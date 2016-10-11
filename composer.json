@@ -1,0 +1,8 @@
+{
+  "name": "go1/util",
+  "autoload": {
+    "psr-4": {
+      "go1\\util\\": "./"
+    }
+  }
+}
