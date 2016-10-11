@@ -19,3 +19,4 @@ class PortalChecker
         return version_compare($portal->version, 'v3.0.0') >= 0;
     }
 }
+
