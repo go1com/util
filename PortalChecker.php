@@ -4,19 +4,29 @@ namespace go1\util;
 
 class PortalChecker
 {
-    public function isVirtual($portal)
+    private function prepare(&$portal)
     {
-        if (!empty($portal->configuration->is_virtual)) {
-            return true;
-        }
-
-        if (!empty($portal->data) && $data = json_decode($portal->data)) {
-            if (!empty($data->configuration)) {
-                return true;
+        if (!isset($portal->configuration) && !empty($portal->data)) {
+            $portal->data = is_scalar($portal->data) ? json_decode($portal->data) : $portal->data;
+            if (!empty($portal->data->configuration)) {
+                $portal->configuration = $portal->data->configuration;
+                unset($portal->data->configuration);
             }
         }
+    }
 
-        return version_compare($portal->version, 'v3.0.0') >= 0;
+    public function isVirtual($portal)
+    {
+        $this->prepare($portal);
+
+        return !empty($portal->configuration->is_virtual) ? true : (version_compare($portal->version, 'v3.0.0') >= 0);
+    }
+
+    public function getPrimaryDomain($portal)
+    {
+        $this->prepare($portal);
+
+        return !empty($portal->configuration->primary_domain) ? $portal->configuration->primary_domain : $portal->title;
     }
 }
 
