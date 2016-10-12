@@ -28,4 +28,11 @@ class PortalChecker
 
         return !empty($portal->configuration->primary_domain) ? $portal->configuration->primary_domain : $portal->title;
     }
+
+    public function getSiteName($portal)
+    {
+        $this->prepare($portal);
+
+        return !empty($portal->configuration->site_name) ? $portal->configuration->site_name : $portal->title;
+    }
 }
