@@ -42,4 +42,8 @@ class ErrorCodes
     # Graphin errors
     # ---------------------
     const GRAPHIN_ERROR = 10000;
+
+    # Rules errors
+    # ---------------------
+    const RULES_ERROR = 11000;
 }
