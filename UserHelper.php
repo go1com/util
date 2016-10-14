@@ -17,14 +17,21 @@ class UserHelper
             : false;
     }
 
-    public function profileId2jwt(Client $client, $userUrl, $profileId)
+    public function profileId2uuid(Client $client, $userUrl, $profileId)
     {
         $jwt = JWT::encode(['admin' => true], 'GO1INTERNAL');
         $url = rtrim($userUrl, '/') . "/account/-/{$profileId}?jwt=$jwt";
         $res = $client->get($url, ['https_errors' => false]);
 
         return (200 == $res->getStatusCode())
-            ? $this->uuid2jwt($client, $userUrl, json_decode($res->getBody()->getContents())->uuid)
+            ? json_decode($res->getBody()->getContents())->uuid
+            : false;
+    }
+
+    public function profileId2jwt(Client $client, $userUrl, $profileId)
+    {
+        return ($uuid = $this->profileId2uuid($client, $userUrl, $profileId))
+            ? $this->uuid2jwt($client, $userUrl, $uuid)
             : false;
     }
 }
