@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AccessChecker
 {
+    const ACCESS_PUBLIC        = 0;
+    const ACCESS_AUTHENTICATED = 100;
+    const ACCESS_ADMIN         = 200;
+    const ACCESS_ROOT          = 300;
+
     /**
      * @param Request $req
      * @param string  $portalName
@@ -140,5 +145,18 @@ class AccessChecker
         }
 
         return false;
+    }
+
+    public function accessLevel(Request $req, $instance = null)
+    {
+        if ($this->isAccountsAdmin($req)) {
+            return static::ACCESS_ROOT;
+        }
+
+        if ($instance && $this->isPortalAdmin($req, $instance)) {
+            return static::ACCESS_ADMIN;
+        }
+
+        return $this->validUser($req) ? static::ACCESS_AUTHENTICATED : static::ACCESS_PUBLIC;
     }
 }
