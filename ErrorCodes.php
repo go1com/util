@@ -7,6 +7,7 @@ class ErrorCodes
     const API_ERROR        = 1000;
     const QUEUE_ERROR      = 2000;
     const PORTAL_ERROR     = 3000;
+    const PORTAL_NO_LEGACY = 3001;
     const USER_ERROR       = 4000;
     const LO_ERROR         = 5000;
     const LOB_ERROR        = 6000;
