@@ -25,4 +25,16 @@ class GraphEdgeTypes
     const HAS_NOTE             = 'HAS_NOTE';
     const HAS_SHARED_NOTE      = 'HAS_SHARED_NOTE';
     const HAS_SHARED_LO        = 'HAS_SHARED_LO';
+
+    public static function type($name)
+    {
+        $name = strtolower($name);
+        $name = ('learning_pathways' === $name) ? 'learning_pathway' : $name;
+        $name = ('activities' === $name) ? 'activity' : $name;
+        $name = str_replace('_', ' ', $name);
+        $name = ucwords($name);
+        $name = str_replace(' ', '', $name);
+
+        return $name;
+    }
 }
