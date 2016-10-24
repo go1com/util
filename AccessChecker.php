@@ -77,13 +77,24 @@ class AccessChecker
         return in_array('Admin on #Accounts', isset($user->roles) ? $user->roles : []) ? $user : false;
     }
 
-    public function validUser(Request $req)
+    public function validUser(Request $req, $instanceName = null)
     {
         $payload = $req->get('jwt.payload');
         if ($payload && !empty($payload->object->type) && ('user' === $payload->object->type)) {
             $user = &$payload->object->content;
-            if (!empty($user->mail)) {
+            $user = !empty($user->mail) ? $user : null;
+        }
+
+        if (!empty($user)) {
+            if (!$instanceName || empty($user->instance)) {
                 return $user;
+            }
+
+            $accounts = isset($user->accounts) ? $user->accounts : [];
+            foreach ($accounts as $account) {
+                if ($instanceName == $account->instance) {
+                    return $account;
+                }
             }
         }
 
