@@ -26,6 +26,18 @@ class GraphEdgeTypes
     const HAS_SHARED_NOTE      = 'HAS_SHARED_NOTE';
     const HAS_SHARED_LO        = 'HAS_SHARED_LO';
 
+    /**
+     * User reaction
+     * (user)-[{reaction: 0|1|-1}]->(li)
+     */
+    const HAS_REACT            = 'HAS_REACT';
+
+    /**
+     * User vote
+     * (user)-->(tag)
+     */
+    const HAS_VOTE             = 'HAS_VOTE';
+
     public static function type($name)
     {
         $name = strtolower($name);
