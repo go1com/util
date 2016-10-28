@@ -19,7 +19,7 @@ class PortalChecker
     {
         $this->prepare($portal);
 
-        return !empty($portal->configuration->is_virtual) ? true : (version_compare($portal->version, 'v3.0.0') >= 0);
+        return !empty($portal->configuration->is_virtual) ? true : (version_compare($portal->version, 'v3.0.0-alpha1') >= 0);
     }
 
     public function getPrimaryDomain($portal)
@@ -36,4 +36,3 @@ class PortalChecker
         return !empty($portal->configuration->site_name) ? $portal->configuration->site_name : $portal->title;
     }
 }
-
