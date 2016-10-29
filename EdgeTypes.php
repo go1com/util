@@ -39,6 +39,11 @@ class EdgeTypes
      * Target: Learning object
      */
     const HAS_ENQUIRY = 19;
+    /**
+     * Source: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries.
+     * Target: 0
+     */
+    const HAS_ARCHIVED_ENQUIRY = 20;
 
     const HAS_ROLE    = 500;
     const HAS_ACCOUNT = 501;
