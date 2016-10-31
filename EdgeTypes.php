@@ -103,11 +103,17 @@ class EdgeTypes
      * Source: gc_user.id
      * Target: gc_lo.id
      */
-    const HAS_SHARE_USER_LO = 600;
+    const HAS_SHARE_USER_NOTE = 600;
 
     /**
      * Source: gc_user.id
      * Target: gc_lo.id
      */
     const HAS_SHARE_WITH_LO_USER = 601;
+
+    /**
+     * Source: gc_user.id
+     * Target: gc_lo.id
+     */
+    const HAS_MENTION = 602;
 }
