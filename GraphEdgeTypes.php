@@ -44,6 +44,21 @@ class GraphEdgeTypes
      */
     const HAS_MENTION          = 'HAS_MENTION';
 
+    public static $roles = [
+        'student'            => 'student',
+        'tutor'              => 'tutor',
+        'manager'            => 'manager',
+        'admin on #accounts' => 'administrator',
+        'administrator'      => 'administrator',
+    ];
+
+    public static function role($name)
+    {
+        $name = strtolower($name);
+
+        return isset(static::$roles[$name]) ? static::$roles[$name] : null;
+    }
+
     public static function type($name)
     {
         $name = strtolower($name);
