@@ -25,6 +25,7 @@ class GraphEdgeTypes
     const HAS_NOTE             = 'HAS_NOTE';
     const HAS_SHARED_NOTE      = 'HAS_SHARED_NOTE';
     const HAS_SHARED_LO        = 'HAS_SHARED_LO';
+    const HAS_MENTION          = 'HAS_MENTION';
 
     /**
      * User reaction
