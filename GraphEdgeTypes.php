@@ -25,7 +25,6 @@ class GraphEdgeTypes
     const HAS_NOTE             = 'HAS_NOTE';
     const HAS_SHARED_NOTE      = 'HAS_SHARED_NOTE';
     const HAS_SHARED_LO        = 'HAS_SHARED_LO';
-    const HAS_MENTION          = 'HAS_MENTION';
 
     /**
      * User reaction
@@ -38,6 +37,12 @@ class GraphEdgeTypes
      * (user)-->(tag)
      */
     const HAS_VOTE             = 'HAS_VOTE';
+
+    /**
+     * User mention
+     * (user)-[{offset: int, length: int}]->(lo/li)
+     */
+    const HAS_MENTION          = 'HAS_MENTION';
 
     public static function type($name)
     {
