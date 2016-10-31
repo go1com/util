@@ -48,7 +48,7 @@ class GraphEdgeTypes
         'student'            => 'student',
         'tutor'              => 'tutor',
         'manager'            => 'manager',
-        'admin on #accounts' => 'administrator',
+        'admin on #accounts' => 'root',
         'administrator'      => 'administrator',
     ];
 
