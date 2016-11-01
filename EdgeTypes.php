@@ -20,6 +20,7 @@ class EdgeTypes
     const HAS_COUPON            = 14;
     const HAS_TUTOR             = 15;
     const HAS_DOMAIN            = 16;
+    const HAS_EXCLUDED_TAG      = 19;
 
     /**
      * Source: Learning object
