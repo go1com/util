@@ -170,4 +170,11 @@ class AccessChecker
 
         return $this->validUser($req) ? static::ACCESS_AUTHENTICATED : static::ACCESS_PUBLIC;
     }
+
+    public function isMasquerading(Request $req)
+    {
+        $payload = $req->get('jwt.payload');
+
+        return ($payload && !empty($payload->object->content->masquerading)) ? true : false;
+    }
 }
