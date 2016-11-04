@@ -38,7 +38,15 @@ class PortalChecker
         return !empty($portal->configuration->site_name) ? $portal->configuration->site_name : $portal->title;
     }
 
-    public function isEnabled($portal) {
+    public function isEnabled($portal)
+    {
         return isset($portal->status) ? (static::INSTANCE_ENABLED == $portal->status) : false;
+    }
+
+    public function publicKey($portal)
+    {
+        $this->prepare($portal);
+
+        return !empty($portal->data->public_key) ? $portal->data->public_key : false;
     }
 }
