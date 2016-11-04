@@ -4,6 +4,8 @@ namespace go1\util;
 
 class PortalChecker
 {
+    const INSTANCE_ENABLED = 1;
+
     private function prepare(&$portal)
     {
         if (!isset($portal->configuration) && !empty($portal->data)) {
@@ -34,5 +36,9 @@ class PortalChecker
         $this->prepare($portal);
 
         return !empty($portal->configuration->site_name) ? $portal->configuration->site_name : $portal->title;
+    }
+
+    public function isEnabled($portal) {
+        return isset($portal->status) ? ($portal->status === static::INSTANCE_ENABLED) : false;
     }
 }
