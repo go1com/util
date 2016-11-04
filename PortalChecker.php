@@ -43,7 +43,7 @@ class PortalChecker
         return isset($portal->status) ? (static::INSTANCE_ENABLED == $portal->status) : false;
     }
 
-    public function publicKey($portal)
+    public function getPublicKey($portal)
     {
         $this->prepare($portal);
 
