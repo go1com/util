@@ -39,6 +39,6 @@ class PortalChecker
     }
 
     public function isEnabled($portal) {
-        return isset($portal->status) ? ($portal->status === static::INSTANCE_ENABLED) : false;
+        return isset($portal->status) ? (static::INSTANCE_ENABLED == $portal->status) : false;
     }
 }
