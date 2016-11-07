@@ -23,8 +23,10 @@ class ErrorCodes
 
     # Credit service
     # ---------------------
-    const CREDIT_ERROR           = 16000;
-    const CREDIT_NOT_FOUND       = 16001;
-    const CREDIT_NOT_AVAILABLE   = 16002;
-    const CREDIT_PRODUCT_UNMATCH = 16003;
+    const CREDIT_ERROR                         = 16000;
+    const CREDIT_NOT_FOUND                     = 16001;
+    const CREDIT_NOT_AVAILABLE                 = 16002;
+    const CREDIT_PRODUCT_UNMATCH               = 16003;
+    const CREDIT_INVALID_TRANSACTION_REFERENCE = 16004;
+    const CREDIT_CANNOT_UPDATE_PROPERTIES      = 16005;
 }
