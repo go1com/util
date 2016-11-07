@@ -20,4 +20,11 @@ class ErrorCodes
     const S3_ERROR         = 13000;
     const FINDER_ERROR     = 14000;
     const HISTORY_ERROR    = 15000;
+
+    # Credit service
+    # ---------------------
+    const CREDIT_ERROR           = 16000;
+    const CREDIT_NOT_FOUND       = 16001;
+    const CREDIT_NOT_AVAILABLE   = 16002;
+    const CREDIT_PRODUCT_UNMATCH = 16003;
 }
