@@ -4,117 +4,38 @@ namespace go1\util;
 
 class EdgeTypes
 {
-    const HAS_LP_ITEM           = 1;
-    const HAS_PRODUCT           = 2;
-    const HAS_EVENT             = 3;
-    const HAS_TAG               = 4;
-    const HAS_LI                = 5;
-    const HAS_WORKSHOP          = 6;
-    const HAS_MODULE            = 7;
-    const HAS_ELECTIVE_LO       = 8;
-    const HAS_ELECTIVE_LI       = 9;
-    const HAS_STRIPE_CUSTOMER   = 10;
-    const HAS_MODULE_DEPENDENCY = 11;
-    const HAS_CUSTOM_TAG        = 12;
-    const HAS_PARENT_TAG        = 13;
-    const HAS_COUPON            = 14;
-    const HAS_TUTOR             = 15;
-    const HAS_DOMAIN            = 16;
-    const HAS_EXCLUDED_TAG      = 19;
-
-    /**
-     * Source: Learning object
-     * Target: Simple Account
-     */
-    const HAS_AUTHOR = 17;
-
-    /**
-     * Create enrolment relationship with tutor
-     * Source: Enrolment
-     * Target: Simple account
-     */
-    const HAS_TUTOR_ENROLMENT = 18;
-
-    /**
-     * Source: Profile
-     * Target: Learning object
-     */
-    const HAS_ENQUIRY = 19;
-    /**
-     * Source: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries.
-     * Target: 0
-     */
-    const HAS_ARCHIVED_ENQUIRY = 20;
-
-    const HAS_ROLE    = 500;
-    const HAS_ACCOUNT = 501;
-
-    /**
-     * Create course module relationship with tutor.
-     * Source: gc_ro id - the record has source_id is course, target_id is
-     * Target: gc_user id
-     */
-    const HAS_TUTOR_EDGE = 502;
-
-    /**
-     * Source: Learning object
-     * Target: gc_user.id
-     */
-    const HAS_AUTHOR_EDGE = 503;
-
-    /**
-     * Source: gc_user.id of student
-     * Target: gc_user.id of manager.
-     */
-    const HAS_MANAGER = 504;
-
-    /**
-     * Create user secondary mail relationship
-     * Source: gc_user id
-     * target_id: gc_user_mail id
-     */
-    const HAS_EMAIL = 505;
-
-    /**
-     * Create enrolment tutor relationship.
-     * source_id: gc_user id
-     * target_id: gc_enrolment id
-     */
-    const HAS_TUTOR_ENROLMENT_EDGE = 506;
-
-    /**
-     * Source: Learning object
-     * Target: Role ID
-     */
-    const HAS_SHARE_WITH = 507;
-
-    /**
-     * Source: gc_user.id
-     * Target: gc_user.id
-     */
-    const HAS_FOLLOWING = 508;
-
-    /**
-     * Source: gc_user.id
-     * Target: gc_instance.id
-     */
-    const HAS_PORTAL_EDGE = 509;
-
-    /**
-     * Source: gc_user.id
-     * Target: gc_lo.id
-     */
-    const HAS_SHARE_USER_NOTE = 600;
-
-    /**
-     * Source: gc_user.id
-     * Target: gc_lo.id
-     */
-    const HAS_SHARE_WITH_LO_USER = 601;
-
-    /**
-     * Source: gc_user.id
-     * Target: gc_lo.id
-     */
-    const HAS_MENTION = 602;
+    const HAS_LP_ITEM              = 1; #   Target: ?                      | Source: Learning object (LP only)
+    const HAS_PRODUCT              = 2; #   Target: ?                      | Source: Learning object
+    const HAS_EVENT                = 3; #   Target: ?                      | Source: Learning object (course, module?)
+    const HAS_TAG                  = 4; #   Target: ?                      | Source: Learning object (course only)
+    const HAS_LI                   = 5; #   Target: ?                      | Source: Learning object (module only)
+    const HAS_WORKSHOP             = 6; #   Target: ?                      | Source: ?
+    const HAS_MODULE               = 7; #   Target: ?                      | Source: ?
+    const HAS_ELECTIVE_LO          = 8; #   Target: ?                      | Source: ?
+    const HAS_ELECTIVE_LI          = 9; #   Target: ?                      | Source: ?
+    const HAS_STRIPE_CUSTOMER      = 10; #  Target: ?                      | Source: ?
+    const HAS_MODULE_DEPENDENCY    = 11; #  Target: ?                      | Source: ?
+    const HAS_CUSTOM_TAG           = 12; #  Target: Tag                    | Source: Learning object
+    const HAS_PARENT_TAG           = 13; #  Target: Tag                    | Source: Tag
+    const HAS_COUPON               = 14; #  Target: ?                      | Source: ?
+    const HAS_TUTOR                = 15; #  Target: ?                      | Source: ?
+    const HAS_DOMAIN               = 16; #  Target: ?                      | Source: ?
+    const HAS_EXCLUDED_TAG         = 19; #  Target: ?                      | Source: ?
+    const HAS_AUTHOR               = 17; #  Target: Simple Account         | Source: Learning object
+    const HAS_TUTOR_ENROLMENT      = 18; #  Target: Simple account         | Source: Enrolment
+    const HAS_ENQUIRY              = 19; #  Target: Learning object        | Source: Profile
+    const HAS_ARCHIVED_ENQUIRY     = 20; #  Target: NULL                   | Source: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
+    const HAS_ROLE                 = 500; # Target: Role                   | Source: User
+    const HAS_ACCOUNT              = 501; # Target: User                   | Source: User
+    const HAS_TUTOR_EDGE           = 502; # Target: User (Tutor)           | Source: gc_ro id - the record has source_id is course, target_id is (Module)
+    const HAS_AUTHOR_EDGE          = 503; # Target: User                   | Source: Learning object
+    const HAS_MANAGER              = 504; # Target: User (Manager).        | Source: gc_user.id of student
+    const HAS_EMAIL                = 505; # Target: gc_user_mail id        | Source: gc_user id
+    const HAS_TUTOR_ENROLMENT_EDGE = 506; # Target: gc_enrolment id        | Source: gc_user id
+    const HAS_SHARE_WITH           = 507; # Target: Role ID                | Source: Learning object
+    const HAS_FOLLOWING            = 508; # Target: gc_user.id             | Source: gc_user.id
+    const HAS_PORTAL_EDGE          = 509; # Target: gc_instance.id         | Source: gc_user.id
+    const HAS_SHARE_USER_NOTE      = 600; # Target: gc_lo.id               | Source: gc_user.id
+    const HAS_SHARE_WITH_LO_USER   = 601; # Target: gc_lo.id               | Source: gc_user.id
+    const HAS_MENTION              = 602; # Target: gc_lo.id               | Source: gc_user.id
 }
