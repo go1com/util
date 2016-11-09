@@ -4,6 +4,8 @@ namespace go1\util;
 
 class ErrorCodes
 {
+    # Error inside services
+    # #####################
     const API_ERROR        = 1000;
     const QUEUE_ERROR      = 2000;
     const PORTAL_ERROR     = 3000;
@@ -29,4 +31,8 @@ class ErrorCodes
     const CREDIT_PRODUCT_UNMATCH               = 16003;
     const CREDIT_INVALID_TRANSACTION_REFERENCE = 16004;
     const CREDIT_CANNOT_UPDATE_PROPERTIES      = 16005;
+
+    # Error outside services
+    # #####################
+    const X_SERVICE_UNREACHABLE = 80000;
 }
