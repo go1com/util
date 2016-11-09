@@ -2,6 +2,9 @@
 
 namespace go1\util;
 
+use Assert\LazyAssertionException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 class ErrorCodes
 {
     # Common HTTP error codes
@@ -54,4 +57,18 @@ class ErrorCodes
     # Error outside services
     # #####################
     const X_SERVICE_UNREACHABLE = 80000;
+
+    public static function createLazyAssertionJsonResponse(LazyAssertionException $e): JsonResponse
+    {
+        $data = ['message' => $e->getMessage()];
+
+        foreach ($e->getErrorExceptions() as $error) {
+            $data['error'][] = [
+                'path'    => $error->getPropertyPath(),
+                'message' => $error->getMessage(),
+            ];
+        }
+
+        return new JsonResponse($data, static::BAD_REQUEST);
+    }
 }
