@@ -4,6 +4,25 @@ namespace go1\util;
 
 class ErrorCodes
 {
+    # Common HTTP error codes
+    # #####################
+    const BAD_REQUEST                   = 400;
+    const UNAUTHORIZED                  = 401;
+    const PAYMENT_REQUIRED              = 402;
+    const FORBIDDEN                     = 403;
+    const NOT_FOUND                     = 404;
+    const METHOD_NOT_ALLOWED            = 405;
+    const NOT_ACCEPTABLE                = 406;
+    const PROXY_AUTHENTICATION_REQUIRED = 407;
+    const REQUEST_TIMEOUT               = 408;
+    const CONFLICT                      = 409;
+    const PRECONDITION_FAILED           = 412;
+    const PAYLOAD_TOO_LARGE             = 413;
+    const UPGRADE_REQUIRED              = 426;
+    const HEADER_TOO_LARGE              = 431;
+    const SERVICE_UNAVAILABLE           = 503;
+    const GATEWAY_TIMEOUT               = 504;
+
     # Error inside services
     # #####################
     const API_ERROR        = 1000;
