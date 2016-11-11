@@ -16,10 +16,10 @@ class AccessChecker
 
     /**
      * @param Request $req
-     * @param string  $portalName
+     * @param string  $instance
      * @return null|bool|stdClass
      */
-    public function isPortalAdmin(Request $req, $portalName)
+    public function isPortalAdmin(Request $req, $instance)
     {
         if (!$user = $this->validUser($req)) {
             return null;
@@ -31,7 +31,7 @@ class AccessChecker
 
         $accounts = isset($user->accounts) ? $user->accounts : [];
         foreach ($accounts as &$account) {
-            if ($portalName === $account->instance) {
+            if ($instance === $account->instance) {
                 if (!empty($account->roles) && in_array('administrator', $account->roles)) {
                     return $account;
                 }
