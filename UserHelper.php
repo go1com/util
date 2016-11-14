@@ -7,6 +7,8 @@ use GuzzleHttp\Client;
 
 class UserHelper
 {
+    const ADMIN_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvYmplY3QiOnsidHlwZSI6InVzZXIiLCJjb250ZW50Ijp7InJvbGVzIjpbIkFkbWluIG9uICNBY2NvdW50cyJdLCJtYWlsIjoiand0QGdvMS5jb20ifX19.rCKoEXiqTQAtDofak30NESqYoSgkOIclS1SPaHx4WqU';
+
     public function uuid2jwt(Client $client, $userUrl, $uuid)
     {
         $url = rtrim($userUrl, '/') . "/account/current/{$uuid}";
