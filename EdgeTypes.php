@@ -38,4 +38,5 @@ class EdgeTypes
     const HAS_SHARE_USER_NOTE      = 600; # Target: gc_lo.id         | Source: gc_user.id
     const HAS_SHARE_WITH_LO_USER   = 601; # Target: gc_lo.id         | Source: gc_user.id
     const HAS_MENTION              = 602; # Target: gc_lo.id         | Source: gc_user.id
+    const HAS_SHARE_WITH_LO_PORTAL = 603; # Target: gc_instance.id   | Source: Learning object
 }
