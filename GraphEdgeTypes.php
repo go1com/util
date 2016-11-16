@@ -19,6 +19,7 @@ class GraphEdgeTypes
     const HAS_AUTHOR       = 'HAS_AUTHOR';
     const HAS_TUTOR        = 'HAS_TUTOR';
     const HAS_ENROLMENT    = 'HAS_ENROLMENT';
+    const HAS_MANAGER      = 'HAS_MANAGER';
     const HAS_LO           = 'HAS_LO';
     const HAS_FOLLOWER     = 'HAS_FOLLOWER';
     const HAS_FOLLOWING    = 'HAS_FOLLOWING';
