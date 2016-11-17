@@ -10,10 +10,11 @@ class MailTemplate
     const USER_WELCOME_REGISTER = [
         'key'    => 'user.welcome.register',
         'tokens' => [
-            '!user_name'  => 'Machine name of user name, this maybe the email address.',
-            '@user_name'  => 'User name.',
-            '!site_name'  => 'Human name of the portal.',
-            '!portal_url' => 'The portal URL.',
+            '!user_name'      => 'Machine name of user name, this maybe the email address.',
+            '@user_name'      => 'User name.',
+            '!site_name'      => 'Human name of the portal.',
+            '!portal_url'     => 'The portal URL.',
+            '!primary_domain' => 'Primary domain of portal.',
         ],
     ];
 
