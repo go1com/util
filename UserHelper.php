@@ -4,6 +4,7 @@ namespace go1\util;
 
 use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
+use stdClass;
 
 class UserHelper
 {
@@ -35,5 +36,12 @@ class UserHelper
         return ($uuid = $this->profileId2uuid($client, $userUrl, $profileId))
             ? $this->uuid2jwt($client, $userUrl, $uuid)
             : false;
+    }
+
+    public function name(stdClass $user, bool $last = false)
+    {
+        $name = $last ? "{$user->first_name} {$user->last_name}" : $user->first_name;
+
+        return trim($name) ?: $user->mail;
     }
 }
