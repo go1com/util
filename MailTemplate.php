@@ -74,10 +74,23 @@ class MailTemplate
         'tokens' => [/* @TODO */],
     ];
 
-    public static function token($key)
+    public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
+        foreach ($self->getConstants() as $constant => $value) {
+            if (isset($value['key'])) {
+                if ($key === $value['key']) {
+                    return true;
+                }
+            }
+        }
 
+        return false;
+    }
+
+    public static function token(string $key)
+    {
+        $self = new ReflectionClass(__CLASS__);
         foreach ($self->getConstants() as $constant => $value) {
             if (isset($value['key'])) {
                 if ($key === $value['key']) {
