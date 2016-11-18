@@ -6,18 +6,18 @@ use ReflectionClass;
 
 class LiTypes
 {
-    const LI_ACTIVITY    = 'activities';
-    const LI_ATTENDANCE  = 'attendance';
-    const LI_DOCUMENT    = 'document';
-    const LI_H5P         = 'h5p';
-    const LI_IFRAME      = 'iframe';
-    const LI_QUESTION    = 'question';
-    const LI_QUIZ        = 'quiz';
-    const LI_RESOURCE    = 'resource';
-    const LI_TEXT        = 'text';
-    const LI_INTERACTIVE = 'interactive';
-    const LI_VIDEO       = 'video';
-    const LI_WORKSHOP    = 'workshop';
+    const ACTIVITY    = 'activities';
+    const ATTENDANCE  = 'attendance';
+    const DOCUMENT    = 'document';
+    const H5P         = 'h5p';
+    const IFRAME      = 'iframe';
+    const QUESTION    = 'question';
+    const QUIZ        = 'quiz';
+    const RESOURCE    = 'resource';
+    const TEXT        = 'text';
+    const INTERACTIVE = 'interactive';
+    const VIDEO       = 'video';
+    const WORKSHOP    = 'workshop';
 
     public static function all()
     {
