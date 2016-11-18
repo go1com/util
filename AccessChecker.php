@@ -86,7 +86,7 @@ class AccessChecker
         }
 
         if (!empty($user)) {
-            if (empty($instanceName)) {
+            if (!$instanceName || empty($user->instance)) {
                 return $user;
             }
 
