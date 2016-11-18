@@ -47,6 +47,12 @@ class GraphEdgeTypes
      */
     const HAS_MENTION = 'HAS_MENTION';
 
+    /**
+     * User group
+     * (user)-->(group)
+     */
+    const HAS_GROUP_OWN         = 'HAS_GROUP_OWN';
+
     public static $roles = [
         'student'            => 'student',
         'tutor'              => 'tutor',
