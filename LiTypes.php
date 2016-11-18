@@ -2,6 +2,8 @@
 
 namespace go1\util;
 
+use ReflectionClass;
+
 class LiTypes
 {
     const LI_ACTIVITY    = 'activities';
@@ -16,4 +18,11 @@ class LiTypes
     const LI_INTERACTIVE = 'interactive';
     const LI_VIDEO       = 'video';
     const LI_WORKSHOP    = 'workshop';
+
+    public static function all()
+    {
+        $rSelf = new ReflectionClass(__CLASS__);
+
+        return array_values($rSelf->getConstants());
+    }
 }
