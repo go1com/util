@@ -76,4 +76,15 @@ class UserHelper
         ];
     }
 
+    public static function encode(stdClass &$payload): string
+    {
+        $array = isset($payload->object->content) ? $payload : [
+            'iss'    => 'go1.user',
+            'ver'    => '2.0',
+            'exp'    => strtotime('+ 1 month'),
+            'object' => ['type' => 'user', 'content' => $payload],
+        ];
+
+        return JWT::encode($array, 'INTERNAL');
+    }
 }
