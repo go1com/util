@@ -4,7 +4,9 @@ namespace go1\util;
 
 use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
+use RuntimeException;
 use stdClass;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserHelper
 {
@@ -44,4 +46,34 @@ class UserHelper
 
         return trim($name) ?: $user->mail;
     }
+
+    public static function jwt(Request $req)
+    {
+        if ($auth = $req->headers->get('Authorization') ?: $req->headers->get('authorization')) {
+            if (0 === strpos($auth, 'Bearer ')) {
+                return substr($auth, 7);
+            }
+        }
+
+        if (!$token = $req->query->get('jwt', isset($token))) {
+            if (!$token = $req->cookies->get('jwt')) {
+                return false;
+            }
+        }
+
+        return (2 === substr_count($token, '.')) ? $token : false;
+    }
+
+    public static function authorizationHeader(Request $req)
+    {
+        if (!$jwt = static::jwt($req)) {
+            throw new RuntimeException('JWT not found.');
+        }
+
+        return [
+            'Content-Type'  => 'application/json',
+            'Authorization' => "Bearer $jwt",
+        ];
+    }
+
 }
