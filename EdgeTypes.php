@@ -25,6 +25,9 @@ class EdgeTypes
     const HAS_TUTOR_ENROLMENT      = 18;  # Target: Simple account   | Source: Enrolment
     const HAS_ENQUIRY              = 19;  # Target: Learning object  | Source: Profile
     const HAS_ARCHIVED_ENQUIRY     = 20;  # Target: NULL             | Source: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
+    CONST HAS_DEPENDENCY           = 21;  # Target: LO               | Source: LO
+    CONST HAS_LOCKING_SCHEDULE     = 22;  # Target: Timestamp        | Source: LO
+    CONST HAS_LOCKING_COMPLETION   = 23;  # Target: Timestamp        | Source: LO # Change to this edge type when self::HAS_LOCKING_SCHEDULE is completed.
     const HAS_ROLE                 = 500; # Target: Role             | Source: User
     const HAS_ACCOUNT              = 501; # Target: User             | Source: User
     const HAS_TUTOR_EDGE           = 502; # Target: User (Tutor)     | Source: gc_ro id - the record has source_id is course, target_id is (Module)
