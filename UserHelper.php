@@ -49,7 +49,7 @@ class UserHelper
 
     public static function jwt(Request $req)
     {
-        if ($auth = $req->headers->get('Authorization') ?: $req->headers->get('authorization')) {
+        if ($auth = $req->headers->get('Authorization') ?: $req->headers->get('Authorization')) {
             if (0 === strpos($auth, 'Bearer ')) {
                 return substr($auth, 7);
             }
