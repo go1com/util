@@ -12,7 +12,7 @@ class GraphEdgeTypes
     const HAS_GROUP        = 'HAS_GROUP';
     const HAS_MEMBER       = 'HAS_MEMBER';
     const HAS_CLONE        = 'HAS_CLONE';
-    const HAS_TAG          = 'HAS_TAG';
+    const HAS_TAG          = 'HAS_TAG';                 # (:lo/li)-[]->(:tag)
     const HAS_EVENT        = 'HAS_EVENT';
     const HAS_PRODUCT      = 'HAS_PRODUCT';
     const HAS_REMOTE       = 'HAS_REMOTE';
@@ -28,30 +28,14 @@ class GraphEdgeTypes
     const HAS_SHARED_NOTE  = 'HAS_SHARED_NOTE';
     const HAS_SHARED_LO    = 'HAS_SHARED_LO';
     const HAS_SHARED_GROUP = 'HAS_SHARED_GROUP';
-
-    /**
-     * User reaction
-     * (user)-[{reaction: 0|1|-1}]->(li)
-     */
-    const HAS_REACT = 'HAS_REACT';
-
-    /**
-     * User vote
-     * (user)-->(tag)
-     */
-    const HAS_VOTE = 'HAS_VOTE';
-
-    /**
-     * User mention
-     * (user)-[{offset: int, length: int}]->(lo/li)
-     */
-    const HAS_MENTION = 'HAS_MENTION';
-
-    /**
-     * User group
-     * (user)-->(group)
-     */
-    const HAS_GROUP_OWN         = 'HAS_GROUP_OWN';
+    const HAS_REACT        = 'HAS_REACT';               # (:user)-[{reaction: 0|1|-1}]->(:li)
+    const HAS_VOTE         = 'HAS_VOTE';                # (:user)-[]->(:tag)
+    const HAS_MENTION      = 'HAS_MENTION';             # (:user)-[{offset: int, length: int}]->(:lo/li)
+    const HAS_RO_PARENT    = 'HAS_RO_PARENT';           # (:tag)-[]->(:parent:ro)
+    const HAS_RO_CHILD     = 'HAS_RO_CHILD';            # (:tag)-[]->(:parent:ro)
+    const HAS_RO_TAG       = 'HAS_RO_TAG';              # (:parent:ro)-[]->(:tag)
+    const HAS_RO_PORTAL    = 'HAS_RO_PORTAL';           # (:ro)-[]->(:portal)
+    const HAS_RO           = 'HAS_RO';                  # (:portal)-[]->(:ro)
 
     public static $roles = [
         'student'            => 'student',
