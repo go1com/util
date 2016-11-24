@@ -5,6 +5,7 @@ namespace go1\util;
 class EdgeTypes
 {
     const LearningObjectTree = [
+        'all'              => [self::HAS_LP_ITEM, self::HAS_MODULE, self::HAS_ELECTIVE_LO, self::HAS_LI, self::HAS_ELECTIVE_LI],
         'learning_pathway' => [self::HAS_LP_ITEM],
         'course'           => [self::HAS_MODULE, self::HAS_ELECTIVE_LO],
         'module'           => [self::HAS_LI, self::HAS_ELECTIVE_LI],
