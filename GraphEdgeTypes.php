@@ -31,6 +31,7 @@ class GraphEdgeTypes
     const HAS_REACT        = 'HAS_REACT';               # (:user)-[{reaction: 0|1|-1}]->(:li)
     const HAS_VOTE         = 'HAS_VOTE';                # (:user)-[]->(:tag)
     const HAS_MENTION      = 'HAS_MENTION';             # (:user)-[{offset: int, length: int}]->(:lo/li)
+    const HAS_GROUP_OWN    = 'HAS_GROUP_OWN';           # (:user)-[]->(:group)
     const HAS_RO_PARENT    = 'HAS_RO_PARENT';           # (:tag)-[]->(:parent:ro)
     const HAS_RO_CHILD     = 'HAS_RO_CHILD';            # (:tag)-[]->(:parent:ro)
     const HAS_RO_TAG       = 'HAS_RO_TAG';              # (:parent:ro)-[]->(:tag)
