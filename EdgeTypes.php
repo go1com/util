@@ -4,6 +4,12 @@ namespace go1\util;
 
 class EdgeTypes
 {
+    const LearningObjectTree = [
+        'learning_pathway' => [self::HAS_LP_ITEM],
+        'course'           => [self::HAS_MODULE, self::HAS_ELECTIVE_LO],
+        'module'           => [self::HAS_LI, self::HAS_ELECTIVE_LI],
+    ];
+
     const HAS_LP_ITEM              = 1;   # Target: ?                   | Source: Learning object (LP only)
     const HAS_PRODUCT              = 2;   # Target: ?                   | Source: Learning object
     const HAS_EVENT                = 3;   # Target: ?                   | Source: Learning object (course, module?)
