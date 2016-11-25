@@ -58,7 +58,7 @@ class ErrorCodes
     # #####################
     const X_SERVICE_UNREACHABLE = 80000;
 
-    public static function createLazyAssertionJsonResponse(LazyAssertionException $e): JsonResponse
+    public static function createLazyAssertionJsonResponse(LazyAssertionException $e, int $httpCode = 400): JsonResponse
     {
         $data = ['message' => $e->getMessage()];
 
@@ -69,6 +69,6 @@ class ErrorCodes
             ];
         }
 
-        return new JsonResponse($data, static::BAD_REQUEST);
+        return new JsonResponse($data, $httpCode);
     }
 }
