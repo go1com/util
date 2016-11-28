@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserHelper
 {
-    const ROOT_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvYmplY3QiOnsidHlwZSI6InVzZXIiLCJjb250ZW50Ijp7InByb2ZpbGVfaWQiOjEsInJvbGVzIjpbIkFkbWluIG9uICNBY2NvdW50cyJdLCJtYWlsIjoiMUAxLjEifX19._Xao-1q_9Lmm8ob_BUZXy0a1BkKpL9vBUrftPL6dCPE';
+    const ROOT_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvYmplY3QiOnsidHlwZSI6InVzZXIiLCJjb250ZW50Ijp7ImlkIjoxLCJwcm9maWxlX2lkIjoxLCJyb2xlcyI6WyJBZG1pbiBvbiAjQWNjb3VudHMiXSwibWFpbCI6IjFAMS4xIn19fQ.YwGrlnegpd_57ek0vew5ixBfzhxiepc5ODVwPva9egs';
 
     public function uuid2jwt(Client $client, $userUrl, $uuid)
     {
