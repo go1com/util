@@ -13,6 +13,7 @@ class AccessChecker
     const ACCESS_AUTHENTICATED = 100;
     const ACCESS_ADMIN         = 200;
     const ACCESS_ROOT          = 300;
+    const ACCESS_OWNER         = 400;
 
     /**
      * @param Request $req
@@ -168,7 +169,20 @@ class AccessChecker
             return static::ACCESS_ADMIN;
         }
 
-        return $this->validUser($req) ? static::ACCESS_AUTHENTICATED : static::ACCESS_PUBLIC;
+        if (!$user = $this->validUser($req)) {
+            return static::ACCESS_PUBLIC;
+        }
+
+        // THE LOGIC is not yet stable, only applying for #ECK for now
+        if (($entityType = $req->attributes->get('entityType')) && ($entityId = $req->attributes->get('entityId'))) {
+            if (0 === strpos($entityType, 'user')) {
+                if ($user->id == $entityId) {
+                    return static::ACCESS_OWNER;
+                }
+            }
+        }
+
+        return static::ACCESS_AUTHENTICATED;
     }
 
     public function isMasquerading(Request $req)
