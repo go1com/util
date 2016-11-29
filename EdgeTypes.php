@@ -11,6 +11,15 @@ class EdgeTypes
         'module'           => [self::HAS_LI, self::HAS_ELECTIVE_LI],
     ];
 
+    const LO_HAS_LO = [
+        1, # LP has item
+        5, # Module has LI
+        6, # has workshop
+        7, # Course has module
+        8, # Course has elective module
+        9, # Module has elective LI
+    ];
+
     const HAS_LP_ITEM              = 1;   # Target: ?                   | Source: Learning object (LP only)
     const HAS_PRODUCT              = 2;   # Target: ?                   | Source: Learning object
     const HAS_EVENT                = 3;   # Target: ?                   | Source: Learning object (course, module?)
