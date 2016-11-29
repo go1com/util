@@ -58,6 +58,11 @@ class ErrorCodes
     # #####################
     const X_SERVICE_UNREACHABLE = 80000;
 
+    public static function createMissingOrInvalidJWT(): JsonResponse
+    {
+        return new JsonResponse(['message' => 'Missing or invalid JWT.'], 403);
+    }
+
     public static function createLazyAssertionJsonResponse(LazyAssertionException $e, int $httpCode = 400): JsonResponse
     {
         $data = ['message' => $e->getMessage()];
