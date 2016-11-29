@@ -32,7 +32,7 @@ class EdgeTypes
     const HAS_TUTOR_ENROLMENT      = 18;  # Target: Simple account      | Source: Enrolment
     const HAS_ENQUIRY              = 19;  # Target: Learning object     | Source: Profile
     const HAS_ARCHIVED_ENQUIRY     = 20;  # Target: NULL                | Source: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
-    const HAS_ENROLMENT_EXPIRATION = 21;  # Target: Seconds to live     | Source: Edge (hasLO, hasElectiveLO -- source: LO | target: LO)
+    const HAS_ENROLMENT_EXPIRATION = 21;  # Target: = self.SOURCE       | Source: Edge (hasLO, hasElectiveLO -- source: LO | target: LO) | NOTE: SOURCE = TARGET to make sure there's no duplication.
     const HAS_EXPIRING_ENROLMENT   = 22;  # Target: Timestamp           | Source: Enrolment
     const HAS_EXPIRED_ENROLMENT    = 23;  # Target: Timestamp           | Source: Enrolment | Note: HAS_EXPIRING_ENROLMENT record will be converted to this when it's is processed.
     const HAS_ROLE                 = 500; # Target: Role                | Source: User
