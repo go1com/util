@@ -8,6 +8,7 @@ class EnrolmentStatuses
     const IN_PROGRESS = 'in-progress';
     const PENDING     = 'pending';
     const COMPLETED   = 'completed';
+    const EXPIRED     = 'expired';
 
     public static function all()
     {
