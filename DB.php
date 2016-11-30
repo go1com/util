@@ -5,10 +5,16 @@ namespace go1\util;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\TableExistsException;
 use Doctrine\DBAL\Schema\Comparator;
+use PDO;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class Database
+class DB
 {
+    const INTEGER  = PDO::PARAM_INT;
+    const INTEGERS = Connection::PARAM_INT_ARRAY;
+    const STRING   = PDO::PARAM_STR;
+    const STRINGS  = Connection::PARAM_STR_ARRAY;
+
     /**
      * @param Connection          $db
      * @param callable|callable[] $callbacks
