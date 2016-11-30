@@ -16,6 +16,18 @@ class DB
     const STRING   = PDO::PARAM_STR;
     const STRINGS  = Connection::PARAM_STR_ARRAY;
 
+    public static function safeThread(Connection $db, string $threadName, int $timeout, callable $callback)
+    {
+        try {
+            $sqlite = 'sqlite' === $db->getDatabasePlatform()->getName();
+            !$sqlite && $db->executeQuery('DO GET_LOCK("' . $threadName . '", ' . $timeout . ')');
+            $callback($db);
+        }
+        finally {
+            !$sqlite && $db->executeQuery('DO RELEASE_LOCK("' . $threadName . '")');
+        }
+    }
+
     /**
      * @param Connection          $db
      * @param callable|callable[] $callbacks
