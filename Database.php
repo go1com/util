@@ -4,6 +4,7 @@ namespace go1\util;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\TableExistsException;
+use Doctrine\DBAL\Schema\Comparator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Database
@@ -17,15 +18,18 @@ class Database
     {
         $db->transactional(
             function (Connection $db) use (&$callbacks) {
+                $compare = new Comparator;
                 $schemaManager = $db->getSchemaManager();
                 $schema = $schemaManager->createSchema();
+                $originSchema = clone $schema;
 
                 $callbacks = is_array($callbacks) ? $callbacks : [$callbacks];
                 foreach ($callbacks as &$callback) {
                     $callback($schema);
                 }
 
-                foreach ($schema->toSql($db->getDatabasePlatform()) as $sql) {
+                $diff = $compare->compare($originSchema, $schema);
+                foreach ($diff->toSql($db->getDatabasePlatform()) as $sql) {
                     try {
                         $db->executeQuery($sql);
                     }
