@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DB
 {
+    const OBJ      = PDO::FETCH_OBJ;
     const INTEGER  = PDO::PARAM_INT;
     const INTEGERS = Connection::PARAM_INT_ARRAY;
     const STRING   = PDO::PARAM_STR;
