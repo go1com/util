@@ -22,34 +22,34 @@ class EdgeTypes
 
     # Learning object relationships
     # ---------------------
-    const HAS_LP_ITEM                = 1;   # Target: ?                   | Source: Learning object (LP only)
-    const HAS_PRODUCT                = 2;   # Target: ?                   | Source: Learning object
-    const HAS_EVENT                  = 3;   # Target: ?                   | Source: Learning object (course, module?)
-    const HAS_TAG                    = 4;   # Target: ?                   | Source: Learning object (course only)
-    const HAS_LI                     = 5;   # Target: ?                   | Source: Learning object (module only)
-    const HAS_WORKSHOP               = 6;   # Target: ?                   | Source: ?
-    const HAS_MODULE                 = 7;   # Target: gc_lo.id            | Source: gc_lo.id
-    const HAS_ELECTIVE_LO            = 8;   # Target: ?                   | Source: ?
-    const HAS_ELECTIVE_LI            = 9;   # Target: ?                   | Source: ?
-    const HAS_STRIPE_CUSTOMER        = 10;  # Target: ?                   | Source: ?
-    const HAS_MODULE_DEPENDENCY      = 11;  # Target: gc_lo.id            | Source: gc_lo.id
-    const HAS_CUSTOM_TAG             = 12;  # Target: Tag                 | Source: Learning object
-    const HAS_PARENT_TAG             = 13;  # Target: Tag                 | Source: Tag
-    const HAS_COUPON                 = 14;  # Target: ?                   | Source: ?
-    const HAS_TUTOR                  = 15;  # Target: ?                   | Source: ?
-    const HAS_DOMAIN                 = 16;  # Target: ?                   | Source: ?
-    const HAS_EXCLUDED_TAG           = 19;  # Target: ?                   | Source: ?
-    const HAS_AUTHOR                 = 17;  # Target: Simple Account      | Source: Learning object
-    const HAS_TUTOR_ENROLMENT        = 18;  # Target: Simple account      | Source: Enrolment
-    const HAS_ENQUIRY                = 19;  # Target: Learning object     | Source: Profile
-    const HAS_ARCHIVED_ENQUIRY       = 20;  # Target: NULL                | Source: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
-    const HAS_ENROLMENT_EXPIRATION   = 21;  # Target: = self.SOURCE       | Source: Edge (hasLO, hasElectiveLO -- source: LO | target: LO) | NOTE: SOURCE = TARGET to make sure there's no duplication.
-    const HAS_EXPIRING_ENROLMENT     = 22;  # Target: Timestamp           | Source: Enrolment
-    const HAS_EXPIRED_ENROLMENT      = 23;  # Target: Timestamp           | Source: Enrolment    | Note: HAS_EXPIRING_ENROLMENT record will be converted to this when it's processed.
-    const HAS_LO_UNLOCK_SCHEDULE     = 24;  # Target: Timestamp           | Source: LO           | Note: See GO1P-6926
-    const HAS_LO_UNLOCKED            = 25;  # Target: Timestamp           | Source: LO           | Note: HAS_LO_UNLOCK_SCHEDULE record will be converted to this when it's processed.
-    const HAS_LO_PUBLISH_ENROLMENT   = 26;  # Target: Time interval       | Source: Enrolment    | Note: See GO1P-6926
-    const HAS_LO_PUBLISHED_ENROLMENT = 27;  # Target: Timestamp           | Source: Enrolment    | Note: HAS_LO_PUBLISH_ENROLMENT record will be converted to this when it's processed.
+    const HAS_LP_ITEM                = 1;   # Target: ?                 | Source: Learning object (LP only)
+    const HAS_PRODUCT                = 2;   # Target: ?                 | Source: Learning object
+    const HAS_EVENT                  = 3;   # Target: ?                 | Source: Learning object (course, module?)
+    const HAS_TAG                    = 4;   # Target: ?                 | Source: Learning object (course only)
+    const HAS_LI                     = 5;   # Target: ?                 | Source: Learning object (module only)
+    const HAS_WORKSHOP               = 6;   # Target: ?                 | Source: ?
+    const HAS_MODULE                 = 7;   # Target: gc_lo.id          | Source: gc_lo.id
+    const HAS_ELECTIVE_LO            = 8;   # Target: ?                 | Source: ?
+    const HAS_ELECTIVE_LI            = 9;   # Target: ?                 | Source: ?
+    const HAS_STRIPE_CUSTOMER        = 10;  # Target: ?                 | Source: ?
+    const HAS_MODULE_DEPENDENCY      = 11;  # Target: gc_lo.id          | Source: gc_lo.id
+    const HAS_CUSTOM_TAG             = 12;  # Target: Tag               | Source: Learning object
+    const HAS_PARENT_TAG             = 13;  # Target: Tag               | Source: Tag
+    const HAS_COUPON                 = 14;  # Target: ?                 | Source: ?
+    const HAS_TUTOR                  = 15;  # Target: ?                 | Source: ?
+    const HAS_DOMAIN                 = 16;  # Target: ?                 | Source: ?
+    const HAS_EXCLUDED_TAG           = 19;  # Target: ?                 | Source: ?
+    const HAS_AUTHOR                 = 17;  # Target: Simple Account    | Source: Learning object
+    const HAS_TUTOR_ENROLMENT        = 18;  # Target: Simple account    | Source: Enrolment
+    const HAS_ENQUIRY                = 19;  # Target: Learning object   | Source: Profile
+    const HAS_ARCHIVED_ENQUIRY       = 20;  # Target: NULL              | Source: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
+    const HAS_ENROLMENT_EXPIRATION   = 21;  # Target: = self.SOURCE     | Source: Edge (hasLO, hasElectiveLO -- source: LO | target: LO) | NOTE: SOURCE = TARGET to make sure there's no duplication.
+    const HAS_EXPIRING_ENROLMENT     = 22;  # Target: Timestamp         | Source: Enrolment
+    const HAS_EXPIRED_ENROLMENT      = 23;  # Target: Timestamp         | Source: Enrolment    | Note: HAS_EXPIRING_ENROLMENT record will be converted to this when it's processed.
+    const HAS_LO_UNLOCK_SCHEDULE     = 24;  # Target: Timestamp         | Source: LO           | Note: See GO1P-6926
+    const HAS_LO_UNLOCKED            = 25;  # Target: Timestamp         | Source: LO           | Note: HAS_LO_UNLOCK_SCHEDULE record will be converted to this when it's processed.
+    const HAS_LO_PUBLISH_ENROLMENT   = 26;  # Target: Time interval     | Source: Enrolment    | Note: See GO1P-6926
+    const HAS_LO_PUBLISHED_ENROLMENT = 27;  # Target: Timestamp         | Source: Enrolment    | Note: HAS_LO_PUBLISH_ENROLMENT record will be converted to this when it's processed.
 
     # User relationships
     # ---------------------
