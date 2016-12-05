@@ -15,4 +15,9 @@ class Timeout
             }
         }
     }
+
+    public static function over(int $start, int $timeout): bool
+    {
+        return (strtotime('now', $start) - $start) >= $timeout;
+    }
 }
