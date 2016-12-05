@@ -50,13 +50,15 @@ class EdgeTypes
 
     # LO & enrolment scheduling
     # ---------------------
-    const  HAS_ENROLMENT_EXPIRATION             = 21; # T: = self.SOURCE | S: Edge (hasLO, hasElectiveLO -- source: LO | target: LO) | NOTE: SOURCE = TARGET to make sure there's no duplication.
-    const  SCHEDULE_EXPIRE_ENROLMENT            = 22; # T: Timestamp     | S: Enrolment
-    const  SCHEDULE_EXPIRE_ENROLMENT_DONE       = 23; # T: Timestamp     | S: Enrolment  | N: SCHEDULE_EXPIRE_ENROLMENT record will be converted to this when it's processed.
-    const  SCHEDULE_UNLOCK_LO                   = 24; # T: Timestamp     | S: LO         | N: See GO1P-6926
-    const  SCHEDULE_UNLOCK_LO_DONE              = 25; # T: Timestamp     | S: LO         | N: SCHEDULE_UNLOCK_LO record will be converted to this when it's processed.
-    const  PUBLISH_ENROLMENT_LO_START_BASE      = 26; # T: Timestamp     | S: LO         | N: See GO1P-6926
-    const  PUBLISH_ENROLMENT_LO_START_BASE_DONE = 27; # T: Timestamp     | S: Enrolment  | N: HAS_LO_PUBLISH_ENROLMENT record will be converted to this when it's processed.
+    const  HAS_ENROLMENT_EXPIRATION               = 21; # T: = self.SOURCE | S: Edge (hasLO, hasElectiveLO -- source: LO | target: LO) | NOTE: SOURCE = TARGET to make sure there's no duplication.
+    const  SCHEDULE_EXPIRE_ENROLMENT              = 22; # T: Timestamp     | S: Enrolment
+    const  SCHEDULE_EXPIRE_ENROLMENT_DONE         = 23; # T: Timestamp     | S: Enrolment  | N: SCHEDULE_EXPIRE_ENROLMENT record will be converted to this when it's processed.
+    const  SCHEDULE_UNLOCK_LO                     = 24; # T: Timestamp     | S: LO         | N: See GO1P-6926
+    const  SCHEDULE_UNLOCK_LO_DONE                = 25; # T: Timestamp     | S: LO         | N: SCHEDULE_UNLOCK_LO record will be converted to this when it's processed.
+    const  PUBLISH_ENROLMENT_LO_START_BASE        = 26; # T: Timestamp     | S: LO         | N: See GO1P-6926
+    const  PUBLISH_ENROLMENT_LO_START_BASE_DONE   = 27; # T: Timestamp     | S: Enrolment  | N: HAS_LO_PUBLISH_ENROLMENT record will be converted to this when it's processed.
+    const  PUBLISH_ENROLMENT_SELF_START_BASE      = 28; # T: Timestamp     | S: Enrolment  | N: See GO1P-6926
+    const  PUBLISH_ENROLMENT_SELF_START_BASE_DONE = 29; # T: Timestamp     | S: Enrolment  | N: PUBLISH_ENROLMENT_SELF_START_BASE record will be coverted to this when it's processed.
 
     # Portal relationships
     # ---------------------
