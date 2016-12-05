@@ -48,7 +48,7 @@ class EdgeTypes
     const HAS_EXPIRED_ENROLMENT      = 23;  # Target: Timestamp         | Source: Enrolment    | Note: HAS_EXPIRING_ENROLMENT record will be converted to this when it's processed.
     const HAS_LO_UNLOCK_SCHEDULE     = 24;  # Target: Timestamp         | Source: LO           | Note: See GO1P-6926
     const HAS_LO_UNLOCKED            = 25;  # Target: Timestamp         | Source: LO           | Note: HAS_LO_UNLOCK_SCHEDULE record will be converted to this when it's processed.
-    const HAS_LO_PUBLISH_ENROLMENT   = 26;  # Target: Time interval     | Source: Enrolment    | Note: See GO1P-6926
+    const HAS_LO_PUBLISH_ENROLMENT   = 26;  # Target: Timestamp         | Source: LO           | Note: See GO1P-6926
     const HAS_LO_PUBLISHED_ENROLMENT = 27;  # Target: Timestamp         | Source: Enrolment    | Note: HAS_LO_PUBLISH_ENROLMENT record will be converted to this when it's processed.
 
     # User relationships
