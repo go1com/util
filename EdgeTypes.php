@@ -2,6 +2,11 @@
 
 namespace go1\util;
 
+/**
+ * T: Target
+ * S: Source
+ * N: Note
+ */
 class EdgeTypes
 {
     const LearningObjectTree = [
@@ -22,36 +27,36 @@ class EdgeTypes
 
     # Learning object relationships
     # ---------------------
-    const HAS_LP_ITEM           = 1;   # Target: ?                 | Source: Learning object (LP only)
-    const HAS_PRODUCT           = 2;   # Target: ?                 | Source: Learning object
-    const HAS_EVENT             = 3;   # Target: ?                 | Source: Learning object (course, module?)
-    const HAS_TAG               = 4;   # Target: ?                 | Source: Learning object (course only)
-    const HAS_LI                = 5;   # Target: ?                 | Source: Learning object (module only)
-    const HAS_WORKSHOP          = 6;   # Target: ?                 | Source: ?
-    const HAS_MODULE            = 7;   # Target: gc_lo.id          | Source: gc_lo.id
-    const HAS_ELECTIVE_LO       = 8;   # Target: ?                 | Source: ?
-    const HAS_ELECTIVE_LI       = 9;   # Target: ?                 | Source: ?
-    const HAS_STRIPE_CUSTOMER   = 10;  # Target: ?                 | Source: ?
-    const HAS_MODULE_DEPENDENCY = 11;  # Target: gc_lo.id          | Source: gc_lo.id
-    const HAS_CUSTOM_TAG        = 12;  # Target: Tag               | Source: Learning object
-    const HAS_PARENT_TAG        = 13;  # Target: Tag               | Source: Tag
-    const HAS_COUPON            = 14;  # Target: ?                 | Source: ?
-    const HAS_TUTOR             = 15;  # Target: ?                 | Source: ?
-    const HAS_EXCLUDED_TAG      = 19;  # Target: ?                 | Source: ?
-    const HAS_AUTHOR            = 17;  # Target: Simple Account    | Source: Learning object
-    const HAS_TUTOR_ENROLMENT   = 18;  # Target: Simple account    | Source: Enrolment
-    const HAS_ENQUIRY           = 19;  # Target: Learning object   | Source: Profile
-    const HAS_ARCHIVED_ENQUIRY  = 20;  # Target: NULL              | Source: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
+    const HAS_LP_ITEM           = 1;  # T: ?               | S: Learning object (LP only)
+    const HAS_PRODUCT           = 2;  # T: ?               | S: Learning object
+    const HAS_EVENT             = 3;  # T: ?               | S: Learning object (course, module?)
+    const HAS_TAG               = 4;  # T: ?               | S: Learning object (course only)
+    const HAS_LI                = 5;  # T: ?               | S: Learning object (module only)
+    const HAS_WORKSHOP          = 6;  # T: ?               | S: ?
+    const HAS_MODULE            = 7;  # T: gc_lo.id        | S: gc_lo.id
+    const HAS_ELECTIVE_LO       = 8;  # T: ?               | S: ?
+    const HAS_ELECTIVE_LI       = 9;  # T: ?               | S: ?
+    const HAS_STRIPE_CUSTOMER   = 10; # T: ?               | S: ?
+    const HAS_MODULE_DEPENDENCY = 11; # T: gc_lo.id        | S: gc_lo.id
+    const HAS_CUSTOM_TAG        = 12; # T: Tag             | S: Learning object
+    const HAS_PARENT_TAG        = 13; # T: Tag             | S: Tag
+    const HAS_COUPON            = 14; # T: ?               | S: ?
+    const HAS_TUTOR             = 15; # T: ?               | S: ?
+    const HAS_EXCLUDED_TAG      = 19; # T: ?               | S: ?
+    const HAS_AUTHOR            = 17; # T: Simple Account  | S: Learning object
+    const HAS_TUTOR_ENROLMENT   = 18; # T: Simple account  | S: Enrolment
+    const HAS_ENQUIRY           = 19; # T: Learning object | S: Profile
+    const HAS_ARCHIVED_ENQUIRY  = 20; # T: NULL            | S: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
 
     # LO & enrolment scheduling
     # ---------------------
-    const HAS_ENROLMENT_EXPIRATION             = 21;  # Target: = self.SOURCE | Source: Edge (hasLO, hasElectiveLO -- source: LO | target: LO) | NOTE: SOURCE = TARGET to make sure there's no duplication.
-    const SCHEDULE_EXPIRE_ENROLMENT            = 22;  # Target: Timestamp     | Source: Enrolment
-    const SCHEDULE_EXPIRE_ENROLMENT_DONE       = 23;  # Target: Timestamp     | Source: Enrolment    | Note: HAS_EXPIRING_ENROLMENT record will be converted to this when it's processed.
-    const SCHEDULE_UNLOCK_LO                   = 24;  # Target: Timestamp     | Source: LO           | Note: See GO1P-6926
-    const SCHEDULE_UNLOCK_LO_DONE              = 25;  # Target: Timestamp     | Source: LO           | Note: HAS_LO_UNLOCK_SCHEDULE record will be converted to this when it's processed.
-    const PUBLISH_ENROLMENT_LO_START_BASE      = 26;  # Target: Timestamp     | Source: LO           | Note: See GO1P-6926
-    const PUBLISH_ENROLMENT_LO_START_BASE_DONE = 27;  # Target: Timestamp     | Source: Enrolment    | Note: HAS_LO_PUBLISH_ENROLMENT record will be converted to this when it's processed.
+    const  HAS_ENROLMENT_EXPIRATION             = 21; # T: = self.SOURCE | S: Edge (hasLO, hasElectiveLO -- source: LO | target: LO) | NOTE: SOURCE = TARGET to make sure there's no duplication.
+    const  SCHEDULE_EXPIRE_ENROLMENT            = 22; # T: Timestamp     | S: Enrolment
+    const  SCHEDULE_EXPIRE_ENROLMENT_DONE       = 23; # T: Timestamp     | S: Enrolment  | N: SCHEDULE_EXPIRE_ENROLMENT record will be converted to this when it's processed.
+    const  SCHEDULE_UNLOCK_LO                   = 24; # T: Timestamp     | S: LO         | N: See GO1P-6926
+    const  SCHEDULE_UNLOCK_LO_DONE              = 25; # T: Timestamp     | S: LO         | N: SCHEDULE_UNLOCK_LO record will be converted to this when it's processed.
+    const  PUBLISH_ENROLMENT_LO_START_BASE      = 26; # T: Timestamp     | S: LO         | N: See GO1P-6926
+    const  PUBLISH_ENROLMENT_LO_START_BASE_DONE = 27; # T: Timestamp     | S: Enrolment  | N: HAS_LO_PUBLISH_ENROLMENT record will be converted to this when it's processed.
 
     # Portal relationships
     # ---------------------
@@ -59,20 +64,20 @@ class EdgeTypes
 
     # User relationships
     # ---------------------
-    const HAS_ROLE                 = 500; # Target: Role                | Source: User
-    const HAS_ACCOUNT              = 501; # Target: User                | Source: User
-    const HAS_TUTOR_EDGE           = 502; # Target: User (Tutor)        | Source: gc_ro id - the record has source_id is course, target_id is (Module)
-    const HAS_AUTHOR_EDGE          = 503; # Target: User                | Source: Learning object
-    const HAS_MANAGER              = 504; # Target: User (Manager)      | Source: gc_user.id of student
-    const HAS_EMAIL                = 505; # Target: gc_user_mail id     | Source: gc_user id
-    const HAS_TUTOR_ENROLMENT_EDGE = 506; # Target: gc_enrolment id     | Source: gc_user id
-    const HAS_SHARE_WITH           = 507; # Target: Role ID             | Source: Learning object
-    const HAS_FOLLOWING            = 508; # Target: gc_user.id          | Source: gc_user.id
-    const HAS_PORTAL_EDGE          = 509; # Target: gc_instance.id      | Source: gc_user.id
-    const HAS_SHARE_USER_NOTE      = 600; # Target: gc_note.id          | Source: gc_user.id
-    const HAS_SHARE_WITH_LO_USER   = 601; # Target: gc_lo.id            | Source: gc_user.id
-    const HAS_MENTION              = 602; # Target: gc_lo.id            | Source: gc_user.id
-    const HAS_SHARE_WITH_LO_PORTAL = 603; # Target: gc_instance.id      | Source: Learning object
-    const HAS_SHARE_GROUP_NOTE     = 604; # Target: gc_social_group.id  | Source: gc_note.id
-    const HAS_ASSIGN               = 701; # Target: enrolment.id        | Source: gc_user.id
+    const HAS_ROLE                 = 500; # T: Role               | S: User
+    const HAS_ACCOUNT              = 501; # T: User               | S: User
+    const HAS_TUTOR_EDGE           = 502; # T: User (Tutor)       | S: gc_ro id - the record has source_id is course, target_id is (Module)
+    const HAS_AUTHOR_EDGE          = 503; # T: User               | S: Learning object
+    const HAS_MANAGER              = 504; # T: User (Manager)     | S: gc_user.id of student
+    const HAS_EMAIL                = 505; # T: gc_user_mail id    | S: gc_user id
+    const HAS_TUTOR_ENROLMENT_EDGE = 506; # T: gc_enrolment id    | S: gc_user id
+    const HAS_SHARE_WITH           = 507; # T: Role ID            | S: Learning object
+    const HAS_FOLLOWING            = 508; # T: gc_user.id         | S: gc_user.id
+    const HAS_PORTAL_EDGE          = 509; # T: gc_instance.id     | S: gc_user.id
+    const HAS_SHARE_USER_NOTE      = 600; # T: gc_note.id         | S: gc_user.id
+    const HAS_SHARE_WITH_LO_USER   = 601; # T: gc_lo.id           | S: gc_user.id
+    const HAS_MENTION              = 602; # T: gc_lo.id           | S: gc_user.id
+    const HAS_SHARE_WITH_LO_PORTAL = 603; # T: gc_instance.id     | S: Learning object
+    const HAS_SHARE_GROUP_NOTE     = 604; # T: gc_social_group.id | S: gc_note.id
+    const HAS_ASSIGN               = 701; # T: enrolment.id       | S: gc_user.id
 }
