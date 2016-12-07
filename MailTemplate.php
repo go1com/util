@@ -21,12 +21,13 @@ class MailTemplate
     const USER_WELCOME_INVITED = [
         'key'    => 'user.welcome.invite',
         'tokens' => [
-            '@user_name'   => 'Name of invited user.',
-            '!user_name'   => 'Name of invitee user.',
-            '!host_email'  => '',
-            '!onetime_url' => 'Onetime login link.',
-            '!site_name'   => 'Human name of the portal.',
-            '!portal_url'  => 'The portal URL.',
+            '@user_name'      => 'Name of invited user.',
+            '!user_name'      => 'Name of invitee user.',
+            '!host_email'     => 'Email of host user.',
+            '!onetime_url'    => 'Onetime login link.',
+            '!site_name'      => 'Human name of the portal.',
+            '!portal_url'     => 'The portal URL.',
+            '!primary_domain' => 'Primary domain of portal.',
         ],
     ];
 
