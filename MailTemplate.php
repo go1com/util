@@ -75,6 +75,14 @@ class MailTemplate
         'tokens' => [/* @TODO */],
     ];
 
+    const USER_ENROL_COURSE = [
+        'key'    => 'user.enrol.course',
+        'tokens' => [
+            '@first_name'     => 'First name of user.',
+            '!course_name'    => 'Course name.',
+        ],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
