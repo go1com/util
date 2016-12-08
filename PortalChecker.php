@@ -49,4 +49,10 @@ class PortalChecker
 
         return !empty($portal->data->public_key) ? $portal->data->public_key : false;
     }
+
+    public function canSendEmail($portal, $key) {
+        $this->prepare($portal);
+
+        return !empty($portal->configuration->{$key}) ? $portal->configuration->{$key} : true;
+    }
 }
