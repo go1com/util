@@ -55,4 +55,10 @@ class PortalChecker
 
         return !empty($portal->configuration->{$key}) ? $portal->configuration->{$key} : true;
     }
+
+    public function allowPublicWriting($portal) {
+        $this->prepare($portal);
+
+        return !empty($portal->configuration->public_writing) ? $portal->configuration->public_writing : false;
+    }
 }
