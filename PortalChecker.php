@@ -17,6 +17,17 @@ class PortalChecker
         }
     }
 
+    public function load($db, $instance) {
+        if (is_numeric($instance)) {
+            $sql = 'SELECT * FROM gc_instance WHERE id = ?';
+        }
+        else {
+            $sql = 'SELECT * FROM gc_instance WHERE title = ?';
+        }
+
+        return $db->executeQuery($sql, [$instance])->fetch(\PDO::FETCH_OBJ);
+    }
+
     public function isVirtual($portal)
     {
         $this->prepare($portal);
