@@ -2,6 +2,8 @@
 
 namespace go1\util;
 
+use Doctrine\DBAL\Connection;
+
 class PortalChecker
 {
     const INSTANCE_ENABLED = 1;
@@ -15,6 +17,17 @@ class PortalChecker
                 unset($portal->data->configuration);
             }
         }
+    }
+
+    public function load(Connection $db, $instance) {
+        if (is_numeric($instance)) {
+            $sql = 'SELECT * FROM gc_instance WHERE id = ?';
+        }
+        else {
+            $sql = 'SELECT * FROM gc_instance WHERE title = ?';
+        }
+
+        return $db->executeQuery($sql, [$instance])->fetch(\PDO::FETCH_OBJ);
     }
 
     public function isVirtual($portal)
