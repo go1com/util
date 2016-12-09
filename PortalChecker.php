@@ -2,6 +2,8 @@
 
 namespace go1\util;
 
+use Doctrine\DBAL\Connection;
+
 class PortalChecker
 {
     const INSTANCE_ENABLED = 1;
@@ -17,7 +19,7 @@ class PortalChecker
         }
     }
 
-    public function load($db, $instance) {
+    public function load(Connection $db, $instance) {
         if (is_numeric($instance)) {
             $sql = 'SELECT * FROM gc_instance WHERE id = ?';
         }
