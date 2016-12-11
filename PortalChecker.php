@@ -19,15 +19,11 @@ class PortalChecker
         }
     }
 
-    public function load(Connection $db, $instance) {
-        if (is_numeric($instance)) {
-            $sql = 'SELECT * FROM gc_instance WHERE id = ?';
-        }
-        else {
-            $sql = 'SELECT * FROM gc_instance WHERE title = ?';
-        }
+    public function load(Connection $db, $instance)
+    {
+        $column = is_numeric($instance) ? 'id' : 'title';
 
-        return $db->executeQuery($sql, [$instance])->fetch(\PDO::FETCH_OBJ);
+        return $db->executeQuery("SELECT * FROM gc_instance WHERE {$column} = ?", [$instance])->fetch(DB::OBJ);
     }
 
     public function isVirtual($portal)
@@ -63,15 +59,26 @@ class PortalChecker
         return !empty($portal->data->public_key) ? $portal->data->public_key : false;
     }
 
-    public function canSendEmail($portal, $key) {
+    public function canSendEmail($portal, $key)
+    {
         $this->prepare($portal);
 
         return !empty($portal->configuration->{$key}) ? $portal->configuration->{$key} : true;
     }
 
-    public function allowPublicWriting($portal) {
+    public function allowPublicWriting($portal)
+    {
         $this->prepare($portal);
 
         return !empty($portal->configuration->public_writing) ? $portal->configuration->public_writing : false;
+    }
+
+    public function buildLink($portal, $uri)
+    {
+        $domain = $this->getPrimaryDomain($portal);
+
+        return ($this->isVirtual($portal))
+            ? "https://{$domain}/beta/#/{$uri}"
+            : "https://{$domain}/webapp/#/{$uri}";
     }
 }
