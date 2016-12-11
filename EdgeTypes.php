@@ -61,6 +61,10 @@ class EdgeTypes
     const  PUBLISH_ENROLMENT_SELF_START_BASE      = 29; # T: Timestamp     | S: Enrolment  | N: See GO1P-6926
     const  PUBLISH_ENROLMENT_SELF_START_BASE_DONE = 30; # T: Timestamp     | S: Enrolment  | N: PUBLISH_ENROLMENT_SELF_START_BASE record will be coverted to this when it's processed.
 
+    # Enrolment
+    # ---------------------
+    const ENROLMENT_DUE_DATE = 200; # T: Timestamp | S: Enrolment | N: See GO1P-8097
+
     # Portal relationships
     # ---------------------
     const HAS_DOMAIN = 16;
