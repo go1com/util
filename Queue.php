@@ -10,4 +10,8 @@ class Queue
 
     const USER_CREATE   = 'user.create';
     const USER_UPdATE   = 'user.update';
+
+    const RO_CREATE     = 'ro.create';
+    const RO_UPDATE     = 'ro.update';
+    const RO_DELETE     = 'ro.delete';
 }
