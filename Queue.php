@@ -9,7 +9,7 @@ class Queue
     const LO_DELETE     = 'lo.delete';
 
     const USER_CREATE   = 'user.create';
-    const USER_UPdATE   = 'user.update';
+    const USER_UPDATE   = 'user.update';
 
     const RO_CREATE     = 'ro.create';
     const RO_UPDATE     = 'ro.update';
