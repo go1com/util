@@ -76,6 +76,7 @@ class PortalChecker
     public function buildLink($portal, $uri)
     {
         $domain = $this->getPrimaryDomain($portal);
+        $uri = ltrim($uri, '/');
 
         return ($this->isVirtual($portal))
             ? "https://{$domain}/beta/#/{$uri}"
