@@ -16,5 +16,5 @@ class Queue
     const RO_DELETE     = 'ro.delete';
 
     const VOTE_CREATE   = 'vote.create';
-    const VOTE_DETELE   = 'vote.delete';
+    const VOTE_DELETE   = 'vote.delete';
 }
