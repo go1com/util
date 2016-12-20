@@ -17,4 +17,8 @@ class Queue
 
     const VOTE_CREATE   = 'vote.create';
     const VOTE_DELETE   = 'vote.delete';
+
+    const CUSTOMER_CREATE = 'customer.create';
+    const CUSTOMER_UPDATE = 'customer.update';
+    const CUSTOMER_DELETE = 'customer.delete';
 }
