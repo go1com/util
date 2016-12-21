@@ -2,6 +2,8 @@
 
 namespace go1\util;
 
+use Assert\Assert;
+use Assert\LazyAssertionException;
 use HTMLPurifier;
 use stdClass;
 use Traversable;
@@ -22,6 +24,20 @@ class Text
             foreach ($value as $k => &$item) {
                 static::purify($html, $item);
             }
+        }
+    }
+
+    public static function isEmail(string $string)
+    {
+        try {
+            Assert::lazy()
+                  ->that($string, 'string')->email()
+                  ->verifyNow();
+
+            return true;
+        }
+        catch (LazyAssertionException $e) {
+            return false;
         }
     }
 }
