@@ -4,6 +4,7 @@ namespace go1\util;
 
 use Assert\Assert;
 use Assert\LazyAssertionException;
+use Firebase\JWT\JWT;
 use HTMLPurifier;
 use stdClass;
 use Traversable;
@@ -39,5 +40,12 @@ class Text
         catch (LazyAssertionException $e) {
             return false;
         }
+    }
+
+    public static function jwtPayload(string $jwt)
+    {
+        $payload = JWT::urlsafeB64Decode(explode('.', $jwt)[1]);
+
+        return Jwt::jsonDecode($payload);
     }
 }
