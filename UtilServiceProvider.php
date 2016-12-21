@@ -29,7 +29,5 @@ class UtilServiceProvider implements ServiceProviderInterface
         $c['lo_checker'] = function () {
             return new LoChecker;
         };
-
-
     }
 }
