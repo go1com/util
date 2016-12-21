@@ -61,10 +61,6 @@ class EdgeTypes
     const  PUBLISH_ENROLMENT_SELF_START_BASE      = 29; # T: Timestamp     | S: Enrolment  | N: See GO1P-6926
     const  PUBLISH_ENROLMENT_SELF_START_BASE_DONE = 30; # T: Timestamp     | S: Enrolment  | N: PUBLISH_ENROLMENT_SELF_START_BASE record will be coverted to this when it's processed.
 
-    # Enrolment
-    # ---------------------
-    const ENROLMENT_DUE_DATE = 200; # T: Timestamp | S: Enrolment | N: See GO1P-8097
-
     # Portal relationships
     # ---------------------
     const HAS_DOMAIN = 16;
@@ -87,7 +83,8 @@ class EdgeTypes
     const HAS_SHARE_WITH_LO_PORTAL   = 603; # T: gc_instance.id     | S: Learning object
     const HAS_SHARE_GROUP_NOTE       = 604; # T: gc_social_group.id | S: gc_note.id
     const HAS_ASSIGN                 = 701; # T: enrolment.id       | S: gc_user.id
-    const HAS_LO_SUGGESTION          = 702; # T: suggested LO       | S: gc_user.id | Weight: Suggesting user.
-    const HAS_LO_SUGGESTION_ACCEPTED = 703; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is accepted.
-    const HAS_LO_SUGGESTION_REJECTED = 704; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is rejected.
+    const HAS_LO_ASSIGNMENT          = 702; # T: suggested LO       | S: gc_user.id | Weight: Suggesting user.
+    const HAS_LO_ASSIGNMENT_ACCEPTED = 703; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is accepted.
+    const HAS_LO_ASSIGNMENT_REJECTED = 704; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is rejected.
+    const HAS_LO_ASSIGNMENT_DUE_DATE = 705; # T: self.SOURCE        | S: suggestion ID | W: Timestamp  | N: See GO1P-8097
 }
