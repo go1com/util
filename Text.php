@@ -42,9 +42,9 @@ class Text
         }
     }
 
-    public static function jwtPayload(string $jwt)
+    public static function jwtContent(string $jwt, $i = 1)
     {
-        $payload = JWT::urlsafeB64Decode(explode('.', $jwt)[1]);
+        $payload = JWT::urlsafeB64Decode(explode('.', $jwt)[$i]);
 
         return Jwt::jsonDecode($payload);
     }
