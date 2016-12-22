@@ -33,7 +33,7 @@ class AccessChecker
         $accounts = isset($user->accounts) ? $user->accounts : [];
         foreach ($accounts as &$account) {
             if ($instance === $account->instance) {
-                if (!empty($account->roles) && in_array('administrator', $account->roles)) {
+                if (!empty($account->roles) && in_array(Roles::ADMIN, $account->roles)) {
                     return $account;
                 }
             }
@@ -42,7 +42,7 @@ class AccessChecker
         return false;
     }
 
-    public function isPortalTutor(Request $req, $portalName, $role = 'Tutor')
+    public function isPortalTutor(Request $req, $portalName, $role = Roles::TUTOR)
     {
         if ($this->isPortalAdmin($req, $portalName)) {
             return 1;
@@ -66,7 +66,7 @@ class AccessChecker
 
     public function isPortalManager(Request $req, $portalName)
     {
-        return $this->isPortalTutor($req, $portalName, 'Manager');
+        return $this->isPortalTutor($req, $portalName, Roles::MANAGER);
     }
 
     public function isAccountsAdmin(Request $req)
@@ -75,7 +75,7 @@ class AccessChecker
             return null;
         }
 
-        return in_array('Admin on #Accounts', isset($user->roles) ? $user->roles : []) ? $user : false;
+        return in_array(Roles::ROOT, isset($user->roles) ? $user->roles : []) ? $user : false;
     }
 
     public function validUser(Request $req, $instanceName = null)
