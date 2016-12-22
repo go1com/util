@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class UserHelper
 {
     const ROOT_JWT      = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvYmplY3QiOnsidHlwZSI6InVzZXIiLCJjb250ZW50Ijp7ImlkIjoxLCJwcm9maWxlX2lkIjoxLCJyb2xlcyI6WyJBZG1pbiBvbiAjQWNjb3VudHMiXSwibWFpbCI6IjFAMS4xIn19fQ.YwGrlnegpd_57ek0vew5ixBfzhxiepc5ODVwPva9egs';
-    const DEFAULT_ROLES = ['Student', 'authenticated user'];
+    const DEFAULT_ROLES = [Roles::STUDENT, Roles::AUTHENTICATED];
 
     public function uuid2jwt(Client $client, $userUrl, $uuid)
     {
@@ -25,7 +25,7 @@ class UserHelper
 
     public function profileId2uuid(Client $client, $userUrl, $profileId)
     {
-        $jwt = JWT::encode(['admin' => true], 'GO1INTERNAL');
+        $jwt = JWT::encode(['admin' => true], 'INTERNAL');
         $url = rtrim($userUrl, '/') . "/account/-/{$profileId}?jwt=$jwt";
         $res = $client->get($url, ['https_errors' => false]);
 
