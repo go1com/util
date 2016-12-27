@@ -2,6 +2,7 @@
 
 namespace go1\util;
 
+use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
 use RuntimeException;
@@ -87,5 +88,51 @@ class UserHelper
         ];
 
         return JWT::encode($array, 'INTERNAL');
+    }
+
+    public function format(stdClass $user)
+    {
+        $data = is_scalar($user->data) ? json_decode($user->data, true) : $user->data;
+
+        return (object) [
+            'id'         => (int) $user->id,
+            'mail'       => $user->mail,
+            'name'       => "{$user->first_name} {$user->last_name}",
+            'profile_id' => (int) $user->profile_id,
+            'first_name' => $user->first_name,
+            'last_name'  => $user->last_name,
+            'roles'      => isset($data['roles']) ? $data['roles'] : null,
+            'avatar'     => isset($data['avatar']['uri']) ? $data['avatar']['uri'] : null,
+            'created'    => (int) $user->created,
+            'login'      => (int) $user->login,
+            'status'     => (bool) $user->status,
+            'data'       => (object) (is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),
+            'root'       => null,
+        ];
+    }
+
+    public function attachRootAccount(Connection $db, array &$users, $accountsName)
+    {
+        $mails = array_column($users, 'mail');
+        $q = $db->createQueryBuilder();
+        $q
+            ->select('u.id, u.mail, u.profile_id')
+            ->from('gc_user', 'u')
+            ->where($q->expr()->in('u.mail', ':mails'))
+            ->andWhere('u.instance = :instance')
+            ->setParameter(':mails', $mails, Connection::PARAM_STR_ARRAY)
+            ->setParameter(':instance', $accountsName);
+
+        $results = $q->execute();
+        while ($rootAcc = $results->fetch()) {
+            foreach ($users as &$user) {
+                if ($rootAcc['mail'] == $user->mail) {
+                    $user->root = [
+                        'id'         => (int) $rootAcc['id'],
+                        'profile_id' => (int) $rootAcc['profile_id']
+                    ];
+                }
+            }
+        }
     }
 }
