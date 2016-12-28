@@ -16,6 +16,14 @@ class DB
     const STRING   = PDO::PARAM_STR;
     const STRINGS  = Connection::PARAM_STR_ARRAY;
 
+    public static function host($masterKey = 'RDS_HOSTNAME', $slaveKey = 'RDS_HOSTNAME_SLAVE', $default = 'microservice.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com')
+    {
+        $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+        $host = in_array($method, ['GET', 'OPTIONS']) ? getenv($slaveKey) : getenv($masterKey);
+
+        return $host ?: $default;
+    }
+
     public static function safeThread(Connection $db, string $threadName, int $timeout, callable $callback)
     {
         try {
