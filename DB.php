@@ -16,16 +16,24 @@ class DB
     const STRING   = PDO::PARAM_STR;
     const STRINGS  = Connection::PARAM_STR_ARRAY;
 
-    public static function host($masterKey = 'RDS_HOSTNAME', $slaveKey = 'RDS_HOSTNAME_SLAVE', $default = 'microservice.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com')
+    public static function connectionOptions(string $name): array
     {
-        if (true) {
-            return getenv($masterKey) ?: $default; # We cant 'use the slave connection for now, but soon we can.
-        }
-
+        $prefix = strtoupper("{$name}_DB");
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
-        $host = in_array($method, ['GET', 'OPTIONS']) ? getenv($slaveKey) : getenv($masterKey);
+        $host = ('go1' === $name) ? 'hostmasterdb.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com' : 'microservice.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com';
+        $slave = true # We can't use the slave connection for now.
+            ? getenv("{$prefix}_HOST")
+            : (in_array($method, ['GET', 'OPTIONS']) ? getenv("{$prefix}_MASTER") : getenv("{$prefix}_SLAVE"));
 
-        return $host ?: $default;
+        return [
+            'driver'        => 'pdo_mysql',
+            'dbname'        => getenv("{$prefix}_NAME") ?: "{$name}_dev",
+            'host'          => $slave ?: $host,
+            'user'          => getenv("{$prefix}_USERNAME") ?: 'gc_dev',
+            'password'      => getenv("{$prefix}_PASSWORD") ?: 'gc_dev#2016',
+            'port'          => getenv("{$prefix}_PORT") ?: '3306',
+            'driverOptions' => [1002 => 'SET NAMES utf8'],
+        ];
     }
 
     public static function safeThread(Connection $db, string $threadName, int $timeout, callable $callback)
