@@ -18,6 +18,10 @@ class DB
 
     public static function host($masterKey = 'RDS_HOSTNAME', $slaveKey = 'RDS_HOSTNAME_SLAVE', $default = 'microservice.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com')
     {
+        if (true) {
+            return getenv($masterKey) ?: $default; # We cant 'use the slave connection for now, but soon we can.
+        }
+
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
         $host = in_array($method, ['GET', 'OPTIONS']) ? getenv($slaveKey) : getenv($masterKey);
 
