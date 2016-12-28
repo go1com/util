@@ -129,7 +129,7 @@ class UserHelper
                 if ($rootAcc['mail'] == $user->mail) {
                     $user->root = [
                         'id'         => (int) $rootAcc['id'],
-                        'profile_id' => (int) $rootAcc['profile_id']
+                        'profile_id' => (int) $rootAcc['profile_id'],
                     ];
                 }
             }
