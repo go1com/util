@@ -6,10 +6,17 @@ use Doctrine\DBAL\Connection;
 
 class LoHelper
 {
+    public static function load(Connection $db, int $id)
+    {
+        return ($learningObjects = static::loadMultiple($db, [$id]))
+            ? $learningObjects[0]
+            : false;
+    }
+
     /**
      * @param Connection $db
-     * @param int[]      $ids
-     * @return object[]
+     * @param  []int      $ids
+     * @return []stdClass
      */
     public static function loadMultiple(Connection $db, array $ids): array
     {
