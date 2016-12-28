@@ -4,6 +4,18 @@ namespace go1\util;
 
 class Service
 {
+    public static function accountsName(string $env): string
+    {
+        switch ($env) {
+            case 'production':
+            case 'staging':
+                return 'accounts.gocatalyze.com';
+
+            default:
+                return 'accounts-dev.gocatalyze.com';
+        }
+    }
+
     public static function urls(array $names, string $env, string $pattern = null): array
     {
         foreach ($names as $name) {
