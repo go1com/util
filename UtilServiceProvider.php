@@ -6,6 +6,7 @@ use HTMLPurifier;
 use HTMLPurifier_Config;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Vectorface\Whip\Whip;
 
 class UtilServiceProvider implements ServiceProviderInterface
 {
@@ -17,6 +18,12 @@ class UtilServiceProvider implements ServiceProviderInterface
 
             return new HTMLPurifier($config);
         };
+
+        if (class_exists(Whip::class)) {
+            $c['whip'] = function () {
+                return new Whip(Whip::REMOTE_ADDR);
+            };
+        }
 
         $c['access_checker'] = function () {
             return new AccessChecker;
