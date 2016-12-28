@@ -4,7 +4,7 @@ namespace go1\util;
 
 class Service
 {
-    public static function urls(array $names, string $env, string $pattern = 'http://SERVICE.ENVIRONMENT.go1.service'): array
+    public static function urls(array $names, string $env, string $pattern = null): array
     {
         foreach ($names as $name) {
             $urls["{$name}_url"] = static::url($names, $env, $pattern);
@@ -13,8 +13,10 @@ class Service
         return !empty($urls) ? $urls : [];
     }
 
-    public static function url(string $name, string $env, string $pattern = 'http://SERVICE.ENVIRONMENT.go1.service'): string
+    public static function url(string $name, string $env, string $pattern = null): string
     {
+        $pattern = $pattern ?: 'http://SERVICE.ENVIRONMENT.go1.service';
+
         return str_replace(['SERVICE', 'ENVIRONMENT'], [$name, $env], $pattern);
     }
 }
