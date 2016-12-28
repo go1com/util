@@ -29,6 +29,11 @@ class Service
     {
         $pattern = $pattern ?: 'http://SERVICE.ENVIRONMENT.go1.service';
 
+        // There are some services don't have staging instance yet.
+        if (in_array($name, ['rules'])) {
+            $env = 'production';
+        }
+
         return str_replace(['SERVICE', 'ENVIRONMENT'], [$name, $env], $pattern);
     }
 }
