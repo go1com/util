@@ -48,4 +48,15 @@ class LoHelper
 
         return $learningObjects;
     }
+
+    public static function findIds(array &$items, array &$ids = [])
+    {
+        foreach ($items as &$item) {
+            $ids[] = $item['id'];
+
+            if (!empty($item['items'])) {
+                static::findIds($item['items'], $ids);
+            }
+        }
+    }
 }
