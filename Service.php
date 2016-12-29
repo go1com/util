@@ -19,7 +19,7 @@ class Service
     public static function urls(array $names, string $env, string $pattern = null): array
     {
         foreach ($names as $name) {
-            $urls["{$name}_url"] = static::url($names, $env, $pattern);
+            $urls["{$name}_url"] = static::url($name, $env, $pattern);
         }
 
         return !empty($urls) ? $urls : [];
