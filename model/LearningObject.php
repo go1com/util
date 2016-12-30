@@ -3,6 +3,7 @@
 namespace go1\util\model;
 
 use Doctrine\DBAL\Connection;
+use go1\util\DB;
 use stdClass;
 
 /**
@@ -27,10 +28,13 @@ class LearningObject
     public $created;
     public $updated;
     public $timestamp;
+    public $enrolment;
     public $data;
-    public $edges;
 
-    public static function create(stdClass $row, int $userProfileId = null, Connection $db = null)
+    /** @var Edge[][] */
+    public $edges = [];
+
+    public static function create(stdClass $row, int $userProfileId = null, Connection $db = null): LearningObject
     {
         $lo = new LearningObject;
         $lo->id = $row->id;
@@ -52,8 +56,21 @@ class LearningObject
         $lo->timestamp = $row->timestamp;
         $lo->data = is_string($row->data) ? json_decode($row->data) : $row->data;
 
-        # …
-        # $lo->edges = $row->edges;
+        if ($db) {
+            # Load enrolment for the user
+            $enrolment = 'SELECT * FROM gc_enrolment WHERE profile_id = ? AND lo_id = ?';
+            $enrolment = $db->executeQuery($enrolment, [$userProfileId, $lo->id]);
+            if ($enrolment = $enrolment->fetch(DB::OBJ)) {
+                $lo->enrolment = Enrolment::create($enrolment);
+            }
+
+            # Load edges
+            $edges = 'SELECT type, target_id, weight, data FROM gc_ro WHWERE type IN (?) AND source_id = ?';
+            $edges = $db->executeQuery($edges, [['@TODO'], $lo->id], [DB::INTEGERS, DB::INTEGER]);
+            while ($edge = $edges->fetch(DB::OBJ)) {
+                $lo->edges[$edge->type][] = Edge::create($edge);
+            }
+        }
 
         return $lo;
     }
