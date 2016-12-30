@@ -31,6 +31,8 @@ class LearningObject
     public $enrolment;
     public $data;
 
+    // @TODO pricing
+
     /** @var Edge[][] */
     public $edges = [];
 
