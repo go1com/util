@@ -1,0 +1,4 @@
+phpunit:
+  tags: ["php7", "phpunit", "composer"]
+  cache: { paths: ["vendor/"] }
+  script: composer install -q --no-dev && phpunit
