@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection;
 
 class PortalChecker
 {
-    const INSTANCE_ENABLED = 1;
-
     private function prepare(&$portal)
     {
         if (!isset($portal->configuration) && !empty($portal->data)) {
@@ -49,7 +47,7 @@ class PortalChecker
 
     public function isEnabled($portal)
     {
-        return isset($portal->status) ? (static::INSTANCE_ENABLED == $portal->status) : false;
+        return isset($portal->status) ? (PortalStatuses::ENABLED == $portal->status) : false;
     }
 
     public function getPublicKey($portal)
