@@ -4,6 +4,8 @@ namespace go1\util;
 
 class Queue
 {
+    # The entity events
+    # -------
     const LO_CREATE        = 'lo.create'; # Body: LO object, no lo.items should be expected.
     const LO_UPDATE        = 'lo.update'; # Body: LO object with extra property: origin.
     const LO_DELETE        = 'lo.delete'; # Body: LO object.
@@ -20,4 +22,8 @@ class Queue
     const ENROLMENT_CREATE = 'enrolment.create';
     const ENROLMENT_UPDATE = 'enrolment.update';
     const ENROLMENT_DELETE = 'enrolment.delete';
+
+    # routingKey that tell some service do something.
+    # -------
+    const DO_CONSUMER_HTTP_REQUEST = 'do.consumer.HttpRequest'; # { method: STRING, url: STRING, query: STRING, headers: map[STRING][STRING], body: STRING }
 }
