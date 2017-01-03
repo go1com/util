@@ -41,7 +41,7 @@ class EdgeTypes
     const HAS_CUSTOM_TAG        = 12; # T: Tag             | S: Learning object
     const HAS_PARENT_TAG        = 13; # T: Tag             | S: Tag
     const HAS_COUPON            = 14; # T: ?               | S: ?
-    const HAS_TUTOR             = 15; # T: ?               | S: ?
+    const HAS_TUTOR             = 15; # T: Simple Account  | S: Learning object
     const HAS_AUTHOR            = 17; # T: Simple Account  | S: Learning object
     const HAS_TUTOR_ENROLMENT   = 18; # T: Simple account  | S: Enrolment
     const HAS_ENQUIRY           = 19; # T: Learning object | S: Profile
