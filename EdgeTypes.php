@@ -30,7 +30,7 @@ class EdgeTypes
     const HAS_LP_ITEM           = 1;  # T: ?               | S: Learning object (LP only)
     const HAS_PRODUCT           = 2;  # T: ?               | S: Learning object
     const HAS_EVENT             = 3;  # T: ?               | S: Learning object (course, module?)
-    const HAS_TAG               = 4;  # T: ?               | S: Learning object (course only)
+    const HAS_TAG               = 4;  # T: Tag             | S: Learning object
     const HAS_LI                = 5;  # T: ?               | S: Learning object (module only)
     const HAS_WORKSHOP          = 6;  # T: ?               | S: ?
     const HAS_MODULE            = 7;  # T: gc_lo.id        | S: gc_lo.id
@@ -42,11 +42,11 @@ class EdgeTypes
     const HAS_PARENT_TAG        = 13; # T: Tag             | S: Tag
     const HAS_COUPON            = 14; # T: ?               | S: ?
     const HAS_TUTOR             = 15; # T: ?               | S: ?
-    const HAS_EXCLUDED_TAG      = 19; # T: ?               | S: ?
     const HAS_AUTHOR            = 17; # T: Simple Account  | S: Learning object
     const HAS_TUTOR_ENROLMENT   = 18; # T: Simple account  | S: Enrolment
     const HAS_ENQUIRY           = 19; # T: Learning object | S: Profile
     const HAS_ARCHIVED_ENQUIRY  = 20; # T: NULL            | S: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
+    const HAS_EXCLUDED_TAG      = 31; # T: Tag             | S: Learning object
 
     # LO & enrolment scheduling
     # ---------------------
