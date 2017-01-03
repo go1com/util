@@ -8,7 +8,7 @@ use go1\clients\MqClient;
 
 class RoHelper
 {
-    public static function link(Connection $db, MqClient $mqClient, $sourceId, $targetId, $type, $weight = 0, $data = null)
+    public static function link(Connection $db, MqClient $mqClient, $type, $sourceId, $targetId, $weight = 0, $data = null)
     {
         $db->insert('gc_ro', $edge = [
           'type'      => $type,
@@ -23,7 +23,7 @@ class RoHelper
 
     public static function hasLink(Connection $db, $type, $sourceId, $targetId)
     {
-        return $db->fetchColumn('SELECT 1 FROM gc_ro WHERE type = ? AND source = ? AND target = ?', [$type, $sourceId, $targetId]);
+        return $db->fetchColumn('SELECT 1 FROM gc_ro WHERE type = ? AND source_id = ? AND target_id = ?', [$type, $sourceId, $targetId]);
     }
 
     public static function unlink(Connection $db, MqClient $mqClient, $type, $sourceId = null, $targetId = null)
