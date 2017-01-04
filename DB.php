@@ -28,7 +28,7 @@ class DB
 
         $dbName = "{$name}_dev";
         if ('go1' === $name) {
-            $dbName = in_array(getenv('_DOCKER_ENV'), ['staging', 'prod']) ? 'gc_go1' : 'dev_go1';
+            $dbName = in_array(getenv('_DOCKER_ENV'), ['staging', 'production']) ? 'gc_go1' : 'dev_go1';
         }
 
         return [
