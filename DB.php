@@ -19,6 +19,10 @@ class DB
 
     public static function connectionOptions(string $name): array
     {
+        if (function_exists('__db_connection_options')) {
+            return __db_connection_options($name);
+        }
+
         $prefix = strtoupper(class_exists(App::class, false) ? "{$name}_DB" : "_DOCKER_{$name}_DB");
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
         $host = ('go1' === $name) ? 'hostmasterdb.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com' : 'microservice.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com';
