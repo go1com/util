@@ -2,10 +2,20 @@
 
 namespace go1\util;
 
+/**
+ * Note for developers who are publishing messages:
+ *
+ * - "Create" message must contain the full entity, not only ID.
+ * - "Update" message must contain 'original' value.
+ * - "Delete" message must contain the full entity, not only ID.
+ */
 class Queue
 {
     # The entity events
     # -------
+    const PORTAL_CREATE    = 'portal.create';
+    const PORTAL_UPDATE    = 'portal.update';
+    const PORTAL_DELETE    = 'portal.delete';
     const LO_CREATE        = 'lo.create'; # Body: LO object, no lo.items should be expected.
     const LO_UPDATE        = 'lo.update'; # Body: LO object with extra property: origin.
     const LO_DELETE        = 'lo.delete'; # Body: LO object.
@@ -24,9 +34,6 @@ class Queue
     const ENROLMENT_CREATE = 'enrolment.create';
     const ENROLMENT_UPDATE = 'enrolment.update';
     const ENROLMENT_DELETE = 'enrolment.delete';
-    const PORTAL_CREATE    = 'portal.create';
-    const PORTAL_UPDATE    = 'portal.update';
-    const PORTAL_DELETE    = 'portal.delete';
     const TAG_CREATE       = 'tag.create';
     const TAG_UPDATE       = 'tag.update';
     const TAG_DELETE       = 'tag.delete';
