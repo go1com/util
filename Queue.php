@@ -11,6 +11,7 @@ class Queue
     const LO_DELETE        = 'lo.delete'; # Body: LO object.
     const USER_CREATE      = 'user.create';
     const USER_UPDATE      = 'user.update';
+    const USER_DELETE      = 'user.delete';
     const RO_CREATE        = 'ro.create';
     const RO_UPDATE        = 'ro.update';
     const RO_DELETE        = 'ro.delete';
