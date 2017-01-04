@@ -30,9 +30,14 @@ class DB
             ? getenv("{$prefix}_HOST")
             : (in_array($method, ['GET', 'OPTIONS']) ? getenv("{$prefix}_MASTER") : getenv("{$prefix}_SLAVE"));
 
+        $dbName = "{$name}_dev";
+        if ('go1' === $name) {
+            $dbName = in_array(getenv('_DOCKER_ENV'), ['staging', 'production']) ? 'gc_go1' : 'dev_go1';
+        }
+
         return [
             'driver'        => 'pdo_mysql',
-            'dbname'        => getenv("{$prefix}_NAME") ?: "{$name}_dev",
+            'dbname'        => getenv("{$prefix}_NAME") ?: $dbName,
             'host'          => $slave ?: $host,
             'user'          => getenv("{$prefix}_USERNAME") ?: 'gc_dev',
             'password'      => getenv("{$prefix}_PASSWORD") ?: 'gc_dev#2016',
