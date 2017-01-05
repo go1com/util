@@ -42,9 +42,9 @@ class AccessChecker
         return false;
     }
 
-    public function isPortalTutor(Request $req, $portalName, $role = Roles::TUTOR)
+    public function isPortalTutor(Request $req, $portalName, $role = Roles::TUTOR, bool $strict = true)
     {
-        if ($this->isPortalAdmin($req, $portalName)) {
+        if ($strict && $this->isPortalAdmin($req, $portalName)) {
             return 1;
         }
 
@@ -64,9 +64,9 @@ class AccessChecker
         return false;
     }
 
-    public function isPortalManager(Request $req, $portalName)
+    public function isPortalManager(Request $req, $portalName, bool $strict = true)
     {
-        return $this->isPortalTutor($req, $portalName, Roles::MANAGER);
+        return $this->isPortalTutor($req, $portalName, Roles::MANAGER, $strict);
     }
 
     public function isAccountsAdmin(Request $req)
