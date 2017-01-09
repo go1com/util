@@ -33,6 +33,18 @@ class UserHelper
         return $db->executeQuery($sql, [$ids], [Connection::PARAM_INT_ARRAY])->fetchAll(DB::OBJ);
     }
 
+    /**
+     * @param \Doctrine\DBAL\Connection $db
+     * @param $profileId
+     * @param $portalName
+     * @return mixed
+     */
+    public static function loadByProfileId(Connection $db, $profileId, $portalName)
+    {
+        $sql = 'SELECT * FROM gc_user WHERE profile_id ? AND instance = ?';
+        return $db->executeQuery($sql, [$profileId, $portalName])->fetch(DB::OBJ);
+    }
+
     public function uuid2jwt(Client $client, $userUrl, $uuid)
     {
         $url = rtrim($userUrl, '/') . "/account/current/{$uuid}";
