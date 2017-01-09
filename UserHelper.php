@@ -22,6 +22,17 @@ class UserHelper
         return $user;
     }
 
+    /**
+     * @param \Doctrine\DBAL\Connection $db
+     * @param array $ids
+     * @return mixed
+     */
+    public static function loadMultiple(Connection $db, array $ids)
+    {
+        $sql = 'SELECT * FROM gc_user WHERE id IN (?)';
+        return $db->executeQuery($sql, [$ids], [Connection::PARAM_INT_ARRAY])->fetchAll(DB::OBJ);
+    }
+
     public function uuid2jwt(Client $client, $userUrl, $uuid)
     {
         $url = rtrim($userUrl, '/') . "/account/current/{$uuid}";
