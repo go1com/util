@@ -39,10 +39,10 @@ class UserHelper
      * @param $portalName
      * @return mixed
      */
-    public static function loadByProfileId(Connection $db, $profileId, $portalName)
+    public static function loadByProfileId(Connection $db, int $profileId, string $instanceName)
     {
-        $sql = 'SELECT * FROM gc_user WHERE profile_id ? AND instance = ?';
-        return $db->executeQuery($sql, [$profileId, $portalName])->fetch(DB::OBJ);
+        $sql = 'SELECT * FROM gc_user WHERE profile_id = ? AND instance = ?';
+        return $db->executeQuery($sql, [$profileId, $instanceName])->fetch(DB::OBJ);
     }
 
     public function uuid2jwt(Client $client, $userUrl, $uuid)
