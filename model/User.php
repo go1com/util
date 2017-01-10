@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\util\DB;
 use go1\util\EdgeTypes;
 use stdClass;
+use PDO;
 
 /**
  * Just for reference, not ready for using yet.
@@ -33,13 +34,22 @@ class User
     /** @var object */
     public $data;
 
-    public static function create(stdClass $row, Connection $db = null, $root = true)
+    /**
+     * @param stdClass        $row
+     * @param Connection|null $db
+     * @param bool            $root
+     * @param string|null     $instance
+     *   Only need this param if $root is true.
+     *   When the param is provided, sub account will be filled.
+     * @return User
+     */
+    public static function create(stdClass $row, Connection $db = null, $root = true, string $instance = null)
     {
         $user = new User;
         $user->id = $row->id;
-        $user->profileId = $row->profileId;
+        $user->profileId = isset($row->profile_id) ? $row->profile_id : null;
         $user->instance = $row->instance;
-        $user->name = $row->name;
+        $user->name = isset($row->name) ? $row->name: null;
         $user->mail = $row->mail;
         $user->firstName = $row->first_name;
         $user->lastName = $row->last_name;
@@ -52,18 +62,18 @@ class User
 
         if ($db) {
             // Fill the roles
-            $roleIds = 'SELECT target_id FROM gc_role WHERE type = ? AND source_id = ?';
-            $roleIds = $db->fetchColumn($roleIds, [EdgeTypes::HAS_ROLE, $user->id]);
-            $user->roles = $db->fetchColumn('SELECT name FROM gc_role WHERE id IN (?)', [$roleIds], [DB::INTEGERS]);
+            $roleIds = 'SELECT target_id FROM gc_ro WHERE type = ? AND source_id = ?';
+            $roleIds = $db->executeQuery($roleIds, [EdgeTypes::HAS_ROLE, $user->id])->fetchAll(PDO::FETCH_COLUMN);
+            $user->roles = $db->executeQuery('SELECT name FROM gc_role WHERE id IN (?)', [$roleIds], [DB::INTEGERS])->fetchAll(PDO::FETCH_COLUMN);
 
             // Fill accounts
-            if ($root) {
-                $accountIds = 'SELECT target_id FROM gc_role WHERE type = ? AND source_id = ?';
-                $accountIds = $db->fetchColumn($accountIds, [EdgeTypes::HAS_ACCOUNT, $user->id]);
+            if ($root && $instance) {
+                $accountIds = 'SELECT target_id FROM gc_ro WHERE type = ? AND source_id = ?';
+                $accountIds = $db->executeQuery($accountIds, [EdgeTypes::HAS_ACCOUNT, $user->id])->fetchAll(PDO::FETCH_COLUMN);
                 if ($accountIds) {
-                    $q = $db->executeQuery('SELECT FROM gc_user WHERE status = 1 AND id IN (?)', [$accountIds], [DB::INTEGERS]);
+                    $q = $db->executeQuery('SELECT * FROM gc_user WHERE status = 1 AND id IN (?) AND instance = ?', [$accountIds, $instance], [DB::INTEGERS]);
                     while ($account = $q->fetch(DB::OBJ)) {
-                        $user->accounts[] = static::create($row, $db);
+                        $user->accounts[] = static::create($account, $db, false);
                     }
                 }
             }
