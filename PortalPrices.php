@@ -38,7 +38,7 @@ class PortalPrices
             return [$currency, $userLicenses, $interval];
         }
 
-        return [];
+        return [null, null, null];
     }
 
     public function getContract($userPlan, $instance)
