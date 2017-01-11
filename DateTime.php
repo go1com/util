@@ -27,7 +27,7 @@ class DateTime
             throw new InvalidArgumentException('Specific date/time string can not empty');
         }
 
-        if (strtotime($time)) {
+        if (!is_numeric($time) && strtotime($time)) {
             $tz = new DateTimeZone($timezone);
             $date = (new DefaultDateTime($time))->setTimezone($tz);
 
