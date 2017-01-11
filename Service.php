@@ -36,4 +36,25 @@ class Service
 
         return str_replace(['SERVICE', 'ENVIRONMENT'], [$name, $env], $pattern);
     }
+
+    /**
+     * This method is only for dev environment for now.
+     *
+     * The container's /etc/resolver.conf, change nameserver to
+     *
+     *  nameserver 172.31.10.148
+     *
+     * @param string $env
+     * @param string $name
+     * @return string[]
+     */
+    public static function ipPort(string $env, string $name)
+    {
+        $records = dns_get_record("$env.$name.service.consul", DNS_SRV);
+        if ($records) {
+            $service = &$records[0];
+
+            return [$service['target'], $service['port']];
+        }
+    }
 }
