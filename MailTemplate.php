@@ -96,6 +96,17 @@ class MailTemplate
         ],
     ];
 
+    const ONBOARD_SENT = [
+        'key'    => 'onboard.sent',
+        'tokens' => [
+            '@full_name'    => 'User full name.',
+            '!user_name'    => 'User email.',
+            '!phone'        => 'User phone.',
+            '!site_name'    => 'Human name of the portal.',
+            '!portal_url'   => 'The portal URL.'
+        ],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
