@@ -138,6 +138,7 @@ class UserHelper
             'login'      => (int) $user->login,
             'status'     => (bool) $user->status,
             'data'       => (object) (is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),
+            'phone'      => isset($data['phone']) ? $data['phone'] : null,
             'root'       => null,
         ];
     }
