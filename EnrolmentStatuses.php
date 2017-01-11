@@ -10,6 +10,10 @@ class EnrolmentStatuses
     const COMPLETED   = 'completed';   # you get this state when you finish the course
     const EXPIRED     = 'expired';     # your enrolment was completed, but it's expired.
 
+    /**
+     * All available values that user can input.
+     * Expired is only set by our background logic.
+     */
     public static function all()
     {
         return [self::ASSIGNED, self::IN_PROGRESS, self::PENDING, self::COMPLETED];
