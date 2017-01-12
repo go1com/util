@@ -18,7 +18,8 @@ class LiTypes
     const TEXT        = 'text';
     const VIDEO       = 'video';
     const WORKSHOP    = 'workshop';
-    const COMPLEX     = ['h5p', 'interactive', 'quiz'];
+    const LTI         = 'lti';
+    const COMPLEX     = ['h5p', 'interactive', 'quiz', 'lti'];
 
     public static function all()
     {
