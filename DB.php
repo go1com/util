@@ -46,6 +46,17 @@ class DB
         ];
     }
 
+    public static function transactional(Connection $db, callable $callback)
+    {
+        $return = null;
+
+        $db->transactional(function (Connection $db) use (&$return, &$callback) {
+            $return = call_user_func($callback, $db);
+        });
+
+        return $return;
+    }
+
     public static function safeThread(Connection $db, string $threadName, int $timeout, callable $callback)
     {
         try {

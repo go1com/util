@@ -22,26 +22,17 @@ class UserHelper
         return $user;
     }
 
-    /**
-     * @param \Doctrine\DBAL\Connection $db
-     * @param array $ids
-     * @return mixed
-     */
     public static function loadMultiple(Connection $db, array $ids)
     {
         $sql = 'SELECT * FROM gc_user WHERE id IN (?)';
+
         return $db->executeQuery($sql, [$ids], [Connection::PARAM_INT_ARRAY])->fetchAll(DB::OBJ);
     }
 
-    /**
-     * @param \Doctrine\DBAL\Connection $db
-     * @param $profileId
-     * @param $portalName
-     * @return mixed
-     */
     public static function loadByProfileId(Connection $db, int $profileId, string $instanceName)
     {
         $sql = 'SELECT * FROM gc_user WHERE profile_id = ? AND instance = ?';
+
         return $db->executeQuery($sql, [$profileId, $instanceName])->fetch(DB::OBJ);
     }
 
