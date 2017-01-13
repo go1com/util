@@ -77,7 +77,7 @@ class PortalChecker
         $uri = ltrim($uri, '/');
 
         return ($this->isVirtual($portal))
-            ? "https://{$domain}/beta/#/{$uri}"
+            ? "https://{$domain}/p/#/{$uri}"
             : "https://{$domain}/webapp/#/{$uri}";
     }
 }
