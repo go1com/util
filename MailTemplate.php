@@ -96,10 +96,21 @@ class MailTemplate
         ],
     ];
 
+    const ONBOARD_WELCOME = [
+        'key'    => 'onboard.welcome',
+        'tokens' => [
+            '!first_name'     => 'First name',
+            '!user_name'      => 'User mail',
+            '!site_name'      => 'Human name of the portal.',
+            '!portal_url'     => 'The portal URL.',
+            '!primary_domain' => 'Primary domain of portal.',
+        ],
+    ];
+
     const ONBOARD_SENT = [
         'key'    => 'onboard.sent',
         'tokens' => [
-            '@full_name'    => 'User full name.',
+            '!full_name'    => 'User full name.',
             '!user_name'    => 'User email.',
             '!phone'        => 'User phone.',
             '!site_name'    => 'Human name of the portal.',
