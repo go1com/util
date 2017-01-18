@@ -50,7 +50,7 @@ class Portal
 
         if ($db) {
             $domainIds = 'SELECT target_id FROM gc_ro WHERE type = ? AND source_id = ?';
-            $domainIds = $db->executeQuery($domainIds, [EdgeTypes::HAS_DOMAIN, ])->fetchAll(PDO::FETCH_COLUMN);
+            $domainIds = $db->executeQuery($domainIds, [EdgeTypes::HAS_DOMAIN, $portal->id])->fetchAll(PDO::FETCH_COLUMN);
 
             if (!empty($domainIds)) {
                 $sql = 'SELECT title FROM gc_domain WHERE id IN (?)';
