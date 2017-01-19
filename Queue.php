@@ -40,5 +40,6 @@ class Queue
 
     # routingKey that tell some service do something.
     # -------
-    const DO_CONSUMER_HTTP_REQUEST = 'do.consumer.HttpRequest'; # { method: STRING, url: STRING, query: STRING, headers: map[STRING][STRING], body: STRING }
+    const DO_CONSUMER_HTTP_REQUEST      = 'do.consumer.HttpRequest'; # { method: STRING, url: STRING, query: STRING, headers: map[STRING][STRING], body: STRING }
+    const DO_PUBLIC_API_WEBHOOK_REQUEST = 'do.public-api.webhook-request'; # { appId: INT, url: STRING, subject: OBJECT, original: null|OBJECT }
 }
