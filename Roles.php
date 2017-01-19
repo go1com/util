@@ -13,6 +13,6 @@ class Roles
     const MANAGER       = 'manager';
     const ANONYMOUS     = 'anonymous';
 
-    const ACCOUNTS_ROLES = [self::ROOT];
+    const ACCOUNTS_ROLES = [self::ROOT, self::AUTHENTICATED];
     const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::STUDENT, self::TUTOR, self::MANAGER];
 }
