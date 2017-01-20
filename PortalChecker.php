@@ -31,6 +31,11 @@ class PortalChecker
         return !empty($portal->configuration->is_virtual) ? true : (version_compare($portal->version, 'v3.0.0-alpha1') >= 0);
     }
 
+    public function isLegacy($portal)
+    {
+        return !$this->isVirtual($portal);
+    }
+
     public function getPrimaryDomain($portal)
     {
         $this->prepare($portal);
