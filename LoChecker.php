@@ -11,7 +11,7 @@ class LoChecker
             return [];
         }
 
-        return is_scalar($lo->data) ? json_decode($lo->data, true) : (is_array($lo->data) ? $lo->data : []);
+        return is_scalar($lo->data) ? json_decode($lo->data, true) : (is_array($lo->data) ? $lo->data : (is_object($lo->data) ? (array) $lo->data : []));
     }
 
     public function isAuthor(Connection $db, int $loId, int $userId)
