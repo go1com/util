@@ -96,6 +96,18 @@ class MailTemplate
         ],
     ];
 
+    const USER_MANUAL_PAYMENT_COURSE = [
+        'key'    => 'user.manual.payment.course',
+        'tokens' => [
+            '!full_name'        => 'Full name.',
+            '!user_name'        => 'User mail.',
+            '!course_name'      => 'Course name.',
+            '!course_url'       => 'Course URL.',
+            '!reject_url'       => 'Reject URL.',
+            '!accept_url'       => 'Accept URL.'
+        ],
+    ];
+
     const ONBOARD_WELCOME = [
         'key'    => 'onboard.welcome',
         'tokens' => [
