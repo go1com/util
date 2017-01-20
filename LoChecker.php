@@ -12,4 +12,10 @@ class LoChecker
 
         return $db->fetchColumn($sql, [$loId, EdgeTypes::HAS_AUTHOR_EDGE, $userId]) ? true : false;
     }
+
+    public static function manualPayment(\stdClass $lo) {
+        $data = json_decode($lo->data, true);
+
+        return !empty($data['manual_payment']) ? ($data['manual_payment'] ? true : false) : false;
+    }
 }
