@@ -18,4 +18,12 @@ class LoChecker
 
         return !empty($data['manual_payment']) ? ($data['manual_payment'] ? true : false) : false;
     }
+
+    public static function manualPaymentRecipient(\stdClass $lo) {
+        $data = json_decode($lo->data, true);
+
+        return !empty($data['manual_payment_recipient']) ? $data['manual_payment_recipient'] : '';
+    }
+
+
 }
