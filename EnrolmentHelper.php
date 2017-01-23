@@ -82,7 +82,7 @@ class EnrolmentHelper
         }
         else {
             $completion = 'SELECT COUNT(*) FROM gc_enrolment WHERE id IN (?) AND status = ?';
-            $completion = $db->fetchColumn($completion, [$dependencyIds], [DB::INTEGERS]);
+            $completion = $db->fetchColumn($completion, [$dependencyIds], 0, [DB::INTEGERS]);
         }
 
         return $completion == count($dependencyIds);
