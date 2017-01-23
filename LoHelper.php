@@ -22,7 +22,7 @@ class LoHelper
     {
         $learningObjects = !$ids ? [] : $db
             ->executeQuery(
-                'SELECT lo.*, pricing.price, pricing.currency, pricing.tax'
+                'SELECT lo.*, pricing.price, pricing.currency, pricing.tax, pricing.tax_included'
                 . ' FROM gc_lo lo'
                 . ' LEFT JOIN gc_lo_pricing pricing ON lo.id = pricing.id'
                 . ' WHERE lo.id IN (?)',
@@ -37,11 +37,12 @@ class LoHelper
             }
 
             $lo->pricing = (object) [
-                'price'    => $lo->price ? (float) $lo->price : 0.00,
-                'currency' => $lo->currency ?: 'USD',
-                'tax'      => $lo->tax ? (float) $lo->tax : 0.00,
+                'price'        => $lo->price ? (float) $lo->price : 0.00,
+                'currency'     => $lo->currency ?: 'USD',
+                'tax'          => $lo->tax ? (float) $lo->tax : 0.00,
+                'tax_included' => $lo->tax_included ? true : false,
             ];
-            unset($lo->price, $lo->currency, $lo->tax);
+            unset($lo->price, $lo->currency, $lo->tax, $lo->tax_included);
 
             $lo->event = empty($lo->event) ? (object) [] : json_decode($lo->event);
         }
