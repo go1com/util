@@ -78,7 +78,7 @@ class EnrolmentHelper
 
         if ($passAware) {
             $completion = 'SELECT COUNT(*) FROM gc_enrolment WHERE id IN (?) AND status = ? AND pass = 1';
-            $completion = $db->fetchColumn($completion, [$dependencyIds, EnrolmentStatuses::COMPLETED], [DB::INTEGERS, DB::STRING]);
+            $completion = $db->fetchColumn($completion, [$dependencyIds, EnrolmentStatuses::COMPLETED], 0, [DB::INTEGERS, DB::STRING]);
         }
         else {
             $completion = 'SELECT COUNT(*) FROM gc_enrolment WHERE id IN (?) AND status = ?';
