@@ -89,6 +89,7 @@ class LoHelper
         $def->addAttribute('iframe', 'mozallowfullscreen', 'Bool');
         $def->addAttribute('iframe', 'webkitallowfullscreen', 'Bool');
         $def->addAttribute('div', 'data-oembed-url', 'CDATA');
+        $def->addAttribute('table', 'height', 'Number');
 
         return $config;
     }
