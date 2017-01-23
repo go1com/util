@@ -5,8 +5,8 @@ namespace go1\util;
 use Doctrine\DBAL\Connection;
 
 /**
- * @TODO
- * We're going to load & attach edges into enrolment.
+ * @TODO We're going to load & attach edges into enrolment.
+ *
  *  - assessor
  *  - expiration
  *  - ...
@@ -47,5 +47,19 @@ class EnrolmentHelper
         return $db
             ->executeQuery('SELECT * FROM gc_enrolment WHERE lo_id = ? AND instance_id = ? AND profile_id = ?', [$loId, $instanceId, $profileId])
             ->fetch(DB::OBJ);
+    }
+
+    public static function becomeCompleted($enrolment, $original, $passAware = true): bool
+    {
+        $status = $enrolment->status;
+        $previousStatus = $original->status;
+
+        if ($status != $previousStatus) {
+            if (EnrolmentStatuses::COMPLETED === $status) {
+                return $passAware ? (1 == $enrolment->pass) : true;
+            }
+        }
+
+        return false;
     }
 }
