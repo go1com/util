@@ -59,4 +59,37 @@ class LoHelper
             }
         }
     }
+
+    /**
+     * Filter learning object description by below elements
+     * Iframe: allow YouTube and Vimeo
+     */
+    public static function descriptionPurifierConfig()
+    {
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('HTML.AllowedElements', [
+            'b', 'code', 'del', 'dd', 'dl', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'sup', 'sub', 'div', 'p', 'blockquote', 'strong', 'i', 'kbd', 's',
+            'strike', 'hr', 'tr', 'td', 'th', 'thead', 'tbody', 'tfoot', 'em', 'pre', 'br',
+            'table', 'a', 'iframe', 'img', 'ul', 'li', 'ol', 'caption'
+        ]);
+        $config->set('HTML.AllowedAttributes', [
+            'a.href', 'img.src', 'img.width', 'img.height',
+            'table.width', 'table.cellspacing', 'table.cellpadding', 'table.height', 'table.align', 'table.summary', 'table.style',
+            '*.class', '*.alt', '*.title', '*.border',
+            'div.data-oembed-url',
+            'iframe.src', 'iframe.allowfullscreen', 'iframe.width', 'iframe.height',
+            'iframe.frameborder', 'iframe.mozallowfullscreen', 'iframe.webkitallowfullscreen'
+        ]);
+        $config->set('HTML.SafeIframe', true);
+        $config->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/)%');
+
+        $def = $config->getHTMLDefinition(true);
+        $def->addAttribute('iframe', 'allowfullscreen', 'Bool');
+        $def->addAttribute('iframe', 'mozallowfullscreen', 'Bool');
+        $def->addAttribute('iframe', 'webkitallowfullscreen', 'Bool');
+        $def->addAttribute('div', 'data-oembed-url', 'CDATA');
+
+        return $config;
+    }
 }
