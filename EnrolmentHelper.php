@@ -3,6 +3,8 @@
 namespace go1\util;
 
 use Doctrine\DBAL\Connection;
+use PDO;
+use stdClass;
 
 /**
  * @TODO We're going to load & attach edges into enrolment.
@@ -49,7 +51,7 @@ class EnrolmentHelper
             ->fetch(DB::OBJ);
     }
 
-    public static function becomeCompleted($enrolment, $original, $passAware = true): bool
+    public static function becomeCompleted(stdClass $enrolment, stdClass $original, bool $passAware = true): bool
     {
         $status = $enrolment->status;
         $previousStatus = $original->status;
@@ -61,5 +63,28 @@ class EnrolmentHelper
         }
 
         return false;
+    }
+
+    # Check that all dependencies are completed.
+    # Only return true if # of completion = # of dependencies
+    public static function dependenciesCompleted(Connection $db, stdClass $enrolment, bool $passAware = true): bool
+    {
+        $moduleId = $enrolment->lo_id;
+        $dependencyIds = 'SELECT target_id FROM gc_ro WHERE type = ? AND source_id = ?';
+        $dependencyIds = $db->executeQuery($dependencyIds, [EdgeTypes::HAS_MODULE_DEPENDENCY, $moduleId])->fetchAll(PDO::FETCH_COLUMN);
+        if (!$dependencyIds) {
+            return false; // If there's no dependencies -> input is wrong -> return false
+        }
+
+        if ($passAware) {
+            $completion = 'SELECT COUNT(*) FROM gc_enrolment WHERE id IN (?) AND status = ? AND pass = 1';
+            $completion = $db->fetchColumn($completion, [$dependencyIds, EnrolmentStatuses::COMPLETED], [DB::INTEGERS, DB::STRING]);
+        }
+        else {
+            $completion = 'SELECT COUNT(*) FROM gc_enrolment WHERE id IN (?) AND status = ?';
+            $completion = $db->fetchColumn($completion, [$dependencyIds], [DB::INTEGERS]);
+        }
+
+        return $completion == count($dependencyIds);
     }
 }
