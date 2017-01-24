@@ -46,5 +46,5 @@ class Queue
     const DO_HISTORY_RECORD                    = 'do.history.record';
     const DO_ENROLMENT_CHECK_MODULE_ENROLMENTS = 'do.enrolment.check-module-enrolments'; # { moduleId: INT }
     const DO_ENROLMENT_CHECK_MODULE_ENROLMENT  = 'do.enrolment.check-module-enrolment'; # { moduleId: INT, enrolmentId: INT }
-    const DO_SMS_SEND                          = 'do.sms.send'; # { }
+    const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
 }
