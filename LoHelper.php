@@ -75,10 +75,10 @@ class LoHelper
             'table', 'a', 'iframe', 'img', 'ul', 'li', 'ol', 'caption'
         ]);
         $config->set('HTML.AllowedAttributes', [
-            'a.href', 'img.src', 'img.width', 'img.height',
+            'a.href', 'img.src', 'img.width', 'img.height', 'img.style',
             'table.width', 'table.cellspacing', 'table.cellpadding', 'table.height', 'table.align', 'table.summary', 'table.style',
             '*.class', '*.alt', '*.title', '*.border',
-            'div.data-oembed-url',
+            'div.data-oembed-url', 'div.style',
             'iframe.src', 'iframe.allowfullscreen', 'iframe.width', 'iframe.height',
             'iframe.frameborder', 'iframe.mozallowfullscreen', 'iframe.webkitallowfullscreen'
         ]);
