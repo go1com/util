@@ -46,6 +46,11 @@ class UserHelper
             : false;
     }
 
+    public static function uuidByProfileId(Connection $db, string $accountsName, int $profileId)
+    {
+        return $db->fetchColumn('SELECT uuid FROM gc_user WHERE instance = ? AND profile_id = ?', [$accountsName, $profileId]);
+    }
+
     public function profileId2uuid(Client $client, $userUrl, $profileId)
     {
         $jwt = JWT::encode(['admin' => true], 'INTERNAL');
