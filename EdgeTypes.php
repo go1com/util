@@ -17,12 +17,20 @@ class EdgeTypes
     ];
 
     const LO_HAS_LO = [
-        1, # LP has item
-        5, # Module has LI
-        6, # has workshop
-        7, # Course has module
-        8, # Course has elective module
-        9, # Module has elective LI
+        self::HAS_LP_ITEM,
+        self::HAS_LI,
+        self::HAS_WORKSHOP,
+        self::HAS_MODULE,
+        self::HAS_ELECTIVE_LO,
+        self::HAS_ELECTIVE_LI,
+    ];
+
+    const LO_HAS_CHILDREN = [
+        self::HAS_LP_ITEM,
+        self::HAS_MODULE,
+        self::HAS_ELECTIVE_LO,
+        self::HAS_LI,
+        self::HAS_ELECTIVE_LI,
     ];
 
     # Learning object relationships
