@@ -55,6 +55,7 @@ class Queue
     const DO_PUBLIC_API_WEBHOOK_REQUEST        = 'do.public-api.webhook-request'; # { appId: INT, url: STRING, subject: OBJECT, original: null|OBJECT }
     const DO_MAIL_SEND                         = 'do.mail.send'; # { subject: STRING, body: STRING, html: STRING, context: OBJECT, attachments: STRING[], options: OBJECT }
     const DO_HISTORY_RECORD                    = 'do.history.record';
+    const DO_ENROLMENT_CRON                    = 'do.enrolment.cron'; # { task: STRING }
     const DO_ENROLMENT_CHECK_MODULE_ENROLMENTS = 'do.enrolment.check-module-enrolments'; # { moduleId: INT }
     const DO_ENROLMENT_CHECK_MODULE_ENROLMENT  = 'do.enrolment.check-module-enrolment'; # { moduleId: INT, enrolmentId: INT }
     const DO_ENROLMENT_CREATE                  = 'do.enrolment.create'; # { … }
