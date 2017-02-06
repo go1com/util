@@ -34,7 +34,6 @@ class Queue
     const ENROLMENT_CREATE   = 'enrolment.create';
     const ENROLMENT_UPDATE   = 'enrolment.update';
     const ENROLMENT_DELETE   = 'enrolment.delete';
-    const ENROLMENT_IMPORT   = 'enrolment.import';
     const TAG_CREATE         = 'tag.create';
     const TAG_UPDATE         = 'tag.update';
     const TAG_DELETE         = 'tag.delete';
@@ -51,4 +50,5 @@ class Queue
     const DO_ENROLMENT_CHECK_MODULE_ENROLMENT  = 'do.enrolment.check-module-enrolment'; # { moduleId: INT, enrolmentId: INT }
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
+    const DO_ENROLMENT_CREATE                  = 'do.enrolment.create';
 }
