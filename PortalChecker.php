@@ -76,6 +76,17 @@ class PortalChecker
         return !empty($portal->configuration->public_writing) ? $portal->configuration->public_writing : false;
     }
 
+    public function allowSendingWelcomeEmail($portal)
+    {
+        $this->prepare($portal);
+        $feature_name = PortalHelper::PORTAL_FEATURES_NAME['SEND_WELCOME_EMAIL'];
+
+        return $portal->configuration
+                && isset($portal->configuration->{$feature_name})
+                && !$portal->configuration->{$feature_name}
+                ? false : true;
+    }
+
     public function buildLink($portal, $uri)
     {
         $domain = $this->getPrimaryDomain($portal);
