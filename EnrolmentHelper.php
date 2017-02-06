@@ -18,6 +18,11 @@ use stdClass;
  */
 class EnrolmentHelper
 {
+    public static function enrolmentId(Connection $db, int $loId, int $profileId)
+    {
+        return $db->fetchColumn('SElECT id FROM gc_enrolment WHERE lo_id = ? AND profile_id = ?', [$loId, $profileId]);
+    }
+
     public static function load(Connection $db, int $id, bool $loadEdges = false)
     {
         return ($enrolments = static::loadMultiple($db, [$id])) ? $enrolments[0] : false;
