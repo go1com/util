@@ -81,7 +81,7 @@ class PortalChecker
         $this->prepare($portal);
         $feature_name = PortalHelper::PORTAL_FEATURES_NAME['SEND_WELCOME_EMAIL'];
 
-        return $portal->configuration
+        return !empty($portal->configuration)
                 && isset($portal->configuration->{$feature_name})
                 && !$portal->configuration->{$feature_name}
                 ? false : true;
