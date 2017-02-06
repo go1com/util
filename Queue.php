@@ -34,6 +34,7 @@ class Queue
     const ENROLMENT_CREATE   = 'enrolment.create';
     const ENROLMENT_UPDATE   = 'enrolment.update';
     const ENROLMENT_DELETE   = 'enrolment.delete';
+    const ENROLMENT_IMPORT   = 'enrolment.import';
     const TAG_CREATE         = 'tag.create';
     const TAG_UPDATE         = 'tag.update';
     const TAG_DELETE         = 'tag.delete';
