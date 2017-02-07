@@ -62,4 +62,5 @@ class Queue
     const DO_ENROLMENT_UPDATE                  = 'do.enrolment.update'; # { KEY_N: MIXED|NULL }
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
+    const DO_USER_DELETE                       = 'do.user.delete'; # User Object
 }
