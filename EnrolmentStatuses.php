@@ -37,9 +37,8 @@ class EnrolmentStatuses
         }
 
         // GO1P-6926: If there's a scheduling, user can't start the LO instantly.
-        $tenMinutes = strtotime('- 10 minutes');
-        $schedule = 'SELECT 1 FROM gc_ro WHERE type = ? AND source_id = ? AND target_id <= ?';
-        $schedule = $db->fetchColumn($schedule, [EdgeTypes::PUBLISH_ENROLMENT_LO_START_BASE, $lo->id, $tenMinutes]);
+        $schedule = 'SELECT 1 FROM gc_ro WHERE type = ? AND source_id = ? AND target_id > ?';
+        $schedule = $db->fetchColumn($schedule, [EdgeTypes::PUBLISH_ENROLMENT_LO_START_BASE, $lo->id, time()]);
         if ($schedule) {
             return self::PENDING;
         }
