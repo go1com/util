@@ -3,6 +3,7 @@
 namespace go1\util;
 
 use Assert\LazyAssertionException;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ErrorCodes
@@ -57,6 +58,11 @@ class ErrorCodes
     # Error outside services
     # #####################
     const X_SERVICE_UNREACHABLE = 80000;
+
+    public static function throw(Exception $e)
+    {
+        throw $e;
+    }
 
     public static function isBadServerResponse(int $code): bool
     {
