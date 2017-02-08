@@ -91,6 +91,13 @@ class PortalChecker
         return true;
     }
 
+    public function useCustomSMTP($portal)
+    {
+        $this->prepare($portal);
+
+        return !empty($portal->configuration->{PortalHelper::FEATURE_CUSTOM_SMTP});
+    }
+
     public function buildLink($portal, $uri)
     {
         $domain = $this->getPrimaryDomain($portal);
