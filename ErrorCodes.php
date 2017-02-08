@@ -74,6 +74,11 @@ class ErrorCodes
         return new JsonResponse(['message' => 'Missing or invalid JWT.'], 403);
     }
 
+    public static function simpleErrorJsonResponse(string $msg, $code = 400)
+    {
+        return new JsonResponse(['message' => $msg], $code);
+    }
+
     public static function createLazyAssertionJsonResponse(LazyAssertionException $e, int $httpCode = 400): JsonResponse
     {
         $data = ['message' => $e->getMessage()];
