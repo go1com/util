@@ -81,10 +81,15 @@ class PortalChecker
         $this->prepare($portal);
         $feature_name = PortalHelper::FEATURE_SEND_WELCOME_EMAIL;
 
-        return !empty($portal->configuration)
-                && isset($portal->configuration->{$feature_name})
-                && !$portal->configuration->{$feature_name}
-                ? false : true;
+        if (!empty($portal->configuration)) {
+            if (isset($portal->configuration->{$feature_name})) {
+                if (!$portal->configuration->{$feature_name}) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public function buildLink($portal, $uri)
