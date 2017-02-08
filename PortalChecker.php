@@ -79,11 +79,10 @@ class PortalChecker
     public function allowSendingWelcomeEmail($portal)
     {
         $this->prepare($portal);
-        $feature_name = PortalHelper::FEATURE_SEND_WELCOME_EMAIL;
 
         if (!empty($portal->configuration)) {
-            if (isset($portal->configuration->{$feature_name})) {
-                if (!$portal->configuration->{$feature_name}) {
+            if (isset($portal->configuration->{PortalHelper::FEATURE_SEND_WELCOME_EMAIL})) {
+                if (!$portal->configuration->{PortalHelper::FEATURE_SEND_WELCOME_EMAIL}) {
                     return false;
                 }
             }
