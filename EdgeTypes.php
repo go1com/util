@@ -33,6 +33,31 @@ class EdgeTypes
         self::HAS_ELECTIVE_LI,
     ];
 
+    # Edges which user object is the source
+    const USER_HAS_OBJECT = [
+        self::HAS_ROLE,
+        self::HAS_ACCOUNT,
+        self::HAS_MANAGER,
+        self::HAS_EMAIL,
+        self::HAS_FOLLOWING,
+        self::HAS_PORTAL_EDGE,
+        self::HAS_SHARE_USER_NOTE,
+        self::HAS_SHARE_WITH_LO_USER,
+        self::HAS_MENTION,
+        self::HAS_ASSIGN,
+        self::HAS_LO_ASSIGNMENT,
+    ];
+
+    # Edges which user object is the target
+    const USER_BELONG_TO = [
+        self::HAS_ACCOUNT,
+        self::HAS_TUTOR_EDGE,
+        self::HAS_AUTHOR_EDGE,
+        self::HAS_MANAGER,
+        self::HAS_TUTOR_ENROLMENT_EDGE,
+        self::HAS_FOLLOWING,
+    ];
+
     # Learning object relationships
     # ---------------------
     const HAS_LP_ITEM           = 1;  # T: ?               | S: Learning object (LP only)

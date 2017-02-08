@@ -5,6 +5,7 @@ namespace go1\util;
 use BadFunctionCallException;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
+use PDO;
 
 class RoHelper
 {
@@ -46,5 +47,27 @@ class RoHelper
             $db->executeQuery('DELETE FROM gc_ro WHERE id = ?', [$row->id]);
             $mqClient->publish($row, Queue::RO_DELETE);
         }
+    }
+
+    public static function edgesFromSource(Connection $db, int $sourceId, array $types)
+    {
+        return $db
+            ->executeQuery(
+                'SELECT * FROM gc_ro WHERE source_id = ? AND type IN (?)',
+                [$sourceId, $types],
+                [PDO::PARAM_INT, Connection::PARAM_INT_ARRAY]
+            )
+            ->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public static function edgesFromTarget(Connection $db, int $targetId, array $types)
+    {
+        return $db
+            ->executeQuery(
+                'SELECT * FROM gc_ro WHERE target_id = ? AND type IN (?)',
+                [$targetId, $types],
+                [PDO::PARAM_INT, Connection::PARAM_INT_ARRAY]
+            )
+            ->fetchAll(PDO::FETCH_OBJ);
     }
 }
