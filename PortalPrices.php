@@ -17,7 +17,7 @@ class PortalPrices
         1000 => 1350,
     ];
 
-    public  function validPlan($userPlan)
+    public function validPlan($userPlan)
     {
         list($currency, $userLicenses,) = $this->getUserPlan($userPlan);
 
@@ -49,11 +49,12 @@ class PortalPrices
         return [
             "{$userLicenses} user licenses for {$instance}",
             $userLicenses,
-            $this->getPrice($interval, $userLicenses)
+            $this->getPrice($interval, $userLicenses),
         ];
     }
 
-    public function getPrice($interval, $userLicenses) {
+    public function getPrice($interval, $userLicenses)
+    {
         return ($interval == 'm') ? $this->prices[$userLicenses] * 1.1 : $this->prices[$userLicenses] * 12;
     }
 
