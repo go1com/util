@@ -6,7 +6,9 @@ use Doctrine\DBAL\Connection;
 
 class PortalChecker
 {
-    private function prepare(&$portal)
+    const DEFAULT_PLAN = 10;
+
+    private static function prepare(&$portal)
     {
         if (!isset($portal->configuration) && !empty($portal->data)) {
             $portal->data = is_scalar($portal->data) ? json_decode($portal->data) : $portal->data;
@@ -106,5 +108,16 @@ class PortalChecker
         return ($this->isVirtual($portal))
             ? "https://{$domain}/p/#/{$uri}"
             : "https://{$domain}/webapp/#/{$uri}";
+    }
+
+    /**
+     * @param $portal
+     * @return int
+     */
+    public static function getPlan($portal)
+    {
+        self::prepare($portal);
+
+        return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : self::DEFAULT_PLAN;
     }
 }
