@@ -68,6 +68,11 @@ class MailTemplate
         'tokens' => [/* @TODO */],
     ];
 
+    const USER_LOGIN_FAIL = [
+        'key'    => 'user.onetime-login',
+        'tokens' => [/* @TODO */],
+    ];
+
     const USER_MAIL_SECONDARY_CONFIRM = [
         'key'    => 'user.mail.secondary.confirm',
         'tokens' => [/* @TODO */],
