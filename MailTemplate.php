@@ -70,7 +70,13 @@ class MailTemplate
 
     const USER_LOGIN_FAIL = [
         'key'    => 'user.onetime-login',
-        'tokens' => [/* @TODO */],
+        'tokens' => [
+            '@user_name'   => 'Name of user.',
+            '!user_name'   => 'User mail',
+            '!site_name'   => 'Human name of the portal',
+            '!portal_url'  => 'The portal URL.',
+            '!onetime_url' => 'Onetime login link.',
+        ],
     ];
 
     const USER_MAIL_SECONDARY_CONFIRM = [
