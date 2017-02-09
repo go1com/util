@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 
 class PortalChecker
 {
-    private function prepare(&$portal)
+    public function prepare(&$portal)
     {
         if (!isset($portal->configuration) && !empty($portal->data)) {
             $portal->data = is_scalar($portal->data) ? json_decode($portal->data) : $portal->data;
