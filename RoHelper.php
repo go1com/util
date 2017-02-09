@@ -49,25 +49,41 @@ class RoHelper
         }
     }
 
-    public static function edgesFromSource(Connection $db, int $sourceId, array $types)
+    public static function edgesFromSource(Connection $db, int $sourceId, array $types = [])
     {
-        return $db
-            ->executeQuery(
-                'SELECT * FROM gc_ro WHERE source_id = ? AND type IN (?)',
-                [$sourceId, $types],
-                [PDO::PARAM_INT, Connection::PARAM_INT_ARRAY]
-            )
-            ->fetchAll(PDO::FETCH_OBJ);
+        return self::edgesFromSources($db, [$sourceId], $types);
     }
 
-    public static function edgesFromTarget(Connection $db, int $targetId, array $types)
+    public static function edgesFromSources(Connection $db, array $sourceIds, array $types = [])
     {
-        return $db
-            ->executeQuery(
-                'SELECT * FROM gc_ro WHERE target_id = ? AND type IN (?)',
-                [$targetId, $types],
-                [PDO::PARAM_INT, Connection::PARAM_INT_ARRAY]
-            )
-            ->fetchAll(PDO::FETCH_OBJ);
+        return self::edges($db, $sourceIds, $types);
+    }
+
+    public static function edgesFromTarget(Connection $db, int $targetId, array $types = [])
+    {
+        return self::edgesFromTargets($db, [$targetId], $types);
+    }
+
+    public static function edgesFromTargets(Connection $db, array $targetIds, array $types = [])
+    {
+        return self::edges($db, [], $targetIds, $types);
+    }
+
+    private static function edges(Connection $db, array $sourceIds = [], array $targetIds = [], array $types = [])
+    {
+        if (!$sourceIds && !$targetIds && !$types) {
+            return [];
+        }
+
+        $query = $db
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('gc_ro');
+
+        $sourceIds && $query->where('source_id IN (:source_id)')->setParameter(':source_id', $sourceIds, Connection::PARAM_INT_ARRAY);
+        $targetIds && $query->where('target_id IN (:target_id)')->setParameter(':target_id', $targetIds, Connection::PARAM_INT_ARRAY);
+        $types && $query->where('type IN (:type)')->setParameter(':type', $types, Connection::PARAM_INT_ARRAY);
+
+        return $query->execute()->fetchAll(PDO::FETCH_OBJ);
     }
 }
