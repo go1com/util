@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 
 class PortalChecker
 {
-    const DEFAULT_PLAN = 10;
 
     private static function prepare(&$portal)
     {
@@ -118,6 +117,6 @@ class PortalChecker
     {
         self::prepare($portal);
 
-        return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : self::DEFAULT_PLAN;
+        return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : PortalHelper::DEFAULT_PLAN;
     }
 }
