@@ -17,7 +17,19 @@ class PortalPrices
         1000 => 1350,
     ];
 
-    public function validPlan($userPlan) {
+    private static function prepare(&$portal)
+    {
+        if (!isset($portal->configuration) && !empty($portal->data)) {
+            $portal->data = is_scalar($portal->data) ? json_decode($portal->data) : $portal->data;
+            if (!empty($portal->data->configuration)) {
+                $portal->configuration = $portal->data->configuration;
+                unset($portal->data->configuration);
+            }
+        }
+    }
+
+    public function validPlan($userPlan)
+    {
         list($currency, $userLicenses,) = $this->getUserPlan($userPlan);
 
         return $userLicenses && in_array($userLicenses, $this->validUserPlan) && in_array($currency, $this->currencies);
@@ -54,5 +66,12 @@ class PortalPrices
 
     public function getPrice($interval, $userLicenses) {
         return ($interval == 'm') ? $this->prices[$userLicenses] * 1.1 : $this->prices[$userLicenses] * 12;
+    }
+
+    public static function getUserLicenses($portal)
+    {
+        self::prepare($portal);
+
+        return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : PortalHelper::DEFAULT_USERS_LICENSES;
     }
 }
