@@ -94,6 +94,26 @@ class MailTemplate
         'tokens' => [/* @TODO */],
     ];
 
+    const ENQUIRY_ACCEPTED = [
+        'key'    => 'lo.enquiry.accepted',
+        'tokens' => [
+            '!title'     => 'Course title',
+            '!first'     => 'User first name',
+            '!last'      => 'User last name',
+            '!site_name' => 'Human name of the portal',
+        ],
+    ];
+
+    const ENQUIRY_REJECED = [
+        'key'    => 'lo.enquiry.rejected',
+        'tokens' => [
+            '!title'     => 'Course title',
+            '!first'     => 'User first name',
+            '!last'      => 'User last name',
+            '!site_name' => 'Human name of the portal',
+        ],
+    ];
+
     const ENQUIRY_NOTIFY_STAFF = [
         'key'    => 'lo.enquiry.notify.staff',
         'tokens' => [/* @TODO */],
