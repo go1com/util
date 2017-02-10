@@ -63,4 +63,5 @@ class Queue
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
     const DO_USER_DELETE                       = 'do.user.delete'; # User Object
+    const DO_ALGOLIA_INDEX                     = 'do.algolia.index'; # {range: { from: INT, to: INT}}
 }
