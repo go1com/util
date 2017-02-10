@@ -48,6 +48,8 @@ class Queue
     const ASM_FEEDBACK_CREATE   = 'asm.feedback.create';
     const ASM_FEEDBACK_UPDATE   = 'asm.feedback.update';
     const ASM_FEEDBACK_DELETE   = 'asm.feedback.delete';
+    const ALGOLIA_LO_UPDATE     = 'algolia.lo.update'; # Lo Object {id: INT, type: STRING}
+    const ALGOLIA_LO_DELETE     = 'algolia.lo.delete'; # Lo Object {id: INT, type: STRING}
 
     # routingKey that tell some service to do something.
     # -------
@@ -63,5 +65,5 @@ class Queue
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
     const DO_USER_DELETE                       = 'do.user.delete'; # User Object
-    const DO_ALGOLIA_INDEX                     = 'do.algolia.index'; # {range: { from: INT, to: INT}}
+    const DO_ALGOLIA_INDEX                     = 'do.algolia.index'; # Object { offset: INT, limit: INT}
 }
