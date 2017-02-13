@@ -59,7 +59,7 @@ class Error
     # Error outside services
     # #####################
     const X_SERVICE_UNREACHABLE = 80000;
-    const ONBOARD_STRIPE_ERROR  = 80001;
+    const ONBOARD_STRIPE_ERROR  = 17001;
 
     public static function throw(Exception $e)
     {
