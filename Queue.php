@@ -11,6 +11,14 @@ namespace go1\util;
  */
 class Queue
 {
+    const DELETE_EVENTS = [
+        self::PORTAL_DELETE,
+        self::USER_DELETE,
+        self::LO_DELETE,
+        self::TAG_DELETE,
+        self::ENROLMENT_DELETE,
+    ];
+
     # The entity events
     # -------
     const PORTAL_CREATE         = 'portal.create';
