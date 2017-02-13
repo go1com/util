@@ -75,15 +75,23 @@ class EdgeHelper
             return [];
         }
 
-        $query = $db
+        $q = $db
             ->createQueryBuilder()
             ->select('*')
             ->from('gc_ro');
 
-        $sourceIds && $query->where('source_id IN (:source_id)')->setParameter(':source_id', $sourceIds, Connection::PARAM_INT_ARRAY);
-        $targetIds && $query->where('target_id IN (:target_id)')->setParameter(':target_id', $targetIds, Connection::PARAM_INT_ARRAY);
-        $types && $query->where('type IN (:type)')->setParameter(':type', $types, Connection::PARAM_INT_ARRAY);
+        $sourceIds && $q
+            ->andWhere('source_id IN (:source_id)')
+            ->setParameter(':source_id', $sourceIds, Connection::PARAM_INT_ARRAY);
 
-        return $query->execute()->fetchAll(PDO::FETCH_OBJ);
+        $targetIds && $q
+            ->andWhere('target_id IN (:target_id)')
+            ->setParameter(':target_id', $targetIds, Connection::PARAM_INT_ARRAY);
+
+        $types && $q
+            ->andWhere('type IN (:types)')
+            ->setParameter(':types', $types, Connection::PARAM_INT_ARRAY);
+
+        return $q->execute()->fetchAll(PDO::FETCH_OBJ);
     }
 }
