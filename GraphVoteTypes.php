@@ -4,8 +4,8 @@ namespace go1\util;
 
 class GraphVoteTypes
 {
-    const LIKE = 'like';
-    const STAR = 'star';
+    const LIKE = 1;
+    const STAR = 2;
 
     const ENTITY_TYPE_LO = 'lo';
     const ENTITY_TYPE_LI = 'li';
@@ -21,7 +21,7 @@ class GraphVoteTypes
         self::ENTITY_TYPE_COMMENT,
     ];
 
-    public static function getIdFromType($entityType)
+    public static function getIdFromType(string $entityType)
     {
         self::validateEntityType($entityType);
 
@@ -39,7 +39,7 @@ class GraphVoteTypes
         }
     }
 
-    public static function getLabelFromType($entityType)
+    public static function getLabelFromType(string $entityType)
     {
         self::validateEntityType($entityType);
 
