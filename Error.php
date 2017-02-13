@@ -45,6 +45,7 @@ class Error
     const S3_ERROR         = 13000;
     const FINDER_ERROR     = 14000;
     const HISTORY_ERROR    = 15000;
+    const ONBOARD_ERROR    = 17000;
 
     # Credit service
     # ---------------------
@@ -58,6 +59,7 @@ class Error
     # Error outside services
     # #####################
     const X_SERVICE_UNREACHABLE = 80000;
+    const ONBOARD_STRIPE_ERROR  = 17001;
 
     public static function throw(Exception $e)
     {
