@@ -56,7 +56,7 @@ class EdgeHelper
 
     public static function edgesFromSources(Connection $db, array $sourceIds, array $types = [])
     {
-        return self::edges($db, $sourceIds, $types);
+        return self::edges($db, $sourceIds, [], $types);
     }
 
     public static function edgesFromTarget(Connection $db, int $targetId, array $types = [])
