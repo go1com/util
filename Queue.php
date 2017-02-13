@@ -58,6 +58,9 @@ class Queue
     const ASM_FEEDBACK_DELETE   = 'asm.feedback.delete';
     const ALGOLIA_LO_UPDATE     = 'algolia.lo.update'; # Lo Object {id: INT, type: STRING}
     const ALGOLIA_LO_DELETE     = 'algolia.lo.delete'; # Lo Object {id: INT, type: STRING}
+    const ECK_CREATE            = 'eck.entity.create';
+    const ECK_UPDATE            = 'eck.entity.update';
+    const ECK_DELETE            = 'eck.entity.delete';
 
     # routingKey that tell some service to do something.
     # -------
