@@ -96,4 +96,14 @@ class LoHelper
 
         return $cnf;
     }
+
+    public static function getTitlePurifyConfig()
+    {
+        $cnf = HTMLPurifier_Config::createDefault();
+        $cnf->set('Cache.DefinitionImpl', null);
+        $cnf->set('HTML.Allowed', '');
+        $cnf->set('Core.HiddenElements', []);
+
+        return $cnf;
+    }
 }
