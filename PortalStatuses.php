@@ -9,4 +9,7 @@ class PortalStatuses
     const DISABLED   = -1;
     const QUEUED     = 0;
     const ENABLED    = 1;
+
+    const TIERS  = ['Unclassified', 'Trial', 'Paid', 'Free', 'Test', 'Inactive'];
+    const STAGES = ['Pre-onboarding', 'Onboarding', 'Established', 'Advocate', 'Inactive'];
 }

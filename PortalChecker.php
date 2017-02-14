@@ -98,6 +98,20 @@ class PortalChecker
         return !empty($portal->configuration->{PortalHelper::FEATURE_CUSTOM_SMTP});
     }
 
+    public function tier($portal)
+    {
+        # !empty($instance->field_account_status_21['und'][0]['value']) ? $instance->field_account_status_21['und'][0]['value'] : 'Trial'
+
+        return '@TODO';
+    }
+
+    public function stage($portal)
+    {
+        # !empty($instance->field_account_stage['und'][0]['value']) ? $instance->field_account_stage['und'][0]['value'] : 'Pre-onboarding';
+
+        return '@TODO';
+    }
+
     public function buildLink($portal, $uri)
     {
         $domain = $this->getPrimaryDomain($portal);
