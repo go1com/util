@@ -6,6 +6,7 @@ use Assert\Assert;
 use Assert\LazyAssertionException;
 use Firebase\JWT\JWT;
 use HTMLPurifier;
+use HTMLPurifier_Config;
 use stdClass;
 use Traversable;
 
@@ -15,15 +16,15 @@ class Text
      * @param HTMLPurifier $html
      * @param mixed        $value
      */
-    public static function purify(HTMLPurifier $html, &$value)
+    public static function purify(HTMLPurifier $html, &$value, HTMLPurifier_Config $config = null)
     {
         if (is_string($value)) {
-            $value = $html->purify($value);
+            $value = $html->purify($value, $config);
         }
 
         if (is_array($value) || ($value instanceof stdClass) || ($value instanceof Traversable)) {
             foreach ($value as $k => &$item) {
-                static::purify($html, $item);
+                static::purify($html, $item, $config);
             }
         }
     }
