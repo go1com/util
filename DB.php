@@ -62,7 +62,8 @@ class DB
         try {
             $sqlite = 'sqlite' === $db->getDatabasePlatform()->getName();
             !$sqlite && $db->executeQuery('DO GET_LOCK("' . $threadName . '", ' . $timeout . ')');
-            $callback($db);
+
+            return $callback($db);
         }
         finally {
             !$sqlite && $db->executeQuery('DO RELEASE_LOCK("' . $threadName . '")');
