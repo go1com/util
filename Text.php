@@ -49,4 +49,9 @@ class Text
 
         return Jwt::jsonDecode($payload);
     }
+
+    public static function parseInlineTags(string $string)
+    {
+        return array_filter(explode('] [', $string));
+    }
 }
