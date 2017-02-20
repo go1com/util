@@ -10,4 +10,5 @@ class PortalHelper
     const FEATURE_CUSTOM_SMTP          = 'custom_smtp';
     const FEATURE_NOTIFY_NEW_ENROLMENT = 'notify_on_enrolment_create';
     const DEFAULT_USERS_LICENSES = 10;
+    const DEFAULT_USERS_LICENSES_TIMES = 4;
 }
