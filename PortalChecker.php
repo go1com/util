@@ -6,17 +6,6 @@ use Doctrine\DBAL\Connection;
 
 class PortalChecker
 {
-    public function prepare(&$portal)
-    {
-        if (!isset($portal->configuration) && !empty($portal->data)) {
-            $portal->data = is_scalar($portal->data) ? json_decode($portal->data) : $portal->data;
-            if (!empty($portal->data->configuration)) {
-                $portal->configuration = $portal->data->configuration;
-                unset($portal->data->configuration);
-            }
-        }
-    }
-
     public function load(Connection $db, $instance)
     {
         $column = is_numeric($instance) ? 'id' : 'title';
@@ -26,7 +15,7 @@ class PortalChecker
 
     public function isVirtual($portal)
     {
-        $this->prepare($portal);
+        PortalHelper::parseConfig($portal);
 
         return !empty($portal->configuration->is_virtual) ? true : (version_compare($portal->version, 'v3.0.0-alpha1') >= 0);
     }
@@ -38,14 +27,14 @@ class PortalChecker
 
     public function getPrimaryDomain($portal)
     {
-        $this->prepare($portal);
+        PortalHelper::parseConfig($portal);
 
         return !empty($portal->configuration->primary_domain) ? $portal->configuration->primary_domain : $portal->title;
     }
 
     public function getSiteName($portal)
     {
-        $this->prepare($portal);
+        PortalHelper::parseConfig($portal);
 
         return !empty($portal->configuration->site_name) ? $portal->configuration->site_name : $portal->title;
     }
@@ -57,28 +46,28 @@ class PortalChecker
 
     public function getPublicKey($portal)
     {
-        $this->prepare($portal);
+        PortalHelper::parseConfig($portal);
 
         return !empty($portal->data->public_key) ? $portal->data->public_key : false;
     }
 
     public function canSendEmail($portal, $key)
     {
-        $this->prepare($portal);
+        PortalHelper::parseConfig($portal);
 
         return !empty($portal->configuration->{$key}) ? $portal->configuration->{$key} : true;
     }
 
     public function allowPublicWriting($portal)
     {
-        $this->prepare($portal);
+        PortalHelper::parseConfig($portal);
 
         return !empty($portal->configuration->public_writing) ? $portal->configuration->public_writing : false;
     }
 
     public function allowSendingWelcomeEmail($portal)
     {
-        $this->prepare($portal);
+        PortalHelper::parseConfig($portal);
 
         if (!empty($portal->configuration)) {
             if (isset($portal->configuration->{PortalHelper::FEATURE_SEND_WELCOME_EMAIL})) {
@@ -93,7 +82,7 @@ class PortalChecker
 
     public function useCustomSMTP($portal)
     {
-        $this->prepare($portal);
+        PortalHelper::parseConfig($portal);
 
         return !empty($portal->configuration->{PortalHelper::FEATURE_CUSTOM_SMTP});
     }
