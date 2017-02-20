@@ -3,10 +3,12 @@
 namespace go1\util;
 
 use Doctrine\DBAL\Connection;
+use stdClass;
 
 class LoChecker
 {
-    private function loData(\stdClass $lo) {
+    private function loData(stdClass $lo)
+    {
         if (!$lo->data) {
             return [];
         }
@@ -21,13 +23,15 @@ class LoChecker
         return $db->fetchColumn($sql, [$loId, EdgeTypes::HAS_AUTHOR_EDGE, $userId]) ? true : false;
     }
 
-    public function manualPayment(\stdClass $lo) {
+    public function manualPayment(stdClass $lo)
+    {
         $data = $this->loData($lo);
 
         return !empty($data['manual_payment']) ? ($data['manual_payment'] ? true : false) : false;
     }
 
-    public function manualPaymentRecipient(\stdClass $lo) {
+    public function manualPaymentRecipient(stdClass $lo)
+    {
         $data = $this->loData($lo);
 
         return !empty($data['manual_payment_recipient']) ? $data['manual_payment_recipient'] : '';

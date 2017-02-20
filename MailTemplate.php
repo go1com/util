@@ -68,6 +68,17 @@ class MailTemplate
         'tokens' => [/* @TODO */],
     ];
 
+    const USER_LOGIN_FAIL = [
+        'key'    => 'user.onetime-login',
+        'tokens' => [
+            '@user_name'   => 'Name of user.',
+            '!user_name'   => 'User mail',
+            '!site_name'   => 'Human name of the portal',
+            '!portal_url'  => 'The portal URL.',
+            '!onetime_url' => 'Onetime login link.',
+        ],
+    ];
+
     const USER_MAIL_SECONDARY_CONFIRM = [
         'key'    => 'user.mail.secondary.confirm',
         'tokens' => [/* @TODO */],
@@ -81,6 +92,26 @@ class MailTemplate
     const ENQUIRY_SENT = [
         'key'    => 'lo.enquiry.sent',
         'tokens' => [/* @TODO */],
+    ];
+
+    const ENQUIRY_ACCEPTED = [
+        'key'    => 'lo.enquiry.accepted',
+        'tokens' => [
+            '!title'     => 'Course title',
+            '!first'     => 'User first name',
+            '!last'      => 'User last name',
+            '!site_name' => 'Human name of the portal',
+        ],
+    ];
+
+    const ENQUIRY_REJECED = [
+        'key'    => 'lo.enquiry.rejected',
+        'tokens' => [
+            '!title'     => 'Course title',
+            '!first'     => 'User first name',
+            '!last'      => 'User last name',
+            '!site_name' => 'Human name of the portal',
+        ],
     ];
 
     const ENQUIRY_NOTIFY_STAFF = [

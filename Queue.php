@@ -11,11 +11,21 @@ namespace go1\util;
  */
 class Queue
 {
+    const DELETE_EVENTS = [
+        self::PORTAL_DELETE,
+        self::USER_DELETE,
+        self::LO_DELETE,
+        self::TAG_DELETE,
+        self::ENROLMENT_DELETE,
+    ];
+
     # The entity events
     # -------
     const PORTAL_CREATE         = 'portal.create';
     const PORTAL_UPDATE         = 'portal.update';
     const PORTAL_DELETE         = 'portal.delete';
+    const CONTRACT_CREATE       = 'contract.create';
+    const CONTRACT_UPDATE       = 'contract.create';
     const LO_CREATE             = 'lo.create'; # Body: LO object, no lo.items should be expected.
     const LO_UPDATE             = 'lo.update'; # Body: LO object with extra property: origin.
     const LO_DELETE             = 'lo.delete'; # Body: LO object.
@@ -48,6 +58,11 @@ class Queue
     const ASM_FEEDBACK_CREATE   = 'asm.feedback.create';
     const ASM_FEEDBACK_UPDATE   = 'asm.feedback.update';
     const ASM_FEEDBACK_DELETE   = 'asm.feedback.delete';
+    const ALGOLIA_LO_UPDATE     = 'algolia.lo.update'; # Lo Object {id: INT, type: STRING}
+    const ALGOLIA_LO_DELETE     = 'algolia.lo.delete'; # Lo Object {id: INT, type: STRING}
+    const ECK_CREATE            = 'eck.entity.create';
+    const ECK_UPDATE            = 'eck.entity.update';
+    const ECK_DELETE            = 'eck.entity.delete';
 
     # routingKey that tell some service to do something.
     # -------
@@ -63,4 +78,5 @@ class Queue
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
     const DO_USER_DELETE                       = 'do.user.delete'; # User Object
+    const DO_ALGOLIA_INDEX                     = 'do.algolia.index'; # Object { offset: INT, limit: INT}
 }
