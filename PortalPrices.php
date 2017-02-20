@@ -60,8 +60,7 @@ class PortalPrices
 
     public function getUserLicenses($portal)
     {
-        $PortalChecker = new PortalChecker();
-        $PortalChecker->prepare($portal);
+        PortalHelper::parseConfig($portal);
 
         return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : PortalHelper::DEFAULT_USERS_LICENSES;
     }
