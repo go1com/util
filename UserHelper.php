@@ -5,6 +5,7 @@ namespace go1\util;
 use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
+use PDO;
 use RuntimeException;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -162,5 +163,21 @@ class UserHelper
                 }
             }
         }
+    }
+
+    public function userRoles(Connection $db, int $userId, string $instance)
+    {
+        $roleIds = 'SELECT target_id FROM gc_ro WHERE type = ? AND source_id = ?';
+        $roleIds = $db->executeQuery($roleIds, [EdgeTypes::HAS_ROLE, $userId])->fetchAll(PDO::FETCH_COLUMN);
+
+        return $roleIds
+            ? $db
+                ->executeQuery(
+                    'SELECT name FROM gc_role WHERE instance = ? AND id IN (?)',
+                    [$instance, $roleIds],
+                    [DB::STRING, DB::INTEGERS]
+                )
+                ->fetchAll(PDO::FETCH_COLUMN)
+            : [];
     }
 }
