@@ -3,6 +3,7 @@
 namespace go1\util;
 
 use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
 use stdClass;
 
 class EnrolmentStatuses
@@ -28,6 +29,29 @@ class EnrolmentStatuses
     public static function all()
     {
         return [self::ASSIGNED, self::NOT_STARTED, self::IN_PROGRESS, self::PENDING, self::COMPLETED];
+    }
+
+    public static function toNumeric(string $status): int
+    {
+        switch ($status) {
+            case self::ASSIGNED:
+                return self::I_ASSIGNED;
+
+            case self::NOT_STARTED:
+                return self::I_NOT_STARTED;
+
+            case self::PENDING:
+                return self::I_PENDING;
+
+            case self::IN_PROGRESS:
+                return self::I_IN_PROGRESS;
+
+            case self::EXPIRED:
+                return self::I_EXPIRED;
+
+            default:
+                throw new InvalidArgumentException('Unknown enrolment status: ' . $status);
+        }
     }
 
     public static function defaultStatus(Connection $db, int $profileId, stdClass $lo, string $input = self::IN_PROGRESS)
