@@ -21,6 +21,7 @@ class EnrolmentStatuses
     const I_PENDING     = -1;
     const I_IN_PROGRESS = 1;
     const I_EXPIRED     = 2;
+    const I_COMPLETED   = 100;
 
     /**
      * All available values that user can input.
@@ -48,6 +49,9 @@ class EnrolmentStatuses
 
             case self::EXPIRED:
                 return self::I_EXPIRED;
+
+            case self::COMPLETED:
+                return self::I_COMPLETED;
 
             default:
                 throw new InvalidArgumentException('Unknown enrolment status: ' . $status);
