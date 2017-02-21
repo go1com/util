@@ -1,5 +1,8 @@
 {
   "name": "go1/util",
+  "license": "proprietary",
+  "prefer-stable": true,
+  "minimum-stability": "stable",
   "autoload": {
     "psr-4": {
       "go1\\util\\": "./"
