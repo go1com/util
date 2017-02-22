@@ -63,6 +63,9 @@ class Queue
     const ECK_CREATE            = 'eck.entity.create';
     const ECK_UPDATE            = 'eck.entity.update';
     const ECK_DELETE            = 'eck.entity.delete';
+    const GROUP_CREATE          = 'group.create';
+    const GROUP_UPDATE          = 'group.update';
+    const GROUP_DELETE          = 'group.delete';
 
     # routingKey that tell some service to do something.
     # -------
