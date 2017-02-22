@@ -10,6 +10,11 @@ class LoTypes
 
     public static function all()
     {
-        return ['learning_pathway', 'course', 'module'];
+        return [self::LEANING_PATHWAY, self::COURSE, self::MODULE];
+    }
+
+    public static function allTheThing()
+    {
+        return array_merge(self::all(), LiTypes::all());
     }
 }
