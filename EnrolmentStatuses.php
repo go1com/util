@@ -65,8 +65,14 @@ class EnrolmentStatuses
             $moduleId = 'SELECT target_id FROM gc_ro WHERE source_id = ? AND type = ?';
             $moduleId = $db->fetchColumn($moduleId, [$lo->id, EdgeTypes::HAS_MODULE_DEPENDENCY]);
             if ($moduleId) {
-                if (!$enrolmentId = EnrolmentHelper::enrolmentId($db, $lo->id, $profileId)) {
+                if (!$enrolmentId = EnrolmentHelper::enrolmentId($db, $moduleId, $profileId)) {
                     return self::PENDING;
+                }
+                else {
+                    $enrolment = EnrolmentHelper::load($db, $enrolmentId);
+                    if (EnrolmentStatuses::COMPLETED != $enrolment->status) {
+                        return self::PENDING;
+                    }
                 }
             }
         }
