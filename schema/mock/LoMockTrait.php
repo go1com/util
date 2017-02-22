@@ -78,11 +78,11 @@ trait LoMockTrait
 
         if (!empty($options['price'])) {
             $db->insert('gc_lo_pricing', [
-                'id'            => $courseId,
-                'price'         => (float) $options['price']['price'],
-                'currency'      => isset($options['price']['currency']) ? $options['price']['currency'] : 'USD',
-                'tax'           => isset($options['price']['tax']) ? $options['price']['tax'] : 0.00,
-                'tax_included'  => isset($options['price']['tax_included']) ? $options['price']['tax_included'] : 0,
+                'id'           => $courseId,
+                'price'        => (float) $options['price']['price'],
+                'currency'     => isset($options['price']['currency']) ? $options['price']['currency'] : 'USD',
+                'tax'          => isset($options['price']['tax']) ? $options['price']['tax'] : 0.00,
+                'tax_included' => isset($options['price']['tax_included']) ? $options['price']['tax_included'] : 0,
             ]);
         }
 
