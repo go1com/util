@@ -82,4 +82,6 @@ class Queue
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
     const DO_USER_DELETE                       = 'do.user.delete'; # User Object
     const DO_ALGOLIA_INDEX                     = 'do.algolia.index'; # Object { offset: INT, limit: INT}
+    const DO_USER_UNBLOCK_MAIL                 = 'do.user.unblock.mail'; # String mail
+    const DO_USER_UNBLOCK_IP                   = 'do.user.unblock.ip'; # String ip
 }
