@@ -6,7 +6,7 @@
   "autoload": {
     "psr-4": {
       "go1\\util\\": "./",
-      "go1\\clients\\": "./clients"
+      "go1\\clients\\": "./clients/"
     }
   },
   "require": {

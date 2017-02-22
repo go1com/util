@@ -8,6 +8,7 @@ use go1\clients\CurrencyClient;
 use go1\clients\GraphinClient;
 use go1\clients\LoClient;
 use go1\clients\MailClient;
+use go1\clients\MqClient;
 use go1\clients\PortalClient;
 use go1\clients\QueueClient;
 use go1\clients\RulesClient;
@@ -21,6 +22,11 @@ use Psr\Log\LoggerInterface;
 
 class ClientsTest extends PHPUnit_Framework_TestCase
 {
+    public function testClassLoading()
+    {
+        $this->assertEquals(true, class_exists(MqClient::class));
+    }
+
     public function testContainerValidation()
     {
         $logger = $this
