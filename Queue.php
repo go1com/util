@@ -24,6 +24,9 @@ class Queue
     const PORTAL_CREATE         = 'portal.create';
     const PORTAL_UPDATE         = 'portal.update';
     const PORTAL_DELETE         = 'portal.delete';
+    const PORTAL_CONFIG_CREATE  = 'portal-config.create';
+    const PORTAL_CONFIG_UPDATE  = 'portal-config.update';
+    const PORTAL_CONFIG_DELETE  = 'portal-config.delete';
     const CONTRACT_CREATE       = 'contract.create';
     const CONTRACT_UPDATE       = 'contract.create';
     const LO_CREATE             = 'lo.create'; # Body: LO object, no lo.items should be expected.

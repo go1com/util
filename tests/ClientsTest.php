@@ -3,7 +3,6 @@
 namespace go1\util\tests;
 
 use Doctrine\Common\Cache\ArrayCache;
-use go1\clients\ClientServiceProvider;
 use go1\clients\CurrencyClient;
 use go1\clients\GraphinClient;
 use go1\clients\LoClient;
@@ -38,7 +37,7 @@ class ClientsTest extends PHPUnit_Framework_TestCase
         $services = ['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin'];
         $c = new Container;
         $c
-            ->register(new UtilServiceProvider(), [
+            ->register(new UtilServiceProvider, [
                     'logger'       => $logger,
                     'client'       => new Client,
                     'cache'        => new ArrayCache,
