@@ -49,10 +49,10 @@ class EnrolmentHelper
             ->fetchAll(DB::OBJ);
     }
 
-    public static function loadByLoAndProfileId(Connection $db, int $loId, int $instanceId, int $profileId, bool $loadEdges = false)
+    public static function loadByLoAndProfileId(Connection $db, int $loId, int $takenInstanceId, int $profileId, bool $loadEdges = false)
     {
         return $db
-            ->executeQuery('SELECT * FROM gc_enrolment WHERE lo_id = ? AND instance_id = ? AND profile_id = ?', [$loId, $instanceId, $profileId])
+            ->executeQuery('SELECT * FROM gc_enrolment WHERE lo_id = ? AND taken_instance_id = ? AND profile_id = ?', [$loId, $takenInstanceId, $profileId])
             ->fetch(DB::OBJ);
     }
 
