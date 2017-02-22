@@ -13,6 +13,7 @@ use go1\clients\QueueClient;
 use go1\clients\RulesClient;
 use go1\clients\SmsClient;
 use go1\util\Service;
+use go1\util\UtilServiceProvider;
 use GuzzleHttp\Client;
 use PHPUnit_Framework_TestCase;
 use Pimple\Container;
@@ -31,7 +32,7 @@ class ClientsTest extends PHPUnit_Framework_TestCase
         $services = ['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin'];
         $c = new Container;
         $c
-            ->register(new ClientServiceProvider, [
+            ->register(new UtilServiceProvider(), [
                     'logger'       => $logger,
                     'client'       => new Client,
                     'cache'        => new ArrayCache,
