@@ -7,5 +7,13 @@
     "psr-4": {
       "go1\\util\\": "./"
     }
+  },
+  "require": {
+    "doctrine/dbal": "^2.5.4",
+    "go1/edge": "^0.3",
+    "go1/flood": "^0.6",
+    "go1/kv": "^0.2",
+    "firebase/php-jwt": "^3.0",
+    "graphaware/neo4j-php-client": "^4.6"
   }
 }
