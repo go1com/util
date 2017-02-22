@@ -5,15 +5,22 @@
   "minimum-stability": "stable",
   "autoload": {
     "psr-4": {
-      "go1\\util\\": "./"
+      "go1\\util\\": "./",
+      "go1\\clients\\": "./clients"
     }
   },
   "require": {
+    "doctrine/cache": "^v1.6.0",
     "doctrine/dbal": "^2.5.4",
+    "firebase/php-jwt": "^3.0",
     "go1/edge": "^0.3",
     "go1/flood": "^0.6",
     "go1/kv": "^0.2",
-    "firebase/php-jwt": "^3.0",
-    "graphaware/neo4j-php-client": "^4.6"
+    "graphaware/neo4j-php-client": "^4.6",
+    "guzzlehttp/guzzle": "^6.0",
+    "ktamas77/firebase-php": "^2.2",
+    "php-amqplib/php-amqplib": "^2.6",
+    "pimple/pimple": "^v3.0.0",
+    "psr/log": "~1.0"
   }
 }
