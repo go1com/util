@@ -71,6 +71,18 @@ class Queue
     const GROUP_DELETE          = 'group.delete';
 
     # routingKey that tell some service to do something.
+    #
+    # Note
+    # =======
+    # We should not add a lot of routing keys for each task. Each should define only one DO routing key for each service.
+    # For example:
+    #   - Should not define:
+    #       - DO_ENROLMENT_CHECK_MODULE_ENROLMENTS = 'do.enrolment.xxxxx' # { BODY }
+    #       - DO_ENROLMENT_CHECK_MODULE_ENROLMENT  = 'do.enrolment.xxxxx' # { BODY }
+    #   - Should:
+    #       - DO_ENROLMENT = 'do.enrolment' # { task: TASK_NAME, body: TASK_BODY }
+    #
+    # The #consumer auto routing the message to #SERVICE when the routing key is "do.SERVICE".
     # -------
     const DO_CONSUMER_HTTP_REQUEST             = 'do.consumer.HttpRequest'; # { method: STRING, url: STRING, query: STRING, headers: map[STRING][STRING], body: STRING }
     const DO_PUBLIC_API_WEBHOOK_REQUEST        = 'do.public-api.webhook-request'; # { appId: INT, url: STRING, subject: OBJECT, original: null|OBJECT }
