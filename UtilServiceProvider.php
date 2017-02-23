@@ -62,7 +62,7 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.user'] = function (Container $c) {
-            return new UserClient($c['client'], $c['user_url']);
+            return new UserClient($c['client'], $c['user_url'], $c['go1.client.mq']);
         };
 
         $c['go1.client.mail'] = function (Container $c) {
