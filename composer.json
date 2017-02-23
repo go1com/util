@@ -21,6 +21,7 @@
     "ktamas77/firebase-php": "^2.2",
     "php-amqplib/php-amqplib": "^2.6",
     "pimple/pimple": "^v3.0.0",
-    "psr/log": "~1.0"
+    "psr/log": "~1.0",
+    "ramsey/uuid": "^3.4"
   }
 }
