@@ -2,6 +2,7 @@
 
 namespace go1\clients;
 
+use go1\util\Queue;
 use GuzzleHttp\Client;
 use Ramsey\Uuid\Uuid;
 use stdClass;
@@ -10,21 +11,23 @@ class UserClient
 {
     private $client;
     private $userUrl;
+    private $mqClient;
 
-    public function __construct(Client $client, $userUrl)
+    public function __construct(Client $client, $userUrl, MqClient $mqClient)
     {
         $this->client = $client;
         $this->userUrl = rtrim($userUrl, '/');
+        $this->mqClient = $mqClient;
     }
 
-    public function unblockEmail($name)
+    public function unblockEmail($mail)
     {
-        $this->client->get("{$this->userUrl}/account/unblock/email/{$name}");
+        $this->mqClient->publish(['mail' => $mail], Queue::DO_USER_UNBLOCK_MAIL);
     }
 
     public function unblockIp($ip)
     {
-        $this->client->get("{$this->userUrl}/account/unblock/ip/{$ip}");
+        $this->mqClient->publish(['ip' => $ip], Queue::DO_USER_UNBLOCK_IP);
     }
 
     public function login(string $name, string $pass, string $instance = null, $jwtExpire = '+ 1 month'): stdClass
