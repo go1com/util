@@ -12,6 +12,8 @@ class LoHelper
     const ENROLMENT_RE_ENROL       = 're_enrol';
     const MANUAL_PAYMENT           = 'manual_payment';
     const MANUAL_PAYMENT_RECIPIENT = 'manual_payment_recipient';
+    const AWARD_EXPIRE             = 'award_expiration'; # GO1P-5665: Expiration for award.
+    const AWARD_EXPIRE_DEFAULT     = '+ 1 year';
 
     public static function load(Connection $db, int $id)
     {
