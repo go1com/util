@@ -8,7 +8,9 @@ use HTMLPurifier_Config;
 class LoHelper
 {
 
-    const ENROLMENT_RE_ENROL = 're_enrol';
+    const ENROLMENT_RE_ENROL                = 're_enrol';
+    const MANUAL_PAYMENT                    = 'manual_payment';
+    const MANUAL_PAYMENT_RECIPIENT          = 'manual_payment_recipient';
 
     public static function load(Connection $db, int $id)
     {
