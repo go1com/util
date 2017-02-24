@@ -77,7 +77,22 @@ class PortalChecker
             }
         }
 
-        return true;
+        return PortalHelper::FEATURE_SEND_WELCOME_EMAIL_DEFAULT;
+    }
+
+    public function allowNotifyEnrolment($portal)
+    {
+        PortalHelper::parseConfig($portal);
+
+        if (!empty($portal->configuration)) {
+            if (isset($portal->configuration->{PortalHelper::FEATURE_NOTIFY_NEW_ENROLMENT})) {
+                if (!$portal->configuration->{PortalHelper::FEATURE_NOTIFY_NEW_ENROLMENT}) {
+                    return false;
+                }
+            }
+        }
+
+        return PortalHelper::FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT;
     }
 
     public function useCustomSMTP($portal)
