@@ -51,9 +51,12 @@ trait LoMockTrait
                 $locale = implode(' ', $locale);
             }
         }
+
+        $options['data'] = isset($options['data']) ? (is_scalar($options['data']) ? json_decode($options['data'], true) : $options['data']) : [];
         if (!isset($options['data'][LoHelper::ENROLMENT_RE_ENROL])) {
             $options['data'][LoHelper::ENROLMENT_RE_ENROL] = LoHelper::ENROLMENT_RE_ENROL_DEFAULT;
         }
+        $options['data'] = json_encode($options['data']);
 
         $db->insert('gc_lo', [
             'type'        => isset($options['type']) ? $options['type'] : 'course',
