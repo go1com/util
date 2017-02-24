@@ -3,23 +3,25 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\LiTypes;
 use go1\util\LoHelper;
+use go1\util\LoTypes;
 
 trait LoMockTrait
 {
     public function createLearningPathway(Connection $db, array $options = [])
     {
         return $this->createLO($db, [
-                'type'  => 'learning_pathway',
+                'type'  => LoTypes::LEANING_PATHWAY,
                 'title' => isset($options['title']) ? $options['title'] : 'Example learning pathway',
             ] + $options);
     }
 
-    public function createModule(Connection $db, array $options = [])
+    public function createAward(Connection $db, array $options = [])
     {
         return $this->createLO($db, [
-                'type'  => 'module',
-                'title' => isset($options['title']) ? $options['title'] : 'Example module',
+                'type'  => LoTypes::AWARD,
+                'title' => isset($options['title']) ? $options['title'] : 'CPD',
             ] + $options);
     }
 
@@ -28,10 +30,18 @@ trait LoMockTrait
         return $this->createLO($db, $options);
     }
 
+    public function createModule(Connection $db, array $options = [])
+    {
+        return $this->createLO($db, [
+                'type'  => LoTypes::MODULE,
+                'title' => isset($options['title']) ? $options['title'] : 'Example module',
+            ] + $options);
+    }
+
     public function createVideo(Connection $db, array $options = [])
     {
         return $this->createLO($db, [
-                'type'  => 'video',
+                'type'  => LiTypes::VIDEO,
                 'title' => isset($options['title']) ? $options['title'] : 'Example video',
             ] + $options);
     }
@@ -59,7 +69,7 @@ trait LoMockTrait
         $options['data'] = json_encode($options['data']);
 
         $db->insert('gc_lo', [
-            'type'        => isset($options['type']) ? $options['type'] : 'course',
+            'type'        => isset($options['type']) ? $options['type'] : LoTypes::COURSE,
             'instance_id' => $instanceId = isset($options['instance_id']) ? $options['instance_id'] : 0,
             'remote_id'   => isset($options['remote_id']) ? $options['remote_id'] : $db->fetchColumn('SELECT 1 + MAX(remote_id) FROM gc_lo') ?: 1,
             'title'       => isset($options['title']) ? $options['title'] : 'Example course',
@@ -107,8 +117,7 @@ trait LoMockTrait
 
     public function postTag(Connection $db, $instanceId, $tag, $parentId = 0)
     {
-        $id = $db->fetchColumn('SELECT id FROM gc_tag WHERE instance_id = ? AND title = ?', [$instanceId, $tag]);
-        $id
+        ($id = $db->fetchColumn('SELECT id FROM gc_tag WHERE instance_id = ? AND title = ?', [$instanceId, $tag]))
             ? $db->executeQuery('UPDATE gc_tag SET lo_count = lo_count + 1 WHERE instance_id = ? AND title = ?', [$instanceId, $tag])
             : $db->insert('gc_tag', ['instance_id' => $instanceId, 'title' => $tag, 'parent_id' => $parentId, 'timestamp' => time()]);
 
