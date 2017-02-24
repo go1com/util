@@ -27,13 +27,20 @@ class LoChecker
     {
         $data = $this->loData($lo);
 
-        return !empty($data['manual_payment']) ? ($data['manual_payment'] ? true : false) : false;
+        return isset($data[LoHelper::MANUAL_PAYMENT]) ? ($data[LoHelper::MANUAL_PAYMENT] ? true : false) : false;
     }
 
     public function manualPaymentRecipient(stdClass $lo)
     {
         $data = $this->loData($lo);
 
-        return !empty($data['manual_payment_recipient']) ? $data['manual_payment_recipient'] : '';
+        return isset($data['manual_payment_recipient']) ? $data[LoHelper::MANUAL_PAYMENT_RECIPIENT] : '';
+    }
+
+    public function allowReEnrol(stdClass $lo)
+    {
+        $data = $this->loData($lo);
+
+        return isset($data[LoHelper::ENROLMENT_RE_ENROL]) ? ($data[LoHelper::ENROLMENT_RE_ENROL] ? true : false) : false;
     }
 }
