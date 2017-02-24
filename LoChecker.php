@@ -9,7 +9,7 @@ class LoChecker
 {
     private function loData(stdClass $lo)
     {
-        if (!$lo->data) {
+        if (empty($lo->data)) {
             return [];
         }
 

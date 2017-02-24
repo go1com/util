@@ -9,11 +9,13 @@ class PortalHelper
 {
     const STABLE_VERSION = 'v3.0.0';
 
-    const FEATURE_SEND_WELCOME_EMAIL   = 'send_welcome_email';
-    const FEATURE_CUSTOM_SMTP          = 'custom_smtp';
-    const FEATURE_NOTIFY_NEW_ENROLMENT = 'notify_on_enrolment_create';
-    const DEFAULT_USERS_LICENSES       = 10;
-    const DEFAULT_USERS_LICENSES_TIMES = 4;
+    const FEATURE_SEND_WELCOME_EMAIL           = 'send_welcome_email';
+    const FEATURE_SEND_WELCOME_EMAIL_DEFAULT   = true;
+    const FEATURE_CUSTOM_SMTP                  = 'custom_smtp';
+    const FEATURE_NOTIFY_NEW_ENROLMENT         = 'notify_on_enrolment_create';
+    const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
+    const DEFAULT_USERS_LICENSES               = 10;
+    const DEFAULT_USERS_LICENSES_TIMES         = 4;
 
     public static function nameFromId(Connection $db, int $id)
     {
@@ -31,5 +33,15 @@ class PortalHelper
                 }
             }
         }
+    }
+
+    public static function loadFromLoId(Connection $db, int $loId)
+    {
+        return $db->executeQuery(
+            'SELECT gc_instance.* FROM gc_instance'
+            . ' INNER JOIN gc_lo ON gc_instance.id = gc_lo.instance_id'
+            . ' WHERE gc_lo.id = ?',
+            [$loId]
+        )->fetch(DB::OBJ);
     }
 }
