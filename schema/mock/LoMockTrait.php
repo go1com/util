@@ -3,6 +3,7 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\LoHelper;
 
 trait LoMockTrait
 {
@@ -49,6 +50,9 @@ trait LoMockTrait
                 }
                 $locale = implode(' ', $locale);
             }
+        }
+        if (!isset($options['data'][LoHelper::ENROLMENT_RE_ENROL])) {
+            $options['data'][LoHelper::ENROLMENT_RE_ENROL] = LoHelper::ENROLMENT_RE_ENROL_DEFAULT;
         }
 
         $db->insert('gc_lo', [
