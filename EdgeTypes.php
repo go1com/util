@@ -83,6 +83,7 @@ class EdgeTypes
     const COURSE_ASSESSOR       = 32; # T: gc_user.id           | S: Learning object
     const HAS_EVENT_EDGE        = 34; # T: gc_event.id          | S: gc_lo.id
     const HAS_GROUP_EDGE        = 35; # T: gc_social_group.id   | S: gc_user.id
+    const AWARD_HAS_ITEM        = 36; # T: LO                   | S: award.                | data: { qty: INTEGER }
 
     # LO & enrolment scheduling
     # ---------------------
