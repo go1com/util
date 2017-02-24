@@ -41,6 +41,6 @@ class LoChecker
     {
         $data = $this->loData($lo);
 
-        return isset($data[LoHelper::ENROLMENT_RE_ENROL]) ? ($data[LoHelper::ENROLMENT_RE_ENROL] ? true : false) : false;
+        return isset($data[LoHelper::ENROLMENT_RE_ENROL]) ? ($data[LoHelper::ENROLMENT_RE_ENROL] ? true : false) : LoHelper::ENROLMENT_RE_ENROL_DEFAULT;
     }
 }
