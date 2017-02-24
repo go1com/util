@@ -7,6 +7,9 @@ use HTMLPurifier_Config;
 
 class LoHelper
 {
+
+    const ENROLMENT_RE_ENROL = 're_enrol';
+
     public static function load(Connection $db, int $id)
     {
         return ($learningObjects = static::loadMultiple($db, [$id]))
