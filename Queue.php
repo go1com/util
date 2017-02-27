@@ -69,6 +69,9 @@ class Queue
     const GROUP_CREATE          = 'group.create';
     const GROUP_UPDATE          = 'group.update';
     const GROUP_DELETE          = 'group.delete';
+    const GROUP_ITEM_CREATE     = 'group.item.create';
+    const GROUP_ITEM_UPDATE     = 'group.item.update';
+    const GROUP_ITEM_DELETE     = 'group.item.delete';
 
     # routingKey that tell some service to do something.
     #
