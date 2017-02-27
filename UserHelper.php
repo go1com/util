@@ -155,8 +155,8 @@ class UserHelper
         $results = $q->execute();
         while ($rootAcc = $results->fetch()) {
             foreach ($users as &$user) {
-                if ($rootAcc['mail'] == $user->mail) {
-                    $user->root = [
+                if ($rootAcc['mail'] == $user['mail']) {
+                    $user['root'] = [
                         'id'         => (int) $rootAcc['id'],
                         'profile_id' => (int) $rootAcc['profile_id'],
                     ];
