@@ -37,6 +37,9 @@ trait InstallTrait
             $this->createUserStreamTable($schema);
             $this->createUserStreamCommentTable($schema);
             $this->createUserStreamFlagTable($schema);
+
+            !$schema->hasTable('social_group') && $this->createSocialGroup($schema);
+            !$schema->hasTable('social_group_item') && $this->createSocialGroupItem($schema);
         }
 
         $diff = $compare->compare($origin, $schema);
@@ -404,5 +407,47 @@ trait InstallTrait
         $table->addColumn('created', 'integer');
         $table->setPrimaryKey(['id']);
         $table->addIndex(['type', 'identifier']);
+    }
+
+    private function createSocialGroup(Schema $schema)
+    {
+        $group = $schema->createTable('social_group');
+        $group->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+        $group->addColumn('title', 'string');
+        $group->addColumn('user_id', 'integer', ['unsigned' => true, 'comment' => 'Author of group']);
+        $group->addColumn('instance_id', 'integer', ['unsigned' => true]);
+        $group->addColumn('visibility', 'integer');
+        $group->addColumn('created', 'integer', ['unsigned' => true]);
+        $group->addColumn('updated', 'integer', ['unsigned' => true]);
+        $group->setPrimaryKey(['id']);
+        $group->addIndex(['title']);
+        $group->addIndex(['user_id']);
+        $group->addIndex(['instance_id']);
+        $group->addIndex(['visibility']);
+        $group->addIndex(['created']);
+        $group->addIndex(['updated']);
+    }
+
+    private function createSocialGroupItem(Schema $schema)
+    {
+        $table = $schema->createTable('social_group_item');
+        $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+        $table->addColumn('group_id', 'integer');
+        $table->addColumn('entity_type', 'string');
+        $table->addColumn('entity_id', 'integer');
+        $table->addColumn('status', 'integer');
+        $table->addColumn('created', 'integer', ['unsigned' => true]);
+        $table->addColumn('updated', 'integer', ['unsigned' => true]);
+        $table->setPrimaryKey(['id']);
+
+        $table->addIndex(['group_id']);
+        $table->addIndex(['entity_type']);
+        $table->addIndex(['entity_id']);
+        $table->addIndex(['status']);
+        $table->addIndex(['created']);
+        $table->addIndex(['updated']);
+
+        $table->addUniqueIndex(['group_id', 'entity_type', 'entity_id']);
+        $table->addForeignKeyConstraint('social_group', ['group_id'], ['id']);
     }
 }
