@@ -3,6 +3,7 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\GroupItemStatus;
 use go1\util\GroupStatus;
 
 trait GroupMockTrait
@@ -27,7 +28,7 @@ trait GroupMockTrait
             'group_id'      => $title = isset($options['group_id']) ? $options['group_id'] : 1,
             'entity_type'   => isset($options['entity_type']) ? $options['entity_type'] : 'user',
             'entity_id'     => isset($options['entity_id']) ? $options['entity_id'] : 1,
-            'status'        => isset($options['status']) ? $options['status'] : 1,
+            'status'        => isset($options['status']) ? $options['status'] : GroupItemStatus::ACTIVE,
             'created'       => isset($options['created']) ? $options['created'] : time(),
             'updated'       => isset($options['updated']) ? $options['updated'] : time(),
         ]);
