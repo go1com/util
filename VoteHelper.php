@@ -68,7 +68,6 @@ class VoteHelper
             case VoteTypes::ENTITY_TYPE_TAG:
                 return 'name';
 
-            case VoteTypes::ENTITY_TYPE_LI:
             case VoteTypes::ENTITY_TYPE_LO:
             default:
                 return 'id';
@@ -86,7 +85,6 @@ class VoteHelper
             case VoteTypes::ENTITY_TYPE_TAG:
                 return 'Tag';
 
-            case VoteTypes::ENTITY_TYPE_LI:
             case VoteTypes::ENTITY_TYPE_LO:
             default:
                 return 'Group';

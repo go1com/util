@@ -8,7 +8,6 @@ class VoteTypes
     const STAR = 2;
 
     const ENTITY_TYPE_LO      = 'lo';
-    const ENTITY_TYPE_LI      = 'li';
     const ENTITY_TYPE_NOTE    = 'note';
     const ENTITY_TYPE_TAG     = 'tag';
 
@@ -18,6 +17,6 @@ class VoteTypes
 
     public static function all()
     {
-        return [self::ENTITY_TYPE_LI, self::ENTITY_TYPE_LO, self::ENTITY_TYPE_NOTE];
+        return [self::ENTITY_TYPE_LO, self::ENTITY_TYPE_NOTE];
     }
 }
