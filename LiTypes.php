@@ -8,6 +8,7 @@ class LiTypes
 {
     const ACTIVITY    = 'activities';
     const ATTENDANCE  = 'attendance';
+    const ASSIGNMENT  = 'assignment';
     const DOCUMENT    = 'document';
     const H5P         = 'h5p';
     const IFRAME      = 'iframe';
@@ -19,7 +20,7 @@ class LiTypes
     const VIDEO       = 'video';
     const WORKSHOP    = 'workshop';
     const LTI         = 'lti';
-    const COMPLEX     = ['h5p', 'interactive', 'quiz', 'lti'];
+    const COMPLEX     = ['assignment', 'h5p', 'interactive', 'quiz', 'lti'];
 
     public static function all()
     {
