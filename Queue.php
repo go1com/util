@@ -66,6 +66,9 @@ class Queue
     const ECK_CREATE            = 'eck.entity.create';
     const ECK_UPDATE            = 'eck.entity.update';
     const ECK_DELETE            = 'eck.entity.delete';
+    const ECK_METADATA_CREATE   = 'eck.metadata.create';
+    const ECK_METADATA_UPDATE   = 'eck.metadata.update';
+    const ECK_METADATA_DELETE   = 'eck.metadata.delete';
     const GROUP_CREATE          = 'group.create';
     const GROUP_UPDATE          = 'group.update';
     const GROUP_DELETE          = 'group.delete';
