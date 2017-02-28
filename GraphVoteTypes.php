@@ -2,6 +2,9 @@
 
 namespace go1\util;
 
+/**
+ * @deprecated
+ */
 class GraphVoteTypes
 {
     const LIKE = 1;
