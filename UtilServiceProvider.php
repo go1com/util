@@ -17,6 +17,7 @@ use go1\clients\RealtimeClient;
 use go1\clients\RulesClient;
 use go1\clients\SmsClient;
 use go1\clients\UserClient;
+use go1\util\consume\ConsumeController;
 use GraphAware\Neo4j\Client\ClientBuilder;
 use HTMLPurifier;
 use HTMLPurifier_Config;
