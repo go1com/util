@@ -55,22 +55,6 @@ class Text
         return array_filter(explode('] [', $string));
     }
 
-    /**
-     *
-     * For example,
-     *
-     * ```php
-     * $string = "instance-id"
-     *
-     * $result = Text::toSnakeCase($string);
-     *
-     * // the result is:
-     * //"instance-id"
-     *
-     * @param $input
-     * @return string
-     *
-     */
     public static function toSnakeCase($input)
     {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
