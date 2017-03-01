@@ -4,6 +4,7 @@ namespace go1\util;
 
 use Assert\Assert;
 use Assert\LazyAssertionException;
+use Doctrine\DBAL\Driver\Connection;
 use Firebase\JWT\JWT;
 use HTMLPurifier;
 use HTMLPurifier_Config;
@@ -53,5 +54,15 @@ class Text
     public static function parseInlineTags(string $string)
     {
         return array_filter(explode('] [', $string));
+    }
+
+    public static function getInstance(Connection $db, $instanceId)
+    {
+        return $db->fetchColumn('SELECT title FROM gc_instance WHERE id = ? ', [$instanceId]);
+    }
+
+    public static function getAuthor(Connection $db, $userId)
+    {
+        return $db->fetchColumn('SELECT mail FROM gc_user WHERE id = ? ', [$userId]);
     }
 }
