@@ -59,11 +59,13 @@ class Text
     {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
         $ret = $matches[0];
+
+        $result = [];
         foreach ($ret as &$match) {
             // lower all words if all words are upper, else lower first character for Datatable filter
-            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+            $result[] = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
         }
-
-        return implode('_', $ret);
+        print_r(implode('_', $result));
+        return implode('_', $result);
     }
 }
