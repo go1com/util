@@ -3,6 +3,7 @@
 namespace go1\clients;
 
 use Exception;
+use go1\util\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -40,11 +41,28 @@ class MqClient
         $this->channel()->close();
     }
 
+    /**
+     * Exchange message to process in sequence
+     */
     public function publish($messageBody, $routingKey)
     {
         $messageBody = is_scalar($messageBody) ? $messageBody : json_encode($messageBody);
         $message = new AMQPMessage($messageBody, ['content_type' => 'application/json']);
         $this->channel()->basic_publish($message, 'events', $routingKey);
+    }
+
+    /**
+     *  Queue message to process in parallel.
+     */
+    public function queue($messageBody, string $routingKey)
+    {
+        $messageBody = is_scalar($messageBody) ? json_decode($messageBody) : $messageBody;
+        $message = json_encode([
+            'routingKey' => $routingKey,
+            'body' => $messageBody
+        ]);
+        $message = new AMQPMessage($message, ['content_type' => 'application/json']);
+        $this->channel()->basic_publish($message, '', Queue::WORKER_QUEUE_NAME);
     }
 
     public function subscribe($bindingKey = '#', callable $callback)
