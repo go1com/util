@@ -102,6 +102,17 @@ class PortalChecker
         return !empty($portal->configuration->{PortalHelper::FEATURE_CUSTOM_SMTP});
     }
 
+    public function allowCredit($portal)
+    {
+        PortalHelper::parseConfig($portal);
+
+        if (isset($portal->configuration->{PortalHelper::FEATURE_CREDIT})) {
+            return $portal->configuration->{PortalHelper::FEATURE_CREDIT};
+        }
+
+        return PortalHelper::FEATURE_CREDIT_DEFAULT;
+    }
+
     public function buildLink($portal, $uri)
     {
         $domain = $this->getPrimaryDomain($portal);
