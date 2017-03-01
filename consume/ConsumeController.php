@@ -11,13 +11,13 @@ use Exception;
 
 class ConsumeController
 {
-    private $consumers = [];
+    /** @var ConsumerInterface[] */
+    private $consumers;
     private $logger;
     private $accessChecker;
 
     public function __construct(array $consumers, LoggerInterface $logger, AccessChecker $accessChecker)
     {
-        /** @var ConsumerInterface[] */
         $this->consumers = $consumers;
         $this->logger = $logger;
         $this->accessChecker = $accessChecker;
@@ -50,5 +50,4 @@ class ConsumeController
 
         return new JsonResponse(null, 500);
     }
-
 }
