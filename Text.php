@@ -4,7 +4,6 @@ namespace go1\util;
 
 use Assert\Assert;
 use Assert\LazyAssertionException;
-use Doctrine\DBAL\Driver\Connection;
 use Firebase\JWT\JWT;
 use HTMLPurifier;
 use HTMLPurifier_Config;
@@ -56,13 +55,14 @@ class Text
         return array_filter(explode('] [', $string));
     }
 
-    public static function getInstance(Connection $db, $instanceId)
+    public static function toSnakeCase($input)
     {
-        return $db->fetchColumn('SELECT title FROM gc_instance WHERE id = ? ', [$instanceId]);
-    }
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
 
-    public static function getAuthor(Connection $db, $userId)
-    {
-        return $db->fetchColumn('SELECT mail FROM gc_user WHERE id = ? ', [$userId]);
+        return implode('_', $ret);
     }
 }
