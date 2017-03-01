@@ -140,26 +140,35 @@ class UserHelper
         ];
     }
 
-    public function attachRootAccount(Connection $db, array &$users, $accountsName)
+    public function attachRootAccount(Connection $db, array &$accounts, $accountsName)
     {
-        $mails = array_column($users, 'mail');
         $q = $db->createQueryBuilder();
-        $q
+        $q = $q
             ->select('u.id, u.mail, u.profile_id')
             ->from('gc_user', 'u')
             ->where($q->expr()->in('u.mail', ':mails'))
             ->andWhere('u.instance = :instance')
-            ->setParameter(':mails', $mails, Connection::PARAM_STR_ARRAY)
-            ->setParameter(':instance', $accountsName);
+            ->setParameter(':mails', array_column($accounts, 'mail'), Connection::PARAM_STR_ARRAY)
+            ->setParameter(':instance', $accountsName)
+            ->execute();
 
-        $results = $q->execute();
-        while ($rootAcc = $results->fetch()) {
-            foreach ($users as &$user) {
-                if ($rootAcc['mail'] == $user['mail']) {
-                    $user['root'] = [
-                        'id'         => (int) $rootAcc['id'],
-                        'profile_id' => (int) $rootAcc['profile_id'],
-                    ];
+        while ($user = $q->fetch(DB::OBJ)) {
+            foreach ($accounts as &$account) {
+                if (is_array($account)) {
+                    if ($user->mail == $account['mail']) {
+                        $account['root'] = [
+                            'id'         => (int) $user->id,
+                            'profile_id' => (int) $user->profile_id,
+                        ];
+                    }
+                }
+                else {
+                    if ($user->mail == $account->mail) {
+                        $account->root = [
+                            'id'         => (int) $user->id,
+                            'profile_id' => (int) $user->profile_id,
+                        ];
+                    }
                 }
             }
         }
