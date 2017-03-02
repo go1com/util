@@ -5,10 +5,19 @@ namespace go1\util;
 use BadFunctionCallException;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
-use PDO;
 
 class EdgeHelper
 {
+    private $select;
+
+    public static function select(string $select = null)
+    {
+        $helper = new self;
+        $helper->select = $select;
+
+        return $helper;
+    }
+
     public static function link(Connection $db, MqClient $queue, $type, $sourceId, $targetId, $weight = 0, $data = null)
     {
         $db->insert('gc_ro', $edge = [
@@ -71,13 +80,18 @@ class EdgeHelper
 
     private static function edges(Connection $db, array $sourceIds = [], array $targetIds = [], array $types = [])
     {
+        return self::select('*')->get($db, $sourceIds, $targetIds, $types);
+    }
+
+    public function get(Connection $db, array $sourceIds = [], array $targetIds = [], array $types = [], $mode = DB::OBJ)
+    {
         if (!$sourceIds && !$targetIds && !$types) {
             return [];
         }
 
         $q = $db
             ->createQueryBuilder()
-            ->select('*')
+            ->select($this->select ?: '*')
             ->from('gc_ro');
 
         $sourceIds && $q
@@ -92,6 +106,6 @@ class EdgeHelper
             ->andWhere('type IN (:types)')
             ->setParameter(':types', $types, Connection::PARAM_INT_ARRAY);
 
-        return $q->execute()->fetchAll(PDO::FETCH_OBJ);
+        return $q->execute()->fetchAll($mode);
     }
 }
