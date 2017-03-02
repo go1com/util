@@ -191,4 +191,14 @@ class AccessChecker
 
         return ($payload && !empty($payload->object->content->masquerading)) ? true : false;
     }
+
+    public function isLoAssessor(Connection $db, $loId, $userId)
+    {
+        return RoHelper::hasLink($db, EdgeTypes::COURSE_ASSESSOR, $loId, $userId);
+    }
+
+    public function isEnrolmentAssessor(Connection $db, $enrolmentId, $userId)
+    {
+        return RoHelper::hasLink($db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $userId, $enrolmentId);
+    }
 }
