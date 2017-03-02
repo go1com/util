@@ -23,7 +23,7 @@ class PortalHelper
     {
         $column = is_numeric($nameOrId) ? 'id' : 'title';
 
-        return $db->executeQuery("SELECT * FROM gc_instance WHERE $column = ?", [$nameOrId]);
+        return $db->executeQuery("SELECT * FROM gc_instance WHERE $column = ?", [$nameOrId])->fetch(DB::OBJ);
     }
 
     public static function nameFromId(Connection $db, int $id)
