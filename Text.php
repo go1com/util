@@ -4,6 +4,7 @@ namespace go1\util;
 
 use Assert\Assert;
 use Assert\LazyAssertionException;
+use Behat\Transliterator\Transliterator;
 use Firebase\JWT\JWT;
 use HTMLPurifier;
 use HTMLPurifier_Config;
@@ -66,5 +67,10 @@ class Text
         }
 
         return implode('_', $result);
+    }
+
+    public static function fileName(string $fileName)
+    {
+        return Transliterator::transliterate($fileName, '-');
     }
 }
