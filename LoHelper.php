@@ -4,6 +4,7 @@ namespace go1\util;
 
 use Doctrine\DBAL\Connection;
 use HTMLPurifier_Config;
+use PDO;
 
 class LoHelper
 {
@@ -119,5 +120,12 @@ class LoHelper
         $cnf->set('Core.HiddenElements', []);
 
         return $cnf;
+    }
+
+    public static function assessors(Connection $db, int $loId): array
+    {
+        return EdgeHelper
+            ::select('target_id')
+            ->get($db, [$loId], [], [EdgeTypes::COURSE_ASSESSOR], PDO::FETCH_COLUMN);
     }
 }
