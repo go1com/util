@@ -124,6 +124,7 @@ class UserHelper
 
         return (object) [
             'id'         => (int) $user->id,
+            'instance'   => $user->instance,
             'mail'       => $user->mail,
             'name'       => "{$user->first_name} {$user->last_name}",
             'profile_id' => (int) $user->profile_id,
