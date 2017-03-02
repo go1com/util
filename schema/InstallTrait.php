@@ -23,6 +23,7 @@ trait InstallTrait
         !$schema->hasTable('gc_kv') && $this->createKeyValueTable($schema);
         !$schema->hasTable('gc_lo') && $this->createLoTable($schema);
         !$schema->hasTable('gc_lo_pricing') && $this->createLoPricingTable($schema);
+        !$schema->hasTable('gc_lo_group') && $this->createLoGroupTable($schema);
         !$schema->hasTable('gc_event') && $this->createEventTable($schema);
         !$schema->hasTable('gc_tag') && $this->createLoTag($schema);
         !$schema->hasTable('gc_outcome') && $this->createOutcomeTable($schema);
@@ -200,6 +201,18 @@ trait InstallTrait
 
         $table->setPrimaryKey(['id']);
         $table->addIndex(['price']);
+    }
+
+    private function createLoGroupTable(Schema $schema)
+    {
+        $table = $schema->createTable('gc_lo_group');
+        $table->addColumn('lo_id', 'integer', ['unsigned' => true]);
+        $table->addColumn('instance_id', 'integer', ['unsigned' => true]);
+        $table->setPrimaryKey(['lo_id', 'instance_id']);
+        $table->addIndex(['lo_id']);
+        $table->addIndex(['instance_id']);
+        $table->addForeignKeyConstraint('gc_lo', ['lo_id'], ['id']);
+        $table->addForeignKeyConstraint('gc_instance', ['instance_id'], ['id']);
     }
 
     private function createEventTable(Schema $schema)
