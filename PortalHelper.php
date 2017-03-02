@@ -19,6 +19,13 @@ class PortalHelper
     const DEFAULT_USERS_LICENSES               = 10;
     const DEFAULT_USERS_LICENSES_TIMES         = 4;
 
+    public static function load(Connection $db, $nameOrId)
+    {
+        $column = is_numeric($nameOrId) ? 'id' : 'title';
+
+        return $db->executeQuery("SELECT * FROM gc_instance WHERE $column = ?", [$nameOrId]);
+    }
+
     public static function nameFromId(Connection $db, int $id)
     {
         return $db->fetchColumn('SELECT title FROM gc_instance WHERE id = ?', [$id]);
