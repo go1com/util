@@ -94,6 +94,7 @@ trait InstallTrait
         $revision->addColumn('enrolment_id', 'integer', ['unsigned' => true]);
         $revision->addColumn('profile_id', 'integer', ['unsigned' => true]);
         $revision->addColumn('parent_lo_id', 'integer', ['unsigned' => true, 'notnull' => false]);
+        $revision->addColumn('parent_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0, 'comment' => 'Parent enrolment ID.']);
         $revision->addColumn('lo_id', 'integer', ['unsigned' => true]);
         $revision->addColumn('instance_id', 'integer', ['unsigned' => true]);
         $revision->addColumn('taken_instance_id', 'integer', ['unsigned' => true]);
