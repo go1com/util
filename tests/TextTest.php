@@ -66,6 +66,6 @@ class TextTest extends PHPUnit_Framework_TestCase
      */
     public function testParseFileName($fileName, $validString)
     {
-        $this->assertEquals($validString, Text::parseFileName($fileName));
+        $this->assertEquals($validString, Text::fileName($fileName));
     }
 }

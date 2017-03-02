@@ -69,7 +69,7 @@ class Text
         return implode('_', $result);
     }
 
-    public static function parseFileName(string $fileName)
+    public static function fileName(string $fileName)
     {
         return Transliterator::transliterate($fileName, '-');
     }
