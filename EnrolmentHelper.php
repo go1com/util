@@ -92,4 +92,11 @@ class EnrolmentHelper
 
         return $completion == count($dependencyIds);
     }
+
+    public static function assessors(Connection $db, int $enrolmentId): array
+    {
+        return EdgeHelper
+            ::select('source_id')
+            ->get($db, [], [$enrolmentId], [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE], PDO::FETCH_COLUMN);
+    }
 }
