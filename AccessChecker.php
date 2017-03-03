@@ -192,8 +192,27 @@ class AccessChecker
         return ($payload && !empty($payload->object->content->masquerading)) ? true : false;
     }
 
-    public static function isAssessor(Connection $db, int $courseId, int $assessorId, int $studentProfileId = null): bool
+    public static function isAssessor(
+        Connection $db,
+        int $courseId,
+        int $assessorId,
+        int $studentProfileId = null,
+        Request $req = null): bool
     {
+        if (self::isAccountsAdmin($req)) {
+            return true;
+        }
+
+        if ((new LoChecker)->isAuthor($db, $courseId, $assessorId)) {
+            return true;
+        }
+
+        // Is portal admin
+        $instance = PortalHelper::titleFromLoId($db, $courseId);
+        if ($instance && self::isPortalAdmin($req, $instance)) {
+            return true;
+        }
+
         if ($studentProfileId) {
             if ($enrolmentId = EnrolmentHelper::enrolmentId($db, $courseId, $studentProfileId)) {
                 if (EdgeHelper::hasLink($db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessorId, $enrolmentId)) {
