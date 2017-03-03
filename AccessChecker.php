@@ -192,16 +192,16 @@ class AccessChecker
         return ($payload && !empty($payload->object->content->masquerading)) ? true : false;
     }
 
-    public static function isAssessor(Connection $db, int $loId, int $assessorId, int $studentProfileId = null): bool
+    public static function isAssessor(Connection $db, int $courseId, int $assessorId, int $studentProfileId = null): bool
     {
         if ($studentProfileId) {
-            if ($enrolmentId = EnrolmentHelper::enrolmentId($db, $loId, $studentProfileId)) {
+            if ($enrolmentId = EnrolmentHelper::enrolmentId($db, $courseId, $studentProfileId)) {
                 if (EdgeHelper::hasLink($db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessorId, $enrolmentId)) {
                     return true;
                 }
             }
         }
 
-        return EdgeHelper::hasLink($db, EdgeTypes::COURSE_ASSESSOR, $loId, $assessorId);
+        return EdgeHelper::hasLink($db, EdgeTypes::COURSE_ASSESSOR, $courseId, $assessorId);
     }
 }
