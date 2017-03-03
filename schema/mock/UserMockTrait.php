@@ -128,6 +128,48 @@ trait UserMockTrait
         ];
     }
 
+    protected function getPayloadMultipleInstances(array $options)
+    {
+        $userId = isset($options['id']) ? $options['id'] : 1;
+        $profileId = isset($options['profile_id']) ? $options['profile_id'] : 11;
+        $accountsName = isset($options['accounts_name']) ? $options['accounts_name'] : 'accounts.gocatalyze.com';
+
+        $user = [
+            'id'            => intval($userId),
+            'first_name'    => 'A',
+            'last_name'     => 'T',
+            'instance_name' => $accountsName,
+            'profile_id'    => intval($profileId),
+            'mail'          => $mail = isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com',
+            'roles'         => isset($options['roles'][$accountsName]) ? $options['roles'][$accountsName] : ['authenticated'],
+        ];
+
+        foreach ($options['instance_name'] as $instanceName) {
+            $user['accounts'][] = (object) [
+                'id'            => intval($userId),
+                'first_name'    => 'A',
+                'last_name'     => 'T',
+                'status'        => 1,
+                'roles'         => isset($options['roles'][$instanceName]) ? $options['roles'][$instanceName] : ['student'],
+                'instance_name' => $instanceName,
+                'mail'          => $mail,
+                'profile_id'    => intval($profileId),
+            ];
+        }
+
+        $this->rootName = "{$user['first_name']} {$user['last_name']}";
+
+        return (object) [
+            'iss'    => 'go1.user',
+            'ver'    => '1.1',
+            'exp'    => strtotime('+ 1 year'),
+            'object' => (object) [
+                'type'    => 'user',
+                'content' => $this->formatUser($user),
+            ],
+        ];
+    }
+
     private function formatUser($user, $root = true)
     {
         $accounts = [];
