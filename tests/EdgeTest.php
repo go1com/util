@@ -112,4 +112,15 @@ class EdgeTest extends UtilTestCase
         $this->assertEquals($accountId = 3, $targetIds[1]);
         $this->assertEquals($accountId = 4, $targetIds[2]);
     }
+
+    public function testCustomSelectSingle()
+    {
+        $select = EdgeHelper::select('target_id');
+        $source = [$userId = 1];
+        $hasAcc = EdgeTypes::HAS_ACCOUNT;
+
+        $this->assertEquals($accountId = 2, $select->getSingle($this->db, $source, [2], [$hasAcc], PDO::FETCH_COLUMN));
+        $this->assertEquals($accountId = 3, $select->getSingle($this->db, $source, [3], [$hasAcc], PDO::FETCH_COLUMN));
+        $this->assertEquals($accountId = 4, $select->getSingle($this->db, $source, [4], [$hasAcc], PDO::FETCH_COLUMN));
+    }
 }

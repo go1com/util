@@ -108,4 +108,11 @@ class EdgeHelper
 
         return $q->execute()->fetchAll($mode);
     }
+
+    public function getSingle(Connection $db, array $sourceIds = [], array $targetIds = [], array $types = [], $mode = DB::OBJ)
+    {
+        $result = $this->get($db, $sourceIds, $targetIds, $types, $mode);
+
+        return $result ? reset($result) : false;
+    }
 }
