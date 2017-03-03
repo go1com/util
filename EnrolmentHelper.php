@@ -49,11 +49,18 @@ class EnrolmentHelper
             ->fetchAll(DB::OBJ);
     }
 
-    public static function loadByLoAndProfileId(Connection $db, int $loId, int $takenInstanceId, int $profileId, bool $loadEdges = false)
+    public static function loadByLoAndProfileId(Connection $db, int $loId, int $profileId, int $parentLoId = null)
     {
-        return $db
-            ->executeQuery('SELECT * FROM gc_enrolment WHERE lo_id = ? AND taken_instance_id = ? AND profile_id = ?', [$loId, $takenInstanceId, $profileId])
-            ->fetch(DB::OBJ);
+        $q = $db
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('gc_enrolment')
+            ->where('lo_id = :lo_id')->setParameter(':lo_id', $loId)
+            ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', $profileId);
+
+        $parentLoId && $q->andWhere('parent_lo_id = :parent_lo_id')->setParameter(':parent_lo_id', $parentLoId);
+
+        return $q->execute()->fetch(DB::OBJ);
     }
 
     public static function becomeCompleted(stdClass $enrolment, stdClass $original, bool $passAware = true): bool
