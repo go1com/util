@@ -199,7 +199,9 @@ class AccessChecker
         int $studentProfileId = null,
         Request $req = null): bool
     {
-        if (self::isAccountsAdmin($req)) {
+        $checker = new self;
+
+        if ($checker->isAccountsAdmin($req)) {
             return true;
         }
 
@@ -209,7 +211,7 @@ class AccessChecker
 
         // Is portal admin
         $instance = PortalHelper::titleFromLoId($db, $courseId);
-        if ($instance && self::isPortalAdmin($req, $instance)) {
+        if ($instance && $checker->isPortalAdmin($req, $instance)) {
             return true;
         }
 
