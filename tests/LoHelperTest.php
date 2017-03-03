@@ -24,7 +24,7 @@ class LoHelperTest extends UtilTestCase
         $this->link($this->db, EdgeTypes::COURSE_ASSESSOR, $courseId, $assessor1Id);
         $this->link($this->db, EdgeTypes::COURSE_ASSESSOR, $courseId, $assessor2Id);
 
-        $assessors = LoHelper::assessors($this->db, $courseId);
+        $assessors = LoHelper::assessorIds($this->db, $courseId);
         $this->assertEquals(2, count($assessors));
         $this->assertEquals($assessor1Id, $assessors[0]);
         $this->assertEquals($assessor2Id, $assessors[1]);

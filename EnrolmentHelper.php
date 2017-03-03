@@ -93,7 +93,7 @@ class EnrolmentHelper
         return $completion == count($dependencyIds);
     }
 
-    public static function assessors(Connection $db, int $enrolmentId): array
+    public static function assessorIds(Connection $db, int $enrolmentId): array
     {
         return EdgeHelper
             ::select('source_id')
