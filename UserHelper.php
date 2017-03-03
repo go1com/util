@@ -190,4 +190,13 @@ class UserHelper
                 ->fetchAll(PDO::FETCH_COLUMN)
             : [];
     }
+
+    public static function userInstanceIds(Connection $db, string $mail): array
+    {
+        $sql  = 'SELECT gc_instance.id FROM gc_instance ';
+        $sql .= 'INNER JOIN gc_user ON gc_instance.title = gc_user.instance ';
+        $sql .= 'WHERE mail = ?';
+
+        return $db->executeQuery($sql, [$mail])->fetchAll(PDO::FETCH_COLUMN);
+    }
 }
