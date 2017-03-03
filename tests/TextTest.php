@@ -2,13 +2,20 @@
 
 namespace go1\util\schema\tests;
 
-use Doctrine\DBAL\DriverManager;
-use go1\util\schema\InstallTrait;
+use Behat\Transliterator\Transliterator;
 use go1\util\Text;
 use PHPUnit_Framework_TestCase;
 
 class TextTest extends PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if (!class_exists(Transliterator::class)) {
+            $this->markTestSkipped();
+        }
+    }
 
     public function testToSnakeCaseSpecialCharater()
     {
@@ -57,7 +64,7 @@ class TextTest extends PHPUnit_Framework_TestCase
             ['Žluťoučký kůň\n', 'zlutoucky-kun-n'],
             ['test mấy cái liên quan tới string', 'test-may-cai-lien-quan-toi-string'],
             ['1CD-Trung & V43-Level...', '1cd-trung-v43-level'],
-            ["^'£$%^&*()}{@'#~?><>,@|-=-_+-¬'", "ps"]
+            ["^'£$%^&*()}{@'#~?><>,@|-=-_+-¬'", "ps"],
         ];
     }
 
