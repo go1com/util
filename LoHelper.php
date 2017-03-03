@@ -122,7 +122,7 @@ class LoHelper
         return $cnf;
     }
 
-    public static function assessors(Connection $db, int $loId): array
+    public static function assessorIds(Connection $db, int $loId): array
     {
         return EdgeHelper
             ::select('target_id')

@@ -22,7 +22,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor1Id, $enrolmentId);
         $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor2Id, $enrolmentId);
 
-        $assessors = EnrolmentHelper::assessors($this->db, $enrolmentId);
+        $assessors = EnrolmentHelper::assessorIds($this->db, $enrolmentId);
         $this->assertEquals(2, count($assessors));
         $this->assertEquals($assessor1Id, $assessors[0]);
         $this->assertEquals($assessor2Id, $assessors[1]);
