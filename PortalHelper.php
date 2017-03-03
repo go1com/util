@@ -53,4 +53,14 @@ class PortalHelper
             [$loId]
         )->fetch(DB::OBJ);
     }
+
+    public static function titleFromLoId(Connection $db, int $loId)
+    {
+        return $db->executeQuery(
+            'SELECT gc_instance.title FROM gc_instance'
+            . ' INNER JOIN gc_lo ON gc_instance.id = gc_lo.instance_id'
+            . ' WHERE gc_lo.id = ?',
+            [$loId]
+        )->fetchColumn();
+    }
 }
