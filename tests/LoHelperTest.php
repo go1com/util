@@ -29,4 +29,13 @@ class LoHelperTest extends UtilTestCase
         $this->assertEquals($assessor1Id, $assessors[0]);
         $this->assertEquals($assessor2Id, $assessors[1]);
     }
+
+    public function testHasActiveMembership()
+    {
+        $this->db->insert('gc_lo_group', ['lo_id' => $loId = 10, 'instance_id' => 20]);
+        $this->db->insert('gc_lo_group', ['lo_id' => $loId, 'instance_id' => 30]);
+        $this->assertTrue(LoHelper::hasActiveMembership($this->db,$loId, 20));
+        $this->assertTrue(LoHelper::hasActiveMembership($this->db,$loId, 30));
+        $this->assertFalse(LoHelper::hasActiveMembership($this->db,$loId, 40));
+    }
 }
