@@ -102,13 +102,13 @@ class AccessChecker
         return false;
     }
 
-    public function isOwner(Request $req, $profileId)
+    public function isOwner(Request $req, $profileId, $property = 'profile_id')
     {
         if (!$user = $this->validUser($req)) {
             return false;
         }
 
-        return $user->profile_id == $profileId;
+        return $user->{$property} == $profileId;
     }
 
     public function hasAccount(Request $req, $portalName)
