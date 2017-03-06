@@ -128,4 +128,10 @@ class LoHelper
             ::select('target_id')
             ->get($db, [$loId], [], [EdgeTypes::COURSE_ASSESSOR], PDO::FETCH_COLUMN);
     }
+
+    public static function hasActiveMembership(Connection $db, int $loId, int $instanceId): bool
+    {
+        $sql = 'SELECT 1 FROM gc_lo_group WHERE lo_id = ? AND instance_id = ?';
+        return $db->fetchColumn($sql, [$loId, $instanceId]) ? true : false;
+    }
 }
