@@ -304,6 +304,7 @@ trait GraphLoMockTrait
     {
         $hasGroup = GraphEdgeTypes::HAS_GROUP;
         $hasMember = GraphEdgeTypes::HAS_MEMBER;
+        $hasTag = GraphEdgeTypes::HAS_TAG;
 
         $stack->push("MATCH (lo:{$course['type']} { id: {$course['id']} })-[r:$hasTag]->() DELETE r");
         if (isset($course['tags']) && is_array($course['tags'])) {
