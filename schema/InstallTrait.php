@@ -42,6 +42,9 @@ trait InstallTrait
             !$schema->hasTable('social_group') && $this->createSocialGroup($schema);
             !$schema->hasTable('social_group_item') && $this->createSocialGroupItem($schema);
             !$schema->hasTable('gc_note') && $this->createNoteTable($schema);
+
+            !$schema->hasTable('vote_items') && $this->createVoteItemsTable($schema);
+            !$schema->hasTable('vote_caches') && $this->createVoteCachesTable($schema);
         }
 
         $diff = $compare->compare($origin, $schema);
@@ -483,5 +486,40 @@ trait InstallTrait
         $note->addIndex(['uuid']);
         $note->addIndex(['created']);
         $note->addIndex(['type']);
+    }
+
+    private function createVoteItemsTable(Schema $schema)
+    {
+        $table = $schema->createTable('vote_items');
+        $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+        $table->addColumn('type', 'integer', ['unsigned' => true]);
+        $table->addColumn('entity_type', 'string');
+        $table->addColumn('entity_id', 'string');
+        $table->addColumn('profile_id', 'integer', ['unsigned' => true]);
+        $table->addColumn('value', 'integer');
+        $table->addColumn('timestamp', 'integer');
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['type']);
+        $table->addIndex(['entity_type']);
+        $table->addIndex(['entity_id']);
+        $table->addIndex(['profile_id']);
+        $table->addIndex(['value']);
+        $table->addIndex(['timestamp']);
+    }
+
+    private function createVoteCachesTable(Schema $schema)
+    {
+        $table = $schema->createTable('vote_caches');
+        $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+        $table->addColumn('type', 'string');
+        $table->addColumn('entity_type', 'string');
+        $table->addColumn('entity_id', 'string');
+        $table->addColumn('percent', 'float');
+        $table->addColumn('data', 'text');
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['type'], 'idx_vote_cache_type');
+        $table->addIndex(['entity_type'], 'idx_vote_cache_entity_type');
+        $table->addIndex(['entity_id'], 'idx_vote_cache_entity_id');
+        $table->addUniqueIndex(['type', 'entity_type', 'entity_id'], 'unq_vote_caches');
     }
 }

@@ -2,6 +2,8 @@
 
 namespace go1\util;
 
+use Doctrine\DBAL\Connection;
+
 class VoteHelper
 {
     public static function buildCacheData(int $type, int $value, array $data = null)
@@ -96,5 +98,12 @@ class VoteHelper
         if (!in_array($entityType, VoteTypes::all())) {
             throw new \Exception('Entity type is invalid');
         }
+    }
+
+    public static function getEntityVote(Connection $db, string $entityType, int $entityId, int $type = VoteTypes::LIKE)
+    {
+        $vote = $db->executeQuery('SELECT * FROM vote_caches WHERE type = ? AND entity_type = ? AND entity_id = ?', [$type, $entityType, $entityId])->fetch(DB::OBJ);
+        $vote && $vote->data = is_scalar($vote->data) ? json_decode($vote->data, true) : $vote->data;
+        return $vote;
     }
 }
