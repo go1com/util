@@ -36,6 +36,9 @@ trait VoteMockTrait
         )->fetchColumn();
 
         $data = VoteHelper::buildCacheData($vote->type, $vote->value, json_decode($cacheData, true));
+        if (!$data) {
+            return;
+        }
         $percent = VoteHelper::calculatePercent($vote->type, $data);
 
         if ($cacheData) {
