@@ -28,7 +28,7 @@ class VoteHelper
                 break;
         }
 
-        return $data;
+        return (0 !== array_sum($data)) ? $data : false;
     }
 
     public static function calculatePercent(int $type, array $data)
