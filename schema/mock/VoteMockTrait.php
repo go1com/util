@@ -26,7 +26,7 @@ trait VoteMockTrait
 
     private function cacheVote(Connection $db, int $voteId)
     {
-        $vote = $this->db
+        $vote = $db
             ->executeQuery('SELECT * FROM vote_items WHERE id = ?', [$voteId])
             ->fetch(DB::OBJ);
 
