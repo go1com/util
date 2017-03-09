@@ -11,6 +11,15 @@ class UserHelperTest extends UtilTestCase
     use UserMockTrait;
     use InstanceMockTrait;
 
+    public function testLoadByMail()
+    {
+        $id = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com']);
+
+        $this->assertEquals(false, UserHelper::loadByEmail($this->db, 'qa.mygo1.com', 'invalid@email.com'));
+        $this->assertEquals(false, UserHelper::loadByEmail($this->db, 'invalid.mygo1.com', 'foo@bar.baz'));
+        $this->assertEquals($id, UserHelper::loadByEmail($this->db, 'qa.mygo1.com', 'foo@bar.baz')->id);
+    }
+
     public function testInstanceIds()
     {
         $instance1Id = $this->createInstance($this->db, ['title' => $instance1Name = 'a1@mygo1.com']);

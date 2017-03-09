@@ -15,11 +15,11 @@ use go1\clients\SmsClient;
 use go1\util\Service;
 use go1\util\UtilServiceProvider;
 use GuzzleHttp\Client;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
 
-class ClientsTest extends PHPUnit_Framework_TestCase
+class ClientsTest extends TestCase
 {
     public function testClassLoading()
     {

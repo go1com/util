@@ -17,10 +17,16 @@ class UserHelper
 
     public static function load(Connection $db, int $id)
     {
-        $user = 'SELECT * FROM gc_user WHERE id = ?';
-        $user = $db->executeQuery($user, [$id])->fetch(DB::OBJ);
+        return $db
+            ->executeQuery('SELECT * FROM gc_user WHERE id = ?', [$id])
+            ->fetch(DB::OBJ);
+    }
 
-        return $user;
+    public static function loadByEmail(Connection $db, string $instance, string $mail)
+    {
+        return $db
+            ->executeQuery('SELECT * FROM gc_user WHERE instance = ? AND mail = ?', [$instance, $mail])
+            ->fetch(DB::OBJ);
     }
 
     public static function loadMultiple(Connection $db, array $ids)
@@ -193,7 +199,7 @@ class UserHelper
 
     public static function userInstanceIds(Connection $db, string $mail): array
     {
-        $sql  = 'SELECT gc_instance.id FROM gc_instance ';
+        $sql = 'SELECT gc_instance.id FROM gc_instance ';
         $sql .= 'INNER JOIN gc_user ON gc_instance.title = gc_user.instance ';
         $sql .= 'WHERE mail = ?';
 
