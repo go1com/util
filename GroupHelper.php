@@ -8,7 +8,7 @@ class GroupHelper
 {
     const ITEM_TYPE_USER   = 'user';
     const ITEM_TYPE_LO     = 'lo';
-    const ITEM_TYPE_PORTAL = 'instance';
+    const ITEM_TYPE_PORTAL = 'portal';
     const ITEM_ALL         = [self::ITEM_TYPE_USER, self::ITEM_TYPE_LO, self::ITEM_TYPE_PORTAL];
 
     public static function isItemOf(Connection $db, string $entityType, int $entityId, int $groupId, int $status = GroupItemStatus::ACTIVE): bool
