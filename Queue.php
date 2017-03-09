@@ -75,6 +75,9 @@ class Queue
     const GROUP_ITEM_CREATE     = 'group.item.create';
     const GROUP_ITEM_UPDATE     = 'group.item.update';
     const GROUP_ITEM_DELETE     = 'group.item.delete';
+    const NOTE_CREATE           = 'note.create';
+    const NOTE_UPDATE           = 'note.update';
+    const NOTE_DELETE           = 'note.delete';
     const WORKER_QUEUE_NAME     = 'worker';
 
     # routingKey that tell some service to do something.
