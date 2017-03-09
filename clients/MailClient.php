@@ -28,7 +28,6 @@ class MailClient
     {
         $helper = new PortalChecker;
         $portal = is_object($instance) ? $instance : $helper->load($db, $instance);
-
         if ($portal) {
             if ($helper->useCustomSMTP($portal)) {
                 $client = clone $this;
