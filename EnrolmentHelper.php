@@ -106,4 +106,32 @@ class EnrolmentHelper
             ::select('source_id')
             ->get($db, [], [$enrolmentId], [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE], PDO::FETCH_COLUMN);
     }
+
+    public static function findParentEnrolment(Connection $db, stdClass $enrolment, $parentLoType = LoTypes::COURSE)
+    {
+        $loadLo = function($loId) use ($db) {
+            return $db->executeQuery('SELECT id, type FROM gc_lo WHERE id = ?', [$loId])->fetch(DB::OBJ);
+        };
+
+        $parentQuery = function(stdClass $lo, stdClass $enrolment) use ($db, $loadLo) {
+            $parentLoId = $enrolment->parent_lo_id ?: false ;
+            if (empty($parentLoId)) {
+                $roTypes = [EdgeTypes::HAS_LP_ITEM, EdgeTypes::HAS_MODULE, EdgeTypes::HAS_ELECTIVE_LO, EdgeTypes::HAS_LI, EdgeTypes::HAS_ELECTIVE_LI];
+                $query = $db->executeQuery('SELECT source_id FROM gc_ro WHERE type IN (?) AND target_id = ?', [$roTypes, $lo->id], [DB::INTEGERS, DB::INTEGER]);
+                $parentLoId = $query->fetchColumn();
+            }
+
+            return [
+                $parentLo = $parentLoId ? $loadLo($parentLoId) : false,
+                $parentEnrolment = $parentLo ? EnrolmentHelper::loadByLoAndProfileId($db, $parentLo->id, $enrolment->profile_id) : false
+            ];
+        };
+        $lo = $loadLo($enrolment->lo_id);
+        list($parentLo, $parentEnrolment) = $parentQuery($lo, $enrolment);
+        while ($parentLo && $parentEnrolment && ($parentLo->type != $parentLoType)) {
+            list($parentLo, $parentEnrolment) = $parentQuery($parentLo, $parentEnrolment);
+        }
+
+        return $parentLo && ($parentLo->type == $parentLoType) ? $parentEnrolment : false;
+    }
 }
