@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\TableExistsException;
 use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 use go1\flood\Flood;
 use go1\kv\KV;
 
@@ -454,18 +455,18 @@ trait InstallTrait
     {
         $note = $schema->createTable('gc_note');
         $note->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-        $note->addColumn('lo_id', 'integer', ['unsigned' => true]);
+        $note->addColumn('entity_id', 'integer', ['unsigned' => true, 'type' => Type::getType(Type::BIGINT)]);
         $note->addColumn('profile_id', 'integer', ['unsigned' => true]);
         $note->addColumn('uuid', 'string', ['notnull' => false, 'length' => 36]);
         $note->addColumn('created', 'integer', ['unsigned' => true, 'length' => 11]);
-        $note->addColumn('type', 'string', ['notnull' => false, 'length' => 11, 'default' => 'lo']);
+        $note->addColumn('entity_type', 'string', ['notnull' => false, 'length' => 11, 'default' => 'lo']);
         $note->setPrimaryKey(['id']);
         $note->addUniqueIndex(['uuid']);
-        $note->addIndex(['lo_id']);
+        $note->addIndex(['entity_id']);
         $note->addIndex(['profile_id']);
         $note->addIndex(['uuid']);
         $note->addIndex(['created']);
-        $note->addIndex(['type']);
+        $note->addIndex(['entity_type']);
     }
 
     private function createVoteItemsTable(Schema $schema)
