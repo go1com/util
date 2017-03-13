@@ -4,13 +4,12 @@ namespace go1\util\schema\tests;
 
 use Doctrine\DBAL\DriverManager;
 use go1\util\schema\mock\OneMockTrait;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class OneMockTest extends PHPUnit_Framework_TestCase
+class OneMockTest extends TestCase
 {
     public function test()
     {
-
         $one = new class
         {
             use OneMockTrait;

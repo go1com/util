@@ -1,8 +1,10 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\enrolment;
 
 use Doctrine\DBAL\Connection;
+use go1\util\edge\EdgeHelper;
+use go1\util\edge\EdgeTypes;
 use PDO;
 use stdClass;
 

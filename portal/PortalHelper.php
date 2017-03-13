@@ -1,8 +1,9 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\portal;
 
 use Doctrine\DBAL\Connection;
+use go1\util\DB;
 use stdClass;
 
 class PortalHelper

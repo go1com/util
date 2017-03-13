@@ -4,9 +4,9 @@ namespace go1\util\model;
 
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
-use go1\util\EdgeTypes;
-use stdClass;
+use go1\util\edge\EdgeTypes;
 use PDO;
+use stdClass;
 
 /**
  * Just for reference, not ready for using yet.
@@ -49,7 +49,7 @@ class User
         $user->id = $row->id;
         $user->profileId = isset($row->profile_id) ? $row->profile_id : null;
         $user->instance = $row->instance;
-        $user->name = isset($row->name) ? $row->name: null;
+        $user->name = isset($row->name) ? $row->name : null;
         $user->mail = $row->mail;
         $user->firstName = $row->first_name;
         $user->lastName = $row->last_name;

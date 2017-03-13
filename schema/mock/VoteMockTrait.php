@@ -4,7 +4,7 @@ namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
-use go1\util\VoteHelper;
+use go1\util\vote\VoteHelper;
 
 trait VoteMockTrait
 {
@@ -45,16 +45,17 @@ trait VoteMockTrait
             $db->update(
                 'vote_caches',
                 [
-                    'data' => json_encode($data),
-                    'percent' => $percent
+                    'data'    => json_encode($data),
+                    'percent' => $percent,
                 ],
                 [
-                    'type' => $vote->type,
+                    'type'        => $vote->type,
                     'entity_type' => $vote->entity_type,
-                    'entity_id' => $vote->entity_id
+                    'entity_id'   => $vote->entity_id,
                 ]
             );
-        } else {
+        }
+        else {
             $db->insert(
                 'vote_caches',
                 [

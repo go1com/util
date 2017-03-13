@@ -2,8 +2,8 @@
 
 namespace go1\util\tests;
 
-use go1\util\EdgeTypes;
-use go1\util\EnrolmentHelper;
+use go1\util\edge\EdgeTypes;
+use go1\util\enrolment\EnrolmentHelper;
 use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 

@@ -1,14 +1,25 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\enrolment;
 
 use Doctrine\DBAL\Connection;
+use go1\util\edge\EdgeTypes;
+use go1\util\lo\LoTypes;
 use InvalidArgumentException;
 use stdClass;
 
 class EnrolmentStatuses
 {
-    const ASSIGNED    = 'assigned';    # Someone added this for you to do
+    # Pre-enrolment statuses
+    # ---------------------
+    # const PENDING                  = -1;
+    const ASSIGNED                 = -3; # Someone added this for you to do
+    const ENQUIRED                 = -4; #
+    const MANUAL_COMPLETE          = -5;
+    const MANUAL_COMPLETE_VERIFIED = -6;
+
+    # Enrolment statuses
+    # ---------------------
     const NOT_STARTED = 'not-started'; # you have enrolled but not yet opened the course
     const IN_PROGRESS = 'in-progress'; # you are learning the LO.
     const PENDING     = 'pending';     # you have enrolled but the enrolment need to be reviewed or blocked by other enrolment

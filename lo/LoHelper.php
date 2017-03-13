@@ -1,8 +1,11 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\lo;
 
 use Doctrine\DBAL\Connection;
+use go1\util\DB;
+use go1\util\edge\EdgeHelper;
+use go1\util\edge\EdgeTypes;
 use HTMLPurifier_Config;
 use PDO;
 
@@ -132,6 +135,7 @@ class LoHelper
     public static function hasActiveMembership(Connection $db, int $loId, int $instanceId): bool
     {
         $sql = 'SELECT 1 FROM gc_lo_group WHERE lo_id = ? AND instance_id = ?';
+
         return $db->fetchColumn($sql, [$loId, $instanceId]) ? true : false;
     }
 }

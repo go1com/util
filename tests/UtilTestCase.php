@@ -9,11 +9,11 @@ use go1\util\schema\mock\UserMockTrait;
 use go1\util\Service;
 use go1\util\UtilServiceProvider;
 use GuzzleHttp\Client;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
 
-abstract class UtilTestCase extends PHPUnit_Framework_TestCase
+abstract class UtilTestCase extends TestCase
 {
     use InstallTrait;
     use UserMockTrait;

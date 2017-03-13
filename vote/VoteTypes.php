@@ -1,6 +1,6 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\vote;
 
 class VoteTypes
 {

@@ -4,7 +4,7 @@ namespace go1\util\tests;
 
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\UserHelper;
+use go1\util\user\UserHelper;
 
 class UserHelperTest extends UtilTestCase
 {

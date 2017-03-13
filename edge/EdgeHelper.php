@@ -1,10 +1,12 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\edge;
 
 use BadFunctionCallException;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
+use go1\util\DB;
+use go1\util\Queue;
 
 class EdgeHelper
 {

@@ -4,9 +4,9 @@ namespace go1\util\schema\tests;
 
 use Behat\Transliterator\Transliterator;
 use go1\util\Text;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class TextTest extends PHPUnit_Framework_TestCase
+class TextTest extends TestCase
 {
     protected function setUp()
     {
