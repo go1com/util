@@ -78,6 +78,9 @@ class Queue
     const NOTE_CREATE           = 'note.create';
     const NOTE_UPDATE           = 'note.update';
     const NOTE_DELETE           = 'note.delete';
+    const REPORT_CREATE         = 'report.create';
+    const REPORT_UPDATE         = 'report.update';
+    const REPORT_DELETE         = 'report.delete';
     const WORKER_QUEUE_NAME     = 'worker';
 
     # routingKey that tell some service to do something.
