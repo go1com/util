@@ -27,14 +27,16 @@ trait GraphNoteMockTrait
                 'data' => [
                     'id'            => (int) $id,
                     'created'       => isset($data['created']) ? (int) $data['created'] : time(),
+                    // Legacy data
                     'entity_type'   => $entityType,
                     'entity_id'     => $entityId,
+                    'profile_id'    => isset($data['profile_id']) ? $data['profile_id'] : 0,
                 ],
             ]
         );
 
         // Add entity_id direction
-        if ($entityId) {
+        if ($entityId && in_array($entityType, ['lo', 'portal'])) {
             list($label, $prop, $propValue) = GraphEdgeTypes::getEntityGraphData($entityType, $entityId);
             $entityId && $stack->push(
                 "MATCH (n:Note { uuid: {uuid} })"
