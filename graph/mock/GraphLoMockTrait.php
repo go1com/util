@@ -2,7 +2,7 @@
 
 namespace go1\util\graph\mock;
 
-use go1\util\EdgeTypes;
+use go1\util\edge\EdgeTypes;
 use go1\util\GraphEdgeTypes;
 use GraphAware\Neo4j\Client\Client;
 use GraphAware\Neo4j\Client\Stack;

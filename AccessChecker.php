@@ -3,6 +3,12 @@
 namespace go1\util;
 
 use Doctrine\DBAL\Connection;
+use go1\util\edge\EdgeHelper;
+use go1\util\edge\EdgeTypes;
+use go1\util\enrolment\EnrolmentHelper;
+use go1\util\lo\LoChecker;
+use go1\util\portal\PortalHelper;
+use go1\util\user\Roles;
 use PDO;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;

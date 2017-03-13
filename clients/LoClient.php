@@ -2,7 +2,7 @@
 
 namespace go1\clients;
 
-use go1\util\UserHelper;
+use go1\util\user\UserHelper;
 use GuzzleHttp\Client;
 
 class LoClient

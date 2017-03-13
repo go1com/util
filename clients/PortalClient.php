@@ -4,7 +4,7 @@ namespace go1\clients;
 
 use Doctrine\Common\Cache\CacheProvider;
 use go1\clients\portal\config\MailTemplate;
-use go1\util\UserHelper;
+use go1\util\user\UserHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use InvalidArgumentException;

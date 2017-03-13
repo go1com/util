@@ -2,7 +2,7 @@
 
 namespace go1\util\graph\mock;
 
-use go1\util\EnrolmentStatuses;
+use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\GraphEdgeTypes;
 use GraphAware\Neo4j\Client\Client;
 
