@@ -3,8 +3,8 @@
 namespace go1\util\tests;
 
 use go1\clients\MqClient;
-use go1\util\EdgeHelper;
-use go1\util\EdgeTypes;
+use go1\util\edge\EdgeHelper;
+use go1\util\edge\EdgeTypes;
 use PDO;
 use ReflectionClass;
 

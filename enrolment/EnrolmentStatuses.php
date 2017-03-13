@@ -4,8 +4,7 @@ namespace go1\util\enrolment;
 
 use Doctrine\DBAL\Connection;
 use go1\util\edge\EdgeTypes;
-use go1\util\EnrolmentHelper;
-use go1\util\LoTypes;
+use go1\util\lo\LoTypes;
 use InvalidArgumentException;
 use stdClass;
 

@@ -4,8 +4,8 @@ namespace go1\util\tests;
 
 use Doctrine\DBAL\DriverManager;
 use go1\util\schema\mock\VoteMockTrait;
-use go1\util\VoteHelper;
-use go1\util\VoteTypes;
+use go1\util\vote\VoteHelper;
+use go1\util\vote\VoteTypes;
 
 class VoteHelperTest extends UtilTestCase
 {

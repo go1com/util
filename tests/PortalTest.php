@@ -2,7 +2,7 @@
 
 namespace go1\util\tests;
 
-use go1\util\PortalHelper;
+use go1\util\portal\PortalHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 

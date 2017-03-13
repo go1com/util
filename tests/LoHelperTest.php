@@ -2,8 +2,8 @@
 
 namespace go1\util\tests;
 
-use go1\util\EdgeTypes;
-use go1\util\LoHelper;
+use go1\util\edge\EdgeTypes;
+use go1\util\lo\LoHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\UserMockTrait;
@@ -34,8 +34,8 @@ class LoHelperTest extends UtilTestCase
     {
         $this->db->insert('gc_lo_group', ['lo_id' => $loId = 10, 'instance_id' => 20]);
         $this->db->insert('gc_lo_group', ['lo_id' => $loId, 'instance_id' => 30]);
-        $this->assertTrue(LoHelper::hasActiveMembership($this->db,$loId, 20));
-        $this->assertTrue(LoHelper::hasActiveMembership($this->db,$loId, 30));
-        $this->assertFalse(LoHelper::hasActiveMembership($this->db,$loId, 40));
+        $this->assertTrue(LoHelper::hasActiveMembership($this->db, $loId, 20));
+        $this->assertTrue(LoHelper::hasActiveMembership($this->db, $loId, 30));
+        $this->assertFalse(LoHelper::hasActiveMembership($this->db, $loId, 40));
     }
 }
