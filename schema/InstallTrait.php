@@ -18,6 +18,7 @@ trait InstallTrait
         $origin = clone $schema;
         !$schema->hasTable('gc_domain') && $this->createDomainTable($schema);
         !$schema->hasTable('gc_enrolment') && $this->createEnrolmentTable($schema);
+        !$schema->hasTable('gc_assignment') && $this->createAssignmentTable($schema);
         !$schema->hasTable('gc_flood') && $this->createFloodTable($schema);
         !$schema->hasTable('gc_instance') && $this->createInstanceTable($schema);
         !$schema->hasTable('gc_kv') && $this->createKeyValueTable($schema);
@@ -113,6 +114,27 @@ trait InstallTrait
         $revision->addIndex(['taken_instance_id']);
         $revision->addIndex(['status']);
         $revision->addIndex(['lo_id']);
+    }
+
+    private function createAssignmentTable(Schema $schema)
+    {
+        $table = $schema->createTable('gc_assignment');
+        $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+        $table->addColumn('user_id', 'integer', ['unsigned' => true]);
+        $table->addColumn('assigner_id', 'integer', ['unsigned' => true, 'notnull' => false]);
+        $table->addColumn('entity_type', 'string');
+        $table->addColumn('entity_id', 'integer');
+        $table->addColumn('status', 'integer');
+        $table->addColumn('created_date', 'datetime');
+        $table->addColumn('due_date', 'datetime', ['notnull' => false]);
+        $table->addColumn('data', 'blob', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['user_id']);
+        $table->addIndex(['assigner_id']);
+        $table->addIndex(['entity_type', 'entity_id']);
+        $table->addIndex(['status']);
+        $table->addIndex(['created_date']);
+        $table->addIndex(['due_date']);
     }
 
     private function createFloodTable(Schema $schema)
