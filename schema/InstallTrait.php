@@ -26,7 +26,6 @@ trait InstallTrait
         !$schema->hasTable('gc_lo_group') && $this->createLoGroupTable($schema);
         !$schema->hasTable('gc_event') && $this->createEventTable($schema);
         !$schema->hasTable('gc_tag') && $this->createLoTag($schema);
-        !$schema->hasTable('gc_outcome') && $this->createOutcomeTable($schema);
         !$schema->hasTable('gc_ro') && $this->createRoTable($schema);
         !$schema->hasTable('gc_role') && $this->createRoleTable($schema);
         !$schema->hasTable('gc_user') && $this->createUserTable($schema);
@@ -42,7 +41,6 @@ trait InstallTrait
             !$schema->hasTable('social_group') && $this->createSocialGroup($schema);
             !$schema->hasTable('social_group_item') && $this->createSocialGroupItem($schema);
             !$schema->hasTable('gc_note') && $this->createNoteTable($schema);
-
             !$schema->hasTable('vote_items') && $this->createVoteItemsTable($schema);
             !$schema->hasTable('vote_caches') && $this->createVoteCachesTable($schema);
         }
@@ -282,24 +280,6 @@ trait InstallTrait
         $table->addIndex(['weight']);
         $table->addIndex(['timestamp']);
         $table->addForeignKeyConstraint('gc_instance', ['instance_id'], ['id']);
-    }
-
-    private function createOutcomeTable(Schema $schema)
-    {
-        $table = $schema->createTable('gc_outcome');
-        $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-        $table->addColumn('lo_id', 'integer', ['unsigned' => true]);
-        $table->addColumn('profile_id', 'integer', ['unsigned' => true]);
-        $table->addColumn('outcome', 'integer', ['unsigned' => true]);
-        $table->addColumn('completion_rate', 'integer', ['unsigned' => true, 'size' => 'tiny', 'default' => 0]);
-        $table->addColumn('remote_id', 'integer', ['unsigned' => true, 'notnull' => false]);
-
-        $table->setPrimaryKey(['id']);
-        $table->addIndex(['lo_id']);
-        $table->addIndex(['profile_id']);
-        $table->addIndex(['remote_id']);
-        $table->addUniqueIndex(['lo_id', 'profile_id']);
-        $table->addForeignKeyConstraint('gc_lo', ['lo_id'], ['id']);
     }
 
     private function createRoTable(Schema $schema)
