@@ -3,6 +3,7 @@
 namespace go1\util\group;
 
 use Doctrine\DBAL\Connection;
+use go1\util\DB;
 
 class GroupHelper
 {
