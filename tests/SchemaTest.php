@@ -18,7 +18,7 @@ class SchemaTest extends TestCase
         $expectingTables = [
             'gc_domain', 'gc_enrolment', 'gc_instance',
             'gc_lo', 'gc_event', 'gc_lo_pricing', 'gc_tag',
-            'gc_enrolment',
+            'gc_enrolment', 'gc_assignment',
             'gc_ro', 'gc_role', 'gc_role', 'gc_tag', 'gc_user',
         ];
 
