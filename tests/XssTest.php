@@ -3,9 +3,9 @@
 namespace go1\util\schema\tests;
 
 use go1\util\text\Xss;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class XssTest extends PHPUnit_Framework_TestCase
+class XssTest extends TestCase
 {
     protected function setUp()
     {

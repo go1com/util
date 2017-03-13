@@ -1,8 +1,9 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\lo;
 
 use Doctrine\DBAL\Connection;
+use go1\util\edge\EdgeTypes;
 use stdClass;
 
 class LoChecker

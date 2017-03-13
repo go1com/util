@@ -2,9 +2,9 @@
 
 namespace go1\util\tests;
 
-use go1\util\EdgeTypes;
-use go1\util\EnrolmentHelper;
-use go1\util\LoTypes;
+use go1\util\edge\EdgeTypes;
+use go1\util\enrolment\EnrolmentHelper;
+use go1\util\lo\LoTypes;
 use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
@@ -49,7 +49,6 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->link($this->db, EdgeTypes::HAS_ELECTIVE_LI, $this->moduleId, $this->electiveTextId, 0);
     }
 
-
     public function testAssessor()
     {
         $enrolmentId = $this->createEnrolment($this->db, ['lo_id' => 1, 'profile_id' => 1]);
@@ -66,16 +65,17 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals($assessor2Id, $assessors[1]);
     }
 
-    public function testfindParentEnrolmentNoParentId() {
+    public function testfindParentEnrolmentNoParentId()
+    {
         $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId];
-        $enrolments  = [
+        $enrolments = [
             'lp'       => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->lpId]),
             'course'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->courseId]),
             'module'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->moduleId]),
             'video'    => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->liVideoId]),
             'resource' => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->liResourceId]),
             'question' => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveQuestionId]),
-            'text' => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveTextId]),
+            'text'     => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveTextId]),
         ];
 
         $course = EnrolmentHelper::findParentEnrolment($this->db, EnrolmentHelper::load($this->db, $enrolments['lp']));
@@ -100,16 +100,17 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals($this->lpId, $lp->id);
     }
 
-    public function testfindParentEnrolmentWithParentId() {
+    public function testfindParentEnrolmentWithParentId()
+    {
         $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId];
-        $enrolments  = [
+        $enrolments = [
             'lp'       => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->lpId]),
             'course'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->courseId, 'parent_lo_id' => $this->lpId]),
             'module'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->moduleId, 'parent_lo_id' => $this->courseId]),
             'video'    => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->liVideoId, 'parent_lo_id' => $this->moduleId]),
             'resource' => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->liResourceId, 'parent_lo_id' => $this->moduleId]),
             'question' => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveQuestionId, 'parent_lo_id' => $this->moduleId]),
-            'text' => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveTextId, 'parent_lo_id' => $this->moduleId]),
+            'text'     => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveTextId, 'parent_lo_id' => $this->moduleId]),
         ];
 
         $course = EnrolmentHelper::findParentEnrolment($this->db, EnrolmentHelper::load($this->db, $enrolments['lp']));

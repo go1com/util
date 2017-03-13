@@ -3,9 +3,9 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
-use go1\util\LiTypes;
-use go1\util\LoHelper;
-use go1\util\LoTypes;
+use go1\util\lo\LiTypes;
+use go1\util\lo\LoHelper;
+use go1\util\lo\LoTypes;
 
 trait LoMockTrait
 {

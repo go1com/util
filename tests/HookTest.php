@@ -3,11 +3,11 @@
 namespace go1\util\tests;
 
 use go1\util\Hook;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
-class HookTest extends PHPUnit_Framework_TestCase
+class HookTest extends TestCase
 {
     public function test()
     {

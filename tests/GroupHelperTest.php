@@ -2,8 +2,8 @@
 
 namespace go1\util\tests;
 
-use go1\util\GroupHelper;
-use go1\util\GroupItemStatus;
+use go1\util\group\GroupHelper;
+use go1\util\group\GroupItemStatus;
 use go1\util\schema\mock\GroupMockTrait;
 
 class GroupHelperTest extends UtilTestCase

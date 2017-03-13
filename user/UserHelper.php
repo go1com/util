@@ -1,9 +1,10 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\user;
 
 use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
+use go1\util\DB;
 use GuzzleHttp\Client;
 use PDO;
 use RuntimeException;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserHelper
 {
-    const ROOT_JWT      = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvYmplY3QiOnsidHlwZSI6InVzZXIiLCJjb250ZW50Ijp7ImlkIjoxLCJwcm9maWxlX2lkIjoxLCJyb2xlcyI6WyJBZG1pbiBvbiAjQWNjb3VudHMiXSwibWFpbCI6IjFAMS4xIn19fQ.YwGrlnegpd_57ek0vew5ixBfzhxiepc5ODVwPva9egs';
+    const ROOT_JWT               = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvYmplY3QiOnsidHlwZSI6InVzZXIiLCJjb250ZW50Ijp7ImlkIjoxLCJwcm9maWxlX2lkIjoxLCJyb2xlcyI6WyJBZG1pbiBvbiAjQWNjb3VudHMiXSwibWFpbCI6IjFAMS4xIn19fQ.YwGrlnegpd_57ek0vew5ixBfzhxiepc5ODVwPva9egs';
     const DEFAULT_ACCOUNTS_ROLES = [Roles::AUTHENTICATED];
     const DEFAULT_PORTAL_ROLES   = [Roles::STUDENT, Roles::AUTHENTICATED];
 
