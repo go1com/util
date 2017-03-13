@@ -1,8 +1,10 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\vote;
 
 use Doctrine\DBAL\Connection;
+use Exception;
+use go1\util\DB;
 
 class VoteHelper
 {
@@ -41,7 +43,8 @@ class VoteHelper
                 $denominator = $data['like'] + $data['dislike'];
                 if (0 === $denominator) {
                     $percent = 0;
-                } else {
+                }
+                else {
                     $percent = $numerator / $denominator * 100;
                 }
                 break;
@@ -93,17 +96,19 @@ class VoteHelper
         }
     }
 
-    public static function validateEntityType($entityType)
+    public static function validateEntityType(string $entityType)
     {
         if (!in_array($entityType, VoteTypes::all())) {
-            throw new \Exception('Entity type is invalid');
+            throw new Exception('Invalid entity type.');
         }
     }
 
     public static function getEntityVote(Connection $db, string $entityType, int $entityId, int $type = VoteTypes::LIKE)
     {
-        $vote = $db->executeQuery('SELECT * FROM vote_caches WHERE type = ? AND entity_type = ? AND entity_id = ?', [$type, $entityType, $entityId])->fetch(DB::OBJ);
+        $vote = 'SELECT * FROM vote_caches WHERE type = ? AND entity_type = ? AND entity_id = ?';
+        $vote = $db->executeQuery($vote, [$type, $entityType, $entityId])->fetch(DB::OBJ);
         $vote && $vote->data = is_scalar($vote->data) ? json_decode($vote->data, true) : $vote->data;
+
         return $vote;
     }
 }

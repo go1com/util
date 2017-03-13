@@ -1,8 +1,9 @@
 <?php
 
-namespace go1\util;
+namespace go1\util\note;
 
 use Doctrine\DBAL\Connection;
+use go1\util\DB;
 
 class NoteHelper
 {
@@ -11,7 +12,6 @@ class NoteHelper
         $sql = 'SELECT * FROM gc_note WHERE id = ?';
 
         return $db->executeQuery($sql, [$id])->fetch(DB::OBJ);
-
     }
 
     public static function loadByUUID(Connection $db, string $uuid)

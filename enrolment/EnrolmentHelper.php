@@ -3,6 +3,9 @@
 namespace go1\util;
 
 use Doctrine\DBAL\Connection;
+use go1\util\edge\EdgeHelper;
+use go1\util\edge\EdgeTypes;
+use go1\util\enrolment\EnrolmentStatuses;
 use PDO;
 use stdClass;
 
