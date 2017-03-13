@@ -64,4 +64,20 @@ class GraphEdgeTypes
 
         return $name;
     }
+
+    public static function getEntityGraphData(string $entityType, int $entityId)
+    {
+        switch ($entityType) {
+            case 'user':
+                return ['User', 'id', $entityId];
+
+            case 'lo':
+                return ['Group', 'name', "lo:$entityId"];
+
+            case 'portal':
+                return ['Group', 'name', "portal:$entityId"];
+        }
+
+        throw new \Exception('Invalid entity type.');
+    }
 }
