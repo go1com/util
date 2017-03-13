@@ -18,6 +18,7 @@ trait GraphNoteMockTrait
         $stack = $client->stack();
         $id = isset($data['id']) ? $data['id'] : 0;
         $uuid = isset($data['uuid']) ? $data['uuid'] : 'NOTE_UUID';
+        $entityId = isset($data['entity_id']) ? $data['entity_id'] : 0;
         $entityType = isset($data['entity_type']) ? $data['entity_type'] : 'lo';
 
         $stack->push("MERGE (n:Note { uuid: {uuid} }) SET n += {data}",
@@ -27,12 +28,12 @@ trait GraphNoteMockTrait
                     'id'            => (int) $id,
                     'created'       => isset($data['created']) ? (int) $data['created'] : time(),
                     'entity_type'   => $entityType,
+                    'entity_id'     => $entityId,
                 ],
             ]
         );
 
         // Add entity_id direction
-        $entityId = isset($data['entity_id']) ? $data['entity_id'] : 0;
         if ($entityId) {
             list($label, $prop, $propValue) = GraphEdgeTypes::getEntityGraphData($entityType, $entityId);
             $entityId && $stack->push(
@@ -84,10 +85,10 @@ trait GraphNoteMockTrait
     protected function createGraphGroupNote(Client $client, int $groupId, string $uuid)
     {
         $client->run(
-            "MERGE (g:Group { name: {groupName} })"
+            "MERGE (g:Group {name: {groupName} })"
             . " MERGE (n:Note { uuid: {uuid} })"
-            . " MERGE (e)-[r:{$this->hasGroup}]->(g)"
-            . " MERGE (g)-[:{$this->hasMember}]->(e)",
+            . " MERGE (n)-[r:{$this->hasGroup}]->(g)"
+            . " MERGE (g)-[:{$this->hasMember}]->(n)",
             ['groupName' => "group:$groupId", 'uuid' => $uuid]
         );
     }
