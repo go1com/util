@@ -48,4 +48,17 @@ trait InstanceMockTrait
 
         return $uuid;
     }
+
+    public function createInstanceConfig(Connection $db, array $options)
+    {
+        $db->insert('portal_conf', [
+            'instance'   => $instance = isset($options['instance']) ? $options['instance'] : 'az.mygo1.com',
+            'namespace'  => isset($options['namespace']) ? $options['namespace'] : 'foo',
+            'name'       => isset($options['name']) ? $options['name'] : 'bar',
+            'public'     => isset($options['public']) ? $options['public'] : 1,
+            'data'       => isset($options['data']) ? $options['data'] : json_encode(['foo' => 'bar']),
+            'timestamp'  => isset($options['timestamp']) ? $options['timestamp'] : time(),
+        ]);
+        return true;
+    }
 }
