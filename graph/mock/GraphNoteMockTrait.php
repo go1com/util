@@ -18,7 +18,7 @@ trait GraphNoteMockTrait
         $stack = $client->stack();
         $id = isset($data['id']) ? $data['id'] : 0;
         $uuid = isset($data['uuid']) ? $data['uuid'] : 'NOTE_UUID';
-        $entityId = isset($data['entity_id']) ? $data['entity_id'] : 0;
+        $entityId = isset($data['entity_id']) ? (int) $data['entity_id'] : 0;
         $entityType = isset($data['entity_type']) ? $data['entity_type'] : 'lo';
 
         $stack->push("MERGE (n:Note { uuid: {uuid} }) SET n += {data}",
@@ -27,44 +27,41 @@ trait GraphNoteMockTrait
                 'data' => [
                     'id'            => (int) $id,
                     'created'       => isset($data['created']) ? (int) $data['created'] : time(),
-                    // Legacy data
+                    'profile_id'    => isset($data['profile_id']) ? (int) $data['profile_id'] : 0,
                     'entity_type'   => $entityType,
                     'entity_id'     => $entityId,
-                    'profile_id'    => isset($data['profile_id']) ? $data['profile_id'] : 0,
-                ],
+                ]
             ]
         );
 
         // Add entity_id direction
-        if ($entityId && in_array($entityType, ['lo', 'portal'])) {
-            list($label, $prop, $propValue) = GraphEdgeTypes::getEntityGraphData($entityType, $entityId);
-            $entityId && $stack->push(
-                "MATCH (n:Note { uuid: {uuid} })"
-                . " MERGE (entity:$label { $prop: {entityPropValue} })"
-                . " MERGE (entity)-[:{$this->hasNote}]->(n)"
-                . " MERGE (n)-[:{$this->hasMember}]->(entity)",
-                ['uuid' => $uuid, 'entityPropValue' => $propValue]
-            );
-        }
-
-        // Delete original user_id
-        $userId = isset($data['user_id']) ? $data['user_id'] : 0;
-        if (isset($data['original']['user_id'])) {
-            $originalUserId = $data['original']['user_id'];
-            if ($originalUserId != $userId) {
+        if ($entityId) {
+            if (in_array($entityType, ['lo', 'portal'])) {
+                list($label, $prop, $propValue) = GraphEdgeTypes::getEntityGraphData($entityType, $entityId);
                 $stack->push(
-                    "MATCH (u:User { id: {$originalUserId} })"
-                    . " MATCH (n:Note { uuid: {uuid} })"
-                    . " MATCH (u)-[r:{$this->hasNote}]->(n)-[rr:{$this->hasMember}]->(u)"
-                    . " DELETE r, rr",
-                    ['uuid' => $uuid]
+                    "MATCH (n:Note { uuid: {uuid} })"
+                    . " MERGE (entity:$label { $prop: {entityPropValue} })"
+                    . " MERGE (entity)-[:{$this->hasNote}]->(n)"
+                    . " MERGE (n)-[:{$this->hasMember}]->(entity)",
+                    ['uuid' => $uuid, 'entityPropValue' => $propValue]
+                );
+            }
+
+            if ($entityType == 'custom') {
+                $stack->push(
+                    "MATCH (n:Note { uuid: {uuid} })"
+                    . " MERGE (e:Group { name: {customName} })"
+                    . " MERGE (e)-[:{$this->hasNote}]->(n)"
+                    . " MERGE (n)-[:{$this->hasMember}]->(e)",
+                    ['uuid' => $uuid, 'customName' => "customLo:{$entityId}"]
                 );
             }
         }
 
-        $userId && $stack->push(
+        $accountId = isset($data['account_id']) ? $data['account_id'] : 0;
+        $accountId && $stack->push(
             "MATCH (n:Note { uuid: {uuid} })"
-            . " MERGE (u:User { id: {$userId} })"
+            . " MERGE (u:User { id: {$accountId} })"
             . " MERGE (u)-[:{$this->hasNote}]->(n)"
             . " MERGE (n)-[:{$this->hasMember}]->(u)",
             ['uuid' => $uuid]
