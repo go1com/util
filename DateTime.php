@@ -11,6 +11,19 @@ use InvalidArgumentException;
  */
 class DateTime
 {
+    public static function create($time, $timezone = 'UTC'): DefaultDateTime
+    {
+        if (!$time) {
+            throw new InvalidArgumentException('Specific date/time string can not empty');
+        }
+
+        $datetime = new DefaultDateTime;
+        $datetime->setTimezone(new DateTimeZone($timezone));
+        $datetime->setTimestamp((is_numeric($time) ? $time : strtotime($time)));
+
+        return $datetime;
+    }
+
     /**
      * Returns date formatted according to the specified format and timezone
      * @param string $time  A date/time string. Valid formats could be:
@@ -23,17 +36,6 @@ class DateTime
      * @return string
      */
     public static function formatDate($time, $format = DATE_ISO8601, $timezone = 'UTC') {
-        if (empty($time)) {
-            throw new InvalidArgumentException('Specific date/time string can not empty');
-        }
-
-        if (!is_numeric($time) && strtotime($time)) {
-            $tz = new DateTimeZone($timezone);
-            $date = (new DefaultDateTime($time))->setTimezone($tz);
-
-            return $date->format($format);
-        }
-
-        return date($format, $time);
+        return static::create($time, $timezone)->format($format);
     }
 }
