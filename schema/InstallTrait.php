@@ -19,7 +19,7 @@ trait InstallTrait
         $origin = clone $schema;
         !$schema->hasTable('gc_domain') && $this->createDomainTable($schema);
         !$schema->hasTable('gc_enrolment') && $this->createEnrolmentTable($schema);
-        !$schema->hasTable('gc_assignment') && $this->createAssignmentTable($schema);
+        !$schema->hasTable('gc_plan') && $this->createPlanTable($schema);
         !$schema->hasTable('gc_flood') && $this->createFloodTable($schema);
         !$schema->hasTable('gc_instance') && $this->createInstanceTable($schema);
         !$schema->hasTable('gc_kv') && $this->createKeyValueTable($schema);
@@ -117,9 +117,10 @@ trait InstallTrait
         $revision->addIndex(['lo_id']);
     }
 
-    private function createAssignmentTable(Schema $schema)
+    private function createPlanTable(Schema $schema)
     {
-        $table = $schema->createTable('gc_assignment');
+        $table = $schema->createTable('gc_plan');
+        $table->addOption('description', 'GO1P-10732: Store learn-planning object.');
         $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
         $table->addColumn('user_id', 'integer', ['unsigned' => true]);
         $table->addColumn('assigner_id', 'integer', ['unsigned' => true, 'notnull' => false]);
