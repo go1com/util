@@ -4,6 +4,7 @@ namespace go1\util\tests;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\DBAL\DriverManager;
+use go1\clients\MqClient;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Service;
@@ -19,11 +20,21 @@ abstract class UtilTestCase extends TestCase
     use UserMockTrait;
 
     protected $db;
+    protected $queue;
+    protected $queueMessages;
 
     public function setUp()
     {
         $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
         $this->installGo1Schema($this->db);
+
+        $this->queue = $this->getMockBuilder(MqClient::class)->setMethods(['publish'])->disableOriginalConstructor()->getMock();
+        $this
+            ->queue
+            ->method('publish')
+            ->willReturnCallback(function ($body, $routingKey) {
+                $this->queueMessages[$routingKey][] = $body;
+            });
     }
 
     protected function getContainer()

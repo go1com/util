@@ -4,15 +4,19 @@ namespace go1\util\plan;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use go1\clients\MqClient;
 use go1\util\DB;
+use go1\util\Queue;
 
 class PlanRepository
 {
     private $db;
+    private $queue;
 
-    public function __construct(Connection $db)
+    public function __construct(Connection $db, MqClient $queue)
     {
         $this->db = $db;
+        $this->queue = $queue;
     }
 
     public static function install(Schema $schema)
@@ -44,11 +48,7 @@ class PlanRepository
             ->executeQuery('SELECT * FROM gc_plan WHERE id = ?', [$id])
             ->fetch(DB::OBJ);
 
-        if ($plan) {
-            $plan = Plan::create($plan);
-        }
-
-        return $plan;
+        return $plan ? Plan::create($plan) : false;
     }
 
     public function create(Plan &$plan)
@@ -64,6 +64,34 @@ class PlanRepository
             'data'         => $plan->data ? json_encode($plan->data) : null,
         ]);
 
-        return $plan->id = $this->db->lastInsertId('gc_plan');
+        $plan->id = $this->db->lastInsertId('gc_plan');
+        $this->queue->publish($plan, Queue::PLAN_CREATE);
+
+        return $plan->id;
+    }
+
+    public function update(int $id, Plan $plan)
+    {
+        if (!$original = $this->load($id)) {
+            return null;
+        }
+
+        if (!$diff = $original->diff($plan)) {
+            return null;
+        }
+
+        $this->db->update('gc_plan', $diff, ['id' => $id]);
+        $plan->original = $original;
+        $this->queue->publish($plan, Queue::PLAN_UPDATE);
+    }
+
+    public function delete(int $id)
+    {
+        if (!$plan = $this->load($id)) {
+            return null;
+        }
+
+        $this->db->delete('gc_plan', ['id' => $id]);
+        $this->queue->publish($plan, Queue::PLAN_DELETE);
     }
 }

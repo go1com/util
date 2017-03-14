@@ -5,9 +5,10 @@ namespace go1\util\plan;
 use DateTime as DefaultDateTime;
 use go1\util\DateTime;
 use go1\util\Text;
+use JsonSerializable;
 use stdClass;
 
-class Plan
+class Plan implements JsonSerializable
 {
     const STATUS_INTERESTING = -3; # Learner interest in the object, but no action provided yet.
     const STATUS_ASSIGNED    = -2; # Learner self-assigned, or by someone.
@@ -46,6 +47,9 @@ class Plan
     /** @var object */
     public $data;
 
+    /** @var  Plan */
+    public $original;
+
     private function __construct()
     {
         // The object should not be created directly.
@@ -66,5 +70,32 @@ class Plan
         Text::purify(null, $plan->data);
 
         return $plan;
+    }
+
+    public function diff(Plan $plan)
+    {
+        $values = [];
+
+        ($this->status != $plan->status) && $values['status'] = $plan->status;
+        ($this->due != $plan->due) && $values['due'] = $plan->due ? $plan->due->format(DATE_ISO8601) : null;
+        ($this->data != $plan->data) && $values['data'] = is_scalar($plan->data) ? $plan->data : json_encode($plan->data);
+
+        return $values;
+    }
+
+    function jsonSerialize()
+    {
+        return [
+            'id'           => $this->id,
+            'user_id'      => $this->userId,
+            'assigner_id'  => $this->assignerId,
+            'entity_type'  => $this->entityType,
+            'entity_id'    => $this->entityId,
+            'status'       => $this->status,
+            'created_date' => $this->created->format(DATE_ISO8601),
+            'due_date'     => $this->due ? $this->due->format(DATE_ISO8601) : null,
+            'data'         => $this->data,
+            'original'     => $this->original,
+        ];
     }
 }

@@ -9,7 +9,7 @@ class PlanTest extends UtilTestCase
 {
     public function testCreate()
     {
-        $repository = new PlanRepository($this->db);
+        $repository = new PlanRepository($this->db, $this->queue);
 
         $input = Plan::create($raw = (object) [
             'user_id'      => 123,
@@ -34,5 +34,62 @@ class PlanTest extends UtilTestCase
         $this->assertEquals($raw->entity_id, $plan->entityId);
         $this->assertEquals($raw->status, $plan->status);
         $this->assertNotContains('<script', $plan->data->note);
+
+        return $plan;
+    }
+
+    public function testUpdate()
+    {
+        $repository = new PlanRepository($this->db, $this->queue);
+
+        // Create the plan
+        $input = Plan::create($raw = (object) [
+            'user_id'      => 123,
+            'assigner_id'  => 111,
+            'entity_type'  => 'lo',
+            'entity_id'    => 555,
+            'status'       => Plan::STATUS_INTERESTING,
+            'created_date' => time(),
+            'due_date'     => '+ 2 months',
+            'data'         => ['note' => 'Something cool!',],
+        ]);
+
+        $id = $repository->create($input);
+        $original = $repository->load($id);
+
+        // Make update
+        $original->status = Plan::STATUS_IN_PROGRESS;
+        $original->data->note = 'OK GO1, I am studying here!';
+        $repository->update($original->id, $original);
+
+        // Load & check.
+        $plan = $repository->load($original->id);
+        $this->assertEquals(Plan::STATUS_IN_PROGRESS, $plan->status);
+        $this->assertEquals('OK GO1, I am studying here!', $plan->data->note);
+    }
+
+    public function testDelete()
+    {
+        $repository = new PlanRepository($this->db, $this->queue);
+
+        // Create the plan
+        $plan = Plan::create($raw = (object) [
+            'user_id'      => 123,
+            'assigner_id'  => 111,
+            'entity_type'  => 'lo',
+            'entity_id'    => 555,
+            'status'       => Plan::STATUS_INTERESTING,
+            'created_date' => time(),
+            'due_date'     => '+ 2 months',
+            'data'         => ['note' => 'Something cool!',],
+        ]);
+        $repository->create($plan);
+
+        // Delete it
+        $repository->delete($plan->id);
+
+        // Check
+        $this->assertNotEmpty(true, is_numeric($plan->id));
+        $this->assertEmpty($repository->load($plan->id));
     }
 }
