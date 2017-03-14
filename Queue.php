@@ -44,6 +44,9 @@ class Queue
     const CUSTOMER_CREATE       = 'customer.create';
     const CUSTOMER_UPDATE       = 'customer.update';
     const CUSTOMER_DELETE       = 'customer.delete';
+    const PLAN_CREATE           = 'plan.create';
+    const PLAN_UPDATE           = 'plan.update';
+    const PLAN_DELETE           = 'plan.delete';
     const ENROLMENT_CREATE      = 'enrolment.create';
     const ENROLMENT_UPDATE      = 'enrolment.update';
     const ENROLMENT_DELETE      = 'enrolment.delete';
