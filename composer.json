@@ -25,6 +25,7 @@
     "ramsey/uuid": "^3.4"
   },
   "require-dev": {
-    "behat/transliterator": "^1.1"
+    "behat/transliterator": "^1.1",
+    "ezyang/htmlpurifier": "^4.7.0"
   }
 }
