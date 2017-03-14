@@ -46,6 +46,7 @@ trait InstallTrait
             !$schema->hasTable('gc_note') && $this->createNoteTable($schema);
             !$schema->hasTable('vote_items') && $this->createVoteItemsTable($schema);
             !$schema->hasTable('vote_caches') && $this->createVoteCachesTable($schema);
+            !$schema->hasTable('portal_conf') && $this->createPortalConfTables($schema);
         }
 
         $diff = $compare->compare($origin, $schema);
@@ -504,5 +505,20 @@ trait InstallTrait
         $table->addIndex(['entity_type'], 'idx_vote_cache_entity_type');
         $table->addIndex(['entity_id'], 'idx_vote_cache_entity_id');
         $table->addUniqueIndex(['type', 'entity_type', 'entity_id'], 'unq_vote_caches');
+    }
+
+    private function createPortalConfTables(Schema $schema)
+    {
+        $conf = $schema->createTable('portal_conf');
+        $conf->addColumn('instance', 'string');
+        $conf->addColumn('namespace', 'string');
+        $conf->addColumn('name', 'string');
+        $conf->addColumn('public', 'smallint');
+        $conf->addColumn('data', 'blob');
+        $conf->addColumn('timestamp', 'integer');
+        $conf->setPrimaryKey(['instance', 'namespace', 'name']);
+        $conf->addIndex(['instance', 'namespace']);
+        $conf->addIndex(['public']);
+        $conf->addIndex(['timestamp']);
     }
 }
