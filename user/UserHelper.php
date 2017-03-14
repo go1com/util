@@ -5,6 +5,7 @@ namespace go1\util\user;
 use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
 use go1\util\DB;
+use go1\util\edge\EdgeTypes;
 use GuzzleHttp\Client;
 use PDO;
 use RuntimeException;
