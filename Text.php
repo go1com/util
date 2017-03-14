@@ -13,12 +13,22 @@ use Traversable;
 
 class Text
 {
+    public static function defaultPurifier(): HTMLPurifier
+    {
+        $cnf = HTMLPurifier_Config::createDefault();
+        $cnf->set('Cache.DefinitionImpl', null);
+
+        return new HTMLPurifier($cnf);
+    }
+
     /**
      * @param HTMLPurifier $html
      * @param mixed        $value
      */
-    public static function purify(HTMLPurifier $html, &$value, HTMLPurifier_Config $config = null)
+    public static function purify(HTMLPurifier $html = null, &$value, HTMLPurifier_Config $config = null)
     {
+        $html = $html ?: self::defaultPurifier();
+
         if (is_string($value)) {
             $value = $html->purify($value, $config);
         }

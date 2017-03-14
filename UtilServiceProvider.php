@@ -20,8 +20,6 @@ use go1\clients\UserClient;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
 use GraphAware\Neo4j\Client\ClientBuilder;
-use HTMLPurifier;
-use HTMLPurifier_Config;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Vectorface\Whip\Whip;
@@ -31,10 +29,7 @@ class UtilServiceProvider implements ServiceProviderInterface
     public function register(Container $c)
     {
         $c['html'] = function () {
-            $cnf = HTMLPurifier_Config::createDefault();
-            $cnf->set('Cache.DefinitionImpl', null);
-
-            return new HTMLPurifier($cnf);
+            return Text::defaultPurifier();
         };
 
         if (class_exists(Whip::class)) {
