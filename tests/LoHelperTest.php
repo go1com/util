@@ -7,6 +7,7 @@ use go1\util\lo\LoHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\UserMockTrait;
+use HTMLPurifier;
 
 class LoHelperTest extends UtilTestCase
 {
@@ -37,5 +38,18 @@ class LoHelperTest extends UtilTestCase
         $this->assertTrue(LoHelper::hasActiveMembership($this->db, $loId, 20));
         $this->assertTrue(LoHelper::hasActiveMembership($this->db, $loId, 30));
         $this->assertFalse(LoHelper::hasActiveMembership($this->db, $loId, 40));
+    }
+
+    public function testDescriptionPurifierConfig()
+    {
+        $html = new HTMLPurifier();
+        $data = [
+            'Plain text' => 'Plain text',
+            'foo <span style="color:#0000aa;">data</span>' => 'foo <span style="color:#0000aa;">data</span>'
+        ];
+        foreach ($data as $input => $expect) {
+            $result = $html->purify(trim($input), LoHelper::descriptionPurifierConfig());
+            $this->assertEquals($expect, $result);
+        }
     }
 }

@@ -92,13 +92,13 @@ class LoHelper
             'b', 'code', 'del', 'dd', 'dl', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
             'sup', 'sub', 'div', 'p', 'blockquote', 'strong', 'i', 'kbd', 's',
             'strike', 'hr', 'tr', 'td', 'th', 'thead', 'tbody', 'tfoot', 'em', 'pre', 'br',
-            'table', 'a', 'iframe', 'img', 'ul', 'li', 'ol', 'caption',
+            'table', 'a', 'iframe', 'img', 'ul', 'li', 'ol', 'caption', 'span',
         ]);
         $cnf->set('HTML.AllowedAttributes', [
             'a.href', 'img.src', 'img.width', 'img.height', 'img.style',
             'table.width', 'table.cellspacing', 'table.cellpadding', 'table.height', 'table.align', 'table.summary', 'table.style',
             '*.class', '*.alt', '*.title', '*.border',
-            'div.data-oembed-url', 'div.style',
+            'div.data-oembed-url', 'div.style', 'span.style',
             'iframe.src', 'iframe.allowfullscreen', 'iframe.width', 'iframe.height',
             'iframe.frameborder', 'iframe.mozallowfullscreen', 'iframe.webkitallowfullscreen',
         ]);
