@@ -20,7 +20,7 @@ class EdgeHelper
         return $helper;
     }
 
-    public static function link(Connection $db, MqClient $queue, $type, $sourceId, $targetId, $weight = 0, $data = null)
+    public static function link(Connection $db, MqClient $queue, $type, $sourceId, $targetId, $weight = 0, $data = null, array $payload = [])
     {
         $db->insert('gc_ro', $edge = [
             'type'      => $type,
@@ -30,7 +30,7 @@ class EdgeHelper
             'data'      => is_scalar($data) ? $data : json_encode($data),
         ]);
 
-        $queue->publish($edge, Queue::RO_CREATE);
+        $queue->publish(array_merge($edge, $payload), Queue::RO_CREATE);
     }
 
     public static function hasLink(Connection $db, $type, $sourceId, $targetId)
