@@ -31,7 +31,7 @@ class MailClient
         if ($portal) {
             if ($helper->useCustomSMTP($portal)) {
                 $client = clone $this;
-                $client->instance = $instance;
+                $client->instance = $portal->title;
 
                 return $client;
             }
