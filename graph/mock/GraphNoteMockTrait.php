@@ -50,7 +50,7 @@ trait GraphNoteMockTrait
             if ($entityType == 'custom') {
                 $stack->push(
                     "MATCH (n:Note { uuid: {uuid} })"
-                    . " MERGE (e:Group { name: {customName} })"
+                    . " MERGE (e:Group { id: {$entityId}, name: {customName} })"
                     . " MERGE (e)-[:{$this->hasNote}]->(n)"
                     . " MERGE (n)-[:{$this->hasMember}]->(e)",
                     ['uuid' => $uuid, 'customName' => "customLo:{$entityId}"]
