@@ -26,22 +26,19 @@ trait VoteMockTrait
 
     private function cacheVote(Connection $db, int $voteId)
     {
-        $vote = $db
-            ->executeQuery('SELECT * FROM vote_items WHERE id = ?', [$voteId])
-            ->fetch(DB::OBJ);
-
-        $cacheData = $db->executeQuery(
-            'SELECT `data` FROM vote_caches WHERE type = ? AND entity_type = ? AND entity_id = ?',
-            [$vote->type, $vote->entity_type, $vote->entity_id]
-        )->fetchColumn();
-
-        $data = VoteHelper::buildCacheData($vote->type, $vote->value, json_decode($cacheData, true));
+        $vote = VoteHelper::load($db, $voteId);
+        $data = VoteHelper::getCacheData($db, $vote->type, $vote->entity_type, $vote->entity_id);
         if (!$data) {
             return;
         }
         $percent = VoteHelper::calculatePercent($vote->type, $data);
 
-        if ($cacheData) {
+        $voteCache = $db->executeQuery(
+            'SELECT `data` FROM vote_caches WHERE type = ? AND entity_type = ? AND entity_id = ?',
+            [$vote->type, $vote->entity_type, $vote->entity_id]
+        )->fetchColumn();
+
+        if ($voteCache) {
             $db->update(
                 'vote_caches',
                 [
