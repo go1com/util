@@ -5,32 +5,53 @@ namespace go1\util\vote;
 use Doctrine\DBAL\Connection;
 use Exception;
 use go1\util\DB;
+use PDO;
 
 class VoteHelper
 {
-    public static function buildCacheData(int $type, int $value, array $data = null)
+    public static function load(Connection $db, int $id)
     {
+        return $db
+            ->executeQuery('SELECT * FROM vote_items WHERE id = ?', [$id])
+            ->fetch(DB::OBJ);
+    }
+
+    public static function getCacheData(Connection $db, $type, $entityType, $entityId)
+    {
+        $qb = $db->createQueryBuilder();
+        $qb
+            ->select('value, COUNT(1) as count')
+            ->from('vote_items')
+            ->where('type = :type')
+            ->andWhere('entity_type = :entityType')
+            ->andWhere('entity_id = :entityId')
+            ->groupBy('value')
+            ->setParameters([
+                'type'        => $type,
+                'entityType' => $entityType,
+                'entityId'   => $entityId,
+            ]);
+
+        $data = $qb->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $data = array_combine(array_column($data, 'value'), array_column($data, 'count'));
+
+        $cacheData = [];
         switch ($type) {
             case VoteTypes::LIKE:
-                $data = $data ?: array_fill_keys(['like', 'dislike'], 0);
-                switch ($value) {
-                    case VoteTypes::VALUE_LIKE:
-                        $data['like']++;
-                        break;
-
-                    case VoteTypes::VALUE_DISLIKE:
-                        $data['dislike']++;
-                        break;
-                }
+                $cacheData = [
+                    'like' => isset($data[VoteTypes::VALUE_LIKE]) ? $data[VoteTypes::VALUE_LIKE] : 0,
+                    'dislike' => isset($data[VoteTypes::VALUE_DISLIKE]) ? $data[VoteTypes::VALUE_DISLIKE] : 0,
+                ];
                 break;
 
             case VoteTypes::STAR:
-                $data = $data ?: array_fill_keys(range(1, 5), 0);
-                $data[$value]++;
+                for ($i = 1; $i <= 5; $i++) {
+                    $cacheData[$i] = isset($data[$i]) ? $data[$i] : 0;
+                }
                 break;
         }
 
-        return (0 !== array_sum($data)) ? $data : false;
+        return array_sum($cacheData) ? $cacheData : false;
     }
 
     public static function calculatePercent(int $type, array $data)
@@ -39,7 +60,7 @@ class VoteHelper
 
         switch ($type) {
             case VoteTypes::LIKE:
-                $numerator = $data['like'] - $data['dislike'];
+                $numerator = $data['like'];
                 $denominator = $data['like'] + $data['dislike'];
                 if (0 === $denominator) {
                     $percent = 0;
