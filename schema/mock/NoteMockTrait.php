@@ -3,8 +3,8 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
-use go1\util\GroupItemStatus;
-use go1\util\GroupStatus;
+use go1\util\group\GroupItemStatus;
+use go1\util\group\GroupStatus;
 
 trait NoteMockTrait
 {

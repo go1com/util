@@ -3,7 +3,7 @@
 namespace go1\util\graph\mock;
 
 use go1\util\GraphEdgeTypes;
-use go1\util\GroupStatus;
+use go1\util\group\GroupStatus;
 use GraphAware\Neo4j\Client\Client;
 
 trait GraphNoteMockTrait
