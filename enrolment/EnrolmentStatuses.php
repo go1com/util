@@ -13,13 +13,14 @@ class EnrolmentStatuses
     # Pre-enrolment statuses
     # ---------------------
     # const PENDING                  = -1;
-    const ASSIGNED                 = -3; # Someone added this for you to do
+    # const ASSIGNED                 = -3; # Someone added this for you to do
     const ENQUIRED                 = -4; #
     const MANUAL_COMPLETE          = -5;
     const MANUAL_COMPLETE_VERIFIED = -6;
 
     # Enrolment statuses
     # ---------------------
+    const ASSIGNED    = 'assigned';    # Someone added this for you to do
     const NOT_STARTED = 'not-started'; # you have enrolled but not yet opened the course
     const IN_PROGRESS = 'in-progress'; # you are learning the LO.
     const PENDING     = 'pending';     # you have enrolled but the enrolment need to be reviewed or blocked by other enrolment
