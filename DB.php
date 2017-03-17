@@ -24,6 +24,7 @@ class DB
         }
 
         $prefix = strtoupper(class_exists(App::class, false) ? "{$name}_DB" : "_DOCKER_{$name}_DB");
+        $prefix = getenv("{$prefix}_NAME") ? $prefix : strtoupper("_DOCKER_{$name}_DB");
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
         $host = ('go1' === $name) ? 'hostmasterdb.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com' : 'microservice.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com';
         $slave = true # We can't use the slave connection for now.
