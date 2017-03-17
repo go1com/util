@@ -20,6 +20,7 @@ trait GraphNoteMockTrait
         $uuid = isset($data['uuid']) ? $data['uuid'] : 'NOTE_UUID';
         $entityId = isset($data['entity_id']) ? (int) $data['entity_id'] : 0;
         $entityType = isset($data['entity_type']) ? $data['entity_type'] : 'lo';
+        $private = isset($data['private']) ? (int) $data['private'] : 0;
 
         $stack->push("MERGE (n:Note { uuid: {uuid} }) SET n += {data}",
             [
@@ -30,6 +31,7 @@ trait GraphNoteMockTrait
                     'profile_id'    => isset($data['profile_id']) ? (int) $data['profile_id'] : 0,
                     'entity_type'   => $entityType,
                     'entity_id'     => $entityId,
+                    'private'       => $private
                 ]
             ]
         );
