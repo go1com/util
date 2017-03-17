@@ -83,7 +83,7 @@ trait InstallTrait
         $enrolment->addColumn('status', 'string');
         $enrolment->addColumn('result', 'float', ['notnull' => false]);
         $enrolment->addColumn('pass', 'smallint');
-        $enrolment->addColumn('changed', 'integer', ['unsigned' => true]);
+        $enrolment->addColumn('changed', 'datetime', ['unsigned' => true]);
         $enrolment->addColumn('timestamp', 'integer', ['unsigned' => true]);
         $enrolment->addColumn('data', 'blob', ['notnull' => false]);
         $enrolment->setPrimaryKey(['id']);
