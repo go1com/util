@@ -3,8 +3,11 @@
 namespace go1\util\lo;
 
 use Doctrine\DBAL\Connection;
+use go1\util\AccessChecker;
 use go1\util\edge\EdgeTypes;
+use go1\util\portal\PortalChecker;
 use stdClass;
+use Symfony\Component\HttpFoundation\Request;
 
 class LoChecker
 {
@@ -43,5 +46,39 @@ class LoChecker
         $data = $this->loData($lo);
 
         return isset($data[LoHelper::ENROLMENT_RE_ENROL]) ? ($data[LoHelper::ENROLMENT_RE_ENROL] ? true : false) : LoHelper::ENROLMENT_RE_ENROL_DEFAULT;
+    }
+
+    public function canCreate(Connection $db, string $instanceName, Request $req): bool
+    {
+        $accessChecker = new AccessChecker();
+        if ($this->access($accessChecker, $req, $instanceName)) {
+            return true;
+        }
+
+        $portalChecker = new PortalChecker();
+        $portal = $portalChecker->load($db, $instanceName);
+        if ($portal && $portalChecker->allowPublicWriting($portal)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function canUpdate(Connection $db, int $id, string $instanceName, Request $req)
+    {
+        $accessChecker = new AccessChecker();
+        if ($this->access($accessChecker, $req, $instanceName)) {
+            return true;
+        }
+
+        $user = $accessChecker->validUser($req);
+        if ($user && $this->isAuthor($db, $id, $user->id)) {
+            return true;
+        }
+    }
+
+    public function access(AccessChecker $accessChecker, Request $req, string $instanceName)
+    {
+        return $accessChecker->isPortalTutor($req, $instanceName) || $accessChecker->isPortalManager($req, $instanceName);
     }
 }
