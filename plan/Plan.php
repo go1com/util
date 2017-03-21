@@ -20,6 +20,8 @@ class Plan implements JsonSerializable
     const STATUS_LATE        = 4; # Learning was assigned & was not able to complete the plan ontime.
     const STATUS_EXPIRED     = 3; # The object is expired.
 
+    const TYPE_AWARD         = 'award';
+
     /** @var integer */
     public $id;
 
