@@ -51,6 +51,21 @@ class PlanRepository
         return $plan ? Plan::create($plan) : false;
     }
 
+    public function loadMultiple(array $ids) {
+        $q = $this->db->createQueryBuilder();
+        $q = $q
+            ->select('*')
+            ->from('gc_plan')
+            ->where($q->expr()->in('id', ':ids'))
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+            ->execute();
+
+        while ($plan = $q->fetch(DB::OBJ)) {
+            $plans[] = Plan::create($plan);
+        }
+        return $plans;
+    }
+
     public function create(Plan &$plan)
     {
         $this->db->insert('gc_plan', [

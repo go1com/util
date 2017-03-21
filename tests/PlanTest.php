@@ -92,4 +92,31 @@ class PlanTest extends UtilTestCase
         $this->assertNotEmpty(true, is_numeric($plan->id));
         $this->assertEmpty($repository->load($plan->id));
     }
+
+    public function testLoadMultiple()
+    {
+        $repository = new PlanRepository($this->db, $this->queue);
+
+        $input = Plan::create($raw = (object) [
+          'user_id'      => 123,
+          'assigner_id'  => 111,
+          'entity_type'  => 'lo',
+          'entity_id'    => 555,
+          'status'       => Plan::STATUS_INTERESTING,
+          'created_date' => time(),
+          'due_date'     => '+ 2 months',
+          'data'         => [
+            'note' => 'Something cool! <script>alert(123);</script>',
+          ],
+        ]);
+
+        $id1 = $repository->create($input);
+        $id2 = $repository->create($input);
+
+        $plans = $repository->loadMultiple([$id1, $id2]);
+
+        $this->assertCount(2, $plans, 'Found 2 plan');
+
+        return $plans;
+    }
 }
