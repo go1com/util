@@ -8,6 +8,36 @@ class PaymentSchema
 {
     public static function install(Schema $schema)
     {
+        $txn = $schema->createTable('payment_transaction');
+        $txn->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+        $txn->addColumn('email', 'string');
+        $txn->addColumn('status', 'integer');
+        $txn->addColumn('amount', 'float');
+        $txn->addColumn('currency', 'string');
+        $txn->addColumn('data', 'blob', ['notnull' => false]);
+        $txn->addColumn('created', 'integer', ['unsigned' => true, 'notnull' => false]);
+        $txn->addColumn('updated', 'integer', ['unsigned' => true, 'notnull' => false]);
+        $txn->addColumn('payment_method', 'string', ['notnull' => false]);
+        $txn->setPrimaryKey(['id']);
+        $txn->addIndex(['status']);
+        $txn->addIndex(['email']);
+        $txn->addIndex(['created']);
+        $txn->addIndex(['updated']);
+        $txn->addIndex(['payment_method']);
+
+        $item = $schema->createTable('payment_transaction_items');
+        $item->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+        $item->addColumn('transaction_id', 'integer', ['unsigned' => true]);
+        $item->addColumn('product_type', 'string');
+        $item->addColumn('product_id', 'string');
+        $item->addColumn('qty', 'integer');
+        $item->addColumn('price', 'float');
+        $item->addColumn('tax', 'float', ['default' => 0.00]);
+        $item->addColumn('tax_included', 'smallint', ['default' => true]);
+        $item->addColumn('data', 'blob');
+        $item->setPrimaryKey(['id']);
+        $item->addForeignKeyConstraint('payment_transaction', ['transaction_id'], ['id']);
+
         # stripe_session
         # ---------------------
         # uuid: UUID of user, this will be connection.uuid when the session is completed successfully.
