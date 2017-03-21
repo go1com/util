@@ -4,6 +4,7 @@ namespace go1\util\tests;
 
 use Doctrine\Common\Cache\ArrayCache;
 use go1\clients\CurrencyClient;
+use go1\clients\EntityClient;
 use go1\clients\GraphinClient;
 use go1\clients\LoClient;
 use go1\clients\MailClient;
@@ -34,7 +35,7 @@ class ClientsTest extends TestCase
             ->setMethods(['error'])
             ->getMockForAbstractClass();
 
-        $services = ['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin'];
+        $services = ['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin', 'entity'];
         $c = new Container;
         $c
             ->register(new UtilServiceProvider, [
@@ -57,5 +58,6 @@ class ClientsTest extends TestCase
         $this->assertTrue($c['go1.client.queue'] instanceof QueueClient);
         $this->assertTrue($c['go1.client.mail'] instanceof MailClient);
         $this->assertTrue($c['go1.client.sms'] instanceof SmsClient);
+        $this->assertTrue($c['go1.client.entity'] instanceof EntityClient);
     }
 }

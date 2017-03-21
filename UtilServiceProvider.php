@@ -4,6 +4,7 @@ namespace go1\util;
 
 use go1\clients\AccountsClient;
 use go1\clients\CurrencyClient;
+use go1\clients\EntityClient;
 use go1\clients\FirebaseClient;
 use go1\clients\GraphinClient;
 use go1\clients\LoClient;
@@ -116,6 +117,10 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.sms'] = function (Container $c) {
             return new SmsClient($c['client'], $c['sms_url'], $c['go1.client.queue'], $c['go1.client.mq']);
+        };
+
+        $c['go1.client.entity'] = function (Container $c) {
+            return new EntityClient($c['client'], $c['entity_url']);
         };
     }
 }
