@@ -90,27 +90,16 @@ class AccountsClient
             throw new InvalidArgumentException('Unsupported entity type: ' . $type);
         }
 
-        $bundles = ['instance', 'course', 'enrollment', 'learning_item', 'domain', 'relationship'];
-        if (getenv('MONOLITH') && strpos($this->accountsName, '.gocatalyze.com') && $type == 'simple' && in_array($bundle, $bundles)) {
-            switch ($bundle) {
-                case 'instance':
-                    $sql = 'SELECT MAX(id) FROM gc_instance';
-                    break;
-                case 'course':
-                case 'learning_item':
-                    $sql = 'SELECT MAX(id) FROM gc_lo';
-                    break;
-                case 'enrollment':
-                    $sql = 'SELECT MAX(id) FROM gc_enrolment';
-                    break;
-                case 'domain':
-                    $sql = 'SELECT MAX(id) FROM gc_domain';
-                    break;
-                case 'relationship':
-                    $sql = 'SELECT MAX(id) FROM gc_ro';
-                    break;
-            }
-            return (int) $this->go1->fetchColumn($sql) + 1;
+        $bundles = [
+            'instance' => 'gc_instance',
+            'course' => 'gc_lo',
+            'learning_item' => 'gc_lo',
+            'enrollment' => 'gc_enrolment',
+            'domain' => 'gc_domain',
+            'relationship' => 'gc_ro',
+        ];
+        if (getenv('MONOLITH') && ($type == 'simple') && isset($bundles[$bundle])) {
+            return (int) $this->go1->fetchColumn("SELECT MAX(id) FROM $bundles[$bundle]") + 1;
         }
 
         list($table, $columnBundle) = $tables[$type];
