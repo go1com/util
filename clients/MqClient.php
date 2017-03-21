@@ -59,7 +59,7 @@ class MqClient
         $messageBody = is_scalar($messageBody) ? json_decode($messageBody) : $messageBody;
         $message = json_encode([
             'routingKey' => $routingKey,
-            'body' => $messageBody
+            'body'       => $messageBody,
         ]);
         $message = new AMQPMessage($message, ['content_type' => 'application/json']);
         $this->channel()->basic_publish($message, '', Queue::WORKER_QUEUE_NAME);
