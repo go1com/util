@@ -17,14 +17,6 @@ trait LoMockTrait
             ] + $options);
     }
 
-    public function createAward(Connection $db, array $options = [])
-    {
-        return $this->createLO($db, [
-                'type'  => LoTypes::AWARD,
-                'title' => isset($options['title']) ? $options['title'] : 'CPD',
-            ] + $options);
-    }
-
     public function createCourse(Connection $db, array $options = [])
     {
         return $this->createLO($db, $options);

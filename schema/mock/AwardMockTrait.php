@@ -15,7 +15,7 @@ trait AwardMockTrait
             'title'       => isset($options['title']) ? $options['title'] : 'Example award',
             'description' => isset($options['description']) ? $options['description'] : '…',
             'tags'        => isset($options['tags']) ? $options['tags'] : '',
-            'locale'      => isset($locale) ? $locale : null,
+            'locale'      => isset($options['locale']) ? $options['locale'] : null,
             'data'        => isset($options['data']) ? $options['data'] : '',
             'published'   => isset($options['published']) ? $options['published'] : 1,
             'quantity'    => isset($options['quantity']) ? $options['quantity'] : null,
