@@ -40,7 +40,6 @@ trait UserMockTrait
             'instance'     => isset($options['instance']) ? $options['instance'] : 'az.mygo1.com',
             'profile_id'   => isset($options['profile_id']) ? $options['profile_id'] : 2,
             'mail'         => isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com',
-            'name'         => isset($options['name']) ? $options['name'] : uniqid('user.name'),
             'password'     => isset($options['password']) ? $options['password'] : 'xxxxxxx',
             'created'      => isset($options['created']) ? $options['created'] : strtotime('-10 days'),
             'login'        => isset($options['login']) ? $options['login'] : strtotime('-2 days'),
