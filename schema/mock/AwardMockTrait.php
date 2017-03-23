@@ -23,18 +23,16 @@ trait AwardMockTrait
             'created'     => isset($options['created']) ? $options['created'] : time(),
         ]);
         $awardId = $db->lastInsertId('award_award');
+        $revisionId = $this->createAwardRevision($db, $awardId, $revisionId);
 
-        is_null($revisionId) && $db->update('award_award',
-            ['revision_id' => $this->createAwardRevision($db, $awardId)],
-            ['id' => $awardId]
-        );
+        $db->update('award_award', ['revision_id' => $revisionId], ['id' => $awardId]);
 
         return $awardId;
     }
 
-    protected function createAwardRevision(Connection $db, int $awardId)
+    protected function createAwardRevision(Connection $db, int $awardId, int $id = null)
     {
-        $db->insert('award_revision', ['award_id' => $awardId, 'updated' => time()]);
+        $db->insert('award_revision', array_filter(['id' => $id, 'award_id' => $awardId, 'updated' => time()]));
 
         return $db->lastInsertId('award_revision');
     }
