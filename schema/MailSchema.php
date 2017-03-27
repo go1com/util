@@ -20,7 +20,7 @@ class MailSchema
             $log->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $log->addColumn('instance', 'integer');
             $log->addColumn('recipient', 'string');
-            $log->addColumn('from', 'string');
+            $log->addColumn('sender', 'string');
             $log->addColumn('cc', 'string');
             $log->addColumn('bcc', 'string');
             $log->addColumn('subject', 'string');
@@ -33,7 +33,7 @@ class MailSchema
             $log->setPrimaryKey(['id']);
             $log->addIndex(['instance']);
             $log->addIndex(['recipient']);
-            $log->addIndex(['from']);
+            $log->addIndex(['sender']);
             $log->addIndex(['cc']);
             $log->addIndex(['bcc']);
             $log->addIndex(['subject']);
