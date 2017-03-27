@@ -3,4 +3,4 @@ phpunit:
   cache: { paths: ["vendor/"] }
   script: composer install -q && phpunit
 
-# ping
+# ping 2
