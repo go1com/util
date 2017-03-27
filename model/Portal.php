@@ -6,9 +6,8 @@ use Doctrine\DBAL\Connection;
 use go1\util\DB;
 use go1\util\edge\EdgeTypes;
 use go1\util\portal\PortalChecker;
-use go1\util\portal\PortalPrices;
-use stdClass;
 use PDO;
+use stdClass;
 
 class Portal
 {
@@ -60,6 +59,7 @@ class Portal
         if (isset($portal->data->user_plan)) {
             $portal->userPlan = $portal->data->user_plan;
         }
+
         return $portal;
     }
 }
