@@ -5,7 +5,7 @@ php:
 matrix:
   fast_finish: true
 before_script: composer install --prefer-source
-script: composer install -q && phpunit
+script: phpunit
 notifications:
   hipchat:
     rooms:
