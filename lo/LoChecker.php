@@ -38,7 +38,14 @@ class LoChecker
     {
         $data = $this->loData($lo);
 
-        return isset($data['manual_payment_recipient']) ? $data[LoHelper::MANUAL_PAYMENT_RECIPIENT] : '';
+        return isset($data[LoHelper::MANUAL_PAYMENT_RECIPIENT]) ? $data[LoHelper::MANUAL_PAYMENT_RECIPIENT] : '';
+    }
+
+    public function singleLi(stdClass $li)
+    {
+        $data = $this->loData($li);
+
+        return isset($data['single_li']) ? ($data['single_li'] ? true : false) : false;
     }
 
     public function allowReEnrol(stdClass $lo)
