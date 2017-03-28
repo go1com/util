@@ -60,30 +60,33 @@ class EdgeTypes
 
     # Learning object relationships
     # ---------------------
-    const HAS_LP_ITEM           = 1;  # T: ?                    | S: Learning object (LP only)
-    const HAS_PRODUCT           = 2;  # T: ?                    | S: Learning object
-    const HAS_EVENT             = 3;  # T: ?                    | S: Learning object (course, module?)
-    const HAS_TAG               = 4;  # T: Tag                  | S: Learning object
-    const HAS_LI                = 5;  # T: ?                    | S: Learning object (module only)
-    const HAS_WORKSHOP          = 6;  # T: ?                    | S: ?
-    const HAS_MODULE            = 7;  # T: gc_lo.id             | S: gc_lo.id
-    const HAS_ELECTIVE_LO       = 8;  # T: ?                    | S: ?
-    const HAS_ELECTIVE_LI       = 9;  # T: ?                    | S: ?
-    const HAS_STRIPE_CUSTOMER   = 10; # T: ?                    | S: ?
-    const HAS_MODULE_DEPENDENCY = 11; # T: gc_lo.id             | S: gc_lo.id
-    const HAS_CUSTOM_TAG        = 12; # T: Tag                  | S: Learning object
-    const HAS_PARENT_TAG        = 13; # T: Tag                  | S: Tag
-    const HAS_COUPON            = 14; # T: ?                    | S: ?
-    const HAS_TUTOR             = 15; # T: Simple Account       | S: Learning object
-    const HAS_AUTHOR            = 17; # T: Simple Account       | S: Learning object
-    const HAS_TUTOR_ENROLMENT   = 18; # T: Simple account       | S: Enrolment
-    const HAS_ENQUIRY           = 19; # T: Learning object      | S: Profile
-    const HAS_ARCHIVED_ENQUIRY  = 20; # T: NULL                 | S: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
-    const HAS_EXCLUDED_TAG      = 31; # T: Tag                  | S: Learning object
-    const COURSE_ASSESSOR       = 32; # T: gc_user.id           | S: Learning object
-    const HAS_EVENT_EDGE        = 34; # T: gc_event.id          | S: gc_lo.id
-    const HAS_GROUP_EDGE        = 35; # T: gc_social_group.id   | S: gc_user.id
-    const AWARD_HAS_ITEM        = 36; # T: LO                   | S: award.                | data: { qty: INTEGER }
+    const HAS_LP_ITEM                 = 1;  # T: ?                    | S: Learning object (LP only)
+    const HAS_PRODUCT                 = 2;  # T: ?                    | S: Learning object
+    const HAS_EVENT                   = 3;  # T: ?                    | S: Learning object (course, module?)
+    const HAS_TAG                     = 4;  # T: Tag                  | S: Learning object
+    const HAS_LI                      = 5;  # T: ?                    | S: Learning object (module only)
+    const HAS_WORKSHOP                = 6;  # T: ?                    | S: ?
+    const HAS_MODULE                  = 7;  # T: gc_lo.id             | S: gc_lo.id
+    const HAS_ELECTIVE_LO             = 8;  # T: ?                    | S: ?
+    const HAS_ELECTIVE_LI             = 9;  # T: ?                    | S: ?
+    const HAS_STRIPE_CUSTOMER         = 10; # T: ?                    | S: ?
+    const HAS_MODULE_DEPENDENCY       = 11; # T: gc_lo.id             | S: gc_lo.id
+    const HAS_CUSTOM_TAG              = 12; # T: Tag                  | S: Learning object
+    const HAS_PARENT_TAG              = 13; # T: Tag                  | S: Tag
+    const HAS_COUPON                  = 14; # T: ?                    | S: ?
+    const HAS_TUTOR                   = 15; # T: Simple Account       | S: Learning object
+    const HAS_AUTHOR                  = 17; # T: Simple Account       | S: Learning object
+    const HAS_TUTOR_ENROLMENT         = 18; # T: Simple account       | S: Enrolment
+    const HAS_ENQUIRY                 = 19; # T: Learning object      | S: Profile
+    const HAS_ARCHIVED_ENQUIRY        = 20; # T: NULL                 | S: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
+    const HAS_EXCLUDED_TAG            = 31; # T: Tag                  | S: Learning object
+    const COURSE_ASSESSOR             = 32; # T: gc_user.id           | S: Learning object
+    const HAS_EVENT_EDGE              = 34; # T: gc_event.id          | S: gc_lo.id
+    const HAS_GROUP_EDGE              = 35; # T: gc_social_group.id   | S: gc_user.id
+    const AWARD_HAS_ITEM              = 36; # T: LO                   | S: award.                | data: { qty: INTEGER }
+    const HAS_CREDIT_REQUEST          = 37; # T: User (learner)       | S: LO                    | …
+    const HAS_CREDIT_REQUEST_DONE     = 38; # T: User (learner)       | S: LO                    | Weight: Manager ID — who paid.
+    const HAS_CREDIT_REQUEST_REJECTED = 39; # T: User (learner)       | S: LO                    | Weight: Manager ID — who reject.
 
     # LO & enrolment scheduling
     # ---------------------
