@@ -60,9 +60,36 @@ class PlanRepository
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
             ->execute();
 
+        $plans = [];
         while ($plan = $q->fetch(DB::OBJ)) {
             $plans[] = Plan::create($plan);
         }
+
+        return $plans;
+    }
+
+    public function loadByEntity(string $entityType, int $entityId, int $status = null)
+    {
+        $q = $this->db->createQueryBuilder();
+        $q
+            ->select('*')
+            ->from('gc_plan')
+            ->where($q->expr()->eq('entity_type', ':entityType'))
+            ->where($q->expr()->eq('entity_id', ':entityId'));
+        !is_null($status) && $q
+            ->where($q->expr()->eq('status', ':status'));
+
+        $q = $q->setParameters([
+            ':entityType' => $entityType,
+            ':entityId'   => $entityId,
+            ':status'     => $status,
+        ])->execute();
+
+        $plans = [];
+        while ($plan = $q->fetch(DB::OBJ)) {
+            $plans[] = Plan::create($plan);
+        }
+
         return $plans;
     }
 
