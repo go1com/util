@@ -94,6 +94,7 @@ class Queue
     const AWARD_ACHIVEMENT_UPDATE = 'award.achievement.update';
     const AWARD_ACHIVEMENT_DELETE = 'award.achievement.delete';
     const WORKER_QUEUE_NAME       = 'worker';
+    const MAIL_LOG_CREATE         = 'mail-log.create';
 
     # routingKey that tell some service to do something.
     #
