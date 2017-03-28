@@ -18,6 +18,7 @@ use go1\clients\RealtimeClient;
 use go1\clients\RulesClient;
 use go1\clients\SmsClient;
 use go1\clients\UserClient;
+use go1\util\lo\LoAccessChecker;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
 use GraphAware\Neo4j\Client\ClientBuilder;
@@ -49,6 +50,10 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['lo_checker'] = function () {
             return new LoChecker;
+        };
+
+        $c['lo_access_checker'] = function (Container $c) {
+            return new LoAccessChecker($c['dbs']['default'], $c['portal_checker'], $c['lo_checker'], $c['cache']);
         };
 
         $c['go1.client.accounts'] = function (Container $c) {

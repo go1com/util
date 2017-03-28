@@ -4,6 +4,7 @@ namespace go1\util\tests;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\DBAL\DriverManager;
+use Firebase\JWT\JWT;
 use go1\clients\MqClient;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
@@ -13,6 +14,7 @@ use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class UtilTestCase extends TestCase
 {
@@ -22,6 +24,9 @@ abstract class UtilTestCase extends TestCase
     protected $db;
     protected $queue;
     protected $queueMessages;
+
+    protected $portalChecker;
+    protected $loChecker;
 
     public function setUp()
     {
@@ -58,5 +63,43 @@ abstract class UtilTestCase extends TestCase
                     ],
                 ] + Service::urls(['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin'], 'qa')
             );
+    }
+
+    protected function middlewarePreProcess(Request &$request)
+    {
+        self::coreMiddleware($request);
+        self::jwtMiddleware($request);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @see go1\app\providers\CoreMiddlewareProvider
+     */
+    private function coreMiddleware(Request $request) {
+        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+            $data = json_decode($request->getContent(), true);
+            $request->request->replace(is_array($data) ? $data : []);
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @see go1\middleware\JwtMiddleware
+     */
+    private function jwtMiddleware(Request $request) {
+        $auth = $request->headers->get('Authorization') ?: $request->headers->get('authorization');
+        if ($auth) {
+            if (0 === strpos($auth, 'Bearer ')) {
+                $token = substr($auth, 7);
+            }
+        }
+
+        $token = $request->query->get('jwt', isset($token) ? $token : null);
+        if ($token && (2 === substr_count($token, '.'))) {
+            $token = explode('.', $token);
+            $request->request->set('jwt.payload', JWT::jsonDecode(JWT::urlsafeB64Decode($token[1])));
+        }
     }
 }
