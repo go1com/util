@@ -24,7 +24,7 @@ class AwardHelper
             'data'          => (object) (is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),
             'published'     => (int) $award->published,
             'quantity'      => isset($award->quantity) ? (int) $award->quantity : null,
-            'expire'        => $award->expire,
+            'expire'        => ctype_digit($award->expire) ? (int) $award->expire : $award->expire,
             'created'       => (int) $award->created,
             'items'         => isset($award->items) ? $award->items : [],
             'enrolment'     => isset($award->enrolment) ? $award->enrolment : null,
