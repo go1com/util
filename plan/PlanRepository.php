@@ -75,9 +75,9 @@ class PlanRepository
             ->select('*')
             ->from('gc_plan')
             ->where($q->expr()->eq('entity_type', ':entityType'))
-            ->where($q->expr()->eq('entity_id', ':entityId'));
+            ->andWhere($q->expr()->eq('entity_id', ':entityId'));
         !is_null($status) && $q
-            ->where($q->expr()->eq('status', ':status'));
+            ->andWhere($q->expr()->eq('status', ':status'));
 
         $q = $q->setParameters([
             ':entityType' => $entityType,
