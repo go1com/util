@@ -35,9 +35,9 @@ class GroupHelper
         return static::isItemOf($db, 'user', $userId, $groupID);
     }
 
-    public static function groupAccess(int $id, int $userId, AccessChecker $accessChecker = null, Request $req = null, string $instanceName = ''): bool
+    public static function groupAccess(int $groupUserId, int $userId, AccessChecker $accessChecker = null, Request $req = null, string $instanceName = ''): bool
     {
-        if ($id == $userId) {
+        if ($groupUserId == $userId) {
             return true;
         }
 
