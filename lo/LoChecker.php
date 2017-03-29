@@ -2,6 +2,7 @@
 
 namespace go1\util\lo;
 
+use PDO;
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\edge\EdgeTypes;
@@ -25,6 +26,72 @@ class LoChecker
         $sql = 'SELECT 1 FROM gc_ro WHERE source_id = ? AND type = ? AND target_id = ?';
 
         return $db->fetchColumn($sql, [$loId, EdgeTypes::HAS_AUTHOR_EDGE, $userId]) ? true : false;
+    }
+
+    public function isParentLosAuthor(Connection $db, int $loId, string $loType, int $userId, int $parentId = null)
+    {
+        $getParentIds = function ($loIds, $parentEdgeTypes) use ($db) {
+            return $db
+                ->executeQuery(
+                    'SELECT source_id FROM gc_ro WHERE target_id IN (?) AND type IN (?)',
+                    [$loIds, $parentEdgeTypes],
+                    [Connection::PARAM_INT_ARRAY, Connection::PARAM_INT_ARRAY])
+                ->fetchAll(PDO::FETCH_COLUMN);
+        };
+
+        $getParentsAuthor = function ($loIds) use ($db, $userId) {
+            if (empty($loIds)) {
+                return false;
+            }
+
+            return $db
+                ->fetchColumn(
+                    'SELECT 1 FROM gc_ro WHERE source_id IN (?) AND type = ? AND target_id = ? ',
+                    [$loIds, EdgeTypes::HAS_AUTHOR_EDGE, $userId],
+                    0,
+                    [Connection::PARAM_INT_ARRAY, PDO::PARAM_INT, PDO::PARAM_INT]
+                );
+        };
+
+        if ($loId && self::isAuthor($db, $loId, $userId)) {
+            return true;
+        }
+
+        if (!$loId && $parentId) {
+            if (self::isAuthor($db, $parentId, $userId)) {
+                return true;
+            }
+
+            if (!$parent = LoHelper::load($db, $parentId)) {
+                return false;
+            }
+
+            $loId = (int) $parent->id;
+            $loType = $parent->type;
+        }
+
+        $loIds = [$loId];
+        switch ($loType) {
+            case in_array($loType, LiTypes::all()):
+                $loIds = $getParentIds($loIds, EdgeTypes::LearningObjectTree['module']);
+                if ($getParentsAuthor($loIds)) {
+                    return true;
+                }
+
+            case LoTypes::MODULE:
+                $loIds = $getParentIds($loIds, EdgeTypes::LearningObjectTree['course']);
+                if ($getParentsAuthor($loIds)) {
+                    return true;
+                }
+
+            case LoTypes::COURSE:
+                $loIds = $getParentIds($loIds, EdgeTypes::LearningObjectTree['learning_pathway']);
+                if ($getParentsAuthor($loIds)) {
+                    return true;
+                }
+        }
+
+        return false;
     }
 
     public function manualPayment(stdClass $lo)
