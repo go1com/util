@@ -61,20 +61,20 @@ trait UserMockTrait
         $instanceName = 'az.mygo1.com',
         $roles = ['authenticated'],
         $profileId = 11,
-        $userId = 1
+        $userId = 1,
+        $encode = true
     )
     {
-        return JWT::encode(
-            $this->getPayload([
-                'id'            => $userId,
-                'accounts_name' => $accountName,
-                'instance_name' => $instanceName,
-                'profile_id'    => $profileId,
-                'mail'          => $mail,
-                'roles'         => $roles,
-            ]),
-            'private_key'
-        );
+        $payload = $this->getPayload([
+            'id'            => $userId,
+            'accounts_name' => $accountName,
+            'instance_name' => $instanceName,
+            'profile_id'    => $profileId,
+            'mail'          => $mail,
+            'roles'         => $roles,
+        ]);
+
+        return $encode ? JWT::encode($payload, 'private_key') : $payload;
     }
 
     protected function getRootPayload()
