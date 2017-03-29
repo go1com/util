@@ -35,6 +35,15 @@ class AwardHelper
 
     public static function loadByRevision(Connection $db, int $revisionId)
     {
-        return $db->executeQuery('SELECT * FROM award_award WHERE revision_id = ?', [$revisionId])->fetch(DB::OBJ);
+        return $db
+            ->executeQuery('SELECT * FROM award_award WHERE revision_id = ?', [$revisionId])
+            ->fetch(DB::OBJ);
+    }
+
+    public static function loadItem(Connection $db, int $awardItemId)
+    {
+        return $db
+            ->executeQuery('SELECT * FROM award_item WHERE id = ?', [$awardItemId])
+            ->fetch(DB::OBJ);
     }
 }
