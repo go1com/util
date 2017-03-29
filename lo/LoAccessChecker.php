@@ -75,7 +75,7 @@ class LoAccessChecker extends AccessChecker
             }
         }
         catch (Exception $e) {
-            $this->cache->save($this->cacheId, $e);
+            $this->cache->save($this->cacheId, $e, $tll = 120);
             return new JsonResponse(['message' => $e->getMessage()], $e->getCode());
         }
     }
