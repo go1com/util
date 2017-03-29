@@ -35,7 +35,7 @@ class GroupHelper
         return static::isItemOf($db, 'user', $userId, $groupID);
     }
 
-    public static function groupAccess(int $groupUserId, int $userId, AccessChecker $accessChecker = null, Request $req = null, string $instanceName = ''): bool
+    public static function groupAccess(int $groupUserId, int $userId, AccessChecker $accessChecker = null, Request $req = null, string $instance = ''): bool
     {
         if ($groupUserId == $userId) {
             return true;
@@ -46,7 +46,7 @@ class GroupHelper
                 return true;
             }
 
-            if ($accessChecker->isPortalAdmin($req, $instanceName)) {
+            if ($instance && $accessChecker->isPortalAdmin($req, $instance)) {
                 return true;
             }
         }
