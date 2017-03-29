@@ -50,8 +50,8 @@ class LoUpdateAccessCheckerTest extends LoAccessCheckerTest
         $loAccessChecker = self::getLoAccessChecker();
         $res = $loAccessChecker->access('lo.update', $req, $options);
 
-        $this->assertEquals(403, $res->getStatusCode());
-        $this->assertEquals('User don\'t have account on this portal to able to update learning object.', json_decode($res->getContent())->message);
+        $this->assertEquals(404, $res->getStatusCode());
+        $this->assertEquals('Account not found.', json_decode($res->getContent())->message);
     }
 
     public function dataLoUpdateByPortalTutorOrAuthor()
@@ -115,15 +115,15 @@ class LoUpdateAccessCheckerTest extends LoAccessCheckerTest
             [
                 $this->publicPortalTutorJwt,
                 [
-                    'code' => 403,
-                    'message' => 'User don\'t have account on this portal to able to update learning object.'
+                    'code' => 404,
+                    'message' => 'Account not found.'
                 ]
             ],
             [
                 $this->publicPortalAuthorJwt,
                 [
-                    'code' => 403,
-                    'message' => 'User don\'t have account on this portal to able to update learning object.'
+                    'code' => 404,
+                    'message' => 'Account not found.'
                 ]
             ],
             [

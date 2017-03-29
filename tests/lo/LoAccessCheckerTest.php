@@ -97,8 +97,8 @@ class LoAccessCheckerTest extends UtilTestCase
         $loAccessChecker = self::getLoAccessChecker();
         $res = $loAccessChecker->access('lo.create', $req, $options);
 
-        $this->assertEquals(403, $res->getStatusCode());
-        $this->assertEquals('User don\'t have account on this portal to able to create learning object.', json_decode($res->getContent())->message);
+        $this->assertEquals(404, $res->getStatusCode());
+        $this->assertEquals('Account not found.', json_decode($res->getContent())->message);
     }
 
     public function dataLoCreateByPortalTutor()

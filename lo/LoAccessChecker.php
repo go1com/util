@@ -86,7 +86,7 @@ class LoAccessChecker extends AccessChecker
 
     private function loCreateAccess(Request $req, stdClass $user, $o) {
         if (!$this->hasAccount($req, $o->instanceName)) {
-            throw new AccessException('User don\'t have account on this portal to able to create learning object.', 403);
+            throw new InvalidArgumentException('Account not found.', 404);
         }
 
         $portal = $this->portalChecker->load($this->db, $o->instanceId);
@@ -99,7 +99,7 @@ class LoAccessChecker extends AccessChecker
 
     private function loUpdateAccess(Request $req, stdClass $user, $o) {
         if (!$this->hasAccount($req, $o->instanceName)) {
-            throw new AccessException('User don\'t have account on this portal to able to update learning object.', 403);
+            throw new InvalidArgumentException('Account not found.', 404);
         }
 
         $portal = $this->portalChecker->load($this->db, $o->instanceId);
