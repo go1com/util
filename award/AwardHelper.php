@@ -2,6 +2,8 @@
 
 namespace go1\util\award;
 
+use Doctrine\DBAL\Connection;
+use go1\util\DB;
 use stdClass;
 use go1\util\text\Xss;
 
@@ -29,5 +31,10 @@ class AwardHelper
             'items'         => isset($award->items) ? $award->items : [],
             'enrolment'     => isset($award->enrolment) ? $award->enrolment : null,
         ];
+    }
+
+    public static function loadByRevision(Connection $db, int $revisionId)
+    {
+        return $db->executeQuery('SELECT * FROM award_award WHERE revision_id = ?', [$revisionId])->fetch(DB::OBJ);
     }
 }
