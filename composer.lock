@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4f78eb0c26b0858fa7df6531038a072",
+    "content-hash": "09ebe6e0be336c9c59c94ce5d08a5119",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -750,16 +750,16 @@
         },
         {
             "name": "graphaware/neo4j-php-client",
-            "version": "4.8.0",
+            "version": "4.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/graphaware/neo4j-php-client.git",
-                "reference": "2041c6a1cb046b3193e1656043e50c972970be28"
+                "reference": "fa63c65f6d8d06ed2d678a46f9edfc75ac03ab45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/graphaware/neo4j-php-client/zipball/2041c6a1cb046b3193e1656043e50c972970be28",
-                "reference": "2041c6a1cb046b3193e1656043e50c972970be28",
+                "url": "https://api.github.com/repos/graphaware/neo4j-php-client/zipball/fa63c65f6d8d06ed2d678a46f9edfc75ac03ab45",
+                "reference": "fa63c65f6d8d06ed2d678a46f9edfc75ac03ab45",
                 "shasum": ""
             },
             "require": {
@@ -810,7 +810,7 @@
                 "http",
                 "neo4j"
             ],
-            "time": "2017-02-27T01:45:03+00:00"
+            "time": "2017-03-24T14:02:49+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -927,16 +927,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "0d6c7ca039329247e4f0f8f8f6506810e8248855"
+                "reference": "f5b8a8512e2b58b0071a7280e39f14f72e05d87c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/0d6c7ca039329247e4f0f8f8f6506810e8248855",
-                "reference": "0d6c7ca039329247e4f0f8f8f6506810e8248855",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/f5b8a8512e2b58b0071a7280e39f14f72e05d87c",
+                "reference": "f5b8a8512e2b58b0071a7280e39f14f72e05d87c",
                 "shasum": ""
             },
             "require": {
@@ -988,7 +988,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-02-27T10:51:17+00:00"
+            "time": "2017-03-20T17:10:46+00:00"
         },
         {
             "name": "ktamas77/firebase-php",
@@ -1034,16 +1034,16 @@
         },
         {
             "name": "myclabs/php-enum",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/php-enum.git",
-                "reference": "e42fa9d2ae5dd660dbd0fb573d94c61e5a0dbb02"
+                "reference": "61f4a24da5be216301447f3278ea6562609d61f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/e42fa9d2ae5dd660dbd0fb573d94c61e5a0dbb02",
-                "reference": "e42fa9d2ae5dd660dbd0fb573d94c61e5a0dbb02",
+                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/61f4a24da5be216301447f3278ea6562609d61f5",
+                "reference": "61f4a24da5be216301447f3278ea6562609d61f5",
                 "shasum": ""
             },
             "require": {
@@ -1074,7 +1074,7 @@
             "keywords": [
                 "enum"
             ],
-            "time": "2016-10-09T21:43:05+00:00"
+            "time": "2017-03-26T10:24:21+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -1196,16 +1196,16 @@
         },
         {
             "name": "php-http/client-common",
-            "version": "v1.4.1",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/client-common.git",
-                "reference": "6027a1d59064c11c614a9aa2b5e3b800add4d878"
+                "reference": "85b2501ad96a8746918527f34c0d7977424b2bb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/client-common/zipball/6027a1d59064c11c614a9aa2b5e3b800add4d878",
-                "reference": "6027a1d59064c11c614a9aa2b5e3b800add4d878",
+                "url": "https://api.github.com/repos/php-http/client-common/zipball/85b2501ad96a8746918527f34c0d7977424b2bb3",
+                "reference": "85b2501ad96a8746918527f34c0d7977424b2bb3",
                 "shasum": ""
             },
             "require": {
@@ -1253,7 +1253,7 @@
                 "http",
                 "httplug"
             ],
-            "time": "2017-02-20T14:20:20+00:00"
+            "time": "2017-03-18T11:14:35+00:00"
         },
         {
             "name": "php-http/discovery",
@@ -1747,30 +1747,30 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.5.2",
+            "version": "3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "5677cfe02397dd6b58c861870dfaa5d9007d3954"
+                "reference": "4ae32dd9ab8860a4bbd750ad269cba7f06f7934e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/5677cfe02397dd6b58c861870dfaa5d9007d3954",
-                "reference": "5677cfe02397dd6b58c861870dfaa5d9007d3954",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/4ae32dd9ab8860a4bbd750ad269cba7f06f7934e",
+                "reference": "4ae32dd9ab8860a4bbd750ad269cba7f06f7934e",
                 "shasum": ""
             },
             "require": {
                 "paragonie/random_compat": "^1.0|^2.0",
-                "php": ">=5.4"
+                "php": "^5.4 || ^7.0"
             },
             "replace": {
                 "rhumsaa/uuid": "self.version"
             },
             "require-dev": {
                 "apigen/apigen": "^4.1",
-                "codeception/aspect-mock": "1.0.0",
+                "codeception/aspect-mock": "^1.0 | ^2.0",
                 "doctrine/annotations": "~1.2.0",
-                "goaop/framework": "1.0.0-alpha.2",
+                "goaop/framework": "1.0.0-alpha.2 | ^1.0 | ^2.1",
                 "ircmaxell/random-lib": "^1.1",
                 "jakub-onderka/php-parallel-lint": "^0.9.0",
                 "mockery/mockery": "^0.9.4",
@@ -1825,7 +1825,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2016-11-22T19:21:44+00:00"
+            "time": "2017-03-26T20:37:53+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1888,6 +1888,59 @@
             "time": "2017-02-21T09:12:04+00:00"
         },
         {
+            "name": "symfony/http-foundation",
+            "version": "v3.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-foundation.git",
+                "reference": "c57009887010eb4e58bfca2970314a5b820b24b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/c57009887010eb4e58bfca2970314a5b820b24b9",
+                "reference": "c57009887010eb4e58bfca2970314a5b820b24b9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "symfony/polyfill-mbstring": "~1.1"
+            },
+            "require-dev": {
+                "symfony/expression-language": "~2.8|~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\HttpFoundation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony HttpFoundation Component",
+            "homepage": "https://symfony.com",
+            "time": "2017-03-04T12:23:14+00:00"
+        },
+        {
             "name": "symfony/options-resolver",
             "version": "v3.2.6",
             "source": {
@@ -1940,6 +1993,65 @@
                 "options"
             ],
             "time": "2017-02-21T09:12:04+00:00"
+        },
+        {
+            "name": "symfony/polyfill-mbstring",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/e79d363049d1c2128f133a2667e4f4190904f7f4",
+                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for the Mbstring extension",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "mbstring",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2016-11-14T01:06:16+00:00"
         },
         {
             "name": "vectorface/whip",

@@ -2,6 +2,8 @@
 
 namespace go1\util\award;
 
+use Doctrine\DBAL\Connection;
+use go1\util\DB;
 use stdClass;
 use go1\util\text\Xss;
 
@@ -24,10 +26,24 @@ class AwardHelper
             'data'          => (object) (is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),
             'published'     => (int) $award->published,
             'quantity'      => isset($award->quantity) ? (int) $award->quantity : null,
-            'expire'        => $award->expire,
+            'expire'        => ctype_digit($award->expire) ? (int) $award->expire : $award->expire,
             'created'       => (int) $award->created,
             'items'         => isset($award->items) ? $award->items : [],
             'enrolment'     => isset($award->enrolment) ? $award->enrolment : null,
         ];
+    }
+
+    public static function loadByRevision(Connection $db, int $revisionId)
+    {
+        return $db
+            ->executeQuery('SELECT * FROM award_award WHERE revision_id = ?', [$revisionId])
+            ->fetch(DB::OBJ);
+    }
+
+    public static function loadItem(Connection $db, int $awardItemId)
+    {
+        return $db
+            ->executeQuery('SELECT * FROM award_item WHERE id = ?', [$awardItemId])
+            ->fetch(DB::OBJ);
     }
 }
