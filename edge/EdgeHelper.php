@@ -12,6 +12,17 @@ class EdgeHelper
 {
     private $select;
 
+    public static function load(Connection $db, int $id)
+    {
+        $edge = 'SELECT * FROM gc_ro WHERE id = ?';
+        $edge = $db->executeQuery($edge, [$id])->fetch(DB::OBJ);
+        if ($edge) {
+            $edge->data = json_decode($edge->data) ?: (object) [];
+        }
+
+        return $edge;
+    }
+
     public static function select(string $select = null)
     {
         $helper = new self;
