@@ -39,6 +39,18 @@ class EdgeTest extends UtilTestCase
         }
     }
 
+    public function testChangeType()
+    {
+        // Create an edge
+        $id = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_CREDIT_REQUEST, $sourceId = 1, $targetId = 2);
+
+        // Change its type
+        EdgeHelper::changeType($this->db, $this->queue, $id, EdgeTypes::HAS_CREDIT_REQUEST_REJECTED);
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_REJECTED, EdgeHelper::load($this->db, $id)->type);
+        $msg = &$this->queueMessages[Queue::RO_UPDATE][0];
+
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST, $msg->original->type);
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_REJECTED, $msg->type);
     }
 
     public function testNoDuplication()

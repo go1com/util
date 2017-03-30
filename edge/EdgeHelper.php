@@ -23,6 +23,22 @@ class EdgeHelper
         return $edge;
     }
 
+    public static function changeType(Connection $db, MqClient $queue, int $id, int $newType)
+    {
+        if ($edge = self::load($db, $id)) {
+            $edge->original = clone $edge;
+            $edge->type = $newType;
+            $edge->data->oldType[$newType] = time();
+            $db->update(
+                'gc_ro',
+                ['type' => $newType, 'data' => json_encode($edge->data)],
+                ['id' => $id]
+            );
+
+            $queue->publish($edge, Queue::RO_UPDATE);
+        }
+    }
+
     public static function select(string $select = null)
     {
         $helper = new self;
