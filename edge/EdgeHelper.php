@@ -12,6 +12,33 @@ class EdgeHelper
 {
     private $select;
 
+    public static function load(Connection $db, int $id)
+    {
+        $edge = 'SELECT * FROM gc_ro WHERE id = ?';
+        $edge = $db->executeQuery($edge, [$id])->fetch(DB::OBJ);
+        if ($edge) {
+            $edge->data = json_decode($edge->data) ?: (object) [];
+        }
+
+        return $edge;
+    }
+
+    public static function changeType(Connection $db, MqClient $queue, int $id, int $newType)
+    {
+        if ($edge = self::load($db, $id)) {
+            $edge->original = clone $edge;
+            $edge->type = $newType;
+            $edge->data->oldType[$newType] = time();
+            $db->update(
+                'gc_ro',
+                ['type' => $newType, 'data' => json_encode($edge->data)],
+                ['id' => $id]
+            );
+
+            $queue->publish($edge, Queue::RO_UPDATE);
+        }
+    }
+
     public static function select(string $select = null)
     {
         $helper = new self;
