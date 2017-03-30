@@ -23,12 +23,14 @@ class EdgeHelper
         return $edge;
     }
 
-    public static function changeType(Connection $db, MqClient $queue, int $id, int $newType)
+    public static function changeType(Connection $db, MqClient $queue, int $id, int $newType, $log = null)
     {
         if ($edge = self::load($db, $id)) {
             $edge->original = clone $edge;
             $edge->type = $newType;
             $edge->data->oldType[$newType] = time();
+            ($log) && $edge->data->log[] = $log;
+
             $db->update(
                 'gc_ro',
                 ['type' => $newType, 'data' => json_encode($edge->data)],
