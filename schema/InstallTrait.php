@@ -230,7 +230,7 @@ trait InstallTrait
         $table->addColumn('timezone', 'string', ['length' => 3]);
         $table->addColumn('seats', 'integer', ['notnull' => false]);
         $table->addColumn('available_seats', 'integer', ['notnull' => false]);
-        $table->addColumn('loc_country', 'string');
+        $table->addColumn('loc_country', 'string', ['notnull' => false]);
         $table->addColumn('loc_administrative_area', 'string', ['notnull' => false]);
         $table->addColumn('loc_sub_administrative_area', 'string', ['notnull' => false]);
         $table->addColumn('loc_locality', 'string', ['notnull' => false]);
