@@ -15,6 +15,8 @@ class PortalHelper
     const FEATURE_SEND_WELCOME_EMAIL           = 'send_welcome_email';
     const FEATURE_SEND_WELCOME_EMAIL_DEFAULT   = true;
     const FEATURE_CUSTOM_SMTP                  = 'custom_smtp';
+    const FEATURE_CREDIT_REQUEST               = 'credit_request';
+    const FEATURE_CREDIT_REQUEST_DEFAULT       = false;
     const FEATURE_NOTIFY_NEW_ENROLMENT         = 'notify_on_enrolment_create';
     const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
     const DEFAULT_USERS_LICENSES               = 10;

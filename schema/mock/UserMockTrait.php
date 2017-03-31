@@ -208,7 +208,7 @@ trait UserMockTrait
         );
     }
 
-    protected function link(Connection $db, $type, $sourceId, $targetId, $weight = 0, $data = null)
+    protected function link(Connection $db, $type, $sourceId, $targetId, $weight = 0, $data = null): int
     {
         $db->insert('gc_ro', [
             'type'      => $type,
