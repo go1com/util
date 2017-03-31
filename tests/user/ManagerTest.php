@@ -15,14 +15,15 @@ class ManagerTest extends UtilTestCase
     {
         // Setup data
         $userId = $this->createUser($this->db, ['instance' => 'accounts.gocatalyze.com', 'mail' => 'student@qa.mygo1.com']);
+        $accountId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com', 'mail' => 'student@qa.mygo1.com']);
         $managerUserId = $this->createUser($this->db, ['instance' => 'accounts.gocatalyze.com', 'mail' => 'manager@qa.mygo1.com']);
-        $managerAccountId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com', 'mail' => 'manager@qa.mygo1.com']);
-        EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $managerUserId, $managerAccountId);
-        EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_MANAGER, $userId, $managerAccountId);
+
+        EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId, $accountId);
+        EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_MANAGER, $accountId, $managerUserId);
 
         // Check
-        $this->assertTrue(ManagerHelper::isManager($this->db, 'qa.mygo1.com', $managerAccountId, $userId));
-        $this->assertFalse(ManagerHelper::isManager($this->db, 'qa.mygo1.com', $managerAccountId + 9, $userId));
-        $this->assertFalse(ManagerHelper::isManager($this->db, 'qa.mygo1.com', $managerAccountId, $userId + 9));
+        $this->assertTrue(ManagerHelper::isManager($this->db, 'qa.mygo1.com', $managerUserId, $userId));
+        $this->assertFalse(ManagerHelper::isManager($this->db, 'qa.mygo1.com', $managerUserId + 9, $userId));
+        $this->assertFalse(ManagerHelper::isManager($this->db, 'qa.mygo1.com', $managerUserId, $userId + 9));
     }
 }

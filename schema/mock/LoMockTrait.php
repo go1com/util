@@ -84,7 +84,6 @@ trait LoMockTrait
         ]);
 
         $courseId = $db->lastInsertId('gc_lo');
-
         if (!empty($options['price'])) {
             $db->insert('gc_lo_pricing', [
                 'id'           => $courseId,
