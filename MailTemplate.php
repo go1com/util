@@ -161,6 +161,22 @@ class MailTemplate
         ],
     ];
 
+    const CREDIT_REQUEST = [
+        'key'    => 'credit.request',
+        'tokens' => [
+            '!user_first_name'  => 'User first name',
+            '!full_name'        => 'User full name',
+            '!course_name'      => 'Course title',
+            '!site_name'        => 'Portal title',
+            '!pricing_price'    => 'Course price',
+            '!pricing_currency' => 'Course price currency',
+            '!course_url'       => 'Course URL',
+            '!approve_url'      => 'Credit approve URL',
+            '!reject_url'       => 'Credit reject URL',
+            '!portal_url'       => 'Portal URL',
+        ]
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
