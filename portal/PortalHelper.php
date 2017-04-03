@@ -48,6 +48,10 @@ class PortalHelper
                 if (!empty($portal->data->configuration)) {
                     $portal->configuration = $portal->data->configuration;
                     unset($portal->data->configuration);
+
+                    if (isset($portal->configuration->dashboard_blocks) && is_scalar($portal->configuration->dashboard_blocks)) {
+                        $portal->configuration->dashboard_blocks = json_decode($portal->configuration->dashboard_blocks);
+                    }
                 }
             }
         }
