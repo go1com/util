@@ -75,7 +75,7 @@ class Service
         }
     }
 
-    public static function ElasticSearchIndex()
+    public static function elasticSearchIndex()
     {
         !defined('ES_INDEX') && define('ES_INDEX', getenv('ES_INDEX') ?: 'go1_dev');
     }
