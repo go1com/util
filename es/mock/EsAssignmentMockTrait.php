@@ -83,7 +83,7 @@ trait EsAssignmentMockTrait
             'type'    => Schema::O_SUBMISSION_REVISION,
             'id'      => $revision['id'],
             'body'    => $revision,
-            'parent'  => null,
+            'parent'  => $options['submission_id'] ?? null,
             'refresh' => true
         ]);
     }
