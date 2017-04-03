@@ -74,4 +74,9 @@ class Service
             return [$service['target'], $service['port']];
         }
     }
+
+    public static function ElasticSearchIndex()
+    {
+        !defined('ES_INDEX') && define('ES_INDEX', getenv('ES_INDEX') ?: 'go1_dev');
+    }
 }
