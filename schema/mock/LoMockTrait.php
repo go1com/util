@@ -3,6 +3,7 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
@@ -144,22 +145,14 @@ trait LoMockTrait
             ] + $location
         );
 
-        $eventId = $db->lastInsertId('gc_event');
-        $eventId && self::createRo($db, $sourceId, $eventId, EdgeTypes::HAS_EVENT_EDGE);
-
+        if ($eventId = $db->lastInsertId('gc_event')) {
+            $db->insert('gc_ro', [
+                'source_id' => $sourceId,
+                'target_id' => $eventId,
+                'type'      => EdgeTypes::HAS_EVENT_EDGE,
+                'weight'    => 0
+            ]);
+        }
         return $eventId;
-    }
-
-    protected function createRo(Connection $db, $sourceId, $targetId, $type, $weight = 0, $data = null)
-    {
-        $db->insert('gc_ro', [
-            'source_id' => $sourceId,
-            'target_id' => $targetId,
-            'type'      => $type,
-            'weight'    => $weight,
-            'data'      => is_scalar($data) ? $data : json_encode($data),
-        ]);
-
-        return $db->lastInsertId('gc_ro');
     }
 }
