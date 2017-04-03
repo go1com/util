@@ -40,17 +40,20 @@ class Plan implements JsonSerializable
     /** @var  integer */
     public $status;
 
-    /** @var  DefaultDateTime */
+    /** @var DefaultDateTime */
     public $created;
 
-    /** @var  DefaultDateTime */
+    /** @var DefaultDateTime */
     public $due;
 
     /** @var object */
     public $data;
 
-    /** @var  Plan */
+    /** @var Plan */
     public $original;
+
+    /** @var bool */
+    public $notify = false;
 
     private function __construct()
     {
@@ -98,6 +101,7 @@ class Plan implements JsonSerializable
             'due_date'     => $this->due ? $this->due->format(DATE_ISO8601) : null,
             'data'         => $this->data,
             'original'     => $this->original,
+            'notify'       => $this->notify,
         ];
     }
 }
