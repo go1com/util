@@ -2,6 +2,7 @@
 
 namespace go1\util\schema\tests;
 
+use go1\clients\MailClient;
 use go1\clients\portal\config\MailTemplate;
 use go1\util\portal\PortalHelper;
 use go1\util\Queue;
@@ -33,7 +34,9 @@ class MailClientTest extends UtilTestCase
             ],
         ]);
 
-        $this->c['go1.client.mail']
+        /** @var MailClient $mailclient */
+        $mailClient = $this->c['go1.client.mail'];
+        $mailClient
             ->instance($this->db, $instance)
             ->post('foo@bar.com', new MailTemplate('subject', 'body', 'html'));
 
@@ -59,7 +62,9 @@ class MailClientTest extends UtilTestCase
     {
         $instanceId = $this->createInstance($this->db, ['title' => $instance = 'foo.bar']);
 
-        $this->c['go1.client.mail']
+        /** @var MailClient $mailclient */
+        $mailClient = $this->c['go1.client.mail'];
+        $mailClient
             ->instance($this->db, $instance)
             ->post('foo@bar.com', new MailTemplate('subject', 'body', 'html'));
 
@@ -82,7 +87,9 @@ class MailClientTest extends UtilTestCase
 
     public function testNoInstance()
     {
-        $this->c['go1.client.mail']->post('foo@bar.com', new MailTemplate('subject', 'body', 'html'));
+        /** @var MailClient $mailclient */
+        $mailClient = $this->c['go1.client.mail'];
+        $mailClient->post('foo@bar.com', new MailTemplate('subject', 'body', 'html'));
 
         $this->assertArrayHasKey(Queue::DO_MAIL_SEND, $this->queueMessages);
         $this->assertCount(1, $this->queueMessages[Queue::DO_MAIL_SEND]);
