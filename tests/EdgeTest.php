@@ -5,6 +5,7 @@ namespace go1\util\tests;
 use go1\clients\MqClient;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
+use go1\util\Queue;
 use PDO;
 use ReflectionClass;
 
@@ -12,6 +13,7 @@ class EdgeTest extends UtilTestCase
 {
     /** @var MqClient */
     protected $mqClient;
+    protected $edgeIds;
 
     public function setUp()
     {
@@ -20,14 +22,35 @@ class EdgeTest extends UtilTestCase
         $this->mqClient = $this->getMockBuilder(MqClient::class)->setMethods(['publish'])->disableOriginalConstructor()->getMock();
 
         // User has 3 accounts
-        EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 2, $weight = 0);
-        EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 3, $weight = 1);
-        EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 4, $weight = 2);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 2, $weight = 0);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 3, $weight = 1);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 4, $weight = 2);
 
         // Course has 3 modules
-        EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 2, $weight = 0);
-        EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 3, $weight = 1);
-        EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 4, $weight = 2);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 2, $weight = 0);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 3, $weight = 1);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 4, $weight = 2);
+    }
+
+    public function testLoad()
+    {
+        foreach ($this->edgeIds as $edgeId) {
+            $this->assertEquals($edgeId, EdgeHelper::load($this->db, $edgeId)->id);
+        }
+    }
+
+    public function testChangeType()
+    {
+        // Create an edge
+        $id = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_CREDIT_REQUEST, $sourceId = 1, $targetId = 2);
+
+        // Change its type
+        EdgeHelper::changeType($this->db, $this->queue, $id, EdgeTypes::HAS_CREDIT_REQUEST_REJECTED);
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_REJECTED, EdgeHelper::load($this->db, $id)->type);
+        $msg = &$this->queueMessages[Queue::RO_UPDATE][0];
+
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST, $msg->original->type);
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_REJECTED, $msg->type);
     }
 
     public function testNoDuplication()

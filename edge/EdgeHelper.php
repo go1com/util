@@ -12,6 +12,35 @@ class EdgeHelper
 {
     private $select;
 
+    public static function load(Connection $db, int $id)
+    {
+        $edge = 'SELECT * FROM gc_ro WHERE id = ?';
+        $edge = $db->executeQuery($edge, [$id])->fetch(DB::OBJ);
+        if ($edge) {
+            $edge->data = json_decode($edge->data) ?: (object) [];
+        }
+
+        return $edge;
+    }
+
+    public static function changeType(Connection $db, MqClient $queue, int $id, int $newType, $log = null)
+    {
+        if ($edge = self::load($db, $id)) {
+            $edge->original = clone $edge;
+            $edge->type = $newType;
+            $edge->data->oldType[$newType] = time();
+            ($log) && $edge->data->log[] = $log;
+
+            $db->update(
+                'gc_ro',
+                ['type' => $newType, 'data' => json_encode($edge->data)],
+                ['id' => $id]
+            );
+
+            $queue->publish($edge, Queue::RO_UPDATE);
+        }
+    }
+
     public static function select(string $select = null)
     {
         $helper = new self;
@@ -20,7 +49,7 @@ class EdgeHelper
         return $helper;
     }
 
-    public static function link(Connection $db, MqClient $queue, $type, $sourceId, $targetId, $weight = 0, $data = null, array $payload = [])
+    public static function link(Connection $db, MqClient $queue, $type, $sourceId, $targetId, $weight = 0, $data = null, array $payload = []): int
     {
         $db->insert('gc_ro', $edge = [
             'type'      => $type,
@@ -30,7 +59,10 @@ class EdgeHelper
             'data'      => is_scalar($data) ? $data : json_encode($data),
         ]);
 
+        $edge['id'] = $db->lastInsertId('gc_ro');
         $queue->publish(array_merge($edge, $payload), Queue::RO_CREATE);
+
+        return $edge['id'];
     }
 
     public static function hasLink(Connection $db, $type, $sourceId, $targetId)

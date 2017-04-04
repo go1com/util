@@ -63,22 +63,22 @@ trait UserMockTrait
         $accountProfileId = 11,
         $accountId = 1,
         $userProfileId = 911,
-        $userId = 91
+        $userId = 91,
+        $encode = true
     )
     {
-        return JWT::encode(
-            $this->getPayload([
-                'id'            => $accountId,
-                'accounts_name' => $accountName,
-                'instance_name' => $instanceName,
-                'profile_id'    => $accountProfileId,
-                'mail'          => $mail,
-                'roles'         => $roles,
-                'user_id'       => $userId,
-                'user_profile_id'   => $userProfileId
-            ]),
-            'private_key'
-        );
+        $payload = $this->getPayload([
+            'id'            => $accountId,
+            'accounts_name' => $accountName,
+            'instance_name' => $instanceName,
+            'profile_id'    => $accountProfileId,
+            'mail'          => $mail,
+            'roles'         => $roles,
+            'user_id'       => $userId,
+            'user_profile_id'   => $userProfileId
+        ]);
+
+        return $encode ? JWT::encode($payload, 'private_key') : $payload;
     }
 
     protected function getRootPayload()
@@ -216,7 +216,7 @@ trait UserMockTrait
         );
     }
 
-    protected function link(Connection $db, $type, $sourceId, $targetId, $weight = 0, $data = null)
+    protected function link(Connection $db, $type, $sourceId, $targetId, $weight = 0, $data = null): int
     {
         $db->insert('gc_ro', [
             'type'      => $type,

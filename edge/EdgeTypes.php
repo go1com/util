@@ -5,6 +5,7 @@ namespace go1\util\edge;
 /**
  * T: Target
  * S: Source
+ * W: Weight. There are hacks around this property, it's not always "weight" as its name.
  * N: Note
  */
 class EdgeTypes
@@ -84,7 +85,7 @@ class EdgeTypes
     const HAS_EVENT_EDGE              = 34; # T: gc_event.id          | S: gc_lo.id
     const HAS_GROUP_EDGE              = 35; # T: gc_social_group.id   | S: gc_user.id
     const AWARD_HAS_ITEM              = 36; # T: LO                   | S: award.                | data: { qty: INTEGER }
-    const HAS_CREDIT_REQUEST          = 37; # T: User (learner)       | S: LO                    | …
+    const HAS_CREDIT_REQUEST          = 37; # T: User (learner)       | S: LO                    | Weight: Manager ID — who will review.
     const HAS_CREDIT_REQUEST_DONE     = 38; # T: User (learner)       | S: LO                    | Weight: Manager ID — who paid.
     const HAS_CREDIT_REQUEST_REJECTED = 39; # T: User (learner)       | S: LO                    | Weight: Manager ID — who reject.
 
@@ -97,7 +98,7 @@ class EdgeTypes
     const  SCHEDULE_UNLOCK_LO_DONE                = 25; # T: Timestamp     | S: LO         | N: SCHEDULE_UNLOCK_LO record will be converted to this when it's processed.
     const  PUBLISH_ENROLMENT_LO_START_BASE        = 26; # T: Timestamp     | S: LO         | N: See GO1P-6926
     const  PUBLISH_ENROLMENT_LO_START_BASE_DONE   = 27; # T: Timestamp     | S: Enrolment  | N: HAS_LO_PUBLISH_ENROLMENT record will be converted to this when it's processed.
-    const  PUBLISH_ENROLMENT_SELF_START_BASE_CNF  = 28; # T: = self.SOURCE | S: LO         | N: type data struct { interval: string }
+    const  PUBLISH_ENROLMENT_SELF_START_BASE_CNF  = 28; # T: = self.SOURCE | S: LO         | N: type data structure { interval: string }
     const  PUBLISH_ENROLMENT_SELF_START_BASE      = 29; # T: Timestamp     | S: Enrolment  | N: See GO1P-6926
     const  PUBLISH_ENROLMENT_SELF_START_BASE_DONE = 30; # T: Timestamp     | S: Enrolment  | N: PUBLISH_ENROLMENT_SELF_START_BASE record will be coverted to this when it's processed.
 
@@ -111,7 +112,7 @@ class EdgeTypes
     const HAS_ACCOUNT                = 501; # T: User               | S: User
     const HAS_TUTOR_EDGE             = 502; # T: User (Tutor)       | S: gc_ro id - the record has source_id is course, target_id is (Module)
     const HAS_AUTHOR_EDGE            = 503; # T: User               | S: Learning object
-    const HAS_MANAGER                = 504; # T: User (Manager)     | S: gc_user.id of student
+    const HAS_MANAGER                = 504; # T: Account            | S: gc_user.id of student
     const HAS_EMAIL                  = 505; # T: gc_user_mail id    | S: gc_user id
     const HAS_TUTOR_ENROLMENT_EDGE   = 506; # T: gc_enrolment id    | S: gc_user id
     const HAS_SHARE_WITH             = 507; # T: Role ID            | S: Learning object
