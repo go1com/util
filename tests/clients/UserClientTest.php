@@ -5,7 +5,6 @@ namespace go1\util\schema\tests;
 use go1\clients\MqClient;
 use go1\util\Queue;
 use go1\util\tests\UtilTestCase;
-use PHPUnit_Framework_TestCase;
 
 class UserClientTest extends UtilTestCase
 {
