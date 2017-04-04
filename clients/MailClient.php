@@ -13,6 +13,7 @@ class MailClient
 {
     private $queue;
     private $instance;
+    private $instanceId;
 
     public function __construct(MqClient $queue)
     {
@@ -24,17 +25,18 @@ class MailClient
      *              ->instance($db, $instance)
      *              ->post(…);
      */
-    public function instance(Connection $db, $instance): MailClient
+    public function instance(Connection $db, $instance, $useSMTP = true): MailClient
     {
         $helper = new PortalChecker;
         $portal = is_object($instance) ? $instance : $helper->load($db, $instance);
         if ($portal) {
-            if ($helper->useCustomSMTP($portal)) {
-                $client = clone $this;
+            $client = clone $this;
+            $client->instanceId = $portal->id;
+            if ($useSMTP && $helper->useCustomSMTP($portal)) {
                 $client->instance = $portal->title;
-
-                return $client;
             }
+
+            return $client;
         }
 
         return $this;
@@ -42,7 +44,7 @@ class MailClient
 
     public function post($recipient, Template $template, array $context = [], array $options = [], $attachments = [], $cc = [], $bcc = [])
     {
-        return $this->send(null, $recipient, $template->getSubject(), $template->getBody(), $template->getHtml(), $context, $options, $attachments, $cc, $bcc);
+        $this->send(null, $recipient, $template->getSubject(), $template->getBody(), $template->getHtml(), $context, $options, $attachments, $cc, $bcc);
     }
 
     /**
@@ -54,6 +56,10 @@ class MailClient
 
         if ($this->instance) {
             $data['instance'] = $this->instance;
+        }
+
+        if ($this->instanceId) {
+            $data['from_instance'] = $this->instanceId;
         }
 
         $data += [
