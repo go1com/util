@@ -25,14 +25,14 @@ class MailClient
      *              ->instance($db, $instance)
      *              ->post(…);
      */
-    public function instance(Connection $db, $instance, $useSMTP = true): MailClient
+    public function instance(Connection $db, $instance): MailClient
     {
         $helper = new PortalChecker;
         $portal = is_object($instance) ? $instance : $helper->load($db, $instance);
         if ($portal) {
             $client = clone $this;
             $client->instanceId = $portal->id;
-            if ($useSMTP && $helper->useCustomSMTP($portal)) {
+            if ($helper->useCustomSMTP($portal)) {
                 $client->instance = $portal->title;
             }
 
