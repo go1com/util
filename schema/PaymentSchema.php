@@ -14,7 +14,9 @@ class PaymentSchema
         $localTransactionId->addColumn('instance_id', 'integer', ['unsigned' => true]);
         $localTransactionId->addColumn('local_id', 'integer', ['unsigned' => true]);
         $localTransactionId->setPrimaryKey(['transaction_id']);
-        $localTransactionId->addIndex(['instance_id', 'local_id']);
+        $localTransactionId->addUniqueIndex(['instance_id', 'local_id']);
+        $localTransactionId->addIndex(['instance_id']);
+        $localTransactionId->addIndex(['local_id']);
 
         $txn = $schema->createTable('payment_transaction');
         $txn->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
