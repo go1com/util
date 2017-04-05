@@ -3,7 +3,6 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
-use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;

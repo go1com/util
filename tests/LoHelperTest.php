@@ -2,6 +2,7 @@
 
 namespace go1\util\tests;
 
+use DateTime;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoHelper;
 use go1\util\schema\mock\InstanceMockTrait;
@@ -51,5 +52,38 @@ class LoHelperTest extends UtilTestCase
             $result = $html->purify(trim($input), LoHelper::descriptionPurifierConfig());
             $this->assertEquals($expect, $result);
         }
+    }
+
+    public function testLoadEvent()
+    {
+        $courseId = $this->createCourse($this->db, ['event' => [
+            'start' => $start = (new DateTime('+1 day'))->format(DATE_ISO8601),
+            'end'   => $end = (new DateTime('+2 days'))->format(DATE_ISO8601),
+        ]]);
+        $lo = LoHelper::load($this->db, $courseId);
+        $this->assertNotEmpty($lo->event);
+        $this->assertEquals($start, $lo->event->start);
+        $this->assertEquals($end, $lo->event->end);
+    }
+    public function testLoadEventLegacy()
+    {
+        $courseId = $this->createCourse($this->db);
+        $this->db->update('gc_lo',
+            ['event' => json_encode([
+                'start' => $start = (new DateTime('+1 day'))->format(DATE_ISO8601),
+                'end'   => $end = (new DateTime('+2 days'))->format(DATE_ISO8601),
+            ])],
+            ['id' => $courseId]
+        );
+        $lo = LoHelper::load($this->db, $courseId);
+        $this->assertNotEmpty($lo->event);
+        $this->assertEquals($start, $lo->event->start);
+        $this->assertEquals($end, $lo->event->end);
+    }
+    public function testLoadNoEvent()
+    {
+        $courseId = $this->createCourse($this->db);
+        $lo = LoHelper::load($this->db, $courseId);
+        $this->assertEquals((object) [], $lo->event);
     }
 }
