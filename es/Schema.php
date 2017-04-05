@@ -21,18 +21,19 @@ class Schema
     const T_OBJECT  = 'object';
     const T_NESTED  = 'nested';
 
-    const O_EDGE                    = 'edge';
-    const O_PORTAL                  = 'portal';
-    const O_CONFIG                  = 'configuration';
-    const O_USER                    = 'user';
-    const O_ACCOUNT                 = 'account';
-    const O_LO                      = 'lo';
-    const O_PLAN                    = 'plan';
-    const O_ENROLMENT               = 'enrolment';
-    const O_SUBMISSION              = 'asm_submission';
-    const O_SUBMISSION_REVISION     = 'asm_submission_revision';
-    const O_GROUP                   = 'group';
-    const O_MAIL                    = 'mail';
+    const O_EDGE                = 'edge';
+    const O_PORTAL              = 'portal';
+    const O_CONFIG              = 'configuration';
+    const O_USER                = 'user';
+    const O_ACCOUNT             = 'account';
+    const O_LO                  = 'lo';
+    const O_PLAN                = 'plan';
+    const O_ENROLMENT           = 'enrolment';
+    const O_SUBMISSION          = 'asm_submission';
+    const O_SUBMISSION_REVISION = 'asm_submission_revision';
+    const O_GROUP               = 'group';
+    const O_MAIL                = 'mail';
+    const O_PAYMENT_TRANSACTION = 'payment_transaction';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -45,25 +46,26 @@ class Schema
     ];
 
     const MAPPING = [
-        self::O_EDGE                    => self::EDGE_MAPPING,
-        self::O_PORTAL                  => self::PORTAL_MAPPING,
-        self::O_CONFIG                  => self::CONFIGURATION_MAPPING,
-        self::O_USER                    => self::USER_MAPPING,
-        self::O_ACCOUNT                 => self::ACCOUNT_MAPPING,
-        self::O_LO                      => self::LO_MAPPING,
-        self::O_PLAN                    => self::PLAN_MAPPING,
-        self::O_ENROLMENT               => self::ENROLMENT_MAPPING,
-        self::O_SUBMISSION              => self::SUBMISSION_MAPPING,
-        self::O_SUBMISSION_REVISION     => self::SUBMISSION_REVISION_MAPPING,
-        self::O_GROUP                   => self::GROUP_MAPPING,
-        self::O_MAIL                    => self::MAIL_MAPPING,
+        self::O_EDGE                => self::EDGE_MAPPING,
+        self::O_PORTAL              => self::PORTAL_MAPPING,
+        self::O_CONFIG              => self::CONFIGURATION_MAPPING,
+        self::O_USER                => self::USER_MAPPING,
+        self::O_ACCOUNT             => self::ACCOUNT_MAPPING,
+        self::O_LO                  => self::LO_MAPPING,
+        self::O_PLAN                => self::PLAN_MAPPING,
+        self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
+        self::O_SUBMISSION          => self::SUBMISSION_MAPPING,
+        self::O_SUBMISSION_REVISION => self::SUBMISSION_REVISION_MAPPING,
+        self::O_GROUP               => self::GROUP_MAPPING,
+        self::O_MAIL                => self::MAIL_MAPPING,
+        self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
     ];
 
     const ANALYZED = [
         'fields' => [
             'analyzed' => [
-                'type' => self::T_TEXT
-            ]
+                'type' => self::T_TEXT,
+            ],
         ],
     ];
 
@@ -224,14 +226,14 @@ class Schema
         '_parent'    => ['type' => self::O_ENROLMENT],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'            => ['type' => self::T_INT],
-            'revision_id'   => ['type' => self::T_INT],
-            'profile_id'    => ['type' => self::T_INT],
-            'status'        => ['type' => self::T_SHORT],
-            'created'       => ['type' => self::T_DATE],
-            'updated'       => ['type' => self::T_DATE],
-            'published'     => ['type' => self::T_BOOL],
-            'assessors'     => ['type' => self::T_INT],
+            'id'          => ['type' => self::T_INT],
+            'revision_id' => ['type' => self::T_INT],
+            'profile_id'  => ['type' => self::T_INT],
+            'status'      => ['type' => self::T_SHORT],
+            'created'     => ['type' => self::T_DATE],
+            'updated'     => ['type' => self::T_DATE],
+            'published'   => ['type' => self::T_BOOL],
+            'assessors'   => ['type' => self::T_INT],
         ],
     ];
 
@@ -240,11 +242,11 @@ class Schema
         '_parent'    => ['type' => self::O_SUBMISSION],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'            => ['type' => self::T_INT],
-            'status'        => ['type' => self::T_SHORT],
-            'created'       => ['type' => self::T_DATE],
-            'updated'       => ['type' => self::T_DATE],
-            'data'          => ['type' => self::T_OBJECT],
+            'id'      => ['type' => self::T_INT],
+            'status'  => ['type' => self::T_SHORT],
+            'created' => ['type' => self::T_DATE],
+            'updated' => ['type' => self::T_DATE],
+            'data'    => ['type' => self::T_OBJECT],
         ],
     ];
 
@@ -253,12 +255,12 @@ class Schema
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'            => ['type' => self::T_INT],
-            'title'         => ['type' => self::T_KEYWORD],
-            'user_id'       => ['type' => self::T_INT],
-            'visibility'    => ['type' => self::T_SHORT],
-            'created'       => ['type' => self::T_DATE],
-            'updated'       => ['type' => self::T_DATE],
+            'id'         => ['type' => self::T_INT],
+            'title'      => ['type' => self::T_KEYWORD],
+            'user_id'    => ['type' => self::T_INT],
+            'visibility' => ['type' => self::T_SHORT],
+            'created'    => ['type' => self::T_DATE],
+            'updated'    => ['type' => self::T_DATE],
         ],
     ];
 
@@ -267,18 +269,33 @@ class Schema
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'            => ['type' => self::T_INT],
-            'recipient'     => ['type' => self::T_KEYWORD],
-            'sender'        => ['type' => self::T_KEYWORD],
-            'cc'            => ['type' => self::T_KEYWORD],
-            'bcc'           => ['type' => self::T_KEYWORD],
-            'subject'       => ['type' => self::T_KEYWORD],
-            'body'          => ['type' => self::T_TEXT],
-            'html'          => ['type' => self::T_TEXT],
-            'context'       => ['type' => self::T_OBJECT],
-            'options'       => ['type' => self::T_OBJECT],
-            'attachments'   => ['type' => self::T_OBJECT],
-            'timestamp'     => ['type' => self::T_DATE],
+            'id'          => ['type' => self::T_INT],
+            'recipient'   => ['type' => self::T_KEYWORD],
+            'sender'      => ['type' => self::T_KEYWORD],
+            'cc'          => ['type' => self::T_KEYWORD],
+            'bcc'         => ['type' => self::T_KEYWORD],
+            'subject'     => ['type' => self::T_KEYWORD],
+            'body'        => ['type' => self::T_TEXT],
+            'html'        => ['type' => self::T_TEXT],
+            'context'     => ['type' => self::T_OBJECT],
+            'options'     => ['type' => self::T_OBJECT],
+            'attachments' => ['type' => self::T_OBJECT],
+            'timestamp'   => ['type' => self::T_DATE],
+        ],
+    ];
+
+    const PAYMENT_TRANSACTION_MAPPING = [
+        'properties' => [
+            'id'             => ['type' => self::T_INT],
+            'local_id'       => ['type' => self::T_INT],
+            'email'          => ['type' => self::T_TEXT],
+            'status'         => ['type' => self::T_FLOAT],
+            'amount'         => ['type' => self::T_FLOAT],
+            'currency'       => ['type' => self::T_TEXT],
+            'data'           => ['type' => self::T_OBJECT],
+            'created'        => ['type' => self::T_DATE],
+            'updated'        => ['type' => self::T_DATE],
+            'payment_method' => ['type' => self::T_TEXT],
         ],
     ];
 }
