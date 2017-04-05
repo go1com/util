@@ -37,10 +37,6 @@ trait InstallTrait
         !$schema->hasTable('gc_user_filter') && $this->createUserFilterTable($schema);
 
         if (!$coreOnly) {
-            $this->createUserStreamTable($schema);
-            $this->createUserStreamCommentTable($schema);
-            $this->createUserStreamFlagTable($schema);
-
             !$schema->hasTable('social_group') && $this->createSocialGroup($schema);
             !$schema->hasTable('social_group_item') && $this->createSocialGroupItem($schema);
             !$schema->hasTable('gc_note') && $this->createNoteTable($schema);
