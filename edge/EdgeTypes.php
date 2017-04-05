@@ -112,7 +112,7 @@ class EdgeTypes
     const HAS_ACCOUNT                = 501; # T: User               | S: User
     const HAS_TUTOR_EDGE             = 502; # T: User (Tutor)       | S: gc_ro id - the record has source_id is course, target_id is (Module)
     const HAS_AUTHOR_EDGE            = 503; # T: User               | S: Learning object
-    const HAS_MANAGER                = 504; # T: Account            | S: gc_user.id of student
+    const HAS_MANAGER                = 504; # T: Account of manager | S: gc_user.id of student
     const HAS_EMAIL                  = 505; # T: gc_user_mail id    | S: gc_user id
     const HAS_TUTOR_ENROLMENT_EDGE   = 506; # T: gc_enrolment id    | S: gc_user id
     const HAS_SHARE_WITH             = 507; # T: Role ID            | S: Learning object
