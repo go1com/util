@@ -3,6 +3,8 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\edge\EdgeHelper;
+use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
@@ -40,10 +42,6 @@ trait LoMockTrait
 
     public function createLO(Connection $db, array $options = [])
     {
-        if ($event = json_decode(isset($options['event']) ? $options['event'] : 'NULL')) {
-            $start = !isset($event->start) ? 0 : (is_numeric($event->start) ? $event->start : strtotime($event->start));
-        }
-
         if (isset($options['locale'])) {
             if (is_array($options['locale'])) {
                 $locale = [];
@@ -69,8 +67,6 @@ trait LoMockTrait
             'private'     => isset($options['private']) ? $options['private'] : 0,
             'published'   => isset($options['published']) ? $options['published'] : 1,
             'language'    => isset($options['language']) ? $options['language'] : 'en',
-            'event'       => isset($options['event']) ? $options['event'] : '',
-            'event_start' => isset($start) ? $start : 0,
             'tags'        => isset($options['tags']) ? $options['tags'] : '',
             'locale'      => isset($locale) ? $locale : null,
             'marketplace' => isset($options['marketplace']) ? $options['marketplace'] : 0,
@@ -84,7 +80,6 @@ trait LoMockTrait
         ]);
 
         $courseId = $db->lastInsertId('gc_lo');
-
         if (!empty($options['price'])) {
             $db->insert('gc_lo_pricing', [
                 'id'           => $courseId,
@@ -104,6 +99,10 @@ trait LoMockTrait
             }
         }
 
+        if (!empty($options['event'])) {
+            self::createEvent($db, $courseId, $options['event']);
+        }
+
         return $courseId;
     }
 
@@ -114,5 +113,45 @@ trait LoMockTrait
             : $db->insert('gc_tag', ['instance_id' => $instanceId, 'title' => $tag, 'parent_id' => $parentId, 'timestamp' => time()]);
 
         return $id ? $id : $db->lastInsertId('gc_tag');
+    }
+
+    protected function createEvent(Connection $db, int $sourceId, array $event)
+    {
+        $location = empty($event['location'])
+            ? []
+            : [
+                'loc_country'                 => $event['location']['country'],
+                'loc_administrative_area'     => $event['location']['administrative_area'],
+                'loc_sub_administrative_area' => $event['location']['sub_administrative_area'],
+                'loc_locality'                => $event['location']['locality'],
+                'loc_dependent_locality'      => $event['location']['dependent_locality'],
+                'loc_thoroughfare'            => $event['location']['thoroughfare'],
+                'loc_premise'                 => $event['location']['premise'],
+                'loc_sub_premise'             => $event['location']['sub_premise'],
+                'loc_organisation_name'       => $event['location']['organisation_name'],
+                'loc_name_line'               => $event['location']['name_line'],
+                'loc_postal_code'             => $event['location']['postal_code'],
+            ];
+
+        $db->insert('gc_event', [
+                'start'     => $event['start'],
+                'end'       => isset($event['end']) ? $event['end'] : null,
+                'timezone'  => isset($event['timezone']) ? $event['timezone'] : 'UTC',
+                'seats'     => isset($event['seats']) ? $event['seats'] : 0,
+                'created'   => time(),
+                'updated'   => time(),
+                'data'      => isset($event['data']) ? (is_scalar($event['data']) ? $event['data'] : json_encode($event['data'])) : '',
+            ] + $location
+        );
+
+        if ($eventId = $db->lastInsertId('gc_event')) {
+            $db->insert('gc_ro', [
+                'source_id' => $sourceId,
+                'target_id' => $eventId,
+                'type'      => EdgeTypes::HAS_EVENT_EDGE,
+                'weight'    => 0
+            ]);
+        }
+        return $eventId;
     }
 }

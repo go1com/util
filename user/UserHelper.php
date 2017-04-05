@@ -200,6 +200,11 @@ class UserHelper
             : [];
     }
 
+    public static function roleId(Connection $db, string $roleName, string $instance)
+    {
+        return $db->fetchColumn('SELECT id FROM gc_role WHERE name = ? AND instance = ?', [$roleName, $instance]);
+    }
+
     public static function userInstanceIds(Connection $db, string $mail): array
     {
         $sql = 'SELECT gc_instance.id FROM gc_instance ';
