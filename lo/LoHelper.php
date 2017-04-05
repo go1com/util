@@ -63,10 +63,19 @@ class LoHelper
             ];
             unset($lo->price, $lo->currency, $lo->tax, $lo->tax_included);
 
-            $lo->event = empty($lo->event) ? (object) [] : json_decode($lo->event);
+            $lo->event = static::getEvent($db, $lo->id) ?: (empty($lo->event) ? (object) [] : json_decode($lo->event));
         }
 
         return $learningObjects;
+    }
+
+    public static function getEvent(Connection $db, int $loId)
+    {
+        $sql = "SELECT e.* FROM gc_event e";
+        $sql .= "   INNER JOIN gc_ro r ON e.id = r.target_id";
+        $sql .= "   WHERE r.source_id = ? AND r.type = ?";
+
+        return $db->executeQuery($sql, [$loId, EdgeTypes::HAS_EVENT_EDGE])->fetch(DB::OBJ);
     }
 
     public static function findIds(array &$items, array &$ids = [])
