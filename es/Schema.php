@@ -293,7 +293,7 @@ class Schema
             'id'             => ['type' => self::T_INT],
             'local_id'       => ['type' => self::T_INT],
             'email'          => ['type' => self::T_TEXT],
-            'status'         => ['type' => self::T_FLOAT],
+            'status'         => ['type' => self::T_SHORT],
             'amount'         => ['type' => self::T_FLOAT],
             'currency'       => ['type' => self::T_TEXT],
             'data'           => ['type' => self::T_OBJECT],
