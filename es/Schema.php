@@ -246,7 +246,11 @@ class Schema
             'status'  => ['type' => self::T_SHORT],
             'created' => ['type' => self::T_DATE],
             'updated' => ['type' => self::T_DATE],
-            'data'    => ['type' => self::T_OBJECT],
+            'data'    => [
+                'properties' => [
+                    'files'   => ['type' => self::T_OBJECT],
+                ]
+            ],
         ],
     ];
 
