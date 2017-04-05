@@ -9,10 +9,12 @@ class PaymentSchema
     public static function install(Schema $schema)
     {
         // Custom index for each portal.
-        $localTransactionId = $schema->createTable('payment_portal_id');
+        $localTransactionId = $schema->createTable('payment_local_id');
         $localTransactionId->addColumn('transaction_id', 'integer', ['unsigned' => true]);
-        $localTransactionId->addColumn('local_id', 'integer');
+        $localTransactionId->addColumn('instance_id', 'integer', ['unsigned' => true]);
+        $localTransactionId->addColumn('local_id', 'integer', ['unsigned' => true]);
         $localTransactionId->setPrimaryKey(['transaction_id']);
+        $localTransactionId->addIndex(['instance_id', 'local_id']);
 
         $txn = $schema->createTable('payment_transaction');
         $txn->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
