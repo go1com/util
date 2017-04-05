@@ -28,7 +28,7 @@ abstract class UtilTestCase extends TestCase
     public function setUp()
     {
         $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
-        $this->installGo1Schema($this->db);
+        $this->installGo1Schema($this->db, false);
 
         $this->queue = $this->getMockBuilder(MqClient::class)->setMethods(['publish'])->disableOriginalConstructor()->getMock();
         $this
