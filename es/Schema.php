@@ -29,7 +29,6 @@ class Schema
     const O_LO                      = 'lo';
     const O_PLAN                    = 'plan';
     const O_ENROLMENT               = 'enrolment';
-    const O_ASSIGNMENT              = 'asm_assignment';
     const O_SUBMISSION              = 'asm_submission';
     const O_SUBMISSION_REVISION     = 'asm_submission_revision';
     const O_GROUP                   = 'group';
@@ -54,7 +53,6 @@ class Schema
         self::O_LO                      => self::LO_MAPPING,
         self::O_PLAN                    => self::PLAN_MAPPING,
         self::O_ENROLMENT               => self::ENROLMENT_MAPPING,
-        self::O_ASSIGNMENT              => self::ASSIGNMENT_MAPPING,
         self::O_SUBMISSION              => self::SUBMISSION_MAPPING,
         self::O_SUBMISSION_REVISION     => self::SUBMISSION_REVISION_MAPPING,
         self::O_GROUP                   => self::GROUP_MAPPING,
@@ -221,26 +219,9 @@ class Schema
         ],
     ];
 
-    const ASSIGNMENT_MAPPING = [
-        //'_source'    => ['enabled' => true],
-        '_parent'    => ['type' => self::O_LO],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'          => ['type' => self::T_INT],
-            'user_id'     => ['type' => self::T_INT],
-            'module_id'   => ['type' => self::T_INT],
-            'created'     => ['type' => self::T_DATE],
-            'updated'     => ['type' => self::T_DATE],
-            'published'   => ['type' => self::T_BOOL],
-            'title'       => ['type' => self::T_KEYWORD],
-            'description' => ['type' => self::T_TEXT],
-            'data'        => ['type' => self::T_OBJECT],
-        ],
-    ];
-
     const SUBMISSION_MAPPING = [
         //'_source'    => ['enabled' => true],
-        '_parent'    => ['type' => self::O_ASSIGNMENT],
+        '_parent'    => ['type' => self::O_ENROLMENT],
         '_routing'   => ['required' => true],
         'properties' => [
             'id'            => ['type' => self::T_INT],
