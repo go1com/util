@@ -32,7 +32,8 @@ trait EsEnrolmentMockTrait
             'type'    => Schema::O_ENROLMENT,
             'id'      => $enrolment['id'],
             'body'    => $enrolment,
-            'parent'  => null,
+            'parent'  => $options['lo_id'] ?? 0,
+            'refresh' => true
         ]);
     }
 }
