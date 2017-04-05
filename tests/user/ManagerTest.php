@@ -4,14 +4,17 @@ namespace go1\util\tests;
 
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
+use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\user\ManagerHelper;
+use go1\util\user\Roles;
 
 class ManagerTest extends UtilTestCase
 {
+    use InstanceMockTrait;
     use UserMockTrait;
 
-    public function test()
+    public function testIsManagerOfUser()
     {
         // Setup data
         $userId = $this->createUser($this->db, ['instance' => 'accounts.gocatalyze.com', 'mail' => 'student@qa.mygo1.com']);
@@ -22,8 +25,21 @@ class ManagerTest extends UtilTestCase
         EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_MANAGER, $accountId, $managerUserId);
 
         // Check
-        $this->assertTrue(ManagerHelper::isManager($this->db, 'qa.mygo1.com', $managerUserId, $userId));
-        $this->assertFalse(ManagerHelper::isManager($this->db, 'qa.mygo1.com', $managerUserId + 9, $userId));
-        $this->assertFalse(ManagerHelper::isManager($this->db, 'qa.mygo1.com', $managerUserId, $userId + 9));
+        $this->assertTrue(ManagerHelper::isManagerOfUser($this->db, 'qa.mygo1.com', $managerUserId, $userId));
+        $this->assertFalse(ManagerHelper::isManagerOfUser($this->db, 'qa.mygo1.com', $managerUserId + 9, $userId));
+        $this->assertFalse(ManagerHelper::isManagerOfUser($this->db, 'qa.mygo1.com', $managerUserId, $userId + 9));
+    }
+
+    public function testIsManagerUser()
+    {
+        // Setup data
+        $this->createInstance($this->db, ['title' => 'az.mygo1.com']);
+        $managerRoleId = $this->createRole($this->db, ['instance' => 'az.mygo1.com', 'name' => Roles::MANAGER]);
+        $managerAccountId = $this->createUser($this->db, ['instance' => 'az.mygo1.com', 'mail' => 'manager@qa.mygo1.com']);
+        EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ROLE, $managerAccountId, $managerRoleId);
+
+        // Check
+        $this->assertTrue(ManagerHelper::isManagerUser($this->db, $managerAccountId, 'az.mygo1.com'));
+        $this->assertFalse(ManagerHelper::isManagerUser($this->db, $managerAccountId,'qa.mygo1.com'));
     }
 }

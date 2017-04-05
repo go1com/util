@@ -8,16 +8,25 @@ use go1\util\edge\EdgeTypes;
 
 class ManagerHelper
 {
-    public static function isManager(Connection $db, string $instance, int $managerUserId, int $userId): bool
+    public static function isManagerOfUser(Connection $db, string $instance, int $managerUserId, int $studentId): bool
     {
         # From instance & user ID, we find account ID.
-        $accountId = 'SELECT u.mail FROM gc_user u WHERE u.id = ?';
-        $accountId = 'SELECT a.id FROM gc_user a WHERE a.instance = ? AND mail = (' . $accountId . ')';
-        $accountId = (int) $db->fetchColumn($accountId, [$instance, $userId]);
-        if (!$accountId) {
+        $studentAccountId = 'SELECT u.mail FROM gc_user u WHERE u.id = ?';
+        $studentAccountId = 'SELECT a.id FROM gc_user a WHERE a.instance = ? AND mail = (' . $studentAccountId . ')';
+        $studentAccountId = (int) $db->fetchColumn($studentAccountId, [$instance, $studentId]);
+        if (!$studentAccountId) {
             return false;
         }
 
-        return EdgeHelper::hasLink($db, EdgeTypes::HAS_MANAGER, $accountId, $managerUserId);
+        return EdgeHelper::hasLink($db, EdgeTypes::HAS_MANAGER, $studentAccountId, $managerUserId);
+    }
+
+    public static function isManagerUser(Connection $db, int $managerAccountId, string $instance): bool
+    {
+        if (!$roleId = UserHelper::roleId($db, Roles::MANAGER, $instance)) {
+            return false;
+        }
+
+        return EdgeHelper::hasLink($db, EdgeTypes::HAS_ROLE, $managerAccountId, $roleId);
     }
 }
