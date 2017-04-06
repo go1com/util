@@ -218,6 +218,7 @@ class Schema
             'start_date' => ['type' => self::T_DATE],
             'end_date'   => ['type' => self::T_DATE],
             'changed'    => ['type' => self::T_DATE],
+            'duration'   => ['type' => self::T_INT],
         ],
     ];
 
