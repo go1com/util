@@ -204,7 +204,7 @@ class Schema
      */
     const ENROLMENT_MAPPING = [
         //'_source'    => ['enabled' => true],
-        '_parent'    => ['type' => self::O_LO],
+        '_parent'    => ['type' => self::O_ACCOUNT],
         '_routing'   => ['required' => true],
         'properties' => [
             'id'         => ['type' => self::T_INT],
@@ -221,6 +221,9 @@ class Schema
             // Duration between end date and start date (hours).
             // @todo Support quiz and interactive.
             'duration'   => ['type' => self::T_INT],
+            'lo'         => [
+                'properties' => self::LO_MAPPING['properties']
+            ]
         ],
     ];
 
