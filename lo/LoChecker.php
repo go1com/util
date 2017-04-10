@@ -58,7 +58,7 @@ class LoChecker
     public function canCreate(Connection $db, string $instanceName, Request $req): bool
     {
         $accessChecker = new AccessChecker();
-        if ($this->access($accessChecker, $req, $instanceName)) {
+        if ($accessChecker->isPortalTutor($req, $instanceName)) {
             return true;
         }
 
@@ -74,7 +74,7 @@ class LoChecker
     public function canUpdate(Connection $db, int $id, string $instanceName, Request $req)
     {
         $accessChecker = new AccessChecker();
-        if ($this->access($accessChecker, $req, $instanceName)) {
+        if ($accessChecker->isPortalTutor($req, $instanceName)) {
             return true;
         }
 
