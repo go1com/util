@@ -114,7 +114,7 @@ class EdgeHelper
         return self::edges($db, [], $targetIds, $types);
     }
 
-    private static function edges(Connection $db, array $sourceIds = [], array $targetIds = [], array $types = [])
+    public static function edges(Connection $db, array $sourceIds = [], array $targetIds = [], array $types = [])
     {
         return self::select('*')->get($db, $sourceIds, $targetIds, $types);
     }
