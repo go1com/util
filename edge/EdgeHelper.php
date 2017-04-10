@@ -70,7 +70,7 @@ class EdgeHelper
         return $db->fetchColumn('SELECT 1 FROM gc_ro WHERE type = ? AND source_id = ? AND target_id = ?', [$type, $sourceId, $targetId]);
     }
 
-    public static function unlink(Connection $db, MqClient $queue, $type, $sourceId = null, $targetId = null)
+    public static function unlink(Connection $db, MqClient $queue, $type, $sourceId = null, $targetId = null, $weight = null)
     {
         if (!$sourceId && !$targetId) {
             throw new BadFunctionCallException('Require source or target.');
@@ -84,6 +84,8 @@ class EdgeHelper
 
         $sourceId && $q->andWhere('source_id = :source_id')->setParameter(':source_id', $sourceId);
         $targetId && $q->andWhere('target_id = :target_id')->setParameter(':target_id', $targetId);
+        $weight && $q->andWhere('weight = :weight')->setParameter(':weight', $weight);
+
         $q = $q->execute();
 
         while ($row = $q->fetch(DB::OBJ)) {
