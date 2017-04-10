@@ -35,6 +35,11 @@ class PortalHelper
         return $portal;
     }
 
+    public static function updateVersion(Connection $db, string $version, $portalId)
+    {
+        $db->update('gc_instance', ['version' => $version], ['id' => $portalId]);
+    }
+
     public static function nameFromId(Connection $db, int $id)
     {
         return $db->fetchColumn('SELECT title FROM gc_instance WHERE id = ?', [$id]);
