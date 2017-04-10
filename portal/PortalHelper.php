@@ -3,7 +3,9 @@
 namespace go1\util\portal;
 
 use Doctrine\DBAL\Connection;
+use go1\clients\MqClient;
 use go1\util\DB;
+use go1\util\Queue;
 use stdClass;
 
 class PortalHelper
@@ -35,9 +37,10 @@ class PortalHelper
         return $portal;
     }
 
-    public static function updateVersion(Connection $db, string $version, $portalId)
+    public static function updateVersion(Connection $db, MqClient $queue, string $version, $portalId)
     {
         $db->update('gc_instance', ['version' => $version], ['id' => $portalId]);
+        $queue->publish(['id' => $portalId, 'version' => $version], Queue::PORTAL_UPDATE);
     }
 
     public static function nameFromId(Connection $db, int $id)
