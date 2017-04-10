@@ -3,6 +3,7 @@
 namespace go1\util\tests;
 
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use go1\clients\MqClient;
 use go1\util\schema\InstallTrait;
@@ -19,6 +20,7 @@ abstract class UtilTestCase extends TestCase
     use InstallTrait;
     use UserMockTrait;
 
+    /** @var  Connection */
     protected $db;
     protected $queue;
     protected $queueMessages;
@@ -26,7 +28,7 @@ abstract class UtilTestCase extends TestCase
     public function setUp()
     {
         $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
-        $this->installGo1Schema($this->db);
+        $this->installGo1Schema($this->db, false);
 
         $this->queue = $this->getMockBuilder(MqClient::class)->setMethods(['publish'])->disableOriginalConstructor()->getMock();
         $this

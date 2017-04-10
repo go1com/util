@@ -21,6 +21,7 @@ use go1\clients\UserClient;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
 use GraphAware\Neo4j\Client\ClientBuilder;
+use Elasticsearch\ClientBuilder as EsClientBuilder;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Vectorface\Whip\Whip;
@@ -57,6 +58,13 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.queue'] = function (Container $c) {
             return new QueueClient($c['client'], $c['queue_url']);
+        };
+
+        $c['go1.client.es'] = function (Container $c) {
+            return EsClientBuilder
+                ::create()
+                ->setHosts([parse_url($c['es_url'])])
+                ->build();
         };
 
         $c['go1.client.user'] = function (Container $c) {

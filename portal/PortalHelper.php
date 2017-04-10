@@ -15,6 +15,8 @@ class PortalHelper
     const FEATURE_SEND_WELCOME_EMAIL           = 'send_welcome_email';
     const FEATURE_SEND_WELCOME_EMAIL_DEFAULT   = true;
     const FEATURE_CUSTOM_SMTP                  = 'custom_smtp';
+    const FEATURE_CREDIT_REQUEST               = 'credit_request';
+    const FEATURE_CREDIT_REQUEST_DEFAULT       = false;
     const FEATURE_NOTIFY_NEW_ENROLMENT         = 'notify_on_enrolment_create';
     const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
     const DEFAULT_USERS_LICENSES               = 10;
@@ -46,6 +48,10 @@ class PortalHelper
                 if (!empty($portal->data->configuration)) {
                     $portal->configuration = $portal->data->configuration;
                     unset($portal->data->configuration);
+
+                    if (isset($portal->configuration->dashboard_blocks) && is_scalar($portal->configuration->dashboard_blocks)) {
+                        $portal->configuration->dashboard_blocks = json_decode($portal->configuration->dashboard_blocks);
+                    }
                 }
             }
         }

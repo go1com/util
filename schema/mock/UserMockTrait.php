@@ -60,21 +60,25 @@ trait UserMockTrait
         $accountName = 'accounts.gocatalyze.com',
         $instanceName = 'az.mygo1.com',
         $roles = ['authenticated'],
-        $profileId = 11,
-        $userId = 1
+        $accountProfileId = 11,
+        $accountId = 1,
+        $userProfileId = 911,
+        $userId = 91,
+        $encode = true
     )
     {
-        return JWT::encode(
-            $this->getPayload([
-                'id'            => $userId,
-                'accounts_name' => $accountName,
-                'instance_name' => $instanceName,
-                'profile_id'    => $profileId,
-                'mail'          => $mail,
-                'roles'         => $roles,
-            ]),
-            'private_key'
-        );
+        $payload = $this->getPayload([
+            'id'            => $accountId,
+            'accounts_name' => $accountName,
+            'instance_name' => $instanceName,
+            'profile_id'    => $accountProfileId,
+            'mail'          => $mail,
+            'roles'         => $roles,
+            'user_id'       => $userId,
+            'user_profile_id'   => $userProfileId
+        ]);
+
+        return $encode ? JWT::encode($payload, 'private_key') : $payload;
     }
 
     protected function getRootPayload()
@@ -89,27 +93,29 @@ trait UserMockTrait
 
     protected function getPayload(array $options)
     {
-        $userId = isset($options['id']) ? $options['id'] : 1;
-        $profileId = isset($options['profile_id']) ? $options['profile_id'] : 11;
+        $userId = isset($options['user_id']) ? $options['user_id'] : 91;
+        $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : 911;
+        $accountId = isset($options['id']) ? $options['id'] : 1;
+        $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : 11;
 
         $user = [
             'id'            => intval($userId),
             'first_name'    => 'A',
             'last_name'     => 'T',
             'instance_name' => isset($options['accounts_name']) ? $options['accounts_name'] : 'accounts.gocatalyze.com',
-            'profile_id'    => intval($profileId),
+            'profile_id'    => intval($userProfileId),
             'mail'          => $mail = isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com',
             'roles'         => $roles = isset($options['roles']) ? $options['roles'] : ['authenticated'],
             'accounts'      => [
                 (object) [
-                    'id'            => intval($userId),
+                    'id'            => intval($accountId),
                     'first_name'    => 'A',
                     'last_name'     => 'T',
                     'status'        => 1,
                     'roles'         => $roles,
                     'instance_name' => isset($options['instance_name']) ? $options['instance_name'] : 'az.mygo1.com',
                     'mail'          => $mail,
-                    'profile_id'    => intval($profileId),
+                    'profile_id'    => intval($accountProfileId),
                 ],
             ],
         ];
@@ -129,8 +135,10 @@ trait UserMockTrait
 
     protected function getPayloadMultipleInstances(array $options)
     {
-        $userId = isset($options['id']) ? $options['id'] : 1;
-        $profileId = isset($options['profile_id']) ? $options['profile_id'] : 11;
+        $userId = isset($options['user_id']) ? $options['user_id'] : 91;
+        $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : 911;
+        $accountId = isset($options['id']) ? $options['id'] : 1;
+        $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : 11;
         $accountsName = isset($options['accounts_name']) ? $options['accounts_name'] : 'accounts.gocatalyze.com';
 
         $user = [
@@ -138,21 +146,21 @@ trait UserMockTrait
             'first_name'    => 'A',
             'last_name'     => 'T',
             'instance_name' => $accountsName,
-            'profile_id'    => intval($profileId),
+            'profile_id'    => intval($userProfileId),
             'mail'          => $mail = isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com',
             'roles'         => isset($options['roles'][$accountsName]) ? $options['roles'][$accountsName] : ['authenticated'],
         ];
 
         foreach ($options['instance_name'] as $instanceName) {
             $user['accounts'][] = (object) [
-                'id'            => intval($userId),
+                'id'            => isset($options['ids'][$instanceName]) ? $options['ids'][$instanceName] : intval($accountId),
                 'first_name'    => 'A',
                 'last_name'     => 'T',
                 'status'        => 1,
                 'roles'         => isset($options['roles'][$instanceName]) ? $options['roles'][$instanceName] : ['student'],
                 'instance_name' => $instanceName,
                 'mail'          => $mail,
-                'profile_id'    => intval($profileId),
+                'profile_id'    => isset($options['profile_ids'][$instanceName]) ? $options['profile_ids'][$instanceName] : intval($accountProfileId),
             ];
         }
 
@@ -208,7 +216,7 @@ trait UserMockTrait
         );
     }
 
-    protected function link(Connection $db, $type, $sourceId, $targetId, $weight = 0, $data = null)
+    protected function link(Connection $db, $type, $sourceId, $targetId, $weight = 0, $data = null): int
     {
         $db->insert('gc_ro', [
             'type'      => $type,

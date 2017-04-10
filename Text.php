@@ -63,7 +63,7 @@ class Text
 
     public static function parseInlineTags(string $string)
     {
-        return array_filter(explode('] [', $string));
+        return array_filter(explode('] [', trim($string, '[]')));
     }
 
     public static function toSnakeCase($input)

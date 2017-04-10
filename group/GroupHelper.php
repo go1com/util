@@ -3,7 +3,11 @@
 namespace go1\util\group;
 
 use Doctrine\DBAL\Connection;
+use go1\util\AccessChecker;
 use go1\util\DB;
+use go1\util\user\UserHelper;
+use stdClass;
+use Symfony\Component\HttpFoundation\Request;
 
 class GroupHelper
 {
@@ -29,5 +33,36 @@ class GroupHelper
     public static function canAccess(Connection $db, int $userId, int $groupID): bool
     {
         return static::isItemOf($db, 'user', $userId, $groupID);
+    }
+
+    public static function groupAccess(int $groupUserId, int $userId, AccessChecker $accessChecker = null, Request $req = null, string $instance = ''): bool
+    {
+        if ($groupUserId == $userId) {
+            return true;
+        }
+
+        if ($accessChecker instanceof AccessChecker) {
+            if ($accessChecker->isAccountsAdmin($req)) {
+                return true;
+            }
+
+            if ($instance && $accessChecker->isPortalAdmin($req, $instance)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static function getAccountId(Connection $db, $user, string $instance): int
+    {
+        $users = [(array) $user];
+        (new UserHelper)->attachRootAccount($db, $users, $instance);
+
+        if (!isset($users[0]['root']['id'])) {
+            return 0;
+        }
+
+        return $users[0]['root']['id'];
     }
 }

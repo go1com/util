@@ -93,7 +93,7 @@ class PlanRepository
         return $plans;
     }
 
-    public function create(Plan &$plan)
+    public function create(Plan &$plan, bool $notify = false)
     {
         $this->db->insert('gc_plan', [
             'user_id'      => $plan->userId,
@@ -107,6 +107,7 @@ class PlanRepository
         ]);
 
         $plan->id = $this->db->lastInsertId('gc_plan');
+        $plan->notify = $notify;
         $this->queue->publish($plan, Queue::PLAN_CREATE);
 
         return $plan->id;
