@@ -39,8 +39,14 @@ class PortalHelper
 
     public static function updateVersion(Connection $db, MqClient $queue, string $version, $portalId)
     {
+        if (!$original = self::load($db, $portalId)) {
+            return null;
+        }
+
         $db->update('gc_instance', ['version' => $version], ['id' => $portalId]);
-        $queue->publish(['id' => $portalId, 'version' => $version], Queue::PORTAL_UPDATE);
+        $portal = self::load($db, $portalId);
+        $portal->original = $original;
+        $queue->publish($portal, Queue::PORTAL_UPDATE);
     }
 
     public static function nameFromId(Connection $db, int $id)
