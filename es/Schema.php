@@ -204,12 +204,12 @@ class Schema
      */
     const ENROLMENT_MAPPING = [
         //'_source'    => ['enabled' => true],
-        '_parent'    => ['type' => self::O_ACCOUNT],
         '_routing'   => ['required' => true],
         'properties' => [
             'id'         => ['type' => self::T_INT],
             'profile_id' => ['type' => self::T_INT],
             'lo_id'      => ['type' => self::T_INT],
+            'account_id' => ['type' => self::T_INT],
             'parent_id'  => ['type' => self::T_INT],
             'status'     => ['type' => self::T_SHORT],
             'result'     => ['type' => self::T_INT],
@@ -223,6 +223,9 @@ class Schema
             'duration'   => ['type' => self::T_INT],
             'lo'         => [
                 'properties' => self::LO_MAPPING['properties']
+            ],
+            'account'    => [
+                'properties' => self::USER_MAPPING['properties']
             ]
         ],
     ];
