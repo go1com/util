@@ -23,4 +23,12 @@ class PortalHelperTest extends UtilTestCase
         // Test ::titleFromLoId()
         $this->assertEquals('qa.mygo1.com', PortalHelper::titleFromLoId($this->db, $courseId));
     }
+
+    public function testUpdate()
+    {
+        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com', 'version' => 'v2.11.0']);
+        PortalHelper::updateVersion($this->db, $this->queue, PortalHelper::STABLE_VERSION, $instanceId);
+        $version = PortalHelper::load($this->db, $instanceId)->version;
+        $this->assertEquals(PortalHelper::STABLE_VERSION, $version);
+    }
 }
