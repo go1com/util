@@ -24,7 +24,9 @@ trait EsEnrolmentMockTrait
             'start_date' => DateTime::formatDate($options['start_date'] ?? time()),
             'end_date'   => isset($options['end_date']) ? DateTime::formatDate($options['end_date']) : null,
             'changed'    => DateTime::formatDate($options['changed'] ?? time()),
-            'lo'         => $options['lo'] ?? null
+            'lo'         => $options['lo'] ?? null,
+            'account_id' => $options['account_id'] ?? 0,
+            'account'    => $options['account'] ?? null
         ];
 
         return $client->create([
@@ -33,7 +35,6 @@ trait EsEnrolmentMockTrait
             'type'    => Schema::O_ENROLMENT,
             'id'      => $enrolment['id'],
             'body'    => $enrolment,
-            'parent'  => $options['account_id'] ?? 0,
             'refresh' => true
         ]);
     }
