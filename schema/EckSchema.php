@@ -73,7 +73,7 @@ class EckSchema
 
             // Type: Float
             $valueFloat = $schema->createTable('eck_value_float');
-            $valueFloat->addColumn('id', 'float', ['unsigned' => true, 'autoincrement' => true]);
+            $valueFloat->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $valueFloat->addColumn('value', 'float');
             $valueFloat->setPrimaryKey(['id']);
             $valueFloat->addIndex(['value']);
