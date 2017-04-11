@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\DB;
 use go1\util\user\UserHelper;
-use stdClass;
+use PDO;
 use Symfony\Component\HttpFoundation\Request;
 
 class GroupHelper
@@ -64,5 +64,15 @@ class GroupHelper
         }
 
         return $users[0]['root']['id'];
+    }
+
+    public function userGroups(Connection $db, int $userId)
+    {
+        $sql = 'SELECT g.title FROM social_group g ';
+        $sql .= 'INNER JOIN social_group_item gi ON g.id = gi.group_id ';
+        $sql .= 'WHERE gi.entity_type = ? ';
+        $sql .= 'AND gi.entity_id = ?';
+
+        return $db->executeQuery($sql, [self::ITEM_TYPE_USER, $userId])->fetchAll(PDO::FETCH_COLUMN);
     }
 }
