@@ -144,6 +144,7 @@ class Schema
             'allow_public' => ['type' => self::T_BOOL],
             'roles'        => ['type' => self::T_KEYWORD],
             'fields'       => ['type' => self::T_OBJECT],
+            'groups'       => ['type' => self::T_KEYWORD],
         ],
     ];
 
@@ -225,7 +226,7 @@ class Schema
                 'properties' => self::LO_MAPPING['properties']
             ],
             'account'    => [
-                'properties' => self::USER_MAPPING['properties']
+                'properties' => self::ACCOUNT_MAPPING['properties']
             ]
         ],
     ];
