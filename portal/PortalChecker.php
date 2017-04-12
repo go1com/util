@@ -114,6 +114,13 @@ class PortalChecker
         return PortalHelper::FEATURE_CREDIT_DEFAULT;
     }
 
+    public function getLicense($portal)
+    {
+        PortalHelper::parseConfig($portal);
+
+        return isset($portal->data->user_plan->license) ? $portal->data->user_plan->license : 0;
+    }
+
     public function buildLink($portal, $uri)
     {
         $domain = $this->getPrimaryDomain($portal);
