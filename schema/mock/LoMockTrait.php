@@ -99,7 +99,8 @@ trait LoMockTrait
         }
 
         if (!empty($options['event'])) {
-            self::createEvent($db, $courseId, $options['event']);
+            $event = is_scalar($options['event']) ? json_decode($options['event'], true) : $options['event'];
+            self::createEvent($db, $courseId, $event);
         }
 
         return $courseId;
