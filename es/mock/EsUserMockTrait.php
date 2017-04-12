@@ -26,15 +26,17 @@ trait EsUserMockTrait
             'allow_public' => $options['allow_public'] ?? false,
             'roles'        => $options['roles'] ?? null,
             'avatar'       => $options['avatar'] ?? null,
+            'fields'       => $options['fields'] ?? null,
         ];
 
+        $type = $options['type'] ?? Schema::O_USER;
         return $client->create([
             'index'   => Schema::INDEX,
             'routing' => Schema::INDEX,
-            'type'    => Schema::O_USER,
+            'type'    => $type,
             'id'      => $user['id'],
             'body'    => $user,
-            'parent'  => null,
-        ]);
+            'refresh' => true
+        ] + ($type == Schema::O_ACCOUNT ? ['parent' => $user['user_id'] ?? 0] : []));
     }
 }
