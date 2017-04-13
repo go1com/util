@@ -19,6 +19,10 @@ class Queue
         self::ENROLMENT_DELETE,
     ];
 
+    const NOTIFY_TASKS = [
+        self::NOTIFY_PORTAL_USER_PLAN
+    ];
+
     # The entity events
     # -------
     const PORTAL_CREATE            = 'portal.create';
@@ -95,6 +99,7 @@ class Queue
     const AWARD_ACHIEVEMENT_DELETE = 'award.achievement.delete';
     const WORKER_QUEUE_NAME        = 'worker';
     const MAIL_LOG_CREATE          = 'mail-log.create';
+    const NOTIFY_PORTAL_USER_PLAN  = 'notify.portal.user_plan_reached';
 
     # routingKey that tell some service to do something.
     #
@@ -125,4 +130,5 @@ class Queue
     const DO_ALGOLIA_INDEX                     = 'do.algolia.index'; # Object { offset: INT, limit: INT}
     const DO_USER_UNBLOCK_MAIL                 = 'do.user.unblock.mail'; # String mail
     const DO_USER_UNBLOCK_IP                   = 'do.user.unblock.ip'; # String ip
+    const DO_NOTIFY                            = 'do.notify'; # {task: string NOTIFY_TASKS, body: array TASK_BODY}
 }
