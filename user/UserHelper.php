@@ -213,4 +213,20 @@ class UserHelper
 
         return $db->executeQuery($sql, [$mail])->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    public static function userId(Connection $db, int $accountId, string $accountsName)
+    {
+        if ($account = self::load($db, $accountId)) {
+            if ($account->instance == $accountsName) {
+                return $account->id;
+            }
+            else {
+                if ($user = self::loadByEmail($db, $accountsName, $account->mail)) {
+                    return $user->id;
+                }
+            }
+        }
+
+        return null;
+    }
 }

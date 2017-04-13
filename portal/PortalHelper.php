@@ -49,6 +49,11 @@ class PortalHelper
         $queue->publish($portal, Queue::PORTAL_UPDATE);
     }
 
+    public static function idFromName(Connection $db, string $instance)
+    {
+        return $db->fetchColumn('SELECT id FROM gc_instance WHERE title = ?', [$instance]);
+    }
+
     public static function nameFromId(Connection $db, int $id)
     {
         return $db->fetchColumn('SELECT title FROM gc_instance WHERE id = ?', [$id]);
