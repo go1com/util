@@ -2,7 +2,7 @@
 
 namespace go1\util\portal;
 
-class PortalPrices
+class PortalPricing
 {
     CONST USER_LICENSES_MULTIPLY_RATE = 2; // @see GO1P-7405
 
