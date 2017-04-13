@@ -14,6 +14,8 @@ class Schema
     const T_SHORT   = 'short';
     const T_INT     = 'integer';
     const T_FLOAT   = 'float';
+    // Use double if you want to use aggregation feature.
+    const T_DOUBLE  = 'double';
     const T_TEXT    = 'text';
     const T_KEYWORD = 'keyword';
     const T_DATE    = 'date';
@@ -173,8 +175,8 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => [
                     'currency'     => ['type' => self::T_KEYWORD],
-                    'price'        => ['type' => self::T_FLOAT],
-                    'tax'          => ['type' => self::T_FLOAT],
+                    'price'        => ['type' => self::T_DOUBLE],
+                    'tax'          => ['type' => self::T_DOUBLE],
                     'tax_included' => ['type' => self::T_BOOL],
                 ],
             ],
@@ -308,17 +310,39 @@ class Schema
     ];
 
     const PAYMENT_TRANSACTION_MAPPING = [
+        //'_source'    => ['enabled' => true],
         'properties' => [
             'id'             => ['type' => self::T_INT],
+            'instance_id'    => ['type' => self::T_INT],
             'local_id'       => ['type' => self::T_INT],
-            'email'          => ['type' => self::T_TEXT],
+            'email'          => ['type' => self::T_KEYWORD],
             'status'         => ['type' => self::T_SHORT],
-            'amount'         => ['type' => self::T_FLOAT],
-            'currency'       => ['type' => self::T_TEXT],
-            'data'           => ['type' => self::T_OBJECT],
+            'amount'         => ['type' => self::T_DOUBLE],
+            'currency'       => ['type' => self::T_KEYWORD],
             'created'        => ['type' => self::T_DATE],
             'updated'        => ['type' => self::T_DATE],
-            'payment_method' => ['type' => self::T_TEXT],
+            'payment_method' => ['type' => self::T_KEYWORD],
+            'user_id'        => ['type' => self::T_INT],
+            'user'           => [
+                'properties' => self::USER_MAPPING['properties']
+            ],
+            'items'          => [
+                'type'       => self::T_NESTED,
+                'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties']
+            ],
+        ],
+    ];
+
+    const PAYMENT_TRANSACTION_ITEM_MAPPING = [
+        //'_source'    => ['enabled' => true],
+        'properties' => [
+            'id'           => ['type' => self::T_INT],
+            'product_type' => ['type' => self::T_KEYWORD],
+            'product_id'   => ['type' => self::T_INT],
+            'qty'          => ['type' => self::T_INT],
+            'price'        => ['type' => self::T_DOUBLE],
+            'tax'          => ['type' => self::T_DOUBLE],
+            'tax_included' => ['type' => self::T_BOOL],
         ],
     ];
 }
