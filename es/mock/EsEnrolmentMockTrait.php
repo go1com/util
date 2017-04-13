@@ -26,7 +26,13 @@ trait EsEnrolmentMockTrait
             'changed'    => DateTime::formatDate($options['changed'] ?? time()),
             'lo'         => $options['lo'] ?? null,
             'account_id' => $options['account_id'] ?? 0,
-            'account'    => $options['account'] ?? null
+            'account'    => $options['account'] ?? null,
+            'metadata'   => [
+                'course_enrolment_id' => $options['metadata']['course_enrolment_id'] ?? 0,
+                'course_id'           => $options['metadata']['course_id'] ?? 0,
+                'status'              => $options['metadata']['status'] ?? 0,
+                'has_assessor'        => $options['metadata']['has_assessor'] ?? 0,
+            ],
         ];
 
         return $client->create([
