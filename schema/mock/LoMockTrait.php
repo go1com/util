@@ -57,6 +57,10 @@ trait LoMockTrait
         }
         $options['data'] = json_encode($options['data']);
 
+        if ((isset($options['event'])) && ($event = is_scalar($options['event']) ? json_decode($options['event'], true) : $options['event'])) {
+            $start = !isset($event['start']) ? 0 : (is_numeric($event['start']) ? $event['start'] : strtotime($event['start']));
+        }
+
         $db->insert('gc_lo', [
             'type'        => isset($options['type']) ? $options['type'] : LoTypes::COURSE,
             'instance_id' => $instanceId = isset($options['instance_id']) ? $options['instance_id'] : 0,
@@ -68,6 +72,8 @@ trait LoMockTrait
             'language'    => isset($options['language']) ? $options['language'] : 'en',
             'tags'        => isset($options['tags']) ? $options['tags'] : '',
             'locale'      => isset($locale) ? $locale : null,
+            'event'       => isset($options['event']) ? (is_scalar($options['event']) ? $options['event'] : json_encode($options['event'])) : '',
+            'event_start' => isset($start) ? $start : 0,
             'marketplace' => isset($options['marketplace']) ? $options['marketplace'] : 0,
             'origin_id'   => isset($options['origin_id']) ? $options['origin_id'] : 0,
             'image'       => isset($options['image']) ? $options['image'] : '',
