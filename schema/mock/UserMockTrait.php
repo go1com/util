@@ -5,8 +5,14 @@ namespace go1\util\schema\mock;
 use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
 
+define('DEFAULT_ACCOUNT_PROFILE_ID', 11);
+define('DEFAULT_ACCOUNT_ID', 1);
+define('DEFAULT_USER_PROFILE_ID', 911);
+define('DEFAULT_USER_ID', 91);
+
 trait UserMockTrait
 {
+
     public function createAccountsAdminRole($db, array $options = [])
     {
         return $this->createRole($db, $options + ['name' => 'Admin on #Accounts']);
@@ -60,10 +66,10 @@ trait UserMockTrait
         $accountName = 'accounts.gocatalyze.com',
         $instanceName = 'az.mygo1.com',
         $roles = ['authenticated'],
-        $accountProfileId = 11,
-        $accountId = 1,
-        $userProfileId = 911,
-        $userId = 91,
+        $accountProfileId = DEFAULT_ACCOUNT_PROFILE_ID,
+        $accountId = DEFAULT_ACCOUNT_ID,
+        $userProfileId = DEFAULT_USER_PROFILE_ID,
+        $userId = DEFAULT_USER_ID,
         $encode = true
     )
     {
@@ -93,10 +99,12 @@ trait UserMockTrait
 
     protected function getPayload(array $options)
     {
-        $userId = isset($options['user_id']) ? $options['user_id'] : 91;
-        $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : 911;
-        $accountId = isset($options['id']) ? $options['id'] : 1;
-        $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : 11;
+
+        $accountId = isset($options['id']) ? $options['id'] : DEFAULT_ACCOUNT_ID;
+        $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : DEFAULT_ACCOUNT_PROFILE_ID;
+
+        $userId = isset($options['user_id']) ? $options['user_id'] : $accountId;
+        $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : $accountProfileId;
 
         $user = [
             'id'            => intval($userId),
@@ -135,10 +143,12 @@ trait UserMockTrait
 
     protected function getPayloadMultipleInstances(array $options)
     {
-        $userId = isset($options['user_id']) ? $options['user_id'] : 91;
-        $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : 911;
-        $accountId = isset($options['id']) ? $options['id'] : 1;
-        $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : 11;
+        $accountId = isset($options['id']) ? $options['id'] : DEFAULT_ACCOUNT_ID;
+        $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : DEFAULT_ACCOUNT_PROFILE_ID;
+
+        $userId = isset($options['user_id']) ? $options['user_id'] : $accountId;
+        $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : $accountProfileId;
+
         $accountsName = isset($options['accounts_name']) ? $options['accounts_name'] : 'accounts.gocatalyze.com';
 
         $user = [
