@@ -12,11 +12,12 @@ class EnrolmentStatuses
 {
     # Pre-enrolment statuses
     # ---------------------
-    # const PENDING                  = -1;
+    # const PENDING                  = -1; # will be removed soon
     # const ASSIGNED                 = -3; # Someone added this for you to do
     const ENQUIRED                 = -4; #
     const MANUAL_COMPLETE          = -5;
     const MANUAL_COMPLETE_VERIFIED = -6;
+    const PENDING_REVIEW           = -1;
 
     # Enrolment statuses
     # ---------------------
