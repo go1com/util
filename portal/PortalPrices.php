@@ -4,6 +4,8 @@ namespace go1\util\portal;
 
 class PortalPrices
 {
+    CONST USER_LICENSES_MULTIPLY_RATE = 2; // @see GO1P-7405
+
     private $validUserPlan = [10, 15, 25, 50, 100, 1000];
     private $currencies    = ['AUD', 'CAD', 'EUR', 'GBP', 'USD'];
 
@@ -63,5 +65,14 @@ class PortalPrices
         PortalHelper::parseConfig($portal);
 
         return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : PortalHelper::DEFAULT_USERS_LICENSES;
+    }
+
+    public function getUserLimitationNumber($portal)
+    {
+        $userLicenses = self::getUserLicenses($portal);
+        // System default user: user.0, user.1, portal author
+        $systemUsersNumber = 3;
+
+        return $userLicenses * self::USER_LICENSES_MULTIPLY_RATE - $systemUsersNumber;
     }
 }
