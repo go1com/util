@@ -3,7 +3,6 @@
 namespace go1\util\payment\mock;
 
 use Doctrine\DBAL\Connection;
-use go1\payment\domain\transaction\TransactionStatus;
 
 trait PaymentMockTrait
 {
@@ -11,7 +10,7 @@ trait PaymentMockTrait
     {
         $db->insert('payment_transaction', [
             'email'            => isset($options['email']) ? $options['email'] : 'test-payment@domain.com',
-            'status'           => isset($options['status']) ? $options['status'] : TransactionStatus::PENDING,
+            'status'           => isset($options['status']) ? $options['status'] : 0,
             'amount'           => isset($options['amount']) ? $options['amount'] : 0,
             'currency'         => isset($options['currency']) ? $options['currency'] : 'USD',
             'data'             => isset($options['data']) ? $options['data'] : '',
