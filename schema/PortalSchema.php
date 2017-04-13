@@ -33,5 +33,19 @@ class PortalSchema
             $domain->setPrimaryKey(['id']);
             $domain->addIndex(['title'], 'index_title');
         }
+
+        if (!$schema->hasTable('portal_conf')) {
+            $conf = $schema->createTable('portal_conf');
+            $conf->addColumn('instance', 'string');
+            $conf->addColumn('namespace', 'string');
+            $conf->addColumn('name', 'string');
+            $conf->addColumn('public', 'smallint');
+            $conf->addColumn('data', 'blob');
+            $conf->addColumn('timestamp', 'integer');
+            $conf->setPrimaryKey(['instance', 'namespace', 'name']);
+            $conf->addIndex(['instance', 'namespace']);
+            $conf->addIndex(['public']);
+            $conf->addIndex(['timestamp']);
+        }
     }
 }

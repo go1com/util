@@ -21,24 +21,26 @@ class PlanRepository
 
     public static function install(Schema $schema)
     {
-        $table = $schema->createTable('gc_plan');
-        $table->addOption('description', 'GO1P-10732: Store learn-planning object.');
-        $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-        $table->addColumn('user_id', 'integer', ['unsigned' => true]);
-        $table->addColumn('assigner_id', 'integer', ['unsigned' => true, 'notnull' => false]);
-        $table->addColumn('entity_type', 'string');
-        $table->addColumn('entity_id', 'integer');
-        $table->addColumn('status', 'integer');
-        $table->addColumn('created_date', 'datetime');
-        $table->addColumn('due_date', 'datetime', ['notnull' => false]);
-        $table->addColumn('data', 'blob', ['notnull' => false]);
-        $table->setPrimaryKey(['id']);
-        $table->addIndex(['user_id']);
-        $table->addIndex(['assigner_id']);
-        $table->addIndex(['entity_type', 'entity_id']);
-        $table->addIndex(['status']);
-        $table->addIndex(['created_date']);
-        $table->addIndex(['due_date']);
+        if (!$schema->hasTable('gc_plan')) {
+            $table = $schema->createTable('gc_plan');
+            $table->addOption('description', 'GO1P-10732: Store learn-planning object.');
+            $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $table->addColumn('user_id', 'integer', ['unsigned' => true]);
+            $table->addColumn('assigner_id', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $table->addColumn('entity_type', 'string');
+            $table->addColumn('entity_id', 'integer');
+            $table->addColumn('status', 'integer');
+            $table->addColumn('created_date', 'datetime');
+            $table->addColumn('due_date', 'datetime', ['notnull' => false]);
+            $table->addColumn('data', 'blob', ['notnull' => false]);
+            $table->setPrimaryKey(['id']);
+            $table->addIndex(['user_id']);
+            $table->addIndex(['assigner_id']);
+            $table->addIndex(['entity_type', 'entity_id']);
+            $table->addIndex(['status']);
+            $table->addIndex(['created_date']);
+            $table->addIndex(['due_date']);
+        }
     }
 
     public function load(int $id)
@@ -51,7 +53,8 @@ class PlanRepository
         return $plan ? Plan::create($plan) : false;
     }
 
-    public function loadMultiple(array $ids) {
+    public function loadMultiple(array $ids)
+    {
         $q = $this->db->createQueryBuilder();
         $q = $q
             ->select('*')
