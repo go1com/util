@@ -227,6 +227,14 @@ class Schema
             ],
             'account'    => [
                 'properties' => self::ACCOUNT_MAPPING['properties']
+            ],
+            'metadata'   => [
+                'properties' => [
+                    'course_enrolment_id' => ['type' => self::T_INT],
+                    'course_id'           => ['type' => self::T_INT],
+                    'status'              => ['type' => self::T_SHORT],
+                    'has_assessor'        => ['type' => self::T_SHORT],
+                ]
             ]
         ],
     ];
