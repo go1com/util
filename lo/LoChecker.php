@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\edge\EdgeTypes;
 use go1\util\portal\PortalChecker;
+use go1\util\portal\PortalHelper;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,6 +26,17 @@ class LoChecker
         $sql = 'SELECT 1 FROM gc_ro WHERE source_id = ? AND type = ? AND target_id = ?';
 
         return $db->fetchColumn($sql, [$loId, EdgeTypes::HAS_AUTHOR_EDGE, $userId]) ? true : false;
+    }
+
+    public function isAuthorOnPortal(Connection $db, $instanceIdOrTitle, int $userId)
+    {
+        $instanceId = is_numeric($instanceIdOrTitle) ? $instanceIdOrTitle : PortalHelper::idFromName($db, $instanceIdOrTitle);
+
+        $sql = 'SELECT 1 FROM gc_ro ro';
+        $sql .= '  INNER JOIN gc_lo lo ON ro.source_id = lo.id AND lo.instance_id = ?';
+        $sql .= '  WHERE ro.type = ? AND ro.target_id = ?';
+
+        return $db->fetchColumn($sql, [$instanceId, EdgeTypes::HAS_AUTHOR_EDGE, $userId]) ? true : false;
     }
 
     public function manualPayment(stdClass $lo)
