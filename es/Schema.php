@@ -156,6 +156,7 @@ class Schema
             'id'          => ['type' => self::T_INT],
             'type'        => ['type' => self::T_KEYWORD],
             'origin_id'   => ['type' => self::T_INT],
+            'remote_id'   => ['type' => self::T_KEYWORD],
             'status'      => ['type' => self::T_SHORT],
             'private'     => ['type' => self::T_BOOL],
             'published'   => ['type' => self::T_BOOL],
