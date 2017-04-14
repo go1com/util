@@ -19,7 +19,7 @@ trait EsEnrolmentMockTrait
             'parent_id'  => $options['parent_id'] ?? 0,
             'status'     => $options['status'] ?? 0,
             'result'     => $options['result'] ?? 0,
-            'pass'       => $options['pass'] ?? false,
+            'pass'       => $options['pass'] ?? 0,
             'assessors'  => $options['assessors'] ?? [],
             'start_date' => DateTime::formatDate($options['start_date'] ?? time()),
             'end_date'   => isset($options['end_date']) ? DateTime::formatDate($options['end_date']) : null,
