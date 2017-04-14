@@ -217,7 +217,7 @@ class Schema
             'parent_id'  => ['type' => self::T_INT],
             'status'     => ['type' => self::T_SHORT],
             'result'     => ['type' => self::T_INT],
-            'pass'       => ['type' => self::T_BOOL],
+            'pass'       => ['type' => self::T_INT],
             'assessors'  => ['type' => self::T_INT],
             'start_date' => ['type' => self::T_DATE],
             'end_date'   => ['type' => self::T_DATE],
