@@ -1,0 +1,33 @@
+<?php
+
+namespace go1\util\tests\lo;
+
+use go1\util\edge\EdgeTypes;
+use go1\util\lo\LoChecker;
+use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\LoMockTrait;
+use go1\util\schema\mock\UserMockTrait;
+use go1\util\tests\UtilTestCase;
+
+class LoCheckerTest extends UtilTestCase
+{
+    use InstanceMockTrait;
+    use LoMockTrait;
+    use UserMockTrait;
+
+    public function testIsCourseAuthorTest()
+    {
+        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com']);
+        $userId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com']);
+        $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId]);
+        $moduleId = $this->createModule($this->db, ['instance_id' => $instanceId]);
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $courseId, $moduleId);
+        $this->link($this->db, EdgeTypes::HAS_AUTHOR_EDGE, $courseId, $userId);
+
+        $checker = new LoChecker;
+        $this->assertEquals(true, $checker->isAuthor($this->db, $courseId, $userId));
+        $this->assertEquals(true, $checker->isModuleAuthor($this->db, $moduleId, $userId));
+        $this->assertEquals(false, $checker->isAuthor($this->db, $courseId + 444, $userId));
+        $this->assertEquals(false, $checker->isModuleAuthor($this->db, $moduleId + 555, $userId));
+    }
+}

@@ -1,6 +1,6 @@
 <?php
 
-namespace go1\util\tests;
+namespace go1\util\tests\lo;
 
 use DateTime;
 use go1\util\edge\EdgeTypes;
@@ -8,6 +8,7 @@ use go1\util\lo\LoHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\UserMockTrait;
+use go1\util\tests\UtilTestCase;
 use HTMLPurifier;
 
 class LoHelperTest extends UtilTestCase
@@ -45,8 +46,8 @@ class LoHelperTest extends UtilTestCase
     {
         $html = new HTMLPurifier();
         $data = [
-            'Plain text' => 'Plain text',
-            'foo <span style="color:#0000aa;">data</span>' => 'foo <span style="color:#0000aa;">data</span>'
+            'Plain text'                                   => 'Plain text',
+            'foo <span style="color:#0000aa;">data</span>' => 'foo <span style="color:#0000aa;">data</span>',
         ];
         foreach ($data as $input => $expect) {
             $result = $html->purify(trim($input), LoHelper::descriptionPurifierConfig());
@@ -65,6 +66,7 @@ class LoHelperTest extends UtilTestCase
         $this->assertEquals($start, $lo->event->start);
         $this->assertEquals($end, $lo->event->end);
     }
+
     public function testLoadEventLegacy()
     {
         $courseId = $this->createCourse($this->db);
@@ -80,6 +82,7 @@ class LoHelperTest extends UtilTestCase
         $this->assertEquals($start, $lo->event->start);
         $this->assertEquals($end, $lo->event->end);
     }
+
     public function testLoadNoEvent()
     {
         $courseId = $this->createCourse($this->db);

@@ -4,6 +4,7 @@ namespace go1\util\lo;
 
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
+use go1\util\DB;
 use go1\util\edge\EdgeTypes;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
@@ -19,6 +20,14 @@ class LoChecker
         }
 
         return is_scalar($lo->data) ? json_decode($lo->data, true) : (is_array($lo->data) ? $lo->data : (is_object($lo->data) ? (array) $lo->data : []));
+    }
+
+    public function isModuleAuthor(Connection $db, int $moduleId, int $userId): bool
+    {
+        $courseId = 'SELECT source_id FROM gc_ro WHERE type IN (?) AND target_id = ?';
+        $courseId = $db->fetchColumn($courseId, [[EdgeTypes::HAS_MODULE, EdgeTypes::HAS_ELECTIVE_LO], $moduleId], 0, [DB::INTEGERS, DB::INTEGER]);
+        
+        return $courseId ? $this->isAuthor($db, $courseId, $userId) : false;
     }
 
     public function isAuthor(Connection $db, int $loId, int $userId)
@@ -64,7 +73,9 @@ class LoChecker
     {
         $data = $this->loData($lo);
 
-        return isset($data[LoHelper::ENROLMENT_RE_ENROL]) ? ($data[LoHelper::ENROLMENT_RE_ENROL] ? true : false) : LoHelper::ENROLMENT_RE_ENROL_DEFAULT;
+        return isset($data[LoHelper::ENROLMENT_RE_ENROL])
+            ? ($data[LoHelper::ENROLMENT_RE_ENROL] ? true : false)
+            : LoHelper::ENROLMENT_RE_ENROL_DEFAULT;
     }
 
     public function canCreate(Connection $db, string $instanceName, Request $req): bool
@@ -83,16 +94,18 @@ class LoChecker
         return false;
     }
 
-    public function canUpdate(Connection $db, int $id, string $instanceName, Request $req)
+    public function canUpdate(Connection $db, int $id, string $instance, Request $req)
     {
-        $accessChecker = new AccessChecker();
-        if ($accessChecker->isPortalTutor($req, $instanceName)) {
+        $access = new AccessChecker;
+
+        if ($access->isPortalTutor($req, $instance)) {
             return true;
         }
 
-        $user = $accessChecker->validUser($req);
-        if ($user && $this->isAuthor($db, $id, $user->id)) {
-            return true;
+        if ($user = $access->validUser($req)) {
+            if ($this->isAuthor($db, $id, $user->id)) {
+                return true;
+            }
         }
     }
 
