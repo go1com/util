@@ -36,6 +36,7 @@ class Schema
     const O_GROUP               = 'group';
     const O_MAIL                = 'mail';
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
+    const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -61,6 +62,7 @@ class Schema
         self::O_GROUP               => self::GROUP_MAPPING,
         self::O_MAIL                => self::MAIL_MAPPING,
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
+        self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
     ];
 
     const ANALYZED = [
@@ -343,6 +345,29 @@ class Schema
             'price'        => ['type' => self::T_DOUBLE],
             'tax'          => ['type' => self::T_DOUBLE],
             'tax_included' => ['type' => self::T_BOOL],
+        ],
+    ];
+
+    const QUIZ_USER_ANSWER_MAPPING = [
+        //'_source'    => ['enabled' => true],
+        'properties' => [
+            'id'             => ['type' => self::T_INT],
+            'question_type'  => ['type' => self::T_KEYWORD],
+            'answer'         => ['type' => self::T_TEXT],
+            'created'        => ['type' => self::T_DATE],
+            'updated'        => ['type' => self::T_DATE],
+            'is_correct'     => ['type' => self::T_BOOL],
+            'is_skipped'     => ['type' => self::T_BOOL],
+            'is_evaluated'   => ['type' => self::T_BOOL],
+            'points'         => ['type' => self::T_INT],
+            // @todo Handle updating question.
+            'question'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'li_id'          => ['type' => self::T_INT],
+            'counter'        => ['type' => self::T_INT],
+            'user_id'        => ['type' => self::T_INT],
+            'user'           => [
+                'properties' => self::USER_MAPPING['properties']
+            ],
         ],
     ];
 }

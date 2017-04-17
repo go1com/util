@@ -100,6 +100,9 @@ class Queue
     const WORKER_QUEUE_NAME        = 'worker';
     const MAIL_LOG_CREATE          = 'mail-log.create';
     const NOTIFY_PORTAL_USER_PLAN  = 'notify.portal.user_plan_reached';
+    const QUIZ_USER_ANSWER_CREATE  = 'quiz.user_answer.create';
+    const QUIZ_USER_ANSWER_UPDATE  = 'quiz.user_answer.update';
+    const QUIZ_USER_ANSWER_DELETE  = 'quiz.user_answer.delete';
 
     # routingKey that tell some service to do something.
     #
