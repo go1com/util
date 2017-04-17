@@ -17,6 +17,7 @@ trait GroupMockTrait
             'instance_id' => isset($options['instance_id']) ? $options['instance_id'] : 1,
             'created'     => isset($options['created']) ? $options['created'] : time(),
             'updated'     => isset($options['updated']) ? $options['updated'] : time(),
+            'data'        => isset($options['data']) ? json_encode($options['updated']) : '',
         ]);
 
         return $db->lastInsertId('social_group');
@@ -30,7 +31,7 @@ trait GroupMockTrait
             'entity_id'   => isset($options['entity_id']) ? $options['entity_id'] : 1,
             'status'      => isset($options['status']) ? $options['status'] : GroupItemStatus::ACTIVE,
             'created'     => isset($options['created']) ? $options['created'] : time(),
-            'updated'     => isset($options['updated']) ? $options['updated'] : time(),
+            'updated'     => isset($options['updated']) ? $options['updated'] : time()
         ]);
 
         return $db->lastInsertId('social_group_item');
