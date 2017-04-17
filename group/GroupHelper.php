@@ -14,7 +14,8 @@ class GroupHelper
     const ITEM_TYPE_USER   = 'user';
     const ITEM_TYPE_LO     = 'lo';
     const ITEM_TYPE_PORTAL = 'portal';
-    const ITEM_ALL         = [self::ITEM_TYPE_USER, self::ITEM_TYPE_LO, self::ITEM_TYPE_PORTAL];
+    const ITEM_TYPE_GROUP  = 'group';
+    const ITEM_ALL         = [self::ITEM_TYPE_USER, self::ITEM_TYPE_LO, self::ITEM_TYPE_PORTAL, self::ITEM_TYPE_GROUP];
 
     public static function load(Connection $db, int $id)
     {
