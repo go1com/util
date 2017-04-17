@@ -91,7 +91,15 @@ class MailTemplate
 
     const ENQUIRY_SENT = [
         'key'    => 'lo.enquiry.sent',
-        'tokens' => [/* @TODO */],
+        'tokens' => [
+            '!request_url' => 'Request URL',
+            '!id'          => 'Course ID',
+            '!user_name'   => 'User full name',
+            '!mail'        => 'User mail',
+            '!phone'       => 'User phone',
+            '!time'        => 'Enquiry time',
+            '!title'       => 'Course title',
+        ],
     ];
 
     const ENQUIRY_ACCEPTED = [
@@ -122,20 +130,26 @@ class MailTemplate
     const USER_ENROL_COURSE = [
         'key'    => 'user.enrol.course',
         'tokens' => [
-            '@first_name'     => 'First name of user.',
-            '!course_name'    => 'Course name.',
+            '!first_name'       => 'User first name',
+            '!course_name'      => 'Course name',
+            '!author_name'      => 'Author full name',
+            '!rating_url'       => 'Rating URL',
+            '!pricing_currency' => 'Course price currency',
+            '!pricing_price'    => 'Course price',
+            '!pricing_tax'      => 'Course price tax',
+            '!course_image'     => 'Course image',
+            '!year'             => 'Copyright year',
         ],
     ];
 
     const USER_MANUAL_PAYMENT_COURSE = [
         'key'    => 'user.manual.payment.course',
         'tokens' => [
-            '!full_name'        => 'Full name.',
-            '!user_name'        => 'User mail.',
-            '!course_name'      => 'Course name.',
-            '!course_url'       => 'Course URL.',
-            '!reject_url'       => 'Reject URL.',
-            '!accept_url'       => 'Accept URL.'
+            '!user_name'   => 'User full name',
+            '!course_name' => 'Course name',
+            '!description' => 'Enrolment description',
+            '!reject_url'  => 'Reject URL',
+            '!accept_url'  => 'Accept URL',
         ],
     ];
 
@@ -170,11 +184,23 @@ class MailTemplate
             '!site_name'        => 'Portal title',
             '!pricing_price'    => 'Course price',
             '!pricing_currency' => 'Course price currency',
+            '!pricing_tax'      => 'Course price tax',
             '!course_url'       => 'Course URL',
             '!approve_url'      => 'Credit approve URL',
             '!reject_url'       => 'Credit reject URL',
             '!portal_url'       => 'Portal URL',
-        ]
+        ],
+    ];
+
+    const ASSIGNMENT_SUBMIT = [
+        'key'=> 'assignment.submit',
+        'tokens' => [
+            '!learner_name'    => 'Learner full name',
+            '!assignment_name' => 'Assignment name',
+            '!module_name'     => 'Module name',
+            '!submission_time' => 'Submission time',
+            '!assignment_url'  => 'Assignment URL',
+        ],
     ];
 
     public static function has(string $key): bool
