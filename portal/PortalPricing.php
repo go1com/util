@@ -2,77 +2,86 @@
 
 namespace go1\util\portal;
 
+use stdClass;
+
 class PortalPricing
 {
-    CONST USER_LICENSES_MULTIPLY_RATE = 2; // @see GO1P-7405
-
-    private $validUserPlan = [10, 15, 25, 50, 100, 1000];
-    private $currencies    = ['AUD', 'CAD', 'EUR', 'GBP', 'USD'];
-
-    // The key is active number licenses and the value is the annual price
-    private $prices = [
-        10   => 10,
-        15   => 90,
-        25   => 150,
-        50   => 250,
-        100  => 450,
-        1000 => 1350,
+    const USER_LICENSES_MULTIPLY_RATE   = 2;
+    const PRODUCT_PLATFORM              = 'platform';
+    const PRODUCT_PREMIUM               = 'premium';
+    const REGIONAL                      = ['AU', 'EU', 'UK', 'US'];
+    const REGIONAL_DEFAULT              = 'AU';
+    const PLATFORM_FREE_LICENSE         = 5;
+    const PLATFORM_H5                   = [ // > 5 licenses
+        'AU'    => ['currency' => 'AUD', 'price' => 2],
+        'EU'    => ['currency' => 'EUR', 'price' => 1.6],
+        'UK'    => ['currency' => 'GBP', 'price' => 1.5],
+        'US'    => ['currency' => 'USD', 'price' => 2],
     ];
 
-    public function validPlan($userPlan)
-    {
-        list($currency, $userLicenses,) = $this->getUserPlan($userPlan);
+    const PREMIUM_LICENSE               = 20;
+    const PREMIUM_LE20                  = [// <= 20 licenses
+        'AU'    => ['currency' => 'AUD', 'price' => 9],
+        'EU'    => ['currency' => 'EUR', 'price' => 7],
+        'UK'    => ['currency' => 'GBP', 'price' => 6],
+        'US'    => ['currency' => 'USD', 'price' => 9],
+    ];
+    const PREMIUM_H20                   = [// > 20 licenses
+        'AU'    => ['currency' => 'AUD', 'price' => 8],
+        'EU'    => ['currency' => 'EUR', 'price' => 6],
+        'UK'    => ['currency' => 'GBP', 'price' => 5],
+        'US'    => ['currency' => 'USD', 'price' => 8],
+    ];
 
-        return $userLicenses && in_array($userLicenses, $this->validUserPlan) && in_array($currency, $this->currencies);
+    public static function getLicenses(stdClass $portal)
+    {
+        return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : static::PLATFORM_FREE_LICENSE;
     }
 
-    /**
-     * Format: (currency)(number)(a/m)
-     * Examples: USD100m, GBP100a
-     */
-    public function getUserPlan(string $userPlan): array
+    public static function getRegional(stdClass $portal)
     {
-        preg_match_all('/(^[A-Z]+)(\d+)(m|a)$/', $userPlan, $matches);
-        if (!empty($matches[3][0])) {
-            $currency = $matches[1][0];
-            $userLicenses = $matches[2][0];
-            $interval = $matches[3][0];
-
-            return [$currency, $userLicenses, $interval];
-        }
-
-        return [null, null, null];
+        return !empty($portal->data->user_plan->regional) ? $portal->data->user_plan->regional : static::REGIONAL_DEFAULT;
     }
 
-    public function getContract($userPlan, $instance)
+    public static function getProduct(stdClass $portal)
     {
-        list(, $userLicenses, $interval) = $this->getUserPlan($userPlan);
-
-        return [
-            "{$userLicenses} user licenses for {$instance}",
-            $userLicenses,
-            $this->getPrice($interval, $userLicenses),
-        ];
+        return !empty($portal->data->user_plan->product) ? $portal->data->user_plan->product : static::PRODUCT_PLATFORM;
     }
 
-    public function getPrice($interval, $userLicenses)
+    public static function getUserLimitationNumber($portal)
     {
-        return ($interval == 'm') ? $this->prices[$userLicenses] * 1.1 : $this->prices[$userLicenses] * 12;
-    }
-
-    public function getUserLicenses($portal)
-    {
-        PortalHelper::parseConfig($portal);
-
-        return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : PortalHelper::DEFAULT_USERS_LICENSES;
-    }
-
-    public function getUserLimitationNumber($portal)
-    {
-        $userLicenses = self::getUserLicenses($portal);
+        $userLicenses = static::getLicenses($portal);
         // System default user: user.0, user.1, portal author
         $systemUsersNumber = 3;
 
-        return $userLicenses * self::USER_LICENSES_MULTIPLY_RATE - $systemUsersNumber;
+        return $userLicenses * static::USER_LICENSES_MULTIPLY_RATE - $systemUsersNumber;
+    }
+
+    /**
+     * https://go1web.atlassian.net/wiki/display/GO1/GO1+2017+Pricing
+     *
+     * @param stdClass $portal
+     * @return array
+     */
+    public static function getPrice(stdClass $portal): array
+    {
+        $license = static::getLicenses($portal);
+        $regional = static::getRegional($portal);
+        $product = static::getProduct($portal);
+
+        $basePrice = [];
+        if (($product == static::PRODUCT_PLATFORM) && ($license > static::PLATFORM_FREE_LICENSE)) {
+            $basePrice = static::PLATFORM_H5[$regional];
+        }
+        else if ($product == static::PRODUCT_PREMIUM) {
+            if ($license <= static::PREMIUM_LICENSE) {
+                $basePrice = static::PREMIUM_LE20[$regional];
+            }
+            else {
+                $basePrice = static::PREMIUM_H20[$regional];
+            }
+        }
+
+        return !empty($basePrice) ? [$basePrice['price']*$license*12, $basePrice['currency']] : [0, 'AUD'];
     }
 }

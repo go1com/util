@@ -28,10 +28,4 @@ class PortalCheckerTest extends UtilTestCase
         ];
         $this->instanceId = $this->createInstance($this->db, ['data' => $data]);
     }
-
-    public function testGetLicense()
-    {
-        $portal = PortalHelper::load($this->db, $this->instanceId);
-        $this->assertEquals(50, $this->portalChecker->getLicense($portal));
-    }
 }
