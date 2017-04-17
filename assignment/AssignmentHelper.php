@@ -9,8 +9,16 @@ class AssignmentHelper
 {
     public static function load(Connection $db, int $id)
     {
-        return $db
+        $assignment = $db
             ->executeQuery('SELECT * FROM asm_assignment WHERE id = ?', [$id])
             ->fetch(DB::OBJ);
+
+        if ($assignment) {
+            if (!$assignment->data = json_decode($assignment->data)) {
+                unset($assignment->data);
+            }
+        }
+
+        return $assignment;
     }
 }
