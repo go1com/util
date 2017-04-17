@@ -21,7 +21,12 @@ class GroupHelper
     {
         $sql = 'SELECT * FROM social_group WHERE id = ?';
 
-        return $db->executeQuery($sql, [$id])->fetch(DB::OBJ);
+        $group = $db->executeQuery($sql, [$id])->fetch(DB::OBJ);
+        if ($group) {
+            $group->data = json_decode($group->data);
+        }
+
+        return $group;
     }
 
     public static function isItemOf(Connection $db, string $entityType, int $entityId, int $groupId, int $status = GroupItemStatus::ACTIVE): bool

@@ -17,6 +17,7 @@ class SocialSchema
             $group->addColumn('visibility', 'integer');
             $group->addColumn('created', 'integer', ['unsigned' => true]);
             $group->addColumn('updated', 'integer', ['unsigned' => true]);
+            $group->addColumn('data', 'blob');
             $group->setPrimaryKey(['id']);
             $group->addIndex(['title']);
             $group->addIndex(['user_id']);
