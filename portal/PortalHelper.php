@@ -21,8 +21,6 @@ class PortalHelper
     const FEATURE_CREDIT_REQUEST_DEFAULT       = false;
     const FEATURE_NOTIFY_NEW_ENROLMENT         = 'notify_on_enrolment_create';
     const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
-    const DEFAULT_USERS_LICENSES               = 10;
-    const DEFAULT_USERS_LICENSES_TIMES         = 4;
 
     public static function load(Connection $db, $nameOrId)
     {
