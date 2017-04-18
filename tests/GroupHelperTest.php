@@ -3,9 +3,15 @@
 namespace go1\util\tests;
 
 use go1\util\AccessChecker;
+use go1\util\edge\EdgeHelper;
+use go1\util\edge\EdgeTypes;
 use go1\util\group\GroupHelper;
 use go1\util\group\GroupItemStatus;
+use go1\util\model\Edge;
 use go1\util\schema\mock\GroupMockTrait;
+use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\LoMockTrait;
+use go1\util\schema\mock\NoteMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\user\Roles;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +20,9 @@ class GroupHelperTest extends UtilTestCase
 {
     use GroupMockTrait;
     use UserMockTrait;
+    use InstanceMockTrait;
+    use LoMockTrait;
+    use NoteMockTrait;
 
     public function setUp()
     {
@@ -64,5 +73,61 @@ class GroupHelperTest extends UtilTestCase
         $userId = $this->createUser($this->db, ['mail' => 'user@go1.com', 'instance' => $instance]);
         $this->assertEquals($userId, GroupHelper::getAccountId($this->db, ['mail' => 'user@go1.com'], $instance));
         $this->assertEquals(0, GroupHelper::getAccountId($this->db, ['mail' => 'user@go1.com'], 'other.mygo1.com'));
+    }
+
+    public function testGetEntityIdPortal()
+    {
+        $instanceId = $this->createInstance($this->db, []);
+        $entityId = (new GroupHelper())
+            ->setConnection($this->db, $this->db, $this->db)
+            ->getEntityId('portal', $instanceId);
+
+        $this->assertEquals($instanceId, $entityId);
+    }
+
+    public function testGetEntityIdUser()
+    {
+        $userId = $this->createUser($this->db, ['mail' => 'user@go1.com', 'instance' => 'accounts']);
+        $accountId = $this->createUser($this->db, ['mail' => 'user@go1.com']);
+        EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId, $accountId);
+
+        $entityId = (new GroupHelper())
+            ->setConnection($this->db, $this->db, $this->db)
+            ->getEntityId('user', $userId, 'az.mygo1.com');
+
+        $this->assertEquals($accountId, $entityId);
+    }
+
+    public function testGetEntityIdLo()
+    {
+        $loId = $this->createCourse($this->db, []);
+
+        $entityId = (new GroupHelper())
+            ->setConnection($this->db, $this->db, $this->db)
+            ->getEntityId('lo', $loId);
+
+        $this->assertEquals($loId, $entityId);
+    }
+
+    public function testGetEntityIdNote()
+    {
+        $noteId = $this->createNote($this->db, []);
+
+        $entityId = (new GroupHelper())
+            ->setConnection($this->db, $this->db, $this->db)
+            ->getEntityId('note', 'NOTE_UUID');
+
+        $this->assertEquals($noteId, $entityId);
+    }
+
+    public function testGetEntityIdGroup()
+    {
+        $groupId = $this->createGroup($this->db, []);
+
+        $entityId = (new GroupHelper())
+            ->setConnection($this->db, $this->db, $this->db)
+            ->getEntityId('group', $groupId);
+
+        $this->assertEquals($groupId, $entityId);
     }
 }

@@ -5,6 +5,9 @@ namespace go1\util\group;
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\DB;
+use go1\util\lo\LoHelper;
+use go1\util\note\NoteHelper;
+use go1\util\portal\PortalHelper;
 use go1\util\user\UserHelper;
 use PDO;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +19,10 @@ class GroupHelper
     const ITEM_TYPE_PORTAL = 'portal';
     const ITEM_TYPE_GROUP  = 'group';
     const ITEM_ALL         = [self::ITEM_TYPE_USER, self::ITEM_TYPE_LO, self::ITEM_TYPE_PORTAL, self::ITEM_TYPE_GROUP];
+
+    private $go1;
+    private $dbSocial;
+    private $dbNote;
 
     public static function load(Connection $db, int $id)
     {
@@ -80,5 +87,57 @@ class GroupHelper
         $sql .= 'AND gi.entity_id = ?';
 
         return $db->executeQuery($sql, [self::ITEM_TYPE_USER, $userId])->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function setConnection(Connection $go1, Connection $dbNote, Connection $dbSocial)
+    {
+        $this->go1 = $go1;
+        $this->dbSocial = $dbSocial;
+        $this->dbNote = $dbNote;
+
+        return $this;
+    }
+
+    public function getEntityId($entityType, $entityId, $instance = '')
+    {
+        $validEntity = false;
+        $id = $entityId;
+
+        switch ($entityType) {
+            case 'portal':
+                $portalEntity = PortalHelper::load($this->go1, $entityId);
+                $validEntity = is_object($portalEntity);
+                break;
+
+            case 'user':
+                $target = (array) UserHelper::load($this->go1, $entityId);
+                if (!empty($target) && $instance) {
+                    $id = static::getAccountId($this->go1, $target, $instance);
+                    $validEntity = true;
+                }
+                break;
+
+            case 'lo':
+                $lo = LoHelper::load($this->go1, $entityId);
+                $validEntity = is_object($lo);
+                break;
+
+            case 'note':
+                $note = NoteHelper::loadByUUID($this->dbNote, $entityId);
+                if (is_object($note)) {
+                    $id = $note->id;
+                    $validEntity = true;
+                }
+
+                break;
+
+            case 'group':
+                $group = GroupHelper::load($this->dbSocial, $entityId);
+                $validEntity = is_object($group);
+
+                break;
+        }
+
+        return $validEntity ? $id : 0;
     }
 }
