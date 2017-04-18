@@ -149,6 +149,7 @@ class Schema
             'roles'        => ['type' => self::T_KEYWORD],
             'fields'       => ['type' => self::T_OBJECT],
             'groups'       => ['type' => self::T_KEYWORD],
+            'managers'     => ['type' => self::T_INT],
         ],
     ];
 

@@ -5,6 +5,7 @@ namespace go1\util\user;
 use Doctrine\DBAL\Connection;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
+use PDO;
 
 class ManagerHelper
 {
@@ -28,5 +29,13 @@ class ManagerHelper
         }
 
         return EdgeHelper::hasLink($db, EdgeTypes::HAS_ROLE, $managerAccountId, $roleId);
+    }
+
+    public static function userManagerIds(Connection $db, int $userId): array
+    {
+        $sql = 'SELECT ro.target_id FROM gc_ro ro ';
+        $sql .= 'WHERE ro.source_id = ? AND ro.type = ?';
+
+        return $db->executeQuery($sql, [$userId, EdgeTypes::HAS_MANAGER])->fetchAll(PDO::FETCH_COLUMN);
     }
 }
