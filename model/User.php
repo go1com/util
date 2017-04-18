@@ -71,7 +71,8 @@ class User
                 $accountIds = 'SELECT target_id FROM gc_ro WHERE type = ? AND source_id = ?';
                 $accountIds = $db->executeQuery($accountIds, [EdgeTypes::HAS_ACCOUNT, $user->id])->fetchAll(PDO::FETCH_COLUMN);
                 if ($accountIds) {
-                    $q = $db->executeQuery('SELECT * FROM gc_user WHERE status = 1 AND id IN (?) AND instance = ?', [$accountIds, $instance], [DB::INTEGERS]);
+                    $q = 'SELECT * FROM gc_user WHERE status = 1 AND id IN (?) AND instance = ?';
+                    $q = $db->executeQuery($q, [$accountIds, $instance], [DB::INTEGERS]);
                     while ($account = $q->fetch(DB::OBJ)) {
                         $user->accounts[] = static::create($account, $db, false);
                     }
