@@ -20,7 +20,7 @@ class Plan implements JsonSerializable
     const STATUS_LATE        = 4; # Learning was assigned & was not able to complete the plan ontime.
     const STATUS_EXPIRED     = 3; # The object is expired.
 
-    const TYPE_AWARD         = 'award';
+    const TYPE_AWARD = 'award';
 
     /** @var integer */
     public $id;
@@ -79,13 +79,11 @@ class Plan implements JsonSerializable
 
     public function diff(Plan $plan)
     {
-        $values = [];
-
         ($this->status != $plan->status) && $values['status'] = $plan->status;
         ($this->due != $plan->due) && $values['due_date'] = $plan->due ? $plan->due->format(DATE_ISO8601) : null;
         ($this->data != $plan->data) && $values['data'] = is_scalar($plan->data) ? $plan->data : json_encode($plan->data);
 
-        return $values;
+        return $values ?? [];
     }
 
     function jsonSerialize()

@@ -67,9 +67,9 @@ class EnrolmentSchema
         if (!$schema->hasTable('enrolment_manual')) {
             $manual = $schema->createTable('enrolment_manual');
             $manual->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
-            $manual->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $manual->addColumn('entity_type', Type::STRING);
             $manual->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $manual->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $manual->addColumn('verified', Type::BOOLEAN);
             $manual->addColumn('data', Type::BLOB, ['notnull' => false]);
             $manual->addColumn('created', Type::INTEGER);
@@ -79,6 +79,7 @@ class EnrolmentSchema
             $manual->addIndex(['user_id']);
             $manual->addIndex(['entity_type']);
             $manual->addIndex(['entity_id']);
+            $manual->addUniqueIndex(['user_id', 'entity_type', 'entity_id']);
             $manual->addIndex(['verified']);
             $manual->addIndex(['created']);
             $manual->addIndex(['updated']);
