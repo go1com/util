@@ -20,10 +20,6 @@ class GroupHelper
     const ITEM_TYPE_GROUP  = 'group';
     const ITEM_ALL         = [self::ITEM_TYPE_USER, self::ITEM_TYPE_LO, self::ITEM_TYPE_PORTAL, self::ITEM_TYPE_GROUP];
 
-    private $go1;
-    private $dbSocial;
-    private $dbNote;
-
     public static function load(Connection $db, int $id)
     {
         $sql = 'SELECT * FROM social_group WHERE id = ?';
@@ -89,7 +85,7 @@ class GroupHelper
         return $db->executeQuery($sql, [self::ITEM_TYPE_USER, $userId])->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public function getEntityId(Connection $go1, Connection $dbNote, Connection $dbSocial, $entityType, $entityId, $instance = '')
+    public static function getEntityId(Connection $go1, Connection $dbNote, Connection $dbSocial, $entityType, $entityId, $instance = '')
     {
         $validEntity = false;
         $id = $entityId;
