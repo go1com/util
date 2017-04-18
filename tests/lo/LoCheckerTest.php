@@ -30,4 +30,18 @@ class LoCheckerTest extends UtilTestCase
         $this->assertEquals(false, $checker->isAuthor($this->db, $courseId + 444, $userId));
         $this->assertEquals(false, $checker->isModuleAuthor($this->db, $moduleId + 555, $userId));
     }
+
+    public function testAuthorIds()
+    {
+        // Setup data
+        $userId = $this->createUser($this->db, ['instance' => 'accounts.gocatalyze.com', 'mail' => 'user@qa.mygo1.com']);
+        $userId2 = $this->createUser($this->db, ['instance' => 'accounts.gocatalyze.com', 'mail' => 'user2@qa.mygo1.com']);
+        $loId = $this->createLO($this->db);
+
+        $this->link($this->db, EdgeTypes::HAS_AUTHOR_EDGE, $loId, $userId);
+        $this->link($this->db, EdgeTypes::HAS_AUTHOR_EDGE, $loId, $userId2);
+
+        // Check
+        $this->assertEquals([$userId, $userId2], LoChecker::authorIds($this->db, $loId));
+    }
 }

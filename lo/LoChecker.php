@@ -8,6 +8,7 @@ use go1\util\DB;
 use go1\util\edge\EdgeTypes;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
+use PDO;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -46,6 +47,15 @@ class LoChecker
         $sql .= '  WHERE ro.type = ? AND ro.target_id = ?';
 
         return $db->fetchColumn($sql, [$instanceId, EdgeTypes::HAS_AUTHOR_EDGE, $userId]) ? true : false;
+    }
+
+    public static function authorIds(Connection $db, int $loId): array
+    {
+        // @todo Consider move this method to LoHelper.
+        $sql = 'SELECT ro.target_id FROM gc_ro ro ';
+        $sql .= 'WHERE ro.source_id = ? AND ro.type = ?';
+
+        return $db->executeQuery($sql, [$loId, EdgeTypes::HAS_AUTHOR_EDGE])->fetchAll(PDO::FETCH_COLUMN);
     }
 
     public function manualPayment(stdClass $lo)
