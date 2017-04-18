@@ -27,7 +27,6 @@ class UserHelperTest extends UtilTestCase
         $instance1Id = $this->createInstance($this->db, ['title' => $instance1Name = 'a1@mygo1.com']);
         $instance2Id = $this->createInstance($this->db, ['title' => $instance2Name = 'a2@mygo1.com']);
         $this->createInstance($this->db, ['title' => 'a3@mygo1.com']);
-
         $this->createUser($this->db, ['mail' => $email = 'user@mail.com', 'instance' => $instance1Name]);
         $this->createUser($this->db, ['mail' => $email, 'instance' => $instance2Name]);
 
