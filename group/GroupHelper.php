@@ -11,6 +11,7 @@ use go1\util\portal\PortalHelper;
 use go1\util\user\UserHelper;
 use PDO;
 use Symfony\Component\HttpFoundation\Request;
+use stdClass;
 
 class GroupHelper
 {
@@ -126,5 +127,19 @@ class GroupHelper
         }
 
         return $validEntity ? $id : 0;
+    }
+
+    public static function isPremium(stdClass $group)
+    {
+        $check = $group->data->premium ?? false;
+
+        return $check ? true : false;
+    }
+
+    public static function isMarketplace(stdClass $group)
+    {
+        $check = $group->data->marketplace ?? 0;
+
+        return $check ? true : false;
     }
 }

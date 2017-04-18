@@ -120,4 +120,40 @@ class GroupHelperTest extends UtilTestCase
 
         $this->assertEquals($groupId, $entityId);
     }
+
+    public function testIsPremium()
+    {
+        $groupPremiumId = $this->createGroup($this->db, ['data' => ['premium' => 1]]);
+        $groupPremium = GroupHelper::load($this->db, $groupPremiumId);
+
+        $this->assertTrue(GroupHelper::isPremium($groupPremium));
+
+        $groupId1 = $this->createGroup($this->db, ['data' => ['premium' => 0]]);
+        $group1 = GroupHelper::load($this->db, $groupId1);
+
+        $this->assertFalse(GroupHelper::isPremium($group1));
+
+        $groupId2 = $this->createGroup($this->db, []);
+        $group2 = GroupHelper::load($this->db, $groupId2);
+
+        $this->assertFalse(GroupHelper::isPremium($group2));
+    }
+
+    public function testIsMarketplace()
+    {
+        $groupMarketId = $this->createGroup($this->db, ['data' => ['marketplace' => 1]]);
+        $groupMarket = GroupHelper::load($this->db, $groupMarketId);
+
+        $this->assertTrue(GroupHelper::isMarketplace($groupMarket));
+
+        $groupId1 = $this->createGroup($this->db, ['data' => ['marketplace' => 0]]);
+        $group1 = GroupHelper::load($this->db, $groupId1);
+
+        $this->assertFalse(GroupHelper::isMarketplace($group1));
+
+        $groupId2 = $this->createGroup($this->db, []);
+        $group2 = GroupHelper::load($this->db, $groupId2);
+
+        $this->assertFalse(GroupHelper::isMarketplace($group2));
+    }
 }
