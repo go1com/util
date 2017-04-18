@@ -4,6 +4,10 @@ namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
+use go1\util\Error;
+use go1\util\model\User;
+use go1\util\user\UserHelper;
+use InvalidArgumentException;
 
 define('DEFAULT_ACCOUNT_PROFILE_ID', 11);
 define('DEFAULT_ACCOUNT_ID', 1);
@@ -61,6 +65,16 @@ trait UserMockTrait
         return $db->lastInsertId('gc_user');
     }
 
+    # NOTE: This is not yet stable, JWT is large, not good for production usage.
+    protected function jwtForUser(Connection $db, $userId, string $instance = null): string
+    {
+        $user = UserHelper::load($db, $userId);
+        $user = $user ? User::create($user, $db, true, $instance) : null;
+        !$user && Error::throw(new InvalidArgumentException('User not found.'));
+
+        return JWT::encode($user, 'INTERNAL');
+    }
+
     protected function getJwt(
         $mail = 'thehongtt@gmail.com',
         $accountName = 'accounts.gocatalyze.com',
@@ -74,14 +88,14 @@ trait UserMockTrait
     )
     {
         $payload = $this->getPayload([
-            'id'            => $accountId,
-            'accounts_name' => $accountName,
-            'instance_name' => $instanceName,
-            'profile_id'    => $accountProfileId,
-            'mail'          => $mail,
-            'roles'         => $roles,
-            'user_id'       => $userId,
-            'user_profile_id'   => $userProfileId
+            'id'              => $accountId,
+            'accounts_name'   => $accountName,
+            'instance_name'   => $instanceName,
+            'profile_id'      => $accountProfileId,
+            'mail'            => $mail,
+            'roles'           => $roles,
+            'user_id'         => $userId,
+            'user_profile_id' => $userProfileId,
         ]);
 
         return $encode ? JWT::encode($payload, 'private_key') : $payload;
@@ -99,10 +113,8 @@ trait UserMockTrait
 
     protected function getPayload(array $options)
     {
-
         $accountId = isset($options['id']) ? $options['id'] : DEFAULT_ACCOUNT_ID;
         $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : DEFAULT_ACCOUNT_PROFILE_ID;
-
         $userId = isset($options['user_id']) ? $options['user_id'] : $accountId;
         $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : $accountProfileId;
 
@@ -128,15 +140,13 @@ trait UserMockTrait
             ],
         ];
 
-        $this->rootName = "{$user['first_name']} {$user['last_name']}";
-
         return (object) [
             'iss'    => 'go1.user',
             'ver'    => '1.1',
             'exp'    => strtotime('+ 1 year'),
             'object' => (object) [
                 'type'    => 'user',
-                'content' => $this->formatUser($user),
+                'content' => $this->formatUser($user, true, "{$user['first_name']} {$user['last_name']}"),
             ],
         ];
     }
@@ -145,10 +155,8 @@ trait UserMockTrait
     {
         $accountId = isset($options['id']) ? $options['id'] : DEFAULT_ACCOUNT_ID;
         $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : DEFAULT_ACCOUNT_PROFILE_ID;
-
         $userId = isset($options['user_id']) ? $options['user_id'] : $accountId;
         $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : $accountProfileId;
-
         $accountsName = isset($options['accounts_name']) ? $options['accounts_name'] : 'accounts.gocatalyze.com';
 
         $user = [
@@ -174,23 +182,19 @@ trait UserMockTrait
             ];
         }
 
-        $this->rootName = "{$user['first_name']} {$user['last_name']}";
-
         return (object) [
             'iss'    => 'go1.user',
             'ver'    => '1.1',
             'exp'    => strtotime('+ 1 year'),
             'object' => (object) [
                 'type'    => 'user',
-                'content' => $this->formatUser($user),
+                'content' => $this->formatUser($user, true, "{$user['first_name']} {$user['last_name']}"),
             ],
         ];
     }
 
-    private function formatUser($user, $root = true)
+    private function formatUser(array $user, $root = true, $username = null)
     {
-        $accounts = [];
-
         if ($root && !empty($user['accounts'])) {
             foreach ($user['accounts'] as &$account) {
                 if ($account->status) {
@@ -204,7 +208,6 @@ trait UserMockTrait
         }
 
         $name = "{$user['first_name']} {$user['last_name']}";
-        $roles = [];
         if (!empty($user['roles'])) {
             foreach ($user['roles'] as $role) {
                 if ('authenticated user' !== $role) {
@@ -219,9 +222,9 @@ trait UserMockTrait
                 'instance'   => !empty($user['instance_name']) ? $user['instance_name'] : null,
                 'profile_id' => intval($user['profile_id']),
                 'mail'       => $root ? $user['mail'] : null,
-                'name'       => $root ? $name : (($this->rootName === $name) ? null : $name),
-                'roles'      => $roles,
-                'accounts'   => $accounts,
+                'name'       => $root ? $name : (($username === $name) ? null : $name),
+                'roles'      => $roles ?? [],
+                'accounts'   => $accounts ?? [],
             ]
         );
     }
