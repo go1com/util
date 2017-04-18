@@ -3,6 +3,9 @@
 namespace go1\util\schema\tests;
 
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Schema\Schema;
+use go1\util\DB;
+use go1\util\schema\EnrolmentSchema;
 use go1\util\schema\InstallTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -26,5 +29,20 @@ class SchemaTest extends TestCase
         foreach ($expectingTables as $table) {
             $this->assertTrue(in_array($table, $actualTables), "Table {$table} is created.");
         }
+    }
+
+    public function testEnrolment()
+    {
+        $db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
+
+        DB::install($db, [
+            function (Schema $schema) {
+                EnrolmentSchema::installManualRecord($schema);
+            },
+        ]);
+
+        $schema = $db->getSchemaManager()->createSchema();
+        $manual = $schema->getTable('enrolment_manual');
+        $this->assertEquals(true, $manual->hasColumn('id'));
     }
 }
