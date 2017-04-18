@@ -145,11 +145,12 @@ class MailTemplate
     const USER_MANUAL_PAYMENT_COURSE = [
         'key'    => 'user.manual.payment.course',
         'tokens' => [
-            '!user_name'   => 'User full name',
-            '!course_name' => 'Course name',
-            '!description' => 'Enrolment description',
-            '!reject_url'  => 'Reject URL',
-            '!accept_url'  => 'Accept URL',
+            '!recipient_name' => 'Recipient full name',
+            '!user_name'      => 'User full name',
+            '!course_name'    => 'Course name',
+            '!description'    => 'Enrolment description',
+            '!reject_url'     => 'Reject URL',
+            '!accept_url'     => 'Accept URL',
         ],
     ];
 
@@ -189,6 +190,28 @@ class MailTemplate
             '!approve_url'      => 'Credit approve URL',
             '!reject_url'       => 'Credit reject URL',
             '!portal_url'       => 'Portal URL',
+        ],
+    ];
+
+    const CREDIT_REQUEST_ACCEPT = [
+        'key'    => 'credit.request.accept',
+        'tokens' => [
+            '!first_name'   => 'User first name',
+            '!manager_name' => 'Manager first name',
+            '!course_name'  => 'Course name',
+            '!site_name'    => 'Human name of the portal',
+            '!course_url'   => 'Course URL',
+        ],
+    ];
+
+    const CREDIT_REQUEST_REJECT = [
+        'key'    => 'credit.request.reject',
+        'tokens' => [
+            '!first_name'   => 'User first name',
+            '!manager_name' => 'Manager first name',
+            '!course_name'  => 'Course name',
+            '!site_name'    => 'Human name of the portal',
+            '!course_url'   => 'Course URL',
         ],
     ];
 

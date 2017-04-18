@@ -24,10 +24,10 @@ class NotificationClient
                         'json' => [
                             'pid'         => $profileId,
                             'message'     => $data['message'],
-                            'image'       => $data['image'] ?: null,
-                            'tag'         => $data['tag'] ?: null,
-                            'from'        => $data['from'] ?: null,
-                            'instance_id' => $data['instance_id'] ?: null,
+                            'image'       => $data['image'] ?? null,
+                            'tag'         => $data['tag'] ?? null,
+                            'from'        => $data['from'] ?? null,
+                            'instance_id' => $data['instance_id'] ?? null,
                         ]]
                 )
                 ->getStatusCode();
