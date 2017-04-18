@@ -89,41 +89,32 @@ class GroupHelper
         return $db->executeQuery($sql, [self::ITEM_TYPE_USER, $userId])->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public function setConnection(Connection $go1, Connection $dbNote, Connection $dbSocial)
-    {
-        $this->go1 = $go1;
-        $this->dbSocial = $dbSocial;
-        $this->dbNote = $dbNote;
-
-        return $this;
-    }
-
-    public function getEntityId($entityType, $entityId, $instance = '')
+    public function getEntityId(Connection $go1, Connection $dbNote, Connection $dbSocial, $entityType, $entityId, $instance = '')
     {
         $validEntity = false;
         $id = $entityId;
 
         switch ($entityType) {
             case 'portal':
-                $portalEntity = PortalHelper::load($this->go1, $entityId);
+                $portalEntity = PortalHelper::load($go1, $entityId);
                 $validEntity = is_object($portalEntity);
                 break;
 
             case 'user':
-                $target = (array) UserHelper::load($this->go1, $entityId);
+                $target = (array) UserHelper::load($go1, $entityId);
                 if (!empty($target) && $instance) {
-                    $id = static::getAccountId($this->go1, $target, $instance);
+                    $id = static::getAccountId($go1, $target, $instance);
                     $validEntity = true;
                 }
                 break;
 
             case 'lo':
-                $lo = LoHelper::load($this->go1, $entityId);
+                $lo = LoHelper::load($go1, $entityId);
                 $validEntity = is_object($lo);
                 break;
 
             case 'note':
-                $note = NoteHelper::loadByUUID($this->dbNote, $entityId);
+                $note = NoteHelper::loadByUUID($dbNote, $entityId);
                 if (is_object($note)) {
                     $id = $note->id;
                     $validEntity = true;
@@ -132,7 +123,7 @@ class GroupHelper
                 break;
 
             case 'group':
-                $group = GroupHelper::load($this->dbSocial, $entityId);
+                $group = GroupHelper::load($dbSocial, $entityId);
                 $validEntity = is_object($group);
 
                 break;

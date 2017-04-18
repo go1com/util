@@ -79,8 +79,7 @@ class GroupHelperTest extends UtilTestCase
     {
         $instanceId = $this->createInstance($this->db, []);
         $entityId = (new GroupHelper())
-            ->setConnection($this->db, $this->db, $this->db)
-            ->getEntityId('portal', $instanceId);
+            ->getEntityId($this->db, $this->db, $this->db, 'portal', $instanceId);
 
         $this->assertEquals($instanceId, $entityId);
     }
@@ -92,8 +91,7 @@ class GroupHelperTest extends UtilTestCase
         EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId, $accountId);
 
         $entityId = (new GroupHelper())
-            ->setConnection($this->db, $this->db, $this->db)
-            ->getEntityId('user', $userId, 'az.mygo1.com');
+            ->getEntityId($this->db, $this->db, $this->db, 'user', $userId, 'az.mygo1.com');
 
         $this->assertEquals($accountId, $entityId);
     }
@@ -103,8 +101,7 @@ class GroupHelperTest extends UtilTestCase
         $loId = $this->createCourse($this->db, []);
 
         $entityId = (new GroupHelper())
-            ->setConnection($this->db, $this->db, $this->db)
-            ->getEntityId('lo', $loId);
+            ->getEntityId($this->db, $this->db, $this->db, 'lo', $loId);
 
         $this->assertEquals($loId, $entityId);
     }
@@ -114,8 +111,7 @@ class GroupHelperTest extends UtilTestCase
         $noteId = $this->createNote($this->db, []);
 
         $entityId = (new GroupHelper())
-            ->setConnection($this->db, $this->db, $this->db)
-            ->getEntityId('note', 'NOTE_UUID');
+            ->getEntityId($this->db, $this->db, $this->db, 'note', 'NOTE_UUID');
 
         $this->assertEquals($noteId, $entityId);
     }
@@ -125,8 +121,7 @@ class GroupHelperTest extends UtilTestCase
         $groupId = $this->createGroup($this->db, []);
 
         $entityId = (new GroupHelper())
-            ->setConnection($this->db, $this->db, $this->db)
-            ->getEntityId('group', $groupId);
+            ->getEntityId($this->db, $this->db, $this->db, 'group', $groupId);
 
         $this->assertEquals($groupId, $entityId);
     }
