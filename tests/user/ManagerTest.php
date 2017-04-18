@@ -40,7 +40,7 @@ class ManagerTest extends UtilTestCase
 
         // Check
         $this->assertTrue(ManagerHelper::isManagerUser($this->db, $managerAccountId, 'az.mygo1.com'));
-        $this->assertFalse(ManagerHelper::isManagerUser($this->db, $managerAccountId,'qa.mygo1.com'));
+        $this->assertFalse(ManagerHelper::isManagerUser($this->db, $managerAccountId, 'qa.mygo1.com'));
     }
 
     public function testUserManagerIds()

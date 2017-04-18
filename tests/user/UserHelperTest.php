@@ -2,8 +2,10 @@
 
 namespace go1\util\tests;
 
+use go1\util\edge\EdgeTypes;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\UserMockTrait;
+use go1\util\Text;
 use go1\util\user\UserHelper;
 
 class UserHelperTest extends UtilTestCase
@@ -36,5 +38,17 @@ class UserHelperTest extends UtilTestCase
 
         $instanceIds = UserHelper::userInstanceIds($this->db, 'none@mail.com');
         $this->assertEquals(0, count($instanceIds));
+    }
+
+    public function testJwt()
+    {
+        $userId = $this->createUser($this->db, ['mail' => 'user@some.where', 'instance' => 'accounts.local']);
+        $accountId = $this->createUser($this->db, ['mail' => 'user@some.where', 'instance' => 'qa.mygo1.com']);
+        $this->link($this->db, EdgeTypes::HAS_ACCOUNT, $userId, $accountId);
+        $jwt = $this->jwtForUser($this->db, $userId, 'qa.mygo1.com');
+        $user = Text::jwtContent($jwt);
+
+        $this->assertEquals($userId, $user->id);
+        $this->assertEquals($accountId, $user->accounts[0]->id);
     }
 }
