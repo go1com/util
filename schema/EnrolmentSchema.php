@@ -3,6 +3,7 @@
 namespace go1\util\schema;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 class EnrolmentSchema
 {
@@ -34,7 +35,9 @@ class EnrolmentSchema
             $enrolment->addIndex(['timestamp']);
             $enrolment->addIndex(['changed']);
             $enrolment->addIndex(['lo_id']);
+        }
 
+        if (!$schema->hasTable('gc_enrolment_revision')) {
             $revision = $schema->createTable('gc_enrolment_revision');
             $revision->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $revision->addColumn('enrolment_id', 'integer', ['unsigned' => true]);
@@ -56,6 +59,29 @@ class EnrolmentSchema
             $revision->addIndex(['taken_instance_id']);
             $revision->addIndex(['status']);
             $revision->addIndex(['lo_id']);
+        }
+    }
+
+    public static function installManualRecord(Schema $schema)
+    {
+        if (!$schema->hasTable('enrolment_manual')) {
+            $manual = $schema->createTable('enrolment_manual');
+            $manual->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $manual->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $manual->addColumn('entity_type', Type::STRING);
+            $manual->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $manual->addColumn('verified', Type::BOOLEAN);
+            $manual->addColumn('data', Type::BLOB, ['notnull' => false]);
+            $manual->addColumn('created', Type::INTEGER);
+            $manual->addColumn('updated', Type::INTEGER);
+
+            $manual->setPrimaryKey(['id']);
+            $manual->addIndex(['user_id']);
+            $manual->addIndex(['entity_type']);
+            $manual->addIndex(['entity_id']);
+            $manual->addIndex(['verified']);
+            $manual->addIndex(['created']);
+            $manual->addIndex(['updated']);
         }
     }
 }
