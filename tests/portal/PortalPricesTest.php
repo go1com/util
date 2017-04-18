@@ -184,4 +184,34 @@ class PortalPricingTest extends UtilTestCase
         $this->assertEquals(1800, $price);
         $this->assertEquals('GBP', $currency);
     }
+
+    public function testGetUserLimitationNumber()
+    {
+        $data = [
+            'user_plan' => [
+                'license'   => 30,
+                'regional'  => 'UK',
+                'product'   => 'premium'
+            ]
+        ];
+        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+
+        $portal = PortalHelper::load($this->db, $instanceId);
+        $userLimitationNumber = PortalPricing::getUserLimitationNumber($portal);
+
+        $this->assertEquals(63, $userLimitationNumber);
+    }
+
+    public function testGetUserLimitationNumberLegacy()
+    {
+        $data = [
+            'foo' => 'bar'
+        ];
+        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+
+        $portal = PortalHelper::load($this->db, $instanceId);
+        $userLimitationNumber = PortalPricing::getUserLimitationNumber($portal);
+
+        $this->assertEquals(-1, $userLimitationNumber);
+    }
 }

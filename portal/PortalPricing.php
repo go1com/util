@@ -12,6 +12,7 @@ class PortalPricing
     const REGIONAL                      = ['AU', 'EU', 'UK', 'US'];
     const REGIONAL_DEFAULT              = 'AU';
     const PLATFORM_FREE_LICENSE         = 5;
+    const PLATFORM_UNLIMITED_LICENSE      = -1;
     const PLATFORM_H5                   = [ // > 5 licenses
         'AU'    => ['currency' => 'AUD', 'price' => 2],
         'EU'    => ['currency' => 'EUR', 'price' => 1.6],
@@ -35,7 +36,7 @@ class PortalPricing
 
     public static function getLicenses(stdClass $portal)
     {
-        return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : static::PLATFORM_FREE_LICENSE;
+        return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : static::PLATFORM_UNLIMITED_LICENSE;
     }
 
     public static function getRegional(stdClass $portal)
@@ -45,16 +46,19 @@ class PortalPricing
 
     public static function getProduct(stdClass $portal)
     {
-        return !empty($portal->data->user_plan->product) ? $portal->data->user_plan->product : static::PRODUCT_PLATFORM;
+        return $portal->data->user_plan->product ?? static::PRODUCT_PLATFORM;
     }
 
     public static function getUserLimitationNumber($portal)
     {
         $userLicenses = static::getLicenses($portal);
+
         // System default user: user.0, user.1, portal author
         $systemUsersNumber = 3;
 
-        return $userLicenses * static::USER_LICENSES_MULTIPLY_RATE - $systemUsersNumber;
+        return  ($userLicenses == static::PLATFORM_UNLIMITED_LICENSE)
+            ? static::PLATFORM_UNLIMITED_LICENSE
+            : $userLicenses * static::USER_LICENSES_MULTIPLY_RATE + $systemUsersNumber;
     }
 
     /**

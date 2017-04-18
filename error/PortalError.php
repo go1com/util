@@ -14,7 +14,7 @@ class PortalError extends Error
     {
         return new JsonResponse(
             [
-                'message' => "You hit the maximum number of user accounts allowed for portal {$instance}. Please contact us at support@go1.com for assistance.",
+                'message' => "You hit the maximum number of user accounts allowed for portal {$instance}. Please contact your portal administrator for assistance.",
                 'code' => self::PORTAL_USER_PLAN_REACHED
             ],
             Error::NOT_ACCEPTABLE
