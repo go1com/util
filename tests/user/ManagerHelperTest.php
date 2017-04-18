@@ -9,7 +9,7 @@ use go1\util\schema\mock\UserMockTrait;
 use go1\util\user\ManagerHelper;
 use go1\util\user\Roles;
 
-class ManagerTest extends UtilTestCase
+class ManagerHelperTest extends UtilTestCase
 {
     use InstanceMockTrait;
     use UserMockTrait;

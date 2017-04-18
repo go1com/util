@@ -76,7 +76,7 @@ class GroupHelper
         return $users[0]['root']['id'];
     }
 
-    public function userGroups(Connection $db, int $userId)
+    public static function userGroups(Connection $db, int $userId)
     {
         $sql = 'SELECT g.title FROM social_group g ';
         $sql .= 'INNER JOIN social_group_item gi ON g.id = gi.group_id ';

@@ -188,6 +188,10 @@ class Schema
             'created'     => ['type' => self::T_DATE],
             'updated'     => ['type' => self::T_DATE],
             'fields'      => ['type' => self::T_OBJECT],
+            'authors'     => [
+                'type'       => self::T_NESTED,
+                'properties' => self::USER_MAPPING['properties']
+            ],
         ],
     ];
 
