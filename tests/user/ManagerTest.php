@@ -42,4 +42,18 @@ class ManagerTest extends UtilTestCase
         $this->assertTrue(ManagerHelper::isManagerUser($this->db, $managerAccountId, 'az.mygo1.com'));
         $this->assertFalse(ManagerHelper::isManagerUser($this->db, $managerAccountId,'qa.mygo1.com'));
     }
+
+    public function testUserManagerIds()
+    {
+        // Setup data
+        $managerUserId = $this->createUser($this->db, ['instance' => 'accounts.gocatalyze.com', 'mail' => 'manager@qa.mygo1.com']);
+        $managerUserId2 = $this->createUser($this->db, ['instance' => 'accounts.gocatalyze.com', 'mail' => 'manager2@qa.mygo1.com']);
+        $accountId = $this->createUser($this->db, ['instance' => 'qa.gocatalyze.com', 'mail' => 'student@qa.mygo1.com']);
+
+        $this->link($this->db, EdgeTypes::HAS_MANAGER, $accountId, $managerUserId);
+        $this->link($this->db, EdgeTypes::HAS_MANAGER, $accountId, $managerUserId2);
+
+        // Check
+        $this->assertEquals([$managerUserId, $managerUserId2], ManagerHelper::userManagerIds($this->db, $accountId));
+    }
 }
