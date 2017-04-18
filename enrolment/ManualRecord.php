@@ -15,6 +15,7 @@ class ManualRecord implements JsonSerializable
     public $data;
     public $created;
     public $updated;
+    public $original;
 
     private function __construct()
     {
@@ -52,6 +53,7 @@ class ManualRecord implements JsonSerializable
             'data'        => $this->data,
             'created'     => $this->created,
             'updated'     => $this->updated,
+            'original'    => $this->original,
         ];
     }
 }
