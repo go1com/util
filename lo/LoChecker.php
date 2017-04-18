@@ -78,6 +78,13 @@ class LoChecker
             : LoHelper::ENROLMENT_RE_ENROL_DEFAULT;
     }
 
+    public function allowEnrolment(stdClass $lo)
+    {
+        $data = $this->loData($lo);
+
+        return empty($data[LoHelper::ENROLMENT_ALLOW]) ? LoHelper::ENROLMENT_ALLOW_DEFAULT : $data[LoHelper::ENROLMENT_ALLOW];
+    }
+
     public function canCreate(Connection $db, string $instanceName, Request $req): bool
     {
         $accessChecker = new AccessChecker();

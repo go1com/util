@@ -13,6 +13,10 @@ class LoHelper
 {
     # configuration key for LO, which put under gc_lo.data
     # ---------------------
+    const ENROLMENT_ALLOW            = 'allow_enrolment';
+    const ENROLMENT_ALLOW_DEFAULT    = 'allow';
+    const ENROLMENT_ALLOW_DISABLE    = 'disable';
+    const ENROLMENT_ALLOW_ENQUIRY    = 'enquiry';
     const ENROLMENT_RE_ENROL         = 're_enrol';
     const ENROLMENT_RE_ENROL_DEFAULT = true;
     const MANUAL_PAYMENT             = 'manual_payment';
