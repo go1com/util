@@ -17,7 +17,7 @@ trait GroupMockTrait
             'instance_id' => isset($options['instance_id']) ? $options['instance_id'] : 1,
             'created'     => isset($options['created']) ? $options['created'] : time(),
             'updated'     => isset($options['updated']) ? $options['updated'] : time(),
-            'data'        => isset($options['data']) ? json_encode($options['updated']) : '',
+            'data'        => isset($options['data']) ? json_encode($options['data']) : '',
         ]);
 
         return $db->lastInsertId('social_group');
