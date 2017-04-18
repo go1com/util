@@ -5,6 +5,9 @@ namespace go1\util\group;
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\DB;
+use go1\util\lo\LoHelper;
+use go1\util\note\NoteHelper;
+use go1\util\portal\PortalHelper;
 use go1\util\user\UserHelper;
 use PDO;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,5 +83,48 @@ class GroupHelper
         $sql .= 'AND gi.entity_id = ?';
 
         return $db->executeQuery($sql, [self::ITEM_TYPE_USER, $userId])->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public static function getEntityId(Connection $go1, Connection $dbNote, Connection $dbSocial, $entityType, $entityId, $instance = '')
+    {
+        $validEntity = false;
+        $id = $entityId;
+
+        switch ($entityType) {
+            case 'portal':
+                $portalEntity = PortalHelper::load($go1, $entityId);
+                $validEntity = is_object($portalEntity);
+                break;
+
+            case 'user':
+                $target = (array) UserHelper::load($go1, $entityId);
+                if (!empty($target) && $instance) {
+                    $id = static::getAccountId($go1, $target, $instance);
+                    $validEntity = true;
+                }
+                break;
+
+            case 'lo':
+                $lo = LoHelper::load($go1, $entityId);
+                $validEntity = is_object($lo);
+                break;
+
+            case 'note':
+                $note = NoteHelper::loadByUUID($dbNote, $entityId);
+                if (is_object($note)) {
+                    $id = $note->id;
+                    $validEntity = true;
+                }
+
+                break;
+
+            case 'group':
+                $group = GroupHelper::load($dbSocial, $entityId);
+                $validEntity = is_object($group);
+
+                break;
+        }
+
+        return $validEntity ? $id : 0;
     }
 }
