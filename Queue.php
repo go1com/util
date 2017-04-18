@@ -20,7 +20,7 @@ class Queue
     ];
 
     const NOTIFY_TASKS = [
-        self::NOTIFY_PORTAL_USER_PLAN
+        self::NOTIFY_PORTAL_USER_PLAN,
     ];
 
     # The entity events
@@ -54,6 +54,9 @@ class Queue
     const ENROLMENT_CREATE         = 'enrolment.create';
     const ENROLMENT_UPDATE         = 'enrolment.update';
     const ENROLMENT_DELETE         = 'enrolment.delete';
+    const MANUAL_RECORD_CREATE     = 'manual-record.create';
+    const MANUAL_RECORD_UPDATE     = 'manual-record.update';
+    const MANUAL_RECORD_DELETE     = 'manual-record.delete';
     const TAG_CREATE               = 'tag.create';
     const TAG_UPDATE               = 'tag.update';
     const TAG_DELETE               = 'tag.delete';
