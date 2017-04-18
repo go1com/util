@@ -71,10 +71,22 @@ trait UserMockTrait
         $user = UserHelper::load($db, $userId);
         $user = $user ? User::create($user, $db, true, $instance) : null;
         !$user && Error::throw(new InvalidArgumentException('User not found.'));
+        $payload = [
+            'iss'    => 'go1.user',
+            'ver'    => '1.1',
+            'exp'    => strtotime('+ 1 year'),
+            'object' => (object) [
+                'type'    => 'user',
+                'content' => $user,
+            ],
+        ];
 
-        return JWT::encode($user, 'INTERNAL');
+        return JWT::encode($payload, 'INTERNAL');
     }
 
+    /**
+     * @deprecated Use ::jwtForUser() instead.
+     */
     protected function getJwt(
         $mail = 'thehongtt@gmail.com',
         $accountName = 'accounts.gocatalyze.com',

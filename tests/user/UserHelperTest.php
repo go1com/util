@@ -46,7 +46,7 @@ class UserHelperTest extends UtilTestCase
         $accountId = $this->createUser($this->db, ['mail' => 'user@some.where', 'instance' => 'qa.mygo1.com']);
         $this->link($this->db, EdgeTypes::HAS_ACCOUNT, $userId, $accountId);
         $jwt = $this->jwtForUser($this->db, $userId, 'qa.mygo1.com');
-        $user = Text::jwtContent($jwt);
+        $user = Text::jwtContent($jwt)->object->content;
 
         $this->assertEquals($userId, $user->id);
         $this->assertEquals($accountId, $user->accounts[0]->id);
