@@ -15,12 +15,6 @@ use stdClass;
 
 class GroupHelper
 {
-    const ITEM_TYPE_USER   = 'user';
-    const ITEM_TYPE_LO     = 'lo';
-    const ITEM_TYPE_PORTAL = 'portal';
-    const ITEM_TYPE_GROUP  = 'group';
-    const ITEM_ALL         = [self::ITEM_TYPE_USER, self::ITEM_TYPE_LO, self::ITEM_TYPE_PORTAL, self::ITEM_TYPE_GROUP];
-
     public static function load(Connection $db, int $id)
     {
         $sql = 'SELECT * FROM social_group WHERE id = ?';
@@ -42,7 +36,7 @@ class GroupHelper
 
     public static function canAccess(Connection $db, int $userId, int $groupID): bool
     {
-        return static::isItemOf($db, 'user', $userId, $groupID);
+        return static::isItemOf($db, GroupItemTypes::USER, $userId, $groupID);
     }
 
     public static function groupAccess(int $groupUserId, int $userId, AccessChecker $accessChecker = null, Request $req = null, string $instance = ''): bool
@@ -83,7 +77,7 @@ class GroupHelper
         $sql .= 'WHERE gi.entity_type = ? ';
         $sql .= 'AND gi.entity_id = ?';
 
-        return $db->executeQuery($sql, [self::ITEM_TYPE_USER, $userId])->fetchAll(PDO::FETCH_COLUMN);
+        return $db->executeQuery($sql, [GroupItemTypes::USER, $userId])->fetchAll(PDO::FETCH_COLUMN);
     }
 
     public static function getEntityId(Connection $go1, Connection $dbNote, Connection $dbSocial, $entityType, $entityId, $instance = '')
@@ -92,12 +86,12 @@ class GroupHelper
         $id = $entityId;
 
         switch ($entityType) {
-            case 'portal':
+            case GroupItemTypes::PORTAL:
                 $portalEntity = PortalHelper::load($go1, $entityId);
                 $validEntity = is_object($portalEntity);
                 break;
 
-            case 'user':
+            case GroupItemTypes::USER:
                 $target = (array) UserHelper::load($go1, $entityId);
                 if (!empty($target) && $instance) {
                     $id = static::getAccountId($go1, $target, $instance);
@@ -105,12 +99,12 @@ class GroupHelper
                 }
                 break;
 
-            case 'lo':
+            case GroupItemTypes::LO:
                 $lo = LoHelper::load($go1, $entityId);
                 $validEntity = is_object($lo);
                 break;
 
-            case 'note':
+            case GroupItemTypes::NOTE:
                 $note = NoteHelper::loadByUUID($dbNote, $entityId);
                 if (is_object($note)) {
                     $id = $note->id;
@@ -119,7 +113,7 @@ class GroupHelper
 
                 break;
 
-            case 'group':
+            case GroupItemTypes::GROUP:
                 $group = GroupHelper::load($dbSocial, $entityId);
                 $validEntity = is_object($group);
 

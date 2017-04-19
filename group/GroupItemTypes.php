@@ -8,5 +8,31 @@ class GroupItemTypes
     const NOTE   = 'note';
     const PORTAL = 'portal';
     const LO     = 'lo';
-    const ALL    = [self::USER, self::NOTE, self::PORTAL, self::LO];
+    const GROUP  = 'group';
+    const ALL    = [self::USER, self::NOTE, self::PORTAL, self::LO, self::GROUP];
+
+    public static function items(string $type): array
+    {
+
+        switch ($type) {
+            case '_none';
+                $types = [self::USER, self::NOTE, self::LO];
+                break;
+
+            case 'premium':
+                $types = [self::LO];
+                break;
+
+            case 'marketplace':
+                $types = [self::GROUP, self::PORTAL];
+                break;
+
+            default:
+                $types = [];
+                break;
+        }
+
+        return $types;
+    }
 }
+
