@@ -46,6 +46,14 @@ class ManualRecordRepository
         }
     }
 
+    public function delete(int $id)
+    {
+        if ($record = $this->load($id)) {
+            $this->db->delete('enrolment_manual', ['id' => $id]);
+            $this->queue->publish($record, Queue::MANUAL_RECORD_DELETE);
+        }
+    }
+
     /**
      * @param int $id
      * @return ManualRecord
