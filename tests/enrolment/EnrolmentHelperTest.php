@@ -1,6 +1,6 @@
 <?php
 
-namespace go1\util\tests;
+namespace go1\util\tests\enrolment;
 
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
@@ -9,6 +9,7 @@ use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\UserMockTrait;
+use go1\util\tests\UtilTestCase;
 
 class EnrolmentHelperTest extends UtilTestCase
 {
@@ -17,8 +18,13 @@ class EnrolmentHelperTest extends UtilTestCase
     use InstanceMockTrait;
     use LoMockTrait;
 
+    protected $instanceId;
+    protected $instancePublicKey;
+    protected $instancePrivateKey;
     protected $instanceName = 'az.mygo1.com';
     protected $profileId    = 11;
+    protected $userId, $jwt;
+    protected $lpId, $courseId, $moduleId, $liVideoId, $liResourceId, $electiveQuestionId, $electiveTextId;
 
     public function setUp()
     {
@@ -65,7 +71,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals($assessor2Id, $assessors[1]);
     }
 
-    public function testfindParentEnrolmentNoParentId()
+    public function testFindParentEnrolmentNoParentId()
     {
         $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId];
         $enrolments = [
