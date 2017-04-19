@@ -25,7 +25,7 @@ class ManualRecordRepository
             'entity_id'   => $record->entityId,
             'user_id'     => $record->userId,
             'verified'    => $record->verified,
-            'data'        => $record->data,
+            'data'        => is_scalar($record->data) ? $record->data : json_encode($record->data),
             'created'     => $record->created,
             'updated'     => $record->updated,
         ]);

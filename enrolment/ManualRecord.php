@@ -30,9 +30,11 @@ class ManualRecord implements JsonSerializable
         $record->entityId = $input->entity_id ?? null;
         $record->userId = $input->user_id ?? null;
         $record->verified = $input->verified ?? false;
-        $record->data = $input->data ?? (object) [];
+        $record->data = !$input->data ? [] : (is_scalar($input->data) ? json_decode($input->data, true) : $input->data);
         $record->created = $input->created ?? time();
         $record->updated = $input->updated ?? time();
+
+        return $record;
     }
 
     public function diff(ManualRecord $record): array
