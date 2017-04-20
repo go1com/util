@@ -40,7 +40,9 @@ class ManualRecord implements JsonSerializable
     public function diff(ManualRecord $record): array
     {
         ($this->verified != $record->verified) && $values['verified'] = $record->verified;
-        ($this->data != $record->data) && $values['data'] = $record->data;
+        if (($this->data != $record->data)) {
+            $values['data'] = is_scalar($record->data) ? $record->data : json_encode($record->data);
+        }
 
         return $values ?? [];
     }
