@@ -14,8 +14,7 @@ class Schema
     const T_SHORT   = 'short';
     const T_INT     = 'integer';
     const T_FLOAT   = 'float';
-    // Use double if you want to use aggregation feature.
-    const T_DOUBLE  = 'double';
+    const T_DOUBLE  = 'double'; # Use double if you want to use aggregation feature.
     const T_TEXT    = 'text';
     const T_KEYWORD = 'keyword';
     const T_DATE    = 'date';
@@ -31,6 +30,7 @@ class Schema
     const O_LO                  = 'lo';
     const O_PLAN                = 'plan';
     const O_ENROLMENT           = 'enrolment';
+    const O_MANUAL_RECORD       = 'manual_record';
     const O_SUBMISSION          = 'asm_submission';
     const O_SUBMISSION_REVISION = 'asm_submission_revision';
     const O_GROUP               = 'group';
@@ -44,7 +44,6 @@ class Schema
     ];
 
     const BODY = [
-        // 'settings' => [],
         'mappings' => self::MAPPING,
     ];
 
@@ -57,6 +56,7 @@ class Schema
         self::O_LO                  => self::LO_MAPPING,
         self::O_PLAN                => self::PLAN_MAPPING,
         self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
+        self::O_MANUAL_RECORD       => self::MANUAL_RECORD_MAPPING,
         self::O_SUBMISSION          => self::SUBMISSION_MAPPING,
         self::O_SUBMISSION_REVISION => self::SUBMISSION_REVISION_MAPPING,
         self::O_GROUP               => self::GROUP_MAPPING,
@@ -74,7 +74,6 @@ class Schema
     ];
 
     const EDGE_MAPPING = [
-        //'_source'    => ['enabled' => true],
         'properties' => [
             'id'        => ['type' => self::T_INT],
             'type_id'   => ['type' => self::T_INT],
@@ -86,7 +85,6 @@ class Schema
     ];
 
     const PORTAL_MAPPING = [
-        //'_source'    => ['enabled' => true],
         '_parent'    => ['type' => self::O_USER],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -100,7 +98,6 @@ class Schema
     ];
 
     const CONFIGURATION_MAPPING = [
-        //'_source'    => ['enabled' => true],
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -113,7 +110,6 @@ class Schema
     ];
 
     const USER_MAPPING = [
-        //'_source'    => ['enabled' => true],
         'properties' => [
             'id'           => ['type' => self::T_INT],
             'profile_id'   => ['type' => self::T_INT],
@@ -132,7 +128,6 @@ class Schema
     ];
 
     const ACCOUNT_MAPPING = [
-        //'_source'    => ['enabled' => true],
         '_parent'    => ['type' => self::O_USER],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -154,7 +149,6 @@ class Schema
     ];
 
     const LO_MAPPING = [
-        //'_source'    => ['enabled' => true],
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -190,13 +184,12 @@ class Schema
             'fields'      => ['type' => self::T_OBJECT],
             'authors'     => [
                 'type'       => self::T_NESTED,
-                'properties' => self::USER_MAPPING['properties']
+                'properties' => self::USER_MAPPING['properties'],
             ],
         ],
     ];
 
     const PLAN_MAPPING = [
-        //'_source'    => ['enabled' => true],
         'properties' => [
             'id'          => ['type' => self::T_INT],
             'user_id'     => ['type' => self::T_INT],
@@ -214,7 +207,6 @@ class Schema
      * @TODO Make sure the revisions are indexed on content re-indexing.
      */
     const ENROLMENT_MAPPING = [
-        //'_source'    => ['enabled' => true],
         '_routing'   => ['required' => true],
         'properties' => [
             'id'         => ['type' => self::T_INT],
@@ -233,10 +225,10 @@ class Schema
             // @todo Support quiz and interactive.
             'duration'   => ['type' => self::T_INT],
             'lo'         => [
-                'properties' => self::LO_MAPPING['properties']
+                'properties' => self::LO_MAPPING['properties'],
             ],
             'account'    => [
-                'properties' => self::ACCOUNT_MAPPING['properties']
+                'properties' => self::ACCOUNT_MAPPING['properties'],
             ],
             'metadata'   => [
                 'properties' => [
@@ -244,13 +236,25 @@ class Schema
                     'course_id'           => ['type' => self::T_INT],
                     'status'              => ['type' => self::T_SHORT],
                     'has_assessor'        => ['type' => self::T_SHORT],
-                ]
-            ]
+                ],
+            ],
+        ],
+    ];
+
+    const MANUAL_RECORD_MAPPING = [
+        'properties' => [
+            'id'          => ['type' => self::T_INT],
+            'entity_type' => ['type' => self::T_TEXT],
+            'entity_id'   => ['type' => self::T_INT],
+            'user_id'     => ['type' => self::T_INT],
+            'verified'    => ['type' => self::T_BOOL],
+            'created'     => ['type' => self::T_DATE],
+            'updated'     => ['type' => self::T_DATE],
+            'data'        => ['type' => self::T_OBJECT],
         ],
     ];
 
     const SUBMISSION_MAPPING = [
-        //'_source'    => ['enabled' => true],
         '_parent'    => ['type' => self::O_ENROLMENT],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -266,7 +270,6 @@ class Schema
     ];
 
     const SUBMISSION_REVISION_MAPPING = [
-        //'_source'    => ['enabled' => true],
         '_parent'    => ['type' => self::O_SUBMISSION],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -276,14 +279,13 @@ class Schema
             'updated' => ['type' => self::T_DATE],
             'data'    => [
                 'properties' => [
-                    'files'   => ['type' => self::T_OBJECT],
-                ]
+                    'files' => ['type' => self::T_OBJECT],
+                ],
             ],
         ],
     ];
 
     const GROUP_MAPPING = [
-        //'_source'    => ['enabled' => true],
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -297,7 +299,6 @@ class Schema
     ];
 
     const MAIL_MAPPING = [
-        //'_source'    => ['enabled' => true],
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -317,7 +318,6 @@ class Schema
     ];
 
     const PAYMENT_TRANSACTION_MAPPING = [
-        //'_source'    => ['enabled' => true],
         'properties' => [
             'id'             => ['type' => self::T_INT],
             'instance_id'    => ['type' => self::T_INT],
@@ -331,17 +331,16 @@ class Schema
             'payment_method' => ['type' => self::T_KEYWORD],
             'user_id'        => ['type' => self::T_INT],
             'user'           => [
-                'properties' => self::USER_MAPPING['properties']
+                'properties' => self::USER_MAPPING['properties'],
             ],
             'items'          => [
                 'type'       => self::T_NESTED,
-                'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties']
+                'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties'],
             ],
         ],
     ];
 
     const PAYMENT_TRANSACTION_ITEM_MAPPING = [
-        //'_source'    => ['enabled' => true],
         'properties' => [
             'id'           => ['type' => self::T_INT],
             'product_type' => ['type' => self::T_KEYWORD],
@@ -354,24 +353,23 @@ class Schema
     ];
 
     const QUIZ_USER_ANSWER_MAPPING = [
-        //'_source'    => ['enabled' => true],
         'properties' => [
-            'id'             => ['type' => self::T_INT],
-            'question_type'  => ['type' => self::T_KEYWORD],
-            'answer'         => ['type' => self::T_TEXT],
-            'created'        => ['type' => self::T_DATE],
-            'updated'        => ['type' => self::T_DATE],
-            'is_correct'     => ['type' => self::T_BOOL],
-            'is_skipped'     => ['type' => self::T_BOOL],
-            'is_evaluated'   => ['type' => self::T_BOOL],
-            'points'         => ['type' => self::T_INT],
+            'id'            => ['type' => self::T_INT],
+            'question_type' => ['type' => self::T_KEYWORD],
+            'answer'        => ['type' => self::T_TEXT],
+            'created'       => ['type' => self::T_DATE],
+            'updated'       => ['type' => self::T_DATE],
+            'is_correct'    => ['type' => self::T_BOOL],
+            'is_skipped'    => ['type' => self::T_BOOL],
+            'is_evaluated'  => ['type' => self::T_BOOL],
+            'points'        => ['type' => self::T_INT],
             // @todo Handle updating question.
-            'question'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'li_id'          => ['type' => self::T_INT],
-            'counter'        => ['type' => self::T_INT],
-            'user_id'        => ['type' => self::T_INT],
-            'user'           => [
-                'properties' => self::USER_MAPPING['properties']
+            'question'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'li_id'         => ['type' => self::T_INT],
+            'counter'       => ['type' => self::T_INT],
+            'user_id'       => ['type' => self::T_INT],
+            'user'          => [
+                'properties' => self::USER_MAPPING['properties'],
             ],
         ],
     ];
