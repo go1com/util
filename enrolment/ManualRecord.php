@@ -29,8 +29,8 @@ class ManualRecord implements JsonSerializable
         $record->entityType = $input->entity_type ?? null;
         $record->entityId = $input->entity_id ?? null;
         $record->userId = $input->user_id ?? null;
-        $record->verified = $input->verified ?? false;
-        $record->data = !$input->data ? [] : (is_scalar($input->data) ? json_decode($input->data, true) : $input->data);
+        $record->verified = isset($input->verified) ? boolval($input->verified) : false;
+        $record->data = !isset($input->data) ? [] : (is_scalar($input->data) ? json_decode($input->data, true) : $input->data);
         $record->created = $input->created ?? time();
         $record->updated = $input->updated ?? time();
 
@@ -48,6 +48,7 @@ class ManualRecord implements JsonSerializable
     public function jsonSerialize()
     {
         return [
+            'id'          => $this->id,
             'entity_type' => $this->entityType,
             'entity_id'   => $this->entityId,
             'user_id'     => $this->userId,
