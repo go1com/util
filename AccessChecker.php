@@ -117,19 +117,19 @@ class AccessChecker
         return $user->{$property} == $profileId;
     }
 
-    public function hasAccount(Request $req, $portalName)
+    public function hasAccount(Request $req, $instance)
     {
         if (!$user = $this->validUser($req)) {
             return false;
         }
 
-        if ($this->isPortalTutor($req, $portalName)) {
+        if ($this->isPortalTutor($req, $instance)) {
             return true;
         }
 
         $accounts = isset($user->accounts) ? $user->accounts : [];
         foreach ($accounts as &$account) {
-            if ($portalName === $account->instance) {
+            if ($instance === $account->instance) {
                 return true;
             }
         }
