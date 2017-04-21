@@ -37,6 +37,7 @@ class Schema
     const O_MAIL                = 'mail';
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
     const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
+    const O_ECK_METADATA        = 'eck_metadata';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -63,6 +64,7 @@ class Schema
         self::O_MAIL                => self::MAIL_MAPPING,
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
+        self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
     ];
 
     const ANALYZED = [
@@ -244,7 +246,7 @@ class Schema
     const MANUAL_RECORD_MAPPING = [
         'properties' => [
             'id'          => ['type' => self::T_INT],
-            'entity_type' => ['type' => self::T_TEXT],
+            'entity_type' => ['type' => self::T_KEYWORD],
             'entity_id'   => ['type' => self::T_INT],
             'user_id'     => ['type' => self::T_INT],
             'verified'    => ['type' => self::T_BOOL],
@@ -372,5 +374,29 @@ class Schema
                 'properties' => self::USER_MAPPING['properties'],
             ],
         ],
+    ];
+
+    const ECK_METADATA_MAPPING = [
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'instance'      => ['type' => self::T_KEYWORD],
+            'entity_type'   => ['type' => self::T_KEYWORD],
+            'field'         => [
+                'type' => self::T_NESTED,
+                'properties' => [
+                    'id'            => ['type' => self::T_INT],
+                    'name'          => ['type' => self::T_KEYWORD],
+                    'description'   => ['type' => self::T_TEXT],
+                    'label'         => ['type' => self::T_KEYWORD],
+                    'help'          => ['type' => self::T_KEYWORD],
+                    'type'          => ['type' => self::T_KEYWORD],
+                    'published'     => ['type' => self::T_BOOL],
+                    'weight'        => ['type' => self::T_INT],
+                    'max_rows'      => ['type' => self::T_INT],
+                    'parent_field'  => ['type' => self::T_KEYWORD],
+                    'data'          => ['type' => self::T_OBJECT],
+                ]
+            ]
+        ]
     ];
 }

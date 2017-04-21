@@ -76,4 +76,10 @@ class EckHelper
 
         return $entity;
     }
+
+    public static function field(Connection $db, int $fieldId)
+    {
+        $row = $db->executeQuery('SELECT * FROM eck_structure WHERE id = ?', [$fieldId])->fetch(DB::OBJ);
+        return $row ? FieldStructure::create($row) : false;
+    }
 }
