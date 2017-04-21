@@ -21,7 +21,7 @@ class PortalModelTest extends UtilTestCase
             'title'      => 'az.mygo1.com',
             'status'     => 1,
             'is_primary' => 1,
-            'version'    => 'v3.0.0',
+            'version'    => PortalHelper::STABLE_VERSION,
             'data'       => [
                 'user_plan' => [
                     'license'   => 100,
