@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\util\DB;
 use go1\util\edge\EdgeTypes;
 use go1\util\portal\PortalChecker;
+use go1\util\portal\PortalPricing;
 use PDO;
 use stdClass;
 
@@ -25,6 +26,8 @@ class Portal
 
     /** @var object */
     public $data;
+
+    public $user_plan;
 
     /**
      * @param stdClass        $row
@@ -56,9 +59,22 @@ class Portal
                 $portal->domains = $db->executeQuery($sql, [$domainIds], [DB::INTEGERS])->fetchAll(PDO::FETCH_COLUMN);
             }
         }
-        if (isset($portal->data->user_plan)) {
-            $portal->userPlan = $portal->data->user_plan;
+
+        if (isset($data->user_plan)) {
+            $portalData = (object) ['data' => $data];
+            list($price, $currency) = PortalPricing::getPrice($portalData);
+
+            $portal->user_plan = (object) [
+                'license'   => PortalPricing::getLicenses($portalData),
+                'product'   => PortalPricing::getProduct($portalData),
+                'regional'  => PortalPricing::getRegional($portalData),
+                'price'     => $price,
+                'currency'  => $currency,
+            ];
         }
+
+        $portal->regionalOptions = PortalPricing::REGIONAL;
+        $portal->productOptions = [PortalPricing::PRODUCT_PLATFORM, PortalPricing::PRODUCT_PREMIUM];
 
         return $portal;
     }
