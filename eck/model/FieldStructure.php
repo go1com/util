@@ -11,6 +11,8 @@ class FieldStructure implements JsonSerializable
 {
     private $id;
     private $name;
+    private $instance;
+    private $entity;
     private $description;
     private $label;
     private $help;
@@ -23,7 +25,7 @@ class FieldStructure implements JsonSerializable
     private $permissions = [];
     private $original;
 
-    public function __construct($id, $name, $description, $label, $help, $type, $mandatory, $published, $weight, $maxRows, $parentField = null)
+    public function __construct($id, $name, $description, $label, $help, $type, $mandatory, $published, $weight, $maxRows, $parentField = null, $instance = null, $entity = null)
     {
         $this->id = $id ? intval($id) : null;
         $this->name = $name;
@@ -36,6 +38,8 @@ class FieldStructure implements JsonSerializable
         $this->weight = $weight;
         $this->maxRows = $maxRows;
         $this->parentField = $parentField;
+        $this->instance = $instance;
+        $this->entity = $entity;
     }
 
     /**
@@ -54,7 +58,10 @@ class FieldStructure implements JsonSerializable
             $row->required,
             $row->published,
             $row->weight,
-            $row->max_rows
+            $row->max_rows,
+            $row->parent_field,
+            $row->instance,
+            $row->entity
         );
     }
 
@@ -285,6 +292,8 @@ class FieldStructure implements JsonSerializable
         return [
             'id'           => $this->id,
             'name'         => $this->name,
+            'instance'     => $this->instance,
+            'entity'       => $this->entity,
             'description'  => $this->description,
             'label'        => $this->label,
             'help'         => $this->help,
@@ -297,5 +306,15 @@ class FieldStructure implements JsonSerializable
             'permission'   => !empty($permissions) ? $permissions : [],
             'original'     => $this->original,
         ];
+    }
+
+    public function instance()
+    {
+        return $this->instance;
+    }
+
+    public function entity()
+    {
+        return $this->entity;
     }
 }
