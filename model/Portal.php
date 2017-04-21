@@ -46,7 +46,7 @@ class Portal
         $portal->version = $row->version;
         $portal->timestamp = $row->timestamp;
         $portal->created = $row->created;
-        $portal->data = $data;
+        $portal->data = clone $data;
         $portal->domains = [];
         $portal->primaryDomain = (new PortalChecker)->getPrimaryDomain($row);
 
