@@ -27,7 +27,7 @@ class Portal
     /** @var object */
     public $data;
 
-    public $user_plan;
+    public $plan;
 
     /**
      * @param stdClass        $row
@@ -64,7 +64,7 @@ class Portal
             $portalData = (object) ['data' => $data];
             list($price, $currency) = PortalPricing::getPrice($portalData);
 
-            $portal->user_plan = (object) [
+            $portal->plan = (object) [
                 'license'   => PortalPricing::getLicenses($portalData),
                 'product'   => PortalPricing::getProduct($portalData),
                 'regional'  => PortalPricing::getRegional($portalData),
