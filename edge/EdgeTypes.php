@@ -125,6 +125,9 @@ class EdgeTypes
     const HAS_SHARE_GROUP_NOTE       = 604; # T: gc_social_group.id | S: gc_note.id
     const HAS_SHARE_PORTAL_NOTE      = 605; # T: gc_note.id         | S: gc_instance.id
     const HAS_NOTE                   = 606; # T: gc_note.id         | S: gc_user.id
+    const HAS_MANUAL_PAYMENT         = 607; # T: submitted times    | S: lo.id | W: gc_user.id
+    const HAS_MANUAL_PAYMENT_ACCEPT  = 608; # T: submitted times    | S: lo.id | W: gc_user.id
+    const HAS_MANUAL_PAYMENT_REJECT  = 609; # T: submitted times    | S: lo.id | W: gc_user.id
     const HAS_ASSIGN                 = 701; # T: enrolment.id       | S: gc_user.id
     const HAS_LO_ASSIGNMENT          = 702; # T: suggested LO       | S: gc_user.id | Weight: Suggesting user.
     const HAS_LO_ASSIGNMENT_ACCEPTED = 703; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is accepted.
