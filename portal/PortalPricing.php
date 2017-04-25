@@ -51,7 +51,7 @@ class PortalPricing
 
     public static function getTrial(stdClass $portal)
     {
-        return isset($portal->data->user_plan->trial) ? $portal->data->user_plan->trial : ($portal->data->configuration->trial ?? 0);
+        return $portal->data->user_plan->trial ?? ($portal->data->configuration->trial ?? 0);
     }
 
     public static function getExpire(stdClass $portal)
