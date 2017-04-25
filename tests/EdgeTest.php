@@ -53,6 +53,23 @@ class EdgeTest extends UtilTestCase
         $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_REJECTED, $msg->type);
     }
 
+    public function testChangeTypeData()
+    {
+        // Create an edge
+        $id = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_CREDIT_REQUEST, $sourceId = 1, $targetId = 2);
+
+        // Change its type
+        EdgeHelper::changeType($this->db, $this->queue, $id, EdgeTypes::HAS_CREDIT_REQUEST_REJECTED);
+        $ro = EdgeHelper::load($this->db, $id);
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_REJECTED, $ro->type);
+        $this->assertTrue(property_exists($ro->data->oldType, EdgeTypes::HAS_CREDIT_REQUEST));
+
+        EdgeHelper::changeType($this->db, $this->queue, $id, EdgeTypes::HAS_CREDIT_REQUEST_DONE);
+        $ro = EdgeHelper::load($this->db, $id);
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_DONE, $ro->type);
+        $this->assertTrue(property_exists($ro->data->oldType, EdgeTypes::HAS_CREDIT_REQUEST_REJECTED));
+    }
+
     public function testNoDuplication()
     {
         $rClass = new ReflectionClass(EdgeTypes::class);
