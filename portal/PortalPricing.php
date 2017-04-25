@@ -49,6 +49,16 @@ class PortalPricing
         return $portal->data->user_plan->product ?? static::PRODUCT_PLATFORM;
     }
 
+    public static function getTrial(stdClass $portal)
+    {
+        return $portal->data->user_plan->trial ?? ($portal->data->configuration->trial ?? 0);
+    }
+
+    public static function getExpire(stdClass $portal)
+    {
+        return $portal->data->user_plan->expire ?? 0;
+    }
+
     public static function getUserLimitationNumber($portal)
     {
         $userLicenses = static::getLicenses($portal);

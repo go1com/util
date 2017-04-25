@@ -25,8 +25,10 @@ class PortalModelTest extends UtilTestCase
             'data'       => [
                 'user_plan' => [
                     'license'   => 100,
+                    'trial'     => 1,
+                    'expire'    => time(),
                     'product'   => PortalPricing::PRODUCT_PLATFORM,
-                    'regional'  => PortalPricing::REGIONAL_DEFAULT
+                    'regional'  => PortalPricing::REGIONAL_DEFAULT,
                 ],
                 'configuration' => [
                     'site_name' => 'foo'
@@ -52,6 +54,8 @@ class PortalModelTest extends UtilTestCase
         $this->assertEquals($data['timestamp'], $model->timestamp);
         $this->assertEquals($data['created'], $model->created);
         $this->assertEquals($data['data']['user_plan']['license'], $model->plan->license);
+        $this->assertEquals($data['data']['user_plan']['trial'], $model->plan->trial);
+        $this->assertEquals($data['data']['user_plan']['expire'], $model->plan->expire);
         $this->assertEquals($data['data']['user_plan']['product'], $model->plan->product);
         $this->assertEquals($data['data']['user_plan']['regional'], $model->plan->regional);
         $this->assertEquals($data['data']['configuration']['site_name'], $model->data->configuration->site_name);
