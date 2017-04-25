@@ -28,7 +28,12 @@ class EdgeHelper
         if ($edge = self::load($db, $id)) {
             $edge->original = clone $edge;
             $edge->type = $newType;
-            $edge->data->oldType->{$newType} = time();
+            if (isset($edge->data->oldType->{$newType})) {
+                $edge->data->oldType->{$newType} = time();
+            }
+            else {
+                $edge->data->oldType[$newType] = time();
+            }
             ($log) && $edge->data->log[] = $log;
 
             $db->update(
