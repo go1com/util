@@ -4,6 +4,8 @@ namespace go1\util;
 
 class Service
 {
+    const VERSION = 'v17.4.4.0';
+
     public static function cacheOptions($root)
     {
         return (getenv('CACHE_BACKEND') && 'memcached' === getenv('CACHE_BACKEND'))
@@ -75,7 +77,7 @@ class Service
         }
     }
 
-    public static function elasticSearchIndex(): string 
+    public static function elasticSearchIndex(): string
     {
         !defined('ES_INDEX') && define('ES_INDEX', getenv('ES_INDEX') ?: 'go1_dev');
 
