@@ -5,6 +5,8 @@ namespace go1\util;
 use Aws\Credentials\CredentialProvider;
 use Aws\Credentials\Credentials;
 use Aws\ElasticsearchService\ElasticsearchPhpHandler;
+use Aws\S3\S3Client;
+use Elasticsearch\ClientBuilder as EsClientBuilder;
 use go1\clients\AccountsClient;
 use go1\clients\CurrencyClient;
 use go1\clients\EntityClient;
@@ -23,8 +25,8 @@ use go1\clients\SmsClient;
 use go1\clients\UserClient;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
+use go1\util\report\Export;
 use GraphAware\Neo4j\Client\ClientBuilder;
-use Elasticsearch\ClientBuilder as EsClientBuilder;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Vectorface\Whip\Whip;
@@ -55,6 +57,10 @@ class UtilServiceProvider implements ServiceProviderInterface
             return new LoChecker;
         };
 
+        $c['report_export'] = function (Container $c) {
+            return new Export($c['go1.client.s3'], $c['go1.client.es']);
+        };
+
         $c['go1.client.accounts'] = function (Container $c) {
             return new AccountsClient($c['dbs']['default'], $c['cache'], $c['accounts_name']);
         };
@@ -75,6 +81,15 @@ class UtilServiceProvider implements ServiceProviderInterface
             return $client
                 ->setHosts([parse_url($o['endpoint'])])
                 ->build();
+        };
+
+        $c['go1.client.s3'] = function (Container $c) {
+            $o = $c['s3Options'];
+            return new S3Client([
+                'region'      => $o['region'],
+                'version'     => '2006-03-01',
+                'credentials' => new Credentials($o['key'], $o['secret']),
+            ]);
         };
 
         $c['go1.client.user'] = function (Container $c) {

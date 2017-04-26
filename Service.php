@@ -83,4 +83,11 @@ class Service
 
         return ES_INDEX;
     }
+
+    public static function s3Bucket(): string
+    {
+        !defined('S3_BUCKET') && define('S3_BUCKET', getenv('S3_BUCKET') ?: 'dev.mygo1.com');
+
+        return S3_BUCKET;
+    }
 }
