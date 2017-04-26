@@ -203,9 +203,11 @@ class QuizSchema
         $tbl->addColumn('editor', 'integer', ['unsigned' => true, 'notnull' => true, 'comment' => 'Person who created this quiz']);
         $tbl->addColumn('data', 'text', ['notnull' => false, 'comment' => 'Json encoded extra data.']);
         $tbl->addColumn('config', 'text', ['notnull' => false, 'default' => null, 'comment' => 'Json encoded config.']);
+        $tbl->addColumn('li_id', 'integer', ['notnull' => false, 'default' => null, 'comment' => 'Learning item id']);
         $tbl->setPrimaryKey(['question_id']);
         $tbl->addUniqueIndex(['question_rid'], 'unq_question_question_rid');
         $tbl->addIndex(['uuid'], 'idx_question_uuid');
+        $tbl->addIndex(['li_id', 'uuid'], 'idx_question_li_id_uuid');
 
         // question result
         $tbl = $schema->createTable('question_result');
@@ -236,6 +238,7 @@ class QuizSchema
         $tbl->addColumn('editor', 'integer', ['unsigned' => true, 'notnull' => true, 'comment' => 'Person who updated this question']);
         $tbl->addColumn('data', 'text', ['notnull' => false, 'comment' => 'Json encoded extra data.']);
         $tbl->addColumn('config', 'text', ['notnull' => false, 'default' => null, 'comment' => 'Json encoded config.']);
+        $tbl->addColumn('li_id', 'integer', ['notnull' => false, 'default' => null, 'comment' => 'Learning item id']);
         $tbl->setPrimaryKey(['question_rid']);
         $tbl->addIndex(['ruuid'], 'idx_question_revisions_ruuid');
         $tbl->addIndex(['uuid'], 'idx_question_revisions_uuid');
