@@ -168,11 +168,11 @@ class MailTemplate
     const ONBOARD_SENT = [
         'key'    => 'onboard.sent',
         'tokens' => [
-            '!full_name'    => 'User full name.',
-            '!user_name'    => 'User email.',
-            '!phone'        => 'User phone.',
-            '!site_name'    => 'Human name of the portal.',
-            '!portal_url'   => 'The portal URL.'
+            '!full_name'  => 'User full name.',
+            '!user_name'  => 'User email.',
+            '!phone'      => 'User phone.',
+            '!site_name'  => 'Human name of the portal.',
+            '!portal_url' => 'The portal URL.',
         ],
     ];
 
@@ -216,13 +216,37 @@ class MailTemplate
     ];
 
     const ASSIGNMENT_SUBMIT = [
-        'key'=> 'assignment.submit',
+        'key'    => 'assignment.submit',
         'tokens' => [
             '!learner_name'    => 'Learner full name',
             '!assignment_name' => 'Assignment name',
             '!module_name'     => 'Module name',
             '!submission_time' => 'Submission time',
             '!assignment_url'  => 'Assignment URL',
+        ],
+    ];
+
+    const ASSIGNMENT_MARKED = [
+        'key'    => 'assignment.marked',
+        'tokens' => [
+            '!li_title'          => 'Learning item title',
+            '!li_submission_url' => 'Learning item submission url',
+        ],
+    ];
+
+    const QUIZ_MARKING = [
+        'key'    => 'quiz.marking',
+        'tokens' => [
+            '!learner_full_name' => 'Learner full name',
+            '!quiz_title'        => 'Quiz title',
+            '!quiz_url'          => 'Quiz URL',
+        ],
+    ];
+
+    const QUIZ_MARKED = [
+        'key'    => 'quiz.marked',
+        'tokens' => [
+            '!li_title' => 'Learning item title',
         ],
     ];
 
