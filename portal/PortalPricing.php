@@ -2,6 +2,7 @@
 
 namespace go1\util\portal;
 
+use go1\util\Currency;
 use stdClass;
 
 class PortalPricing
@@ -67,7 +68,7 @@ class PortalPricing
 
     public static function getCurrency(stdClass $portal)
     {
-        return $portal->data->user_plan->currency ?? 'AUD';
+        return $portal->data->user_plan->currency ?? Currency::DEFAULT;
     }
 
     public static function getUserLimitationNumber($portal)
