@@ -32,6 +32,11 @@ class Coupon implements JsonSerializable
         # Should not create the object directly.
     }
 
+    public function type(): string
+    {
+        return (self::TYPE_PERCENT == $this->type) ? '%' : '$';
+    }
+
     public static function create(stdClass $input): Coupon
     {
         $coupon = new Coupon;
