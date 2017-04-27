@@ -148,9 +148,10 @@ class MailTemplate
             '!recipient_name' => 'Recipient full name',
             '!user_name'      => 'User full name',
             '!course_name'    => 'Course name',
+            '!quantity'       => 'Credit quantity',
             '!description'    => 'Enrolment description',
-            '!reject_url'     => 'Reject URL',
-            '!accept_url'     => 'Accept URL',
+            '!credit_type'    => 'Credit type',
+            '!payment_url'    => 'Payment URL',
         ],
     ];
 
@@ -247,6 +248,22 @@ class MailTemplate
         'key'    => 'quiz.marked',
         'tokens' => [
             '!li_title' => 'Learning item title',
+        ],
+    ];
+
+    const NOTE_CREATE = [
+        'key'    => 'note.create',
+        'tokens' => [
+            '!entity_type' => 'Note entity type',
+            '!entity_name' => 'Note entity name',
+            '!note_url'    => 'Note URL',
+            '!portal_url'  => 'Portal URL',
+        ],
+    ];
+
+    const NOTE_MENTION = [
+        'key'    => 'note.mention',
+        'tokens' => [
         ],
     ];
 
