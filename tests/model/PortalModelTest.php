@@ -55,12 +55,14 @@ class PortalModelTest extends UtilTestCase
         $this->assertEquals($data['created'], $model->created);
         $this->assertEquals($data['data']['user_plan']['license'], $model->plan->license);
         $this->assertEquals($data['data']['user_plan']['trial'], $model->plan->trial);
+        $this->assertEquals(PortalPricing::PLAN_STATUS[$model->plan->trial], $model->plan->trialText);
         $this->assertEquals($data['data']['user_plan']['expire'], $model->plan->expire);
         $this->assertEquals($data['data']['user_plan']['product'], $model->plan->product);
         $this->assertEquals($data['data']['user_plan']['regional'], $model->plan->regional);
-        $this->assertEquals($data['data']['configuration']['site_name'], $model->data->configuration->site_name);
         $this->assertEquals(2400, $model->plan->price);
         $this->assertEquals('AUD', $model->plan->currency);
+
+        $this->assertEquals($data['data']['configuration']['site_name'], $model->data->configuration->site_name);
         $this->assertTrue(in_array('domain.go1.com', $model->domains));
     }
 }

@@ -63,20 +63,23 @@ class Portal
         if (isset($data->user_plan)) {
             $portalData = (object)['data' => $data];
             list($price, $currency) = PortalPricing::getPrice($portalData);
+            $trial = PortalPricing::getTrial($portalData);
 
             $portal->plan = (object)[
-                'license'  => PortalPricing::getLicenses($portalData),
-                'product'  => PortalPricing::getProduct($portalData),
-                'regional' => PortalPricing::getRegional($portalData),
-                'trial'    => PortalPricing::getTrial($portalData),
-                'expire'   => PortalPricing::getExpire($portalData),
-                'price'    => $price,
-                'currency' => $currency,
+                'license'   => PortalPricing::getLicenses($portalData),
+                'product'   => PortalPricing::getProduct($portalData),
+                'regional'  => PortalPricing::getRegional($portalData),
+                'trial'     => $trial,
+                'trialText' => PortalPricing::PLAN_STATUS[$trial],
+                'expire'    => PortalPricing::getExpire($portalData),
+                'price'     => $price,
+                'currency'  => $currency,
             ];
         }
 
         $portal->regionalOptions = PortalPricing::REGIONAL;
         $portal->productOptions = [PortalPricing::PRODUCT_PLATFORM, PortalPricing::PRODUCT_PREMIUM];
+        $portal->trialOptions   = PortalPricing::PLAN_STATUS;
 
         return $portal;
     }
