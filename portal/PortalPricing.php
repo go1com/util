@@ -34,6 +34,12 @@ class PortalPricing
         'US'    => ['currency' => 'USD', 'price' => 8],
     ];
 
+    const PLAN_STATUS                   = [
+        0   => 'Free',
+        1   => 'Trial',
+        2   => 'Paid'
+    ];
+
     public static function getLicenses(stdClass $portal)
     {
         return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : static::PLATFORM_UNLIMITED_LICENSE;
