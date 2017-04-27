@@ -35,10 +35,13 @@ class PortalPricing
         'US'    => ['currency' => 'USD', 'price' => 8],
     ];
 
+    const PLAN_STATUS_FREE              = 0;
+    const PLAN_STATUS_TRIAL             = 1;
+    const PLAN_STATUS_PAID              = 2;
     const PLAN_STATUS                   = [
-        0   => 'Free',
-        1   => 'Trial',
-        2   => 'Paid'
+        self::PLAN_STATUS_FREE    => 'Free',
+        self::PLAN_STATUS_TRIAL   => 'Trial',
+        self::PLAN_STATUS_PAID    => 'Paid'
     ];
 
     public static function getLicenses(stdClass $portal)
