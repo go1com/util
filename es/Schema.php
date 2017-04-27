@@ -145,7 +145,7 @@ class Schema
             'allow_public' => ['type' => self::T_BOOL],
             'roles'        => ['type' => self::T_KEYWORD],
             'fields'       => ['type' => self::T_OBJECT],
-            'groups'       => ['type' => self::T_KEYWORD],
+            'groups'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'managers'     => ['type' => self::T_INT],
         ],
     ];
