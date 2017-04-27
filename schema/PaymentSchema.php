@@ -76,7 +76,7 @@ class PaymentSchema
         # uuid: The UUID of connection. Should be instance public key.
         # code: OAuth code, on success connection, Stripe redirect user to /CALLBACK?scope=read_write&code=…
         # data: The full object returned from /oauth/token.
-        if ($schema->hasTable('stripe_connection')) {
+        if (!$schema->hasTable('stripe_connection')) {
             $connection = $schema->createTable('stripe_connection');
             $connection->addColumn('uuid', Type::STRING);
             $connection->addColumn('code', Type::STRING);
