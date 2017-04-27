@@ -21,10 +21,11 @@ class CouponRepository
         $this->queue = $queue;
     }
 
-    public function load(int $id)
+    public function load($idOrCode)
     {
-        $coupon = 'SELECT * FROM payment_coupon WHERE id = ?';
-        $coupon = $this->db->executeQuery($coupon, [$id])->fetch(DB::OBJ);
+        $column = is_numeric($idOrCode) ? 'id' : 'code';
+        $coupon = "SELECT * FROM payment_coupon WHERE {$column} = ?";
+        $coupon = $this->db->executeQuery($coupon, [$idOrCode])->fetch(DB::OBJ);
 
         return $coupon ? Coupon::create($coupon) : false;
     }
