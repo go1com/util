@@ -10,7 +10,7 @@ class PaymentSchema
     public static function install(Schema $schema)
     {
         // Custom index for each portal.
-        if ($schema->hasTable('payment_local_id')) {
+        if (!$schema->hasTable('payment_local_id')) {
             $localTransactionId = $schema->createTable('payment_local_id');
             $localTransactionId->addColumn('transaction_id', Type::INTEGER, ['unsigned' => true]);
             $localTransactionId->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
@@ -85,7 +85,7 @@ class PaymentSchema
             $connection->addIndex(['code']);
         }
 
-        if ($schema->hasTable('payment_cart')) {
+        if (!$schema->hasTable('payment_cart')) {
             $cart = $schema->createTable('payment_cart');
             $cart->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $cart->addColumn('data', 'blob');
@@ -94,7 +94,7 @@ class PaymentSchema
             $cart->addIndex(['timestamp']);
         }
 
-        if ($schema->hasTable('payment_cart_items')) {
+        if (!$schema->hasTable('payment_cart_items')) {
             $item = $schema->createTable('payment_cart_items');
             $item->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $item->addColumn('cart_id', Type::INTEGER, ['unsigned' => true]);
@@ -108,7 +108,7 @@ class PaymentSchema
             $item->addForeignKeyConstraint('payment_cart', ['cart_id'], ['id']);
         }
 
-        if ($schema->hasTable('payment_customer')) {
+        if (!$schema->hasTable('payment_customer')) {
             $customer = $schema->createTable('payment_customer');
             $customer->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $customer->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
