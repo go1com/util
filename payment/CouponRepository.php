@@ -66,9 +66,20 @@ class CouponRepository
             $db->delete('payment_coupon_usage', ['coupon_id' => $coupon->id]);
             $db->executeQuery('DELETE FROM payment_coupon WHERE id = ?', ['id' => $coupon->id]);
 
-        $this->queue->publish($coupon, Queue::COUPON_DELETE);
+            $this->queue->publish($coupon, Queue::COUPON_DELETE);
         });
 
         return true;
+    }
+
+    public function recordUsage(Coupon $coupon, int $transactionId, $userId): int
+    {
+        $this->db->insert('payment_coupon_usage', [
+            'coupon_id'      => $coupon->id,
+            'transaction_id' => $transactionId,
+            'user_id'        => $userId,
+        ]);
+
+        return $this->db->lastInsertId('payment_coupon_usage');
     }
 }
