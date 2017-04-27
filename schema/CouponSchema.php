@@ -31,7 +31,7 @@ class CouponSchema
 
         $couponUsage = $schema->createTable('payment_coupon_usage');
         $couponUsage->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
-        $couponUsage->addColumn('coupon_id', Type::INTER, ['unsigned' => true]);
+        $couponUsage->addColumn('coupon_id', Type::INTEGER, ['unsigned' => true]);
         $couponUsage->addColumn('transaction_id', Type::INTEGER, ['unsigned' => true]);
         $couponUsage->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
         $couponUsage->addColumn('entity_type', Type::STRING);
