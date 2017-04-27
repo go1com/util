@@ -62,8 +62,12 @@ class CouponRepository
             return false;
         }
 
-        $this->db->executeQuery('DELETE FROM payment_coupon WHERE id = ?', ['id' => $id]);
+        DB::transactional($this->db, function (Connection $db) use (&$coupon) {
+            $db->delete('payment_coupon_usage', ['coupon_id' => $coupon->id]);
+            $db->executeQuery('DELETE FROM payment_coupon WHERE id = ?', ['id' => $coupon->id]);
+
         $this->queue->publish($coupon, Queue::COUPON_DELETE);
+        });
 
         return true;
     }
