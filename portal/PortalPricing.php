@@ -2,6 +2,7 @@
 
 namespace go1\util\portal;
 
+use go1\util\Currency;
 use stdClass;
 
 class PortalPricing
@@ -65,6 +66,11 @@ class PortalPricing
         return $portal->data->user_plan->expire ?? 0;
     }
 
+    public static function getCurrency(stdClass $portal)
+    {
+        return $portal->data->user_plan->currency ?? Currency::DEFAULT;
+    }
+
     public static function getUserLimitationNumber($portal)
     {
         $userLicenses = static::getLicenses($portal);
@@ -85,6 +91,12 @@ class PortalPricing
      */
     public static function getPrice(stdClass $portal): array
     {
+        $currency = static::getCurrency($portal);
+        $price = $portal->data->user_plan->price ?? 0;
+        if ($price) {
+            return [$price, $currency];
+        }
+
         $license = static::getLicenses($portal);
         $regional = static::getRegional($portal);
         $product = static::getProduct($portal);
