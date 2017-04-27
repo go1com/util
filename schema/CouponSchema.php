@@ -40,13 +40,9 @@ class CouponSchema
             $couponUsage->addColumn('coupon_id', Type::INTEGER, ['unsigned' => true]);
             $couponUsage->addColumn('transaction_id', Type::INTEGER, ['unsigned' => true]);
             $couponUsage->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
-            $couponUsage->addColumn('entity_type', Type::STRING);
-            $couponUsage->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
             $couponUsage->addIndex(['coupon_id']);
             $couponUsage->addIndex(['transaction_id']);
             $couponUsage->addIndex(['user_id']);
-            $couponUsage->addIndex(['entity_type']);
-            $couponUsage->addIndex(['entity_id']);
             $couponUsage->addIndex(['created']);
             $couponUsage->addIndex(['updated']);
             $couponUsage->addForeignKeyConstraint('payment_coupon', ['coupon_id'], ['id']);
