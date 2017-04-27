@@ -60,6 +60,9 @@ class Queue
     const TAG_CREATE               = 'tag.create';
     const TAG_UPDATE               = 'tag.update';
     const TAG_DELETE               = 'tag.delete';
+    const COUPON_CREATE            = 'coupon.create';
+    const COUPON_UPDATE            = 'coupon.update';
+    const COUPON_DELETE            = 'coupon.delete';
     const TRANSACTION_CREATE       = 'transaction.create';
     const TRANSACTION_UPDATE       = 'transaction.update';
     const ASM_ASSIGNMENT_CREATE    = 'asm.assignment.create';
