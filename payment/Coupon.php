@@ -2,6 +2,7 @@
 
 namespace go1\util\payment;
 
+use Assert\Assert;
 use JsonSerializable;
 use Ramsey\Uuid\Uuid;
 use stdClass;
@@ -48,6 +49,16 @@ class Coupon implements JsonSerializable
         $coupon->updated = $input->updated ?? time();
 
         return $coupon;
+    }
+
+    public function validateCartItems(array $items)
+    {
+        $assert = Assert::lazy();
+        foreach ($items as $i => &$item) {
+            $assert->that($item->instanceId ?? null, "item_{$i}")->eq($this->instanceId);
+        }
+
+        $assert->verifyNow();
     }
 
     public function diff(Coupon $coupon): array
