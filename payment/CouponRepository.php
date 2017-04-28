@@ -21,6 +21,11 @@ class CouponRepository
         $this->queue = $queue;
     }
 
+    public function db(): Connection
+    {
+        return $this->db;
+    }
+
     public function load($idOrCode)
     {
         $column = is_numeric($idOrCode) ? 'id' : 'code';
