@@ -9,7 +9,7 @@ class CouponSchema
 {
     public static function install(Schema $schema)
     {
-        if ($schema->hasTable('payment_coupon')) {
+        if (!$schema->hasTable('payment_coupon')) {
             $coupon = $schema->createTable('payment_coupon');
             $coupon->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $coupon->addColumn('code', Type::STRING);
@@ -21,10 +21,10 @@ class CouponSchema
             $coupon->addColumn('value', Type::FLOAT, ['unsigned' => true]);
             $coupon->addColumn('status', Type::SMALLINT, ['description' => '-1: No longer available/Reach limitation. 0: Unpublished. 1: Still available.']);
             $coupon->addColumn('limitation', Type::INTEGER, ['unsigned' => true]);
-            $coupon->addColumn('expiration', Type::DATETIMETZ);
+            $coupon->addColumn('expiration', Type::DATETIMETZ, ['notnull' => false]);
             $coupon->addColumn('created', Type::INTEGER);
             $coupon->addColumn('updated', Type::INTEGER);
-            $coupon->setPrimaryKey(['coupon']);
+            $coupon->setPrimaryKey(['id']);
             $coupon->addUniqueIndex(['code']);
             $coupon->addIndex(['instance_id']);
             $coupon->addIndex(['entity_type']);
@@ -34,17 +34,17 @@ class CouponSchema
             $coupon->addIndex(['updated']);
         }
 
-        if ($schema->hasTable('payment_coupon_usage')) {
+        if (!$schema->hasTable('payment_coupon_usage')) {
             $couponUsage = $schema->createTable('payment_coupon_usage');
             $couponUsage->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $couponUsage->addColumn('coupon_id', Type::INTEGER, ['unsigned' => true]);
             $couponUsage->addColumn('transaction_id', Type::INTEGER, ['unsigned' => true]);
             $couponUsage->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $couponUsage->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $couponUsage->addIndex(['coupon_id']);
             $couponUsage->addIndex(['transaction_id']);
             $couponUsage->addIndex(['user_id']);
             $couponUsage->addIndex(['created']);
-            $couponUsage->addIndex(['updated']);
             $couponUsage->addForeignKeyConstraint('payment_coupon', ['coupon_id'], ['id']);
         }
     }
