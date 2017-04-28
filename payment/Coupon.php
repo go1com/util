@@ -60,7 +60,7 @@ class Coupon implements JsonSerializable
     {
         $assert = Assert::lazy();
         foreach ($items as $i => &$item) {
-            $assert->that($item->instanceId ?? null, "item_{$i}")->eq($this->instanceId);
+            $assert->that($item['instanceId'] ?? null, "item_{$i}.instanceId")->eq($this->instanceId);
         }
 
         $assert->verifyNow();

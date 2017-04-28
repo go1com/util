@@ -78,6 +78,7 @@ class CouponRepository
             'coupon_id'      => $coupon->id,
             'transaction_id' => $transactionId,
             'user_id'        => $userId,
+            'created'        => time(),
         ]);
 
         return $this->db->lastInsertId('payment_coupon_usage');

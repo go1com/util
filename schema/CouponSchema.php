@@ -41,6 +41,7 @@ class CouponSchema
             $couponUsage->addColumn('transaction_id', Type::INTEGER, ['unsigned' => true]);
             $couponUsage->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $couponUsage->addColumn('created', Type::INTEGER, ['unsigned' => true]);
+            $couponUsage->setPrimaryKey(['id']);
             $couponUsage->addIndex(['coupon_id']);
             $couponUsage->addIndex(['transaction_id']);
             $couponUsage->addIndex(['user_id']);
