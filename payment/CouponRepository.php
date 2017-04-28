@@ -88,4 +88,9 @@ class CouponRepository
 
         return $this->db->lastInsertId('payment_coupon_usage');
     }
+
+    public function countUsage(Coupon $coupon): int
+    {
+        return $this->db->fetchColumn('SELECT COUNT(*) FROM payment_coupon_usage WHERE coupon_id = ?', [$coupon->id]);
+    }
 }
