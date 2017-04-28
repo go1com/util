@@ -142,8 +142,20 @@ class MailTemplate
         ],
     ];
 
-    const USER_MANUAL_PAYMENT_COURSE = [
-        'key'    => 'user.manual.payment.course',
+    const USER_MANUAL_PAYMENT_CREATE = [
+        'key'    => 'user.manual-payment.create',
+        'tokens' => [
+            '!recipient_name' => 'Recipient full name',
+            '!user_name'      => 'User full name',
+            '!course_name'    => 'Course name',
+            '!description'    => 'Enrolment description',
+            '!accept_url'     => 'Accept payment URL',
+            '!reject_url'     => 'Reject payment URL',
+        ],
+    ];
+
+    const USER_MANUAL_PAYMENT_BULK_CREATE = [
+        'key'    => 'user.manual-payment.create',
         'tokens' => [
             '!recipient_name' => 'Recipient full name',
             '!user_name'      => 'User full name',
@@ -151,7 +163,30 @@ class MailTemplate
             '!quantity'       => 'Credit quantity',
             '!description'    => 'Enrolment description',
             '!credit_type'    => 'Credit type',
-            '!payment_url'    => 'Payment URL',
+            '!accept_url'     => 'Accept payment URL',
+            '!reject_url'     => 'Reject payment URL',
+        ],
+    ];
+
+    const USER_MANUAL_PAYMENT_ACCEPT = [
+        'key'    => 'user.manual-payment.accept',
+        'tokens' => [
+            '!payer_name'  => 'Payer full name',
+            '!course_name' => 'Course name',
+            '!site_name'   => 'Human name of the portal',
+            '!course_url'  => 'Course URL',
+            '!portal_url'  => 'Portal URL',
+        ],
+    ];
+
+    const USER_MANUAL_PAYMENT_REJECT = [
+        'key'    => 'user.manual-payment.reject',
+        'tokens' => [
+            '!payer_name'  => 'Payer full name',
+            '!course_name' => 'Course name',
+            '!site_name'   => 'Human name of the portal',
+            '!course_url'  => 'Course URL',
+            '!portal_url'  => 'Portal URL',
         ],
     ];
 
