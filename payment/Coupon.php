@@ -50,6 +50,7 @@ class Coupon implements JsonSerializable
         $coupon->value = $input->value ?? 0.00;
         $coupon->status = $input->status ?? 0;
         $coupon->limitation = $input->limitation ?? 1;
+        $coupon->expiration = $input->expiration ?? null;
         $coupon->created = $input->created ?? time();
         $coupon->updated = $input->updated ?? time();
 
@@ -69,10 +70,6 @@ class Coupon implements JsonSerializable
     public function diff(Coupon $coupon): array
     {
         $diff = [];
-
-        if ($coupon->entityType != $this->entityType) {
-            $diff['entity_type'] = $coupon->entityType;
-        }
 
         if ($coupon->entityId != $this->entityId) {
             $diff['entity_id'] = $coupon->entityId;

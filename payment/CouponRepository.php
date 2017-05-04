@@ -26,6 +26,10 @@ class CouponRepository
         return $this->db;
     }
 
+    public function browse(stdClass $user, $instanceId, $entityType = 'lo', $entityId = null, int $limit = 50, int $offset = 0): array
+    {
+    }
+
     public function load($idOrCode)
     {
         $column = is_numeric($idOrCode) ? 'id' : 'code';
