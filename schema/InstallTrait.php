@@ -4,6 +4,7 @@ namespace go1\util\schema;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 use go1\kv\KV;
 use go1\util\DB;
 use go1\util\plan\PlanRepository;
@@ -32,6 +33,17 @@ trait InstallTrait
                     $edge->addIndex(['source_id']);
                     $edge->addIndex(['target_id']);
                     $edge->addUniqueIndex(['type', 'source_id', 'target_id']);
+                }
+
+                if (!$schema->hasTable('gc_access')) {
+                    $access = $schema->createTable('gc_access');
+                    $access->addColumn('item_type', Type::STRING);
+                    $access->addColumn('item_id', Type::INTEGER, ['unsigned' => true]);
+                    $access->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+                    $access->addIndex(['item_type']);
+                    $access->addIndex(['item_id']);
+                    $access->addIndex(['user_id']);
+                    $access->addUniqueIndex(['item_type', 'item_id', 'user_id']);
                 }
 
                 PortalSchema::install($schema);
