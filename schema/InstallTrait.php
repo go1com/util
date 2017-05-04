@@ -37,13 +37,14 @@ trait InstallTrait
 
                 if (!$schema->hasTable('gc_access')) {
                     $access = $schema->createTable('gc_access');
-                    $access->addColumn('item_type', Type::STRING);
-                    $access->addColumn('item_id', Type::INTEGER, ['unsigned' => true]);
+                    $access->addColumn('group_id', Type::INTEGER, ['unsigned' => true]);
+                    $access->addColumn('entity_type', Type::STRING);
+                    $access->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
                     $access->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
-                    $access->addIndex(['item_type']);
-                    $access->addIndex(['item_id']);
+                    $access->addIndex(['entity_type']);
+                    $access->addIndex(['entity_id']);
                     $access->addIndex(['user_id']);
-                    $access->addUniqueIndex(['item_type', 'item_id', 'user_id']);
+                    $access->addUniqueIndex(['group_id', 'entity_type', 'entity_id', 'user_id']);
                 }
 
                 PortalSchema::install($schema);
