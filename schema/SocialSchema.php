@@ -46,5 +46,15 @@ class SocialSchema
             $item->addUniqueIndex(['group_id', 'entity_type', 'entity_id']);
             $item->addForeignKeyConstraint('social_group', ['group_id'], ['id']);
         }
+
+        if (!$schema->hasTable('gc_social_tag')) {
+            $tag = $schema->createTable('gc_social_tag');
+            $tag->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $tag->addColumn('user_id', 'integer', ['unsigned' => true]);
+            $tag->addColumn('tag_id', 'integer', ['unsigned' => true]);
+            $tag->setPrimaryKey(['id']);
+            $tag->addIndex(['user_id']);
+            $tag->addIndex(['tag_id']);
+        }
     }
 }
