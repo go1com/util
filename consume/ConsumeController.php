@@ -5,6 +5,7 @@ namespace go1\util\consume;
 use Exception;
 use go1\util\AccessChecker;
 use go1\util\contract\ConsumerInterface;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,6 +45,10 @@ class ConsumeController
                 return new JsonResponse(null, 204);
             }
             catch (Exception $e) {
+                if (class_exists(TestCase::class, false)) {
+                    throw $e;
+                }
+
                 $this->logger->error(printf('Failed to consume [%s] with %s: %s', $routingKey, json_encode($body), $e->getMessage()));
             }
         }
