@@ -30,6 +30,7 @@ class Schema
     const O_LO                  = 'lo';
     const O_PLAN                = 'plan';
     const O_ENROLMENT           = 'enrolment';
+    const O_ENROLMENT_REVISION  = 'enrolment_revision';
     const O_MANUAL_RECORD       = 'manual_record';
     const O_SUBMISSION          = 'asm_submission';
     const O_SUBMISSION_REVISION = 'asm_submission_revision';
@@ -57,6 +58,7 @@ class Schema
         self::O_LO                  => self::LO_MAPPING,
         self::O_PLAN                => self::PLAN_MAPPING,
         self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
+        self::O_ENROLMENT_REVISION  => self::ENROLMENT_MAPPING_REVISION,
         self::O_MANUAL_RECORD       => self::MANUAL_RECORD_MAPPING,
         self::O_SUBMISSION          => self::SUBMISSION_MAPPING,
         self::O_SUBMISSION_REVISION => self::SUBMISSION_REVISION_MAPPING,
@@ -240,6 +242,20 @@ class Schema
                     'has_assessor'        => ['type' => self::T_SHORT],
                 ],
             ],
+        ],
+    ];
+
+    const ENROLMENT_MAPPING_REVISION = [
+        '_routing'   => ['required' => true],
+        '_parent'    => ['type' => self::O_ENROLMENT],
+        'properties' => [
+            'id'         => ['type' => self::T_INT],
+            'start_date' => ['type' => self::T_DATE],
+            'end_date'   => ['type' => self::T_DATE],
+            'status'     => ['type' => self::T_SHORT],
+            'result'     => ['type' => self::T_INT],
+            'pass'       => ['type' => self::T_INT],
+            'note'       => ['type' => self::T_TEXT],
         ],
     ];
 
