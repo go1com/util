@@ -9,6 +9,7 @@ use go1\util\enrolment\EnrolmentHelper;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\user\Roles;
+use go1\util\user\UserHelper;
 use PDO;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,7 +85,7 @@ class AccessChecker
         return in_array(Roles::ROOT, isset($user->roles) ? $user->roles : []) ? $user : false;
     }
 
-    public function validUser(Request $req, $instanceName = null)
+    public function validUser(Request $req, $instanceName = null, Connection $db = null)
     {
         $payload = $req->get('jwt.payload');
         if ($payload && !empty($payload->object->type) && ('user' === $payload->object->type)) {
@@ -101,6 +102,16 @@ class AccessChecker
             foreach ($accounts as $account) {
                 if ($instanceName == $account->instance) {
                     return $account;
+                }
+            }
+
+            if ($db) {
+                $account = UserHelper::loadByEmail($db, $instanceName, $user->mail);
+                if (is_object($account)) {
+                    $hasLink = EdgeHelper::hasLink($db, EdgeTypes::HAS_ACCOUNT_VIRTUAL, $user->id, $account->id);
+                    if ($hasLink) {
+                        return $account;
+                    }
                 }
             }
         }
