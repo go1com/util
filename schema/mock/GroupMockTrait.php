@@ -31,7 +31,7 @@ trait GroupMockTrait
             'entity_id'   => isset($options['entity_id']) ? $options['entity_id'] : 1,
             'status'      => isset($options['status']) ? $options['status'] : GroupItemStatus::ACTIVE,
             'created'     => isset($options['created']) ? $options['created'] : time(),
-            'updated'     => isset($options['updated']) ? $options['updated'] : time()
+            'updated'     => isset($options['updated']) ? $options['updated'] : time(),
         ]);
 
         return $db->lastInsertId('social_group_item');

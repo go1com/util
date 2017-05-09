@@ -5,6 +5,7 @@ namespace go1\util\consume;
 use Exception;
 use go1\util\AccessChecker;
 use go1\util\contract\ConsumerInterface;
+use go1\util\Error;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,7 +28,7 @@ class ConsumeController
     public function post(Request $req)
     {
         if (!$this->accessChecker->isAccountsAdmin($req)) {
-            return new JsonResponse(['message' => 'Internal resource'], 403);
+            return Error::simpleErrorJsonResponse('Internal resource', 403);
         }
 
         $routingKey = $req->get('routingKey');
