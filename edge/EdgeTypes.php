@@ -118,7 +118,7 @@ class EdgeTypes
     const HAS_SHARE_WITH             = 507; # T: Role ID            | S: Learning object
     const HAS_FOLLOWING              = 508; # T: gc_user.id         | S: gc_user.id
     const HAS_PORTAL_EDGE            = 509; # T: gc_instance.id     | S: gc_user.id
-    const HAS_ACCOUNT_VIRTUAL        = 510; # T: User               | S: User
+    const HAS_ACCOUNT_VIRTUAL        = 510; # T: User               | S: Account
     const HAS_SHARE_USER_NOTE        = 600; # T: gc_note.id         | S: gc_user.id
     const HAS_SHARE_WITH_LO_USER     = 601; # T: gc_lo.id           | S: gc_user.id
     const HAS_MENTION                = 602; # T: gc_lo.id           | S: gc_user.id
