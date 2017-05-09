@@ -10,6 +10,7 @@ use stdClass;
 
 class PortalHelper
 {
+    const LEGACY_VERSION = 'v2.11.0';
     const STABLE_VERSION = 'v3.0.0';
 
     const FEATURE_CREDIT                       = 'credit';
