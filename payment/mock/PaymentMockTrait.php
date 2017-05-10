@@ -3,6 +3,8 @@
 namespace go1\util\payment\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\payment\Coupon;
+use Ramsey\Uuid\Uuid;
 
 trait PaymentMockTrait
 {
@@ -36,5 +38,37 @@ trait PaymentMockTrait
         ]);
 
         return $db->lastInsertId('payment_transaction_items');
+    }
+
+    public function createCoupon(Connection $db, array $options = [])
+    {
+        $db->insert('payment_coupon', [
+            'code'              => $options['code'] ?? Uuid::uuid4()->toString(),
+            'instance_id'       => $options['instance_id'] ?? 0,
+            'entity_type'       => $options['entity_type'] ?? 'lo',
+            'entity_id'         => $options['entity_id'] ?? 1,
+            'user_id'           => $options['user_id'] ?? 1,
+            'type'              => $options['type'] ?? Coupon::TYPE_PERCENT,
+            'value'             => $options['value'] ?? 10,
+            'status'            => $options['status'] ?? 1,
+            'limitation'        => $options['limitation'] ?? 1,
+            'expiration'        => $options['expiration'] ?? (new \DateTime('+1 week'))->format(DATE_ISO8601),
+            'created'           => $options['created'] ?? time(),
+            'updated'           => $options['updated'] ?? time(),
+        ]);
+
+        return $db->lastInsertId('payment_coupon');
+    }
+
+    public function createCouponUsage(Connection $db, array $options = [])
+    {
+        $db->insert('payment_coupon_usage', [
+            'coupon_id'         => $options['coupon_id'] ?? 1,
+            'transaction_id'    => $options['transaction_id'] ?? 1,
+            'user_id'           => $options['user_id'] ?? 1,
+            'created'           => $options['created'] ?? time(),
+        ]);
+
+        return $db->lastInsertId('payment_coupon_usage');
     }
 }

@@ -39,6 +39,7 @@ class Schema
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
     const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
     const O_ECK_METADATA        = 'eck_metadata';
+    const O_COUPON              = 'coupon';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -67,6 +68,7 @@ class Schema
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
         self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
+        self::O_COUPON              => self::COUPON_MAPPING,
     ];
 
     const ANALYZED = [
@@ -411,6 +413,34 @@ class Schema
                     'max_rows'      => ['type' => self::T_INT],
                     'parent_field'  => ['type' => self::T_KEYWORD],
                     'data'          => ['type' => self::T_OBJECT],
+                ]
+            ]
+        ]
+    ];
+
+    const COUPON_MAPPING = [
+        '_routing'   => ['required' => true],
+        '_parent'    => ['type' => self::O_USER],
+        'properties' => [
+            'code'          => ['type' => self::T_KEYWORD],
+            'instance_id'   => ['type' => self::T_INT],
+            'entity_type'   => ['type' => self::T_KEYWORD],
+            'entity_id'     => ['type' => self::T_INT],
+            'user_id'       => ['type' => self::T_INT],
+            'coupon_type'   => ['type' => self::T_SHORT],
+            'coupon_value'  => ['type' => self::T_DOUBLE],
+            'status'        => ['type' => self::T_SHORT],
+            'limitation'    => ['type' => self::T_SHORT],
+            'expiration'    => ['type' => self::T_DATE],
+            'created'       => ['type' => self::T_DATE],
+            'updated'       => ['type' => self::T_DATE],
+            'num_usage'     => ['type' => self::T_INT],
+            'usage'         => [
+                'type'          => self::T_NESTED,
+                'properties'    => [
+                    'user_id'           => ['type' => self::T_INT],
+                    'transaction_id'    => ['type' => self::T_INT],
+                    'created'           => ['type' => self::T_DATE],
                 ]
             ]
         ]
