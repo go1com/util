@@ -134,4 +134,5 @@ class EdgeTypes
     const HAS_LO_ASSIGNMENT_ACCEPTED = 703; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is accepted.
     const HAS_LO_ASSIGNMENT_REJECTED = 704; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is rejected.
     const HAS_LO_ASSIGNMENT_DUE_DATE = 705; # T: self.SOURCE        | S: suggestion ID | W: Timestamp  | N: See GO1P-8097
+    const CREDIT_TRANSFER            = 800; # T: Timestamp          | S: credit.id | D: old owner, new owner, actor
 }
