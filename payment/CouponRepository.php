@@ -83,14 +83,17 @@ class CouponRepository
 
     public function recordUsage(Coupon $coupon, int $transactionId, $userId): int
     {
-        $this->db->insert('payment_coupon_usage', [
+        $this->db->insert('payment_coupon_usage', $usage = [
             'coupon_id'      => $coupon->id,
             'transaction_id' => $transactionId,
             'user_id'        => $userId,
             'created'        => time(),
         ]);
 
-        return $this->db->lastInsertId('payment_coupon_usage');
+        $usage['id'] = $this->db->lastInsertId('payment_coupon_usage');
+        $this->queue->publish($usage, Queue::COUPON_USE);
+
+        return $usage['id'];
     }
 
     public function countUsage(Coupon $coupon): int
