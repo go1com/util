@@ -44,8 +44,15 @@ trait GraphNoteMockTrait
                     "MATCH (n:Note { uuid: {uuid} })"
                     . " MERGE (entity:$label { $prop: {entityPropValue} })"
                     . " MERGE (entity)-[:{$this->hasNote}]->(n)"
-                    . " MERGE (n)-[:{$this->hasMember}]->(entity)",
-                    ['uuid' => $uuid, 'entityPropValue' => $propValue]
+                    . " MERGE (n)-[r:{$this->hasMember}]->(entity)"
+                    . (($entityType == 'lo') ? " SET r = {data}" : ""),
+                    [
+                        'uuid'              => $uuid,
+                        'entityPropValue'   => $propValue,
+                        'data' => [
+                            'status' => isset($data['lo_status']) ? (int) $data['lo_status'] : 1
+                        ]
+                    ]
                 );
             }
 
