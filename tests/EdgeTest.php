@@ -163,4 +163,11 @@ class EdgeTest extends UtilTestCase
         $this->assertEquals($accountId = 3, $select->getSingle($this->db, $source, [3], [$hasAcc], PDO::FETCH_COLUMN));
         $this->assertEquals($accountId = 4, $select->getSingle($this->db, $source, [4], [$hasAcc], PDO::FETCH_COLUMN));
     }
+
+    public function testCreditTransfer()
+    {
+        EdgeHelper::link($this->db, $this->queue, EdgeTypes::CREDIT_TRANSFER, 1, 100000, 0, ['old_owner' => 1, 'new_owner' => 2, 'actor' => 'abc@go1.com']);
+        EdgeHelper::link($this->db, $this->queue, EdgeTypes::CREDIT_TRANSFER, 1, 100001, 0, ['old_owner' => 2, 'new_owner' => 3, 'actor' => 'abc1@go1.com']);
+        EdgeHelper::link($this->db, $this->queue, EdgeTypes::CREDIT_TRANSFER, 1, 100002, 0, ['old_owner' => 3, 'new_owner' => 1, 'actor' => 'abc@go1.com']);
+    }
 }
