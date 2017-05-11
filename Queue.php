@@ -139,6 +139,7 @@ class Queue
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
     const DO_USER_CREATE_VIRTUAL_ACCOUNT       = 'do.user.virtual-account'; # { type: STRING, object: enrolment/??? object}
     const DO_USER_DELETE                       = 'do.user.delete'; # User Object
+    const DO_USER_IMPORT                       = 'do.user.import'; # {$instance, $mail, $first, $last, $status, $manager}
     const DO_ALGOLIA_INDEX                     = 'do.algolia.index'; # Object { offset: INT, limit: INT}
     const DO_USER_UNBLOCK_MAIL                 = 'do.user.unblock.mail'; # String mail
     const DO_USER_UNBLOCK_IP                   = 'do.user.unblock.ip'; # String ip
