@@ -85,6 +85,7 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.s3'] = function (Container $c) {
             $o = $c['s3Options'];
+
             return new S3Client([
                 'region'      => $o['region'],
                 'version'     => '2006-03-01',
