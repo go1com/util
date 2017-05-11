@@ -85,7 +85,7 @@ class AccessChecker
         return in_array(Roles::ROOT, isset($user->roles) ? $user->roles : []) ? $user : false;
     }
 
-    public function validUser(Request $req, $instanceName = null, Connection $db = null)
+    public function validUser(Request $req, $instance = null, Connection $db = null)
     {
         $payload = $req->get('jwt.payload');
         if ($payload && !empty($payload->object->type) && ('user' === $payload->object->type)) {
@@ -94,19 +94,19 @@ class AccessChecker
         }
 
         if (!empty($user)) {
-            if (!$instanceName || empty($user->instance) || ($user->instance == $instanceName)) {
+            if (!$instance || empty($user->instance) || ($user->instance == $instance)) {
                 return $user;
             }
 
             $accounts = isset($user->accounts) ? $user->accounts : [];
             foreach ($accounts as $account) {
-                if ($instanceName == $account->instance) {
+                if ($instance == $account->instance) {
                     return $account;
                 }
             }
 
             if ($db) {
-                $account = UserHelper::loadByEmail($db, $instanceName, $user->mail);
+                $account = UserHelper::loadByEmail($db, $instance, $user->mail);
                 if (is_object($account)) {
                     $hasLink = EdgeHelper::hasLink($db, EdgeTypes::HAS_ACCOUNT_VIRTUAL, $user->id, $account->id);
                     if ($hasLink) {
