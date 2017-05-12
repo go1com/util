@@ -42,13 +42,15 @@ trait UserMockTrait
 
     protected function createUser(Connection $db, array $options = []): int
     {
+        static $profileId = 15;
+
         $data = isset($options['data']) ? $options['data'] : '[]';
         $data = is_scalar($data) ? $data : json_encode($data);
 
         $db->insert('gc_user', [
             'uuid'         => isset($options['uuid']) ? $options['uuid'] : uniqid('xxxxxxxx'),
             'instance'     => isset($options['instance']) ? $options['instance'] : 'az.mygo1.com',
-            'profile_id'   => isset($options['profile_id']) ? $options['profile_id'] : 2,
+            'profile_id'   => isset($options['profile_id']) ? $options['profile_id'] : $profileId++,
             'mail'         => isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com',
             'password'     => isset($options['password']) ? $options['password'] : 'xxxxxxx',
             'created'      => isset($options['created']) ? $options['created'] : strtotime('-10 days'),

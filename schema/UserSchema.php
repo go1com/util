@@ -38,6 +38,7 @@ class UserSchema
             $user->addIndex(['instance']);
             $user->addUniqueIndex(['uuid']);
             $user->addUniqueIndex(['instance', 'mail']);
+            $user->addUniqueIndex(['instance', 'profile_id']);
         }
 
         if (!$schema->hasTable('gc_role')) {
