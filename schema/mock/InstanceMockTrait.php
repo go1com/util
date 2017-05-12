@@ -30,10 +30,13 @@ trait InstanceMockTrait
 
     public function createInstancePublicKey(Connection $db, array $options, $magic = 'user.0')
     {
+
+        static $profileId = 25;
+
         $db->insert('gc_user', [
             'instance'   => $instance = isset($options['instance']) ? $options['instance'] : 'az.mygo1.com',
             'uuid'       => $uuid = isset($options['uuid']) ? $options['uuid'] : uniqid("PUBLIC_KEY_{$instance}"),
-            'profile_id' => isset($options['profile_id']) ? $options['profile_id'] : 2,
+            'profile_id' => isset($options['profile_id']) ? $options['profile_id'] : $profileId++,
             'mail'       => $magic . '@' . $instance,
             'password'   => isset($options['password']) ? $options['password'] : 'xxxxxxx',
             'created'    => isset($options['created']) ? $options['created'] : strtotime('-10 days'),
