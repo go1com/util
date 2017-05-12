@@ -15,7 +15,7 @@ class UserSchema
             $user->addColumn('uuid', 'string');
             $user->addColumn('name', 'string', ['notnull' => false]);
             $user->addColumn('instance', 'string');
-            $user->addColumn('profile_id', 'integer', ['unsigned' => true]);
+            $user->addColumn('profile_id', 'integer', ['notnull' => false]);
             $user->addColumn('mail', 'string');
             $user->addColumn('password', 'string');
             $user->addColumn('created', 'integer');
