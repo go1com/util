@@ -119,6 +119,7 @@ class LoSchema
             $customTag->addColumn('instance_id', Type::INTEGER);
             $customTag->addColumn('lo_id', Type::INTEGER);
             $customTag->addColumn('tag', Type::STRING);
+            $customTag->addColumn('status', Type:: BOOLEAN);
             $customTag->addIndex(['instance_id']);
             $customTag->addIndex(['lo_id']);
             $customTag->addIndex(['tag']);
