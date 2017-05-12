@@ -3,6 +3,7 @@
 namespace go1\util\schema;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 class LoSchema
 {
@@ -111,6 +112,17 @@ class LoSchema
             $event->addIndex(['loc_postal_code']);
             $event->addIndex(['created']);
             $event->addIndex(['updated']);
+        }
+
+        if (!$schema->hasTable('gc_lo_tag')) {
+            $customTag = $schema->createTable('gc_lo_tag');
+            $customTag->addColumn('instance_id', Type::INTEGER);
+            $customTag->addColumn('lo_id', Type::INTEGER);
+            $customTag->addColumn('tag', Type::STRING);
+            $customTag->addIndex(['instance_id']);
+            $customTag->addIndex(['lo_id']);
+            $customTag->addIndex(['tag']);
+            $customTag->addUniqueIndex(['instance_id', 'lo_id', 'tag']);
         }
 
         # @TODO Remove children & lo_count columns.

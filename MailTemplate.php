@@ -302,6 +302,21 @@ class MailTemplate
         ],
     ];
 
+    const AWARD_UPDATE = [
+        'key'    => 'award.update',
+        'tokens' => [],
+    ];
+
+    const AWARD_ASSIGN = [
+        'key'    => 'award.assign',
+        'tokens' => [],
+    ];
+
+    const AWARD_ACHIEVE = [
+        'key'    => 'award.achieve',
+        'tokens' => [],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
