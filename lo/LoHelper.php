@@ -29,19 +29,20 @@ class LoHelper
         'expiration' => ['type' => 'string', 'default' => '+ 1 year'],
     ];
 
-    public static function load(Connection $db, int $id)
+    public static function load(Connection $db, int $id, int $instanceId = null)
     {
-        return ($learningObjects = static::loadMultiple($db, [$id]))
+        return ($learningObjects = static::loadMultiple($db, [$id], $instanceId))
             ? $learningObjects[0]
             : false;
     }
 
     /**
      * @param Connection $db
-     * @param  []int      $ids
+     * @param  []int     $ids
+     * @param   int      $instanceId
      * @return []stdClass
      */
-    public static function loadMultiple(Connection $db, array $ids): array
+    public static function loadMultiple(Connection $db, array $ids, int $instanceId = null): array
     {
         $learningObjects = !$ids ? [] : $db
             ->executeQuery(
@@ -54,6 +55,7 @@ class LoHelper
             )
             ->fetchAll(DB::OBJ);
 
+        $loIds = [];
         foreach ($learningObjects as &$lo) {
             if (!$lo->data = json_decode($lo->data)) {
                 unset($lo->data);
@@ -68,6 +70,21 @@ class LoHelper
             unset($lo->price, $lo->currency, $lo->tax, $lo->tax_included);
 
             $lo->event = static::getEvent($db, $lo->id) ?: (empty($lo->event) ? (object) [] : json_decode($lo->event));
+
+            $loIds[] = $lo->id;
+        }
+
+        if ($instanceId && $loIds) {
+            # Load custom tags.
+            $q = 'SELECT lo_id, tag FROM gc_lo_tag WHERE status = 1 AND instance_id = ? AND lo_id IN (?)';
+            $q = $db->executeQuery($q, [$instanceId, $loIds], [DB::INTEGER, DB::INTEGERS]);
+            while ($row = $q->fetch(DB::OBJ)) {
+                foreach ($learningObjects as &$lo) {
+                    if ($lo->id == $row->lo_id) {
+                        $lo->custom_tags[] = $row->tag;
+                    }
+                }
+            }
         }
 
         return $learningObjects;

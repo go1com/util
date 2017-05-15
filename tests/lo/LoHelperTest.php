@@ -89,4 +89,14 @@ class LoHelperTest extends UtilTestCase
         $lo = LoHelper::load($this->db, $courseId);
         $this->assertEquals((object) [], $lo->event);
     }
+
+    public function testLoadCustomTag()
+    {
+        $instanceId = 999;
+        $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId]);
+        $this->db->insert('gc_lo_tag', ['instance_id' => $instanceId, 'lo_id' => $courseId, 'tag' => 'foo', 'status' => 1]);
+        $this->db->insert('gc_lo_tag', ['instance_id' => $instanceId, 'lo_id' => $courseId, 'tag' => 'bar', 'status' => 1]);
+        $course = LoHelper::load($this->db, $courseId, $instanceId);
+        $this->assertEquals(['bar', 'foo'], $course->custom_tags);
+    }
 }
