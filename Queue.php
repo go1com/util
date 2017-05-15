@@ -110,6 +110,9 @@ class Queue
     const QUIZ_USER_ANSWER_CREATE  = 'quiz.user_answer.create';
     const QUIZ_USER_ANSWER_UPDATE  = 'quiz.user_answer.update';
     const QUIZ_USER_ANSWER_DELETE  = 'quiz.user_answer.delete';
+    const LOCATION_CREATE          = 'location.create';
+    const LOCATION_UPDATE          = 'location.update';
+    const LOCATION_DELETE          = 'location.delete';
 
     # routingKey that tell some service to do something.
     #

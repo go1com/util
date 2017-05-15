@@ -123,7 +123,7 @@ trait LoMockTrait
 
     protected function createEvent(Connection $db, int $sourceId, array $event)
     {
-        $location = empty($event['location'])
+        $location = empty($event['location']) || is_numeric($event['location'])
             ? []
             : [
                 'loc_country'                 => $event['location']['country'],
@@ -157,6 +157,15 @@ trait LoMockTrait
                 'type'      => EdgeTypes::HAS_EVENT_EDGE,
                 'weight'    => 0
             ]);
+
+            if (isset($event['location']) && is_numeric($event['location'])) {
+                $db->insert('gc_ro', [
+                    'source_id' => $eventId,
+                    'target_id' => $event['location'],
+                    'type'      => EdgeTypes::HAS_LOCATION,
+                    'weight'    => 0
+                ]);
+            }
         }
         return $eventId;
     }
