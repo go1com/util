@@ -92,13 +92,17 @@ class MailTemplate
     const ENQUIRY_SENT = [
         'key'    => 'lo.enquiry.sent',
         'tokens' => [
-            '!request_url' => 'Request URL',
-            '!id'          => 'Course ID',
-            '!user_name'   => 'User full name',
-            '!mail'        => 'User mail',
-            '!phone'       => 'User phone',
-            '!time'        => 'Enquiry time',
-            '!title'       => 'Course title',
+            '!request_url'    => 'Request URL',
+            '!id'             => 'Course ID',
+            '!user_name'      => 'User full name',
+            '!user_image'     => 'User avatar',
+            '!mail'           => 'User mail',
+            '!phone'          => 'User phone',
+            '!time'           => 'Enquiry time',
+            '!title'          => 'Course title',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal image',
+            '!recipient_mail' => 'Recipient mail',
         ],
     ];
 
@@ -125,6 +129,32 @@ class MailTemplate
     const ENQUIRY_NOTIFY_STAFF = [
         'key'    => 'lo.enquiry.notify.staff',
         'tokens' => [/* @TODO */],
+    ];
+
+    const LEARNER_ENROLMENT_COURSE = [
+        'key'    => 'learner.enrol.course',
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+        ],
+    ];
+
+    const AUTHOR_ENROLMENT_COURSE = [
+        'key'    => 'author.enrol.course',
+        'tokens' => [
+            '!author_first_name'  => 'Author first name',
+            '!author_mail'        => 'Author mail',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_image'      => 'Learner image',
+            '!course_name'        => 'Course name',
+            '!portal_name'        => 'Portal name',
+            '!portal_url'         => 'Portal URL',
+            '!portal_image'       => 'Portal image',
+        ],
     ];
 
     const USER_ENROL_COURSE = [
@@ -158,24 +188,31 @@ class MailTemplate
         'key'    => 'user.manual-payment.create',
         'tokens' => [
             '!recipient_name' => 'Recipient full name',
+            '!recipient_mail' => 'Recipient mail',
             '!user_name'      => 'User full name',
+            '!user_image'     => 'User image',
             '!course_name'    => 'Course name',
             '!quantity'       => 'Credit quantity',
             '!description'    => 'Enrolment description',
             '!credit_type'    => 'Credit type',
             '!accept_url'     => 'Accept payment URL',
             '!reject_url'     => 'Reject payment URL',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal image',
         ],
     ];
 
     const USER_MANUAL_PAYMENT_ACCEPT = [
         'key'    => 'user.manual-payment.accept',
         'tokens' => [
-            '!payer_name'  => 'Payer full name',
-            '!course_name' => 'Course name',
-            '!site_name'   => 'Human name of the portal',
-            '!course_url'  => 'Course URL',
-            '!portal_url'  => 'Portal URL',
+            '!payer_name'   => 'Payer full name',
+            '!payer_image'  => 'Payer image',
+            '!course_name'  => 'Course name',
+            '!course_url'   => 'Course URL',
+            '!portal_url'   => 'Portal URL',
+            '!portal_name'  => 'Portal name',
+            '!portal_image' => 'Portal image',
+            '!learner_mail' => 'Learner mail',
         ],
     ];
 
@@ -215,39 +252,52 @@ class MailTemplate
     const CREDIT_REQUEST = [
         'key'    => 'credit.request',
         'tokens' => [
-            '!user_first_name'  => 'User first name',
-            '!full_name'        => 'User full name',
-            '!course_name'      => 'Course title',
-            '!site_name'        => 'Portal title',
-            '!pricing_price'    => 'Course price',
-            '!pricing_currency' => 'Course price currency',
-            '!pricing_tax'      => 'Course price tax',
-            '!course_url'       => 'Course URL',
-            '!approve_url'      => 'Credit approve URL',
-            '!reject_url'       => 'Credit reject URL',
-            '!portal_url'       => 'Portal URL',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_full_name'  => 'Learner full name',
+            '!learner_image'      => 'Learner image',
+            '!course_name'        => 'Course title',
+            '!pricing_price'      => 'Course price',
+            '!pricing_currency'   => 'Course price currency',
+            '!pricing_tax'        => 'Course price tax',
+            '!course_url'         => 'Course URL',
+            '!approve_url'        => 'Credit approve URL',
+            '!reject_url'         => 'Credit reject URL',
+            '!portal_name'        => 'Portal name',
+            '!portal_url'         => 'Portal URL',
+            '!portal_image'       => 'Portal image',
+            '!manager_mail'       => 'Manager mail',
         ],
     ];
 
     const CREDIT_REQUEST_ACCEPT = [
         'key'    => 'credit.request.accept',
         'tokens' => [
-            '!first_name'   => 'User first name',
-            '!manager_name' => 'Manager first name',
-            '!course_name'  => 'Course name',
-            '!site_name'    => 'Human name of the portal',
-            '!course_url'   => 'Course URL',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!manager_name'       => 'Manager first name',
+            '!manager_image'      => 'Manager image',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!site_name'          => 'Human name of the portal',
+            '!portal_name'        => 'Portal name',
+            '!portal_url'         => 'Portal URL',
+            '!portal_image'       => 'Portal logo',
         ],
     ];
 
     const CREDIT_REQUEST_REJECT = [
         'key'    => 'credit.request.reject',
         'tokens' => [
-            '!first_name'   => 'User first name',
-            '!manager_name' => 'Manager first name',
-            '!course_name'  => 'Course name',
-            '!site_name'    => 'Human name of the portal',
-            '!course_url'   => 'Course URL',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!manager_name'       => 'Manager first name',
+            '!manager_image'      => 'Manager image',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!site_name'          => 'Human name of the portal',
+            '!portal_name'        => 'Portal name',
+            '!portal_url'         => 'Portal URL',
+            '!portal_image'       => 'Portal logo',
         ],
     ];
 
@@ -255,10 +305,13 @@ class MailTemplate
         'key'    => 'assignment.submit',
         'tokens' => [
             '!learner_name'    => 'Learner full name',
+            '!learner_image'   => 'Learner image',
             '!assignment_name' => 'Assignment name',
             '!module_name'     => 'Module name',
             '!submission_time' => 'Submission time',
             '!assignment_url'  => 'Assignment URL',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal image',
         ],
     ];
 
@@ -267,6 +320,9 @@ class MailTemplate
         'tokens' => [
             '!li_title'          => 'Learning item title',
             '!li_submission_url' => 'Learning item submission url',
+            '!portal_name'       => 'Portal name',
+            '!portal_image'      => 'Portal logo',
+            '!leaner_mail'       => 'Learner mail',
         ],
     ];
 
@@ -304,17 +360,42 @@ class MailTemplate
 
     const AWARD_UPDATE = [
         'key'    => 'award.update',
-        'tokens' => [],
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!award_name'         => 'Award name',
+            '!award_url'          => 'Award URL',
+            '!portal_name'        => 'Portal name',
+            '!portal_url'         => 'Portal URL',
+            '!portal_image'       => 'Portal logo',
+        ],
     ];
 
     const AWARD_ASSIGN = [
         'key'    => 'award.assign',
-        'tokens' => [],
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!award_name'         => 'Award name',
+            '!award_url'          => 'Award URL',
+            '!portal_name'        => 'Portal name',
+            '!portal_url'         => 'Portal URL',
+            '!portal_image'       => 'Portal logo',
+        ],
     ];
 
     const AWARD_ACHIEVE = [
         'key'    => 'award.achieve',
-        'tokens' => [],
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!award_name'         => 'Award name',
+            '!award_url'          => 'Award URL',
+            '!course_name'        => 'Course name',
+            '!portal_name'        => 'Portal name',
+            '!portal_url'         => 'Portal URL',
+            '!portal_image'       => 'Portal logo',
+        ],
     ];
 
     public static function has(string $key): bool
