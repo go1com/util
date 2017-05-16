@@ -88,6 +88,7 @@ class EdgeTypes
     const HAS_CREDIT_REQUEST          = 37; # T: User (learner)       | S: LO                    | Weight: Manager ID — who will review.
     const HAS_CREDIT_REQUEST_DONE     = 38; # T: User (learner)       | S: LO                    | Weight: Manager ID — who paid.
     const HAS_CREDIT_REQUEST_REJECTED = 39; # T: User (learner)       | S: LO                    | Weight: Manager ID — who reject.
+    const HAS_LOCATION                = 40; # T: gc_location.id       | S: gc_event.id
 
     # LO & enrolment scheduling
     # ---------------------

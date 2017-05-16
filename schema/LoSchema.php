@@ -114,6 +114,43 @@ class LoSchema
             $event->addIndex(['updated']);
         }
 
+        if (!$schema->hasTable('gc_location')) {
+            $location = $schema->createTable('gc_location');
+            $location->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $location->addColumn('title', 'string');
+            $location->addColumn('instance_id', 'integer', ['unsigned' => true]);
+            $location->addColumn('country', 'string', ['notnull' => false]);
+            $location->addColumn('administrative_area', 'string', ['notnull' => false]);
+            $location->addColumn('sub_administrative_area', 'string', ['notnull' => false]);
+            $location->addColumn('locality', 'string', ['notnull' => false]);
+            $location->addColumn('dependent_locality', 'string', ['notnull' => false]);
+            $location->addColumn('thoroughfare', 'string', ['notnull' => false]);
+            $location->addColumn('premise', 'string', ['notnull' => false]);
+            $location->addColumn('sub_premise', 'string', ['notnull' => false]);
+            $location->addColumn('organisation_name', 'string', ['notnull' => false]);
+            $location->addColumn('name_line', 'string', ['notnull' => false]);
+            $location->addColumn('postal_code', 'integer', ['notnull' => false]);
+            $location->addColumn('author_id', 'integer', ['notnull' => false]);
+            $location->addColumn('created', 'integer');
+            $location->addColumn('updated', 'integer');
+
+            $location->setPrimaryKey(['id']);
+            $location->addIndex(['title']);
+            $location->addIndex(['instance_id']);
+            $location->addIndex(['country']);
+            $location->addIndex(['administrative_area']);
+            $location->addIndex(['sub_administrative_area']);
+            $location->addIndex(['locality']);
+            $location->addIndex(['dependent_locality']);
+            $location->addIndex(['thoroughfare']);
+            $location->addIndex(['premise']);
+            $location->addIndex(['sub_premise']);
+            $location->addIndex(['organisation_name']);
+            $location->addIndex(['name_line']);
+            $location->addIndex(['postal_code']);
+            $location->addIndex(['author_id']);
+        }
+
         if (!$schema->hasTable('gc_lo_tag')) {
             $customTag = $schema->createTable('gc_lo_tag');
             $customTag->addColumn('instance_id', Type::INTEGER);
