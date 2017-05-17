@@ -3,8 +3,8 @@
 namespace go1\util\es\mock;
 
 use Elasticsearch\Client;
-use go1\util\es\Schema;
 use go1\util\DateTime;
+use go1\util\es\Schema;
 
 trait EsEnrolmentMockTrait
 {
@@ -42,7 +42,7 @@ trait EsEnrolmentMockTrait
             'id'      => $enrolment['id'],
             'parent'  => $enrolment['lo_id'],
             'body'    => $enrolment,
-            'refresh' => true
+            'refresh' => true,
         ]);
     }
 }

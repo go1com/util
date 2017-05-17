@@ -3,8 +3,8 @@
 namespace go1\util\es\mock;
 
 use Elasticsearch\Client;
-use go1\util\es\Schema;
 use go1\util\DateTime;
+use go1\util\es\Schema;
 
 trait EsInstanceMockTrait
 {

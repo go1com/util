@@ -3,8 +3,8 @@
 namespace go1\util\es\mock;
 
 use Elasticsearch\Client;
-use go1\util\es\Schema;
 use go1\util\DateTime;
+use go1\util\es\Schema;
 
 trait EsUserMockTrait
 {
@@ -30,13 +30,14 @@ trait EsUserMockTrait
         ];
 
         $type = $options['type'] ?? Schema::O_USER;
+
         return $client->create([
-            'index'   => Schema::INDEX,
-            'routing' => Schema::INDEX,
-            'type'    => $type,
-            'id'      => $user['id'],
-            'body'    => $user,
-            'refresh' => true
-        ] + ($type == Schema::O_ACCOUNT ? ['parent' => $user['user_id'] ?? 0] : []));
+                'index'   => Schema::INDEX,
+                'routing' => Schema::INDEX,
+                'type'    => $type,
+                'id'      => $user['id'],
+                'body'    => $user,
+                'refresh' => true,
+            ] + ($type == Schema::O_ACCOUNT ? ['parent' => $user['user_id'] ?? 0] : []));
     }
 }

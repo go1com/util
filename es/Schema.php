@@ -404,52 +404,52 @@ class Schema
     const ECK_METADATA_MAPPING = [
         '_routing'   => ['required' => true],
         'properties' => [
-            'instance'      => ['type' => self::T_KEYWORD],
-            'entity_type'   => ['type' => self::T_KEYWORD],
-            'field'         => [
-                'type' => self::T_NESTED,
+            'instance'    => ['type' => self::T_KEYWORD],
+            'entity_type' => ['type' => self::T_KEYWORD],
+            'field'       => [
+                'type'       => self::T_NESTED,
                 'properties' => [
-                    'id'            => ['type' => self::T_INT],
-                    'name'          => ['type' => self::T_KEYWORD],
-                    'description'   => ['type' => self::T_TEXT],
-                    'label'         => ['type' => self::T_KEYWORD],
-                    'help'          => ['type' => self::T_KEYWORD],
-                    'type'          => ['type' => self::T_KEYWORD],
-                    'published'     => ['type' => self::T_INT],
-                    'weight'        => ['type' => self::T_INT],
-                    'max_rows'      => ['type' => self::T_INT],
-                    'parent_field'  => ['type' => self::T_KEYWORD],
-                    'data'          => ['type' => self::T_OBJECT],
-                ]
-            ]
-        ]
+                    'id'           => ['type' => self::T_INT],
+                    'name'         => ['type' => self::T_KEYWORD],
+                    'description'  => ['type' => self::T_TEXT],
+                    'label'        => ['type' => self::T_KEYWORD],
+                    'help'         => ['type' => self::T_KEYWORD],
+                    'type'         => ['type' => self::T_KEYWORD],
+                    'published'    => ['type' => self::T_INT],
+                    'weight'       => ['type' => self::T_INT],
+                    'max_rows'     => ['type' => self::T_INT],
+                    'parent_field' => ['type' => self::T_KEYWORD],
+                    'data'         => ['type' => self::T_OBJECT],
+                ],
+            ],
+        ],
     ];
 
     const COUPON_MAPPING = [
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_USER],
         'properties' => [
-            'code'          => ['type' => self::T_KEYWORD],
-            'instance_id'   => ['type' => self::T_INT],
-            'entity_type'   => ['type' => self::T_KEYWORD],
-            'entity_id'     => ['type' => self::T_INT],
-            'user_id'       => ['type' => self::T_INT],
-            'coupon_type'   => ['type' => self::T_SHORT],
-            'coupon_value'  => ['type' => self::T_DOUBLE],
-            'status'        => ['type' => self::T_SHORT],
-            'limitation'    => ['type' => self::T_SHORT],
-            'expiration'    => ['type' => self::T_DATE],
-            'created'       => ['type' => self::T_DATE],
-            'updated'       => ['type' => self::T_DATE],
-            'num_usage'     => ['type' => self::T_INT],
-            'usage'         => [
-                'type'          => self::T_NESTED,
-                'properties'    => [
-                    'user_id'           => ['type' => self::T_INT],
-                    'transaction_id'    => ['type' => self::T_INT],
-                    'created'           => ['type' => self::T_DATE],
-                ]
-            ]
-        ]
+            'code'         => ['type' => self::T_KEYWORD],
+            'instance_id'  => ['type' => self::T_INT],
+            'entity_type'  => ['type' => self::T_KEYWORD],
+            'entity_id'    => ['type' => self::T_INT],
+            'user_id'      => ['type' => self::T_INT],
+            'coupon_type'  => ['type' => self::T_SHORT],
+            'coupon_value' => ['type' => self::T_DOUBLE],
+            'status'       => ['type' => self::T_SHORT],
+            'limitation'   => ['type' => self::T_SHORT],
+            'expiration'   => ['type' => self::T_DATE],
+            'created'      => ['type' => self::T_DATE],
+            'updated'      => ['type' => self::T_DATE],
+            'num_usage'    => ['type' => self::T_INT],
+            'usage'        => [
+                'type'       => self::T_NESTED,
+                'properties' => [
+                    'user_id'        => ['type' => self::T_INT],
+                    'transaction_id' => ['type' => self::T_INT],
+                    'created'        => ['type' => self::T_DATE],
+                ],
+            ],
+        ],
     ];
 }

@@ -3,8 +3,8 @@
 namespace go1\util\es\mock;
 
 use Elasticsearch\Client;
-use go1\util\es\Schema;
 use go1\util\DateTime;
+use go1\util\es\Schema;
 
 trait EsAssignmentMockTrait
 {
@@ -13,14 +13,14 @@ trait EsAssignmentMockTrait
         static $autoId;
 
         $submission = [
-            'id'            => $options['id'] ?? ++$autoId,
-            'revision_id'   => $options['revision_id'] ?? 0,
-            'profile_id'    => $options['profile_id'] ?? 0,
-            'status'        => $options['status'] ?? 0,
-            'published'     => $options['published'] ?? 0,
-            'created'       => DateTime::formatDate($options['created'] ?? time()),
-            'updated'       => DateTime::formatDate($options['updated'] ?? time()),
-            'assessors'     => $options['assessors'] ?? [],
+            'id'          => $options['id'] ?? ++$autoId,
+            'revision_id' => $options['revision_id'] ?? 0,
+            'profile_id'  => $options['profile_id'] ?? 0,
+            'status'      => $options['status'] ?? 0,
+            'published'   => $options['published'] ?? 0,
+            'created'     => DateTime::formatDate($options['created'] ?? time()),
+            'updated'     => DateTime::formatDate($options['updated'] ?? time()),
+            'assessors'   => $options['assessors'] ?? [],
         ];
 
         return $client->create([
@@ -30,7 +30,7 @@ trait EsAssignmentMockTrait
             'id'      => $submission['id'],
             'body'    => $submission,
             'parent'  => $options['enrolment_id'] ?? 0,
-            'refresh' => true
+            'refresh' => true,
         ]);
     }
 
@@ -41,11 +41,11 @@ trait EsAssignmentMockTrait
         isset($options['data']) && is_scalar($options['data']) && $options['data'] = json_decode($options['data'], true);
 
         $revision = [
-            'id'            => $options['id'] ?? ++$autoId,
-            'status'        => $options['status'] ?? 0,
-            'created'       => DateTime::formatDate($options['created'] ?? time()),
-            'updated'       => DateTime::formatDate($options['updated'] ?? time()),
-            'data'          => $options['data'] ?? [],
+            'id'      => $options['id'] ?? ++$autoId,
+            'status'  => $options['status'] ?? 0,
+            'created' => DateTime::formatDate($options['created'] ?? time()),
+            'updated' => DateTime::formatDate($options['updated'] ?? time()),
+            'data'    => $options['data'] ?? [],
         ];
 
         return $client->create([
@@ -55,7 +55,7 @@ trait EsAssignmentMockTrait
             'id'      => $revision['id'],
             'body'    => $revision,
             'parent'  => $options['submission_id'] ?? null,
-            'refresh' => true
+            'refresh' => true,
         ]);
     }
 }

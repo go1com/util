@@ -52,7 +52,7 @@ trait EsLoMockTrait
             'type'    => Schema::O_LO,
             'id'      => $lo['id'],
             'body'    => $lo,
-            'parent'  => $lo['instance_id']
+            'parent'  => $lo['instance_id'],
         ]);
     }
 }
