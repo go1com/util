@@ -2,6 +2,7 @@
 
 namespace go1\util\portal;
 
+use Doctrine\DBAL\Connection;
 use go1\util\Currency;
 use stdClass;
 
@@ -86,6 +87,14 @@ class PortalPricing
         return  ($userLicenses == static::PLATFORM_UNLIMITED_LICENSE)
             ? static::PLATFORM_UNLIMITED_LICENSE
             : $userLicenses * static::USER_LICENSES_MULTIPLY_RATE + $systemUsersNumber;
+    }
+
+    public static function countPortalUsers(Connection $db, $instance)
+    {
+        $count = $db->executeQuery('SELECT COUNT(*) FROM gc_user WHERE instance = ?', [$instance])->fetchColumn();
+
+        // System default user: user.0, user.1
+        return ($count > 2) ? $count - 2 : 0;
     }
 
     /**

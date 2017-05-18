@@ -234,4 +234,22 @@ class PortalPricingTest extends UtilTestCase
         $this->assertEquals(10000, $price);
         $this->assertEquals('USD', $currency);
     }
+
+    public function testCountPortalUsers()
+    {
+        $instance = 'portal.mygo1.com';
+        $this->createInstance($this->db, ['title' => $instance]);
+
+        $this->createUser($this->db, ['mail' => 'user.0@instance.com', 'instance' => $instance]);
+        $this->createUser($this->db, ['mail' => 'user.1@instance.com', 'instance' => $instance]);
+
+        $i = 0;
+        while ($i < 10) {
+            $this->createUser($this->db, ['mail' => "user{$i}@instance.com", 'instance' => $instance]);
+            $i++;
+        }
+
+        $count = PortalPricing::countPortalUsers($this->db, $instance);
+        $this->assertEquals(10, $count);
+    }
 }
