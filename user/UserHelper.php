@@ -86,6 +86,30 @@ class UserHelper
         return trim($name) ?: $user->mail;
     }
 
+    public static function firstName(Connection $db, stdClass $account, string $accountsName)
+    {
+        if ($account->instance != $accountsName) {
+            $user = static::loadByEmail($db, $accountsName, $account->mail);
+        }
+        else {
+            $user = $account;
+        }
+
+        return ($user && $user->first_name) ? $user->first_name : '';
+    }
+
+    public static function lastName(Connection $db, stdClass $account, string $accountsName)
+    {
+        if ($account->instance != $accountsName) {
+            $user = static::loadByEmail($db, $accountsName, $account->mail);
+        }
+        else {
+            $user = $account;
+        }
+
+        return ($user && $user->last_name) ? $user->last_name : '';
+    }
+
     public static function jwt(Request $req)
     {
         if ($auth = $req->headers->get('Authorization') ?: $req->headers->get('Authorization')) {
