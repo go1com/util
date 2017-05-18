@@ -111,22 +111,6 @@ class LoHelperTest extends UtilTestCase
         $this->assertEquals($end, $lo->event->end);
     }
 
-    public function testLoadEventLegacy()
-    {
-        $courseId = $this->createCourse($this->db);
-        $this->db->update('gc_lo',
-            ['event' => json_encode([
-                'start' => $start = (new DateTime('+1 day'))->format(DATE_ISO8601),
-                'end'   => $end = (new DateTime('+2 days'))->format(DATE_ISO8601),
-            ])],
-            ['id' => $courseId]
-        );
-        $lo = LoHelper::load($this->db, $courseId);
-        $this->assertNotEmpty($lo->event);
-        $this->assertEquals($start, $lo->event->start);
-        $this->assertEquals($end, $lo->event->end);
-    }
-
     public function testLoadNoEvent()
     {
         $courseId = $this->createCourse($this->db);

@@ -69,8 +69,7 @@ class LoHelper
             ];
             unset($lo->price, $lo->currency, $lo->tax, $lo->tax_included);
 
-            $lo->event = static::getEvent($db, $lo->id) ?: (empty($lo->event) ? (object) [] : json_decode($lo->event));
-
+            $lo->event = new \stdClass();
             $loIds[] = $lo->id;
         }
 
@@ -87,9 +86,85 @@ class LoHelper
             }
         }
 
+        # Load events.
+        $learningObjects && static::attachEvents($db, $learningObjects, $loIds);
+
         return $learningObjects;
     }
 
+    private static function attachEvents(Connection $db, array &$los, array &$loIds)
+    {
+        $put = function (\stdClass &$node, array $event) use (&$put) {
+            if ($node->id == $event['loId']) {
+                $node->event = (object) [
+                    'start'           => $event['start'],
+                    'end'             => $event['end'],
+                    'timezone'        => $event['timezone'],
+                    'seats'           => $event['seats'],
+                    'created'         => $event['created'],
+                    'updated'         => $event['updated'],
+                    'data'            => !empty($event['data']) ? json_decode($event['data']) : $event['data'],
+                ];
+
+                $node->event->locations = [];
+                # Get location from gc_event table
+                if (!empty($event['loc_country'])) {
+                    $node->event->locations = [[
+                        'country'                   => $event['loc_country'],
+                        'administrative_area'       => $event['loc_administrative_area'],
+                        'sub_administrative_area'   => $event['loc_sub_administrative_area'],
+                        'locality'                  => $event['loc_locality'],
+                        'dependent_locality'        => $event['loc_dependent_locality'],
+                        'thoroughfare'              => $event['loc_thoroughfare'],
+                        'premise'                   => $event['loc_premise'],
+                        'sub_premise'               => $event['loc_sub_premise'],
+                        'organisation_name'         => $event['loc_organisation_name'],
+                        'name_line'                 => $event['loc_name_line'],
+                        'postal_code'               => $event['loc_postal_code'],
+                    ]];
+                }
+                # Get location from gc_location table
+                else if (!empty($event['country'])) {
+                    $node->event->locations = [[
+                        'id'                        => $event['locationId'],
+                        'title'                     => $event['title'],
+                        'country'                   => $event['country'],
+                        'administrative_area'       => $event['administrative_area'],
+                        'sub_administrative_area'   => $event['sub_administrative_area'],
+                        'locality'                  => $event['locality'],
+                        'dependent_locality'        => $event['dependent_locality'],
+                        'thoroughfare'              => $event['thoroughfare'],
+                        'premise'                   => $event['premise'],
+                        'sub_premise'               => $event['sub_premise'],
+                        'organisation_name'         => $event['organisation_name'],
+                        'name_line'                 => $event['name_line'],
+                        'postal_code'               => $event['postal_code'],
+                    ]];
+                }
+            }
+        };
+
+        $sql = 'SELECT gc_location.*, event.*, ro.source_id as loId, gc_location.id as locationId FROM gc_event event';
+        $sql .= ' INNER JOIN gc_ro ro ON event.id = ro.target_id AND ro.type = ?';
+        $sql .= ' LEFT JOIN gc_ro ro_location ON ro_location.source_id = ro.target_id AND ro_location.type = ?';
+        $sql .= ' LEFT JOIN gc_location gc_location ON ro_location.target_id = gc_location.id';
+        $sql .= ' WHERE ro.source_id IN (?)';
+        $events = $db->executeQuery(
+            $sql,
+            [EdgeTypes::HAS_EVENT_EDGE, EdgeTypes::HAS_LOCATION, $loIds],
+            [DB::INTEGER, DB::INTEGER, DB::INTEGERS]
+        );
+
+        while ($event = $events->fetch()) {
+            foreach ($los as &$lo) {
+                $put($lo, $event);
+            }
+        }
+    }
+
+    /**
+     * @deprecated 
+     */
     public static function getEvent(Connection $db, int $loId)
     {
         $sql = "SELECT e.* FROM gc_event e";
