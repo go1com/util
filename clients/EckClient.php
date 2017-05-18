@@ -16,7 +16,7 @@ class EckClient
         $this->url = $url;
     }
 
-    public function getPortalFields(string $instance) : array
+    public function portalFields(string $instance) : array
     {
         $payload = (object) ['mail' => "admin@{$instance}", 'roles' => ['Admin on #Accounts']];
         $jwt = UserHelper::encode($payload);
