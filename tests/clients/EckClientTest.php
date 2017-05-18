@@ -34,7 +34,7 @@ class EckClientTest extends UtilTestCase
 
         $c['client'] = $client;
         $c['eck_url'] = $this->eckUrl;
-        $fields = $c['go1.client.eck']->getPortalFields($this->instance);
+        $fields = $c['go1.client.eck']->portalFields($this->instance);
 
         $fieldArea = $fields['field_area'];
         $this->assertEquals('Specialist area', $fieldArea['label']);
