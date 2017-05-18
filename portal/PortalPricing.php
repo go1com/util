@@ -44,6 +44,8 @@ class PortalPricing
         self::PLAN_STATUS_PAID    => 'Paid'
     ];
 
+    const TRIAL_EXPIRE                  = 3600 * 24 * 14;
+
     public static function getLicenses(stdClass $portal)
     {
         return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : static::PLATFORM_UNLIMITED_LICENSE;
