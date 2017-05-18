@@ -18,9 +18,7 @@ class EckClient
 
     public function portalFields(string $instance) : array
     {
-        $payload = (object) ['mail' => "admin@{$instance}", 'roles' => ['Admin on #Accounts']];
-        $jwt = UserHelper::encode($payload);
-
+        $jwt = UserHelper::ROOT_JWT;
         $data = $this->client->get("{$this->url}/fields/{$instance}/user?jwt={$jwt}")->getBody()->getContents();
         $data = json_decode($data, true);
 
