@@ -40,6 +40,7 @@ trait EsEnrolmentMockTrait
             'routing' => Schema::INDEX,
             'type'    => Schema::O_ENROLMENT,
             'id'      => $enrolment['id'],
+            'parent'  => $enrolment['lo_id'],
             'body'    => $enrolment,
             'refresh' => true
         ]);

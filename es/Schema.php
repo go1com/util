@@ -192,6 +192,12 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => self::USER_MAPPING['properties'],
             ],
+            'metadata'    => [
+                'properties' => [
+                    'parents_authors_ids'   => ['type' => self::T_INT],
+                    'parents_id'            => ['type' => self::T_INT],
+                ]
+            ],
         ],
     ];
 
@@ -213,6 +219,7 @@ class Schema
      * @TODO Make sure the revisions are indexed on content re-indexing.
      */
     const ENROLMENT_MAPPING = [
+        '_parent'    => ['type' => self::O_LO],
         '_routing'   => ['required' => true],
         'properties' => [
             'id'         => ['type' => self::T_INT],
