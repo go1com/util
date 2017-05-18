@@ -8,7 +8,8 @@ use GraphAware\Neo4j\Client\Client;
 
 trait GraphSocialMockTrait
 {
-    protected function addGraphUserTag(Client $client, int $userId, array $tagNames) {
+    protected function addGraphUserTag(Client $client, int $userId, array $tagNames)
+    {
         $hasAccount = GraphEdgeTypes::HAS_ACCOUNT;
         $hasGroup = GraphEdgeTypes::HAS_GROUP;
         $hasMember = GraphEdgeTypes::HAS_MEMBER;
@@ -31,19 +32,21 @@ trait GraphSocialMockTrait
         $client->runStack($stack);
     }
 
-    protected function followGraph(Client $client, int $sourceId, int $targetId) {
+    protected function followGraph(Client $client, int $sourceId, int $targetId)
+    {
         $hasFollowing = GraphEdgeTypes::HAS_FOLLOWING;
         $hasFollower = GraphEdgeTypes::HAS_FOLLOWER;
 
-        $query = "MATCH (A:User { id: {$sourceId} })"
+        $client->run(
+            "MATCH (A:User { id: {$sourceId} })"
             . " MATCH (B:User { id: {$targetId} })"
             . " MERGE (A)-[r:{$hasFollowing}]->(B)"
-            . " MERGE (B)-[rr:{$hasFollower}]->(A)";
-
-        $client->run($query);
+            . " MERGE (B)-[rr:{$hasFollower}]->(A)"
+        );
     }
 
-    protected function createGraphGroup(Client $client, array $option) {
+    protected function createGraphGroup(Client $client, array $option)
+    {
         $hasMember = GraphEdgeTypes::HAS_MEMBER;
         $hasGroupOwn = GraphEdgeTypes::HAS_GROUP_OWN;
         static $autoGroupId;
@@ -62,10 +65,10 @@ trait GraphSocialMockTrait
             [
                 'name' => "group:{$group['id']}",
                 'data' => [
-                    'title'         => $group['title'],
-                    'created'       => $group['created'],
-                    'visibility'    => $group['visibility'],
-                ]
+                    'title'      => $group['title'],
+                    'created'    => $group['created'],
+                    'visibility' => $group['visibility'],
+                ],
             ]
         );
 
@@ -90,51 +93,87 @@ trait GraphSocialMockTrait
         return $autoGroupId;
     }
 
-    protected function addGraphUserGroup(Client $client, int $accountId, int $groupId) {
+    protected function addGraphUserGroup(Client $client, int $accountId, int $groupId)
+    {
         $hasGroup = GraphEdgeTypes::HAS_GROUP;
         $hasMember = GraphEdgeTypes::HAS_MEMBER;
 
-        $query = "MATCH (g:Group { id: {$groupId}, name: {groupName} })"
+        $client->run(
+            "MATCH (g:Group { id: {$groupId}, name: {groupName} })"
             . " MERGE (acc:User { id: {$accountId} })"
             . " MERGE (acc)-[:{$hasGroup}]->(g)"
-            . " MERGE (g)-[:{$hasMember}]->(acc)";
-
-        $client->run($query, ['groupName' => "group:{$groupId}"]);
+            . " MERGE (g)-[:{$hasMember}]->(acc)",
+            [
+                'groupName' => "group:{$groupId}",
+            ]
+        );
     }
 
-    protected function addGraphPortalGroup(Client $client, int $portalId, int $groupId) {
+    protected function addGraphPortalGroup(Client $client, int $portalId, int $groupId)
+    {
         $hasGroup = GraphEdgeTypes::HAS_GROUP;
         $hasMember = GraphEdgeTypes::HAS_MEMBER;
 
-        $query = " MATCH (g:Group { id: {$groupId}, name: {groupName} })"
+        $client->run(
+            " MATCH (g:Group { id: {$groupId}, name: {groupName} })"
             . "MERGE (p:Group { name: {portalName} })"
             . " MERGE (p)-[:{$hasGroup}]->(g)"
-            . " MERGE (g)-[:{$hasMember}]->(p)";
-
-        $client->run($query, ['portalName' => "portal:{$portalId}", 'groupName' => "group:{$groupId}"]);
+            . " MERGE (g)-[:{$hasMember}]->(p)",
+            [
+                'portalName' => "portal:{$portalId}",
+                'groupName'  => "group:{$groupId}",
+            ]
+        );
     }
 
-    protected function addGraphLoGroup(Client $client, int $loId, int $groupId) {
+    protected function addGraphLoGroup(Client $client, int $loId, int $groupId)
+    {
         $hasSharedGroup = GraphEdgeTypes::HAS_SHARED_GROUP;
         $hasSharedLo = GraphEdgeTypes::HAS_SHARED_LO;
 
-        $query = " MATCH (g:Group { id: {$groupId}, name: {groupName} })"
+        $client->run(
+            " MATCH (g:Group { id: {$groupId}, name: {groupName} })"
             . "MERGE (lo:Group { name: {loName} })"
             . " MERGE (lo)-[:{$hasSharedGroup}]->(g)"
-            . " MERGE (g)-[:{$hasSharedLo}]->(lo)";
-
-        $client->run($query, ['loName' => "lo:{$loId}", 'groupName' => "group:{$groupId}"]);
+            . " MERGE (g)-[:{$hasSharedLo}]->(lo)",
+            [
+                'loName'    => "lo:{$loId}",
+                'groupName' => "group:{$groupId}",
+            ]
+        );
     }
 
-    protected function addGraphNoteGroup(Client $client, string $uuid, int $groupId) {
+    protected function addGraphNoteGroup(Client $client, string $uuid, int $groupId)
+    {
         $hasGroup = GraphEdgeTypes::HAS_GROUP;
         $hasMember = GraphEdgeTypes::HAS_MEMBER;
 
-        $query = " MATCH (g:Group { id: {$groupId}, name: {groupName} })"
+        $client->run(
+            " MATCH (g:Group { id: {$groupId}, name: {groupName} })"
             . "MERGE (n:Note { uuid: {uuid} })"
             . " MERGE (n)-[:{$hasGroup}]->(g)"
-            . " MERGE (g)-[:{$hasMember}]->(n)";
+            . " MERGE (g)-[:{$hasMember}]->(n)",
+            [
+                'uuid'      => "{$uuid}",
+                'groupName' => "group:{$groupId}",
+            ]
+        );
+    }
 
-        $client->run($query, ['uuid' => "{$uuid}", 'groupName' => "group:{$groupId}"]);
+    protected function addGraphGroupGroup(Client $client, string $firstGroupId, int $secondGroupId)
+    {
+        $hasGroup = GraphEdgeTypes::HAS_GROUP;
+        $hasMember = GraphEdgeTypes::HAS_MEMBER;
+
+        $client->run(
+            " MATCH (g:Group { id: {$firstGroupId}, name: {firstGroupName} })"
+            . " MERGE (gg:Group { id: {$secondGroupId}, name: {secondGroupName} })"
+            . " MERGE (g)-[:{$hasGroup}]->(gg)"
+            . " MERGE (gg)-[:{$hasMember}]->(g)",
+            [
+                'firstGroupName'  => "group:{$firstGroupId}",
+                'secondGroupName' => "group:{$secondGroupId}",
+            ]
+        );
     }
 }
