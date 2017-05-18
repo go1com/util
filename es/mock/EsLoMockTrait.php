@@ -39,6 +39,11 @@ trait EsLoMockTrait
             'assessors'   => $options['assessors'] ?? [],
             'created'     => DateTime::formatDate($options['created'] ?? time()),
             'updated'     => DateTime::formatDate($options['updated'] ?? time()),
+            'authors'     => $options['authors'] ?? [],
+            'metadata'    => [
+                'parents_authors_ids'   => $options['metadata']['parents_authors_ids'] ?? null,
+                'parents_id'            => $options['metadata']['parents_id'] ?? null,
+            ]
         ];
 
         return $client->create([
