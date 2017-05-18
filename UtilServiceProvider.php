@@ -9,6 +9,7 @@ use Aws\S3\S3Client;
 use Elasticsearch\ClientBuilder as EsClientBuilder;
 use go1\clients\AccountsClient;
 use go1\clients\CurrencyClient;
+use go1\clients\EckClient;
 use go1\clients\EntityClient;
 use go1\clients\FirebaseClient;
 use go1\clients\GraphinClient;
@@ -155,6 +156,10 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.entity'] = function (Container $c) {
             return new EntityClient($c['client'], $c['entity_url']);
+        };
+
+        $c['go1.client.eck'] = function (Container $c) {
+            return new EckClient($c['client'], $c['eck_url']);
         };
     }
 }
