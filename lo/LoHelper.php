@@ -168,4 +168,43 @@ class LoHelper
 
         return $db->fetchColumn($sql, [$loId, $instanceId]) ? true : false;
     }
+
+    public static function parentIds(Connection $db, int $loId): array
+    {
+        $q = 'SELECT source_id FROM gc_ro WHERE type IN (?) AND target_id = ?';
+        $q = $db->executeQuery($q, [EdgeTypes::LO_HAS_CHILDREN, $loId], [DB::INTEGERS, DB::INTEGER]);
+
+        $ids = [];
+        while ($id = $q->fetchColumn()) {
+            $ids[] = (int) $id;
+        }
+
+        return $ids;
+    }
+
+    public static function parentsAuthorIds(Connection $db, int $loId): array
+    {
+        $authorIds = [];
+        $parentLoIds = static::parentIds($db, $loId);
+        foreach ($parentLoIds as $parentLoId) {
+            $authorIds = array_merge($authorIds, LoChecker::authorIds($db, $parentLoId));
+            $authorIds = array_merge($authorIds, static::parentsAuthorIds($db, $parentLoId));
+        }
+
+        $authorIds = array_values(array_unique($authorIds));
+        return array_map('intval', $authorIds);
+    }
+
+    public static function childIds(Connection $db, int $loId): array
+    {
+        $q = 'SELECT target_id FROM gc_ro WHERE type IN (?) AND source_id = ?';
+        $q = $db->executeQuery($q, [EdgeTypes::LO_HAS_CHILDREN, $loId], [DB::INTEGERS, DB::INTEGER]);
+
+        $ids = [];
+        while ($id = $q->fetchColumn()) {
+            $ids[] = (int) $id;
+        }
+
+        return $ids;
+    }
 }
