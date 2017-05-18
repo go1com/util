@@ -345,10 +345,13 @@ class MailTemplate
     const NOTE_CREATE = [
         'key'    => 'note.create',
         'tokens' => [
-            '!entity_type' => 'Note entity type',
-            '!entity_name' => 'Note entity name',
-            '!note_url'    => 'Note URL',
-            '!portal_url'  => 'Portal URL',
+            '!entity_type'    => 'Note entity type',
+            '!entity_name'    => 'Note entity name',
+            '!note_url'       => 'Note URL',
+            '!portal_name'    => 'Portal name',
+            '!portal_url'     => 'Portal URL',
+            '!portal_image'   => 'Portal logo',
+            '!recipient_mail' => 'Recipient mail',
         ],
     ];
 
