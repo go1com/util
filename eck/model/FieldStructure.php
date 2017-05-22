@@ -2,7 +2,7 @@
 
 namespace go1\util\eck\model;
 
-use go1\util\eck\model\permission\Permission;
+use go1\util\eck\model\Permission;
 use JsonSerializable;
 use RuntimeException;
 use stdClass;
