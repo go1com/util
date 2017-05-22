@@ -26,6 +26,7 @@ class EnrolmentSchema
             $enrolment->addColumn('changed', 'datetime', ['unsigned' => true]);
             $enrolment->addColumn('timestamp', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('data', 'blob', ['notnull' => false]);
+
             $enrolment->setPrimaryKey(['id']);
             $enrolment->addUniqueIndex(['profile_id', 'parent_lo_id', 'lo_id']);
             $enrolment->addIndex(['profile_id']);
@@ -52,7 +53,9 @@ class EnrolmentSchema
             $revision->addColumn('status', 'string');
             $revision->addColumn('result', 'float', ['notnull' => false]);
             $revision->addColumn('pass', 'smallint');
+            $revision->addColumn('data', 'blob', ['notnull' => false]);
             $revision->addColumn('note', 'text');
+
             $revision->setPrimaryKey(['id']);
             $revision->addIndex(['profile_id']);
             $revision->addIndex(['instance_id']);
