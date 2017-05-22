@@ -47,4 +47,15 @@ trait AwardMockTrait
 
         return $db->lastInsertId('award_item');
     }
+
+    protected function createAwardAchievement(Connection $db, int $userId, int $awardItemId, int $created = null)
+    {
+        $db->insert('award_achievement', [
+            'user_id'       => $userId,
+            'award_item_id' => $awardItemId,
+            'created'       => $created ?? time(),
+        ]);
+
+        return $db->lastInsertId('award_achievement');
+    }
 }
