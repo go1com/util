@@ -4,7 +4,7 @@ namespace go1\util;
 
 class Service
 {
-    const VERSION = 'v17.5.3.0';
+    const VERSION = 'v17.5.4.0';
 
     public static function cacheOptions($root)
     {
