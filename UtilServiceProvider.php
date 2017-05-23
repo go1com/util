@@ -159,7 +159,7 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.eck'] = function (Container $c) {
-            return new EckClient($c['client'], $c['eck_url']);
+            return new EckClient($c['client'], $c['eck_url'], $c['cache']);
         };
     }
 }
