@@ -2,7 +2,6 @@
 
 namespace go1\clients;
 
-use Doctrine\Common\Cache\CacheProvider;
 use go1\util\user\UserHelper;
 use GuzzleHttp\Client;
 
@@ -10,14 +9,12 @@ class EckClient
 {
     private $client;
     private $url;
-    private $cache;
     private $jwt = UserHelper::ROOT_JWT;
 
-    public function __construct(Client $client, string $url, CacheProvider $cache)
+    public function __construct(Client $client, string $url)
     {
         $this->client = $client;
         $this->url = $url;
-        $this->cache = $cache;
     }
 
     public function fields(string $instance, string $entityType) : array
