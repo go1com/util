@@ -52,30 +52,4 @@ class EckClientTest extends UtilTestCase
         $this->assertEquals('Phone', $fieldPhone['label']);
         $this->assertEquals('string', $fieldPhone['type']);
     }
-
-    public function testUserFieldsCache()
-    {
-        $c = $this->getContainer();
-
-        $c['client'] = $this->mockClient();
-        $c['eck_url'] = $this->eckUrl;
-
-        /** @var EckClient $eckClient */
-        $eckClient = $c['go1.client.eck'];
-        $fields = $eckClient->fields($this->instance, 'user', true);
-
-        $fieldArea = $fields['field_area'];
-        $this->assertEquals('Specialist area', $fieldArea['label']);
-        $this->assertEquals('string', $fieldArea['type']);
-        $fieldPhone = $fields['field_phone'];
-        $this->assertEquals('Phone', $fieldPhone['label']);
-        $this->assertEquals('string', $fieldPhone['type']);
-
-        $i = 0;
-        while ($i < 10) {
-            $fields = $eckClient->fields($this->instance, 'user', true);
-            $this->assertTrue(!empty($fields['field_area']));
-            $i++;
-        }
-    }
 }

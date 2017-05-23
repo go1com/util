@@ -20,16 +20,8 @@ class EckClient
         $this->cache = $cache;
     }
 
-    public function fields(string $instance, string $entityType, bool $isCache = false) : array
+    public function fields(string $instance, string $entityType) : array
     {
-        $cacheId = "fields:{$instance}:{$entityType}";
-
-        if ($isCache && $this->cache->contains($cacheId)) {
-            if ($fields = $this->cache->fetch($cacheId)) {
-                return $fields;
-            }
-        }
-
         $data = $this->client->get("{$this->url}/fields/{$instance}/{$entityType}?jwt={$this->jwt}")->getBody()->getContents();
         $data = json_decode($data, true);
 
@@ -39,9 +31,6 @@ class EckClient
                 $fields[$fieldName] = ['label' => $item['label'], 'type' => $item['type']];
             }
         }
-
-        $ttl = 60 * 60; # 1 hour.
-        $isCache && $this->cache->save($cacheId, $fields, $ttl);
 
         return $fields;
     }
