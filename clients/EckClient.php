@@ -9,6 +9,7 @@ class EckClient
 {
     private $client;
     private $url;
+    private $jwt = UserHelper::ROOT_JWT;
 
     public function __construct(Client $client, string $url)
     {
@@ -16,10 +17,9 @@ class EckClient
         $this->url = $url;
     }
 
-    public function portalFields(string $instance) : array
+    public function fields(string $instance, string $entityType) : array
     {
-        $jwt = UserHelper::ROOT_JWT;
-        $data = $this->client->get("{$this->url}/fields/{$instance}/user?jwt={$jwt}")->getBody()->getContents();
+        $data = $this->client->get("{$this->url}/fields/{$instance}/{$entityType}?jwt={$this->jwt}")->getBody()->getContents();
         $data = json_decode($data, true);
 
         $fields = [];
@@ -30,5 +30,17 @@ class EckClient
         }
 
         return $fields;
+    }
+
+    public function create(string $instance, string $entityType, int $entityId, array $fields)
+    {
+        $eckUrl = "{$this->url}/entity/{$instance}/{$entityType}/{$entityId}?jwt={$this->jwt}";
+        $this->client->post($eckUrl, ['json' => ['fields' => $fields]]);
+    }
+
+    public function update(string $instance, string $entityType, int $entityId, array $fields)
+    {
+        $eckUrl = "{$this->url}/entity/{$instance}/{$entityType}/{$entityId}?jwt={$this->jwt}";
+        $this->client->put($eckUrl, ['json' => ['fields' => $fields]]);
     }
 }
