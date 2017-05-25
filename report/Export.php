@@ -19,11 +19,8 @@ class Export
         $this->elasticsearchClient = $elasticsearchClient;
     }
 
-    public function doExport($bucket, $key, $fields, $params, $selectedIds, $excludedIds, $formatters = [])
+    public function doExport($bucket, $key, $fields, $headers, $params, $selectedIds, $excludedIds, $formatters = [])
     {
-        $this->hideFields($fields);
-        $this->sortFields($fields);
-
         $this->s3Client->registerStreamWrapper();
         $context = stream_context_create(array(
             's3' => array(
@@ -34,7 +31,7 @@ class Export
         $stream = fopen("s3://{$bucket}/{$key}", 'w', 0, $context);
 
         // Write header.
-        fputcsv($stream, $this->getHeaders($fields));
+        fputcsv($stream, $headers);
 
         if ($selectedIds !== ['All']) {
             // Improve performance by not loading all records then filter out.
@@ -94,43 +91,20 @@ class Export
         return "https://s3-{$region}.amazonaws.com/$bucket/{$key}";
     }
 
-    private function hideFields(&$fields)
-    {
-        foreach ($fields as $key => $field) {
-            if (!$field['options']['datatable']['visible']) {
-                unset($fields[$key]);
-            }
-        }
-    }
-
-    private function sortFields(&$fields)
-    {
-        uasort($fields, function ($a, $b) {
-            if ($a['options']['datatable']['order'] == $b['options']['datatable']['order']) {
-                return 0;
-            }
-            return ($a['options']['datatable']['order'] < $b['options']['datatable']['order']) ? -1 : 1;
-        });
-    }
-
-    private function getHeaders($fields)
-    {
-        $header = [];
-        foreach ($fields as $field) {
-            $header[] = $field['title'];
-        }
-        return $header;
-    }
-
     private function getValues($fields, $hit, $formatters = [])
     {
         $values = [];
-        foreach ($fields as $key => $field) {
+        foreach ($fields as $key) {
             if (isset($formatters[$key]) && is_callable($formatters[$key])) {
                 $values[] = $formatters[$key]($hit);
             }
             else {
-                $value = array_get($hit['_source'], $field['field']);
+                if (isset($formatters[$key]) && is_string($formatters[$key])) {
+                    $value = array_get($hit['_source'], $formatters[$key]);
+                }
+                else {
+                    $value = $hit['_source'][$key];
+                }
                 if (is_array($value)) {
                     $value = implode(', ', $value);
                 }
