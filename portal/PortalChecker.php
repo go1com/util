@@ -116,11 +116,19 @@ class PortalChecker
 
     public function buildLink($portal, $uri)
     {
-        $domain = $this->getPrimaryDomain($portal);
         $uri = ltrim($uri, '/');
 
-        return ($this->isVirtual($portal))
-            ? "https://{$domain}/p/#/{$uri}"
-            : "https://{$domain}/webapp/#/{$uri}";
+        if ($portal->title == PortalHelper::WEBSITE_PUBLIC_INSTANCE) {
+            $domain = PortalHelper::WEBSITE_DOMAIN;
+
+            return "https://{$domain}/#/{$uri}";
+        }
+        else {
+            $domain = $this->getPrimaryDomain($portal);
+
+            return ($this->isVirtual($portal))
+                ? "https://{$domain}/p/#/{$uri}"
+                : "https://{$domain}/webapp/#/{$uri}";
+        }
     }
 }
