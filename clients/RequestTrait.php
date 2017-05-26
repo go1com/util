@@ -71,9 +71,11 @@ trait RequestTrait
                 $this->mqClient->publish($msg, Queue::DO_CONSUMER_HTTP_REQUEST);
             }
             else {
-                $this
-                    ->queueClient
-                    ->queue('accounts-legacy', 'accounts.worker.legacy.post', [$method, $url, [], $body]);
+                if ($this->queueClient) {
+                    $this
+                        ->queueClient
+                        ->queue('accounts-legacy', 'accounts.worker.legacy.post', [$method, $url, [], $body]);
+                }
 
                 return $e->getResponse();
             }
