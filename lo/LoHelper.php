@@ -282,4 +282,11 @@ class LoHelper
 
         return $ids;
     }
+
+    public static function isBelongToGroup(Connection $db, int $loId, int $instanceId) : bool
+    {
+        $sql = 'SELECT 1 FROM gc_lo_group WHERE lo_id = ? AND instance_id = ?';
+
+        return $db->fetchColumn($sql, [$loId, $instanceId]) ? true : false;
+    }
 }
