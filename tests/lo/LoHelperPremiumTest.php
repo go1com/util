@@ -25,9 +25,9 @@ class LoHelperPremiumTest extends UtilTestCase
 
     public function testIsPremium()
     {
-        $this->assertTrue(LoHelper::isPremium($this->db, 1000, 10000));
-        $this->assertTrue(LoHelper::isPremium($this->db, 2000, 10000));
-        $this->assertFalse(LoHelper::isPremium($this->db, 3000, 10000));
-        $this->assertFalse(LoHelper::isPremium($this->db, 1000, 10001));
+        $this->assertTrue(LoHelper::isBelongToGroup($this->db, 1000, 10000));
+        $this->assertTrue(LoHelper::isBelongToGroup($this->db, 2000, 10000));
+        $this->assertFalse(LoHelper::isBelongToGroup($this->db, 3000, 10000));
+        $this->assertFalse(LoHelper::isBelongToGroup($this->db, 1000, 10001));
     }
 }
