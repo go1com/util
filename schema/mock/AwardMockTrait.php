@@ -27,6 +27,12 @@ trait AwardMockTrait
 
         $db->update('award_award', ['revision_id' => $revisionId], ['id' => $awardId]);
 
+        if (isset($options['items']) && is_array($options['items'])) {
+            foreach ($options['items'] as $item) {
+                $this->createAwardItem($db, $revisionId, $item['entity_id'], $item['quantity']);
+            }
+        }
+
         return $awardId;
     }
 
@@ -57,5 +63,27 @@ trait AwardMockTrait
         ]);
 
         return $db->lastInsertId('award_achievement');
+    }
+
+    protected function createAwardItemManual(Connection $db, int $awardId, int $userId, int $entityId, int $quantity = null)
+    {
+        $db->insert('award_item_manual', [
+            'award_id'  => $awardId,
+            'user_id'   => $userId,
+            'entity_id' => $entityId,
+            'quantity'  => $quantity,
+        ]);
+
+        return $db->lastInsertId('award_item_manual');
+    }
+
+    protected function createAwardAchievementManual(Connection $db, int $awardItemManualId, int $created = null)
+    {
+        $db->insert('award_achievement_manual', [
+            'award_item_manual_id' => $awardItemManualId,
+            'created'              => $created ?? time(),
+        ]);
+
+        return $db->lastInsertId('award_achievement_manual');
     }
 }

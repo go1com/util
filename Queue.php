@@ -101,6 +101,9 @@ class Queue
     const AWARD_ITEM_CREATE        = 'award.item.create';
     const AWARD_ITEM_UPDATE        = 'award.item.update';
     const AWARD_ITEM_DELETE        = 'award.item.delete';
+    const AWARD_ITEM_MANUAL_CREATE = 'award.item-manual.create';
+    const AWARD_ITEM_MANUAL_UPDATE = 'award.item-manual.update';
+    const AWARD_ITEM_MANUAL_DELETE = 'award.item-manual.delete';
     const AWARD_ACHIEVEMENT_CREATE = 'award.achievement.create';
     const AWARD_ACHIEVEMENT_UPDATE = 'award.achievement.update';
     const AWARD_ACHIEVEMENT_DELETE = 'award.achievement.delete';
