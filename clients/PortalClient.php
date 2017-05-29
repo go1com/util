@@ -41,7 +41,7 @@ class PortalClient
             $url = rtrim($this->portalUrl, '/') . "/{$instance}";
             $response = $this->request('GET', $url, [], []);
             $portal = json_decode($response->getBody()->getContents());
-            if (!$portal) {
+            if (!$portal || $response->getStatusCode() === 404) {
                 $is404 = true;
                 $this->cache->save($this->cacheId, 404, $ttl = 30);
             }

@@ -21,7 +21,7 @@ class PortalClientTest extends UtilTestCase
             ->willThrowException(new BadResponseException(
                 'Portal not found',
                 $this->createMock(RequestInterface::class),
-                new Response()
+                new Response(404, [], '"Portal not found"')
             ));
 
         $cache = $this->getMockBuilder(ArrayCache::class)->setMethods(['contains'])->getMock();
