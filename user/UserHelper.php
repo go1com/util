@@ -18,10 +18,17 @@ class UserHelper
     const DEFAULT_ACCOUNTS_ROLES = [Roles::AUTHENTICATED];
     const DEFAULT_PORTAL_ROLES   = [Roles::STUDENT, Roles::AUTHENTICATED];
 
-    public static function load(Connection $db, int $id)
+    public static function load(Connection $db, int $id, string $instance = null)
     {
+        $sql = 'SELECT * FROM gc_user WHERE id = ?';
+        $params = [$id];
+
+        if ($instance) {
+            $sql .= ' AND instance = ?';
+            $params[] = $instance;
+        }
         return $db
-            ->executeQuery('SELECT * FROM gc_user WHERE id = ?', [$id])
+            ->executeQuery($sql, $params)
             ->fetch(DB::OBJ);
     }
 

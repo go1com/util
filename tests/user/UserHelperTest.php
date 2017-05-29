@@ -13,6 +13,33 @@ class UserHelperTest extends UtilTestCase
     use UserMockTrait;
     use InstanceMockTrait;
 
+    public function testLoad()
+    {
+        $id = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com']);
+
+        $user = UserHelper::load($this->db, $id);
+        $this->assertEquals($id, $user->id);
+        $this->assertEquals('foo@bar.baz', $user->mail);
+        $this->assertEquals('qa.mygo1.com', $user->instance);
+        $this->assertEquals(false, UserHelper::load($this->db, 0));
+        $this->assertEquals(false, UserHelper::load($this->db, 999));
+    }
+
+    public function testLoadByInstance()
+    {
+        $id = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com']);
+
+        $this->assertEquals(false, UserHelper::load($this->db, 0, 'qa.mygo1.com'));
+        $this->assertEquals(false, UserHelper::load($this->db, 999, 'qa.mygo1.com'));
+        $this->assertEquals(false, UserHelper::load($this->db, 999, 'invalid.mygo1.com'));
+        $this->assertEquals(false, UserHelper::load($this->db, $id, 'invalid.mygo1.com'));
+
+        $user = UserHelper::load($this->db, $id, 'qa.mygo1.com');
+        $this->assertEquals($id, $user->id);
+        $this->assertEquals('foo@bar.baz', $user->mail);
+        $this->assertEquals('qa.mygo1.com', $user->instance);
+    }
+
     public function testLoadByMail()
     {
         $id = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com']);
