@@ -12,6 +12,11 @@ class Coupon implements JsonSerializable
     const TYPE_PERCENT = 1;
     const TYPE_VALUE   = 2;
 
+    const STATUS_UNAVAILABLE = -1; # No longer available/Reach limitation.
+    const STATUS_UNPUBLISHED = 0; # Author does want publish the coupon yet.
+    const STATUS_AVAILABLE   = 1; # Available for usage.
+    const STATUS_ALL         = [-1, 0, 1];
+
     public $id;
     public $instanceId;
     public $entityType;

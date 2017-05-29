@@ -32,7 +32,7 @@ class CouponRepository
         stdClass $user,
         int $instanceId,
         string $entityType = 'lo',
-        int $entityId = null,
+        int $entityId = 0,
         int $userId = null,
         int $status = null,
         int $limit = 50,
