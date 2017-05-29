@@ -26,6 +26,7 @@ class Coupon implements JsonSerializable
     public $type;
     public $value;
     public $limitation;
+    public $limitationPerUser;
     public $expiration;
     public $status;
     public $created;
@@ -55,6 +56,7 @@ class Coupon implements JsonSerializable
         $coupon->value = $input->value ?? 0.00;
         $coupon->status = $input->status ?? 0;
         $coupon->limitation = $input->limitation ?? 1;
+        $coupon->limitationPerUser = $input->limitation_per_user ?? 0;
         $coupon->expiration = $input->expiration ?? null;
         $coupon->created = $input->created ?? time();
         $coupon->updated = $input->updated ?? time();
@@ -100,25 +102,30 @@ class Coupon implements JsonSerializable
             $diff['limitation'] = $coupon->limitation;
         }
 
+        if ($coupon->limitationPerUser != $this->limitationPerUser) {
+            $diff['limitation_per_user'] = $coupon->limitationPerUser;
+        }
+
         return $diff;
     }
 
     public function jsonSerialize()
     {
         $array = [
-            'id'          => $this->id,
-            'instance_id' => $this->instanceId,
-            'entity_type' => $this->entityType,
-            'entity_id'   => $this->entityId,
-            'user_id'     => $this->userId,
-            'code'        => $this->code,
-            'type'        => $this->type,
-            'value'       => $this->value,
-            'status'      => $this->status,
-            'expiration'  => $this->expiration,
-            'limitation'  => $this->limitation,
-            'created'     => $this->created,
-            'updated'     => $this->updated,
+            'id'                  => $this->id,
+            'instance_id'         => $this->instanceId,
+            'entity_type'         => $this->entityType,
+            'entity_id'           => $this->entityId,
+            'user_id'             => $this->userId,
+            'code'                => $this->code,
+            'type'                => $this->type,
+            'value'               => $this->value,
+            'status'              => $this->status,
+            'expiration'          => $this->expiration,
+            'limitation'          => $this->limitation,
+            'limitation_per_user' => $this->limitationPerUser,
+            'created'             => $this->created,
+            'updated'             => $this->updated,
         ];
 
         if ($this->original) {
