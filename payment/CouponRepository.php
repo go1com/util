@@ -2,13 +2,11 @@
 
 namespace go1\util\payment;
 
-use Assert\Assert;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
 use go1\util\DB;
 use go1\util\Queue;
 use Psr\Log\LoggerInterface;
-use stdClass;
 
 class CouponRepository
 {
@@ -29,7 +27,6 @@ class CouponRepository
     }
 
     public function browse(
-        stdClass $user,
         int $instanceId,
         string $entityType = 'lo',
         int $entityId = 0,
@@ -53,11 +50,7 @@ class CouponRepository
             ->setParameter(':entity_type', $entityType);
 
         if (null !== $orderBy) {
-            # Only work on indexed columns.
-            Assert::that($orderBy)->inArray(['entity_id', 'status', 'created', 'updated']);
-
-            $q
-                ->orderBy("coupon.{$orderBy}", $direction);
+            $q->orderBy("coupon.{$orderBy}", $direction);
         }
 
         if ($entityId) {
