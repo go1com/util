@@ -2,11 +2,13 @@
 
 namespace go1\util\payment;
 
+use Assert\Assert;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
 use go1\util\DB;
 use go1\util\Queue;
 use Psr\Log\LoggerInterface;
+use stdClass;
 
 class CouponRepository
 {
@@ -26,8 +28,62 @@ class CouponRepository
         return $this->db;
     }
 
-    public function browse(stdClass $user, $instanceId, $entityType = 'lo', $entityId = null, int $limit = 50, int $offset = 0): array
+    public function browse(
+        stdClass $user,
+        int $instanceId,
+        string $entityType = 'lo',
+        int $entityId = null,
+        int $userId = null,
+        int $status = null,
+        int $limit = 50,
+        int $offset = 0,
+        string $orderBy = null,
+        string $direction = 'ASC'): array
     {
+        $q = $this
+            ->db
+            ->createQueryBuilder()
+            ->select('coupon.*')
+            ->from('payment_coupon', 'coupon')
+            ->where('coupon.instance_id = :instance_id')
+            ->andWhere('coupon.entity_type = :entity_type')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter(':instance_id', $instanceId)
+            ->setParameter(':entity_type', $entityType);
+
+        if (null !== $orderBy) {
+            # Only work on indexed columns.
+            Assert::that($orderBy)->inArray(['entity_id', 'status', 'created', 'updated']);
+
+            $q
+                ->orderBy("coupon.{$orderBy}", $direction);
+        }
+
+        if ($entityId) {
+            $q
+                ->andWhere('coupon.entity_id = :entity_id')
+                ->setParameter(':entity_id', $entityId);
+        }
+
+        if ($userId) {
+            $q
+                ->andWhere('coupon.user_id = :user_id')
+                ->setParameter(':user_id', $userId);
+        }
+
+        if (null !== $status) {
+            $q
+                ->andWhere('coupon.status = :status')
+                ->setParameter(':status', $status);
+        }
+
+        $q = $q->execute();
+        while ($row = $q->fetch(DB::OBJ)) {
+            $rows[] = Coupon::create($row);
+        }
+
+        return $rows ?? [];
     }
 
     public function load($idOrCode)
