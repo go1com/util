@@ -21,7 +21,7 @@ class CouponSchema
             $coupon->addColumn('value', Type::FLOAT, ['unsigned' => true]);
             $coupon->addColumn('status', Type::SMALLINT, ['description' => '-1: No longer available/Reach limitation. 0: Unpublished. 1: Still available.']);
             $coupon->addColumn('limitation', Type::INTEGER, ['unsigned' => true]);
-            $coupon->addColumn('limitation_per_user', Type::INTEGER, ['unsigned' => true]);
+            $coupon->addColumn('limitation_per_user', Type::INTEGER, ['unsigned' => true, 'default' => 1]);
             $coupon->addColumn('expiration', Type::DATETIMETZ, ['notnull' => false]);
             $coupon->addColumn('created', Type::INTEGER);
             $coupon->addColumn('updated', Type::INTEGER);
