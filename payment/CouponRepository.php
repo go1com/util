@@ -145,8 +145,10 @@ class CouponRepository
         return $usage['id'];
     }
 
-    public function countUsage(Coupon $coupon): int
+    public function countUsage(Coupon $coupon, int $userId = null): int
     {
-        return $this->db->fetchColumn('SELECT COUNT(*) FROM payment_coupon_usage WHERE coupon_id = ?', [$coupon->id]);
+        return $userId
+            ? $this->db->fetchColumn('SELECT COUNT(*) FROM payment_coupon_usage WHERE coupon_id = ? AND user_id = ?', [$coupon->id, $userId])
+            : $this->db->fetchColumn('SELECT COUNT(*) FROM payment_coupon_usage WHERE coupon_id = ?', [$coupon->id]);
     }
 }
