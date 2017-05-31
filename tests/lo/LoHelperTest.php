@@ -185,15 +185,19 @@ class LoHelperTest extends UtilTestCase
 
         # Resource 1
         $parentIds = LoHelper::parentIds($this->db, $this->resource1Id);
-        $this->assertEquals(2, count($parentIds));
+        $this->assertEquals(4, count($parentIds));
         $this
             ->hasParent($this->module1Id, $parentIds)
-            ->hasParent($this->module2Id, $parentIds);
+            ->hasParent($this->module2Id, $parentIds)
+            ->hasParent($this->course1Id, $parentIds)
+            ->hasParent($this->course2Id, $parentIds);
 
         # Resource 2
         $parentIds = LoHelper::parentIds($this->db, $this->resource2Id);
-        $this->assertEquals(1, count($parentIds));
-        $this->hasParent($this->module2Id, $parentIds);
+        $this->assertEquals(2, count($parentIds));
+        $this
+            ->hasParent($this->module2Id, $parentIds)
+            ->hasParent($this->course2Id, $parentIds);
     }
 
     public function testChildIds()

@@ -251,10 +251,11 @@ class LoHelper
 
         $ids = [];
         while ($id = $q->fetchColumn()) {
+            $ids = array_merge($ids, static::parentIds($db, $id));
             $ids[] = (int) $id;
         }
 
-        return $ids;
+        return array_unique($ids);
     }
 
     public static function parentsAuthorIds(Connection $db, int $loId): array
