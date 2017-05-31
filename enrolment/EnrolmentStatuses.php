@@ -14,10 +14,11 @@ class EnrolmentStatuses
     # ---------------------
     # const PENDING                  = -1; # will be removed soon
     # const ASSIGNED                 = -3; # Someone added this for you to do
-    const ENQUIRED                 = -4; #
+    const PENDING_REVIEW           = -1;
+    const ENQUIRED                 = -4; # @deprecated: We will use plan object for this this kind of purpose.
     const MANUAL_COMPLETE          = -5;
     const MANUAL_COMPLETE_VERIFIED = -6;
-    const PENDING_REVIEW           = -1;
+    const MANUAL_COMPLETE_REJECTED = -7;
 
     # Enrolment statuses
     # ---------------------
