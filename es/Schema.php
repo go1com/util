@@ -40,6 +40,7 @@ class Schema
     const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
     const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
+    const O_LO_GROUP            = 'lo_group';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -69,6 +70,7 @@ class Schema
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
         self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
         self::O_COUPON              => self::COUPON_MAPPING,
+        self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
     ];
 
     const ANALYZED = [
@@ -198,6 +200,15 @@ class Schema
                     'parents_id'            => ['type' => self::T_INT],
                 ]
             ],
+        ],
+    ];
+
+    const LO_GROUP_MAPPING = [
+        '_parent'    => ['type' => self::O_LO],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'lo_id'       => ['type' => self::T_INT],
+            'instance_id' => ['type' => self::T_INT],
         ],
     ];
 
