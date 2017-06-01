@@ -18,6 +18,11 @@ class UserHelper
     const DEFAULT_ACCOUNTS_ROLES = [Roles::AUTHENTICATED];
     const DEFAULT_PORTAL_ROLES   = [Roles::STUDENT, Roles::AUTHENTICATED];
 
+    const INTERACTIVE_ADMIN_USER_ID    = -100;
+    const INTERACTIVE_ADMIN_PROFILE_ID = -100;
+    const QUIZ_ADMIN_USER_ID           = -200;
+    const QUIZ_ADMIN_PROFILE_ID        = -200;
+
     public static function load(Connection $db, int $id, string $instance = null)
     {
         $sql = 'SELECT * FROM gc_user WHERE id = ?';
