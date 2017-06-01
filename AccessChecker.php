@@ -197,6 +197,13 @@ class AccessChecker
                     return static::ACCESS_OWNER;
                 }
             }
+
+            if (0 === strpos($entityType, 'account')) {
+                $account = $instance ? $this->validUser($req, $instance) : false;
+                if ($account && $account->id == $entityId) {
+                    return static::ACCESS_OWNER;
+                }
+            }
         }
 
         return static::ACCESS_AUTHENTICATED;
