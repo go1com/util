@@ -27,6 +27,7 @@ class UserHelper
             $sql .= ' AND instance = ?';
             $params[] = $instance;
         }
+
         return $db
             ->executeQuery($sql, $params)
             ->fetch(DB::OBJ);

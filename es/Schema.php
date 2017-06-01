@@ -196,9 +196,9 @@ class Schema
             ],
             'metadata'    => [
                 'properties' => [
-                    'parents_authors_ids'   => ['type' => self::T_INT],
-                    'parents_id'            => ['type' => self::T_INT],
-                ]
+                    'parents_authors_ids' => ['type' => self::T_INT],
+                    'parents_id'          => ['type' => self::T_INT],
+                ],
             ],
         ],
     ];

@@ -71,10 +71,9 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.es'] = function (Container $c) {
-            $o = $c['esOptions'];
-
             $client = EsClientBuilder::create();
-            if ($o['credential']) {
+
+            if (($o = $c['esOptions']) && $o['credential']) {
                 $provider = CredentialProvider::fromCredentials(new Credentials($o['key'], $o['secret']));
                 $client->setHandler(new ElasticsearchPhpHandler($o['region'], $provider));
             }
