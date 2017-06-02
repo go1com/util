@@ -7,7 +7,6 @@ use go1\util\DB;
 use stdClass;
 use go1\util\text\Xss;
 
-
 class AwardHelper
 {
     public static function format(stdClass $award)

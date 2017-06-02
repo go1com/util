@@ -95,7 +95,6 @@ class MailTemplate
             '!request_url'    => 'Request URL',
             '!id'             => 'Course ID',
             '!user_name'      => 'User full name',
-            '!user_image'     => 'User avatar',
             '!mail'           => 'User mail',
             '!phone'          => 'User phone',
             '!time'           => 'Enquiry time',
@@ -149,10 +148,8 @@ class MailTemplate
             '!author_first_name'  => 'Author first name',
             '!author_mail'        => 'Author mail',
             '!learner_first_name' => 'Learner first name',
-            '!learner_image'      => 'Learner avatar',
             '!course_name'        => 'Course name',
             '!portal_name'        => 'Portal name',
-            '!portal_url'         => 'Portal URL',
             '!portal_image'       => 'Portal image',
         ],
     ];
@@ -189,8 +186,7 @@ class MailTemplate
         'tokens' => [
             '!recipient_name' => 'Recipient full name',
             '!recipient_mail' => 'Recipient mail',
-            '!user_name'      => 'User full name',
-            '!user_image'     => 'User avatar',
+            '!learner_name'   => 'Learner full name',
             '!course_name'    => 'Course name',
             '!quantity'       => 'Credit quantity',
             '!description'    => 'Enrolment description',
@@ -206,10 +202,8 @@ class MailTemplate
         'key'    => 'user.manual-payment.accept',
         'tokens' => [
             '!payer_name'   => 'Payer full name',
-            '!payer_image'  => 'Payer avatar',
             '!course_name'  => 'Course name',
-            '!course_url'   => 'Course URL',
-            '!portal_url'   => 'Portal URL',
+            '!course_link'  => 'Course URL',
             '!portal_name'  => 'Portal name',
             '!portal_image' => 'Portal image',
             '!learner_mail' => 'Learner mail',
@@ -219,11 +213,12 @@ class MailTemplate
     const USER_MANUAL_PAYMENT_REJECT = [
         'key'    => 'user.manual-payment.reject',
         'tokens' => [
-            '!payer_name'  => 'Payer full name',
-            '!course_name' => 'Course name',
-            '!site_name'   => 'Human name of the portal',
-            '!course_url'  => 'Course URL',
-            '!portal_url'  => 'Portal URL',
+            '!payer_name'   => 'Payer full name',
+            '!course_name'  => 'Course name',
+            '!course_link'  => 'Course URL',
+            '!portal_name'  => 'Portal name',
+            '!portal_image' => 'Portal image',
+            '!learner_mail' => 'Learner mail',
         ],
     ];
 
@@ -254,16 +249,14 @@ class MailTemplate
         'tokens' => [
             '!learner_first_name' => 'Learner first name',
             '!learner_full_name'  => 'Learner full name',
-            '!learner_image'      => 'Learner avatar',
             '!course_name'        => 'Course title',
             '!pricing_price'      => 'Course price',
             '!pricing_currency'   => 'Course price currency',
             '!pricing_tax'        => 'Course price tax',
             '!course_url'         => 'Course URL',
-            '!approve_url'        => 'Credit approve URL',
-            '!reject_url'         => 'Credit reject URL',
+            '!approve_link'       => 'Credit approve URL',
+            '!reject_link'        => 'Credit reject URL',
             '!portal_name'        => 'Portal name',
-            '!portal_url'         => 'Portal URL',
             '!portal_image'       => 'Portal image',
             '!manager_mail'       => 'Manager mail',
         ],
@@ -275,12 +268,10 @@ class MailTemplate
             '!learner_first_name' => 'Learner first name',
             '!learner_mail'       => 'Learner mail',
             '!manager_name'       => 'Manager first name',
-            '!manager_image'      => 'Manager avatar',
             '!course_name'        => 'Course name',
             '!course_url'         => 'Course URL',
             '!site_name'          => 'Human name of the portal',
             '!portal_name'        => 'Portal name',
-            '!portal_url'         => 'Portal URL',
             '!portal_image'       => 'Portal logo',
         ],
     ];
@@ -291,12 +282,10 @@ class MailTemplate
             '!learner_first_name' => 'Learner first name',
             '!learner_mail'       => 'Learner mail',
             '!manager_name'       => 'Manager first name',
-            '!manager_image'      => 'Manager avatar',
             '!course_name'        => 'Course name',
             '!course_url'         => 'Course URL',
             '!site_name'          => 'Human name of the portal',
             '!portal_name'        => 'Portal name',
-            '!portal_url'         => 'Portal URL',
             '!portal_image'       => 'Portal logo',
         ],
     ];
@@ -305,7 +294,6 @@ class MailTemplate
         'key'    => 'assignment.submit',
         'tokens' => [
             '!learner_name'    => 'Learner full name',
-            '!learner_image'   => 'Learner avatar',
             '!assignment_name' => 'Assignment name',
             '!module_name'     => 'Module name',
             '!submission_time' => 'Submission time',
@@ -332,6 +320,9 @@ class MailTemplate
             '!learner_full_name' => 'Learner full name',
             '!quiz_title'        => 'Quiz title',
             '!quiz_url'          => 'Quiz URL',
+            '!portal_name'       => 'Portal name',
+            '!portal_image'      => 'Portal logo',
+            '!assessor_mail'     => 'Assessor mail',
         ],
     ];
 
@@ -345,19 +336,26 @@ class MailTemplate
     const NOTE_CREATE = [
         'key'    => 'note.create',
         'tokens' => [
-            '!entity_type'    => 'Note entity type',
-            '!entity_name'    => 'Note entity name',
-            '!note_url'       => 'Note URL',
-            '!portal_name'    => 'Portal name',
-            '!portal_url'     => 'Portal URL',
-            '!portal_image'   => 'Portal logo',
-            '!recipient_mail' => 'Recipient mail',
+            '!user_first_name' => 'User first name',
+            '!entity_type'     => 'Note entity type',
+            '!entity_name'     => 'Note entity name',
+            '!note_url'        => 'Note URL',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal logo',
+            '!recipient_mail'  => 'Recipient mail',
         ],
     ];
 
     const NOTE_MENTION = [
         'key'    => 'note.mention',
         'tokens' => [
+            '!entity_type'       => 'Note entity type',
+            '!entity_name'       => 'Note entity name',
+            '!author_first_name' => 'Author first name',
+            '!note_url'          => 'Note URL',
+            '!portal_name'       => 'Portal name',
+            '!portal_image'      => 'Portal logo',
+            '!recipient_mail'    => 'Recipient mail',
         ],
     ];
 
@@ -369,7 +367,6 @@ class MailTemplate
             '!award_name'         => 'Award name',
             '!award_url'          => 'Award URL',
             '!portal_name'        => 'Portal name',
-            '!portal_url'         => 'Portal URL',
             '!portal_image'       => 'Portal logo',
         ],
     ];
@@ -381,8 +378,8 @@ class MailTemplate
             '!learner_mail'       => 'Learner mail',
             '!award_name'         => 'Award name',
             '!award_url'          => 'Award URL',
+            '!award_expiry'       => 'Award expiry date',
             '!portal_name'        => 'Portal name',
-            '!portal_url'         => 'Portal URL',
             '!portal_image'       => 'Portal logo',
         ],
     ];
@@ -394,10 +391,89 @@ class MailTemplate
             '!learner_mail'       => 'Learner mail',
             '!award_name'         => 'Award name',
             '!award_url'          => 'Award URL',
-            '!course_name'        => 'Course name',
+            '!award_expiry'       => 'Award expiry date',
             '!portal_name'        => 'Portal name',
-            '!portal_url'         => 'Portal URL',
             '!portal_image'       => 'Portal logo',
+        ],
+    ];
+
+    // No activity after registration (user)
+    const REMIND_NO_ACTIVITY_USER = [
+        'key'    => 'user.remind.no-activity-user',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'Portal URL',
+            '!portal_image'    => 'Portal logo',
+        ],
+    ];
+
+    // No activity after registration (collab)
+    const REMIND_NO_ACTIVITY_COLLABORATOR = [
+        'key'    => 'user.remind.no-activity-collaborator',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal logo',
+        ],
+    ];
+
+    // Expiry of free access
+    const REMIND_FREE_TRIAL_EXPIRE = [
+        'key'    => 'user.remind.free-trial-expire',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal logo',
+        ],
+    ];
+
+    // Free access expired encouragement
+    const REMIND_FREE_TRIAL_EXPIRED = [
+        'key'    => 'user.remind.free-trial-expired',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal logo',
+        ],
+    ];
+
+    // Remind to start course
+    const REMIND_COURSE = [
+        'key'    => 'user.remind.course',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!course_name'     => 'Course name',
+            '!course_url'      => 'Course URL',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal logo',
+        ],
+    ];
+
+    // Expiry of subscription
+    const REMIND_SUBSCRIPTION_EXPIRE = [
+        'key'    => 'user.remind.subscription-expire',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal logo',
+        ],
+    ];
+
+    // Subscription expired
+    const REMIND_SUBSCRIPTION_EXPIRED = [
+        'key'    => 'user.remind.subscription-expired',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal logo',
         ],
     ];
 
