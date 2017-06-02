@@ -103,11 +103,11 @@ class PortalPricing
      * @param stdClass $portal
      * @return array
      */
-    public static function getPrice(stdClass $portal): array
+    public static function getPrice(stdClass $portal, $reCalculate = false): array
     {
         $currency = static::getCurrency($portal);
         $price = $portal->data->user_plan->price ?? 0;
-        if ($price) {
+        if ($price && !$reCalculate) {
             return [$price, $currency];
         }
 
