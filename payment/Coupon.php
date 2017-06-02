@@ -27,6 +27,7 @@ class Coupon implements JsonSerializable
     public $value;
     public $limitation;
     public $limitationPerUser;
+    /** @var  \DateTime */
     public $expiration;
     public $status;
     public $created;
@@ -121,7 +122,7 @@ class Coupon implements JsonSerializable
             'type'                => $this->type,
             'value'               => $this->value,
             'status'              => $this->status,
-            'expiration'          => $this->expiration,
+            'expiration'          => ($this->expiration instanceof \DateTime) ? $this->expiration->format(DATE_ISO8601) : $this->expiration,
             'limitation'          => $this->limitation,
             'limitation_per_user' => $this->limitationPerUser,
             'created'             => $this->created,
