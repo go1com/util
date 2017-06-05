@@ -158,42 +158,36 @@ class Schema
             [
                 'custom_field_string' => [
                     'path_match' => 'fields_*.*.value_string',
-                    'match_mapping_type' => 'string',
                     'mapping' => ['type' => self::T_KEYWORD] + self::ANALYZED
                 ]
             ],
             [
                 'custom_field_text' => [
                     'path_match' => 'fields_*.*.value_text',
-                    'match_mapping_type' => 'string',
                     'mapping' => ['type' => self::T_TEXT]
                 ]
             ],
             [
                 'custom_field_integer' => [
                     'path_match' => 'fields_*.*.value_integer',
-                    'match_mapping_type' => 'long',
                     'mapping' => ['type' => self::T_INT]
                 ]
             ],
             [
                 'custom_field_float' => [
                     'path_match' => 'fields_*.*.value_float',
-                    'match_mapping_type' => 'double',
                     'mapping' => ['type' => self::T_DOUBLE]
                 ]
             ],
             [
                 'custom_field_date' => [
                     'path_match' => 'fields_*.*.value_date',
-                    'match_mapping_type' => 'string',
                     'mapping' => ['type' => self::T_DATE]
                 ]
             ],
             [
                 'custom_field_datetime' => [
                     'path_match' => 'fields_*.*.value_datetime',
-                    'match_mapping_type' => 'string',
                     'mapping' => ['type' => self::T_DATE]
                 ]
             ]
