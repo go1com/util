@@ -12,6 +12,7 @@ class CouponSchema
         if (!$schema->hasTable('payment_coupon')) {
             $coupon = $schema->createTable('payment_coupon');
             $coupon->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $coupon->addColumn('title', Type::STRING, ['notnull' => false]);
             $coupon->addColumn('code', Type::STRING);
             $coupon->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
             $coupon->addColumn('entity_type', Type::STRING);
@@ -26,7 +27,7 @@ class CouponSchema
             $coupon->addColumn('created', Type::INTEGER);
             $coupon->addColumn('updated', Type::INTEGER);
             $coupon->setPrimaryKey(['id']);
-            $coupon->addUniqueIndex(['code']);
+            $coupon->addUniqueIndex(['instance_id', 'code']);
             $coupon->addIndex(['instance_id']);
             $coupon->addIndex(['entity_type']);
             $coupon->addIndex(['entity_id']);
