@@ -11,6 +11,7 @@ trait InstanceMockTrait
         $data = isset($options['data']) ? $options['data'] : '[]';
 
         $db->insert('gc_instance', [
+            'id'         => $options['id'] ?? null,
             'title'      => $title = isset($options['title']) ? $options['title'] : 'az.mygo1.com',
             'status'     => isset($options['status']) ? $options['status'] : 1,
             'is_primary' => isset($options['is_primary']) ? $options['is_primary'] : 1,
