@@ -43,6 +43,7 @@ trait PaymentMockTrait
     public function createCoupon(Connection $db, array $options = [])
     {
         $db->insert('payment_coupon', [
+            'title'             => $options['title'] ?? '',
             'code'              => $options['code'] ?? Uuid::uuid4()->toString(),
             'instance_id'       => $options['instance_id'] ?? 0,
             'entity_type'       => $options['entity_type'] ?? 'lo',
