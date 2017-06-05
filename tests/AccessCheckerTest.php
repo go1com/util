@@ -34,7 +34,7 @@ class AccessCheckerTest extends UtilTestCase
         $manager2Id = $this->createUser($this->db, ['mail' => $manager2Mail ='manager2@mail.com', 'instance' => $accountsName = 'accounts.gocatalyze.com']);
         $managerId = $this->createUser($this->db, ['mail' => $managerMail = 'manager@mail.com', 'instance' => $accountsName = 'accounts.gocatalyze.com']);
         $studentId = $this->createUser($this->db, ['mail' => $studentMail = 'student@mail.com', 'instance' => $instanceName = 'portal.mygo1.com']);
-        $this->link($this->db, EdgeTypes::HAS_MANAGER, $managerId, $studentId);
+        $this->link($this->db, EdgeTypes::HAS_MANAGER, $studentId, $managerId);
 
         # Is manager
         $req = new Request(['jwt.payload' => $this->getPayload(['id' => $managerId, 'mail' => $managerMail])]);

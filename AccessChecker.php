@@ -157,11 +157,11 @@ class AccessChecker
         return $db->fetchColumn(
             'SELECT 1 FROM gc_ro'
             . ' WHERE type = ?'
-            . '   AND source_id = ?'
-            . '   AND target_id = (SELECT id FROM gc_user WHERE instance = ? AND mail = ?)',
-            [EdgeTypes::HAS_MANAGER, $user->id, $instance, $studentMail],
+            . '   AND source_id = (SELECT id FROM gc_user WHERE instance = ? AND mail = ?)'
+            . '   AND target_id = ?',
+            [EdgeTypes::HAS_MANAGER, $instance, $studentMail, $user->id],
             0,
-            [PDO::PARAM_INT, PDO::PARAM_INT, PDO::PARAM_STR, PDO::PARAM_STR]
+            [PDO::PARAM_INT, PDO::PARAM_STR, PDO::PARAM_STR, PDO::PARAM_INT]
         ) ? true : false;
     }
 
