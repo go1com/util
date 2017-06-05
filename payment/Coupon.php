@@ -54,7 +54,7 @@ class Coupon implements JsonSerializable
         $coupon->entityType = $input->entity_type ?? 'lo';
         $coupon->entityId = $input->entity_id ?? 0;
         $coupon->userId = $input->user_id ?? 0;
-        $coupon->title = $input->title ? Xss::filter($input->title) : null;
+        $coupon->title = isset($input->title) ? Xss::filter($input->title) : null;
         $coupon->code = $input->code ?? Uuid::uuid4()->toString();
         $coupon->type = $input->type ?? self::TYPE_VALUE;
         $coupon->value = $input->value ?? 0.00;
