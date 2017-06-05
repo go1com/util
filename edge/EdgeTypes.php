@@ -102,6 +102,8 @@ class EdgeTypes
     const  PUBLISH_ENROLMENT_SELF_START_BASE_CNF  = 28; # T: = self.SOURCE | S: LO         | N: type data structure { interval: string }
     const  PUBLISH_ENROLMENT_SELF_START_BASE      = 29; # T: Timestamp     | S: Enrolment  | N: See GO1P-6926
     const  PUBLISH_ENROLMENT_SELF_START_BASE_DONE = 30; # T: Timestamp     | S: Enrolment  | N: PUBLISH_ENROLMENT_SELF_START_BASE record will be coverted to this when it's processed.
+    const  PUBLISH_MARKETPLACE_REQUEST_REJECTED   = 50; # T: User-Rejecter | S: LO         | Learning object
+    const  PUBLISH_MARKETPLACE_REQUEST_APPROVED   = 51; # T: User-Acceptor | S: LO         | Learning object
 
     # Portal relationships
     # ---------------------
