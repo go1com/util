@@ -48,6 +48,7 @@ trait UserMockTrait
         $data = is_scalar($data) ? $data : json_encode($data);
 
         $db->insert('gc_user', [
+            'id'           => $options['id'] ?? null,
             'uuid'         => isset($options['uuid']) ? $options['uuid'] : uniqid('xxxxxxxx'),
             'instance'     => isset($options['instance']) ? $options['instance'] : 'az.mygo1.com',
             'profile_id'   => isset($options['profile_id']) ? $options['profile_id'] : $profileId++,
