@@ -3,6 +3,7 @@
 namespace go1\util\payment;
 
 use Assert\Assert;
+use go1\util\text\Xss;
 use JsonSerializable;
 use Ramsey\Uuid\Uuid;
 use stdClass;
@@ -22,6 +23,7 @@ class Coupon implements JsonSerializable
     public $entityType;
     public $entityId;
     public $userId;
+    public $title;
     public $code;
     public $type;
     public $value;
@@ -52,6 +54,7 @@ class Coupon implements JsonSerializable
         $coupon->entityType = $input->entity_type ?? 'lo';
         $coupon->entityId = $input->entity_id ?? 0;
         $coupon->userId = $input->user_id ?? 0;
+        $coupon->title = $input->title ? Xss::filter($input->title) : null;
         $coupon->code = $input->code ?? Uuid::uuid4()->toString();
         $coupon->type = $input->type ?? self::TYPE_VALUE;
         $coupon->value = $input->value ?? 0.00;
@@ -78,6 +81,14 @@ class Coupon implements JsonSerializable
     public function diff(Coupon $coupon): array
     {
         $diff = [];
+
+        if ($coupon->title != $this->title) {
+            $diff['title'] = $coupon->title;
+        }
+
+        if ($coupon->code != $this->code) {
+            $diff['code'] = $coupon->code;
+        }
 
         if ($coupon->entityId != $this->entityId) {
             $diff['entity_id'] = $coupon->entityId;
@@ -118,6 +129,7 @@ class Coupon implements JsonSerializable
             'entity_type'         => $this->entityType,
             'entity_id'           => $this->entityId,
             'user_id'             => $this->userId,
+            'title'               => $this->title,
             'code'                => $this->code,
             'type'                => $this->type,
             'value'               => $this->value,
