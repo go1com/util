@@ -113,17 +113,22 @@ class LoChecker
 
     public function canUpdate(Connection $db, int $id, string $instance, Request $req)
     {
-        $access = new AccessChecker;
-
-        if ($access->isPortalTutor($req, $instance)) {
+        $accessChecker = new AccessChecker;
+        if ($accessChecker->isPortalTutor($req, $instance)) {
             return true;
         }
 
-        if ($user = $access->validUser($req)) {
+        if ($user = $accessChecker->validUser($req)) {
             if ($this->isAuthor($db, $id, $user->id)) {
                 return true;
             }
+
+            # Parent LO author CAN update
+            $parentAuthorIds = LoHelper::parentsAuthorIds($db, $id);
+            return in_array($user->id, $parentAuthorIds);
         }
+
+        return false;
     }
 
     public function access(AccessChecker $accessChecker, Request $req, string $instanceName)
