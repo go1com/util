@@ -28,4 +28,23 @@ class AccessCheckerTest extends UtilTestCase
         $account2 = $access->validUser($req, $instance, $this->db);
         $this->assertEquals($accountId, $account2->id);
     }
+
+    public function testIsStudentManager()
+    {
+        $manager2Id = $this->createUser($this->db, ['mail' => $manager2Mail ='manager2@mail.com', 'instance' => $accountsName = 'accounts.gocatalyze.com']);
+        $managerId = $this->createUser($this->db, ['mail' => $managerMail = 'manager@mail.com', 'instance' => $accountsName = 'accounts.gocatalyze.com']);
+        $studentId = $this->createUser($this->db, ['mail' => $studentMail = 'student@mail.com', 'instance' => $instanceName = 'portal.mygo1.com']);
+        $this->link($this->db, EdgeTypes::HAS_MANAGER, $managerId, $studentId);
+
+        # Is manager
+        $req = new Request(['jwt.payload' => $this->getPayload(['id' => $managerId, 'mail' => $managerMail])]);
+        $access = new AccessChecker();
+        $this->assertTrue($access->isStudentManager($this->db, $req, $studentMail, $instanceName, EdgeTypes::HAS_MANAGER));
+
+        # Is not manager
+        $req = new Request(['jwt.payload' => $this->getPayload(['id' => $manager2Id, 'mail' => $manager2Mail])]);
+        $access = new AccessChecker();
+        $this->assertFalse($access->isStudentManager($this->db, $req, $studentMail, $instanceName, EdgeTypes::HAS_MANAGER));
+    }
+
 }
