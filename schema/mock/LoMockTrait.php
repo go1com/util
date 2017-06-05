@@ -62,6 +62,7 @@ trait LoMockTrait
         }
 
         $db->insert('gc_lo', [
+            'id'          => $options['id'] ?? null,
             'type'        => isset($options['type']) ? $options['type'] : LoTypes::COURSE,
             'instance_id' => $instanceId = isset($options['instance_id']) ? $options['instance_id'] : 0,
             'remote_id'   => isset($options['remote_id']) ? $options['remote_id'] : $db->fetchColumn('SELECT 1 + MAX(remote_id) FROM gc_lo') ?: 1,
@@ -140,13 +141,13 @@ trait LoMockTrait
             ];
 
         $db->insert('gc_event', [
-                'start'     => $event['start'],
-                'end'       => isset($event['end']) ? $event['end'] : null,
-                'timezone'  => isset($event['timezone']) ? $event['timezone'] : 'UTC',
-                'seats'     => isset($event['seats']) ? $event['seats'] : 0,
-                'created'   => time(),
-                'updated'   => time(),
-                'data'      => isset($event['data']) ? (is_scalar($event['data']) ? $event['data'] : json_encode($event['data'])) : '',
+                'start'    => $event['start'],
+                'end'      => isset($event['end']) ? $event['end'] : null,
+                'timezone' => isset($event['timezone']) ? $event['timezone'] : 'UTC',
+                'seats'    => isset($event['seats']) ? $event['seats'] : 0,
+                'created'  => time(),
+                'updated'  => time(),
+                'data'     => isset($event['data']) ? (is_scalar($event['data']) ? $event['data'] : json_encode($event['data'])) : '',
             ] + $location
         );
 
@@ -155,7 +156,7 @@ trait LoMockTrait
                 'source_id' => $sourceId,
                 'target_id' => $eventId,
                 'type'      => EdgeTypes::HAS_EVENT_EDGE,
-                'weight'    => 0
+                'weight'    => 0,
             ]);
 
             if (isset($event['location']) && is_numeric($event['location'])) {
@@ -163,10 +164,11 @@ trait LoMockTrait
                     'source_id' => $eventId,
                     'target_id' => $event['location'],
                     'type'      => EdgeTypes::HAS_LOCATION,
-                    'weight'    => 0
+                    'weight'    => 0,
                 ]);
             }
         }
+
         return $eventId;
     }
 }
