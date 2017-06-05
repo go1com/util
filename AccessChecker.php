@@ -148,32 +148,21 @@ class AccessChecker
         return false;
     }
 
-    public function isStudentManager(Connection $db, Request $req, $studentMail, $portalName, $hasManagerCode = 504)
+    public function isStudentManager(Connection $db, Request $req, string $studentMail, string $instance)
     {
         if (!$user = $this->validUser($req)) {
-            return null;
+            return false;
         }
 
-        if (isset($user->mail) && $studentMail && !empty($user->accounts)) {
-            foreach ($user->accounts as &$account) {
-                if ($portalName == $account->instance) {
-                    $isManager = $db->fetchColumn(
-                        'SELECT 1 FROM gc_ro'
-                        . ' WHERE type = ?'
-                        . '   AND source_id = (SELECT id FROM gc_user WHERE instance = ? AND mail = ?)'
-                        . '   AND target_id = (SELECT id FROM gc_user WHERE instance = ? AND mail = ?)',
-                        [$hasManagerCode, $portalName, $studentMail, $portalName, $user->mail],
-                        0,
-                        [PDO::PARAM_INT, PDO::PARAM_STR, PDO::PARAM_STR, PDO::PARAM_STR, PDO::PARAM_STR]
-                    );
-                    if ($isManager) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        return $db->fetchColumn(
+            'SELECT 1 FROM gc_ro'
+            . ' WHERE type = ?'
+            . '   AND source_id = ?'
+            . '   AND target_id = (SELECT id FROM gc_user WHERE instance = ? AND mail = ?)',
+            [EdgeTypes::HAS_MANAGER, $user->id, $instance, $studentMail],
+            0,
+            [PDO::PARAM_INT, PDO::PARAM_INT, PDO::PARAM_STR, PDO::PARAM_STR]
+        ) ? true : false;
     }
 
     public function accessLevel(Request $req, $instance = null)
