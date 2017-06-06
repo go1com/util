@@ -258,13 +258,14 @@ class LoHelper
         return array_unique($ids);
     }
 
-    public static function parentsAuthorIds(Connection $db, int $loId): array
+    public static function parentsAuthorIds(Connection $db, int $loId, array $parentLoIds = NULL): array
     {
         $authorIds = [];
-        $parentLoIds = static::parentIds($db, $loId);
+        if (!isset($parentLoIds)) {
+            $parentLoIds = static::parentIds($db, $loId);
+        }
         foreach ($parentLoIds as $parentLoId) {
             $authorIds = array_merge($authorIds, LoChecker::authorIds($db, $parentLoId));
-            $authorIds = array_merge($authorIds, static::parentsAuthorIds($db, $parentLoId));
         }
 
         $authorIds = array_values(array_unique($authorIds));
