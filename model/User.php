@@ -17,7 +17,7 @@ class User
     public $id, $profileId;
 
     /** @var string */
-    public $instance, $name, $mail, $firstName, $lastName;
+    public $instance, $name, $mail, $firstName, $lastName, $avatar;
 
     /** @var bool */
     public $status;
@@ -59,6 +59,7 @@ class User
         $user->login = $row->login;
         $user->timestamp = $row->timestamp;
         $user->data = is_string($row->data) ? json_decode($row->data) : $row->data;
+        $user->avatar = $row->data->avatar->uri ?? null;
 
         if ($db) {
             // Fill the roles
