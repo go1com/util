@@ -2,22 +2,44 @@
 
 namespace go1\clients;
 
+use go1\util\portal\PortalChecker;
 use go1\util\user\UserHelper;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Log\LoggerInterface;
+use stdClass;
+use Symfony\Component\HttpFoundation\Request;
 
 class PaymentClient
 {
     private $logger;
     private $client;
     private $paymentUrl;
+    private $appId;
+    private $appSecret;
 
     public function __construct(LoggerInterface $logger, Client $client, string $paymentUrl)
     {
         $this->logger = $logger;
         $this->client = $client;
         $this->paymentUrl = rtrim($paymentUrl, '/');
+    }
+
+    /**
+     * @param mixed $appId
+     */
+    public function setAppId($appId)
+    {
+        $this->appId = $appId;
+    }
+
+    /**
+     * @param mixed $appSecret
+     */
+    public function setAppSecret($appSecret)
+    {
+        $this->appSecret = $appSecret;
     }
 
     public function stripeConnectionId(string $instance)
@@ -51,6 +73,83 @@ class PaymentClient
         }
         catch (RequestException $e) {
             $this->logger->error("[#payment] Failed to fetch portal Stripe connection: " . $e->getMessage());
+
+            return false;
+        }
+    }
+
+    public function create(stdClass $product, int $qty, string $paymentMethod, array $paymentOptions = [], string $authorization, array $metadata = [])
+    {
+        try {
+            $res = $this->client->post(
+                "{$this->paymentUrl}/cart/process",
+                [
+                    'headers' => ['Authorization' => $authorization, 'Content-Type'  => 'application/json'],
+                    'json'    => $this->buildCartOptions($product, $qty, $paymentMethod, $paymentOptions, $metadata),
+                ]
+            );
+
+            $transactionJson = $res->getBody()->getContents();
+
+            if (!$transaction = json_decode($transactionJson)) {
+                return false;
+            }
+
+            return $transaction;
+        }
+        catch (BadResponseException $e) {
+            $this->logger->error("[#payment] Failed to transaction: " . $e->getMessage());
+
+            return false;
+        }
+    }
+
+    private function buildCartOptions(
+        stdClass $product,
+        int $qty,
+        string $paymentMethod,
+        array $paymentOptions = [],
+        array $metadata = []
+    )
+    {
+        $options = [
+            'applicationId'  => $this->appId,
+            'timestamp'      => time(),
+            'paymentMethod'  => $paymentMethod,
+            'paymentOptions' => $paymentOptions,
+            'cartOptions'    => [],
+            'metadata'       => $metadata,
+        ];
+
+        $options['cartOptions']['items'][] = [
+            'productId'    => "lo-{$product->id}",
+            'type'         => 'product',
+            'price'        => $product->pricing->price,
+            'tax'          => isset($product->pricing->tax) ? $product->pricing->tax : 0.00,
+            'tax_included' => isset($product->pricing->tax_included) ? $product->pricing->tax_included : true,
+            'currency'     => $product->pricing->currency,
+            'qty'          => $qty,
+            'data'         => ['title' => $product->title],
+        ];
+
+        ksort($options);
+        $signature = http_build_query($options);
+        $signature = sha1($signature . $this->appSecret);
+
+        return $options + ['signature' => $signature];
+    }
+
+    public function updateCODTransaction($id)
+    {
+        try {
+            $this->client->put("{$this->paymentUrl}/transaction/{$id}/complete");
+
+            return true;
+        }
+        catch (BadResponseException $e) {
+            $response = $e->getResponse();
+
+            $this->logger->error(sprintf('[#payment] Failed to update transaction #%d: %s .', $id, $response->getBody()->getContents()));
 
             return false;
         }
