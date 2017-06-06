@@ -65,25 +65,25 @@ trait AwardMockTrait
         return $db->lastInsertId('award_achievement');
     }
 
-    protected function createAwardItemManual(Connection $db, int $awardId, int $userId, int $entityId, int $quantity = null)
+    protected function createAwardItemManual(Connection $db, array $options)
     {
+        $options['data'] = isset($options['data'])
+            ? (is_scalar($options['data']) ? json_decode($options['data'], true) : $options['data'])
+            : [];
+        $options['data'] = json_encode($options['data']);
+
         $db->insert('award_item_manual', [
-            'award_id'  => $awardId,
-            'user_id'   => $userId,
-            'entity_id' => $entityId,
-            'quantity'  => $quantity,
+            'award_id'        => $options['award_id'] ?? 0,
+            'description'     => $options['description'] ?? null,
+            'user_id'         => $options['user_id'] ?? 0,
+            'entity_id'       => $options['entity_id'] ?? null,
+            'verified'        => $options['verified'] ?? false,
+            'verifier_id'     => $options['verifier_id'] ?? 0,
+            'quantity'        => $options['quantity'] ?? null,
+            'completion_date' => $options['completion_date'] ?? time(),
+            'data'            => $options['data'],
         ]);
 
         return $db->lastInsertId('award_item_manual');
-    }
-
-    protected function createAwardAchievementManual(Connection $db, int $awardItemManualId, int $created = null)
-    {
-        $db->insert('award_achievement_manual', [
-            'award_item_manual_id' => $awardItemManualId,
-            'created'              => $created ?? time(),
-        ]);
-
-        return $db->lastInsertId('award_achievement_manual');
     }
 }

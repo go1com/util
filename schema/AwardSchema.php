@@ -62,13 +62,20 @@ class AwardSchema
             $itemManual = $schema->createTable('award_item_manual');
             $itemManual->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $itemManual->addColumn('award_id', Type::INTEGER, ['unsigned' => true]);
+            $itemManual->addColumn('description', Type::STRING, ['notnull' => false]);
             $itemManual->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
-            $itemManual->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.']);
+            $itemManual->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.', 'notnull' => false]);
+            $itemManual->addColumn('verified', Type::BOOLEAN);
+            $itemManual->addColumn('verifier_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $itemManual->addColumn('quantity', Type::INTEGER, ['notnull' => false, 'description' => 'Number of item quantity.']);
+            $itemManual->addColumn('completion_date', Type::INTEGER, ['unsigned' => true]);
+            $itemManual->addColumn('data', 'blob');
             $itemManual->setPrimaryKey(['id']);
             $itemManual->addIndex(['award_id']);
             $itemManual->addIndex(['user_id']);
             $itemManual->addIndex(['entity_id']);
+            $itemManual->addIndex(['verified']);
+            $itemManual->addIndex(['verifier_id']);
         }
 
         if (!$schema->hasTable('award_achievement')) {
@@ -80,16 +87,6 @@ class AwardSchema
             $achievement->setPrimaryKey(['id']);
             $achievement->addIndex(['user_id']);
             $achievement->addIndex(['award_item_id']);
-            $achievement->addIndex(['created']);
-        }
-
-        if (!$schema->hasTable('award_achievement_manual')) {
-            $achievement = $schema->createTable('award_achievement_manual');
-            $achievement->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
-            $achievement->addColumn('award_item_manual_id', Type::INTEGER, ['unsigned' => true]);
-            $achievement->addColumn('created', Type::INTEGER);
-            $achievement->setPrimaryKey(['id']);
-            $achievement->addIndex(['award_item_manual_id']);
             $achievement->addIndex(['created']);
         }
     }
