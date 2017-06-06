@@ -26,18 +26,12 @@ class PaymentClient
         $this->paymentUrl = rtrim($paymentUrl, '/');
     }
 
-    /**
-     * @param mixed $appId
-     */
-    public function setAppId($appId)
+    public function setAppId(string $appId)
     {
         $this->appId = $appId;
     }
 
-    /**
-     * @param mixed $appSecret
-     */
-    public function setAppSecret($appSecret)
+    public function setAppSecret(string $appSecret)
     {
         $this->appSecret = $appSecret;
     }
@@ -110,7 +104,7 @@ class PaymentClient
         string $paymentMethod,
         array $paymentOptions = [],
         array $metadata = []
-    )
+    ): array
     {
         $options = [
             'applicationId'  => $this->appId,
@@ -139,7 +133,7 @@ class PaymentClient
         return $options + ['signature' => $signature];
     }
 
-    public function updateCODTransaction($id)
+    public function updateCODTransaction($id): bool
     {
         try {
             $this->client->put("{$this->paymentUrl}/transaction/{$id}/complete");
