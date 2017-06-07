@@ -283,9 +283,6 @@ class Schema
             'start_date' => ['type' => self::T_DATE],
             'end_date'   => ['type' => self::T_DATE],
             'changed'    => ['type' => self::T_DATE],
-            // Duration between end date and start date (hours).
-            // @todo Support quiz and interactive.
-            'duration'   => ['type' => self::T_INT],
             'lo'         => [
                 'properties' => self::LO_MAPPING['properties'],
             ],
