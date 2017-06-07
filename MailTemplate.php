@@ -416,6 +416,7 @@ class MailTemplate
             '!user_first_name' => 'User first name',
             '!user_mail'       => 'User mail',
             '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'Portal URL',
             '!portal_image'    => 'Portal logo',
         ],
     ];
@@ -427,6 +428,7 @@ class MailTemplate
             '!user_first_name' => 'User first name',
             '!user_mail'       => 'User mail',
             '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'Portal URL',
             '!portal_image'    => 'Portal logo',
         ],
     ];
@@ -438,6 +440,7 @@ class MailTemplate
             '!user_first_name' => 'User first name',
             '!user_mail'       => 'User mail',
             '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'Portal URL',
             '!portal_image'    => 'Portal logo',
         ],
     ];
@@ -451,6 +454,7 @@ class MailTemplate
             '!course_name'     => 'Course name',
             '!course_url'      => 'Course URL',
             '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'Portal URL',
             '!portal_image'    => 'Portal logo',
         ],
     ];
@@ -462,6 +466,7 @@ class MailTemplate
             '!user_first_name' => 'User first name',
             '!user_mail'       => 'User mail',
             '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'Portal URL',
             '!portal_image'    => 'Portal logo',
         ],
     ];
@@ -473,6 +478,7 @@ class MailTemplate
             '!user_first_name' => 'User first name',
             '!user_mail'       => 'User mail',
             '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'Portal URL',
             '!portal_image'    => 'Portal logo',
         ],
     ];

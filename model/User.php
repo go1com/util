@@ -59,7 +59,7 @@ class User
         $user->login = $row->login;
         $user->timestamp = $row->timestamp;
         $user->data = is_string($row->data) ? json_decode($row->data) : $row->data;
-        $user->avatar = $row->data->avatar->uri ?? null;
+        $user->avatar = $user->data->avatar->uri ?? null;
 
         if ($db) {
             // Fill the roles
