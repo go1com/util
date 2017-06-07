@@ -31,6 +31,9 @@ class Plan implements JsonSerializable
     /** @var integer */
     public $assignerId;
 
+    /** @var integer */
+    public $instanceId;
+
     /** @var  string */
     public $entityType;
 
@@ -66,6 +69,7 @@ class Plan implements JsonSerializable
         $plan->id = isset($input->id) ? $input->id : null;
         $plan->userId = isset($input->user_id) ? $input->user_id : null;
         $plan->assignerId = isset($input->assigner_id) ? $input->assigner_id : null;
+        $plan->instanceId = $input->instance_id ?? null;
         $plan->entityType = $input->entity_type;
         $plan->entityId = $input->entity_id;
         $plan->status = $input->status;
@@ -92,6 +96,7 @@ class Plan implements JsonSerializable
             'id'           => $this->id,
             'user_id'      => $this->userId,
             'assigner_id'  => $this->assignerId,
+            'instance_id'  => $this->instanceId,
             'entity_type'  => $this->entityType,
             'entity_id'    => $this->entityId,
             'status'       => $this->status,

@@ -4,6 +4,7 @@ namespace go1\util\plan;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 use go1\clients\MqClient;
 use go1\util\DB;
 use go1\util\Queue;
@@ -22,24 +23,26 @@ class PlanRepository
     public static function install(Schema $schema)
     {
         if (!$schema->hasTable('gc_plan')) {
-            $table = $schema->createTable('gc_plan');
-            $table->addOption('description', 'GO1P-10732: Store learn-planning object.');
-            $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-            $table->addColumn('user_id', 'integer', ['unsigned' => true]);
-            $table->addColumn('assigner_id', 'integer', ['unsigned' => true, 'notnull' => false]);
-            $table->addColumn('entity_type', 'string');
-            $table->addColumn('entity_id', 'integer');
-            $table->addColumn('status', 'integer');
-            $table->addColumn('created_date', 'datetime');
-            $table->addColumn('due_date', 'datetime', ['notnull' => false]);
-            $table->addColumn('data', 'blob', ['notnull' => false]);
-            $table->setPrimaryKey(['id']);
-            $table->addIndex(['user_id']);
-            $table->addIndex(['assigner_id']);
-            $table->addIndex(['entity_type', 'entity_id']);
-            $table->addIndex(['status']);
-            $table->addIndex(['created_date']);
-            $table->addIndex(['due_date']);
+            $plan = $schema->createTable('gc_plan');
+            $plan->addOption('description', 'GO1P-10732: Store learn-planning object.');
+            $plan->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $plan->addColumn('user_id', 'integer', ['unsigned' => true]);
+            $plan->addColumn('assigner_id', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $plan->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+            $plan->addColumn('entity_type', 'string');
+            $plan->addColumn('entity_id', 'integer');
+            $plan->addColumn('status', 'integer');
+            $plan->addColumn('created_date', 'datetime');
+            $plan->addColumn('due_date', 'datetime', ['notnull' => false]);
+            $plan->addColumn('data', 'blob', ['notnull' => false]);
+            $plan->setPrimaryKey(['id']);
+            $plan->addIndex(['user_id']);
+            $plan->addIndex(['assigner_id']);
+            $plan->addIndex(['instance_id']);
+            $plan->addIndex(['entity_type', 'entity_id']);
+            $plan->addIndex(['status']);
+            $plan->addIndex(['created_date']);
+            $plan->addIndex(['due_date']);
         }
     }
 
