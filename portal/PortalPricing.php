@@ -77,6 +77,11 @@ class PortalPricing
         return $portal->data->user_plan->currency ?? Currency::DEFAULT;
     }
 
+    public static function getManualPrice(stdClass $portal)
+    {
+        return $portal->data->user_plan->manual_price ?? false;
+    }
+
     public static function getUserLimitationNumber($portal)
     {
         $userLicenses = static::getLicenses($portal);
