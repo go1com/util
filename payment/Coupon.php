@@ -122,7 +122,7 @@ class Coupon implements JsonSerializable
         return $diff;
     }
 
-    public function expired(): true
+    public function expired(): bool
     {
         if ($this->expiration) {
             return $this->expiration < new DateTime;
