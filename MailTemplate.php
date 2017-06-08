@@ -397,6 +397,16 @@ class MailTemplate
         ],
     ];
 
+    const COURSE_COMPLETE = [
+        'key'    => 'course.complete',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!course_name'     => 'Course name',
+            '!portal_url'      => 'Portal URL',
+        ],
+    ];
+
     // No activity after registration (user)
     const REMIND_NO_ACTIVITY_USER = [
         'key'    => 'user.remind.no-activity-user',
