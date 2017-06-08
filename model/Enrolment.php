@@ -26,6 +26,7 @@ class Enrolment
         $enrolment->profileId = $row->profile_id;
         $enrolment->parentLoId = $row->parent_lo_id;
         $enrolment->loId = $row->lo_id;
+        $enrolment->instanceId = $row->instance_id;
         $enrolment->takenInstanceId = $row->taken_instance_id;
         $enrolment->startDate = $row->start_date;
         $enrolment->endDate = $row->end_date;
@@ -33,6 +34,7 @@ class Enrolment
         $enrolment->result = $row->result;
         $enrolment->pass = $row->pass;
         $enrolment->changed = $row->changed;
+        $enrolment->timestamp = $row->timestamp;
 
         return $enrolment;
     }
