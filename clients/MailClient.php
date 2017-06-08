@@ -72,7 +72,7 @@ class MailClient
             'options'     => $options,
         ];
 
-        $this->queue->publish($data, Queue::DO_MAIL_SEND);
+        $this->queue->queue($data, Queue::DO_MAIL_SEND);
     }
 
     public function template(PortalClient $portalClient, string $instance, string $mailKey, string $defaultSubject, string $defaultBody, string $defaultHtml = null): Template
