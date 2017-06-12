@@ -20,9 +20,9 @@ trait GraphLoMockTrait
         $hasRoPortal = GraphEdgeTypes::HAS_RO_PORTAL;
 
         $q = "MERGE (portal:Group { name: {portalName} })"
-           . " MERGE (tag:Tag { name: {tagName} })"
-           . " MERGE (tag)-[:$hasGroup]->(portal)"
-           . " MERGE (portal)-[:$hasMember]->(tag)";
+            . " MERGE (tag:Tag { name: {tagName} })"
+            . " MERGE (tag)-[:$hasGroup]->(portal)"
+            . " MERGE (portal)-[:$hasMember]->(tag)";
         $p = [
             'portalName' => "portal:$instanceId",
             'tagName'    => $tag,
@@ -36,6 +36,21 @@ trait GraphLoMockTrait
         }
 
         $client->run($q, $p);
+    }
+
+    protected function createGraphCustomTag(Client $client, $tag, $loId, $instanceId)
+    {
+        $hasCustomTag = GraphEdgeTypes::HAS_CUSTOM_TAG;
+
+        $client->run(
+            "MATCH (lo:Group { id: $loId, name: {loName} })"
+            . " MERGE (tag:Tag { name : {tagName} })"
+            . " MERGE (lo)-[r:$hasCustomTag { portal_id: $instanceId }]->(tag)",
+            [
+                'loName'  => "lo:$loId",
+                'tagName' => $tag,
+            ]
+        );
     }
 
     protected function createGraphLearningPathway(Client $client, array $options = [])
@@ -64,38 +79,38 @@ trait GraphLoMockTrait
         static $autoCourseId;
 
         $course = [
-            'type'          => isset($options['type']) ? GraphEdgeTypes::type($options['type']) : 'Course',
-            'id'            => isset($options['id']) ? $options['id'] : ++$autoCourseId,
-            'title'         => isset($options['title']) ? $options['title'] : 'Example course',
-            'instance_id'   => $instanceId = isset($options['instance_id']) ? $options['instance_id'] : 0,
-            'private'       => isset($options['private']) ? $options['private'] : 0,
-            'published'     => isset($options['published']) ? $options['published'] : 1,
-            'marketplace'   => isset($options['marketplace']) ? $options['marketplace'] : 0,
-            'privacy'       => isset($options['privacy']) ? $options['privacy'] : [],
-            'tags'          => isset($options['tags']) ? $options['tags'] : [],
-            'groups'        => isset($options['groups']) ? $options['groups'] : [],
-            'tutors'        => isset($options['tutors']) ? $options['tutors'] : [],
-            'authors'       => isset($options['authors']) ? $options['authors'] : [],
-            'roles'         => isset($options['roles']) ? $options['roles'] : [],
-            'event'         => isset($options['event']) ? $options['event'] : [],
-            'parents'       => isset($options['parents']) ? $options['parents'] : [],
+            'type'        => isset($options['type']) ? GraphEdgeTypes::type($options['type']) : 'Course',
+            'id'          => isset($options['id']) ? $options['id'] : ++$autoCourseId,
+            'title'       => isset($options['title']) ? $options['title'] : 'Example course',
+            'instance_id' => $instanceId = isset($options['instance_id']) ? $options['instance_id'] : 0,
+            'private'     => isset($options['private']) ? $options['private'] : 0,
+            'published'   => isset($options['published']) ? $options['published'] : 1,
+            'marketplace' => isset($options['marketplace']) ? $options['marketplace'] : 0,
+            'privacy'     => isset($options['privacy']) ? $options['privacy'] : [],
+            'tags'        => isset($options['tags']) ? $options['tags'] : [],
+            'groups'      => isset($options['groups']) ? $options['groups'] : [],
+            'tutors'      => isset($options['tutors']) ? $options['tutors'] : [],
+            'authors'     => isset($options['authors']) ? $options['authors'] : [],
+            'roles'       => isset($options['roles']) ? $options['roles'] : [],
+            'event'       => isset($options['event']) ? $options['event'] : [],
+            'parents'     => isset($options['parents']) ? $options['parents'] : [],
         ];
         if (!empty($options['price'])) {
             $course['pricing'] = [
-                'price'     => $options['price']['price'],
-                'currency'  => $options['price']['currency'],
-                'tax'       => $options['price']['tax'],
+                'price'    => $options['price']['price'],
+                'currency' => $options['price']['currency'],
+                'tax'      => $options['price']['tax'],
             ];
         }
 
         $stack = $client->stack();
         $stack->push(
             "MERGE (lo:{$course['type']}:Group { id: {$course['id']}, name: {name} }) ON CREATE SET lo += {lo} ON MATCH SET lo += {lo}"
-          . " MERGE (lo)-[:$hasGroup]->(lo)"
-          . " MERGE (lo)-[:$hasMember]->(lo)",
+            . " MERGE (lo)-[:$hasGroup]->(lo)"
+            . " MERGE (lo)-[:$hasMember]->(lo)",
             [
                 'name' => "lo:{$course['id']}",
-                'lo' => ['title' => $course['title']],
+                'lo'   => ['title' => $course['title']],
             ]
         );
 
@@ -125,9 +140,9 @@ trait GraphLoMockTrait
         foreach ($course['authors'] as $authorId) {
             $stack->push(
                 "MATCH (lo:{$course['type']} { id: {$course['id']} })"
-              . " MERGE (author:User { id: $authorId })"
-              . " MERGE (lo)-[:$hasAuthor]->(author)"
-              . " MERGE (author)-[:$hasLo]->(lo)"
+                . " MERGE (author:User { id: $authorId })"
+                . " MERGE (lo)-[:$hasAuthor]->(author)"
+                . " MERGE (author)-[:$hasLo]->(lo)"
             );
         }
 
@@ -142,9 +157,9 @@ trait GraphLoMockTrait
         foreach ($course['tutors'] as $tutorId) {
             $stack->push(
                 "MATCH (lo:{$course['type']} { id: {$course['id']} })"
-              . " MERGE (tutor:User { id: $tutorId })"
-              . " MERGE (lo)-[:$hasTutor]->(tutor)"
-              . " MERGE (tutor)-[:$hasLo]->(lo)"
+                . " MERGE (tutor:User { id: $tutorId })"
+                . " MERGE (lo)-[:$hasTutor]->(tutor)"
+                . " MERGE (tutor)-[:$hasLo]->(lo)"
             );
         }
 
@@ -158,15 +173,15 @@ trait GraphLoMockTrait
 
         if ($course['instance_id']) {
             $q = "MATCH (lo:{$course['type']} { id: {$course['id']} })"
-               . " MERGE (portal:Group { name: {portal} })"
-               . " MERGE (lo)-[:$hasGroup]->(portal)"
-               . " MERGE (portal)-[:$hasMember]->(lo)";
+                . " MERGE (portal:Group { name: {portal} })"
+                . " MERGE (lo)-[:$hasGroup]->(portal)"
+                . " MERGE (portal)-[:$hasMember]->(lo)";
             $stack->push($q, ['portal' => "portal:{$course['instance_id']}"]);
 
             if (!empty($course['roles']) || !empty($course['privacy'] || $course['private'])) {
                 $q = "MATCH (portal:Group)-[r:$hasMember]->(lo:{$course['type']})"
-                   . " WHERE portal.name = {portal} AND lo.id = {$course['id']}"
-                   . " DELETE r";
+                    . " WHERE portal.name = {portal} AND lo.id = {$course['id']}"
+                    . " DELETE r";
                 $stack->push($q, ['portal' => "portal:{$course['instance_id']}"]);
             }
         }
@@ -185,7 +200,8 @@ trait GraphLoMockTrait
                 $q .= ", (portal:Group { name: {portalName} })"
                     . " MERGE (role:Group { name: {role} })-[:$hasGroup]->(portal)";
                 $p = ['role' => "role:$role", 'portalName' => "portal:$portalId"];
-            } else {
+            }
+            else {
                 $q .= " MERGE (role:Group { name: {role} })";
                 $p = ['role' => "role:$role"];
             }
@@ -205,18 +221,18 @@ trait GraphLoMockTrait
         if (!$course['private'] && $course['published'] && empty($course['roles'])) {
             $stack->push(
                 "MATCH (lo:{$course['type']} {id: {$course['id']} })"
-              . " MERGE (public:Group { name: 'public' })"
-              . " MERGE (lo)-[:$hasGroup]->(public)"
-              . " MERGE (public)-[:$hasMember]->(lo)"
+                . " MERGE (public:Group { name: 'public' })"
+                . " MERGE (lo)-[:$hasGroup]->(public)"
+                . " MERGE (public)-[:$hasMember]->(lo)"
             );
         }
         else {
             $stack->push(
                 "MATCH (lo:{$course['type']} {id: {$course['id']} })"
-              . " MATCH (public:Group { name: 'public' })"
-              . " MATCH (lo)-[r:$hasGroup]->(public)"
-              . " MATCH (public)-[rr:$hasMember]->(lo)"
-              . " DELETE r, rr"
+                . " MATCH (public:Group { name: 'public' })"
+                . " MATCH (lo)-[r:$hasGroup]->(public)"
+                . " MATCH (public)-[rr:$hasMember]->(lo)"
+                . " DELETE r, rr"
             );
         }
 
@@ -231,18 +247,18 @@ trait GraphLoMockTrait
         if (!$course['private'] && $course['published'] && $course['marketplace'] && empty($course['roles'])) {
             $stack->push(
                 "MATCH (lo:{$course['type']} {id: {$course['id']} })"
-              . " MERGE (marketplace:Group { name: 'marketplace' })"
-              . " MERGE (lo)-[:$hasGroup]->(marketplace)"
-              . " MERGE (marketplace)-[:$hasMember]->(lo)"
+                . " MERGE (marketplace:Group { name: 'marketplace' })"
+                . " MERGE (lo)-[:$hasGroup]->(marketplace)"
+                . " MERGE (marketplace)-[:$hasMember]->(lo)"
             );
         }
         else {
             $stack->push(
                 "MATCH (lo:{$course['type']} {id: {$course['id']} })"
-              . " MATCH (marketplace:Group { name: 'marketplace' })"
-              . " MATCH (lo)-[r:$hasGroup]->(marketplace)"
-              . " MATCH (marketplace)-[rr:$hasMember]->(lo)"
-              . " DELETE r, rr"
+                . " MATCH (marketplace:Group { name: 'marketplace' })"
+                . " MATCH (lo)-[r:$hasGroup]->(marketplace)"
+                . " MATCH (marketplace)-[rr:$hasMember]->(lo)"
+                . " DELETE r, rr"
             );
         }
 
@@ -260,19 +276,19 @@ trait GraphLoMockTrait
                 $targetId = isset($privacy['target_id']) ? $privacy['target_id'] : 0;
                 $weight == 0 && $stack->push(
                     "MATCH (lo:{$course['type']} {id: {$course['id']} })"
-                  . " MERGE (shareUser:User { id: {$targetId} })"
-                  . " MERGE (lo)-[:$hasMember]->(shareUser)"
-                  . " MERGE (shareUser)-[:$hasSharedLo]->(lo)"
+                    . " MERGE (shareUser:User { id: {$targetId} })"
+                    . " MERGE (lo)-[:$hasMember]->(shareUser)"
+                    . " MERGE (shareUser)-[:$hasSharedLo]->(lo)"
                 );
             }
         }
         else {
             $stack->push(
                 "MATCH (lo:{$course['type']} {id: {$course['id']}})"
-              . " MATCH (shareUser:User)"
-              . " MATCH (shareUser)-[r:$hasSharedLo]->(lo)"
-              . " MATCH (lo)-[rr:$hasMember]->(shareUser)"
-              . " DELETE r, rr"
+                . " MATCH (shareUser:User)"
+                . " MATCH (shareUser)-[r:$hasSharedLo]->(lo)"
+                . " MATCH (lo)-[rr:$hasMember]->(shareUser)"
+                . " DELETE r, rr"
             );
         }
 
@@ -286,8 +302,8 @@ trait GraphLoMockTrait
         if (isset($course['pricing']) && is_array($course['pricing'])) {
             $stack->push(
                 "MATCH (lo:{$course['type']} { id: {$course['id']} })"
-              . " MERGE (product:Product { id: {$course['id']} }) ON CREATE SET product += {product} ON MATCH SET product += {product}"
-              . " MERGE (lo)-[:$hasProduct]->(product)",
+                . " MERGE (product:Product { id: {$course['id']} }) ON CREATE SET product += {product} ON MATCH SET product += {product}"
+                . " MERGE (lo)-[:$hasProduct]->(product)",
                 ['product' => $course['pricing']]
             );
         }
@@ -312,11 +328,11 @@ trait GraphLoMockTrait
                 if ($tag = trim($tag)) {
                     $stack->push(
                         "MATCH (lo:{$course['type']} { id: {$course['id']} })"
-                      . " MERGE (portal:Group { name: {portal} })"
-                      . " MERGE (tag:Tag { name: {name} })"
-                      . " MERGE (tag)-[:$hasGroup]->(portal)"
-                      . " MERGE (portal)-[:$hasMember]->(tag)"
-                      . " MERGE (lo)-[:$hasTag]->(tag)",
+                        . " MERGE (portal:Group { name: {portal} })"
+                        . " MERGE (tag:Tag { name: {name} })"
+                        . " MERGE (tag)-[:$hasGroup]->(portal)"
+                        . " MERGE (portal)-[:$hasMember]->(tag)"
+                        . " MERGE (lo)-[:$hasTag]->(tag)",
                         ['name' => $tag, 'portal' => "portal:{$course['instance_id']}"]
                     );
                 }
@@ -326,17 +342,17 @@ trait GraphLoMockTrait
         // Delete orphan tag
         $stack->push(
             "MATCH (tag:Tag)"
-          . " WHERE NOT (tag)<-[:$hasTag]-()"
-          . " DETACH DELETE tag"
+            . " WHERE NOT (tag)<-[:$hasTag]-()"
+            . " DETACH DELETE tag"
         );
-        
+
         // Delete orphan RO
         // RO must have at least 6 connection (2 to portal, 4 to two related entities)
         $stack->push(
             "MATCH (ro:RO)-[r]-(o)"
-          . " WITH ro, count(o) AS count, collect(o) as col"
-          . " WHERE count < 6"
-          . " DETACH DELETE ro"
+            . " WITH ro, count(o) AS count, collect(o) as col"
+            . " WHERE count < 6"
+            . " DETACH DELETE ro"
         );
 
         return $this;
@@ -349,9 +365,9 @@ trait GraphLoMockTrait
         if ($course['event']) {
             $stack->push(
                 "MATCH (lo:{$course['type']} { id: {$course['id']} })"
-              . " MERGE (event:Event {id: {$course['id']}}) ON CREATE SET event += {event} ON MATCH SET event += {event}"
-              . " MERGE (lo)-[:$hasEvent]->(event)",
-                ['event' => (array) $course['event']]
+                . " MERGE (event:Event {id: {$course['id']}}) ON CREATE SET event += {event} ON MATCH SET event += {event}"
+                . " MERGE (lo)-[:$hasEvent]->(event)",
+                ['event' => (array)$course['event']]
             );
         }
         else {
@@ -374,8 +390,8 @@ trait GraphLoMockTrait
                 : false;
             $stack->push(
                 "MATCH (lo:{$course['type']} { id: {$course['id']} })"
-              . " MERGE (parent:{$itemType}:Group { id: {$item['id']}, name: {parentName} })"
-              . " MERGE (parent)-[r:$hasItem]->(lo) SET r.elective = {elective}",
+                . " MERGE (parent:{$itemType}:Group { id: {$item['id']}, name: {parentName} })"
+                . " MERGE (parent)-[r:$hasItem]->(lo) SET r.elective = {elective}",
                 [
                     'parentName' => "lo:{$item['id']}",
                     'elective'   => $elective,

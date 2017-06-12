@@ -13,6 +13,7 @@ class GraphEdgeTypes
     const HAS_MEMBER       = 'HAS_MEMBER';
     const HAS_CLONE        = 'HAS_CLONE';
     const HAS_TAG          = 'HAS_TAG';                 # (:lo/li)-[]->(:tag)
+    const HAS_CUSTOM_TAG   = 'HAS_CUSTOM_TAG';          # (:lo/li)-[]->(:tag)
     const HAS_EVENT        = 'HAS_EVENT';
     const HAS_PRODUCT      = 'HAS_PRODUCT';
     const HAS_REMOTE       = 'HAS_REMOTE';
