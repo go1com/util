@@ -15,8 +15,6 @@ class CouponSchema
             $coupon->addColumn('title', Type::STRING, ['notnull' => false]);
             $coupon->addColumn('code', Type::STRING);
             $coupon->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
-            $coupon->addColumn('entity_type', Type::STRING);
-            $coupon->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
             $coupon->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $coupon->addColumn('type', Type::SMALLINT, ['unsigned' => true]);
             $coupon->addColumn('value', Type::FLOAT, ['unsigned' => true]);

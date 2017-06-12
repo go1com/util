@@ -40,14 +40,12 @@ class CouponRepository
         $q = $this
             ->db
             ->createQueryBuilder()
-            ->select('coupon.*')
+            ->select('DISTINCT coupon.*')
             ->from('payment_coupon', 'coupon')
             ->where('coupon.instance_id = :instance_id')
-            ->andWhere('coupon.entity_type = :entity_type')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
-            ->setParameter(':instance_id', $instanceId)
-            ->setParameter(':entity_type', $entityType);
+            ->setParameter(':instance_id', $instanceId);
 
         if (null !== $orderBy) {
             $q->orderBy("coupon.{$orderBy}", $direction);
@@ -55,7 +53,10 @@ class CouponRepository
 
         if ($entityId) {
             $q
-                ->andWhere('coupon.entity_id = :entity_id')
+                ->innerJoin('coupon', 'payment_coupon_item', 'item', 'coupon.id = item.coupon_id')
+                ->andWhere('item.entity_id = :entity_id')
+                ->andWhere('item.entity_type = :entity_type')
+                ->setParameter(':entity_type', $entityType)
                 ->setParameter(':entity_id', $entityId);
         }
 
@@ -84,14 +85,35 @@ class CouponRepository
         $column = is_numeric($idOrCode) ? 'id' : 'code';
         $coupon = "SELECT * FROM payment_coupon WHERE {$column} = ?";
         $coupon = $this->db->executeQuery($coupon, [$idOrCode])->fetch(DB::OBJ);
+        $coupon = $coupon ? Coupon::create($coupon) : false;
 
-        return $coupon ? Coupon::create($coupon) : false;
+        if ($coupon) {
+            $q = $this->db->executeQuery('SELECT entity_type, entity_id FROM payment_coupon_item WHERE coupon_id = ?', [$coupon->id]);
+            while ($item = $q->fetch(DB::OBJ)) {
+                $coupon->add($item->entity_type, $item->entity_id);
+            }
+        }
+
+        return $coupon;
     }
 
     public function create(Coupon &$coupon): int
     {
-        $this->db->insert('payment_coupon', $coupon->jsonSerialize());
+        $row = $coupon->jsonSerialize();
+        $entities = $coupon->entities;
+        $this->db->insert('payment_coupon', $row);
         $coupon->id = $this->db->lastInsertId('payment_coupon');
+
+        foreach ($entities as $entityType => $entityIds) {
+            foreach ($entityIds as $entityId) {
+                $this->db->insert('payment_coupon_item', [
+                    'coupon_id'   => $coupon->id,
+                    'entity_type' => $entityType,
+                    'entity_id'   => $entityId,
+                ]);
+            }
+        }
+
         $this->queue->publish($coupon, Queue::COUPON_CREATE);
 
         return $coupon->id;
@@ -107,11 +129,27 @@ class CouponRepository
             return false;
         }
 
-        $this->db->update('payment_coupon', $diff, ['id' => $coupon->id]);
-        $coupon->original = $original;
-        $this->queue->publish($coupon, Queue::COUPON_UPDATE);
+        return DB::transactional($this->db, function () use (&$coupon, &$diff, &$original) {
+            $entities = $diff['entities'];
+            unset($diff['entities']);
 
-        return true;
+            $this->db->update('payment_coupon', $diff, ['id' => $coupon->id]);
+
+            foreach ($entities as $entityType => $entityIds) {
+                $this->db->executeQuery('DELETE FROM payment_coupon_item WHERE coupon_id = ? AND entity_type = ?', [$coupon->id, $entityType]);
+
+                foreach ($entityIds as $entityId) {
+                    $this->db->insert('payment_coupon_item', [
+                        'coupon_id'   => $coupon->id,
+                        'entity_type' => $entityType,
+                        'entity_id'   => $entityId,
+                    ]);
+                }
+            }
+
+            $coupon->original = $original;
+            $this->queue->publish($coupon, Queue::COUPON_UPDATE);
+        });
     }
 
     public function delete(int $id): bool
@@ -122,6 +160,7 @@ class CouponRepository
 
         DB::transactional($this->db, function (Connection $db) use (&$coupon) {
             $db->executeQuery('DELETE FROM payment_coupon_usage WHERE coupon_id = ?', [$coupon->id]);
+            $db->executeQuery('DELETE FROM payment_coupon_item WHERE coupon_id = ?', [$coupon->id]);
             $db->executeQuery('DELETE FROM payment_coupon WHERE id = ?', [$coupon->id]);
 
             $this->queue->publish($coupon, Queue::COUPON_DELETE);
