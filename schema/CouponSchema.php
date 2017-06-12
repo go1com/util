@@ -36,6 +36,14 @@ class CouponSchema
             $coupon->addIndex(['updated']);
         }
 
+        if (!$schema->hasTable('payment_coupon_item')) {
+            $item = $schema->createTable('payment_coupon_item');
+            $item->addColumn('coupon_id', Type::INTEGER, ['unsigned' => true]);
+            $item->addColumn('entity_type', Type::STRING);
+            $item->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $item->addUniqueIndex(['coupon_id', 'entity_type', 'entity_id']);
+        }
+
         if (!$schema->hasTable('payment_coupon_usage')) {
             $couponUsage = $schema->createTable('payment_coupon_usage');
             $couponUsage->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
