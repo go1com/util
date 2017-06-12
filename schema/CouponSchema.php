@@ -15,8 +15,6 @@ class CouponSchema
             $coupon->addColumn('title', Type::STRING, ['notnull' => false]);
             $coupon->addColumn('code', Type::STRING);
             $coupon->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
-            $coupon->addColumn('entity_type', Type::STRING);
-            $coupon->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
             $coupon->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $coupon->addColumn('type', Type::SMALLINT, ['unsigned' => true]);
             $coupon->addColumn('value', Type::FLOAT, ['unsigned' => true]);
@@ -34,6 +32,14 @@ class CouponSchema
             $coupon->addIndex(['status']);
             $coupon->addIndex(['created']);
             $coupon->addIndex(['updated']);
+        }
+
+        if (!$schema->hasTable('payment_coupon_item')) {
+            $item = $schema->createTable('payment_coupon_item');
+            $item->addColumn('coupon_id', Type::INTEGER, ['unsigned' => true]);
+            $item->addColumn('entity_type', Type::STRING);
+            $item->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $item->addUniqueIndex(['coupon_id', 'entity_type', 'entity_id']);
         }
 
         if (!$schema->hasTable('payment_coupon_usage')) {

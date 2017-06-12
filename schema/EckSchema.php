@@ -39,7 +39,7 @@ class EckSchema
             $structure->addColumn('required', 'string');
             $structure->addColumn('published', 'boolean', ['default' => true]);
             $structure->addColumn('weight', 'integer');
-            $structure->addColumn('max_rows', 'string');
+            $structure->addColumn('max_rows', 'string'); # TODO: should be integer.
             $structure->addColumn('parent_field', 'string', ['notnull' => false]);
             $structure->addColumn('data', 'blob', ['notnull' => false]);
 
