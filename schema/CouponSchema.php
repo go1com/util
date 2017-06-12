@@ -27,8 +27,6 @@ class CouponSchema
             $coupon->setPrimaryKey(['id']);
             $coupon->addUniqueIndex(['instance_id', 'code']);
             $coupon->addIndex(['instance_id']);
-            $coupon->addIndex(['entity_type']);
-            $coupon->addIndex(['entity_id']);
             $coupon->addIndex(['status']);
             $coupon->addIndex(['created']);
             $coupon->addIndex(['updated']);
@@ -40,6 +38,7 @@ class CouponSchema
             $item->addColumn('entity_type', Type::STRING);
             $item->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
             $item->addUniqueIndex(['coupon_id', 'entity_type', 'entity_id']);
+            $item->addIndex(['entity_type', 'entity_id']);
         }
 
         if (!$schema->hasTable('payment_coupon_usage')) {
