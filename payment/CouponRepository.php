@@ -100,6 +100,7 @@ class CouponRepository
     public function create(Coupon &$coupon): int
     {
         $row = $coupon->jsonSerialize();
+        unset($row['entities']);
         $entities = $coupon->entities;
         $this->db->insert('payment_coupon', $row);
         $coupon->id = $this->db->lastInsertId('payment_coupon');

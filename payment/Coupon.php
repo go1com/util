@@ -63,9 +63,11 @@ class Coupon implements JsonSerializable
         $coupon->created = $input->created ?? time();
         $coupon->updated = $input->updated ?? time();
 
-        foreach ($input->entities as $entityType => $entityIds) {
-            foreach ($entityIds as $entityId) {
-                $coupon->add($entityType, $entityId);
+        if (!empty($input->entities)) {
+            foreach ($input->entities as $entityType => $entityIds) {
+                foreach ($entityIds as $entityId) {
+                    $coupon->add($entityType, $entityId);
+                }
             }
         }
 
