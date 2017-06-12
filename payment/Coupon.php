@@ -21,7 +21,7 @@ class Coupon implements JsonSerializable
 
     public $id;
     public $instanceId;
-    public $entities;
+    public $entities = [];
     public $userId;
     public $title;
     public $code;
@@ -51,7 +51,6 @@ class Coupon implements JsonSerializable
         $coupon = new Coupon;
         $coupon->id = $input->id ?? null;
         $coupon->instanceId = $input->instance_id;
-        $coupon->entities = $input->entities ?? [];
         $coupon->userId = $input->user_id ?? 0;
         $coupon->title = isset($input->title) ? Xss::filter($input->title) : null;
         $coupon->code = $input->code ?? Uuid::uuid4()->toString();
@@ -64,7 +63,32 @@ class Coupon implements JsonSerializable
         $coupon->created = $input->created ?? time();
         $coupon->updated = $input->updated ?? time();
 
+        foreach ($input->entities as $entityType => $entityIds) {
+            foreach ($entityIds as $entityId) {
+                $coupon->add($entityType, $entityId);
+            }
+        }
+
         return $coupon;
+    }
+
+    public function add(string $entityType, int $entityId)
+    {
+        $this->entities[$entityType][] = $entityId;
+        $this->entities[$entityType] = array_unique($this->entities[$entityType]);
+    }
+
+    public function remove(string $entityType, int $entityId)
+    {
+        foreach ($this->entities as $type => $ids) {
+            if ($entityType == $type) {
+                foreach ($ids as $i => $id) {
+                    if ($entityId == $id) {
+                        unset($this->entities[$type][$i]);
+                    }
+                }
+            }
+        }
     }
 
     public function validateCartItems(array $items)
