@@ -22,10 +22,11 @@ class FieldStructure implements JsonSerializable
     private $weight;
     private $maxRows;
     private $parentField;
+    private $data;
     private $permissions = [];
     private $original;
 
-    public function __construct($id, $name, $description, $label, $help, $type, $mandatory, $published, $weight, $maxRows, $parentField = null, $instance = null, $entity = null)
+    public function __construct($id, $name, $description, $label, $help, $type, $mandatory, $published, $weight, $maxRows, $parentField = null, $data = null, $instance = null, $entity = null)
     {
         $this->id = $id ? intval($id) : null;
         $this->name = $name;
@@ -38,6 +39,7 @@ class FieldStructure implements JsonSerializable
         $this->weight = $weight;
         $this->maxRows = $maxRows;
         $this->parentField = $parentField;
+        $this->data = $data;
         $this->instance = $instance;
         $this->entity = $entity;
     }
@@ -60,6 +62,7 @@ class FieldStructure implements JsonSerializable
             $row->weight,
             $row->max_rows,
             $row->parent_field,
+            $row->data,
             $row->instance,
             $row->entity
         );
@@ -175,6 +178,18 @@ class FieldStructure implements JsonSerializable
     public function parentField()
     {
         return $this->parentField;
+    }
+
+    public function enum()
+    {
+        $enum = [];
+        if ($this->data && is_scalar($this->data)) {
+            $data = json_decode($this->data, true);
+
+            $enum = isset($data['enum']) ? implode("\n", $data['enum']) : '';
+        }
+
+        return $enum;
     }
 
     /**
@@ -303,6 +318,7 @@ class FieldStructure implements JsonSerializable
             'weight'       => $this->weight,
             'max_rows'     => $this->maxRows,
             'parent_field' => $this->parentField,
+            'enum'         => $this->enum(),
             'permission'   => !empty($permissions) ? $permissions : [],
             'original'     => $this->original,
         ];
