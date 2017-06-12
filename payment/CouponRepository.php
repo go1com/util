@@ -73,8 +73,21 @@ class CouponRepository
         }
 
         $q = $q->execute();
+        $couponIds = [];
         while ($row = $q->fetch(DB::OBJ)) {
             $rows[] = Coupon::create($row);
+            $couponIds[] = $row->id;
+        }
+
+        if ($couponIds) {
+            $q = $this->db()->executeQuery('SELECT coupon_id, entity_type, entity_id FROM payment_coupon_item WHERE coupon_id IN (?)', [$couponIds], [DB::INTEGERS]);
+            while ($row = $q->fetch(DB::OBJ)) {
+                foreach ($rows as &$coupon) {
+                    if ($coupon->id == $row->coupon_id) {
+                        $coupon->add($row->entity_type, $row->entity_id);
+                    }
+                }
+            }
         }
 
         return $rows ?? [];
@@ -101,7 +114,7 @@ class CouponRepository
     {
         $row = $coupon->jsonSerialize();
         unset($row['entities']);
-        $entities = $coupon->entities;
+        $entities = $coupon->entities ?? [];
         $this->db->insert('payment_coupon', $row);
         $coupon->id = $this->db->lastInsertId('payment_coupon');
 
@@ -131,14 +144,12 @@ class CouponRepository
         }
 
         return DB::transactional($this->db, function () use (&$coupon, &$diff, &$original) {
-            $entities = $diff['entities'];
+            $entities = $diff['entities'] ?? [];
             unset($diff['entities']);
-
             $this->db->update('payment_coupon', $diff, ['id' => $coupon->id]);
+            $this->db->executeQuery('DELETE FROM payment_coupon_item WHERE coupon_id = ?', [$coupon->id]);
 
             foreach ($entities as $entityType => $entityIds) {
-                $this->db->executeQuery('DELETE FROM payment_coupon_item WHERE coupon_id = ? AND entity_type = ?', [$coupon->id, $entityType]);
-
                 foreach ($entityIds as $entityId) {
                     $this->db->insert('payment_coupon_item', [
                         'coupon_id'   => $coupon->id,
@@ -150,6 +161,8 @@ class CouponRepository
 
             $coupon->original = $original;
             $this->queue->publish($coupon, Queue::COUPON_UPDATE);
+
+            return true;
         });
     }
 
