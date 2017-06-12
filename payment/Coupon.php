@@ -21,8 +21,7 @@ class Coupon implements JsonSerializable
 
     public $id;
     public $instanceId;
-    public $entityType;
-    public $entityId;
+    public $entities;
     public $userId;
     public $title;
     public $code;
@@ -52,8 +51,7 @@ class Coupon implements JsonSerializable
         $coupon = new Coupon;
         $coupon->id = $input->id ?? null;
         $coupon->instanceId = $input->instance_id;
-        $coupon->entityType = $input->entity_type ?? 'lo';
-        $coupon->entityId = $input->entity_id ?? 0;
+        $coupon->entities = $input->entities ?? [];
         $coupon->userId = $input->user_id ?? 0;
         $coupon->title = isset($input->title) ? Xss::filter($input->title) : null;
         $coupon->code = $input->code ?? Uuid::uuid4()->toString();
@@ -91,8 +89,8 @@ class Coupon implements JsonSerializable
             $diff['code'] = $coupon->code;
         }
 
-        if ($coupon->entityId != $this->entityId) {
-            $diff['entity_id'] = $coupon->entityId;
+        if ($coupon->entities != $this->entities) {
+            $diff['entities'] = $coupon->entities;
         }
 
         if ($coupon->type != $this->type) {
@@ -136,8 +134,7 @@ class Coupon implements JsonSerializable
         $array = [
             'id'                  => $this->id,
             'instance_id'         => $this->instanceId,
-            'entity_type'         => $this->entityType,
-            'entity_id'           => $this->entityId,
+            'entities'            => $this->entities,
             'user_id'             => $this->userId,
             'title'               => $this->title,
             'code'                => $this->code,
