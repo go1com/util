@@ -3,7 +3,8 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
-use go1\credit\domain\model\Credit;
+use go1\util\credit\CreditPrivacies;
+use go1\util\credit\CreditStatuses;
 use Ramsey\Uuid\Uuid;
 
 trait CreditMockTrait
@@ -18,9 +19,9 @@ trait CreditMockTrait
             'transaction_id' => isset($options['transaction_id']) ? $options['transaction_id'] : null,
             'created'        => isset($options['created']) ? $options['created'] : time(),
             'updated'        => isset($options['updated']) ? $options['updated'] : time(),
-            'status'         => isset($options['status']) ? $options['status'] : Credit::STATUS_DISABLED,
+            'status'         => isset($options['status']) ? $options['status'] : CreditStatuses::STATUS_DISABLED,
             'token'          => isset($options['token']) ? $options['token'] : Uuid::uuid4()->toString(),
-            'privacy'        => isset($options['privacy']) ? $options['privacy'] : Credit::PRIVACY_HIDDEN,
+            'privacy'        => isset($options['privacy']) ? $options['privacy'] : CreditPrivacies::PRIVACY_HIDDEN,
         ]);
 
         return $db->lastInsertId('credit');
