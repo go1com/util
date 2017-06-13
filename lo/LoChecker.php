@@ -95,6 +95,13 @@ class LoChecker
         return empty($data[LoHelper::ENROLMENT_ALLOW]) ? LoHelper::ENROLMENT_ALLOW_DEFAULT : $data[LoHelper::ENROLMENT_ALLOW];
     }
 
+    public function requiredSequence(stdClass $lo)
+    {
+        $data = $this->loData($lo);
+
+        return isset($data[LoHelper::SEQUENCE_ENROL]) ? ($data[LoHelper::SEQUENCE_ENROL] ? true : false) : false;
+    }
+
     public function canCreate(Connection $db, string $instanceName, Request $req): bool
     {
         $accessChecker = new AccessChecker();

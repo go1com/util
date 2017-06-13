@@ -24,7 +24,7 @@ class EnrolmentHelperTest extends UtilTestCase
     protected $instanceName = 'az.mygo1.com';
     protected $profileId    = 11;
     protected $userId, $jwt;
-    protected $lpId, $courseId, $moduleId, $liVideoId, $liResourceId, $electiveQuestionId, $electiveTextId;
+    protected $lpId, $courseId, $moduleId, $liVideoId, $liResourceId, $liInteractiveId, $electiveQuestionId, $electiveTextId, $electiveQuizId;
 
     public function setUp()
     {
@@ -43,16 +43,20 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->moduleId = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId, 'data' => $data]);
         $this->liVideoId = $this->createCourse($this->db, ['type' => 'video', 'instance_id' => $this->instanceId]);
         $this->liResourceId = $this->createCourse($this->db, ['type' => 'iframe', 'instance_id' => $this->instanceId]);
+        $this->liInteractiveId = $this->createCourse($this->db, ['type' => 'interactive', 'instance_id' => $this->instanceId]);
         $this->electiveQuestionId = $this->createCourse($this->db, ['type' => 'question', 'instance_id' => $this->instanceId]);
         $this->electiveTextId = $this->createCourse($this->db, ['type' => 'text', 'instance_id' => $this->instanceId]);
+        $this->electiveQuizId = $this->createCourse($this->db, ['type' => 'quiz', 'instance_id' => $this->instanceId]);
 
         // Linking
         $this->link($this->db, EdgeTypes::HAS_LP_ITEM, $this->lpId, $this->courseId, 0);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $this->moduleId, 0);
         $this->link($this->db, EdgeTypes::HAS_LI, $this->moduleId, $this->liVideoId, 0);
-        $this->link($this->db, EdgeTypes::HAS_LI, $this->moduleId, $this->liResourceId, 0);
-        $this->link($this->db, EdgeTypes::HAS_ELECTIVE_LI, $this->moduleId, $this->electiveQuestionId, 0);
-        $this->link($this->db, EdgeTypes::HAS_ELECTIVE_LI, $this->moduleId, $this->electiveTextId, 0);
+        $this->link($this->db, EdgeTypes::HAS_ELECTIVE_LI, $this->moduleId, $this->electiveQuestionId, 1);
+        $this->link($this->db, EdgeTypes::HAS_ELECTIVE_LI, $this->moduleId, $this->electiveTextId, 2);
+        $this->link($this->db, EdgeTypes::HAS_LI, $this->moduleId, $this->liResourceId, 3);
+        $this->link($this->db, EdgeTypes::HAS_LI, $this->moduleId, $this->liInteractiveId, 4);
+        $this->link($this->db, EdgeTypes::HAS_ELECTIVE_LI, $this->moduleId, $this->electiveQuizId, 5);
     }
 
     public function testAssessor()
@@ -139,5 +143,28 @@ class EnrolmentHelperTest extends UtilTestCase
 
         $lp = EnrolmentHelper::findParentEnrolment($this->db, EnrolmentHelper::load($this->db, $enrolments['video']), LoTypes::LEANING_PATHWAY);
         $this->assertEquals($this->lpId, $lp->id);
+    }
+
+    public function testSequenceEnrolmentCompleted()
+    {
+        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId];
+        $enrolments = [
+            'lp'       => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->lpId]),
+            'course'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->courseId, 'parent_lo_id' => $this->lpId]),
+            'module'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->moduleId, 'parent_lo_id' => $this->courseId]),
+            'video'    => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->liVideoId, 'parent_lo_id' => $this->moduleId]),
+            'question' => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveQuestionId, 'parent_lo_id' => $this->moduleId]),
+        ];
+
+        $completion = EnrolmentHelper::sequenceEnrolmentCompleted($this->db, $this->electiveTextId, $this->moduleId, LoTypes::MODULE, $this->profileId);
+        $this->assertTrue($completion);
+        $completion = EnrolmentHelper::sequenceEnrolmentCompleted($this->db, $this->liResourceId, $this->moduleId, LoTypes::MODULE, $this->profileId);
+        $this->assertTrue($completion);
+        $completion = EnrolmentHelper::sequenceEnrolmentCompleted($this->db, $this->electiveQuizId, $this->moduleId, LoTypes::MODULE, $this->profileId);
+        $this->assertTrue($completion);
+
+        $completion = EnrolmentHelper::sequenceEnrolmentCompleted($this->db, $this->liInteractiveId, $this->moduleId, LoTypes::MODULE, $this->profileId);
+        $this->assertFalse($completion);
+
     }
 }
