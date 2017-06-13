@@ -37,6 +37,7 @@ class Schema
     const O_GROUP               = 'group';
     const O_MAIL                = 'mail';
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
+    const O_CREDIT              = 'credit';
     const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
     const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
@@ -67,6 +68,7 @@ class Schema
         self::O_GROUP               => self::GROUP_MAPPING,
         self::O_MAIL                => self::MAIL_MAPPING,
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
+        self::O_CREDIT              => self::CREDIT_MAPPING,
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
         self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
         self::O_COUPON              => self::COUPON_MAPPING,
@@ -498,6 +500,29 @@ class Schema
                     'user_id'        => ['type' => self::T_INT],
                     'transaction_id' => ['type' => self::T_INT],
                     'created'        => ['type' => self::T_DATE],
+                ],
+            ],
+        ],
+    ];
+
+    const CREDIT_MAPPING = [
+        '_routing'   => ['required' => true],
+        '_parent'    => ['type' => self::O_PAYMENT_TRANSACTION],
+        'properties' => [
+            'user'           => [
+                'properties' => self::USER_MAPPING['properties'],
+            ],
+            'lo'         => [
+                'properties' => self::LO_MAPPING['properties'],
+            ],
+            'portal_id'      => ['type' => self::T_INT],
+            'total'          => ['type' => self::T_INT],
+            'used'           => ['type' => self::T_INT],
+            'remaining'      => ['type' => self::T_INT],
+            'metadata'   => [
+                'properties' => [
+                    'user_id'         => ['type' => self::T_INT],
+                    'lo_id'           => ['type' => self::T_INT],
                 ],
             ],
         ],
