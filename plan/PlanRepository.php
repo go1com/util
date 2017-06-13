@@ -104,6 +104,7 @@ class PlanRepository
         $this->db->insert('gc_plan', [
             'user_id'      => $plan->userId,
             'assigner_id'  => $plan->assignerId,
+            'instance_id'  => $plan->instanceId,
             'entity_type'  => $plan->entityType,
             'entity_id'    => $plan->entityId,
             'status'       => $plan->status,
@@ -142,5 +143,36 @@ class PlanRepository
 
         $this->db->delete('gc_plan', ['id' => $id]);
         $this->queue->publish($plan, Queue::PLAN_DELETE);
+    }
+
+    public function merge(Plan $plan, bool $notify = false)
+    {
+        $qb = $this->db->createQueryBuilder();
+        $originalPlanId = $qb
+            ->select('p.id')
+            ->from('gc_plan', 'p')
+            ->where($qb->expr()->eq('user_id', ':userId'))
+            ->andWhere($qb->expr()->eq('assigner_id', ':assignerId'))
+            ->andWhere($qb->expr()->eq('instance_id', ':instanceId'))
+            ->andWhere($qb->expr()->eq('entity_type', ':entityType'))
+            ->andWhere($qb->expr()->eq('entity_id', ':entityId'))
+            ->setParameters([
+                ':userId'     => $plan->userId,
+                ':assignerId' => $plan->assignerId,
+                ':instanceId' => $plan->instanceId,
+                ':entityType' => $plan->entityType,
+                ':entityId'   => $plan->entityId,
+            ])
+            ->execute()
+            ->fetchColumn();
+
+        if ($originalPlanId) {
+            $this->update($originalPlanId, $plan);
+            $planId = $originalPlanId;
+        } else {
+            $planId = $this->create($plan, $notify);
+        }
+
+        return $planId;
     }
 }

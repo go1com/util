@@ -11,9 +11,10 @@ class PlanTest extends UtilTestCase
     {
         $repository = new PlanRepository($this->db, $this->queue);
 
-        $input = Plan::create($raw = (object) [
+        $input = Plan::create($raw = (object)[
             'user_id'      => 123,
             'assigner_id'  => 111,
+            'instance_id'  => 124,
             'entity_type'  => 'lo',
             'entity_id'    => 555,
             'status'       => Plan::STATUS_INTERESTING,
@@ -30,6 +31,7 @@ class PlanTest extends UtilTestCase
         $this->assertEquals($id, $plan->id);
         $this->assertEquals($raw->user_id, $plan->userId);
         $this->assertEquals($raw->assigner_id, $plan->assignerId);
+        $this->assertEquals($raw->instance_id, $plan->instanceId);
         $this->assertEquals($raw->entity_type, $plan->entityType);
         $this->assertEquals($raw->entity_id, $plan->entityId);
         $this->assertEquals($raw->status, $plan->status);
@@ -43,9 +45,10 @@ class PlanTest extends UtilTestCase
         $repository = new PlanRepository($this->db, $this->queue);
 
         // Create the plan
-        $input = Plan::create($raw = (object) [
+        $input = Plan::create($raw = (object)[
             'user_id'      => 123,
             'assigner_id'  => 111,
+            'instance_id'  => 124,
             'entity_type'  => 'lo',
             'entity_id'    => 555,
             'status'       => Plan::STATUS_INTERESTING,
@@ -73,9 +76,10 @@ class PlanTest extends UtilTestCase
         $repository = new PlanRepository($this->db, $this->queue);
 
         // Create the plan
-        $plan = Plan::create($raw = (object) [
+        $plan = Plan::create($raw = (object)[
             'user_id'      => 123,
             'assigner_id'  => 111,
+            'instance_id'  => 124,
             'entity_type'  => 'lo',
             'entity_id'    => 555,
             'status'       => Plan::STATUS_INTERESTING,
@@ -97,17 +101,18 @@ class PlanTest extends UtilTestCase
     {
         $repository = new PlanRepository($this->db, $this->queue);
 
-        $input = Plan::create($raw = (object) [
-          'user_id'      => 123,
-          'assigner_id'  => 111,
-          'entity_type'  => 'lo',
-          'entity_id'    => 555,
-          'status'       => Plan::STATUS_INTERESTING,
-          'created_date' => time(),
-          'due_date'     => '+ 2 months',
-          'data'         => [
-            'note' => 'Something cool! <script>alert(123);</script>',
-          ],
+        $input = Plan::create($raw = (object)[
+            'user_id'      => 123,
+            'assigner_id'  => 111,
+            'instance_id'  => 124,
+            'entity_type'  => 'lo',
+            'entity_id'    => 555,
+            'status'       => Plan::STATUS_INTERESTING,
+            'created_date' => time(),
+            'due_date'     => '+ 2 months',
+            'data'         => [
+                'note' => 'Something cool! <script>alert(123);</script>',
+            ],
         ]);
 
         $id1 = $repository->create($input);
@@ -118,5 +123,33 @@ class PlanTest extends UtilTestCase
         $this->assertCount(2, $plans, 'Found 2 plan');
 
         return $plans;
+    }
+
+    public function testMerge()
+    {
+        $repository = new PlanRepository($this->db, $this->queue);
+
+        $input = Plan::create($raw = (object)[
+            'user_id'      => 123,
+            'assigner_id'  => 111,
+            'instance_id'  => 124,
+            'entity_type'  => 'lo',
+            'entity_id'    => 555,
+            'status'       => Plan::STATUS_INTERESTING,
+            'created_date' => time(),
+            'due_date'     => '+ 2 months',
+            'data'         => [
+                'note' => 'Something cool! <script>alert(123);</script>',
+            ],
+        ]);
+
+        $id = $repository->merge($input);
+        $plan = $repository->load($id);
+
+        $this->assertEquals($id, $plan->id);
+
+        $id2 = $repository->merge($input);
+
+        $this->assertEquals($id, $id2);
     }
 }
