@@ -119,6 +119,9 @@ class Queue
     const LOCATION_DELETE          = 'location.delete';
     const LO_GROUP_CREATE          = 'lo_group.create';
     const LO_GROUP_DELETE          = 'lo_group.delete';
+    const CREDIT_CREATE            = 'credit.create';
+    const CREDIT_UPDATE            = 'credit.update';
+    const CREDIT_DELETE            = 'credit.delete';
 
     # routingKey that tell some service to do something.
     #
