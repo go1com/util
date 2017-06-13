@@ -6,6 +6,7 @@ use DateTime as DefaultDateTime;
 use go1\util\DateTime;
 use go1\util\Text;
 use JsonSerializable;
+use ReflectionClass;
 use stdClass;
 
 class Plan implements JsonSerializable
@@ -16,11 +17,12 @@ class Plan implements JsonSerializable
     const STATUS_PENDING     = 0; # The object is not yet available.
     const STATUS_IN_PROGRESS = 1; # Learning in progress.
     const STATUS_COMPLETED   = 2; # The plan is completed.
-    const STATUS_FAILED      = 4; # The plan is completed, but result is not good.
+    const STATUS_FAILED      = 3; # The plan is completed, but result is not good.
     const STATUS_LATE        = 4; # Learning was assigned & was not able to complete the plan ontime.
-    const STATUS_EXPIRED     = 3; # The object is expired.
+    const STATUS_EXPIRED     = 5; # The object is expired.
 
     const TYPE_AWARD = 'award';
+    const TYPE_LO = 'lo';
 
     /** @var integer */
     public $id;
@@ -61,6 +63,20 @@ class Plan implements JsonSerializable
     private function __construct()
     {
         // The object should not be created directly.
+    }
+
+    public static function allStatus()
+    {
+        $rClass = new ReflectionClass(self::class);
+
+        $statuses = [];
+        foreach ($rClass->getConstants() as $constant => $val) {
+            if (0 === strpos($constant, 'STATUS_')) {
+                $statuses[$constant] = $val;
+            }
+        }
+
+        return $statuses;
     }
 
     public static function create(stdClass $input): Plan
