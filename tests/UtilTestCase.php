@@ -8,6 +8,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
 use go1\clients\MqClient;
 use go1\util\DB;
+use go1\util\plan\PlanRepository;
 use go1\util\schema\AssignmentSchema;
 use go1\util\schema\EckSchema;
 use go1\util\schema\InstallTrait;
@@ -38,6 +39,7 @@ abstract class UtilTestCase extends TestCase
             function (Schema $schema) {
                 EckSchema::install($schema);
                 AssignmentSchema::install($schema);
+                PlanRepository::install($schema);
             },
         ]);
 

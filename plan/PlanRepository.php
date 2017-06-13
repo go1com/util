@@ -145,7 +145,7 @@ class PlanRepository
         $this->queue->publish($plan, Queue::PLAN_DELETE);
     }
 
-    public function mergePlan(Plan $plan, bool $notify = false)
+    public function merge(Plan $plan, bool $notify = false)
     {
         $qb = $this->db->createQueryBuilder();
         $originalPlanId = $qb
