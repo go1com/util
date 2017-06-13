@@ -21,6 +21,7 @@ class LoHelper
     const ENROLMENT_RE_ENROL_DEFAULT = true;
     const MANUAL_PAYMENT             = 'manual_payment';
     const MANUAL_PAYMENT_RECIPIENT   = 'manual_payment_recipient';
+    const SEQUENCE_ENROL             = 'requiredSequence';
 
     // GO1P-5665: Expiration for award.
     const AWARD      = 'award';

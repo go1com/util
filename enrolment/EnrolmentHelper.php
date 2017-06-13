@@ -138,4 +138,38 @@ class EnrolmentHelper
 
         return $parentLo && ($parentLo->type == $parentLoType) ? $parentEnrolment : false;
     }
+
+    public static function sequenceEnrolmentCompleted(Connection $db, int $loId, int $parentLoId, string $parentLoType = LoTypes::COURSE, int $profileId)
+    {
+        $edgeType         = ($parentLoType == LoTypes::COURSE) ? EdgeTypes::LearningObjectTree['course'] : EdgeTypes::LearningObjectTree['module'];
+        $requiredEdgeType = ($parentLoType == LoTypes::COURSE) ? EdgeTypes::HAS_MODULE : EdgeTypes::HAS_LI;
+
+        // Fetching all LOs stay beyond current LO
+        $loQuery = $db
+            ->createQueryBuilder()
+            ->select('required_ro.target_id')
+            ->from('gc_ro', 'ro')
+            ->join('ro', 'gc_ro', 'required_ro', 'ro.type = required_ro.type AND ro.source_id = required_ro.source_id')
+            ->where('ro.type IN (:type)')->setParameter(':type', $edgeType, Connection::PARAM_INT_ARRAY)
+            ->andwhere('required_ro.type = :requiredType')->setParameter(':requiredType', $requiredEdgeType)
+            ->andWhere('ro.source_id = :source_id')->setParameter(':source_id', $parentLoId)
+            ->andWhere('ro.target_id = :target_id')->setParameter(':target_id', $loId)
+            ->andWhere('required_ro.weight < ro.weight');
+
+        if (!$requiredLoIds = $loQuery->execute()->fetchAll(PDO::FETCH_COLUMN)) {
+            return true;
+        }
+
+        // Fetching number of enrolled LO form above LoIds list
+        $enrolmentQuery = $db
+            ->createQueryBuilder()
+            ->select('COUNT(*)')
+            ->from('gc_enrolment')
+            ->where('lo_id IN (:lo_ids)')->setParameter(':lo_ids', $requiredLoIds, Connection::PARAM_INT_ARRAY)
+            ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', $profileId);
+
+        $completedRequiredLos = $enrolmentQuery->execute()->fetchColumn();
+
+        return $completedRequiredLos >= count($requiredLoIds);
+    }
 }
