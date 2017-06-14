@@ -157,7 +157,7 @@ class GroupHelperTest extends UtilTestCase
         $this->assertFalse(GroupHelper::isMarketplace($group2));
     }
 
-    public function testLoadItemBy()
+    public function testFindItems()
     {
         $fooGroupId = 1;
         $barGroupId = 2;
@@ -167,9 +167,28 @@ class GroupHelperTest extends UtilTestCase
         $this->createGroupItem($this->db, ['group_id' => $fooGroupId, 'entity_type' => GroupItemTypes::USER, 'entity_id' => 1]);
         $this->createGroupItem($this->db, ['group_id' => $barGroupId, 'entity_type' => GroupItemTypes::USER, 'entity_id' => 2]);
 
-        $this->assertCount(3, GroupHelper::loadItemsBy($this->db, null, GroupItemTypes::LO));
-        $this->assertCount(2, GroupHelper::loadItemsBy($this->db, $barGroupId, null));
-        $this->assertCount(2, GroupHelper::loadItemsBy($this->db, $fooGroupId, GroupItemTypes::LO));
-        $this->assertCount(1, GroupHelper::loadItemsBy($this->db, $fooGroupId, GroupItemTypes::USER));
+        $items = [];
+        foreach (GroupHelper::findItems($this->db, $fooGroupId, GroupItemTypes::LO, 1, 0, true) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(2, $items);
+
+        $items = [];
+        foreach (GroupHelper::findItems($this->db, $fooGroupId, null) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(3, $items);
+
+        $items = [];
+        foreach (GroupHelper::findItems($this->db, $fooGroupId, GroupItemTypes::USER) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(1, $items);
+
+        $items = [];
+        foreach (GroupHelper::findItems($this->db, $barGroupId, null, 1) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(1, $items);
     }
 }

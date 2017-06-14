@@ -27,21 +27,35 @@ class GroupHelper
         return $group;
     }
 
-    public static function loadItemsBy(Connection $db, int $groupId = null, string $entityType = null)
+    public static function findItems(Connection $db, int $groupId, string $entityType = null, $limit = 50, $offset = 0, $all = false)
     {
-        $qb = $db->createQueryBuilder();
-        $qb->select('*')
-            ->from('social_group_item', 'item')
-            ->where('status = :status')
-            ->setParameter(':status', GroupItemStatus::ACTIVE);
-        $groupId && $qb
-            ->andWhere('group_id = :groupId')
-            ->setParameter(':groupId', $groupId);
-        $entityType && $qb
-            ->andWhere('entity_type = :entityType')
-            ->setParameter(':entityType', $entityType);
+        while (true) {
+            $qb = $db->createQueryBuilder();
+            $qb->select('*')
+                ->from('social_group_item', 'item')
+                ->where('status = :status')
+                ->setParameter(':status', GroupItemStatus::ACTIVE)
+                ->andWhere('group_id = :groupId')
+                ->setParameter(':groupId', $groupId);
+            $entityType && $qb
+                ->andWhere('entity_type = :entityType')
+                ->setParameter(':entityType', $entityType);
+            $items = $qb
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->execute()
+                ->fetchAll(DB::OBJ);
+            if ($items) {
+                foreach ($items as $item) {
+                    yield $item;
+                }
+            }
 
-        return $qb->execute()->fetchAll(DB::OBJ);
+            $offset += $limit;
+            if (!$items || !$all) {
+                break;
+            }
+        }
     }
 
     public static function isItemOf(Connection $db, string $entityType, int $entityId, int $groupId, int $status = GroupItemStatus::ACTIVE): bool
