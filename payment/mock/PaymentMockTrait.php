@@ -46,8 +46,6 @@ trait PaymentMockTrait
             'title'             => $options['title'] ?? '',
             'code'              => $options['code'] ?? Uuid::uuid4()->toString(),
             'instance_id'       => $options['instance_id'] ?? 0,
-            'entity_type'       => $options['entity_type'] ?? 'lo',
-            'entity_id'         => $options['entity_id'] ?? 1,
             'user_id'           => $options['user_id'] ?? 1,
             'type'              => $options['type'] ?? Coupon::TYPE_PERCENT,
             'value'             => $options['value'] ?? 10,
