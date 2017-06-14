@@ -55,14 +55,23 @@ trait GraphNoteMockTrait
                     ]
                 );
             }
-
-            if ($entityType == 'custom') {
+            else if ($entityType == 'custom') {
                 $stack->push(
                     "MATCH (n:Note { uuid: {uuid} })"
                     . " MERGE (e:Group { id: {$entityId}, name: {customName} })"
                     . " MERGE (e)-[:{$this->hasNote}]->(n)"
                     . " MERGE (n)-[:{$this->hasMember}]->(e)",
                     ['uuid' => $uuid, 'customName' => "customLo:{$entityId}"]
+                );
+            }
+            else if (!in_array($entityType, ['custom', 'lo', 'portal', 'group'])) {
+                $label = ucwords($entityType);
+                $stack->push(
+                    "MATCH (n:Note { uuid: {uuid} })"
+                    . " MERGE (e:Other:$label { id: {$entityId} })"
+                    . " MERGE (e)-[:{$this->hasNote}]->(n)"
+                    . " MERGE (n)-[r:{$this->hasMember}]->(e)",
+                    ['uuid' => $uuid]
                 );
             }
         }
