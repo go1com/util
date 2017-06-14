@@ -7,7 +7,7 @@ use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\group\GroupHelper;
 use go1\util\group\GroupItemStatus;
-use go1\util\model\Edge;
+use go1\util\group\GroupItemTypes;
 use go1\util\schema\mock\GroupMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
@@ -155,5 +155,40 @@ class GroupHelperTest extends UtilTestCase
         $group2 = GroupHelper::load($this->db, $groupId2);
 
         $this->assertFalse(GroupHelper::isMarketplace($group2));
+    }
+
+    public function testFindItems()
+    {
+        $fooGroupId = 1;
+        $barGroupId = 2;
+        $this->createGroupItem($this->db, ['group_id' => $fooGroupId, 'entity_type' => GroupItemTypes::LO, 'entity_id' => 1]);
+        $this->createGroupItem($this->db, ['group_id' => $fooGroupId, 'entity_type' => GroupItemTypes::LO, 'entity_id' => 2]);
+        $this->createGroupItem($this->db, ['group_id' => $barGroupId, 'entity_type' => GroupItemTypes::LO, 'entity_id' => 3]);
+        $this->createGroupItem($this->db, ['group_id' => $fooGroupId, 'entity_type' => GroupItemTypes::USER, 'entity_id' => 1]);
+        $this->createGroupItem($this->db, ['group_id' => $barGroupId, 'entity_type' => GroupItemTypes::USER, 'entity_id' => 2]);
+
+        $items = [];
+        foreach (GroupHelper::findItems($this->db, $fooGroupId, GroupItemTypes::LO, 1, 0, true) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(2, $items);
+
+        $items = [];
+        foreach (GroupHelper::findItems($this->db, $fooGroupId, null) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(3, $items);
+
+        $items = [];
+        foreach (GroupHelper::findItems($this->db, $fooGroupId, GroupItemTypes::USER) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(1, $items);
+
+        $items = [];
+        foreach (GroupHelper::findItems($this->db, $barGroupId, null, 1) as $item) {
+            $items[] = $item;
+        }
+        $this->assertCount(1, $items);
     }
 }

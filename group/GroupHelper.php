@@ -27,6 +27,37 @@ class GroupHelper
         return $group;
     }
 
+    public static function findItems(Connection $db, int $groupId, string $entityType = null, $limit = 50, $offset = 0, $all = false)
+    {
+        while (true) {
+            $qb = $db->createQueryBuilder();
+            $qb->select('*')
+                ->from('social_group_item', 'item')
+                ->where('status = :status')
+                ->setParameter(':status', GroupItemStatus::ACTIVE)
+                ->andWhere('group_id = :groupId')
+                ->setParameter(':groupId', $groupId);
+            $entityType && $qb
+                ->andWhere('entity_type = :entityType')
+                ->setParameter(':entityType', $entityType);
+            $items = $qb
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->execute()
+                ->fetchAll(DB::OBJ);
+            if ($items) {
+                foreach ($items as $item) {
+                    yield $item;
+                }
+            }
+
+            $offset += $limit;
+            if (!$items || !$all) {
+                break;
+            }
+        }
+    }
+
     public static function isItemOf(Connection $db, string $entityType, int $entityId, int $groupId, int $status = GroupItemStatus::ACTIVE): bool
     {
         $sql = 'SELECT 1 FROM social_group_item WHERE entity_type = ? AND entity_id = ? AND group_id = ? AND status = ?';
