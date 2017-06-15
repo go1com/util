@@ -27,7 +27,8 @@ trait EsInstanceMockTrait
             'type'    => Schema::O_PORTAL,
             'id'      => $portal['id'],
             'body'    => $portal,
-            'parent'  => null,
+            'parent'  => $portal['parent'] ?? 1,
+            'refresh' => true,
         ]);
     }
 }
