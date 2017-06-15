@@ -42,8 +42,8 @@
             int $instanceId,
             int $userId,
             string $status = Contract::STATUS_ACTIVE,
-            DateTime $startDate = null,
-            DateTime $signedDate = null,
+            string $startDate = null,
+            string $signedDate = null,
             string $initialTerm = null,
             int $numberOfUsers = null,
             float $price = null,
@@ -53,7 +53,7 @@
             string $paymentMethod = null,
             DateTime $renewalDate = null,
             DateTime $cancelDate = null,
-            stdClass $data = null,
+            $data = null,
             int $created = null,
             int $updated = null
         )
@@ -125,62 +125,62 @@
             return self::STATUS_ACTIVE == $this->status;
         }
 
-        public function getStartDate(): string
+        public function getStartDate()
         {
             return $this->startDate;
         }
 
-        public function getSignedDate(): string
+        public function getSignedDate()
         {
             return $this->signedDate;
         }
 
-        public function getInitialTerm(): string
+        public function getInitialTerm()
         {
             return $this->initialTerm;
         }
 
-        public function getNumberOfUsers(): int
+        public function getNumberOfUsers()
         {
             return $this->numberOfUsers;
         }
 
-        public function getPrice(): float
+        public function getPrice()
         {
             return $this->price;
         }
 
-        public function getTax(): float
+        public function getTax()
         {
             return $this->tax;
         }
 
-        public function getTaxIncluded(): int
+        public function getTaxIncluded()
         {
             return $this->taxIncluded;
         }
 
-        public function getCurrency(): string
+        public function getCurrency()
         {
             return $this->currency ?? self::DEFAULT_CURRENCY;
         }
 
-        public function getPaymentMethod(): string
+        public function getPaymentMethod()
         {
             return $this->paymentMethod;
         }
 
-        public function getRenewalDate(): string
+        public function getRenewalDate()
         {
-            return $this->renewalDate ?? time();
+            return $this->renewalDate;
         }
 
-        public function getCancelDate(): string
+        public function getCancelDate()
         {
-            return $this->cancelDate ?? time();
+            return $this->cancelDate;
         }
 
-        public function getData($stdClass = true)
+        public function getData($stdClass = false)
         {
             if ($stdClass) {
                 return is_scalar($this->data) ? json_decode($this->data) : $this->data;
@@ -191,12 +191,12 @@
 
         public function getCreated(): int
         {
-            return $this->created;
+            return $this->created ?? time();
         }
 
         public function getUpdated(): int
         {
-            return $this->updated;
+            return $this->updated ?? time();
         }
 
         public static function create(stdClass $row): Contract
@@ -220,19 +220,19 @@
             $row->updated = $row->updated ?? time();
 
             return new Contract(
-                $row->id,
+                $row->id ?? null,
                 $row->instance_id,
                 $row->user_id,
                 $row->status,
                 $row->start_date,
                 $row->signed_date,
                 $row->initial_term,
-                $row->number_of_users,
+                $row->number_users,
                 $row->price,
                 $row->tax,
                 $row->tax_included,
                 $row->currency,
-                $row->paymentMethod,
+                $row->payment_method,
                 $row->renewal_date,
                 $row->cancel_date,
                 $row->data,
