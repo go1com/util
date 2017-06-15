@@ -14,6 +14,7 @@ trait EsInstanceMockTrait
 
         $portal = [
             'id'            => $options['id'] ?? ++$autoId,
+            'name'          => $options['name'] ?? 'GO1',
             'title'         => $options['title'] ?? 'az.mygo1.com',
             'status'        => $options['status'] ?? 1,
             'version'       => $options['version'] ?? '',
@@ -27,7 +28,7 @@ trait EsInstanceMockTrait
             'type'    => Schema::O_PORTAL,
             'id'      => $portal['id'],
             'body'    => $portal,
-            'parent'  => null,
+            'parent'  => $portal['parent'] ?? 1,
         ]);
     }
 }
