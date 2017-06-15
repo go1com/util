@@ -146,7 +146,8 @@ class CouponRepository
         return DB::transactional($this->db, function () use (&$coupon, &$diff, &$original) {
             $entities = $diff['entities'] ?? [];
             unset($diff['entities']);
-            $this->db->update('payment_coupon', $diff, ['id' => $coupon->id]);
+
+            $diff && $this->db->update('payment_coupon', $diff, ['id' => $coupon->id]);
             $this->db->executeQuery('DELETE FROM payment_coupon_item WHERE coupon_id = ?', [$coupon->id]);
 
             foreach ($entities as $entityType => $entityIds) {
