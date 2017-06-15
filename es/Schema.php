@@ -103,6 +103,7 @@ class Schema
             'id'            => ['type' => self::T_INT],
             'title'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'status'        => ['type' => self::T_SHORT],
+            'name'          => ['type' => self::T_KEYWORD],
             'version'       => ['type' => self::T_KEYWORD],
             'created'       => ['type' => self::T_DATE],
             'configuration' => ['type' => self::T_OBJECT],
