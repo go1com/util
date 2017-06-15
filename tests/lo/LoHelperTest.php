@@ -6,6 +6,7 @@ use DateTime;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
+use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\UserMockTrait;
@@ -17,6 +18,7 @@ class LoHelperTest extends UtilTestCase
     use UserMockTrait;
     use LoMockTrait;
     use InstanceMockTrait;
+    use EnrolmentMockTrait;
 
     private $author1Id;
     private $author2Id;
@@ -231,6 +233,14 @@ class LoHelperTest extends UtilTestCase
         # Resource 2
         $childIds = LoHelper::childIds($this->db, $this->resource2Id);
         $this->assertEquals(0, count($childIds));
+    }
+
+    public function testCountEnrolment()
+    {
+        $this->createEnrolment($this->db, ['profile_id' => 1, 'lo_id' => $this->course1Id]);
+        $this->createEnrolment($this->db, ['profile_id' => 2, 'lo_id' => $this->course1Id]);
+        $this->createEnrolment($this->db, ['profile_id' => 3, 'lo_id' => $this->course1Id]);
+        $this->assertEquals(3, LoHelper::countEnrolment($this->db, $this->course1Id));
     }
 
     private function hasAuthor($authorId, array $source)

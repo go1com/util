@@ -292,4 +292,10 @@ class LoHelper
 
         return $db->fetchColumn($sql, [$loId, $instanceId]) ? true : false;
     }
+
+    public static function countEnrolment(Connection $db, int $loId)
+    {
+        $sql = 'SELECT COUNT(*) FROM gc_enrolment WHERE lo_id = ?';
+        return $db->fetchColumn($sql, [$loId]);
+    }
 }
