@@ -54,6 +54,7 @@ trait EsLoMockTrait
             'id'      => $lo['id'],
             'body'    => $lo,
             'parent'  => $lo['instance_id'],
+            'refresh' => true
         ]);
     }
 }
