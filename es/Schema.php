@@ -42,6 +42,7 @@ class Schema
     const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
     const O_LO_GROUP            = 'lo_group';
+    const O_EVENT               = 'event';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -73,6 +74,7 @@ class Schema
         self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
         self::O_COUPON              => self::COUPON_MAPPING,
         self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
+        self::O_EVENT               => self::EVENT_MAPPING,
     ];
 
     const ANALYZED = [
@@ -528,6 +530,30 @@ class Schema
                     'lo_id'           => ['type' => self::T_INT],
                 ],
             ],
+        ],
+    ];
+
+    const EVENT_MAPPING = [
+        '_routing'   => ['required' => true],
+        '_parent'    => ['type' => self::O_LO],
+        'properties' => [
+            'lo_id'                   => ['type' => self::T_INT],
+            'start'                   => ['type' => self::T_DATE],
+            'end'                     => ['type' => self::T_DATE],
+            'timezone'                => ['type' => self::T_KEYWORD],
+            'seats'                   => ['type' => self::T_INT],
+            'available_seats'         => ['type' => self::T_INT],
+            'country'                 => ['type' => self::T_KEYWORD],
+            'administrative_area'     => ['type' => self::T_KEYWORD],
+            'sub_administrative_area' => ['type' => self::T_KEYWORD],
+            'locality'                => ['type' => self::T_KEYWORD],
+            'dependent_locality'      => ['type' => self::T_KEYWORD],
+            'thoroughfare'            => ['type' => self::T_KEYWORD],
+            'premise'                 => ['type' => self::T_KEYWORD],
+            'sub_premise'             => ['type' => self::T_KEYWORD],
+            'organisation_name'       => ['type' => self::T_KEYWORD],
+            'name_line'               => ['type' => self::T_KEYWORD],
+            'postal_code'             => ['type' => self::T_KEYWORD],
         ],
     ];
 }
