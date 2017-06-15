@@ -30,6 +30,7 @@ class CouponRepository
         int $instanceId,
         string $entityType = 'lo',
         int $entityId = 0,
+        bool $admin = false,
         int $userId = null,
         int $status = null,
         int $limit = 50,
@@ -58,6 +59,11 @@ class CouponRepository
                 ->andWhere('item.entity_type = :entity_type')
                 ->setParameter(':entity_type', $entityType)
                 ->setParameter(':entity_id', $entityId);
+        }
+        elseif (!$admin) {
+            $q
+                ->andWhere('coupon.user_id = :user_id')
+                ->setParameter(':user_id', $userId);
         }
 
         if ($userId) {
