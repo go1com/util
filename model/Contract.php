@@ -37,7 +37,6 @@
         private $data;
         private $created;
         private $updated;
-        private $downloadUrl;
 
         public function __construct(
             int $id = null,
@@ -201,11 +200,6 @@
             return $this->updated ?? time();
         }
 
-        public function setDownloadUrl($downloadUrl)
-        {
-            $this->downloadUrl = $downloadUrl;
-        }
-
         public function threadName(): string
         {
             return 'contract:' . $this->id;
@@ -318,42 +312,6 @@
                 'data'           => $this->getData(true),
                 'created'        => $this->getCreated(),
                 'updated'        => $this->getUpdated(),
-            ];
-        }
-
-        public function datatable(): array
-        {
-            $data = [];
-            $columns = self::datatableColumn();
-            foreach ($columns as $key => $column) {
-                if ($key == 'download') {
-                    $data[$key] = "<a href='{$this->downloadUrl}/contract/{$this->id}/download'>Download</a>";
-                }
-                else if (isset($column['property'])) {
-                    $data[$key] = $this->{$column['property']};
-                }
-                else {
-                    $data[$key] = $this->{$column['data']};
-                }
-            }
-
-            return $data;
-        }
-
-        public static function datatableColumn(): array
-        {
-            return [
-                'id'            => ['title' => 'Id', 'data' => 'id'],
-                'user_id'       => ['title' => 'Owner', 'data' => 'user_id', 'property' => 'userId'],
-                'number_users'  => ['title' => '# of Users', 'data' => 'number_users', 'property' => 'numberOfUsers'],
-                'price'         => ['title' => 'Price', 'data' => 'price'],
-                'currency'      => ['title' => 'Currency', 'data' => 'currency'],
-                'status'        => ['title' => 'Status', 'data' => 'status'],
-                'download'      => [
-                    'title'     => 'Export as PDF',
-                    'data'      => 'download',
-                    'type'      => DataTable::COL_TYPE_MARKUP,
-                    'filter'    => ['type' => DataTable::FILTER_NONE]],
             ];
         }
     }
