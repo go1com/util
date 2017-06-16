@@ -4,6 +4,7 @@
 
     use Assert\Assert;
     use Assert\Assertion;
+    use go1\staff\domain\views\DataTable;
     use go1\util\DateTime;
     use go1\util\Text;
     use JsonSerializable;
@@ -36,6 +37,7 @@
         private $data;
         private $created;
         private $updated;
+        private $downloadUrl;
 
         public function __construct(
             int $id = null,
@@ -199,16 +201,18 @@
             return $this->updated ?? time();
         }
 
+        public function setDownloadUrl($downloadUrl)
+        {
+            $this->downloadUrl = $downloadUrl;
+        }
+
         public static function create(stdClass $row): Contract
         {
-            Assert::lazy()
-                ->that($row->status, 'contract.status')->inArray(Contract::$statuses)
-                ->verifyNow();
-
             $row->start_date   = !empty($row->start_date) ? DateTime::create($row->start_date ? $row->start_date : time())->format(DATE_ISO8601) : null;
             $row->signed_date  = !empty($row->signed_date)? DateTime::create($row->signed_date ? $row->signed_date : time())->format(DATE_ISO8601) : null;
             $row->renewal_date = !empty($row->renewal_date) ? DateTime::create($row->renewal_date ? $row->renewal_date : time())->format(DATE_ISO8601) : null;
             $row->cancel_date  = !empty($row->cancel_date) ? DateTime::create($row->cancel_date ? $row->cancel_date : time())->format(DATE_ISO8601) : null;
+            $row->status = (int) $row->status;
 
             $row->price = number_format($row->price, 2);
             $row->tax = number_format($row->tax, 2);
@@ -262,6 +266,42 @@
                 'data'           => $this->getData(true),
                 'created'        => $this->getCreated(),
                 'updated'        => $this->getUpdated(),
+            ];
+        }
+
+        public function datatable(): array
+        {
+            $data = [];
+            $columns = self::datatableColumn();
+            foreach ($columns as $key => $column) {
+                if ($key == 'download') {
+                    $data[$key] = "<a href='{$this->downloadUrl}/contract/{$this->id}/download'>Download</a>";
+                }
+                else if (isset($column['property'])) {
+                    $data[$key] = $this->{$column['property']};
+                }
+                else {
+                    $data[$key] = $this->{$column['data']};
+                }
+            }
+
+            return $data;
+        }
+
+        public static function datatableColumn(): array
+        {
+            return [
+                'id'            => ['title' => 'Id', 'data' => 'id'],
+                'user_id'       => ['title' => 'Owner', 'data' => 'user_id', 'property' => 'userId'],
+                'number_users'  => ['title' => '# of Users', 'data' => 'number_users', 'property' => 'numberOfUsers'],
+                'price'         => ['title' => 'Price', 'data' => 'price'],
+                'currency'      => ['title' => 'Currency', 'data' => 'currency'],
+                'status'        => ['title' => 'Status', 'data' => 'status'],
+                'download'      => [
+                    'title'     => 'Export as PDF',
+                    'data'      => 'download',
+                    'type'      => DataTable::COL_TYPE_MARKUP,
+                    'filter'    => ['type' => DataTable::FILTER_NONE]],
             ];
         }
     }
