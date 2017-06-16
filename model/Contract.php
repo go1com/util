@@ -20,20 +20,20 @@
         public static $statuses = [-1, 0, 1];
 
         private $id;
-        private $instanceId;
-        private $userId;
+        private $instance_id;
+        private $user_id;
         private $status;
-        private $startDate;
-        private $signedDate;
-        private $initialTerm;
-        private $numberOfUsers;
+        private $start_date;
+        private $signed_date;
+        private $initial_term;
+        private $number_users;
         private $price;
         private $tax;
-        private $taxIncluded;
+        private $tax_included;
         private $currency;
-        private $paymentMethod;
-        private $renewalDate;
-        private $cancelDate;
+        private $payment_method;
+        private $renewal_date;
+        private $cancel_date;
         private $data;
         private $created;
         private $updated;
@@ -60,20 +60,20 @@
         )
         {
             $this->id = $id;
-            $this->instanceId = $instanceId;
-            $this->userId = $userId;
+            $this->instance_id = $instanceId;
+            $this->user_id = $userId;
             $this->status = $status;
-            $this->startDate = $startDate;
-            $this->signedDate = $signedDate;
-            $this->initialTerm = $initialTerm;
-            $this->numberOfUsers = $numberOfUsers;
+            $this->start_date = $startDate;
+            $this->signed_date = $signedDate;
+            $this->initial_term = $initialTerm;
+            $this->number_users = $numberOfUsers;
             $this->price = $price;
             $this->tax = $tax;
-            $this->taxIncluded = $taxIncluded;
+            $this->tax_included = $taxIncluded;
             $this->currency = $currency;
-            $this->paymentMethod = $paymentMethod;
-            $this->renewalDate = $renewalDate;
-            $this->cancelDate = $cancelDate;
+            $this->payment_method = $paymentMethod;
+            $this->renewal_date = $renewalDate;
+            $this->cancel_date = $cancelDate;
             $this->data = $data;
             $this->created = $created;
             $this->updated = $updated;
@@ -86,12 +86,12 @@
 
         public function getInstanceId(): int
         {
-            return $this->instanceId;
+            return $this->instance_id;
         }
 
         public function getUserId(): int
         {
-            return $this->userId;
+            return $this->user_id;
         }
 
         public function getStatus(bool $string = false)
@@ -128,22 +128,22 @@
 
         public function getStartDate()
         {
-            return $this->startDate;
+            return $this->start_date;
         }
 
         public function getSignedDate()
         {
-            return $this->signedDate;
+            return $this->signed_date;
         }
 
         public function getInitialTerm()
         {
-            return $this->initialTerm;
+            return $this->initial_term;
         }
 
-        public function getNumberOfUsers()
+        public function getNumberUsers()
         {
-            return $this->numberOfUsers;
+            return $this->number_users;
         }
 
         public function getPrice()
@@ -158,7 +158,7 @@
 
         public function getTaxIncluded()
         {
-            return $this->taxIncluded;
+            return $this->tax_included;
         }
 
         public function getCurrency()
@@ -168,17 +168,17 @@
 
         public function getPaymentMethod()
         {
-            return $this->paymentMethod;
+            return $this->payment_method;
         }
 
         public function getRenewalDate()
         {
-            return $this->renewalDate;
+            return $this->renewal_date;
         }
 
         public function getCancelDate()
         {
-            return $this->cancelDate;
+            return $this->cancel_date;
         }
 
         public function getData($stdClass = false)
@@ -200,12 +200,17 @@
             return $this->updated ?? time();
         }
 
+        public function set($propertyName, $propertyValue)
+        {
+            $this->{$propertyName} = $propertyValue;
+        }
+
         public function threadName(): string
         {
             return 'contract:' . $this->id;
         }
 
-        public static function create(stdClass $row): Contract
+        public static function format(stdClass &$row)
         {
             $row->status = (int) $row->status;
 
@@ -223,6 +228,11 @@
 
             $row->created = $row->created ?? time();
             $row->updated = $row->updated ?? time();
+        }
+
+        public static function create(stdClass $row): Contract
+        {
+            self::format($row);
 
             return new Contract(
                 $row->id ?? null,
@@ -251,20 +261,20 @@
             if ($origin->getStatus() != $this->status) {
                 $values['status'] = $this->status;
             }
-            if ($origin->getUserId() != $this->userId) {
-                $values['user_id'] = $this->userId;
+            if ($origin->getUserId() != $this->user_id) {
+                $values['user_id'] = $this->user_id;
             }
-            if ($origin->getStartDate() != $this->startDate) {
-                $values['start_date'] = $this->startDate;
+            if ($origin->getStartDate() != $this->start_date) {
+                $values['start_date'] = $this->start_date;
             }
-            if ($origin->getSignedDate() != $this->signedDate) {
-                $values['signed_date'] = $this->signedDate;
+            if ($origin->getSignedDate() != $this->signed_date) {
+                $values['signed_date'] = $this->signed_date;
             }
-            if ($origin->getInitialTerm() != $this->initialTerm) {
-                $values['initial_term'] = $this->initialTerm;
+            if ($origin->getInitialTerm() != $this->initial_term) {
+                $values['initial_term'] = $this->initial_term;
             }
-            if ($origin->getNumberOfUsers() != $this->numberOfUsers) {
-                $values['number_users'] = $this->numberOfUsers;
+            if ($origin->getNumberUsers() != $this->number_users) {
+                $values['number_users'] = $this->number_users;
             }
             if ($origin->getPrice() != $this->price) {
                 $values['price'] = $this->price;
@@ -272,23 +282,29 @@
             if ($origin->getTax() != $this->tax) {
                 $values['tax'] = $this->tax;
             }
-            if ($origin->getTaxIncluded() != $this->taxIncluded) {
-                $values['tax_included'] = $this->taxIncluded;
+            if ($origin->getTaxIncluded() != $this->tax_included) {
+                $values['tax_included'] = $this->tax_included;
             }
             if ($origin->getCurrency() != $this->currency) {
                 $values['currency'] = $this->currency;
             }
-            if ($origin->getPaymentMethod() != $this->paymentMethod) {
-                $values['payment_method'] = $this->paymentMethod;
+            if ($origin->getPaymentMethod() != $this->payment_method) {
+                $values['payment_method'] = $this->payment_method;
             }
-            if ($origin->getRenewalDate() != $this->renewalDate) {
-                $values['renewal_date'] = $this->renewalDate;
+            if ($origin->getRenewalDate() != $this->renewal_date) {
+                $values['renewal_date'] = $this->renewal_date;
             }
-            if ($origin->getCancelDate() != $this->cancelDate) {
-                $values['cancel_date'] = $this->cancelDate;
+            if ($origin->getCancelDate() != $this->cancel_date) {
+                $values['cancel_date'] = $this->cancel_date;
             }
 
-            return !empty($values) ? $values : [];
+            if (empty($values)) {
+                return [];
+            }
+
+            $values['updated'] = time();
+
+            return $values;
         }
 
         function jsonSerialize()
@@ -301,7 +317,7 @@
                 'start_date'     => $this->getStartDate(),
                 'signed_date'    => $this->getSignedDate(),
                 'initial_term'   => $this->getInitialTerm(),
-                'number_users'   => $this->getNumberOfUsers(),
+                'number_users'   => $this->getNumberUsers(),
                 'price'          => $this->getPrice(),
                 'tax'            => $this->getTax(),
                 'tax_included'   => $this->getTaxIncluded(),
