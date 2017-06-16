@@ -72,6 +72,32 @@ class EnrolmentStatuses
         }
     }
 
+    public static function toString(int $status): string
+    {
+        switch ($status) {
+            case self::I_ASSIGNED:
+                return self::ASSIGNED;
+
+            case self::I_NOT_STARTED:
+                return self::NOT_STARTED;
+
+            case self::I_PENDING:
+                return self::PENDING;
+
+            case self::I_IN_PROGRESS:
+                return self::IN_PROGRESS;
+
+            case self::I_EXPIRED:
+                return self::EXPIRED;
+
+            case self::I_COMPLETED:
+                return self::COMPLETED;
+
+            default:
+                throw new InvalidArgumentException('Unknown enrolment status: ' . $status);
+        }
+    }
+
     public static function defaultStatus(Connection $db, int $profileId, stdClass $lo, string $input = self::IN_PROGRESS)
     {
         // Mark status is "pending" enrolment If a user enrolls to a dependency module.
