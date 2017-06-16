@@ -50,11 +50,11 @@
             int $numberOfUsers = null,
             float $price = null,
             float $tax = null,
-            int $taxIncluded = null,
+            string $taxIncluded = null,
             string $currency = Contract::DEFAULT_CURRENCY,
             string $paymentMethod = null,
-            DateTime $renewalDate = null,
-            DateTime $cancelDate = null,
+            string $renewalDate = null,
+            string $cancelDate = null,
             $data = null,
             int $created = null,
             int $updated = null
@@ -206,16 +206,23 @@
             $this->downloadUrl = $downloadUrl;
         }
 
+        public function threadName(): string
+        {
+            return 'contract:' . $this->id;
+        }
+
         public static function create(stdClass $row): Contract
         {
-            $row->start_date   = !empty($row->start_date) ? DateTime::create($row->start_date ? $row->start_date : time())->format(DATE_ISO8601) : null;
-            $row->signed_date  = !empty($row->signed_date)? DateTime::create($row->signed_date ? $row->signed_date : time())->format(DATE_ISO8601) : null;
-            $row->renewal_date = !empty($row->renewal_date) ? DateTime::create($row->renewal_date ? $row->renewal_date : time())->format(DATE_ISO8601) : null;
-            $row->cancel_date  = !empty($row->cancel_date) ? DateTime::create($row->cancel_date ? $row->cancel_date : time())->format(DATE_ISO8601) : null;
             $row->status = (int) $row->status;
+
+            $row->start_date   = !empty($row->start_date) ? DateTime::create($row->start_date ? $row->start_date : time())->format(DATE_ISO8601) : null;
+            $row->signed_date  = !empty($row->signed_date)? DateTime::create($row->signed_date)->format(DATE_ISO8601) : null;
+            $row->renewal_date = !empty($row->renewal_date) ? DateTime::create($row->renewal_date)->format(DATE_ISO8601) : null;
+            $row->cancel_date  = !empty($row->cancel_date) ? DateTime::create($row->cancel_date)->format(DATE_ISO8601) : null;
 
             $row->price = number_format($row->price, 2);
             $row->tax = number_format($row->tax, 2);
+            $row->currency = !empty($row->currency) ? strtoupper($row->currency) : null;
 
             $row->data = !empty($row->data) ? (is_scalar($row->data) ? json_decode($row->data) : $row->data) : null;
             Text::purify(null, $row->data);
@@ -243,6 +250,51 @@
                 $row->created,
                 $row->updated
             );
+        }
+
+        public function getUpdatedValues(Contract $origin): array
+        {
+            if ($origin->getStatus() != $this->status) {
+                $values['status'] = $this->status;
+            }
+            if ($origin->getUserId() != $this->userId) {
+                $values['user_id'] = $this->userId;
+            }
+            if ($origin->getStartDate() != $this->startDate) {
+                $values['start_date'] = $this->startDate;
+            }
+            if ($origin->getSignedDate() != $this->signedDate) {
+                $values['signed_date'] = $this->signedDate;
+            }
+            if ($origin->getInitialTerm() != $this->initialTerm) {
+                $values['initial_term'] = $this->initialTerm;
+            }
+            if ($origin->getNumberOfUsers() != $this->numberOfUsers) {
+                $values['number_users'] = $this->numberOfUsers;
+            }
+            if ($origin->getPrice() != $this->price) {
+                $values['price'] = $this->price;
+            }
+            if ($origin->getTax() != $this->tax) {
+                $values['tax'] = $this->tax;
+            }
+            if ($origin->getTaxIncluded() != $this->taxIncluded) {
+                $values['tax_included'] = $this->taxIncluded;
+            }
+            if ($origin->getCurrency() != $this->currency) {
+                $values['currency'] = $this->currency;
+            }
+            if ($origin->getPaymentMethod() != $this->paymentMethod) {
+                $values['payment_method'] = $this->paymentMethod;
+            }
+            if ($origin->getRenewalDate() != $this->renewalDate) {
+                $values['renewal_date'] = $this->renewalDate;
+            }
+            if ($origin->getCancelDate() != $this->cancelDate) {
+                $values['cancel_date'] = $this->cancelDate;
+            }
+
+            return !empty($values) ? $values : [];
         }
 
         function jsonSerialize()

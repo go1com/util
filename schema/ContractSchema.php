@@ -21,7 +21,7 @@
                 $contract->addColumn('number_users', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
                 $contract->addColumn('price', Type::FLOAT, ['notnull' => false]);
                 $contract->addColumn('tax', Type::FLOAT, ['notnull' => false]);
-                $contract->addColumn('tax_included', Type::INTEGER, ['notnull' => false, 'unsigned' => true]);
+                $contract->addColumn('tax_included', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('currency', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('payment_method', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('renewal_date', Type::DATETIME, ['notnull' => false]);
