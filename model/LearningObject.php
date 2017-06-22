@@ -25,6 +25,8 @@ class LearningObject
     public $event;
     public $tags;
     public $image;
+    public $locale;
+    public $locations;
     public $created;
     public $updated;
     public $timestamp;
@@ -53,6 +55,8 @@ class LearningObject
         $lo->event = $row->event;
         $lo->tags = $row->tags;
         $lo->image = $row->image;
+        $lo->locale = isset($row->locale) ? $row->locale : [];
+        $lo->locations = isset($row->locations) ? $row->locations : [];
         $lo->created = $row->created;
         $lo->updated = $row->updated;
         $lo->timestamp = $row->timestamp;
