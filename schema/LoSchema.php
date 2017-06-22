@@ -26,6 +26,7 @@ class LoSchema
             $lo->addColumn('event', 'text', ['notnull' => false]);
             $lo->addColumn('event_start', 'integer', ['unsigned' => true, 'notnull' => false]);
             $lo->addColumn('locale', 'string', ['notnull' => false]);
+            $lo->addColumn('locations', 'string', ['notnull' => false]);
             $lo->addColumn('tags', 'string');
             $lo->addColumn('timestamp', 'integer', ['unsigned' => true]);
             $lo->addColumn('data', 'blob');
@@ -48,6 +49,7 @@ class LoSchema
             $lo->addIndex(['sharing']);
             $lo->addIndex(['tags']);
             $lo->addIndex(['locale']);
+            $lo->addIndex(['locations']);
             $lo->addUniqueIndex(['instance_id', 'type', 'remote_id']);
         }
 
