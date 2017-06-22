@@ -18,7 +18,7 @@ trait AwardMockTrait
             'locale'      => isset($options['locale']) ? $options['locale'] : null,
             'data'        => isset($options['data']) ? $options['data'] : '',
             'published'   => isset($options['published']) ? $options['published'] : 1,
-            'quantity'    => isset($options['quantity']) ? $options['quantity'] : null,
+            'quantity'    => isset($options['quantity']) ? round($options['quantity'], 2) : null,
             'expire'      => isset($options['expire']) ? $options['expire'] : null,
             'created'     => isset($options['created']) ? $options['created'] : time(),
         ]);
@@ -43,12 +43,12 @@ trait AwardMockTrait
         return $db->lastInsertId('award_revision');
     }
 
-    protected function createAwardItem(Connection $db, int $awardRevId, int $entityId, int $quantity = null)
+    protected function createAwardItem(Connection $db, int $awardRevId, int $entityId, float $quantity = null)
     {
         $db->insert('award_item', [
             'award_revision_id' => $awardRevId,
             'entity_id'         => $entityId,
-            'quantity'          => $quantity,
+            'quantity'          => $quantity ? round($quantity, 2) : $quantity,
         ]);
 
         return $db->lastInsertId('award_item');
@@ -79,7 +79,7 @@ trait AwardMockTrait
             'entity_id'       => $options['entity_id'] ?? null,
             'verified'        => $options['verified'] ?? false,
             'verifier_id'     => $options['verifier_id'] ?? 0,
-            'quantity'        => $options['quantity'] ?? null,
+            'quantity'        => isset($options['quantity']) ? round($options['quantity'], 2) : null,
             'completion_date' => $options['completion_date'] ?? time(),
             'data'            => $options['data'],
         ]);
