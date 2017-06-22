@@ -21,7 +21,7 @@ class AwardSchema
             $award->addColumn('locale', Type::STRING, ['notnull' => false]);
             $award->addColumn('data', Type::BLOB);
             $award->addColumn('published', Type::BOOLEAN);
-            $award->addColumn('quantity', Type::INTEGER, ['notnull' => false, 'description' => 'Target quantity']);
+            $award->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Target quantity']);
             $award->addColumn('expire', Type::STRING, ['notnull' => false, 'description' => 'Award expire time']);
             $award->addColumn('created', Type::INTEGER);
             $award->setPrimaryKey(['id']);
@@ -52,7 +52,7 @@ class AwardSchema
             $item->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $item->addColumn('award_revision_id', Type::INTEGER, ['unsigned' => true]);
             $item->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.']);
-            $item->addColumn('quantity', Type::INTEGER, ['notnull' => false, 'description' => 'Number of item quantity.']);
+            $item->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
             $item->setPrimaryKey(['id']);
             $item->addIndex(['award_revision_id']);
             $item->addIndex(['entity_id']);
@@ -67,7 +67,7 @@ class AwardSchema
             $itemManual->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.', 'notnull' => false]);
             $itemManual->addColumn('verified', Type::BOOLEAN);
             $itemManual->addColumn('verifier_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
-            $itemManual->addColumn('quantity', Type::INTEGER, ['notnull' => false, 'description' => 'Number of item quantity.']);
+            $itemManual->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
             $itemManual->addColumn('completion_date', Type::INTEGER, ['unsigned' => true]);
             $itemManual->addColumn('data', 'blob');
             $itemManual->setPrimaryKey(['id']);

@@ -27,7 +27,7 @@ trait EsLoMockTrait
             'locale'         => $options['locale'] ?? 0,
             'title'          => $options['title'] ?? 'Foo course',
             'description'    => $options['description'] ?? '',
-            'tags'           => $options['tags'] ?? '',
+            'tags'           => $options['tags'] ?? [],
             'image'          => $options['image'] ?? '',
             'pricing'        => [
                 'currency'     => $options['currency'] ?? 'USD',
