@@ -20,11 +20,20 @@ class LocationRepository
 
     public function load(int $id)
     {
-        $data = $this->db
-            ->executeQuery('SELECT * FROM gc_location WHERE id = ?', [$id])
-            ->fetch(DB::OBJ);
+        return ($location = $this->loadMultiple([$id]))
+            ? $location[0]
+            : null;
+    }
 
-        return $data ? Location::create($data) : null;
+    public function loadMultiple(array $ids)
+    {
+        $locations = $this->db
+            ->executeQuery('SELECT * FROM gc_location WHERE id IN (?)', [$ids], [DB::INTEGERS])
+            ->fetchAll(DB::OBJ);
+
+        return array_map(function($_) {
+                return Location::create($_);
+            }, $locations);
     }
 
     public function create(Location &$location): int
