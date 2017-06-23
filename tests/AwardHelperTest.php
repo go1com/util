@@ -40,12 +40,13 @@ class AwardHelperTest extends UtilTestCase
 
     public function testAwardFormatSame()
     {
-        $this->assertEquals($this->format_item, AwardHelper::format($this->format_item));
+        $container = $this->getContainer();
+        $this->assertEquals($this->format_item, AwardHelper::format($this->format_item, $container['html']));
 
         $wrong = $this->format_item;
         // For some string value, its should convert to int
         $wrong->id = '1';
         $wrong->revision_id = '1';
-        $this->assertEquals($this->format_item, AwardHelper::format($wrong));
+        $this->assertEquals($this->format_item, AwardHelper::format($wrong, $container['html']));
     }
 }
