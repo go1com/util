@@ -1,6 +1,6 @@
 <?php
 
-namespace go1\util\tests;
+namespace go1\util\tests\group;
 
 use go1\util\AccessChecker;
 use go1\util\edge\EdgeHelper;
@@ -13,6 +13,7 @@ use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\NoteMockTrait;
 use go1\util\schema\mock\UserMockTrait;
+use go1\util\tests\UtilTestCase;
 use go1\util\user\Roles;
 use Symfony\Component\HttpFoundation\Request;
 
