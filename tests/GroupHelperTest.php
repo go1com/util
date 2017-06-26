@@ -30,6 +30,13 @@ class GroupHelperTest extends UtilTestCase
         $this->installGo1Schema($this->db, $coreOnly = false);
     }
 
+    public function testInstanceId()
+    {
+        $groupId = $this->createGroup($this->db, ['instance_id' => 555]);
+        $this->assertEquals(555, GroupHelper::instanceId($this->db, $groupId));
+        $this->assertEquals(null, GroupHelper::instanceId($this->db, $groupId + 666));
+    }
+
     public function testIsItemOf()
     {
         $groupId = $this->createGroup($this->db);

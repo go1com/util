@@ -10,8 +10,8 @@ use go1\util\note\NoteHelper;
 use go1\util\portal\PortalHelper;
 use go1\util\user\UserHelper;
 use PDO;
-use Symfony\Component\HttpFoundation\Request;
 use stdClass;
+use Symfony\Component\HttpFoundation\Request;
 
 class GroupHelper
 {
@@ -41,16 +41,31 @@ class GroupHelper
         return $groups;
     }
 
+    public static function instanceId(Connection $db, int $groupId)
+    {
+        static $instanceIds = [];
+
+        if (isset($instanceIds[$groupId])) {
+            return $instanceIds[$groupId];
+        }
+
+        if ($group = self::load($db, $groupId)) {
+            $instanceIds[$groupId] = $group->instance_id;
+        }
+
+        return $instanceIds[$groupId] ?? null;
+    }
+
     public static function findItems(Connection $db, int $groupId, string $entityType = null, $limit = 50, $offset = 0, $all = false)
     {
         while (true) {
             $qb = $db->createQueryBuilder();
             $qb->select('*')
-                ->from('social_group_item', 'item')
-                ->where('status = :status')
-                ->setParameter(':status', GroupItemStatus::ACTIVE)
-                ->andWhere('group_id = :groupId')
-                ->setParameter(':groupId', $groupId);
+               ->from('social_group_item', 'item')
+               ->where('status = :status')
+               ->setParameter(':status', GroupItemStatus::ACTIVE)
+               ->andWhere('group_id = :groupId')
+               ->setParameter(':groupId', $groupId);
             $entityType && $qb
                 ->andWhere('entity_type = :entityType')
                 ->setParameter(':entityType', $entityType);
