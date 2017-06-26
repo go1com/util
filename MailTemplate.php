@@ -7,6 +7,8 @@ use ReflectionClass;
 
 class MailTemplate
 {
+    const ALL = ['key' => 'all'];
+
     const USER_WELCOME_REGISTER = [
         'key'    => 'user.welcome.register',
         'tokens' => [
