@@ -22,7 +22,7 @@ trait LocationMockTrait
             'organisation_name'         => $options['organisation_name'] ?? null,
             'name_line'                 => $options['name_line'] ?? null,
             'postal_code'               => $options['postal_code'] ?? null,
-            'author_id'                 => $options['author_id'] ?? 1,
+            'author_id'                 => $options['author_id'] ?? null,
             'created'                   => $options['created'] ?? time(),
             'updated'                   => $options['updated'] ?? time(),
         ]);

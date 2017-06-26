@@ -32,7 +32,8 @@ class Queue
     const PORTAL_CONFIG_UPDATE     = 'portal-config.update';
     const PORTAL_CONFIG_DELETE     = 'portal-config.delete';
     const CONTRACT_CREATE          = 'contract.create';
-    const CONTRACT_UPDATE          = 'contract.create';
+    const CONTRACT_UPDATE          = 'contract.update';
+    const CONTRACT_DELETE          = 'contract.delete';
     const LO_CREATE                = 'lo.create'; # Body: LO object, no lo.items should be expected.
     const LO_UPDATE                = 'lo.update'; # Body: LO object with extra property: origin.
     const LO_DELETE                = 'lo.delete'; # Body: LO object.
@@ -148,6 +149,8 @@ class Queue
     const DO_ENROLMENT_UPDATE                  = 'do.enrolment.update'; # { KEY_N: MIXED|NULL }
     const DO_ENROLMENT_DELETE                  = 'do.enrolment.delete'; # { KEY_N: MIXED|NULL }
     const DO_ENROLMENT_PLAN_CREATE             = 'do.enrolment.plan.create'; # Plan Object
+    const DO_EXIM_IMPORT_ENROLLMENT            = 'do.exim.import-enrolment'; # {user_id, lo_id, instance_id, notify, manager_id}
+    const DO_EXIM_IMPORT_USER                  = 'do.exim.import-user'; # {$instance, $mail, $first, $last, $status, $manager}
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
     const DO_USER_CREATE_VIRTUAL_ACCOUNT       = 'do.user.virtual-account'; # { type: STRING, object: enrolment/??? object}

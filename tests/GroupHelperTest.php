@@ -191,4 +191,13 @@ class GroupHelperTest extends UtilTestCase
         }
         $this->assertCount(1, $items);
     }
+
+    public function testFormat()
+    {
+        $groupId = $this->createGroup($this->db, ['data' => ['marketplace' => 1, 'description' => 'group description']]);
+        $group = GroupHelper::load($this->db, $groupId);
+
+        $this->assertTrue(GroupHelper::isMarketplace($group));
+        $this->assertEquals('group description', $group->description);
+    }
 }

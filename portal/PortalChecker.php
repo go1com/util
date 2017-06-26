@@ -114,6 +114,13 @@ class PortalChecker
         return PortalHelper::FEATURE_CREDIT_DEFAULT;
     }
 
+    public function allowRegister($portal)
+    {
+        PortalHelper::parseConfig($portal);
+
+        return $portal->configuration->modulesEnabled->allowRegister ?? true;
+    }
+
     public function buildLink($portal, $uri)
     {
         $uri = ltrim($uri, '/');
