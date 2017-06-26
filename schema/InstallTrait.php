@@ -38,9 +38,11 @@ trait InstallTrait
                 if (!$schema->hasTable('gc_access')) {
                     $access = $schema->createTable('gc_access');
                     $access->addColumn('group_id', Type::INTEGER, ['unsigned' => true]);
+                    $access->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
                     $access->addColumn('entity_type', Type::STRING);
                     $access->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
                     $access->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+                    $access->addIndex(['instance_id']);
                     $access->addIndex(['entity_type']);
                     $access->addIndex(['entity_id']);
                     $access->addIndex(['user_id']);
