@@ -21,10 +21,24 @@ class GroupHelper
 
         $group = $db->executeQuery($sql, [$id])->fetch(DB::OBJ);
         if ($group) {
-            $group->data = json_decode($group->data);
+            self::format($group);
         }
 
         return $group;
+    }
+
+    public static function loadMultiple(Connection $db, array $ids)
+    {
+        $groups = [];
+        $sql = 'SELECT * FROM social_group WHERE id IN (?) ORDER BY id DESC';
+
+        $query = $db->executeQuery($sql, [$ids], [Connection::PARAM_INT_ARRAY]);
+        while ($group = $query->fetch(DB::OBJ)) {
+            self::format($group);
+            $groups[] = $group;
+        }
+
+        return $groups;
     }
 
     public static function instanceId(Connection $db, int $groupId)
@@ -181,5 +195,15 @@ class GroupHelper
         $check = $group->data->marketplace ?? 0;
 
         return $check ? true : false;
+    }
+
+    public static function format(stdClass &$group)
+    {
+        $group->data = is_scalar($group->data) ? json_decode($group->data) : $group->data;
+
+        if (isset($group->data->description)) {
+            $group->description = $group->data->description;
+            unset($group->data->description);
+        }
     }
 }

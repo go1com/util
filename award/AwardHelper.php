@@ -4,12 +4,14 @@ namespace go1\util\award;
 
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
-use stdClass;
+use go1\util\lo\LoHelper;
 use go1\util\text\Xss;
+use HTMLPurifier;
+use stdClass;
 
 class AwardHelper
 {
-    public static function format(stdClass $award)
+    public static function format(stdClass $award, HTMLPurifier $html)
     {
         $data = is_scalar($award->data) ? json_decode($award->data, true) : $award->data;
 
@@ -18,8 +20,8 @@ class AwardHelper
             'revision_id'   => (int) $award->revision_id,
             'instance_id'   => (int) $award->instance_id,
             'user_id'       => (int) $award->user_id,
-            'title'         => Xss::filter($award->title),
-            'description'   => Xss::filter($award->description),
+            'title'         => trim(Xss::filter($award->title)),
+            'description'   => $html->purify(trim($award->description), LoHelper::descriptionPurifierConfig()),
             'tags'          => $award->tags, // We filter in the CRUD
             'locale'        => $award->locale,
             'data'          => (object) (is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),

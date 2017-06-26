@@ -80,12 +80,15 @@ class PortalHelper
 
     public static function loadFromLoId(Connection $db, int $loId)
     {
-        return $db->executeQuery(
+        static $portal;
+        if (isset($portal[$loId])) {
+            return $portal[$loId];
+        }
+        return $portal[$loId] = $db->executeQuery(
             'SELECT gc_instance.* FROM gc_instance'
             . ' INNER JOIN gc_lo ON gc_instance.id = gc_lo.instance_id'
             . ' WHERE gc_lo.id = ?',
-            [$loId]
-        )->fetch(DB::OBJ);
+            [$loId])->fetch(DB::OBJ);
     }
 
     public static function titleFromLoId(Connection $db, int $loId)
