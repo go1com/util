@@ -50,7 +50,7 @@ class ConsumeController
                     throw $e;
                 }
 
-                $this->logger->error(printf('Failed to consume [%s] with %s: %s', $routingKey, json_encode($body), $e->getMessage()));
+                $this->logger->error(sprintf('Failed to consume [%s] with %s: %s', $routingKey, json_encode($body), $e->getMessage()));
             }
         }
 
