@@ -2,6 +2,7 @@
 
 namespace go1\util\tests;
 
+use Doctrine\DBAL\Connection;
 use go1\util\portal\PortalHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
@@ -30,5 +31,25 @@ class PortalHelperTest extends UtilTestCase
         PortalHelper::updateVersion($this->db, $this->queue, PortalHelper::STABLE_VERSION, $instanceId);
         $version = PortalHelper::load($this->db, $instanceId)->version;
         $this->assertEquals(PortalHelper::STABLE_VERSION, $version);
+    }
+
+    public function testLoadFromLoId()
+    {
+        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com', 'version' => 'v2.11.0']);
+        $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId]);
+
+        $mockDb = $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['executeQuery'])
+            ->getMock();
+        $mockDb->expects($this->once())
+            ->method('executeQuery')
+            ->willReturn($this->db->executeQuery('SELECT gc_instance.* FROM gc_instance'
+                . ' INNER JOIN gc_lo ON gc_instance.id = gc_lo.instance_id'
+                . ' WHERE gc_lo.id = ?',
+                [$courseId]));
+
+        $portal = PortalHelper::loadFromLoId($mockDb, $courseId);
+        $portal = PortalHelper::loadFromLoId($mockDb, $courseId);
     }
 }
