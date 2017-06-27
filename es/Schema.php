@@ -304,6 +304,7 @@ class Schema
                     'course_id'           => ['type' => self::T_INT],
                     'status'              => ['type' => self::T_SHORT],
                     'has_assessor'        => ['type' => self::T_SHORT],
+                    'user_id'             => ['type' => self::T_INT],
                 ],
             ],
         ],

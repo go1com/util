@@ -32,6 +32,7 @@ trait EsEnrolmentMockTrait
                 'course_id'           => $options['metadata']['course_id'] ?? 0,
                 'status'              => $options['metadata']['status'] ?? 0,
                 'has_assessor'        => $options['metadata']['has_assessor'] ?? 0,
+                'user_id'             => $options['metadata']['user_id'] ?? 0,
             ],
         ];
 
