@@ -69,13 +69,15 @@ class AwardSchema
             $itemManual->addColumn('verifier_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $itemManual->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
             $itemManual->addColumn('completion_date', Type::INTEGER, ['unsigned' => true]);
-            $itemManual->addColumn('data', 'blob');
+            $itemManual->addColumn('data', Type::BLOB);
+            $itemManual->addColumn('published', Type::BOOLEAN);
             $itemManual->setPrimaryKey(['id']);
             $itemManual->addIndex(['award_id']);
             $itemManual->addIndex(['user_id']);
             $itemManual->addIndex(['entity_id']);
             $itemManual->addIndex(['verified']);
             $itemManual->addIndex(['verifier_id']);
+            $itemManual->addIndex(['published']);
         }
 
         if (!$schema->hasTable('award_achievement')) {

@@ -3,6 +3,7 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\award\AwardStatuses;
 
 trait AwardMockTrait
 {
@@ -82,6 +83,7 @@ trait AwardMockTrait
             'quantity'        => isset($options['quantity']) ? round($options['quantity'], 2) : null,
             'completion_date' => $options['completion_date'] ?? time(),
             'data'            => $options['data'],
+            'published'       => $options['published'] ?? AwardStatuses::PUBLISHED,
         ]);
 
         return $db->lastInsertId('award_item_manual');
