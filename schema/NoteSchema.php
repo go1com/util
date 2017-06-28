@@ -17,7 +17,7 @@ class NoteSchema
             $note->addColumn('profile_id', 'integer', ['unsigned' => true]);
             $note->addColumn('uuid', 'string', ['notnull' => false, 'length' => 36]);
             $note->addColumn('created', 'integer', ['unsigned' => true, 'length' => 11]);
-            $note->addColumn('private', 'integer', ['default' => 0, 'length' => 2]);
+            $note->addColumn('private', 'smallint', ['default' => 0, 'length' => 2]);
             $note->addColumn('data', 'blob');
             $note->setPrimaryKey(['id']);
             $note->addUniqueIndex(['uuid']);

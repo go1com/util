@@ -17,6 +17,7 @@ trait NoteMockTrait
             'uuid'          => !empty($options['uuid']) ? $options['uuid'] : 'NOTE_UUID',
             'created'       => !empty($options['created']) ? $options['created'] : time(),
             'entity_type'   => !empty($options['entity_type']) ? $options['entity_type'] : 'lo',
+            'private'       => !empty($options['private']) ? $options['private'] : 0,
             'data'          => json_encode($data),
         ]);
 
