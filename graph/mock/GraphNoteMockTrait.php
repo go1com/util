@@ -2,6 +2,7 @@
 
 namespace go1\util\graph\mock;
 
+use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\GraphEdgeTypes;
 use go1\util\group\GroupStatus;
 use GraphAware\Neo4j\Client\Client;
@@ -42,17 +43,21 @@ trait GraphNoteMockTrait
         if ($entityId) {
             if (in_array($entityType, ['lo', 'portal'])) {
                 list($label, $prop, $propValue) = GraphEdgeTypes::getEntityGraphData($entityType, $entityId);
+
+                $status = isset($data['lo_status']) ? (int) $data['lo_status'] : 1;
+                $enrolment = $data['enrolment'] ?? EnrolmentStatuses::IN_PROGRESS;
                 $stack->push(
                     "MATCH (n:Note { uuid: {uuid} })"
                     . " MERGE (entity:$label { $prop: {entityPropValue} })"
                     . " MERGE (entity)-[:{$this->hasNote}]->(n)"
                     . " MERGE (n)-[r:{$this->hasMember}]->(entity)"
-                    . (($entityType == 'lo') ? " SET r = {data}" : ""),
+                    . " SET r = {data}",
                     [
                         'uuid'              => $uuid,
                         'entityPropValue'   => $propValue,
-                        'data' => [
-                            'status' => isset($data['lo_status']) ? (int) $data['lo_status'] : 1
+                        'data'              => [
+                            'status'    => $status,
+                            'enrolment' => $enrolment,
                         ]
                     ]
                 );
