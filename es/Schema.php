@@ -536,6 +536,7 @@ class Schema
         '_parent'    => ['type' => self::O_LO],
         'properties' => [
             'lo_id'                   => ['type' => self::T_INT],
+            'title'                   => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'start'                   => ['type' => self::T_DATE],
             'end'                     => ['type' => self::T_DATE],
             'timezone'                => ['type' => self::T_KEYWORD],
@@ -552,6 +553,9 @@ class Schema
             'organisation_name'       => ['type' => self::T_KEYWORD],
             'name_line'               => ['type' => self::T_KEYWORD],
             'postal_code'             => ['type' => self::T_KEYWORD],
+            'parent'                  => [
+                'properties' => self::LO_MAPPING['properties'],
+            ]
         ],
     ];
 }
