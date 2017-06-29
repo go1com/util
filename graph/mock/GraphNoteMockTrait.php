@@ -22,12 +22,14 @@ trait GraphNoteMockTrait
         $entityType = isset($data['entity_type']) ? $data['entity_type'] : 'lo';
         $private = isset($data['private']) ? (int) $data['private'] : 0;
 
+        static $created = 1000000;
+
         $stack->push("MERGE (n:Note { uuid: {uuid} }) SET n += {data}",
             [
                 'uuid' => $uuid,
                 'data' => [
                     'id'            => (int) $id,
-                    'created'       => isset($data['created']) ? (int) $data['created'] : time(),
+                    'created'       => isset($data['created']) ? (int) $data['created'] : $created++,
                     'profile_id'    => isset($data['profile_id']) ? (int) $data['profile_id'] : 0,
                     'entity_type'   => $entityType,
                     'entity_id'     => $entityId,
