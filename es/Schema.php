@@ -554,6 +554,7 @@ class Schema
             'name_line'               => ['type' => self::T_KEYWORD],
             'postal_code'             => ['type' => self::T_KEYWORD],
             'parent'                  => [
+                'type'       => self::T_NESTED,
                 'properties' => self::LO_MAPPING['properties'],
             ]
         ],
