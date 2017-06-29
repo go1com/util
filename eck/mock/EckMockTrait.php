@@ -42,17 +42,19 @@ trait EckMockTrait
                 ->fetch(DB::OBJ);
         };
 
-        foreach ($fields as $field => $value) {
-            if ($fieldInfo = $fieldStructure($field)) {
-                $db->insert("eck_value_$fieldInfo->type", ['value' => $value]);
-                $id = $db->lastInsertId("eck_value_{$field}");
+        foreach ($fields as $field => $values) {
+            foreach ($values as $weight => $value) {
+                if ($fieldInfo = $fieldStructure($field)) {
+                    $db->insert("eck_value_$fieldInfo->type", ['value' => $value]);
+                    $id = $db->lastInsertId("eck_value_{$field}");
 
-                $db->insert('eck_edge', [
-                    'field_id'  => $fieldInfo->id,
-                    'entity_id' => $entityId,
-                    'value_id'  => $id,
-                    'weight'    => 0,
-                ]);
+                    $db->insert('eck_edge', [
+                        'field_id'  => $fieldInfo->id,
+                        'entity_id' => $entityId,
+                        'value_id'  => $id,
+                        'weight'    => $weight,
+                    ]);
+                }
             }
         }
     }

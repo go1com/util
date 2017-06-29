@@ -18,8 +18,8 @@ class EckHelperTest extends UtilTestCase
         $this->createField($this->db, ['field' => 'field_first_name', 'instance' => $instanceId, 'entity' => 'user']);
         $this->createField($this->db, ['field' => 'field_last_name', 'instance' => $instanceId, 'entity' => 'user']);
         $this->createEntityValues($this->db, $instanceId, 'user', 100, [
-            'field_first_name' => 'Foo',
-            'field_last_name' => 'Bar',
+            'field_first_name' => [0 => 'Foo'],
+            'field_last_name' => [0 => 'Bar'],
         ]);
 
         $user = EckHelper::load($this->db, $instanceId, 'user', 100);

@@ -488,8 +488,6 @@ class Schema
             'title'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'code'         => ['type' => self::T_KEYWORD],
             'instance_id'  => ['type' => self::T_INT],
-            'entity_type'  => ['type' => self::T_KEYWORD],
-            'entity_id'    => ['type' => self::T_INT],
             'user_id'      => ['type' => self::T_INT],
             'coupon_type'  => ['type' => self::T_SHORT],
             'coupon_value' => ['type' => self::T_DOUBLE],
