@@ -5,13 +5,14 @@ namespace go1\util\model;
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
 use go1\util\edge\EdgeTypes;
+use JsonSerializable;
 use PDO;
 use stdClass;
 
 /**
  * Just for reference, not ready for using yet.
  */
-class User
+class User implements JsonSerializable
 {
     /** @var integer */
     public $id, $profileId;
@@ -82,5 +83,27 @@ class User
         }
 
         return $user;
+    }
+
+    function jsonSerialize()
+    {
+        return [
+            'id'         => $this->id,
+            'profile_id' => $this->profileId,
+            'instance'   => $this->instance,
+            'name'       => $this->name,
+            'mail'       => $this->mail,
+            'first_name' => $this->firstName,
+            'last_name'  => $this->lastName,
+            'avatar'     => $this->avatar,
+            'status'     => $this->status,
+            'created'    => $this->created,
+            'access'     => $this->access,
+            'login'      => $this->login,
+            'timestamp'  => $this->timestamp,
+            'roles'      => $this->roles,
+            'accounts'   => $this->accounts,
+            'data'       => $this->data,
+        ];
     }
 }
