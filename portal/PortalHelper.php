@@ -80,7 +80,7 @@ class PortalHelper
 
     public static function loadFromLoId(Connection $db, int $loId)
     {
-        static $portal;
+        $portal = &DB::cache(static::class, []);
 
         if (isset($portal[$loId])) {
             return $portal[$loId];

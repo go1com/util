@@ -4,6 +4,7 @@ namespace go1\util\schema;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use go1\util\award\AwardStatuses;
 
 class AwardSchema
 {
@@ -70,7 +71,7 @@ class AwardSchema
             $itemManual->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
             $itemManual->addColumn('completion_date', Type::INTEGER, ['unsigned' => true]);
             $itemManual->addColumn('data', Type::BLOB);
-            $itemManual->addColumn('published', Type::BOOLEAN);
+            $itemManual->addColumn('published', Type::BOOLEAN, ['default' => AwardStatuses::PUBLISHED]);
             $itemManual->setPrimaryKey(['id']);
             $itemManual->addIndex(['award_id']);
             $itemManual->addIndex(['user_id']);

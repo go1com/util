@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DB
 {
-    const OBJ      = PDO::FETCH_OBJ;
-    const INTEGER  = PDO::PARAM_INT;
+    const OBJ = PDO::FETCH_OBJ;
+    const INTEGER = PDO::PARAM_INT;
     const INTEGERS = Connection::PARAM_INT_ARRAY;
-    const STRING   = PDO::PARAM_STR;
-    const STRINGS  = Connection::PARAM_STR_ARRAY;
+    const STRING = PDO::PARAM_STR;
+    const STRINGS = Connection::PARAM_STR_ARRAY;
 
     public static function connectionOptions(string $name): array
     {
@@ -102,5 +102,33 @@ class DB
         );
 
         return new JsonResponse([], 200);
+    }
+
+    public static function &cache($name, $defaultValue = null, $reset = false)
+    {
+        static $data = [], $default = [];
+
+        if (isset($data[$name]) || array_key_exists($name, $data)) {
+            if ($reset) {
+                $data[$name] = $default[$name];
+            }
+
+            return $data[$name];
+        }
+
+        if (isset($name)) {
+            if ($reset) {
+                return $data;
+            }
+            $default[$name] = $data[$name] = $defaultValue;
+
+            return $data[$name];
+        }
+
+        foreach ($default as $name => $value) {
+            $data[$name] = $value;
+        }
+
+        return $data;
     }
 }
