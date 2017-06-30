@@ -18,6 +18,11 @@ class ManualRecordRepository
         $this->queue = $queue;
     }
 
+    public function db()
+    {
+        return $this->db;
+    }
+
     public function create(ManualRecord $record)
     {
         $this->db->insert('enrolment_manual', $row = [
