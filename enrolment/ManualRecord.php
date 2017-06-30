@@ -27,7 +27,7 @@ class ManualRecord implements JsonSerializable
     {
         $record = new ManualRecord;
         $record->id = $input->id ?? null;
-        $record->instanceId = $input->instanceId;
+        $record->instanceId = $input->instance_id;
         $record->entityType = $input->entity_type ?? null;
         $record->entityId = $input->entity_id ?? null;
         $record->userId = $input->user_id ?? null;
