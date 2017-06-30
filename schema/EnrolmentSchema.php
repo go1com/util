@@ -72,7 +72,7 @@ class EnrolmentSchema
             $manual->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $manual->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
             $manual->addColumn('entity_type', Type::STRING);
-            $manual->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $manual->addColumn('entity_id', Type::STRING);
             $manual->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $manual->addColumn('verified', Type::BOOLEAN);
             $manual->addColumn('data', Type::BLOB, ['notnull' => false]);
