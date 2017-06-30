@@ -44,12 +44,13 @@ trait AwardMockTrait
         return $db->lastInsertId('award_revision');
     }
 
-    protected function createAwardItem(Connection $db, int $awardRevId, int $entityId, float $quantity = null)
+    protected function createAwardItem(Connection $db, int $awardRevId, int $entityId, float $quantity = null, $weight = null)
     {
         $db->insert('award_item', [
             'award_revision_id' => $awardRevId,
             'entity_id'         => $entityId,
             'quantity'          => $quantity ? round($quantity, 2) : $quantity,
+            'weight'            => $weight ?? 0,
         ]);
 
         return $db->lastInsertId('award_item');
@@ -84,6 +85,7 @@ trait AwardMockTrait
             'completion_date' => $options['completion_date'] ?? time(),
             'data'            => $options['data'],
             'published'       => $options['published'] ?? AwardStatuses::PUBLISHED,
+            'weight'          => $options['weight'] ?? 0,
         ]);
 
         return $db->lastInsertId('award_item_manual');

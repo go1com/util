@@ -54,9 +54,11 @@ class AwardSchema
             $item->addColumn('award_revision_id', Type::INTEGER, ['unsigned' => true]);
             $item->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.']);
             $item->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
+            $item->addColumn('weight', Type::INTEGER, ['unsigned' => true]);
             $item->setPrimaryKey(['id']);
             $item->addIndex(['award_revision_id']);
             $item->addIndex(['entity_id']);
+            $item->addIndex(['weight']);
         }
 
         if (!$schema->hasTable('award_item_manual')) {
@@ -72,6 +74,7 @@ class AwardSchema
             $itemManual->addColumn('completion_date', Type::INTEGER, ['unsigned' => true]);
             $itemManual->addColumn('data', Type::BLOB);
             $itemManual->addColumn('published', Type::BOOLEAN, ['default' => AwardStatuses::PUBLISHED]);
+            $itemManual->addColumn('weight', Type::INTEGER, ['unsigned' => true]);
             $itemManual->setPrimaryKey(['id']);
             $itemManual->addIndex(['award_id']);
             $itemManual->addIndex(['user_id']);
@@ -79,6 +82,7 @@ class AwardSchema
             $itemManual->addIndex(['verified']);
             $itemManual->addIndex(['verifier_id']);
             $itemManual->addIndex(['published']);
+            $itemManual->addIndex(['weight']);
         }
 
         if (!$schema->hasTable('award_achievement')) {
