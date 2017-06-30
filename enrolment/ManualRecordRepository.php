@@ -40,12 +40,24 @@ class ManualRecordRepository
         $this->queue->publish($record, Queue::MANUAL_RECORD_CREATE);
     }
 
-    public function update(ManualRecord $record)
+    public function update(ManualRecord $record, int $actorId = null)
     {
         if ($origin = $this->load($record->id)) {
             if ($diff = $origin->diff($record)) {
                 $record->original = $origin;
                 $diff['updated'] = $record->updated = time();
+
+                if ($actorId) {
+                    if ($origin->verified != $record->verified) {
+                        $record->data['verify'][] = [
+                            'action'    => $record->verified ? 'approved' : 'declined',
+                            'actor_id'  => $actorId,
+                            'timestamp' => time(),
+                        ];
+                    }
+                }
+
+                $diff['data'] = json_encode($record->data);
                 $this->db->update('enrolment_manual', $diff, ['id' => $record->id]);
                 $this->queue->publish($record, Queue::MANUAL_RECORD_UPDATE);
             }
