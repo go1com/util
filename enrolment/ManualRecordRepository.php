@@ -23,6 +23,7 @@ class ManualRecordRepository
         $this->db->insert('enrolment_manual', $row = [
             'entity_type' => $record->entityType,
             'entity_id'   => $record->entityId,
+            'instance_id' => $record->instanceId,
             'user_id'     => $record->userId,
             'verified'    => $record->verified,
             'data'        => is_scalar($record->data) ? $record->data : json_encode($record->data),
