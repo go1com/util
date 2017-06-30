@@ -43,6 +43,7 @@ class Schema
     const O_COUPON              = 'coupon';
     const O_LO_GROUP            = 'lo_group';
     const O_EVENT               = 'event';
+    const O_AWARD               = 'award';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -75,6 +76,7 @@ class Schema
         self::O_COUPON              => self::COUPON_MAPPING,
         self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
+        self::O_AWARD               => self::AWARD_MAPPING,
     ];
 
     const ANALYZED = [
@@ -556,6 +558,26 @@ class Schema
             'parent'                  => [
                 'properties' => self::LO_MAPPING['properties'],
             ]
+        ],
+    ];
+
+    const AWARD_MAPPING = [
+        '_routing'   => ['required' => true],
+        '_parent'    => ['type' => self::O_PAYMENT_TRANSACTION],
+        'properties' => [
+            'id'             => ['type' => self::T_INT],
+            'title'          => ['type' => self::T_KEYWORD],
+            'description'    => ['type' => self::T_TEXT],
+            'image'          => ['type' => self::T_TEXT],
+            'user_id'        => ['type' => self::T_INT],
+            'instance_id'    => ['type' => self::T_INT],
+            'published'      => ['type' => self::T_INT],
+            'quantity'       => ['type' => self::T_INT],
+            'expire'         => ['type' => self::T_KEYWORD],
+            'created'        => ['type' => self::T_DATE],
+            'items_count'    => ['type' => self::T_INT],
+            'tags'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'locale'         => ['type' => self::T_KEYWORD],
         ],
     ];
 }
