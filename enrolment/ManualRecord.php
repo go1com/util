@@ -8,6 +8,7 @@ use stdClass;
 class ManualRecord implements JsonSerializable
 {
     public $id;
+    public $instanceId;
     public $entityType;
     public $entityId;
     public $userId;
@@ -26,6 +27,7 @@ class ManualRecord implements JsonSerializable
     {
         $record = new ManualRecord;
         $record->id = $input->id ?? null;
+        $record->instanceId = $input->instanceId;
         $record->entityType = $input->entity_type ?? null;
         $record->entityId = $input->entity_id ?? null;
         $record->userId = $input->user_id ?? null;
@@ -51,6 +53,7 @@ class ManualRecord implements JsonSerializable
     {
         return [
             'id'          => $this->id,
+            'instance_id' => $this->instanceId,
             'entity_type' => $this->entityType,
             'entity_id'   => $this->entityId,
             'user_id'     => $this->userId,

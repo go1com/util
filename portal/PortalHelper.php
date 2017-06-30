@@ -13,7 +13,7 @@ class PortalHelper
     const LEGACY_VERSION = 'v2.11.0';
     const STABLE_VERSION = 'v3.0.0';
 
-    const WEBSITE_DOMAIN = 'go1.com';
+    const WEBSITE_DOMAIN          = 'go1.com';
     const WEBSITE_PUBLIC_INSTANCE = 'public.mygo1.com';
 
     const FEATURE_CREDIT                       = 'credit';
@@ -81,9 +81,11 @@ class PortalHelper
     public static function loadFromLoId(Connection $db, int $loId)
     {
         static $portal;
+
         if (isset($portal[$loId])) {
             return $portal[$loId];
         }
+
         return $portal[$loId] = $db->executeQuery(
             'SELECT gc_instance.* FROM gc_instance'
             . ' INNER JOIN gc_lo ON gc_instance.id = gc_lo.instance_id'
