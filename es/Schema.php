@@ -562,8 +562,6 @@ class Schema
     ];
 
     const AWARD_MAPPING = [
-        '_routing'   => ['required' => true],
-        '_parent'    => ['type' => self::O_PAYMENT_TRANSACTION],
         'properties' => [
             'id'             => ['type' => self::T_INT],
             'title'          => ['type' => self::T_KEYWORD],
@@ -573,6 +571,8 @@ class Schema
             'instance_id'    => ['type' => self::T_INT],
             'published'      => ['type' => self::T_INT],
             'quantity'       => ['type' => self::T_INT],
+            // Save as keyword, not date, because there are dynamic values (e.g.
+            // +6 day, +2 month). UI will render its way.
             'expire'         => ['type' => self::T_KEYWORD],
             'created'        => ['type' => self::T_DATE],
             'items_count'    => ['type' => self::T_INT],
