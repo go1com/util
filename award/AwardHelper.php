@@ -16,22 +16,22 @@ class AwardHelper
     {
         $data = is_scalar($award->data) ? json_decode($award->data, true) : $award->data;
 
-        return (object) [
-            'id'            => (int) $award->id,
-            'revision_id'   => (int) $award->revision_id,
-            'instance_id'   => (int) $award->instance_id,
-            'user_id'       => (int) $award->user_id,
-            'title'         => trim(Xss::filter($award->title)),
-            'description'   => $html->purify(trim($award->description), LoHelper::descriptionPurifierConfig()),
-            'tags'          => Text::parseInlineTags($award->tags),
-            'locale'        => Text::parseInlineTags($award->locale),
-            'data'          => (object) (is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),
-            'published'     => (int) $award->published,
-            'quantity'      => isset($award->quantity) ? (float) $award->quantity : null,
-            'expire'        => ctype_digit($award->expire) ? (int) $award->expire : $award->expire,
-            'created'       => (int) $award->created,
-            'items'         => isset($award->items) ? $award->items : [],
-            'enrolment'     => isset($award->enrolment) ? $award->enrolment : null,
+        return (object)[
+            'id'          => (int)$award->id,
+            'revision_id' => (int)$award->revision_id,
+            'instance_id' => (int)$award->instance_id,
+            'user_id'     => (int)$award->user_id,
+            'title'       => trim(Xss::filter($award->title)),
+            'description' => $html->purify(trim($award->description), LoHelper::descriptionPurifierConfig()),
+            'tags'        => Text::parseInlineTags((string)$award->tags),
+            'locale'      => Text::parseInlineTags((string)$award->locale),
+            'data'        => (object)(is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),
+            'published'   => (int)$award->published,
+            'quantity'    => isset($award->quantity) ? (float)$award->quantity : null,
+            'expire'      => ctype_digit($award->expire) ? (int)$award->expire : $award->expire,
+            'created'     => (int)$award->created,
+            'items'       => isset($award->items) ? $award->items : [],
+            'enrolment'   => isset($award->enrolment) ? $award->enrolment : null,
         ];
     }
 
