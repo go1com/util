@@ -16,7 +16,7 @@ trait AwardMockTrait
             'title'       => isset($options['title']) ? $options['title'] : 'Example award',
             'description' => isset($options['description']) ? $options['description'] : '…',
             'tags'        => isset($options['tags']) ? $options['tags'] : '',
-            'locale'      => isset($options['locale']) ? $options['locale'] : null,
+            'locale'      => isset($options['locale']) ? $options['locale'] : '',
             'data'        => isset($options['data']) ? $options['data'] : '',
             'published'   => isset($options['published']) ? $options['published'] : 1,
             'quantity'    => isset($options['quantity']) ? round($options['quantity'], 2) : null,
@@ -30,7 +30,8 @@ trait AwardMockTrait
 
         if (isset($options['items']) && is_array($options['items'])) {
             foreach ($options['items'] as $item) {
-                $this->createAwardItem($db, $revisionId, $item['entity_id'], $item['quantity']);
+                $weight = $item['weight'] ?? 0;
+                $this->createAwardItem($db, $revisionId, $item['entity_id'], $item['quantity'], $weight);
             }
         }
 
