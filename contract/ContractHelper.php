@@ -26,7 +26,7 @@ class ContractHelper
         $data = [];
         foreach ($columns as $key => $column) {
             if ($key == 'download') {
-                $data[$key] = "<a href='{$downloadUrl}/contract/{$contract->getId()}/download'>Download</a>";
+                $data[$key] = "<a href='{$downloadUrl}/download/contract/{$contract->getId()}'>Download</a>";
             }
             else if (isset($column['callback'])) {
                 $data[$key] = call_user_func([$contract, $column['callback']]);
@@ -38,5 +38,20 @@ class ContractHelper
         }
 
         return $data;
+    }
+
+    public static function load(Connection $db, int $id, $jsonSerialize = false)
+    {
+        $row = $db
+            ->executeQuery('SELECT * FROM contract WHERE id = ?', [$id])
+            ->fetch(\PDO::FETCH_OBJ);
+
+        if (!$row) {
+            return false;
+        }
+
+        $contract = Contract::create($row);
+
+        return $jsonSerialize ? $contract->jsonSerialize() : $contract;
     }
 }
