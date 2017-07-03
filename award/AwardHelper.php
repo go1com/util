@@ -5,6 +5,7 @@ namespace go1\util\award;
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
 use go1\util\lo\LoHelper;
+use go1\util\Text;
 use go1\util\text\Xss;
 use HTMLPurifier;
 use stdClass;
@@ -22,8 +23,8 @@ class AwardHelper
             'user_id'       => (int) $award->user_id,
             'title'         => trim(Xss::filter($award->title)),
             'description'   => $html->purify(trim($award->description), LoHelper::descriptionPurifierConfig()),
-            'tags'          => $award->tags, // We filter in the CRUD
-            'locale'        => $award->locale,
+            'tags'          => Text::parseInlineTags($award->tags),
+            'locale'        => Text::parseInlineTags($award->locale),
             'data'          => (object) (is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),
             'published'     => (int) $award->published,
             'quantity'      => isset($award->quantity) ? (float) $award->quantity : null,
