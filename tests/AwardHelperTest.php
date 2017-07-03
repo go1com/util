@@ -3,6 +3,7 @@
 namespace go1\util\tests;
 
 use go1\util\award\AwardHelper;
+use go1\util\Text;
 
 class AwardHelperTest extends UtilTestCase
 {
@@ -41,12 +42,16 @@ class AwardHelperTest extends UtilTestCase
     public function testAwardFormatSame()
     {
         $container = $this->getContainer();
-        $this->assertEquals($this->format_item, AwardHelper::format($this->format_item, $container['html']));
 
-        $wrong = $this->format_item;
+        $correct = clone $this->format_item;
+        $correct->tags = Text::parseInlineTags($correct->tags);
+        $correct->locale = Text::parseInlineTags($correct->locale);
+        $this->assertEquals($correct, AwardHelper::format($this->format_item, $container['html']));
+
+        $wrong = clone $this->format_item;
         // For some string value, its should convert to int
         $wrong->id = '1';
         $wrong->revision_id = '1';
-        $this->assertEquals($this->format_item, AwardHelper::format($wrong, $container['html']));
+        $this->assertEquals($correct, AwardHelper::format($wrong, $container['html']));
     }
 }
