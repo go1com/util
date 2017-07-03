@@ -570,7 +570,7 @@ class Schema
             'user_id'        => ['type' => self::T_INT],
             'instance_id'    => ['type' => self::T_INT],
             'published'      => ['type' => self::T_INT],
-            'quantity'       => ['type' => self::T_INT],
+            'quantity'       => ['type' => self::T_DOUBLE],
             // Save as keyword, not date, because there are dynamic values (e.g.
             // +6 day, +2 month). UI will render its way.
             'expire'         => ['type' => self::T_KEYWORD],
