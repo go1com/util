@@ -19,7 +19,7 @@ class AwardHelperTest extends UtilTestCase
           'title'         => 'String',
           'description'   => 'Just a string',
           'tags'          => '[force] [award]',
-          'locale'        => 'en',
+          'locale'        => null,
           'data'          => (object) [
             'image'         => 'http://abc/abc.jpg',
             'image_cover'   => 'http://abc/abc.jpg',
@@ -45,7 +45,7 @@ class AwardHelperTest extends UtilTestCase
 
         $correct = clone $this->format_item;
         $correct->tags = Text::parseInlineTags($correct->tags);
-        $correct->locale = Text::parseInlineTags($correct->locale);
+        $correct->locale = [];
         $this->assertEquals($correct, AwardHelper::format($this->format_item, $container['html']));
 
         $wrong = clone $this->format_item;
