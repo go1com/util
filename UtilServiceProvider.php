@@ -9,6 +9,7 @@ use Aws\S3\S3Client;
 use Elasticsearch\ClientBuilder as EsClientBuilder;
 use go1\clients\AccountsClient;
 use go1\clients\CurrencyClient;
+use go1\clients\DownloadPDFClient;
 use go1\clients\EckClient;
 use go1\clients\EntityClient;
 use go1\clients\FirebaseClient;
@@ -159,6 +160,10 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.eck'] = function (Container $c) {
             return new EckClient($c['client'], $c['eck_url']);
+        };
+
+        $c['go1.client.download-pdf'] = function (Container $c) {
+            return new DownloadPDFClient($c['client'], $c['wkhtmltopdf_url']);
         };
     }
 }
