@@ -62,7 +62,7 @@ class ManualRecordTest extends UtilTestCase
         $this->assertEquals(['some' => 'thing'], $msg->data);
 
         // Load by entity
-        $_ = $this->repository->loadByEntity($load->instanceId, $load->entityType, $load->entityId);
+        $_ = $this->repository->loadByEntity($load->instanceId, $load->entityType, $load->entityId, $load->userId);
         $this->assertEquals($_, $load);
 
         return $record;

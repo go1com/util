@@ -88,12 +88,13 @@ class ManualRecordRepository
      * @param int    $instanceId
      * @param string $entityType
      * @param string $entityId
+     * @param int    $userId
      * @return ManualRecord
      */
-    public function loadByEntity($instanceId, $entityType, $entityId)
+    public function loadByEntity($instanceId, $entityType, $entityId, $userId)
     {
-        $row = 'SELECT * FROM enrolment_manual WHERE instance_id = ? AND entity_type = ? AND entity_id = ?';
-        $row = $this->db->executeQuery($row, [$instanceId, $entityType, $entityId])->fetch(DB::OBJ);
+        $row = 'SELECT * FROM enrolment_manual WHERE instance_id = ? AND entity_type = ? AND entity_id = ? AND user_id = ?';
+        $row = $this->db->executeQuery($row, [$instanceId, $entityType, $entityId, $userId])->fetch(DB::OBJ);
 
         return $row ? ManualRecord::create($row) : null;
     }
