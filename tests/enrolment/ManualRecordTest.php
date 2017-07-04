@@ -30,7 +30,7 @@ class ManualRecordTest extends UtilTestCase
 
     public function testCreateAndLoad()
     {
-        $record = ManualRecord::create((object)[
+        $record = ManualRecord::create((object) [
             'entity_type' => 'lo',
             'entity_id'   => 555,
             'instance_id' => 888,
@@ -60,6 +60,10 @@ class ManualRecordTest extends UtilTestCase
         $this->assertEquals(false, $msg->verified);
         $this->assertEquals(['some' => 'thing'], $load->data);
         $this->assertEquals(['some' => 'thing'], $msg->data);
+
+        // Load by entity
+        $_ = $this->repository->loadByEntity($load->instanceId, $load->entityType, $load->entityId);
+        $this->assertEquals($_, $load);
 
         return $record;
     }

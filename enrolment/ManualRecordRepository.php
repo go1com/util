@@ -83,4 +83,18 @@ class ManualRecordRepository
 
         return $row ? ManualRecord::create($row) : null;
     }
+
+    /**
+     * @param int    $instanceId
+     * @param string $entityType
+     * @param string $entityId
+     * @return ManualRecord
+     */
+    public function loadByEntity($instanceId, $entityType, $entityId)
+    {
+        $row = 'SELECT * FROM enrolment_manual WHERE instance_id = ? AND entity_type = ? AND entity_id = ?';
+        $row = $this->db->executeQuery($row, [$instanceId, $entityType, $entityId])->fetch(DB::OBJ);
+
+        return $row ? ManualRecord::create($row) : null;
+    }
 }
