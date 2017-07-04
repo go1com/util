@@ -60,6 +60,7 @@ trait InstallTrait
                     SocialSchema::install($schema);
                     NoteSchema::install($schema);
                     VoteSchema::install($schema);
+                    ContractSchema::install($schema);
                 }
             },
         ]);
