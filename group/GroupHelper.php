@@ -22,6 +22,9 @@ class GroupHelper
         $group = $db->executeQuery($sql, [$id])->fetch(DB::OBJ);
         if ($group) {
             self::format($group);
+            $groups = [$group];
+            self::countMembers($db, $groups);
+            $group = $groups[0];
         }
 
         return $group;
@@ -37,6 +40,8 @@ class GroupHelper
             self::format($group);
             $groups[] = $group;
         }
+
+        !empty($groups) && self::countMembers($db, $groups);
 
         return $groups;
     }
@@ -204,6 +209,20 @@ class GroupHelper
         if (isset($group->data->description)) {
             $group->description = $group->data->description;
             unset($group->data->description);
+        }
+    }
+
+    public static function countMembers(Connection $db, array &$groups)
+    {
+        $ids = array_column($groups, 'id');
+        $sql = 'SELECT group_id, COUNT(id) as count FROM social_group_item WHERE group_id IN (?)';
+        $query = $db->executeQuery($sql, [$ids], [Connection::PARAM_INT_ARRAY]);
+        while ($item = $query->fetch(DB::OBJ)) {
+            foreach ($groups as &$group) {
+                if ($group->id == $item->group_id) {
+                    $group->number_member = $item->count;
+                }
+            }
         }
     }
 }
