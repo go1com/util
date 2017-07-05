@@ -215,12 +215,12 @@ class GroupHelper
     public static function countMembers(Connection $db, array &$groups)
     {
         $ids = array_column($groups, 'id');
-        $sql = 'SELECT group_id, COUNT(id) as count FROM social_group_item WHERE group_id IN (?)';
+        $sql = 'SELECT group_id, COUNT(id) as count FROM social_group_item WHERE group_id IN (?) GROUP BY group_id';
         $query = $db->executeQuery($sql, [$ids], [Connection::PARAM_INT_ARRAY]);
         while ($item = $query->fetch(DB::OBJ)) {
             foreach ($groups as &$group) {
                 if ($group->id == $item->group_id) {
-                    $group->number_member = $item->count;
+                    $group->member_count = $item->count;
                 }
             }
         }

@@ -220,6 +220,6 @@ class GroupHelperTest extends UtilTestCase
         }
 
         $group = GroupHelper::load($this->db, $groupId);
-        $this->assertEquals(10, $group->number_member);
+        $this->assertEquals(10, $group->member_count);
     }
 }
