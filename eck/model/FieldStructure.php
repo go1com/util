@@ -2,6 +2,7 @@
 
 namespace go1\util\eck\model;
 
+use go1\util\DateTime;
 use go1\util\eck\model\Permission;
 use JsonSerializable;
 use RuntimeException;
@@ -133,7 +134,7 @@ class FieldStructure implements JsonSerializable
         }
     }
 
-    public function format(array $dbRow)
+    public function format(array $dbRow, bool $es = false)
     {
         unset($dbRow['id']);
 
@@ -145,6 +146,10 @@ class FieldStructure implements JsonSerializable
             case 'float':
                 $dbRow['value'] = floatval($dbRow['value']);
                 break;
+        }
+
+        if ($es && $this->type === 'datetime') {
+            $dbRow['value'] = DateTime::formatDate($dbRow['value']);
         }
 
         return $dbRow;
