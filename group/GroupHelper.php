@@ -210,6 +210,11 @@ class GroupHelper
             $group->description = $group->data->description;
             unset($group->data->description);
         }
+
+        if (isset($group->data->image)) {
+            $group->image = $group->data->image;
+            unset($group->data->image);
+        }
     }
 
     public static function countMembers(Connection $db, array &$groups)
