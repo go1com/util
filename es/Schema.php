@@ -279,7 +279,7 @@ class Schema
         '_routing'   => ['required' => true],
         'properties' => [
             'id'         => ['type' => self::T_INT],
-            // Type of enrolment: enrolment, manual-record, plan:assigned.
+            // Type of enrolment: enrolment, manual-record, plan-assigned.
             'type'       => ['type' => self::T_KEYWORD],
             'profile_id' => ['type' => self::T_INT],
             'lo_id'      => ['type' => self::T_INT],

@@ -1,6 +1,6 @@
 <?php
 
-namespace go1\util\index;
+namespace go1\util\enrolment;
 
 class EnrolmentTypes
 {
