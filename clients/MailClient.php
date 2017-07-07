@@ -75,9 +75,9 @@ class MailClient
         $this->queue->queue($data, Queue::DO_MAIL_SEND);
     }
 
-    public function template(PortalClient $portalClient, string $instance, string $mailKey, string $defaultSubject, string $defaultBody, string $defaultHtml = null): Template
+    public function template(PortalClient $portalClient, string $instance, string $mailKey, string $defaultSubject, string $defaultBody, string $defaultHtml = null, bool $strict = true): Template
     {
-        if (!MailTemplate::has($mailKey)) {
+        if ($strict && !MailTemplate::has($mailKey)) {
             throw new InvalidArgumentException('Invalid mail key: ' . $mailKey);
         }
 

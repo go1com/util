@@ -10,6 +10,7 @@ use go1\clients\MqClient;
 use go1\util\DB;
 use go1\util\plan\PlanRepository;
 use go1\util\schema\AssignmentSchema;
+use go1\util\schema\AwardSchema;
 use go1\util\schema\CreditSchema;
 use go1\util\schema\EckSchema;
 use go1\util\schema\InstallTrait;
@@ -42,6 +43,7 @@ abstract class UtilTestCase extends TestCase
                 AssignmentSchema::install($schema);
                 PlanRepository::install($schema);
                 CreditSchema::install($schema);
+                AwardSchema::install($schema);
             },
         ]);
 
