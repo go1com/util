@@ -61,13 +61,13 @@ class PlanTest extends UtilTestCase
         $original = $repository->load($id);
 
         // Make update
-        $original->status = Plan::STATUS_IN_PROGRESS;
+        $original->status = Plan::STATUS_LATE;
         $original->data->note = 'OK GO1, I am studying here!';
         $repository->update($original->id, $original);
 
         // Load & check.
         $plan = $repository->load($original->id);
-        $this->assertEquals(Plan::STATUS_IN_PROGRESS, $plan->status);
+        $this->assertEquals(Plan::STATUS_LATE, $plan->status);
         $this->assertEquals('OK GO1, I am studying here!', $plan->data->note);
     }
 
