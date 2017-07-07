@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Error as SystemError;
 
 class ConsumeController
 {
@@ -34,26 +35,32 @@ class ConsumeController
         $routingKey = $req->get('routingKey');
         $body = $req->get('body');
         $body = is_scalar($body) ? json_decode($body) : json_decode(json_encode($body));
+        $errors = [];
 
         if ($body) {
-            try {
-                foreach ($this->consumers as $consumer) {
-                    if ($consumer->aware($routingKey)) {
+            foreach ($this->consumers as $consumer) {
+                if ($consumer->aware($routingKey)) {
+                    try {
                         $consumer->consume($routingKey, $body);
                     }
+                    catch (Exception $e) {
+                        if (class_exists(TestCase::class, false)) {
+                            throw $e;
+                        }
+                    }
+                    catch (SystemError $e) {
+                        $errors[] = $e->getMessage();
+                    }
                 }
-
-                return new JsonResponse(null, 204);
-            }
-            catch (Exception $e) {
-                if (class_exists(TestCase::class, false)) {
-                    throw $e;
-                }
-
-                $this->logger->error(sprintf('Failed to consume [%s] with %s: %s', $routingKey, json_encode($body), $e->getMessage()));
             }
         }
 
-        return new JsonResponse(null, 500);
+        if ($errors) {
+            $this->logger->error(sprintf('Failed to consume [%s] with %s: %s', $routingKey, json_encode($body), json_encode($errors)));
+
+            return new JsonResponse(null, 500);
+        }
+
+        return new JsonResponse(null, 204);
     }
 }
