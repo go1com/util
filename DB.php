@@ -27,9 +27,11 @@ class DB
         $prefix = getenv("{$prefix}_NAME") ? $prefix : strtoupper("_DOCKER_{$name}_DB");
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
         $host = ('go1' === $name) ? 'hostmasterdb.csb6wde17f7d.ap-southeast-2.rds.amazonaws.com' : 'microservice.cluster-csb6wde17f7d.ap-southeast-2.rds.amazonaws.com';
-        $slave = true # We can't use the slave connection for now.
-            ? getenv("{$prefix}_HOST")
-            : (in_array($method, ['GET', 'OPTIONS']) ? getenv("{$prefix}_MASTER") : getenv("{$prefix}_SLAVE"));
+
+        $slave = getenv("{$prefix}_HOST");
+        if (('go1' === $name) && ('GET' === $method) && (getenv("{$prefix}_SLAVE"))) {
+            $slave = getenv("{$prefix}_SLAVE");
+        }
 
         $dbName = "{$name}_dev";
         if ('go1' === $name) {
