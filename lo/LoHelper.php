@@ -201,7 +201,8 @@ class LoHelper
             'table', 'a', 'iframe', 'img', 'ul', 'li', 'ol', 'caption', 'span',
         ]);
         $cnf->set('HTML.AllowedAttributes', [
-            'a.href', 'img.src', 'img.width', 'img.height', 'img.style',
+            'a.href', 'a.rel', 'a.target', 'a.type',
+            'img.src', 'img.width', 'img.height', 'img.style',
             'table.width', 'table.cellspacing', 'table.cellpadding', 'table.height', 'table.align', 'table.summary', 'table.style',
             '*.class', '*.alt', '*.title', '*.border',
             'div.data-oembed-url', 'div.style', 'span.style',
