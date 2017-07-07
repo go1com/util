@@ -12,41 +12,59 @@ use stdClass;
 
 class AwardHelper
 {
-    public static function format(stdClass $award, HTMLPurifier $html)
+    public static function format(stdClass &$award, HTMLPurifier $html = null)
     {
-        $data = is_scalar($award->data) ? json_decode($award->data, true) : $award->data;
+        $award->id = intval($award->id);
+        $award->revision_id = intval($award->revision_id);
+        $award->instance_id = intval($award->instance_id);
+        $award->user_id = intval($award->user_id);
+        $award->title = trim(Xss::filter($award->title));
+        $award->description = $html
+            ? $html->purify(trim($award->description), LoHelper::descriptionPurifierConfig())
+            : $award->description;
+        $award->tags = Text::parseInlineTags((string)$award->tags);
+        $award->locale = Text::parseInlineTags((string)$award->locale);
 
-        return (object)[
-            'id'          => (int)$award->id,
-            'revision_id' => (int)$award->revision_id,
-            'instance_id' => (int)$award->instance_id,
-            'user_id'     => (int)$award->user_id,
-            'title'       => trim(Xss::filter($award->title)),
-            'description' => $html->purify(trim($award->description), LoHelper::descriptionPurifierConfig()),
-            'tags'        => Text::parseInlineTags((string)$award->tags),
-            'locale'      => Text::parseInlineTags((string)$award->locale),
-            'data'        => (object)(is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),
-            'published'   => (int)$award->published,
-            'quantity'    => isset($award->quantity) ? (float)$award->quantity : null,
-            'expire'      => ctype_digit($award->expire) ? (int)$award->expire : $award->expire,
-            'created'     => (int)$award->created,
-            'items'       => isset($award->items) ? $award->items : [],
-            'enrolment'   => isset($award->enrolment) ? $award->enrolment : null,
-        ];
+        $data = is_scalar($award->data) ? json_decode($award->data, true) : $award->data;
+        $award->data = (object)(is_array($data)
+            ? array_diff_key($data, array_flip(['avatar', 'roles']))
+            : $data);
+        $award->published = intval($award->published);
+        $award->quantity = isset($award->quantity) ? (float)$award->quantity : null;
+        $award->expire = ctype_digit($award->expire) ? (int)$award->expire : $award->expire;
+        $award->created = intval($award->created);
     }
 
     public static function load(Connection $db, int $awardId)
     {
-        return $db
-            ->executeQuery('SELECT * FROM award_award WHERE id = ?', [$awardId])
-            ->fetch(DB::OBJ);
+        $awards = static::loadMultiple($db, [$awardId]);
+
+        return $awards ? $awards[0] : null;
+    }
+
+    public static function loadMultiple(Connection $db, array $awardIds)
+    {
+        $awards = $db
+            ->executeQuery('SELECT * FROM award_award WHERE id IN (?)', [$awardIds], [DB::INTEGERS])
+            ->fetchAll(DB::OBJ);
+
+        if ($awards) {
+            foreach ($awards as &$award) {
+                static::format($award);
+            }
+        }
+
+        return $awards;
     }
 
     public static function loadByRevision(Connection $db, int $revisionId)
     {
-        return $db
+        $award = $db
             ->executeQuery('SELECT * FROM award_award WHERE revision_id = ?', [$revisionId])
             ->fetch(DB::OBJ);
+        $award && static::format($award);
+
+        return $award;
     }
 
     public static function loadItem(Connection $db, int $awardItemId)
