@@ -25,9 +25,9 @@ trait EsEnrolmentMockTrait
             'end_date'   => isset($options['end_date']) ? DateTime::formatDate($options['end_date']) : null,
             'changed'    => DateTime::formatDate($options['changed'] ?? time()),
             'lo'         => $options['lo'] ?? null,
-            'account_id' => $options['account_id'] ?? 0,
             'account'    => $options['account'] ?? null,
             'metadata'   => [
+                'account_id' => $options['account_id'] ?? 0,
                 'course_enrolment_id' => $options['metadata']['course_enrolment_id'] ?? 0,
                 'course_id'           => $options['metadata']['course_id'] ?? 0,
                 'status'              => $options['metadata']['status'] ?? 0,
