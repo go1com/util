@@ -36,19 +36,6 @@ class ConsumeControllerTest extends UtilTestCase
 
     private function builder($aware = true, $exception = false)
     {
-        $consumerObj = new class implements ConsumerInterface
-        {
-            public function aware(string $event): bool
-            {
-                return true;
-            }
-
-            public function consume(string $routingKey, stdClass $body): bool
-            {
-                return true;
-            }
-        };
-
         $consumer = $this->getMockBuilder(Consumer::class)
             ->setMethods(['aware', 'consume'])
             ->getMock();
