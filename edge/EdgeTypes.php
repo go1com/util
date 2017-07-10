@@ -90,7 +90,7 @@ class EdgeTypes
     const HAS_CREDIT_REQUEST_REJECTED = 39; # T: User (learner)       | S: LO                    | Weight: Manager ID — who reject.
     const HAS_LOCATION                = 40; # T: gc_location.id       | S: gc_event.id
     const HAS_LO_LOCATION             = 41; # T: gc_location.id       | S: gc_lo.id
-    const HAS_LO_TOKEN                = 42; # T: $timestamp           | S: gc_lo.id              | data: STRING, the token value.
+    const HAS_LO_TOKEN                = 42; # T: gc_instance.id       | S: gc_lo.id              | data: { token_N: STRING }
 
     # LO & enrolment scheduling
     # ---------------------
