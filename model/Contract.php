@@ -219,9 +219,11 @@
             $row->renewal_date = !empty($row->renewal_date) ? DateTime::create($row->renewal_date)->format(DATE_ISO8601) : null;
             $row->cancel_date  = !empty($row->cancel_date) ? DateTime::create($row->cancel_date)->format(DATE_ISO8601) : null;
 
-            $row->price = number_format($row->price, 2);
-            $row->tax = number_format($row->tax, 2);
+            $row->price = number_format($row->price, 2, '.', '');
+            $row->tax = number_format($row->tax, 2, '.', '');
+            $row->tax_included = $row->tax_included ?? '';
             $row->currency = !empty($row->currency) ? strtoupper($row->currency) : null;
+            $row->payment_method = $row->payment_method ?? '';
 
             $row->data = !empty($row->data) ? (is_scalar($row->data) ? json_decode($row->data) : $row->data) : null;
             Text::purify(null, $row->data);

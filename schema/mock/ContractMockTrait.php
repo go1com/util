@@ -13,7 +13,7 @@ trait ContractMockTrait
     {
         $data = isset($options['data']) ? (is_scalar($options['data']) ? json_decode($options['data'], true) : $options['data']) : [];
         $db->insert('contract', [
-            'instance_id'       => $options['entity_id'] ?? 0,
+            'instance_id'       => $options['instance_id'] ?? 0,
             'user_id'           => $options['user_id'] ?? 0,
             'status'            => $options['status'] ?? Contract::STATUS_ACTIVE,
             'start_date'        => $options['start_date'] ?? (new DateTime)->format('Y-m-d'),
@@ -27,7 +27,7 @@ trait ContractMockTrait
             'payment_method'    => $options['payment_method'] ?? '',
             'renewal_date'      => $options['renewal_date'] ?? (new DateTime)->format('Y-m-d'),
             'cancel_date'       => $options['cancel_date'] ?? (new DateTime)->format('Y-m-d'),
-            'data'              => $data,
+            'data'              => json_encode($data),
             'created'           => $options['created'] ?? time(),
             'updated'           => $options['updated'] ?? time(),
         ]);
