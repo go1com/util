@@ -59,7 +59,7 @@ class Coupon implements JsonSerializable
         $coupon->status = $input->status ?? 0;
         $coupon->limitation = $input->limitation ?? 1;
         $coupon->limitationPerUser = $input->limitation_per_user ?? 0;
-        $coupon->expiration = !$input->expiration ? null : is_scalar($input->expiration) ? new DateTime($input->expiration) : $input->expiration;
+        $coupon->expiration = !isset($input->expiration) ? null : (is_scalar($input->expiration) ? new DateTime($input->expiration) : $input->expiration);
         $coupon->created = $input->created ?? time();
         $coupon->updated = $input->updated ?? time();
 
