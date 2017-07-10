@@ -2,9 +2,8 @@
 
     namespace go1\util\model;
 
-    use Assert\Assert;
     use Assert\Assertion;
-    use go1\staff\domain\views\DataTable;
+    use go1\util\Currency;
     use go1\util\DateTime;
     use go1\util\Text;
     use JsonSerializable;
@@ -12,7 +11,6 @@
 
     class Contract implements JsonSerializable
     {
-        const DEFAULT_CURRENCY  = 'AUD';
         const STATUS_ACTIVE     = 1;
         const STATUS_INACTIVE   = 0;
         const STATUS_CANCELED   = -1;
@@ -50,7 +48,7 @@
             float $price = null,
             float $tax = null,
             string $taxIncluded = null,
-            string $currency = Contract::DEFAULT_CURRENCY,
+            string $currency = Currency::DEFAULT,
             string $paymentMethod = null,
             string $renewalDate = null,
             string $cancelDate = null,
@@ -163,7 +161,7 @@
 
         public function getCurrency()
         {
-            return $this->currency ?? self::DEFAULT_CURRENCY;
+            return $this->currency ?? Currency::DEFAULT;
         }
 
         public function getPaymentMethod()
@@ -203,6 +201,11 @@
         public function set($propertyName, $propertyValue)
         {
             $this->{$propertyName} = $propertyValue;
+        }
+
+        public function get($propertyName)
+        {
+            return $this->{$propertyName};
         }
 
         public function threadName(): string
@@ -260,44 +263,27 @@
 
         public function getUpdatedValues(Contract $origin): array
         {
-            if ($origin->getStatus() != $this->status) {
-                $values['status'] = $this->status;
-            }
-            if ($origin->getUserId() != $this->user_id) {
-                $values['user_id'] = $this->user_id;
-            }
-            if ($origin->getStartDate() != $this->start_date) {
-                $values['start_date'] = $this->start_date;
-            }
-            if ($origin->getSignedDate() != $this->signed_date) {
-                $values['signed_date'] = $this->signed_date;
-            }
-            if ($origin->getInitialTerm() != $this->initial_term) {
-                $values['initial_term'] = $this->initial_term;
-            }
-            if ($origin->getNumberUsers() != $this->number_users) {
-                $values['number_users'] = $this->number_users;
-            }
-            if ($origin->getPrice() != $this->price) {
-                $values['price'] = $this->price;
-            }
-            if ($origin->getTax() != $this->tax) {
-                $values['tax'] = $this->tax;
-            }
-            if ($origin->getTaxIncluded() != $this->tax_included) {
-                $values['tax_included'] = $this->tax_included;
-            }
-            if ($origin->getCurrency() != $this->currency) {
-                $values['currency'] = $this->currency;
-            }
-            if ($origin->getPaymentMethod() != $this->payment_method) {
-                $values['payment_method'] = $this->payment_method;
-            }
-            if ($origin->getRenewalDate() != $this->renewal_date) {
-                $values['renewal_date'] = $this->renewal_date;
-            }
-            if ($origin->getCancelDate() != $this->cancel_date) {
-                $values['cancel_date'] = $this->cancel_date;
+            $props = [
+                'status'            => 'getStatus',
+                'user_id'           => 'getUserId',
+                'start_date'        => 'getStartDate',
+                'signed_date'       => 'getSignedDate',
+                'initial_term'      => 'getInitialTerm',
+                'number_users'      => 'getNumberUsers',
+                'price'             => 'getPrice',
+                'tax'               => 'getTax',
+                'tax_included'      => 'getTaxIncluded',
+                'currency'          => 'getCurrency',
+                'payment_method'    => 'getPaymentMethod',
+                'renewal_date'      => 'getRenewalDate',
+                'cancel_date'       => 'getCancelDate',
+            ];
+
+            $values = [];
+            foreach ($props as $prop => $getter) {
+                if (call_user_func_array([$origin, $getter], []) != $this->{$prop}) {
+                    $values[$prop] = $this->{$prop};
+                }
             }
 
             if (empty($values)) {
