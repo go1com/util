@@ -31,7 +31,6 @@ class ConsumeControllerTest extends UtilTestCase
         $this->fooConsumer = $this->builder();
         $this->barConsumer = $this->builder();
         $this->errConsumer = $this->builder(true, true);
-
     }
 
     private function builder($aware = true, $exception = false)
