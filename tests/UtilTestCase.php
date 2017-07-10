@@ -48,14 +48,13 @@ abstract class UtilTestCase extends TestCase
         ]);
 
         $this->queue = $this->getMockBuilder(MqClient::class)->setMethods(['publish', 'queue'])->disableOriginalConstructor()->getMock();
-        $this
-            ->queue
+        $this->queue
             ->method('publish')
             ->willReturnCallback(function ($body, $routingKey) {
                 $this->queueMessages[$routingKey][] = $body;
             });
-        $this
-            ->queue
+
+        $this->queue
             ->method('queue')
             ->willReturnCallback(function ($body, $routingKey) {
                 $this->queueMessages[$routingKey][] = $body;
