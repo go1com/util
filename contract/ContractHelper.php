@@ -54,4 +54,17 @@ class ContractHelper
 
         return $jsonSerialize ? $contract->jsonSerialize() : $contract;
     }
+
+    public static function loadActiveContract(Connection $db, int $instanceId)
+    {
+        $row = $db
+            ->executeQuery('SELECT * FROM contract WHERE instance_id = ? AND status = ? ORDER BY id DESC', [$instanceId, Contract::STATUS_ACTIVE])
+            ->fetch(\PDO::FETCH_OBJ);
+
+        if (!$row) {
+            return false;
+        }
+
+        return Contract::create($row);
+    }
 }

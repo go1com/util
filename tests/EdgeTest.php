@@ -170,4 +170,16 @@ class EdgeTest extends UtilTestCase
         EdgeHelper::link($this->db, $this->queue, EdgeTypes::CREDIT_TRANSFER, 1, 100001, 0, ['old_owner' => 2, 'new_owner' => 3, 'actor' => 'abc1@go1.com']);
         EdgeHelper::link($this->db, $this->queue, EdgeTypes::CREDIT_TRANSFER, 1, 100002, 0, ['old_owner' => 3, 'new_owner' => 1, 'actor' => 'abc@go1.com']);
     }
+
+    public function testLoHasToken()
+    {
+        $courseId = 123;
+        $instanceId = 555;
+        $edgeId = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_LO_TOKEN, $courseId, $instanceId, 0, $data = [
+            'token_1' => 'value 1',
+            'token_2' => 'value 2',
+        ]);
+
+        $this->assertEquals($data, (array) EdgeHelper::load($this->db, $edgeId)->data);
+    }
 }

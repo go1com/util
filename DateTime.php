@@ -11,6 +11,8 @@ use InvalidArgumentException;
  */
 class DateTime
 {
+    const DEFAULT_HUMAN_FORMAT = 'Y-m-d H:i:s';
+
     public static function create($time, $timezone = 'UTC'): DefaultDateTime
     {
         if (!$time) {

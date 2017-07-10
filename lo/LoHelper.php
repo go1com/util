@@ -8,6 +8,7 @@ use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use HTMLPurifier_Config;
 use PDO;
+use stdClass;
 
 class LoHelper
 {
@@ -70,7 +71,7 @@ class LoHelper
             ];
             unset($lo->price, $lo->currency, $lo->tax, $lo->tax_included);
 
-            $lo->event = new \stdClass();
+            $lo->event = new stdClass;
             $loIds[] = $lo->id;
         }
 
@@ -95,52 +96,52 @@ class LoHelper
 
     private static function attachEvents(Connection $db, array &$los, array &$loIds)
     {
-        $put = function (\stdClass &$node, array $event) use (&$put) {
+        $put = function (stdClass &$node, array $event) use (&$put) {
             if ($node->id == $event['loId']) {
                 $node->event = (object) [
-                    'start'           => $event['start'],
-                    'end'             => $event['end'],
-                    'timezone'        => $event['timezone'],
-                    'seats'           => $event['seats'],
-                    'created'         => $event['created'],
-                    'updated'         => $event['updated'],
-                    'data'            => !empty($event['data']) ? json_decode($event['data']) : $event['data'],
+                    'start'    => $event['start'],
+                    'end'      => $event['end'],
+                    'timezone' => $event['timezone'],
+                    'seats'    => $event['seats'],
+                    'created'  => $event['created'],
+                    'updated'  => $event['updated'],
+                    'data'     => !empty($event['data']) ? json_decode($event['data']) : $event['data'],
                 ];
 
                 $node->event->locations = [];
                 # Get location from gc_event table
                 if (!empty($event['loc_country'])) {
                     $node->event->locations = [[
-                        'country'                   => $event['loc_country'],
-                        'administrative_area'       => $event['loc_administrative_area'],
-                        'sub_administrative_area'   => $event['loc_sub_administrative_area'],
-                        'locality'                  => $event['loc_locality'],
-                        'dependent_locality'        => $event['loc_dependent_locality'],
-                        'thoroughfare'              => $event['loc_thoroughfare'],
-                        'premise'                   => $event['loc_premise'],
-                        'sub_premise'               => $event['loc_sub_premise'],
-                        'organisation_name'         => $event['loc_organisation_name'],
-                        'name_line'                 => $event['loc_name_line'],
-                        'postal_code'               => $event['loc_postal_code'],
-                    ]];
+                                                   'country'                 => $event['loc_country'],
+                                                   'administrative_area'     => $event['loc_administrative_area'],
+                                                   'sub_administrative_area' => $event['loc_sub_administrative_area'],
+                                                   'locality'                => $event['loc_locality'],
+                                                   'dependent_locality'      => $event['loc_dependent_locality'],
+                                                   'thoroughfare'            => $event['loc_thoroughfare'],
+                                                   'premise'                 => $event['loc_premise'],
+                                                   'sub_premise'             => $event['loc_sub_premise'],
+                                                   'organisation_name'       => $event['loc_organisation_name'],
+                                                   'name_line'               => $event['loc_name_line'],
+                                                   'postal_code'             => $event['loc_postal_code'],
+                                               ]];
                 }
                 # Get location from gc_location table
                 else if (!empty($event['country'])) {
                     $node->event->locations = [[
-                        'id'                        => $event['locationId'],
-                        'title'                     => $event['title'],
-                        'country'                   => $event['country'],
-                        'administrative_area'       => $event['administrative_area'],
-                        'sub_administrative_area'   => $event['sub_administrative_area'],
-                        'locality'                  => $event['locality'],
-                        'dependent_locality'        => $event['dependent_locality'],
-                        'thoroughfare'              => $event['thoroughfare'],
-                        'premise'                   => $event['premise'],
-                        'sub_premise'               => $event['sub_premise'],
-                        'organisation_name'         => $event['organisation_name'],
-                        'name_line'                 => $event['name_line'],
-                        'postal_code'               => $event['postal_code'],
-                    ]];
+                                                   'id'                      => $event['locationId'],
+                                                   'title'                   => $event['title'],
+                                                   'country'                 => $event['country'],
+                                                   'administrative_area'     => $event['administrative_area'],
+                                                   'sub_administrative_area' => $event['sub_administrative_area'],
+                                                   'locality'                => $event['locality'],
+                                                   'dependent_locality'      => $event['dependent_locality'],
+                                                   'thoroughfare'            => $event['thoroughfare'],
+                                                   'premise'                 => $event['premise'],
+                                                   'sub_premise'             => $event['sub_premise'],
+                                                   'organisation_name'       => $event['organisation_name'],
+                                                   'name_line'               => $event['name_line'],
+                                                   'postal_code'             => $event['postal_code'],
+                                               ]];
                 }
             }
         };
@@ -164,7 +165,7 @@ class LoHelper
     }
 
     /**
-     * @deprecated 
+     * @deprecated
      */
     public static function getEvent(Connection $db, int $loId)
     {
@@ -201,7 +202,8 @@ class LoHelper
             'table', 'a', 'iframe', 'img', 'ul', 'li', 'ol', 'caption', 'span',
         ]);
         $cnf->set('HTML.AllowedAttributes', [
-            'a.href', 'img.src', 'img.width', 'img.height', 'img.style',
+            'a.href', 'a.rel', 'a.target',
+            'img.src', 'img.width', 'img.height', 'img.style',
             'table.width', 'table.cellspacing', 'table.cellpadding', 'table.height', 'table.align', 'table.summary', 'table.style',
             '*.class', '*.alt', '*.title', '*.border',
             'div.data-oembed-url', 'div.style', 'span.style',
@@ -259,7 +261,7 @@ class LoHelper
         return array_unique($ids);
     }
 
-    public static function parentsAuthorIds(Connection $db, int $loId, array $parentLoIds = NULL): array
+    public static function parentsAuthorIds(Connection $db, int $loId, array $parentLoIds = null): array
     {
         $authorIds = [];
         if (!isset($parentLoIds)) {
@@ -270,6 +272,7 @@ class LoHelper
         }
 
         $authorIds = array_values(array_unique($authorIds));
+
         return array_map('intval', $authorIds);
     }
 
@@ -286,7 +289,7 @@ class LoHelper
         return $ids;
     }
 
-    public static function isBelongToGroup(Connection $db, int $loId, int $instanceId) : bool
+    public static function isBelongToGroup(Connection $db, int $loId, int $instanceId): bool
     {
         $sql = 'SELECT 1 FROM gc_lo_group WHERE lo_id = ? AND instance_id = ?';
 
@@ -296,6 +299,7 @@ class LoHelper
     public static function countEnrolment(Connection $db, int $loId)
     {
         $sql = 'SELECT COUNT(*) FROM gc_enrolment WHERE lo_id = ?';
+
         return $db->fetchColumn($sql, [$loId]);
     }
 }

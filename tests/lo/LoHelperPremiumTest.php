@@ -2,15 +2,8 @@
 
 namespace go1\util\tests\lo;
 
-use DateTime;
-use go1\util\edge\EdgeTypes;
-use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
-use go1\util\schema\mock\InstanceMockTrait;
-use go1\util\schema\mock\LoMockTrait;
-use go1\util\schema\mock\UserMockTrait;
 use go1\util\tests\UtilTestCase;
-use HTMLPurifier;
 
 class LoHelperPremiumTest extends UtilTestCase
 {

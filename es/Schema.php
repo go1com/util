@@ -157,7 +157,6 @@ class Schema
             'status'       => ['type' => self::T_SHORT],
             'allow_public' => ['type' => self::T_BOOL],
             'roles'        => ['type' => self::T_KEYWORD],
-            'fields'       => ['type' => self::T_OBJECT],
             'groups'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'managers'     => ['type' => self::T_INT],
         ],
@@ -280,6 +279,8 @@ class Schema
         '_routing'   => ['required' => true],
         'properties' => [
             'id'         => ['type' => self::T_INT],
+            // Type of enrolment: enrolment, manual-record, plan-assigned.
+            'type'       => ['type' => self::T_KEYWORD],
             'profile_id' => ['type' => self::T_INT],
             'lo_id'      => ['type' => self::T_INT],
             'account_id' => ['type' => self::T_INT],
