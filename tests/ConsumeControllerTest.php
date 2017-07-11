@@ -68,6 +68,7 @@ class ConsumeControllerTest extends UtilTestCase
         $req = Request::create('/consume', 'POST');
         $req->request->replace(['routingKey' => Queue::RO_CREATE, 'body' => ['foo' => 'bar']]);
         $res = $this->consume->post($req);
+
         $this->assertEquals(403, $res->getStatusCode());
     }
 
