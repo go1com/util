@@ -59,6 +59,7 @@ class ConsumeControllerTest extends UtilTestCase
         $this->barConsumer = new $consumerObj(true, false);
         $this->excConsumer = new $consumerObj(true, (new Exception('foo')));
         $this->errConsumer = new $consumerObj(true, (new Error('foo')));
+
     }
 
     public function test403()
