@@ -133,7 +133,7 @@ class DB
         return $data;
     }
 
-    public function merge(Connection $db, string $table, array $keys, array $fields): int
+    public static function merge(Connection $db, string $table, array $keys, array $fields): int
     {
         $find = $db
             ->createQueryBuilder()
