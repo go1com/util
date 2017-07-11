@@ -5,11 +5,11 @@ namespace go1\util\consume;
 use go1\util\AccessChecker;
 use go1\util\contract\ConsumerInterface;
 use go1\util\Error;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Throwable;
+use Exception;
+use Error as SystemError;
 
 class ConsumeController
 {
@@ -42,7 +42,10 @@ class ConsumeController
                     try {
                         $consumer->consume($routingKey, $body);
                     }
-                    catch (Throwable $e) {
+                    catch (Exception $e) {
+                        $errors[] = $e->getMessage();
+                    }
+                    catch (SystemError $e) {
                         $errors[] = $e->getMessage();
                     }
                 }

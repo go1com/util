@@ -3,13 +3,15 @@
 namespace go1\util\tests;
 
 use go1\util\consume\ConsumeController;
-use go1\util\consume\Consumer;
+use go1\util\contract\ConsumerInterface;
 use go1\util\Queue;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Text;
 use go1\util\user\UserHelper;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
+use stdClass;
+use Error;
 
 class ConsumeControllerTest extends UtilTestCase
 {
@@ -19,6 +21,7 @@ class ConsumeControllerTest extends UtilTestCase
     private $consume;
     private $fooConsumer;
     private $barConsumer;
+    private $excConsumer;
     private $errConsumer;
 
     public function setUp()
@@ -26,34 +29,36 @@ class ConsumeControllerTest extends UtilTestCase
         parent::setUp();
         $this->c = $this->getContainer();
 
-        $this->fooConsumer = $this->builder();
-        $this->barConsumer = $this->builder();
-        $this->errConsumer = $this->builder(true, true);
-    }
+        $consumerObj = (new class($isAware = true, $exception = false) implements ConsumerInterface
+        {
+            private $isAware;
+            private $exception;
 
-    private function builder($aware = true, $exception = false)
-    {
-        $consumer = $this->getMockBuilder(Consumer::class)
-            ->setMethods(['aware', 'consume'])
-            ->getMock();
+            public function __construct($isAware, $exception)
+            {
+                $this->isAware = $isAware;
+                $this->exception = $exception;
+            }
 
-        $consumer
-            ->method('aware')
-            ->willReturn($aware);
+            public function aware(string $event): bool
+            {
+                return true;
+            }
 
-        if ($exception) {
-            $consumer
-                ->method('consume')
-                ->willThrowException(new Exception());
+            public function consume(string $routingKey, stdClass $body): bool
+            {
+                if (!$this->exception) {
+                    return true;
+                }
 
-        }
-        else {
-            $consumer
-                ->method('consume')
-                ->willReturn($exception);
-        }
+                throw $this->exception;
+            }
+        });
 
-        return $consumer;
+        $this->fooConsumer = new $consumerObj(true, false);
+        $this->barConsumer = new $consumerObj(true, false);
+        $this->excConsumer = new $consumerObj(true, (new Exception('foo')));
+        $this->errConsumer = new $consumerObj(true, (new Error('foo')));
     }
 
     public function test403()
@@ -81,7 +86,7 @@ class ConsumeControllerTest extends UtilTestCase
      */
     public function test204($routingKey, $expectedBody)
     {
-        $this->consume = new ConsumeController([$this->fooConsumer, $this->barConsumer], $this->c['logger'], $this->c['access_checker']);
+        $consume = new ConsumeController([$this->fooConsumer, $this->barConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
@@ -89,7 +94,7 @@ class ConsumeControllerTest extends UtilTestCase
             'body'       => $expectedBody,
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
-        $res = $this->consume->post($req);
+        $res = $consume->post($req);
 
         $this->assertEquals(204, $res->getStatusCode());
     }
@@ -99,7 +104,7 @@ class ConsumeControllerTest extends UtilTestCase
      */
     public function testException($routingKey, $expectedBody)
     {
-        $this->consume = new ConsumeController([$this->fooConsumer, $this->barConsumer, $this->errConsumer], $this->c['logger'], $this->c['access_checker']);
+        $consume = new ConsumeController([$this->fooConsumer, $this->barConsumer, $this->excConsumer, $this->errConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
@@ -107,7 +112,7 @@ class ConsumeControllerTest extends UtilTestCase
             'body'       => $expectedBody,
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
-        $res = $this->consume->post($req);
+        $res = $consume->post($req);
 
         $this->assertEquals(500, $res->getStatusCode());
     }
@@ -117,7 +122,7 @@ class ConsumeControllerTest extends UtilTestCase
      */
     public function testExceptions($routingKey, $expectedBody)
     {
-        $this->consume = new ConsumeController([$this->errConsumer, $this->errConsumer, $this->errConsumer], $this->c['logger'], $this->c['access_checker']);
+        $consume = new ConsumeController([$this->excConsumer, $this->errConsumer, $this->errConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
@@ -125,7 +130,7 @@ class ConsumeControllerTest extends UtilTestCase
             'body'       => $expectedBody,
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
-        $res = $this->consume->post($req);
+        $res = $consume->post($req);
 
         $this->assertEquals(500, $res->getStatusCode());
     }
