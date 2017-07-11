@@ -261,27 +261,27 @@
             );
         }
 
-        public function getUpdatedValues(Contract $origin): array
+        public function diff(Contract $origin): array
         {
             $props = [
-                'status'            => 'getStatus',
-                'user_id'           => 'getUserId',
-                'start_date'        => 'getStartDate',
-                'signed_date'       => 'getSignedDate',
-                'initial_term'      => 'getInitialTerm',
-                'number_users'      => 'getNumberUsers',
-                'price'             => 'getPrice',
-                'tax'               => 'getTax',
-                'tax_included'      => 'getTaxIncluded',
-                'currency'          => 'getCurrency',
-                'payment_method'    => 'getPaymentMethod',
-                'renewal_date'      => 'getRenewalDate',
-                'cancel_date'       => 'getCancelDate',
+                'status',
+                'user_id',
+                'start_date',
+                'signed_date',
+                'initial_term',
+                'number_users',
+                'price',
+                'tax',
+                'tax_included',
+                'currency',
+                'payment_method',
+                'renewal_date',
+                'cancel_date'
             ];
 
             $values = [];
-            foreach ($props as $prop => $getter) {
-                if (call_user_func_array([$origin, $getter], []) != $this->{$prop}) {
+            foreach ($props as $prop) {
+                if ($origin->get($prop) != $this->{$prop}) {
                     $values[$prop] = $this->{$prop};
                 }
             }

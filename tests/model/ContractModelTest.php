@@ -61,7 +61,7 @@ class ContractModelTest extends UtilTestCase
         $contract = ContractHelper::load($this->db, $this->contractId);
         $originContract = unserialize(serialize($contract));
         $contract->set('status', Contract::STATUS_INACTIVE);
-        $updatedValues = $contract->getUpdatedValues($originContract);
+        $updatedValues = $contract->diff($originContract);
 
         $this->assertEquals(Contract::STATUS_INACTIVE, $updatedValues['status']);
         $this->assertTrue(!empty($updatedValues['updated']));
