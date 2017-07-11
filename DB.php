@@ -146,10 +146,8 @@ class DB
                 ->setParameter(":$k", $v);
         }
 
-        $find->execute()->fetchColumn()
+        return $find->execute()->fetchColumn()
             ? $db->insert($table, $fields)
             : $db->update($table, $fields, $keys);
-
-        return 0;
     }
 }
