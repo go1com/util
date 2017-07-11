@@ -203,11 +203,6 @@
             $this->{$propertyName} = $propertyValue;
         }
 
-        public function get($propertyName)
-        {
-            return $this->{$propertyName};
-        }
-
         public function threadName(): string
         {
             return 'contract:' . $this->id;
@@ -264,24 +259,24 @@
         public function diff(Contract $origin): array
         {
             $props = [
-                'status',
-                'user_id',
-                'start_date',
-                'signed_date',
-                'initial_term',
-                'number_users',
-                'price',
-                'tax',
-                'tax_included',
-                'currency',
-                'payment_method',
-                'renewal_date',
-                'cancel_date'
+                'status'            => 'getStatus',
+                'user_id'           => 'getUserId',
+                'start_date'        => 'getStartDate',
+                'signed_date'       => 'getSignedDate',
+                'initial_term'      => 'getInitialTerm',
+                'number_users'      => 'getNumberUsers',
+                'price'             => 'getPrice',
+                'tax'               => 'getTax',
+                'tax_included'      => 'getTaxIncluded',
+                'currency'          => 'getCurrency',
+                'payment_method'    => 'getPaymentMethod',
+                'renewal_date'      => 'getRenewalDate',
+                'cancel_date'       => 'getCancelDate',
             ];
 
             $values = [];
-            foreach ($props as $prop) {
-                if ($origin->get($prop) != $this->{$prop}) {
+            foreach ($props as $prop => $getter) {
+                if (call_user_func_array([$origin, $getter], []) != $this->{$prop}) {
                     $values[$prop] = $this->{$prop};
                 }
             }
