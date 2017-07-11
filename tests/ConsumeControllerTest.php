@@ -4,14 +4,12 @@ namespace go1\util\tests;
 
 use go1\util\consume\ConsumeController;
 use go1\util\consume\Consumer;
-use go1\util\contract\ConsumerInterface;
 use go1\util\Queue;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Text;
 use go1\util\user\UserHelper;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
-use stdClass;
 
 class ConsumeControllerTest extends UtilTestCase
 {
