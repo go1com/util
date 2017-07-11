@@ -77,6 +77,11 @@ class PortalPricing
         return $portal->data->user_plan->currency ?? Currency::DEFAULT;
     }
 
+    public static function getPortalPrice(stdClass $portal)
+    {
+        return $portal->data->user_plan->price ?? 0;
+    }
+
     public static function getManualPrice(stdClass $portal)
     {
         return $portal->data->user_plan->manual_price ?? false;
@@ -111,7 +116,7 @@ class PortalPricing
     public static function getPrice(stdClass $portal, $reCalculate = false): array
     {
         $currency = static::getCurrency($portal);
-        $price = $portal->data->user_plan->price ?? 0;
+        $price = static::getPortalPrice($portal);
         if ($price && !$reCalculate) {
             return [$price, $currency];
         }
