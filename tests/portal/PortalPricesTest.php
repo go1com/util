@@ -233,6 +233,8 @@ class PortalPricingTest extends UtilTestCase
 
         $this->assertEquals(10000, $price);
         $this->assertEquals('USD', $currency);
+        $portalPrice = PortalPricing::getPortalPrice($portal);
+        $this->assertEquals(10000, $portalPrice);
     }
 
     public function testCountPortalUsers()
