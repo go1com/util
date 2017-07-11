@@ -116,7 +116,7 @@ class PortalPricing
     public static function getPrice(stdClass $portal, $reCalculate = false): array
     {
         $currency = static::getCurrency($portal);
-        $price = self::getPrice($portal);
+        $price = self::getPortalPrice($portal);
         if ($price && !$reCalculate) {
             return [$price, $currency];
         }
