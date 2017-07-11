@@ -55,10 +55,13 @@ class ContractHelper
         return $jsonSerialize ? $contract->jsonSerialize() : $contract;
     }
 
-    public static function loadActiveContract(Connection $db, int $instanceId)
+    /**
+     * This functionality gets the first contract created by onboard wizard
+     */
+    public static function loadOnboardContract(Connection $db, int $instanceId)
     {
         $row = $db
-            ->executeQuery('SELECT * FROM contract WHERE instance_id = ? AND status = ? ORDER BY id DESC', [$instanceId, Contract::STATUS_ACTIVE])
+            ->executeQuery('SELECT * FROM contract WHERE instance_id = ? AND status = ? ORDER BY id ASC', [$instanceId, Contract::STATUS_ACTIVE])
             ->fetch(\PDO::FETCH_OBJ);
 
         if (!$row) {
