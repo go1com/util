@@ -69,7 +69,7 @@ abstract class UtilTestCase extends TestCase
             ->setMethods(['error'])
             ->getMockForAbstractClass();
 
-        return (new Container)
+        return (new Container(['accounts_name' => 'accounts.test']))
             ->register(new UtilServiceProvider, [
                     'logger'       => $logger,
                     'client'       => new Client,
