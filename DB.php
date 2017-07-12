@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DB
 {
-    const OBJ = PDO::FETCH_OBJ;
-    const INTEGER = PDO::PARAM_INT;
+    const OBJ      = PDO::FETCH_OBJ;
+    const INTEGER  = PDO::PARAM_INT;
     const INTEGERS = Connection::PARAM_INT_ARRAY;
-    const STRING = PDO::PARAM_STR;
-    const STRINGS = Connection::PARAM_STR_ARRAY;
+    const STRING   = PDO::PARAM_STR;
+    const STRINGS  = Connection::PARAM_STR_ARRAY;
 
     public static function connectionOptions(string $name): array
     {
@@ -131,5 +131,23 @@ class DB
         }
 
         return $data;
+    }
+
+    public static function merge(Connection $db, string $table, array $keys, array $fields): int
+    {
+        $find = $db
+            ->createQueryBuilder()
+            ->select('1')
+            ->from($table);
+
+        foreach ($keys as $k => $v) {
+            $find
+                ->andWhere("$k = :$k")
+                ->setParameter(":$k", $v);
+        }
+
+        return $find->execute()->fetchColumn()
+            ? $db->insert($table, $fields)
+            : $db->update($table, $fields, $keys);
     }
 }
