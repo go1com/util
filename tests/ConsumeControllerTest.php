@@ -24,7 +24,7 @@ class ConsumeControllerTest extends UtilTestCase
     {
         parent::setUp();
         $this->c = $this->getContainer();
-        unset($GLOBALS['hasConsumer']);
+        unset($GLOBALS['consumeCount']);
     }
 
     private function consumerClass(bool $isAware = true, Throwable $exception = null)
@@ -48,8 +48,8 @@ class ConsumeControllerTest extends UtilTestCase
             public function consume(string $routingKey, stdClass $body): bool
             {
                 if (!$this->exception) {
-                    global $hasConsumer;
-                    $hasConsumer[$routingKey] = isset($hasConsumer[$routingKey]) ? ++$hasConsumer[$routingKey] : 1;
+                    global $consumeCount;
+                    $consumeCount[$routingKey] = isset($consumeCount[$routingKey]) ? ++$consumeCount[$routingKey] : 1;
 
                     return true;
                 }
@@ -69,8 +69,8 @@ class ConsumeControllerTest extends UtilTestCase
         $res = $consume->post($req);
 
         $this->assertEquals(403, $res->getStatusCode());
-        global $hasConsumer;
-        $this->assertNull($hasConsumer);
+        global $consumeCount;
+        $this->assertNull($consumeCount);
     }
 
     public function test204()
@@ -88,10 +88,10 @@ class ConsumeControllerTest extends UtilTestCase
         $res = $consume->post($req);
 
         $this->assertEquals(204, $res->getStatusCode());
-        global $hasConsumer;
-        $this->assertCount(1, $hasConsumer);
-        $this->assertEquals(2, $hasConsumer[self::ROUTING_KEY]);
-        $this->assertArrayHasKey(self::ROUTING_KEY, $hasConsumer);
+        global $consumeCount;
+        $this->assertCount(1, $consumeCount);
+        $this->assertArrayHasKey(self::ROUTING_KEY, $consumeCount);
+        $this->assertEquals(2, $consumeCount[self::ROUTING_KEY]);
     }
 
     public function test500()
@@ -111,15 +111,15 @@ class ConsumeControllerTest extends UtilTestCase
         $res = $consume->post($req);
 
         $this->assertEquals(500, $res->getStatusCode());
-        global $hasConsumer;
-        $this->assertCount(1, $hasConsumer);
-        $this->assertEquals(2, $hasConsumer[self::ROUTING_KEY]);
-        $this->assertArrayHasKey(self::ROUTING_KEY, $hasConsumer);
+        global $consumeCount;
+        $this->assertCount(1, $consumeCount);
+        $this->assertArrayHasKey(self::ROUTING_KEY, $consumeCount);
+        $this->assertEquals(2, $consumeCount[self::ROUTING_KEY]);
     }
 
     public function test204Empty()
     {
-        $fooConsumer = $this->consumerClass();
+        $fooConsumer = $this->consumerClass(false);
         $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
@@ -131,9 +131,7 @@ class ConsumeControllerTest extends UtilTestCase
         $res = $consume->post($req);
 
         $this->assertEquals(204, $res->getStatusCode());
-        global $hasConsumer;
-        $this->assertCount(1, $hasConsumer);
-        $this->assertEquals(1, $hasConsumer[self::ROUTING_KEY]);
-        $this->assertArrayHasKey(self::ROUTING_KEY, $hasConsumer);
+        global $consumeCount;
+        $this->assertNull($consumeCount);
     }
 }
