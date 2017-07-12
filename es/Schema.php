@@ -508,6 +508,10 @@ class Schema
                     'created'        => ['type' => self::T_DATE],
                 ],
             ],
+            'items'          => [
+                'type'       => self::T_NESTED,
+                'properties' => self::LO_MAPPING['properties'],
+            ],
         ],
     ];
 
