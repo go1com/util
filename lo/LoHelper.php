@@ -212,6 +212,7 @@ class LoHelper
         ]);
         $cnf->set('HTML.SafeIframe', true);
         $cnf->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/)%');
+        $cnf->set('Attr.AllowedFrameTargets', array('_blank', '_self', '_parent', '_top'));
 
         $def = $cnf->getHTMLDefinition(true);
         $def->addAttribute('iframe', 'allowfullscreen', 'Bool');

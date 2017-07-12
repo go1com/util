@@ -48,13 +48,62 @@ class GroupHelperTest extends UtilTestCase
 
     public function testCanAccess()
     {
-        $groupId = $this->createGroup($this->db);
-        $this->createGroupItem($this->db, ['group_id' => $groupId, 'entity_type' => 'user', 'entity_id' => $user1Id = 25]);
-        $this->assertTrue(GroupHelper::canAccess($this->db, $user1Id, $groupId));
+        $c = $this->getContainer();
+        $portalId = $this->createInstance($this->db, [
+            'title' => $portalName = 'foo.com',
+        ]);
+        $fooUserId = $this->createUser($this->db, [
+            'id'       => 31,
+            'instance' => $c['accounts_name'],
+        ]);
+        $barUserId = $this->createUser($this->db, [
+            'id'       => 33,
+            'mail'     => $barMail = 'bar@foo.com',
+            'instance' => $c['accounts_name'],
+        ]);
+        $barAccountId = $this->createUser($this->db, [
+            'id'       => 34,
+            'mail'     => $barMail,
+            'instance' => $portalName,
+        ]);
+        $groupId = $this->createGroup($this->db, [
+            'user_id'     => $fooUserId,
+            'instance_id' => $portalId,
+        ]);
+        $this->createGroupItem($this->db, ['group_id' => $groupId, 'entity_type' => 'user', 'entity_id' => $barAccountId]);
 
-        $this->createGroupItem($this->db, ['group_id' => $groupId, 'entity_type' => 'user', 'entity_id' => $user2Id = 52, 'status' => GroupItemStatus::PENDING]);
-        $this->assertFalse(GroupHelper::canAccess($this->db, $user2Id, $groupId));
-        $this->assertFalse(GroupHelper::canAccess($this->db, $userId = 404, $groupId));
+        $this->assertTrue(GroupHelper::canAccess($this->db, $this->db, $fooUserId, $groupId));
+        $this->assertTrue(GroupHelper::canAccess($this->db, $this->db, $barUserId, $groupId));
+    }
+
+    public function testCantAccess()
+    {
+        $c = $this->getContainer();
+        $portalId = $this->createInstance($this->db, [
+            'title' => $portalName = 'foo.com',
+        ]);
+        $fooUserId = $this->createUser($this->db, [
+            'id'       => 33,
+            'mail'     => $fooMail = 'foo@foo.com',
+            'instance' => $c['accounts_name'],
+        ]);
+        $fooAccountId = $this->createUser($this->db, [
+            'id'       => 34,
+            'mail'     => $fooMail,
+            'instance' => $portalName,
+        ]);
+        $groupId = $this->createGroup($this->db, [
+            'instance_id' => $portalId,
+        ]);
+        $this->createGroupItem($this->db, [
+            'group_id'    => $groupId,
+            'entity_type' => 'user',
+            'entity_id'   => $fooAccountId,
+            'status'      => GroupItemStatus::PENDING,
+        ]);
+
+        $this->assertFalse(GroupHelper::canAccess($this->db, $this->db, $fooUserId, $groupId));
+        $this->assertFalse(GroupHelper::canAccess($this->db, $this->db, $barUserId = 404, $groupId));
     }
 
     public function testGroupAccess()
