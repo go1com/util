@@ -99,11 +99,27 @@ class CouponRepository
         return $rows ?? [];
     }
 
-    public function load($idOrCode)
+    public function load($id)
+    {
+        $coupon = "SELECT * FROM payment_coupon WHERE id = ?";
+        $coupon = $this->db->executeQuery($coupon, [$id])->fetch(DB::OBJ);
+        $coupon = $coupon ? Coupon::create($coupon) : false;
+
+        if ($coupon) {
+            $q = $this->db->executeQuery('SELECT entity_type, entity_id FROM payment_coupon_item WHERE coupon_id = ?', [$coupon->id]);
+            while ($item = $q->fetch(DB::OBJ)) {
+                $coupon->add($item->entity_type, $item->entity_id);
+            }
+        }
+
+        return $coupon;
+    }
+
+    public function get($instanceId, $idOrCode)
     {
         $column = is_numeric($idOrCode) ? 'id' : 'code';
-        $coupon = "SELECT * FROM payment_coupon WHERE {$column} = ?";
-        $coupon = $this->db->executeQuery($coupon, [$idOrCode])->fetch(DB::OBJ);
+        $coupon = "SELECT * FROM payment_coupon WHERE instance_id = ? AND {$column} = ?";
+        $coupon = $this->db->executeQuery($coupon, [$instanceId, $idOrCode])->fetch(DB::OBJ);
         $coupon = $coupon ? Coupon::create($coupon) : false;
 
         if ($coupon) {
@@ -154,7 +170,6 @@ class CouponRepository
                 unset($diff['entities']);
                 $this->db->update('payment_coupon', $diff, ['id' => $coupon->id]);
             }
-
 
             $this->db->executeQuery('DELETE FROM payment_coupon_item WHERE coupon_id = ?', [$coupon->id]);
 

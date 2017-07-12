@@ -18,4 +18,15 @@ class DateTimeTest extends TestCase
         $this->assertTrue(DateTime::create('10 September 2000') instanceof DefaultDateTime);
         $this->assertTrue(DateTime::create('2016-12-30T10:01:33+0700') instanceof DefaultDateTime);
     }
+
+    public function testCompare()
+    {
+        $this->assertEquals(DateTime::DATETIME_GREATER, DateTime::compare('now', '-1 week'));
+        $this->assertEquals(DateTime::DATETIME_GREATER, DateTime::compare(time(), '1970-1-1'));
+        $this->assertEquals(DateTime::DATETIME_GREATER, DateTime::compare(DateTime::formatDate('2017-7-12T09:01:33+0700'), DateTime::formatDate('2000-12-30T10:01:33+0700')));
+
+        $this->assertEquals(DateTime::DATETIME_EQUAL, DateTime::compare('now', 'now'));
+
+        $this->assertEquals(DateTime::DATETIME_LESS, DateTime::compare('now', '+1 week'));
+    }
 }
