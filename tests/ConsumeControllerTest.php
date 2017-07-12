@@ -18,18 +18,16 @@ class ConsumeControllerTest extends UtilTestCase
     use UserMockTrait;
 
     private $c;
-    private $consume;
-    private $fooConsumer;
-    private $barConsumer;
-    private $excConsumer;
-    private $errConsumer;
 
     public function setUp()
     {
         parent::setUp();
         $this->c = $this->getContainer();
+    }
 
-        $consumerObj = (new class($isAware = true, $exception = false) implements ConsumerInterface
+    public function consumerClass($isAware = true, $exception = false)
+    {
+        return new class($isAware, $exception) implements ConsumerInterface
         {
             private $isAware;
             private $exception;
@@ -42,97 +40,92 @@ class ConsumeControllerTest extends UtilTestCase
 
             public function aware(string $event): bool
             {
-                return true;
+                return $this->isAware ? true : false;
             }
 
             public function consume(string $routingKey, stdClass $body): bool
             {
                 if (!$this->exception) {
+                    global $foo;
+                    $foo[$routingKey] = isset($foo[$routingKey]) ? $foo[$routingKey]++ : 1;
+
                     return true;
                 }
 
                 throw $this->exception;
             }
-        });
-
-        $this->fooConsumer = new $consumerObj(true, false);
-        $this->barConsumer = new $consumerObj(true, false);
-        $this->excConsumer = new $consumerObj(true, (new Exception('foo')));
-        $this->errConsumer = new $consumerObj(true, (new Error('foo')));
+        };
     }
 
     public function test403()
     {
-        $this->consume = new ConsumeController([$this->fooConsumer], $this->c['logger'], $this->c['access_checker']);
+        $fooConsumer = $this->consumerClass(false);
+        $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume', 'POST');
         $req->request->replace(['routingKey' => Queue::RO_CREATE, 'body' => ['foo' => 'bar']]);
-        $res = $this->consume->post($req);
-
+        $res = $consume->post($req);
         $this->assertEquals(403, $res->getStatusCode());
     }
 
-    public function dataTest()
+    public function test204()
     {
-        return [
-            [Queue::RO_CREATE, ['foo' => 'bar']],
-            [Queue::ENROLMENT_CREATE, ['foo' => 'bar']],
-            [Queue::ENROLMENT_UPDATE, ['foo' => 'bar']],
-            [Queue::ENROLMENT_DELETE, ['foo' => 'bar']],
-        ];
-    }
-
-    /**
-     * @dataProvider dataTest
-     */
-    public function test204($routingKey, $expectedBody)
-    {
-        $consume = new ConsumeController([$this->fooConsumer, $this->barConsumer], $this->c['logger'], $this->c['access_checker']);
+        $fooConsumer = $this->consumerClass();
+        $barConsumer = $this->consumerClass();
+        $consume = new ConsumeController([$fooConsumer, $barConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
-            'routingKey' => $routingKey,
-            'body'       => $expectedBody,
+            'routingKey' => Queue::RO_CREATE,
+            'body'       => ['foo' => 'bar'],
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $res = $consume->post($req);
+        global $foo;
 
         $this->assertEquals(204, $res->getStatusCode());
+        $this->assertCount(1, $foo);
+        $this->assertArrayHasKey(Queue::RO_CREATE, $foo);
     }
 
-    /**
-     * @dataProvider dataTest
-     */
-    public function testException($routingKey, $expectedBody)
+    public function testException()
     {
-        $consume = new ConsumeController([$this->fooConsumer, $this->barConsumer, $this->excConsumer, $this->errConsumer], $this->c['logger'], $this->c['access_checker']);
+        $fooConsumer = $this->consumerClass();
+        $barConsumer = $this->consumerClass();
+        $excConsumer = $this->consumerClass(true, (new Exception('foo')));
+        $errConsumer = $this->consumerClass(true, (new Error('foo')));
+        $consume = new ConsumeController([$fooConsumer, $barConsumer, $excConsumer, $errConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
-            'routingKey' => $routingKey,
-            'body'       => $expectedBody,
+            'routingKey' => Queue::RO_CREATE,
+            'body'       => ['foo' => 'bar'],
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $res = $consume->post($req);
+        global $foo;
 
         $this->assertEquals(500, $res->getStatusCode());
+        $this->assertCount(1, $foo);
+        $this->assertArrayHasKey(Queue::RO_CREATE, $foo);
     }
 
-    /**
-     * @dataProvider dataTest
-     */
-    public function testExceptions($routingKey, $expectedBody)
+    public function testDontConsume()
     {
-        $consume = new ConsumeController([$this->excConsumer, $this->errConsumer, $this->errConsumer], $this->c['logger'], $this->c['access_checker']);
+        $fooConsumer = $this->consumerClass(false);
+        $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
-            'routingKey' => $routingKey,
-            'body'       => $expectedBody,
+            'routingKey' => Queue::RO_CREATE,
+            'body'       => ['foo' => 'bar'],
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $res = $consume->post($req);
+        global $foo;
 
-        $this->assertEquals(500, $res->getStatusCode());
+        $this->assertEquals(204, $res->getStatusCode());
+        $this->assertCount(1, $foo);
+        $this->assertArrayHasKey(Queue::RO_CREATE, $foo);
     }
 }
