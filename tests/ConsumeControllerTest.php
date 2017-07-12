@@ -4,7 +4,6 @@ namespace go1\util\tests;
 
 use go1\util\consume\ConsumeController;
 use go1\util\contract\ConsumerInterface;
-use go1\util\Queue;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Text;
 use go1\util\user\UserHelper;
@@ -12,20 +11,23 @@ use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use stdClass;
 use Error;
+use Throwable;
 
 class ConsumeControllerTest extends UtilTestCase
 {
     use UserMockTrait;
 
+    const ROUTING_KEY = 'routingKey';
     private $c;
 
     public function setUp()
     {
         parent::setUp();
         $this->c = $this->getContainer();
+        unset($GLOBALS['hasConsumer']);
     }
 
-    public function consumerClass($isAware = true, $exception = false)
+    private function consumerClass(bool $isAware = true, Throwable $exception = null)
     {
         return new class($isAware, $exception) implements ConsumerInterface
         {
@@ -40,14 +42,14 @@ class ConsumeControllerTest extends UtilTestCase
 
             public function aware(string $event): bool
             {
-                return $this->isAware ? true : false;
+                return $this->isAware;
             }
 
             public function consume(string $routingKey, stdClass $body): bool
             {
                 if (!$this->exception) {
-                    global $foo;
-                    $foo[$routingKey] = isset($foo[$routingKey]) ? $foo[$routingKey]++ : 1;
+                    global $hasConsumer;
+                    $hasConsumer[$routingKey] = isset($hasConsumer[$routingKey]) ? ++$hasConsumer[$routingKey] : 1;
 
                     return true;
                 }
@@ -59,13 +61,16 @@ class ConsumeControllerTest extends UtilTestCase
 
     public function test403()
     {
-        $fooConsumer = $this->consumerClass(false);
+        $fooConsumer = $this->consumerClass();
         $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume', 'POST');
-        $req->request->replace(['routingKey' => Queue::RO_CREATE, 'body' => ['foo' => 'bar']]);
+        $req->request->replace(['routingKey' => self::ROUTING_KEY, 'body' => ['foo' => 'bar']]);
         $res = $consume->post($req);
+
         $this->assertEquals(403, $res->getStatusCode());
+        global $hasConsumer;
+        $this->assertNull($hasConsumer);
     }
 
     public function test204()
@@ -76,19 +81,20 @@ class ConsumeControllerTest extends UtilTestCase
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
-            'routingKey' => Queue::RO_CREATE,
+            'routingKey' => self::ROUTING_KEY,
             'body'       => ['foo' => 'bar'],
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $res = $consume->post($req);
-        global $foo;
 
         $this->assertEquals(204, $res->getStatusCode());
-        $this->assertCount(1, $foo);
-        $this->assertArrayHasKey(Queue::RO_CREATE, $foo);
+        global $hasConsumer;
+        $this->assertCount(1, $hasConsumer);
+        $this->assertEquals(2, $hasConsumer[self::ROUTING_KEY]);
+        $this->assertArrayHasKey(self::ROUTING_KEY, $hasConsumer);
     }
 
-    public function testException()
+    public function test500()
     {
         $fooConsumer = $this->consumerClass();
         $barConsumer = $this->consumerClass();
@@ -98,34 +104,36 @@ class ConsumeControllerTest extends UtilTestCase
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
-            'routingKey' => Queue::RO_CREATE,
+            'routingKey' => self::ROUTING_KEY,
             'body'       => ['foo' => 'bar'],
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $res = $consume->post($req);
-        global $foo;
 
         $this->assertEquals(500, $res->getStatusCode());
-        $this->assertCount(1, $foo);
-        $this->assertArrayHasKey(Queue::RO_CREATE, $foo);
+        global $hasConsumer;
+        $this->assertCount(1, $hasConsumer);
+        $this->assertEquals(2, $hasConsumer[self::ROUTING_KEY]);
+        $this->assertArrayHasKey(self::ROUTING_KEY, $hasConsumer);
     }
 
-    public function testDontConsume()
+    public function test204Empty()
     {
-        $fooConsumer = $this->consumerClass(false);
+        $fooConsumer = $this->consumerClass();
         $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
-            'routingKey' => Queue::RO_CREATE,
+            'routingKey' => self::ROUTING_KEY,
             'body'       => ['foo' => 'bar'],
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $res = $consume->post($req);
-        global $foo;
 
         $this->assertEquals(204, $res->getStatusCode());
-        $this->assertCount(1, $foo);
-        $this->assertArrayHasKey(Queue::RO_CREATE, $foo);
+        global $hasConsumer;
+        $this->assertCount(1, $hasConsumer);
+        $this->assertEquals(1, $hasConsumer[self::ROUTING_KEY]);
+        $this->assertArrayHasKey(self::ROUTING_KEY, $hasConsumer);
     }
 }
