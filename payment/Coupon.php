@@ -142,7 +142,7 @@ class Coupon implements JsonSerializable
         }
 
         if ($coupon->expiration != $this->expiration) {
-            $diff['expiration'] = is_scalar($coupon->expiration) ? $coupon->expiration : $coupon->expiration->getTimestamp();
+            $diff['expiration'] = is_scalar($coupon->expiration) ? $coupon->expiration : $coupon->expiration->format(DateTime::ISO8601);
         }
 
         if ($coupon->limitation != $this->limitation) {
