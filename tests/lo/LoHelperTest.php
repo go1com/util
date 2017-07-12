@@ -94,7 +94,7 @@ class LoHelperTest extends UtilTestCase
         $data = [
             'Plain text'                                            => 'Plain text',
             'foo <span style="color:#0000aa;">data</span>'          => 'foo <span style="color:#0000aa;">data</span>',
-            '<a href="test.html" target="_blank">Invalid link</a>'  => '<a href="test.html" target="_blank" rel="noreferrer">Invalid link</a>'
+            '<a href="test.html" target="_blank">Invalid link</a>'  => '<a href="test.html" target="_blank" rel="noreferrer noopener">Invalid link</a>'
         ];
         foreach ($data as $input => $expect) {
             $result = $html->purify(trim($input), LoHelper::descriptionPurifierConfig());
