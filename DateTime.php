@@ -12,6 +12,9 @@ use InvalidArgumentException;
 class DateTime
 {
     const DEFAULT_HUMAN_FORMAT = 'Y-m-d H:i:s';
+    const DATETIME_GREATER     = 1;
+    const DATETIME_EQUAL       = 0;
+    const DATETIME_LESS        = -1;
 
     public static function create($time, $timezone = 'UTC'): DefaultDateTime
     {
@@ -39,5 +42,30 @@ class DateTime
      */
     public static function formatDate($time, $format = DATE_ISO8601, $timezone = 'UTC') {
         return static::create($time, $timezone)->format($format);
+    }
+
+    /**
+     * Return comparision result of 2 datetime object
+     * @param $date1
+     * @param $date2
+     * @return integer
+     * - 1  if Greater than
+     * - 0  if Equal
+     * - -1 if Less than
+     */
+    public static function compare($date1, $date2): int
+    {
+        $d1 = static::create($date1);
+        $d2 = static::create($date2);
+
+        if ($d1 > $d2) {
+            return static::DATETIME_GREATER;
+        }
+
+        if ($d1 < $d2) {
+            return static::DATETIME_LESS;
+        }
+
+        return static::DATETIME_EQUAL;
     }
 }
