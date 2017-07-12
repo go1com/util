@@ -155,7 +155,6 @@ class CouponRepository
                 $this->db->update('payment_coupon', $diff, ['id' => $coupon->id]);
             }
 
-
             $this->db->executeQuery('DELETE FROM payment_coupon_item WHERE coupon_id = ?', [$coupon->id]);
 
             foreach ($coupon->entities as $entityType => $entityIds) {
