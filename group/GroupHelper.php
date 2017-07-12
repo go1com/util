@@ -99,9 +99,29 @@ class GroupHelper
         return $db->fetchColumn($sql, [$entityType, $entityId, $groupId, $status]) ? true : false;
     }
 
-    public static function canAccess(Connection $db, int $userId, int $groupID): bool
+    public static function canAccess(Connection $dbGo1, Connection $dbSocial, int $userId, int $groupId): bool
     {
-        return static::isItemOf($db, GroupItemTypes::USER, $userId, $groupID);
+        if (!$group = static::load($dbSocial, $groupId)) {
+            return false;
+        }
+
+        if ($userId == $group->user_id) {
+            return true;
+        }
+
+        if (!$portalName = PortalHelper::nameFromId($dbGo1, $group->instance_id)) {
+            return false;
+        }
+
+        if (!$user = UserHelper::load($dbGo1, $userId)) {
+            return false;
+        }
+
+        if (!$account = UserHelper::loadByEmail($dbGo1, $portalName, $user->mail)) {
+            return false;
+        }
+
+        return static::isItemOf($dbSocial, GroupItemTypes::USER, $account->id, $groupId);
     }
 
     public static function groupAccess(int $groupUserId, int $userId, AccessChecker $accessChecker = null, Request $req = null, string $instance = ''): bool
