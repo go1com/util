@@ -18,24 +18,24 @@ class Contract implements JsonSerializable
     public static $statuses = [-1, 0, 1];
 
     private $id;
-    private $instance_id;
-    private $user_id;
+    private $instanceId;
+    private $userId;
     private $name;
     private $status;
-    private $start_date;
-    private $signed_date;
-    private $initial_term;
-    private $number_users;
+    private $startDate;
+    private $signedDate;
+    private $initialTerm;
+    private $numberUsers;
     private $price;
     private $tax;
-    private $tax_included;
+    private $taxIncluded;
     private $currency;
     private $frequency;
-    private $frequency_other;
-    private $custom_term;
-    private $payment_method;
-    private $renewal_date;
-    private $cancel_date;
+    private $frequencyOther;
+    private $customTerm;
+    private $paymentMethod;
+    private $renewalDate;
+    private $cancelDate;
     private $data;
     private $created;
     private $updated;
@@ -66,24 +66,24 @@ class Contract implements JsonSerializable
     )
     {
         $this->id = $id;
-        $this->instance_id = $instanceId;
-        $this->user_id = $userId;
+        $this->instanceId = $instanceId;
+        $this->userId = $userId;
         $this->name = $name;
         $this->status = $status;
-        $this->start_date = $startDate;
-        $this->signed_date = $signedDate;
-        $this->initial_term = $initialTerm;
-        $this->number_users = $numberOfUsers;
+        $this->startDate = $startDate;
+        $this->signedDate = $signedDate;
+        $this->initialTerm = $initialTerm;
+        $this->numberUsers = $numberOfUsers;
         $this->price = $price;
         $this->tax = $tax;
-        $this->tax_included = $taxIncluded;
+        $this->taxIncluded = $taxIncluded;
         $this->currency = $currency;
         $this->frequency = $frequency;
-        $this->frequency_other = $frequency_other;
-        $this->custom_term = $customTerms;
-        $this->payment_method = $paymentMethod;
-        $this->renewal_date = $renewalDate;
-        $this->cancel_date = $cancelDate;
+        $this->frequencyOther = $frequency_other;
+        $this->customTerm = $customTerms;
+        $this->paymentMethod = $paymentMethod;
+        $this->renewalDate = $renewalDate;
+        $this->cancelDate = $cancelDate;
         $this->data = $data;
         $this->created = $created;
         $this->updated = $updated;
@@ -96,12 +96,12 @@ class Contract implements JsonSerializable
 
     public function getInstanceId(): int
     {
-        return $this->instance_id;
+        return $this->instanceId;
     }
 
     public function getUserId(): int
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     public function getName(): string
@@ -143,22 +143,22 @@ class Contract implements JsonSerializable
 
     public function getStartDate()
     {
-        return $this->start_date;
+        return $this->startDate;
     }
 
     public function getSignedDate()
     {
-        return $this->signed_date;
+        return $this->signedDate;
     }
 
     public function getInitialTerm()
     {
-        return $this->initial_term;
+        return $this->initialTerm;
     }
 
     public function getNumberUsers()
     {
-        return $this->number_users;
+        return $this->numberUsers;
     }
 
     public function getPrice()
@@ -173,7 +173,7 @@ class Contract implements JsonSerializable
 
     public function getTaxIncluded()
     {
-        return $this->tax_included;
+        return $this->taxIncluded;
     }
 
     public function getCurrency()
@@ -188,27 +188,27 @@ class Contract implements JsonSerializable
 
     public function getFrequencyOther(): string
     {
-        return $this->frequency_other;
+        return $this->frequencyOther;
     }
 
     public function getCustomTerm(): string
     {
-        return $this->custom_term;
+        return $this->customTerm;
     }
 
     public function getPaymentMethod()
     {
-        return $this->payment_method;
+        return $this->paymentMethod;
     }
 
     public function getRenewalDate()
     {
-        return $this->renewal_date;
+        return $this->renewalDate;
     }
 
     public function getCancelDate()
     {
-        return $this->cancel_date;
+        return $this->cancelDate;
     }
 
     public function getData($stdClass = false)
@@ -304,20 +304,20 @@ class Contract implements JsonSerializable
         if ($origin->getStatus() != $this->status) {
             $values['status'] = $this->status;
         }
-        if ($origin->getUserId() != $this->user_id) {
-            $values['user_id'] = $this->user_id;
+        if ($origin->getUserId() != $this->userId) {
+            $values['user_id'] = $this->userId;
         }
-        if ($origin->getStartDate() != $this->start_date) {
-            $values['start_date'] = $this->start_date;
+        if ($origin->getStartDate() != $this->startDate) {
+            $values['start_date'] = $this->startDate;
         }
-        if ($origin->getSignedDate() != $this->signed_date) {
-            $values['signed_date'] = $this->signed_date;
+        if ($origin->getSignedDate() != $this->signedDate) {
+            $values['signed_date'] = $this->signedDate;
         }
-        if ($origin->getInitialTerm() != $this->initial_term) {
-            $values['initial_term'] = $this->initial_term;
+        if ($origin->getInitialTerm() != $this->initialTerm) {
+            $values['initial_term'] = $this->initialTerm;
         }
-        if ($origin->getNumberUsers() != $this->number_users) {
-            $values['number_users'] = $this->number_users;
+        if ($origin->getNumberUsers() != $this->numberUsers) {
+            $values['number_users'] = $this->numberUsers;
         }
         if ($origin->getPrice() != $this->price) {
             $values['price'] = $this->price;
@@ -325,8 +325,8 @@ class Contract implements JsonSerializable
         if ($origin->getTax() != $this->tax) {
             $values['tax'] = $this->tax;
         }
-        if ($origin->getTaxIncluded() != $this->tax_included) {
-            $values['tax_included'] = $this->tax_included;
+        if ($origin->getTaxIncluded() != $this->taxIncluded) {
+            $values['tax_included'] = $this->taxIncluded;
         }
         if ($origin->getCurrency() != $this->currency) {
             $values['currency'] = $this->currency;
@@ -334,20 +334,20 @@ class Contract implements JsonSerializable
         if ($origin->getFrequency() != $this->frequency) {
             $values['frequency'] = $this->frequency;
         }
-        if ($origin->getFrequencyOther() != $this->frequency_other) {
-            $values['frequency_other'] = $this->frequency_other;
+        if ($origin->getFrequencyOther() != $this->frequencyOther) {
+            $values['frequency_other'] = $this->frequencyOther;
         }
-        if ($origin->getCustomTerm() != $this->custom_term) {
-            $values['custom_term'] = $this->custom_term;
+        if ($origin->getCustomTerm() != $this->customTerm) {
+            $values['custom_term'] = $this->customTerm;
         }
-        if ($origin->getPaymentMethod() != $this->payment_method) {
-            $values['payment_method'] = $this->payment_method;
+        if ($origin->getPaymentMethod() != $this->paymentMethod) {
+            $values['payment_method'] = $this->paymentMethod;
         }
-        if ($origin->getRenewalDate() != $this->renewal_date) {
-            $values['renewal_date'] = $this->renewal_date;
+        if ($origin->getRenewalDate() != $this->renewalDate) {
+            $values['renewal_date'] = $this->renewalDate;
         }
-        if ($origin->getCancelDate() != $this->cancel_date) {
-            $values['cancel_date'] = $this->cancel_date;
+        if ($origin->getCancelDate() != $this->cancelDate) {
+            $values['cancel_date'] = $this->cancelDate;
         }
 
         if (empty($values)) {
@@ -363,24 +363,24 @@ class Contract implements JsonSerializable
     {
         return [
             'id'                => $this->id,
-            'instance_id'       => $this->instance_id,
-            'user_id'           => $this->user_id,
+            'instance_id'       => $this->instanceId,
+            'user_id'           => $this->userId,
             'name'              => $this->name,
             'status'            => $this->getStatus(true),
-            'start_date'        => $this->start_date,
-            'signed_date'       => $this->signed_date,
-            'initial_term'      => $this->initial_term,
-            'number_users'      => $this->number_users,
+            'start_date'        => $this->startDate,
+            'signed_date'       => $this->signedDate,
+            'initial_term'      => $this->initialTerm,
+            'number_users'      => $this->numberUsers,
             'price'             => $this->price,
             'tax'               => $this->tax,
-            'tax_included'      => $this->tax_included,
+            'tax_included'      => $this->taxIncluded,
             'currency'          => $this->currency,
             'frequency'         => $this->frequency,
-            'frequency_other'   => $this->frequency_other,
-            'custom_term'       => $this->custom_term,
-            'payment_method'    => $this->payment_method,
-            'renewal_date'      => $this->renewal_date,
-            'cancel_date'       => $this->cancel_date,
+            'frequency_other'   => $this->frequencyOther,
+            'custom_term'       => $this->customTerm,
+            'payment_method'    => $this->paymentMethod,
+            'renewal_date'      => $this->renewalDate,
+            'cancel_date'       => $this->cancelDate,
             'data'              => $this->getData(true),
             'created'           => $this->created,
             'updated'           => $this->updated,
