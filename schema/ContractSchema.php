@@ -15,6 +15,7 @@
                 $contract->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
                 $contract->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
                 $contract->addColumn('status', Type::INTEGER);
+                $contract->addColumn('name', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('start_date', Type::DATETIME, ['notnull' => false]);
                 $contract->addColumn('signed_date', Type::DATETIME, ['notnull' => false]);
                 $contract->addColumn('initial_term', Type::STRING, ['notnull' => false]);
@@ -23,6 +24,8 @@
                 $contract->addColumn('tax', Type::FLOAT, ['notnull' => false]);
                 $contract->addColumn('tax_included', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('currency', Type::STRING, ['notnull' => false]);
+                $contract->addColumn('frequency', Type::STRING, ['notnull' => false]);
+                $contract->addColumn('frequency_other', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('payment_method', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('renewal_date', Type::DATETIME, ['notnull' => false]);
                 $contract->addColumn('cancel_date', Type::DATETIME, ['notnull' => false]);
