@@ -32,6 +32,7 @@ class Contract implements JsonSerializable
     private $currency;
     private $frequency;
     private $frequency_other;
+    private $custom_term;
     private $payment_method;
     private $renewal_date;
     private $cancel_date;
@@ -55,6 +56,7 @@ class Contract implements JsonSerializable
         string $currency = Currency::DEFAULT,
         string $frequency = null,
         string $frequency_other = null,
+        string $customTerms = null,
         string $paymentMethod = null,
         string $renewalDate = null,
         string $cancelDate = null,
@@ -78,6 +80,7 @@ class Contract implements JsonSerializable
         $this->currency = $currency;
         $this->frequency = $frequency;
         $this->frequency_other = $frequency_other;
+        $this->custom_term = $customTerms;
         $this->payment_method = $paymentMethod;
         $this->renewal_date = $renewalDate;
         $this->cancel_date = $cancelDate;
@@ -188,6 +191,11 @@ class Contract implements JsonSerializable
         return $this->frequency_other;
     }
 
+    public function getCustomTerm(): string
+    {
+        return $this->custom_term;
+    }
+
     public function getPaymentMethod()
     {
         return $this->payment_method;
@@ -235,6 +243,7 @@ class Contract implements JsonSerializable
     public static function format(stdClass &$row)
     {
         $row->status = (int) $row->status;
+        $row->name = $row->name ?? '';
 
         $row->start_date   = !empty($row->start_date) ? DateTime::create($row->start_date ? $row->start_date : time())->format(DATE_ISO8601) : null;
         $row->signed_date  = !empty($row->signed_date)? DateTime::create($row->signed_date)->format(DATE_ISO8601) : null;
@@ -245,6 +254,9 @@ class Contract implements JsonSerializable
         $row->tax = number_format($row->tax, 2, '.', '');
         $row->tax_included = $row->tax_included ?? '';
         $row->currency = !empty($row->currency) ? strtoupper($row->currency) : null;
+        $row->frequency = $row->frequency ?? '';
+        $row->frequency_other = $row->frequency_other ?? '';
+        $row->custom_term = $row->custom_term ?? '';
         $row->payment_method = $row->payment_method ?? '';
 
         $row->data = !empty($row->data) ? (is_scalar($row->data) ? json_decode($row->data) : $row->data) : null;
@@ -274,6 +286,7 @@ class Contract implements JsonSerializable
             $row->currency,
             $row->frequency,
             $row->frequency_other,
+            $row->custom_term,
             $row->payment_method,
             $row->renewal_date,
             $row->cancel_date,
@@ -324,6 +337,9 @@ class Contract implements JsonSerializable
         if ($origin->getFrequencyOther() != $this->frequency_other) {
             $values['frequency_other'] = $this->frequency_other;
         }
+        if ($origin->getCustomTerm() != $this->custom_term) {
+            $values['custom_term'] = $this->custom_term;
+        }
         if ($origin->getPaymentMethod() != $this->payment_method) {
             $values['payment_method'] = $this->payment_method;
         }
@@ -361,6 +377,7 @@ class Contract implements JsonSerializable
             'currency'          => $this->currency,
             'frequency'         => $this->frequency,
             'frequency_other'   => $this->frequency_other,
+            'custom_term'       => $this->custom_term,
             'payment_method'    => $this->payment_method,
             'renewal_date'      => $this->renewal_date,
             'cancel_date'       => $this->cancel_date,

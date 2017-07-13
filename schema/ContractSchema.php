@@ -26,6 +26,7 @@
                 $contract->addColumn('currency', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('frequency', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('frequency_other', Type::STRING, ['notnull' => false]);
+                $contract->addColumn('custom_term', Type::TEXT, ['notnull' => false]);
                 $contract->addColumn('payment_method', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('renewal_date', Type::DATETIME, ['notnull' => false]);
                 $contract->addColumn('cancel_date', Type::DATETIME, ['notnull' => false]);
