@@ -27,6 +27,7 @@ trait ContractMockTrait
             'currency'          => $options['currency'] ?? Currency::DEFAULT,
             'frequency'         => $options['frequency'] ?? '',
             'frequency_other'   => $options['frequency_other'] ?? '',
+            'custom_term'       => $options['custom_term'] ?? '',
             'payment_method'    => $options['payment_method'] ?? '',
             'renewal_date'      => $options['renewal_date'] ?? (new DateTime)->format('Y-m-d'),
             'cancel_date'       => $options['cancel_date'] ?? (new DateTime)->format('Y-m-d'),
