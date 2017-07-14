@@ -508,7 +508,6 @@ class MailTemplate
         'key'    => 'marketplace.approve',
         'tokens' => [
             '!staff_first_name' => 'User first name',
-            '!staff_full_name'  => 'User full name',
             '!manager_name'     => 'Manager name',
             '!course_name'      => 'Course name',
             '!portal_name'      => 'Portal name',
@@ -521,7 +520,6 @@ class MailTemplate
         'key'    => 'marketplace.reject',
         'tokens' => [
             '!staff_first_name' => 'User first name',
-            '!staff_full_name'  => 'User full name',
             '!manager_name'     => 'Manager name',
             '!course_name'      => 'Course name',
             '!portal_name'      => 'Portal name',
