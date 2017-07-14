@@ -8,25 +8,10 @@ use go1\util\lo\LoHelper;
 use go1\util\Text;
 use go1\util\text\Xss;
 use HTMLPurifier;
-use ReflectionClass;
 use stdClass;
 
 class AwardHelper
 {
-    const MANUAL_TYPE_BOOK    = 'book';
-    const MANUAL_TYPE_ARTICLE = 'article';
-    const MANUAL_TYPE_JOURNAL = 'journal';
-    const MANUAL_TYPE_F2F     = 'face to face';
-    const MANUAL_TYPE_ONLINE  = 'online';
-    const MANUAL_TYPE_OTHER   = 'other';
-
-    public static function allManualTypes()
-    {
-        $rClass = new ReflectionClass(static::class);
-
-        return $rClass->getConstants();
-    }
-
     public static function format(stdClass &$award, HTMLPurifier $html = null)
     {
         $award->id          = intval($award->id);
