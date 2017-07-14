@@ -270,7 +270,6 @@ class MailTemplate
             '!manager_name'       => 'Manager first name',
             '!course_name'        => 'Course name',
             '!course_url'         => 'Course URL',
-            '!site_name'          => 'Human name of the portal',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal logo',
         ],
@@ -284,9 +283,21 @@ class MailTemplate
             '!manager_name'       => 'Manager first name',
             '!course_name'        => 'Course name',
             '!course_url'         => 'Course URL',
-            '!site_name'          => 'Human name of the portal',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal logo',
+        ],
+    ];
+
+    const CREDIT_ASSIGN = [
+        'key'    => 'credit.assign',
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_name'       => 'Learner full name',
+            '!learner_mail'       => 'Learner mail',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal logo',
+            '!purchaser_name'     => 'Purchaser full name',
+            '!onetime_url'        => 'Onetime URL',
         ],
     ];
 
