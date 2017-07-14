@@ -283,7 +283,6 @@ class Schema
             'type'       => ['type' => self::T_KEYWORD],
             'profile_id' => ['type' => self::T_INT],
             'lo_id'      => ['type' => self::T_INT],
-            'account_id' => ['type' => self::T_INT],
             'parent_id'  => ['type' => self::T_INT],
             'status'     => ['type' => self::T_SHORT],
             'result'     => ['type' => self::T_INT],
@@ -303,6 +302,7 @@ class Schema
             ],
             'metadata'   => [
                 'properties' => [
+                    'account_id'          => ['type' => self::T_INT],
                     'course_enrolment_id' => ['type' => self::T_INT],
                     'course_id'           => ['type' => self::T_INT],
                     'status'              => ['type' => self::T_SHORT],
