@@ -17,7 +17,7 @@ class DB
     const STRING   = PDO::PARAM_STR;
     const STRINGS  = Connection::PARAM_STR_ARRAY;
 
-    public static function connectionOptions(string $name): array
+    public static function connectionOptions(string $name, $forceSlave = false): array
     {
         if (function_exists('__db_connection_options')) {
             return __db_connection_options($name);
@@ -28,7 +28,10 @@ class DB
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 
         $slave = getenv("{$prefix}_HOST");
-        if (('go1' === $name) && ('GET' === $method) && (getenv("{$prefix}_SLAVE"))) {
+        if (
+            (('GET' === $method) && (getenv("{$prefix}_SLAVE")))
+            || $forceSlave
+        ) {
             $slave = getenv("{$prefix}_SLAVE");
         }
 
