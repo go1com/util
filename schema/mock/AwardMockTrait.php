@@ -23,7 +23,7 @@ trait AwardMockTrait
             'expire'      => isset($options['expire']) ? $options['expire'] : null,
             'created'     => isset($options['created']) ? $options['created'] : time(),
         ]);
-        $awardId = $db->lastInsertId('award_award');
+        $awardId    = $db->lastInsertId('award_award');
         $revisionId = $this->createAwardRevision($db, $awardId, $revisionId);
 
         $db->update('award_award', ['revision_id' => $revisionId], ['id' => $awardId]);
@@ -77,6 +77,8 @@ trait AwardMockTrait
 
         $db->insert('award_item_manual', [
             'award_id'        => $options['award_id'] ?? 0,
+            'title'           => $options['title'] ?? null,
+            'type'            => $options['type'] ?? null,
             'description'     => $options['description'] ?? null,
             'user_id'         => $options['user_id'] ?? 0,
             'entity_id'       => $options['entity_id'] ?? null,

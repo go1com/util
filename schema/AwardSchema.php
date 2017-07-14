@@ -65,6 +65,8 @@ class AwardSchema
             $itemManual = $schema->createTable('award_item_manual');
             $itemManual->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $itemManual->addColumn('award_id', Type::INTEGER, ['unsigned' => true]);
+            $itemManual->addColumn('title', Type::STRING, ['notnull' => false]);
+            $itemManual->addColumn('type', Type::STRING, ['notnull' => false]);
             $itemManual->addColumn('description', Type::STRING, ['notnull' => false]);
             $itemManual->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $itemManual->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.', 'notnull' => false]);
