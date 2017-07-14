@@ -504,6 +504,32 @@ class MailTemplate
         ],
     ];
 
+    const MARKETPLACE_APPROVE = [
+        'key'    => 'marketplace.approve',
+        'tokens' => [
+            '!staff_first_name' => 'User first name',
+            '!staff_full_name'  => 'User full name',
+            '!manager_name'     => 'Manager name',
+            '!course_name'      => 'Course name',
+            '!portal_name'      => 'Portal name',
+            '!portal_image'     => 'Portal logo',
+            '!manager_mail'     => 'Manager mail',
+        ],
+    ];
+
+    const MARKETPLACE_REJECT = [
+        'key'    => 'marketplace.reject',
+        'tokens' => [
+            '!staff_first_name' => 'User first name',
+            '!staff_full_name'  => 'User full name',
+            '!manager_name'     => 'Manager name',
+            '!course_name'      => 'Course name',
+            '!portal_name'      => 'Portal name',
+            '!portal_image'     => 'Portal logo',
+            '!manager_mail'     => 'Manager mail',
+        ],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
