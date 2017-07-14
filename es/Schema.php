@@ -44,6 +44,7 @@ class Schema
     const O_LO_GROUP            = 'lo_group';
     const O_EVENT               = 'event';
     const O_AWARD               = 'award';
+    const O_ACCOUNT_ENROLMENT   = 'account_enrolment';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -77,6 +78,7 @@ class Schema
         self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
         self::O_AWARD               => self::AWARD_MAPPING,
+        self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
     ];
 
     const ANALYZED = [
@@ -324,6 +326,15 @@ class Schema
             'result'     => ['type' => self::T_INT],
             'pass'       => ['type' => self::T_INT],
             'note'       => ['type' => self::T_TEXT],
+        ],
+    ];
+
+    const ACCOUNT_ENROLMENT_MAPPING = [
+        '_parent'    => ['type' => self::O_ACCOUNT],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'         => ['type' => self::T_INT],
+            'lo_id'      => ['type' => self::T_INT],
         ],
     ];
 
