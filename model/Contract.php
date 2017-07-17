@@ -40,6 +40,9 @@ class Contract implements JsonSerializable
     private $created;
     private $updated;
 
+    public $userName;
+    public $defaultTerms;
+
     public function __construct(
         int $id = null,
         int $instanceId,
@@ -384,6 +387,8 @@ class Contract implements JsonSerializable
             'data'              => $this->getData(true),
             'created'           => $this->created,
             'updated'           => $this->updated,
+            'user_name'         => $this->userName,
+            'default_terms'     => $this->defaultTerms
         ];
     }
 }
