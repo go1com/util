@@ -36,7 +36,7 @@ trait EsEventMockTrait
             'index'   => Schema::INDEX,
             'routing' => Schema::INDEX,
             'type'    => Schema::O_EVENT,
-            'id'      => $event['id'] ?? ($autoId + 1),
+            'id'      => $options['id'] ?? ($autoId + 1),
             'body'    => $event,
             'parent'  => $event['parent'] ?? $event['lo_id'],
             'refresh' => true,
