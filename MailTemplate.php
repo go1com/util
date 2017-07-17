@@ -142,6 +142,18 @@ class MailTemplate
         ],
     ];
 
+    const LEARNER_ASSIGN_COURSE = [
+        'key'    => 'learner.assign.course',
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+        ],
+    ];
+
     const AUTHOR_ENROLMENT_COURSE = [
         'key'    => 'author.enrol.course',
         'tokens' => [
