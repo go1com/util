@@ -40,8 +40,8 @@ class Contract implements JsonSerializable
     private $created;
     private $updated;
 
-    public $userName        = '';
-    public $defaultTerms    = '';
+    public $userName;
+    public $defaultTerms;
 
     public function __construct(
         int $id = null,
