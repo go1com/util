@@ -140,4 +140,11 @@ class PortalPricing
 
         return !empty($basePrice) ? [$basePrice['price']*$license*12, $basePrice['currency']] : [0, 'AUD'];
     }
+
+    public static function calculateTrialStatus(stdClass $portal)
+    {
+        list($price,) = self::getPrice($portal, true);
+
+        return $price > 0 ? self::PLAN_STATUS_TRIAL : self::PLAN_STATUS_FREE;
+    }
 }
