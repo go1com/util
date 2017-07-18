@@ -145,6 +145,6 @@ class PortalPricing
     {
         list($price,) = self::getPrice($portal, true);
 
-        return $price > 0 ? self::PLAN_STATUS_TRIAL : self::PLAN_STATUS_FREE;
+        return ($price > 0) ? self::PLAN_STATUS_TRIAL : self::PLAN_STATUS_FREE;
     }
 }
