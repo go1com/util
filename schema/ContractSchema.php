@@ -4,6 +4,7 @@
 
     use Doctrine\DBAL\Schema\Schema;
     use Doctrine\DBAL\Types\Type;
+    use go1\kv\KV;
 
     class ContractSchema
     {
@@ -41,6 +42,10 @@
                 $contract->addIndex(['initial_term']);
                 $contract->addIndex(['created']);
                 $contract->addIndex(['updated']);
+            }
+
+            if (!$schema->hasTable('contract_kv')) {
+                KV::migrate($schema, 'contract_kv');
             }
         }
     }
