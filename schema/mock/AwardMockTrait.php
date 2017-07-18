@@ -9,6 +9,9 @@ trait AwardMockTrait
 {
     protected function createAward(Connection $db, array $options = [])
     {
+        $data = $options['data'] ?? [];
+        $data = !$data ? json_encode(null) : (is_scalar($data) ? $data : json_encode($data));
+
         $db->insert('award_award', [
             'revision_id' => $revisionId = isset($options['revision_id']) ? $options['revision_id'] : null,
             'instance_id' => isset($options['instance_id']) ? $options['instance_id'] : 0,
@@ -17,7 +20,7 @@ trait AwardMockTrait
             'description' => isset($options['description']) ? $options['description'] : '…',
             'tags'        => isset($options['tags']) ? $options['tags'] : '',
             'locale'      => isset($options['locale']) ? $options['locale'] : '',
-            'data'        => isset($options['data']) ? $options['data'] : '',
+            'data'        => $data,
             'published'   => isset($options['published']) ? $options['published'] : 1,
             'quantity'    => isset($options['quantity']) ? round($options['quantity'], 2) : null,
             'expire'      => isset($options['expire']) ? $options['expire'] : null,
