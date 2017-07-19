@@ -59,6 +59,17 @@ trait PaymentMockTrait
         return $db->lastInsertId('payment_coupon');
     }
 
+    public function createCouponItem(Connection $db, array $options = [])
+    {
+        $db->insert('payment_coupon_item', [
+            'coupon_id'         => $options['coupon_id'] ?? 1,
+            'entity_type'       => $options['entity_type'] ?? 'lo',
+            'entity_id'         => $options['entity_id'] ?? 1,
+        ]);
+
+        return $db->lastInsertId('payment_coupon_item');
+    }
+
     public function createCouponUsage(Connection $db, array $options = [])
     {
         $db->insert('payment_coupon_usage', [

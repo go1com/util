@@ -44,6 +44,9 @@ class Schema
     const O_LO_GROUP            = 'lo_group';
     const O_EVENT               = 'event';
     const O_AWARD               = 'award';
+    // enrolment only belong to lo. account_enrolment is enrolment, but belong to account.
+    // This is used to get users that is not enrolled to a course.
+    const O_ACCOUNT_ENROLMENT   = 'account_enrolment';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -77,6 +80,7 @@ class Schema
         self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
         self::O_AWARD               => self::AWARD_MAPPING,
+        self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
     ];
 
     const ANALYZED = [
@@ -283,7 +287,6 @@ class Schema
             'type'       => ['type' => self::T_KEYWORD],
             'profile_id' => ['type' => self::T_INT],
             'lo_id'      => ['type' => self::T_INT],
-            'account_id' => ['type' => self::T_INT],
             'parent_id'  => ['type' => self::T_INT],
             'status'     => ['type' => self::T_SHORT],
             'result'     => ['type' => self::T_INT],
@@ -303,6 +306,7 @@ class Schema
             ],
             'metadata'   => [
                 'properties' => [
+                    'account_id'          => ['type' => self::T_INT],
                     'course_enrolment_id' => ['type' => self::T_INT],
                     'course_id'           => ['type' => self::T_INT],
                     'status'              => ['type' => self::T_SHORT],
@@ -324,6 +328,16 @@ class Schema
             'result'     => ['type' => self::T_INT],
             'pass'       => ['type' => self::T_INT],
             'note'       => ['type' => self::T_TEXT],
+        ],
+    ];
+
+    const ACCOUNT_ENROLMENT_MAPPING = [
+        '_parent'    => ['type' => self::O_ACCOUNT],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            // Enrolment id.
+            'id'         => ['type' => self::T_INT],
+            'lo_id'      => ['type' => self::T_INT],
         ],
     ];
 
@@ -507,6 +521,10 @@ class Schema
                     'transaction_id' => ['type' => self::T_INT],
                     'created'        => ['type' => self::T_DATE],
                 ],
+            ],
+            'items'          => [
+                'type'       => self::T_NESTED,
+                'properties' => self::LO_MAPPING['properties'],
             ],
         ],
     ];

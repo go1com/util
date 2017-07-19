@@ -142,6 +142,18 @@ class MailTemplate
         ],
     ];
 
+    const LEARNER_ASSIGN_COURSE = [
+        'key'    => 'learner.assign.course',
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+        ],
+    ];
+
     const AUTHOR_ENROLMENT_COURSE = [
         'key'    => 'author.enrol.course',
         'tokens' => [
@@ -270,7 +282,6 @@ class MailTemplate
             '!manager_name'       => 'Manager first name',
             '!course_name'        => 'Course name',
             '!course_url'         => 'Course URL',
-            '!site_name'          => 'Human name of the portal',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal logo',
         ],
@@ -284,9 +295,21 @@ class MailTemplate
             '!manager_name'       => 'Manager first name',
             '!course_name'        => 'Course name',
             '!course_url'         => 'Course URL',
-            '!site_name'          => 'Human name of the portal',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal logo',
+        ],
+    ];
+
+    const CREDIT_ASSIGN = [
+        'key'    => 'credit.assign',
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_name'       => 'Learner full name',
+            '!learner_mail'       => 'Learner mail',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal logo',
+            '!purchaser_name'     => 'Purchaser full name',
+            '!onetime_url'        => 'Onetime URL',
         ],
     ];
 
@@ -490,6 +513,30 @@ class MailTemplate
             '!portal_name'     => 'Portal name',
             '!portal_url'      => 'Portal URL',
             '!portal_image'    => 'Portal logo',
+        ],
+    ];
+
+    const MARKETPLACE_APPROVE = [
+        'key'    => 'marketplace.approve',
+        'tokens' => [
+            '!staff_first_name' => 'User first name',
+            '!manager_name'     => 'Manager name',
+            '!course_name'      => 'Course name',
+            '!portal_name'      => 'Portal name',
+            '!portal_image'     => 'Portal logo',
+            '!manager_mail'     => 'Manager mail',
+        ],
+    ];
+
+    const MARKETPLACE_REJECT = [
+        'key'    => 'marketplace.reject',
+        'tokens' => [
+            '!staff_first_name' => 'User first name',
+            '!manager_name'     => 'Manager name',
+            '!course_name'      => 'Course name',
+            '!portal_name'      => 'Portal name',
+            '!portal_image'     => 'Portal logo',
+            '!manager_mail'     => 'Manager mail',
         ],
     ];
 

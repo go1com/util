@@ -9,6 +9,9 @@ trait AwardMockTrait
 {
     protected function createAward(Connection $db, array $options = [])
     {
+        $data = $options['data'] ?? [];
+        $data = !$data ? json_encode(null) : (is_scalar($data) ? $data : json_encode($data));
+
         $db->insert('award_award', [
             'revision_id' => $revisionId = isset($options['revision_id']) ? $options['revision_id'] : null,
             'instance_id' => isset($options['instance_id']) ? $options['instance_id'] : 0,
@@ -17,13 +20,14 @@ trait AwardMockTrait
             'description' => isset($options['description']) ? $options['description'] : '…',
             'tags'        => isset($options['tags']) ? $options['tags'] : '',
             'locale'      => isset($options['locale']) ? $options['locale'] : '',
-            'data'        => isset($options['data']) ? $options['data'] : '',
+            'data'        => $data,
             'published'   => isset($options['published']) ? $options['published'] : 1,
+            'marketplace' => isset($options['marketplace']) ? $options['marketplace'] : 0,
             'quantity'    => isset($options['quantity']) ? round($options['quantity'], 2) : null,
             'expire'      => isset($options['expire']) ? $options['expire'] : null,
             'created'     => isset($options['created']) ? $options['created'] : time(),
         ]);
-        $awardId = $db->lastInsertId('award_award');
+        $awardId    = $db->lastInsertId('award_award');
         $revisionId = $this->createAwardRevision($db, $awardId, $revisionId);
 
         $db->update('award_award', ['revision_id' => $revisionId], ['id' => $awardId]);
@@ -77,6 +81,8 @@ trait AwardMockTrait
 
         $db->insert('award_item_manual', [
             'award_id'        => $options['award_id'] ?? 0,
+            'title'           => $options['title'] ?? null,
+            'type'            => $options['type'] ?? null,
             'description'     => $options['description'] ?? null,
             'user_id'         => $options['user_id'] ?? 0,
             'entity_id'       => $options['entity_id'] ?? null,

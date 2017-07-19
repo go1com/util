@@ -22,6 +22,7 @@ class AwardSchema
             $award->addColumn('locale', Type::STRING, ['notnull' => false]);
             $award->addColumn('data', Type::BLOB);
             $award->addColumn('published', Type::BOOLEAN);
+            $award->addColumn('marketplace', Type::BOOLEAN);
             $award->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Target quantity']);
             $award->addColumn('expire', Type::STRING, ['notnull' => false, 'description' => 'Award expire time']);
             $award->addColumn('created', Type::INTEGER);
@@ -33,6 +34,7 @@ class AwardSchema
             $award->addIndex(['tags']);
             $award->addIndex(['locale']);
             $award->addIndex(['published']);
+            $award->addIndex(['marketplace']);
             $award->addIndex(['quantity']);
             $award->addIndex(['expire']);
             $award->addIndex(['created']);
@@ -65,6 +67,8 @@ class AwardSchema
             $itemManual = $schema->createTable('award_item_manual');
             $itemManual->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $itemManual->addColumn('award_id', Type::INTEGER, ['unsigned' => true]);
+            $itemManual->addColumn('title', Type::STRING, ['notnull' => false]);
+            $itemManual->addColumn('type', Type::STRING, ['notnull' => false]);
             $itemManual->addColumn('description', Type::STRING, ['notnull' => false]);
             $itemManual->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $itemManual->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.', 'notnull' => false]);
