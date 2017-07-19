@@ -465,11 +465,23 @@ class Schema
             'points'        => ['type' => self::T_INT],
             // @todo Handle updating question.
             'question'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'li_id'         => ['type' => self::T_INT],
             'counter'       => ['type' => self::T_INT],
             'user_id'       => ['type' => self::T_INT],
             'user'          => [
                 'properties' => self::USER_MAPPING['properties'],
+            ],
+            'li'            => [
+                'properties' => self::LO_MAPPING['properties'],
+            ],
+            'course'        => [
+                'properties' => self::LO_MAPPING['properties'],
+            ],
+            'metadata'   => [
+                'properties' => [
+                    'li_id'               => ['type' => self::T_INT],
+                    'course_id'           => ['type' => self::T_INT],
+                    'user_id'             => ['type' => self::T_INT],
+                ],
             ],
         ],
     ];
