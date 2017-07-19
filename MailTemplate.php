@@ -356,6 +356,13 @@ class MailTemplate
         ],
     ];
 
+    const QUIZ_COMPLETE = [
+        'key'    => 'quiz.complete',
+        'tokens' => [
+            '!li_title' => 'Learning item title',
+        ],
+    ];
+
     const NOTE_CREATE = [
         'key'    => 'note.create',
         'tokens' => [
