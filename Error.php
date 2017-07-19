@@ -81,6 +81,21 @@ class Error
         return new JsonResponse(['message' => ($msg instanceof Exception) ? $msg->getMessage() : $msg], $code);
     }
 
+    public static function jr403($msg): JsonResponse
+    {
+        return static::simpleErrorJsonResponse($msg, 403);
+    }
+
+    public static function jr404($msg): JsonResponse
+    {
+        return static::simpleErrorJsonResponse($msg, 404);
+    }
+
+    public static function jr406($msg): JsonResponse
+    {
+        return static::simpleErrorJsonResponse($msg, 406);
+    }
+
     public static function createLazyAssertionJsonResponse(LazyAssertionException $e, int $httpCode = 400): JsonResponse
     {
         $data = ['message' => $e->getMessage()];
