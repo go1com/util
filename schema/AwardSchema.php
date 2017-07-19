@@ -22,6 +22,7 @@ class AwardSchema
             $award->addColumn('locale', Type::STRING, ['notnull' => false]);
             $award->addColumn('data', Type::BLOB);
             $award->addColumn('published', Type::BOOLEAN);
+            $award->addColumn('marketplace', Type::BOOLEAN);
             $award->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Target quantity']);
             $award->addColumn('expire', Type::STRING, ['notnull' => false, 'description' => 'Award expire time']);
             $award->addColumn('created', Type::INTEGER);
@@ -33,6 +34,7 @@ class AwardSchema
             $award->addIndex(['tags']);
             $award->addIndex(['locale']);
             $award->addIndex(['published']);
+            $award->addIndex(['marketplace']);
             $award->addIndex(['quantity']);
             $award->addIndex(['expire']);
             $award->addIndex(['created']);
