@@ -111,7 +111,8 @@ class LoHelper
                 $node->event->locations = [];
                 # Get location from gc_event table
                 if (!empty($event['loc_country'])) {
-                    $node->event->locations = [[
+                    $node->event->locations = [
+                        [
                                                    'country'                 => $event['loc_country'],
                                                    'administrative_area'     => $event['loc_administrative_area'],
                                                    'sub_administrative_area' => $event['loc_sub_administrative_area'],
@@ -123,11 +124,13 @@ class LoHelper
                                                    'organisation_name'       => $event['loc_organisation_name'],
                                                    'name_line'               => $event['loc_name_line'],
                                                    'postal_code'             => $event['loc_postal_code'],
-                                               ]];
+                        ],
+                    ];
                 }
                 # Get location from gc_location table
                 else if (!empty($event['country'])) {
-                    $node->event->locations = [[
+                    $node->event->locations = [
+                        [
                                                    'id'                      => $event['locationId'],
                                                    'title'                   => $event['title'],
                                                    'country'                 => $event['country'],
@@ -141,7 +144,8 @@ class LoHelper
                                                    'organisation_name'       => $event['organisation_name'],
                                                    'name_line'               => $event['name_line'],
                                                    'postal_code'             => $event['postal_code'],
-                                               ]];
+                        ],
+                    ];
                 }
             }
         };
@@ -212,7 +216,7 @@ class LoHelper
         ]);
         $cnf->set('HTML.SafeIframe', true);
         $cnf->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/)%');
-        $cnf->set('Attr.AllowedFrameTargets', array('_blank', '_self', '_parent', '_top'));
+        $cnf->set('Attr.AllowedFrameTargets', ['_blank', '_self', '_parent', '_top']);
 
         $def = $cnf->getHTMLDefinition(true);
         $def->addAttribute('iframe', 'allowfullscreen', 'Bool');

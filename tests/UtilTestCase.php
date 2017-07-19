@@ -39,11 +39,11 @@ abstract class UtilTestCase extends TestCase
 
         DB::install($this->db, [
             function (Schema $schema) {
-                EckSchema::install($schema);
-                AssignmentSchema::install($schema);
-                PlanRepository::install($schema);
-                CreditSchema::install($schema);
                 AwardSchema::install($schema);
+                AssignmentSchema::install($schema);
+                CreditSchema::install($schema);
+                EckSchema::install($schema);
+                PlanRepository::install($schema);
             },
         ]);
 

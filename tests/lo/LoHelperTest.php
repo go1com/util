@@ -92,9 +92,9 @@ class LoHelperTest extends UtilTestCase
     {
         $html = new HTMLPurifier();
         $data = [
-            'Plain text'                                            => 'Plain text',
-            'foo <span style="color:#0000aa;">data</span>'          => 'foo <span style="color:#0000aa;">data</span>',
-            '<a href="test.html" target="_blank">Invalid link</a>'  => '<a href="test.html" target="_blank" rel="noreferrer noopener">Invalid link</a>'
+            'Plain text'                                           => 'Plain text',
+            'foo <span style="color:#0000aa;">data</span>'         => 'foo <span style="color:#0000aa;">data</span>',
+            '<a href="test.html" target="_blank">Invalid link</a>' => '<a href="test.html" target="_blank" rel="noreferrer noopener">Invalid link</a>',
         ];
         foreach ($data as $input => $expect) {
             $result = $html->purify(trim($input), LoHelper::descriptionPurifierConfig());
@@ -247,18 +247,21 @@ class LoHelperTest extends UtilTestCase
     private function hasAuthor($authorId, array $source)
     {
         $this->assertTrue(in_array($authorId, $source));
+
         return $this;
     }
 
     private function hasParent($parentId, array $source)
     {
         $this->assertTrue(in_array($parentId, $source));
+
         return $this;
     }
 
     private function hasChild($childId, array $source)
     {
         $this->assertTrue(in_array($childId, $source));
+
         return $this;
     }
 }

@@ -25,12 +25,6 @@ class GroupHelperTest extends UtilTestCase
     use LoMockTrait;
     use NoteMockTrait;
 
-    public function setUp()
-    {
-        parent::setUp();
-        $this->installGo1Schema($this->db, $coreOnly = false);
-    }
-
     public function testInstanceId()
     {
         $groupId = $this->createGroup($this->db, ['instance_id' => 555]);
@@ -49,13 +43,8 @@ class GroupHelperTest extends UtilTestCase
     public function testCanAccess()
     {
         $c = $this->getContainer();
-        $portalId = $this->createInstance($this->db, [
-            'title' => $portalName = 'foo.com',
-        ]);
-        $fooUserId = $this->createUser($this->db, [
-            'id'       => 31,
-            'instance' => $c['accounts_name'],
-        ]);
+        $portalId = $this->createInstance($this->db, ['title' => $portalName = 'foo.com']);
+        $fooUserId = $this->createUser($this->db, ['id' => 31, 'instance' => $c['accounts_name']]);
         $barUserId = $this->createUser($this->db, [
             'id'       => 33,
             'mail'     => $barMail = 'bar@foo.com',
@@ -66,10 +55,7 @@ class GroupHelperTest extends UtilTestCase
             'mail'     => $barMail,
             'instance' => $portalName,
         ]);
-        $groupId = $this->createGroup($this->db, [
-            'user_id'     => $fooUserId,
-            'instance_id' => $portalId,
-        ]);
+        $groupId = $this->createGroup($this->db, ['user_id' => $fooUserId, 'instance_id' => $portalId]);
         $this->createGroupItem($this->db, ['group_id' => $groupId, 'entity_type' => 'user', 'entity_id' => $barAccountId]);
 
         $this->assertTrue(GroupHelper::canAccess($this->db, $this->db, $fooUserId, $groupId));
@@ -79,9 +65,7 @@ class GroupHelperTest extends UtilTestCase
     public function testCantAccess()
     {
         $c = $this->getContainer();
-        $portalId = $this->createInstance($this->db, [
-            'title' => $portalName = 'foo.com',
-        ]);
+        $portalId = $this->createInstance($this->db, ['title' => $portalName = 'foo.com']);
         $fooUserId = $this->createUser($this->db, [
             'id'       => 33,
             'mail'     => $fooMail = 'foo@foo.com',
