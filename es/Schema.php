@@ -8,7 +8,12 @@ namespace go1\util\es;
 class Schema
 {
     const INDEX = ES_INDEX;
+    const MARKETPLACE_INDEX = ES_INDEX . '_marketplace';
     const TEMP  = -32;
+
+    const DO_INDEX  = 'index';
+    const DO_UPDATE = 'update';
+    const DO_DELETE = 'delete';
 
     const T_BOOL    = 'boolean';
     const T_SHORT   = 'short';
@@ -599,4 +604,9 @@ class Schema
             'locale'         => ['type' => self::T_KEYWORD],
         ],
     ];
+
+    public static function portalIndex(int $portalId)
+    {
+        return static::INDEX . '_portal_' . $portalId;
+    }
 }
