@@ -7,8 +7,10 @@ namespace go1\util\es;
  */
 class Schema
 {
-    const INDEX = ES_INDEX;
-    const MARKETPLACE_INDEX = ES_INDEX . '_marketplace';
+    const INDEX                 = ES_INDEX;
+    const ALL_INDEX             = ES_INDEX . '*';
+    const MARKETPLACE_INDEX     = ES_INDEX . '_marketplace';
+    
     const TEMP  = -32;
 
     const DO_INDEX  = 'index';
