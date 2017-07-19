@@ -259,7 +259,7 @@ class LoHelper
 
         return !$groupIds ? [] : $social
             ->executeQuery(
-                'SELECT entity_id FROM social_group_item WHERE entity_type = ? AND group_id IN (?)',
+                'SELECT DISTINCT entity_id FROM social_group_item WHERE entity_type = ? AND group_id IN (?)',
                 ['portal', $groupIds],
                 [DB::STRING, DB::INTEGERS]
             )
