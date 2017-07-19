@@ -22,6 +22,7 @@ trait AwardMockTrait
             'locale'      => isset($options['locale']) ? $options['locale'] : '',
             'data'        => $data,
             'published'   => isset($options['published']) ? $options['published'] : 1,
+            'marketplace' => isset($options['marketplace']) ? $options['marketplace'] : 0,
             'quantity'    => isset($options['quantity']) ? round($options['quantity'], 2) : null,
             'expire'      => isset($options['expire']) ? $options['expire'] : null,
             'created'     => isset($options['created']) ? $options['created'] : time(),
