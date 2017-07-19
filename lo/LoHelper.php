@@ -113,17 +113,17 @@ class LoHelper
                 if (!empty($event['loc_country'])) {
                     $node->event->locations = [
                         [
-                                                   'country'                 => $event['loc_country'],
-                                                   'administrative_area'     => $event['loc_administrative_area'],
-                                                   'sub_administrative_area' => $event['loc_sub_administrative_area'],
-                                                   'locality'                => $event['loc_locality'],
-                                                   'dependent_locality'      => $event['loc_dependent_locality'],
-                                                   'thoroughfare'            => $event['loc_thoroughfare'],
-                                                   'premise'                 => $event['loc_premise'],
-                                                   'sub_premise'             => $event['loc_sub_premise'],
-                                                   'organisation_name'       => $event['loc_organisation_name'],
-                                                   'name_line'               => $event['loc_name_line'],
-                                                   'postal_code'             => $event['loc_postal_code'],
+                            'country'                 => $event['loc_country'],
+                            'administrative_area'     => $event['loc_administrative_area'],
+                            'sub_administrative_area' => $event['loc_sub_administrative_area'],
+                            'locality'                => $event['loc_locality'],
+                            'dependent_locality'      => $event['loc_dependent_locality'],
+                            'thoroughfare'            => $event['loc_thoroughfare'],
+                            'premise'                 => $event['loc_premise'],
+                            'sub_premise'             => $event['loc_sub_premise'],
+                            'organisation_name'       => $event['loc_organisation_name'],
+                            'name_line'               => $event['loc_name_line'],
+                            'postal_code'             => $event['loc_postal_code'],
                         ],
                     ];
                 }
@@ -131,19 +131,19 @@ class LoHelper
                 else if (!empty($event['country'])) {
                     $node->event->locations = [
                         [
-                                                   'id'                      => $event['locationId'],
-                                                   'title'                   => $event['title'],
-                                                   'country'                 => $event['country'],
-                                                   'administrative_area'     => $event['administrative_area'],
-                                                   'sub_administrative_area' => $event['sub_administrative_area'],
-                                                   'locality'                => $event['locality'],
-                                                   'dependent_locality'      => $event['dependent_locality'],
-                                                   'thoroughfare'            => $event['thoroughfare'],
-                                                   'premise'                 => $event['premise'],
-                                                   'sub_premise'             => $event['sub_premise'],
-                                                   'organisation_name'       => $event['organisation_name'],
-                                                   'name_line'               => $event['name_line'],
-                                                   'postal_code'             => $event['postal_code'],
+                            'id'                      => $event['locationId'],
+                            'title'                   => $event['title'],
+                            'country'                 => $event['country'],
+                            'administrative_area'     => $event['administrative_area'],
+                            'sub_administrative_area' => $event['sub_administrative_area'],
+                            'locality'                => $event['locality'],
+                            'dependent_locality'      => $event['dependent_locality'],
+                            'thoroughfare'            => $event['thoroughfare'],
+                            'premise'                 => $event['premise'],
+                            'sub_premise'             => $event['sub_premise'],
+                            'organisation_name'       => $event['organisation_name'],
+                            'name_line'               => $event['name_line'],
+                            'postal_code'             => $event['postal_code'],
                         ],
                     ];
                 }
@@ -250,6 +250,20 @@ class LoHelper
         $sql = 'SELECT 1 FROM gc_lo_group WHERE lo_id = ? AND instance_id = ?';
 
         return $db->fetchColumn($sql, [$loId, $instanceId]) ? true : false;
+    }
+
+    public static function activeMembershipIds(Connection $social, int $loId): array
+    {
+        $groupIds = 'SELECT group_id FROM social_group_item WHERE entity_type = ? AND entity_id = ?';
+        $groupIds = $social->executeQuery($groupIds, ['lo', $loId])->fetchAll(PDO::FETCH_COLUMN);
+
+        return !$groupIds ? [] : $social
+            ->executeQuery(
+                'SELECT entity_id FROM social_group_item WHERE entity_type = ? AND group_id IN (?)',
+                ['portal', $groupIds],
+                [DB::STRING, DB::INTEGERS]
+            )
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     public static function parentIds(Connection $db, int $loId): array
