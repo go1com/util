@@ -60,16 +60,23 @@ class SocialSchema
 
         if (!$schema->hasTable('social_group_assign')) {
             $assign = $schema->createTable('social_group_assign');
+            $assign->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $assign->addColumn('group_id', Type::INTEGER, ['unsigned' => true]);
             $assign->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
             $assign->addColumn('entity_type', Type::STRING);
             $assign->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $assign->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $assign->addColumn('status', Type::INTEGER);
-            $assign->addColumn('timestamp', Type::INTEGER, ['unsigned' => true]);
+            $assign->addColumn('created', Type::INTEGER, ['unsigned' => true]);
+            $assign->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
+            $assign->setPrimaryKey(['id']);
             $assign->addIndex(['instance_id']);
             $assign->addIndex(['entity_type']);
             $assign->addIndex(['entity_id']);
-            $assign->addUniqueIndex(['group_id', 'instance_id', 'entity_type', 'entity_id']);
+            $assign->addIndex(['user_id']);
+            $assign->addIndex(['status']);
+            $assign->addIndex(['created']);
+            $assign->addIndex(['updated']);
         }
     }
 }

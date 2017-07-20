@@ -276,6 +276,7 @@ class GroupHelperTest extends UtilTestCase
             'instance_id' => 1,
             'entity_type' => GroupAssign::TYPE_LO,
             'entity_id'   => 33,
+            'user_id'     => 99,
             'status'      => GroupAssign::STATUS_PUBLISHED,
         ]);
         $this->createGroupAssign($this->db, [
@@ -283,6 +284,7 @@ class GroupHelperTest extends UtilTestCase
             'instance_id' => 1,
             'entity_type' => GroupAssign::TYPE_LO,
             'entity_id'   => 34,
+            'user_id'     => 99,
             'status'      => GroupAssign::STATUS_PUBLISHED,
         ]);
         $this->createGroupAssign($this->db, [
@@ -290,6 +292,7 @@ class GroupHelperTest extends UtilTestCase
             'instance_id' => 1,
             'entity_type' => GroupAssign::TYPE_LO,
             'entity_id'   => 35,
+            'user_id'     => 99,
             'status'      => GroupAssign::STATUS_ARCHIVED,
         ]);
 
