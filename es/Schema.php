@@ -120,6 +120,8 @@ class Schema
             'version'       => ['type' => self::T_KEYWORD],
             'created'       => ['type' => self::T_DATE],
             'configuration' => ['type' => self::T_OBJECT],
+            'legacy'        => ['type' => self::T_BOOL],
+            'score'         => ['type' => self::T_INT], # activity score
         ],
     ];
 
