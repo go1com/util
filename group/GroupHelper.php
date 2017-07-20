@@ -251,7 +251,7 @@ class GroupHelper
         }
     }
 
-    public static function loadAssignsByGroup(Connection $db, int $groupId, array $options = [])
+    public static function groupAssignments(Connection $db, int $groupId, array $options = [])
     {
         $q = $db->createQueryBuilder();
         $q
