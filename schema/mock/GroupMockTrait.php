@@ -44,6 +44,7 @@ trait GroupMockTrait
             'instance_id' => $options['instance_id'],
             'entity_type' => $options['entity_type'],
             'entity_id'   => $options['entity_id'],
+            'timestamp'   => isset($options['timestamp']) ? $options['timestamp'] : time(),
         ]);
     }
 }
