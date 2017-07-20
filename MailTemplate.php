@@ -234,6 +234,17 @@ class MailTemplate
         ],
     ];
 
+    const USER_GROUP_REQUEST = [
+        'key'    => 'user.group.request',
+        'tokens' => [
+            '!recipient_name' => 'Recipient full name',
+            '!user_name'      => 'User full name',
+            '!group_title'    => 'Group name',
+            '!accept_url'     => 'Accept payment URL',
+            '!reject_url'     => 'Reject payment URL',
+        ],
+    ];
+
     const ONBOARD_WELCOME = [
         'key'    => 'onboard.welcome',
         'tokens' => [
