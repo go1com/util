@@ -91,6 +91,9 @@ class Queue
     const GROUP_ITEM_CREATE        = 'group.item.create';
     const GROUP_ITEM_UPDATE        = 'group.item.update';
     const GROUP_ITEM_DELETE        = 'group.item.delete';
+    const GROUP_ASSIGN_CREATE      = 'group.assign.create';
+    const GROUP_ASSIGN_UPDATE      = 'group.assign.update';
+    const GROUP_ASSIGN_DELETE      = 'group.assign.delete';
     const NOTE_CREATE              = 'note.create';
     const NOTE_UPDATE              = 'note.update';
     const NOTE_DELETE              = 'note.delete';
