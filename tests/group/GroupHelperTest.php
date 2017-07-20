@@ -5,6 +5,7 @@ namespace go1\util\tests\group;
 use go1\util\AccessChecker;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
+use go1\util\group\GroupAssign;
 use go1\util\group\GroupHelper;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupItemTypes;
@@ -265,5 +266,34 @@ class GroupHelperTest extends UtilTestCase
 
         $group = GroupHelper::load($this->db, $groupId2);
         $this->assertEquals(20, $group->member_count);
+    }
+
+    public function testLoadAssignsByGroup()
+    {
+        $groupId = 1;
+        $this->createGroupAssign($this->db, [
+            'group_id'    => $groupId,
+            'instance_id' => 1,
+            'entity_type' => GroupAssign::TYPE_LO,
+            'entity_id'   => 33,
+            'status'      => GroupAssign::STATUS_PUBLISHED,
+        ]);
+        $this->createGroupAssign($this->db, [
+            'group_id'    => $groupId,
+            'instance_id' => 1,
+            'entity_type' => GroupAssign::TYPE_LO,
+            'entity_id'   => 34,
+            'status'      => GroupAssign::STATUS_PUBLISHED,
+        ]);
+        $this->createGroupAssign($this->db, [
+            'group_id'    => $groupId,
+            'instance_id' => 1,
+            'entity_type' => GroupAssign::TYPE_LO,
+            'entity_id'   => 35,
+            'status'      => GroupAssign::STATUS_ARCHIVED,
+        ]);
+
+        $this->assertCount(2, GroupHelper::loadAssignsByGroup($this->db, $groupId));
+        $this->assertCount(1, GroupHelper::loadAssignsByGroup($this->db, $groupId, ['status' => GroupAssign::STATUS_ARCHIVED]));
     }
 }

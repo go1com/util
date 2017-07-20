@@ -64,6 +64,7 @@ class SocialSchema
             $assign->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
             $assign->addColumn('entity_type', Type::STRING);
             $assign->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $assign->addColumn('status', Type::INTEGER);
             $assign->addColumn('timestamp', Type::INTEGER, ['unsigned' => true]);
             $assign->addIndex(['instance_id']);
             $assign->addIndex(['entity_type']);
