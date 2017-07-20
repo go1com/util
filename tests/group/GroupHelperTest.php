@@ -5,7 +5,8 @@ namespace go1\util\tests\group;
 use go1\util\AccessChecker;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
-use go1\util\group\GroupAssign;
+use go1\util\group\GroupAssignStatuses;
+use go1\util\group\GroupAssignTypes;
 use go1\util\group\GroupHelper;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupItemTypes;
@@ -274,29 +275,29 @@ class GroupHelperTest extends UtilTestCase
         $this->createGroupAssign($this->db, [
             'group_id'    => $groupId,
             'instance_id' => 1,
-            'entity_type' => GroupAssign::TYPE_LO,
+            'entity_type' => GroupAssignTypes::LO,
             'entity_id'   => 33,
             'user_id'     => 99,
-            'status'      => GroupAssign::STATUS_PUBLISHED,
+            'status'      => GroupAssignStatuses::PUBLISHED,
         ]);
         $this->createGroupAssign($this->db, [
             'group_id'    => $groupId,
             'instance_id' => 1,
-            'entity_type' => GroupAssign::TYPE_LO,
+            'entity_type' => GroupAssignTypes::LO,
             'entity_id'   => 34,
             'user_id'     => 99,
-            'status'      => GroupAssign::STATUS_PUBLISHED,
+            'status'      => GroupAssignStatuses::PUBLISHED,
         ]);
         $this->createGroupAssign($this->db, [
             'group_id'    => $groupId,
             'instance_id' => 1,
-            'entity_type' => GroupAssign::TYPE_LO,
+            'entity_type' => GroupAssignTypes::LO,
             'entity_id'   => 35,
             'user_id'     => 99,
-            'status'      => GroupAssign::STATUS_ARCHIVED,
+            'status'      => GroupAssignStatuses::ARCHIVED,
         ]);
 
-        $this->assertCount(2, GroupHelper::groupAssignments($this->db, $groupId));
-        $this->assertCount(1, GroupHelper::groupAssignments($this->db, $groupId, ['status' => GroupAssign::STATUS_ARCHIVED]));
+        $this->assertCount(2, GroupHelper::groupAssigns($this->db, $groupId));
+        $this->assertCount(1, GroupHelper::groupAssigns($this->db, $groupId, ['status' => GroupAssignStatuses::ARCHIVED]));
     }
 }

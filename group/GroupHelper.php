@@ -251,7 +251,12 @@ class GroupHelper
         }
     }
 
-    public static function groupAssignments(Connection $db, int $groupId, array $options = [])
+    public static function loadAssign(Connection $db, int $assignId)
+    {
+        return $db->executeQuery('SELECT * FROM social_group_assign WHERE id = ?', $assignId)->fetch(DB::OBJ);
+    }
+
+    public static function groupAssigns(Connection $db, int $groupId, array $options = [])
     {
         $q = $db->createQueryBuilder();
         $q
@@ -261,7 +266,7 @@ class GroupHelper
             ->andWhere('status = :status')
             ->setParameters([
                 ':groupId' => $groupId,
-                ':status'  => isset($options['status']) ? $options['status'] : GroupAssign::STATUS_PUBLISHED,
+                ':status'  => isset($options['status']) ? $options['status'] : GroupAssignStatuses::PUBLISHED,
             ]);
         isset($options['entityType']) && $q
             ->andWhere('entity_type = :entityType')
