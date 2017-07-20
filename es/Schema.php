@@ -7,8 +7,15 @@ namespace go1\util\es;
  */
 class Schema
 {
-    const INDEX = ES_INDEX;
+    const INDEX                 = ES_INDEX;
+    const ALL_INDEX             = ES_INDEX . '*';
+    const MARKETPLACE_INDEX     = ES_INDEX . '_marketplace';
+    
     const TEMP  = -32;
+
+    const DO_INDEX  = 'index';
+    const DO_UPDATE = 'update';
+    const DO_DELETE = 'delete';
 
     const T_BOOL    = 'boolean';
     const T_SHORT   = 'short';
@@ -113,6 +120,8 @@ class Schema
             'version'       => ['type' => self::T_KEYWORD],
             'created'       => ['type' => self::T_DATE],
             'configuration' => ['type' => self::T_OBJECT],
+            'legacy'        => ['type' => self::T_BOOL],
+            'score'         => ['type' => self::T_INT], # activity score
         ],
     ];
 
@@ -465,11 +474,23 @@ class Schema
             'points'        => ['type' => self::T_INT],
             // @todo Handle updating question.
             'question'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'li_id'         => ['type' => self::T_INT],
             'counter'       => ['type' => self::T_INT],
             'user_id'       => ['type' => self::T_INT],
             'user'          => [
                 'properties' => self::USER_MAPPING['properties'],
+            ],
+            'li'            => [
+                'properties' => self::LO_MAPPING['properties'],
+            ],
+            'course'        => [
+                'properties' => self::LO_MAPPING['properties'],
+            ],
+            'metadata'   => [
+                'properties' => [
+                    'li_id'               => ['type' => self::T_INT],
+                    'course_id'           => ['type' => self::T_INT],
+                    'user_id'             => ['type' => self::T_INT],
+                ],
             ],
         ],
     ];
@@ -599,4 +620,9 @@ class Schema
             'locale'         => ['type' => self::T_KEYWORD],
         ],
     ];
+
+    public static function portalIndex(int $portalId)
+    {
+        return static::INDEX . '_portal_' . $portalId;
+    }
 }

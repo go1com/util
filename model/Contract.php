@@ -302,7 +302,7 @@ class Contract implements JsonSerializable
     public function getUpdatedValues(Contract $origin): array
     {
         if ($origin->getName() != $this->name) {
-            $values['status'] = $this->name;
+            $values['name'] = $this->name;
         }
         if ($origin->getStatus() != $this->status) {
             $values['status'] = $this->status;
