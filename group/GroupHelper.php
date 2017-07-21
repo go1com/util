@@ -250,4 +250,28 @@ class GroupHelper
             }
         }
     }
+
+    public static function loadAssignment(Connection $db, int $assignId)
+    {
+        return $db->executeQuery('SELECT * FROM social_group_assign WHERE id = ?', $assignId)->fetch(DB::OBJ);
+    }
+
+    public static function groupAssignments(Connection $db, int $groupId, array $options = [])
+    {
+        $q = $db->createQueryBuilder();
+        $q
+            ->select('*')
+            ->from('social_group_assign')
+            ->where('group_id = :groupId')
+            ->andWhere('status = :status')
+            ->setParameters([
+                ':groupId' => $groupId,
+                ':status'  => isset($options['status']) ? $options['status'] : GroupAssignStatuses::PUBLISHED,
+            ]);
+        isset($options['entityType']) && $q
+            ->andWhere('entity_type = :entityType')
+            ->setParameter('entityType', $options['entityType']);
+
+        return $q->execute()->fetchAll(DB::OBJ);
+    }
 }

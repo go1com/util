@@ -3,6 +3,7 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\group\GroupAssignStatuses;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupStatus;
 
@@ -35,5 +36,19 @@ trait GroupMockTrait
         ]);
 
         return $db->lastInsertId('social_group_item');
+    }
+
+    public function createGroupAssign(Connection $db, array $options = [])
+    {
+        $db->insert('social_group_assign', [
+            'group_id'    => $options['group_id'],
+            'instance_id' => $options['instance_id'],
+            'entity_type' => $options['entity_type'],
+            'entity_id'   => $options['entity_id'],
+            'user_id'     => $options['user_id'],
+            'status'      => isset($options['status']) ? $options['status'] : GroupAssignStatuses::PUBLISHED,
+            'created'     => isset($options['created']) ? $options['created'] : time(),
+            'updated'     => isset($options['updated']) ? $options['updated'] : time(),
+        ]);
     }
 }
