@@ -82,11 +82,7 @@ class DBTest extends UtilTestCase
                 'mail'       => 'changed@foo.com',
                 'first_name' => 'Phuc',
                 'instance'   => 'bar.com',
-            ],
-            [
-                'created' => time() + 99,
-            ],
-            $original
+            ]
         );
         $user = (array) UserHelper::load($this->db, $userId);
 
