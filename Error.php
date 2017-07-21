@@ -96,6 +96,11 @@ class Error
         return static::simpleErrorJsonResponse($msg, 406);
     }
 
+    public static function jr500($msg): JsonResponse
+    {
+        return static::simpleErrorJsonResponse($msg, 500);
+    }
+
     public static function createLazyAssertionJsonResponse(LazyAssertionException $e, int $httpCode = 400): JsonResponse
     {
         $data = ['message' => $e->getMessage()];
