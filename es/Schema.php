@@ -523,6 +523,7 @@ class Schema
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_USER],
         'properties' => [
+            'id'           => ['type' => self::T_INT],
             'title'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'code'         => ['type' => self::T_KEYWORD],
             'instance_id'  => ['type' => self::T_INT],
