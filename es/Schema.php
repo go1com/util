@@ -234,12 +234,12 @@ class Schema
             'tags'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'image'          => ['type' => self::T_TEXT],
             'pricing'        => [
-                'type'       => self::T_NESTED,
                 'properties' => [
                     'currency'     => ['type' => self::T_KEYWORD],
                     'price'        => ['type' => self::T_DOUBLE],
                     'tax'          => ['type' => self::T_DOUBLE],
                     'tax_included' => ['type' => self::T_BOOL],
+                    'total'        => ['type' => self::T_DOUBLE],
                 ],
             ],
             'duration'       => ['type' => self::T_INT], # Duration in minute
