@@ -297,7 +297,7 @@ class GroupHelperTest extends UtilTestCase
             'status'      => GroupAssignStatuses::ARCHIVED,
         ]);
 
-        $this->assertCount(2, GroupHelper::groupAssigns($this->db, $groupId));
-        $this->assertCount(1, GroupHelper::groupAssigns($this->db, $groupId, ['status' => GroupAssignStatuses::ARCHIVED]));
+        $this->assertCount(2, GroupHelper::groupAssignments($this->db, $groupId));
+        $this->assertCount(1, GroupHelper::groupAssignments($this->db, $groupId, ['status' => GroupAssignStatuses::ARCHIVED]));
     }
 }
