@@ -4,6 +4,7 @@ namespace go1\util\schema\tests;
 
 use go1\util\DB;
 use go1\util\tests\UtilTestCase;
+use go1\util\user\UserHelper;
 
 class DBTest extends UtilTestCase
 {
@@ -49,5 +50,36 @@ class DBTest extends UtilTestCase
     public function testCacheRetrievalReset()
     {
         $this->assertEquals([], DB::cache(self::class, null, true));
+    }
+
+    public function testMerge()
+    {
+        DB::merge($this->db, 'gc_user', [], $dataUser = [
+            'id'         => $userId = 99,
+            'first_name' => 'Nikk',
+            'last_name'  => 'Nguyen',
+            'mail'       => 'user@foo.com',
+            'uuid'       => 'xxx',
+            'instance'   => 'foo.com',
+            'password'   => 'yyy',
+            'created'    => time(),
+            'access'     => time(),
+            'login'      => time(),
+            'timestamp'  => time(),
+            'status'     => 1,
+            'data'       => json_encode(null),
+        ]);
+        $originalUser = (array) UserHelper::load($this->db, $userId);
+
+        $this->assertArraySubset($dataUser, $originalUser);
+
+        DB::merge($this->db, 'gc_user', ['id' => $userId], $changedData = [
+            'mail'       => 'changed@foo.com',
+            'first_name' => 'Phuc',
+            'instance'   => 'bar.com',
+        ], $original);
+        $user = (array) UserHelper::load($this->db, $userId);
+
+        $this->assertEquals($changedData, array_diff($user, $originalUser));
     }
 }

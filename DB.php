@@ -136,11 +136,11 @@ class DB
         return $data;
     }
 
-    public static function merge(Connection $db, string $table, array $keys, array $fields): int
+    public static function merge(Connection $db, string $table, array $keys, array $fields, &$original = null): int
     {
         $find = $db
             ->createQueryBuilder()
-            ->select('1')
+            ->select('*')
             ->from($table);
 
         foreach ($keys as $k => $v) {
@@ -149,8 +149,10 @@ class DB
                 ->setParameter(":$k", $v);
         }
 
-        return $find->execute()->fetchColumn()
-            ? $db->insert($table, $fields)
-            : $db->update($table, $fields, $keys);
+        $original = $find->execute()->fetch(DB::OBJ);
+
+        return $original
+            ? $db->update($table, $fields, $keys)
+            : $db->insert($table, $fields);
     }
 }
