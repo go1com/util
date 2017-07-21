@@ -136,7 +136,7 @@ class DB
         return $data;
     }
 
-    public static function merge(Connection $db, string $table, array $keys, array $fields, &$original = null): int
+    public static function merge(Connection $db, string $table, array $keys, array $fields, array $fieldsCreateOnly = [], &$original = null): int
     {
         $find = $db
             ->createQueryBuilder()
@@ -153,6 +153,6 @@ class DB
 
         return $original
             ? $db->update($table, $fields, $keys)
-            : $db->insert($table, $fields);
+            : $db->insert($table, $fields + $fieldsCreateOnly);
     }
 }

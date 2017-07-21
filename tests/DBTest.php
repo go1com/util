@@ -73,11 +73,21 @@ class DBTest extends UtilTestCase
 
         $this->assertArraySubset($dataUser, $originalUser);
 
-        DB::merge($this->db, 'gc_user', ['id' => $userId], $changedData = [
-            'mail'       => 'changed@foo.com',
-            'first_name' => 'Phuc',
-            'instance'   => 'bar.com',
-        ], $original);
+        DB::merge(
+            $this->db, 'gc_user',
+            [
+                'id' => $userId,
+            ],
+            $changedData = [
+                'mail'       => 'changed@foo.com',
+                'first_name' => 'Phuc',
+                'instance'   => 'bar.com',
+            ],
+            [
+                'created' => time() + 99,
+            ],
+            $original
+        );
         $user = (array) UserHelper::load($this->db, $userId);
 
         $this->assertEquals($changedData, array_diff($user, $originalUser));
