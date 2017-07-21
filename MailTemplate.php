@@ -108,13 +108,15 @@ class MailTemplate
     const ENQUIRY_ACCEPTED = [
         'key'    => 'lo.enquiry.accepted',
         'tokens' => [
-            '!title'     => 'Course title',
-            '!first'     => 'User first name',
-            '!last'      => 'User last name',
-            '!site_name' => 'Human name of the portal',
+            '!learner_name' => 'Learn name',
+            '!course_name'  => 'Course name',
+            '!portal_name'  => 'Portal name',
+            '!portal_image' => 'Portal image',
+            '!learner_mail' => 'Learner mail',
         ],
     ];
 
+    /* deprecated */
     const ENQUIRY_REJECED = [
         'key'    => 'lo.enquiry.rejected',
         'tokens' => [
@@ -122,6 +124,17 @@ class MailTemplate
             '!first'     => 'User first name',
             '!last'      => 'User last name',
             '!site_name' => 'Human name of the portal',
+        ],
+    ];
+
+    const ENQUIRY_REJECTED = [
+        'key'    => 'lo.enquiry.rejected',
+        'tokens' => [
+            '!learner_name' => 'Learn name',
+            '!course_name'  => 'Course name',
+            '!portal_name'  => 'Portal name',
+            '!portal_image' => 'Portal image',
+            '!learner_mail' => 'Learner mail',
         ],
     ];
 
