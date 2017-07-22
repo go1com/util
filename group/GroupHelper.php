@@ -253,7 +253,7 @@ class GroupHelper
 
     public static function loadAssignment(Connection $db, int $assignId)
     {
-        return $db->executeQuery('SELECT * FROM social_group_assign WHERE id = ?', $assignId)->fetch(DB::OBJ);
+        return $db->executeQuery('SELECT * FROM social_group_assign WHERE id = ?', [$assignId])->fetch(DB::OBJ);
     }
 
     public static function groupAssignments(Connection $db, int $groupId, array $options = [])
