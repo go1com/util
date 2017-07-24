@@ -81,7 +81,7 @@ class EnrolmentHelper
         return false;
     }
 
-    public static function isCompleted(stdClass $enrolment): bool
+    public static function completed(stdClass $enrolment): bool
     {
         return ($enrolment->status == EnrolmentStatuses::COMPLETED) && ($enrolment->pass == 1);
     }
