@@ -100,7 +100,7 @@ class Schema
 
     const EDGE_MAPPING = [
         'properties' => [
-            'id'        => ['type' => self::T_INT],
+            'id'        => ['type' => self::T_KEYWORD],
             'type_id'   => ['type' => self::T_INT],
             'source_id' => ['type' => self::T_INT],
             'target_id' => ['type' => self::T_INT],
@@ -113,7 +113,7 @@ class Schema
         '_parent'    => ['type' => self::O_USER],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'            => ['type' => self::T_INT],
+            'id'            => ['type' => self::T_KEYWORD],
             'title'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'status'        => ['type' => self::T_SHORT],
             'name'          => ['type' => self::T_KEYWORD],
@@ -139,7 +139,7 @@ class Schema
 
     const USER_MAPPING = [
         'properties' => [
-            'id'           => ['type' => self::T_INT],
+            'id'           => ['type' => self::T_KEYWORD],
             'profile_id'   => ['type' => self::T_INT],
             'mail'         => ['type' => self::T_KEYWORD],
             'name'         => ['type' => self::T_KEYWORD],
@@ -159,7 +159,7 @@ class Schema
         '_parent'    => ['type' => self::O_USER],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'           => ['type' => self::T_INT],
+            'id'           => ['type' => self::T_KEYWORD],
             'instance'     => ['type' => self::T_KEYWORD],
             'mail'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
@@ -217,7 +217,7 @@ class Schema
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'             => ['type' => self::T_INT],
+            'id'             => ['type' => self::T_KEYWORD],
             'type'           => ['type' => self::T_KEYWORD],
             'origin_id'      => ['type' => self::T_INT],
             'remote_id'      => ['type' => self::T_KEYWORD],
@@ -272,7 +272,7 @@ class Schema
 
     const PLAN_MAPPING = [
         'properties' => [
-            'id'          => ['type' => self::T_INT],
+            'id'          => ['type' => self::T_KEYWORD],
             'user_id'     => ['type' => self::T_INT],
             'assigner_id' => ['type' => self::T_INT],
             'entity_type' => ['type' => self::T_KEYWORD],
@@ -291,7 +291,7 @@ class Schema
         '_parent'    => ['type' => self::O_LO],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'         => ['type' => self::T_INT],
+            'id'         => ['type' => self::T_KEYWORD],
             // Type of enrolment: enrolment, manual-record, plan-assigned.
             'type'       => ['type' => self::T_KEYWORD],
             'profile_id' => ['type' => self::T_INT],
@@ -330,7 +330,7 @@ class Schema
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_ENROLMENT],
         'properties' => [
-            'id'         => ['type' => self::T_INT],
+            'id'         => ['type' => self::T_KEYWORD],
             'start_date' => ['type' => self::T_DATE],
             'end_date'   => ['type' => self::T_DATE],
             'status'     => ['type' => self::T_SHORT],
@@ -345,14 +345,14 @@ class Schema
         '_routing'   => ['required' => true],
         'properties' => [
             // Enrolment id.
-            'id'         => ['type' => self::T_INT],
+            'id'         => ['type' => self::T_KEYWORD],
             'lo_id'      => ['type' => self::T_INT],
         ],
     ];
 
     const MANUAL_RECORD_MAPPING = [
         'properties' => [
-            'id'          => ['type' => self::T_INT],
+            'id'          => ['type' => self::T_KEYWORD],
             'entity_type' => ['type' => self::T_KEYWORD],
             'entity_id'   => ['type' => self::T_INT],
             'user_id'     => ['type' => self::T_INT],
@@ -367,7 +367,7 @@ class Schema
         '_parent'    => ['type' => self::O_ENROLMENT],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'          => ['type' => self::T_INT],
+            'id'          => ['type' => self::T_KEYWORD],
             'revision_id' => ['type' => self::T_INT],
             'profile_id'  => ['type' => self::T_INT],
             'status'      => ['type' => self::T_SHORT],
@@ -382,7 +382,7 @@ class Schema
         '_parent'    => ['type' => self::O_SUBMISSION],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'      => ['type' => self::T_INT],
+            'id'      => ['type' => self::T_KEYWORD],
             'status'  => ['type' => self::T_SHORT],
             'created' => ['type' => self::T_DATE],
             'updated' => ['type' => self::T_DATE],
@@ -398,7 +398,7 @@ class Schema
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'         => ['type' => self::T_INT],
+            'id'         => ['type' => self::T_KEYWORD],
             'title'      => ['type' => self::T_KEYWORD],
             'user_id'    => ['type' => self::T_INT],
             'visibility' => ['type' => self::T_SHORT],
@@ -411,7 +411,7 @@ class Schema
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'          => ['type' => self::T_INT],
+            'id'          => ['type' => self::T_KEYWORD],
             'recipient'   => ['type' => self::T_KEYWORD],
             'sender'      => ['type' => self::T_KEYWORD],
             'cc'          => ['type' => self::T_KEYWORD],
@@ -428,7 +428,7 @@ class Schema
 
     const PAYMENT_TRANSACTION_MAPPING = [
         'properties' => [
-            'id'             => ['type' => self::T_INT],
+            'id'             => ['type' => self::T_KEYWORD],
             'instance_id'    => ['type' => self::T_INT],
             'local_id'       => ['type' => self::T_INT],
             'email'          => ['type' => self::T_KEYWORD],
@@ -451,7 +451,7 @@ class Schema
 
     const PAYMENT_TRANSACTION_ITEM_MAPPING = [
         'properties' => [
-            'id'           => ['type' => self::T_INT],
+            'id'           => ['type' => self::T_KEYWORD],
             'product_type' => ['type' => self::T_KEYWORD],
             'product_id'   => ['type' => self::T_INT],
             'qty'          => ['type' => self::T_INT],
@@ -463,7 +463,7 @@ class Schema
 
     const QUIZ_USER_ANSWER_MAPPING = [
         'properties' => [
-            'id'            => ['type' => self::T_INT],
+            'id'            => ['type' => self::T_KEYWORD],
             'question_type' => ['type' => self::T_KEYWORD],
             'answer'        => ['type' => self::T_TEXT],
             'created'       => ['type' => self::T_DATE],
@@ -503,7 +503,7 @@ class Schema
             'field'       => [
                 'type'       => self::T_NESTED,
                 'properties' => [
-                    'id'           => ['type' => self::T_INT],
+                    'id'           => ['type' => self::T_KEYWORD],
                     'name'         => ['type' => self::T_KEYWORD],
                     'description'  => ['type' => self::T_TEXT],
                     'label'        => ['type' => self::T_KEYWORD],
@@ -523,7 +523,7 @@ class Schema
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_USER],
         'properties' => [
-            'id'           => ['type' => self::T_INT],
+            'id'           => ['type' => self::T_KEYWORD],
             'title'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'code'         => ['type' => self::T_KEYWORD],
             'instance_id'  => ['type' => self::T_INT],
@@ -578,6 +578,7 @@ class Schema
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_LO],
         'properties' => [
+            'id'                      => ['type' => self::T_KEYWORD],
             'lo_id'                   => ['type' => self::T_INT],
             'title'                   => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'start'                   => ['type' => self::T_DATE],
@@ -604,7 +605,7 @@ class Schema
 
     const AWARD_MAPPING = [
         'properties' => [
-            'id'             => ['type' => self::T_INT],
+            'id'             => ['type' => self::T_KEYWORD],
             'title'          => ['type' => self::T_KEYWORD],
             'description'    => ['type' => self::T_TEXT],
             'image'          => ['type' => self::T_TEXT],
