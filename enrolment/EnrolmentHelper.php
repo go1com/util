@@ -81,6 +81,11 @@ class EnrolmentHelper
         return false;
     }
 
+    public static function isCompleted(stdClass $enrolment): bool
+    {
+        return ($enrolment->status == EnrolmentStatuses::COMPLETED) && ($enrolment->pass == 1);
+    }
+
     # Check that all dependencies are completed.
     # Only return true if # of completion = # of dependencies
     public static function dependenciesCompleted(Connection $db, stdClass $enrolment, bool $passAware = true): bool
