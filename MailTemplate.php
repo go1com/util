@@ -255,6 +255,31 @@ class MailTemplate
             '!group_title'    => 'Group name',
             '!accept_url'     => 'Accept payment URL',
             '!reject_url'     => 'Reject payment URL',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal image',
+            '!portal_url'     => 'The portal URL',
+        ],
+    ];
+
+    const USER_GROUP_REQUEST_ACCEPT = [
+        'key'    => 'user.group.request.accept',
+        'tokens' => [
+            '!recipient_name' => 'Recipient full name',
+            '!group_title'    => 'Group name',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal image',
+            '!portal_url'     => 'The portal URL',
+        ],
+    ];
+
+    const USER_GROUP_REQUEST_REJECT = [
+        'key'    => 'user.group.request.reject',
+        'tokens' => [
+            '!recipient_name' => 'Recipient full name',
+            '!group_title'    => 'Group name',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal image',
+            '!portal_url'     => 'The portal URL',
         ],
     ];
 
