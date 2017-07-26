@@ -4,12 +4,12 @@ namespace go1\util\note;
 
 class NoteStatus
 {
-    const LO_STATUS_PRIVATE = 0;
-    const LO_STATUS_COURSE  = 1;
-    const LO_STATUS_PUBLIC  = 2;
+    const ENTITY_STATUS_PRIVATE     = 0;
+    const ENTITY_STATUS_ENROLLED    = 1;
+    const ENTITY_STATUS_PUBLIC      = 2;
 
-    const TYPE_LO       = 'lo';
-    const TYPE_GROUP    = 'group';
+    const TYPE_LO                   = 'lo';
+    const TYPE_GROUP                = 'group';
 
-    public static $loStatus = [self::LO_STATUS_PRIVATE, self::LO_STATUS_COURSE, self::LO_STATUS_PUBLIC];
+    public static $loStatus = [self::ENTITY_STATUS_PRIVATE, self::ENTITY_STATUS_ENROLLED, self::ENTITY_STATUS_PUBLIC];
 }
