@@ -39,10 +39,12 @@ class PortalPricing
     const PLAN_STATUS_FREE              = 0;
     const PLAN_STATUS_TRIAL             = 1;
     const PLAN_STATUS_PAID              = 2;
+    const PLAN_STATUS_OVERDUE_INVOICE   = 3;
     const PLAN_STATUS                   = [
-        self::PLAN_STATUS_FREE    => 'Free',
-        self::PLAN_STATUS_TRIAL   => 'Trial',
-        self::PLAN_STATUS_PAID    => 'Paid'
+        self::PLAN_STATUS_FREE            => 'Free',
+        self::PLAN_STATUS_TRIAL           => 'Trial',
+        self::PLAN_STATUS_PAID            => 'Paid',
+        self::PLAN_STATUS_OVERDUE_INVOICE => 'Overdue invoice'
     ];
 
     const TRIAL_EXPIRE                  = 3600 * 24 * 14;
