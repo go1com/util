@@ -10,7 +10,7 @@ class Schema
     const INDEX                 = ES_INDEX;
     const ALL_INDEX             = ES_INDEX . '*';
     const MARKETPLACE_INDEX     = ES_INDEX . '_marketplace';
-    
+
     const TEMP  = -32;
 
     const DO_INDEX  = 'index';
@@ -51,6 +51,11 @@ class Schema
     const O_LO_GROUP            = 'lo_group';
     const O_EVENT               = 'event';
     const O_AWARD               = 'award';
+    const O_AWARD_ITEM          = 'award_item';
+    const O_AWARD_ITEM_MANUAL   = 'award_item_manual';
+    const O_AWARD_ENROLMENT     = 'award_enrolment';
+    const O_AWARD_ACHIEVEMENT   = 'award_achievement';
+
     // enrolment only belong to lo. account_enrolment is enrolment, but belong to account.
     // This is used to get users that is not enrolled to a course.
     const O_ACCOUNT_ENROLMENT   = 'account_enrolment';
@@ -87,6 +92,10 @@ class Schema
         self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
         self::O_AWARD               => self::AWARD_MAPPING,
+        self::O_AWARD_ITEM          => self::AWARD_ITEM_MAPPING,
+        self::O_AWARD_ITEM_MANUAL   => self::AWARD_ITEM_MANUAL_MAPPING,
+        self::O_AWARD_ENROLMENT     => self::AWARD_ENROLMENT_MAPPING,
+        self::O_AWARD_ACHIEVEMENT   => self::AWARD_ACHIEVEMENT_MAPPING,
         self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
     ];
 
@@ -604,23 +613,87 @@ class Schema
     ];
 
     const AWARD_MAPPING = [
+        '_parent'    => ['type' => self::O_PORTAL],
+        '_routing'   => ['required' => true],
         'properties' => [
-            'id'             => ['type' => self::T_KEYWORD],
-            'title'          => ['type' => self::T_KEYWORD],
-            'description'    => ['type' => self::T_TEXT],
-            'image'          => ['type' => self::T_TEXT],
-            'user_id'        => ['type' => self::T_INT],
-            'instance_id'    => ['type' => self::T_INT],
-            'published'      => ['type' => self::T_INT],
-            'quantity'       => ['type' => self::T_DOUBLE],
+            'id'          => ['type' => self::T_KEYWORD],
+            'revision_id' => ['type' => self::T_INT],
+            'title'       => ['type' => self::T_KEYWORD],
+            'description' => ['type' => self::T_TEXT],
+            'image'       => ['type' => self::T_TEXT],
+            'user_id'     => ['type' => self::T_INT],
+            'instance_id' => ['type' => self::T_INT],
+            'published'   => ['type' => self::T_INT],
+            'quantity'    => ['type' => self::T_DOUBLE],
             // Save as keyword, not date, because there are dynamic values (e.g.
             // +6 day, +2 month). UI will render its way.
-            'expire'         => ['type' => self::T_KEYWORD],
-            'created'        => ['type' => self::T_DATE],
-            'items_count'    => ['type' => self::T_INT],
-            'tags'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'locale'         => ['type' => self::T_KEYWORD],
+            'expire'      => ['type' => self::T_KEYWORD],
+            'created'     => ['type' => self::T_DATE],
+            'items_count' => ['type' => self::T_INT],
+            'tags'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'locale'      => ['type' => self::T_KEYWORD],
         ],
+    ];
+
+    const AWARD_ITEM_MAPPING = [
+        '_parent'    => ['type' => self::O_AWARD],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'          => ['type' => self::T_KEYWORD],
+            'entity_id'   => ['type' => self::T_INT],
+            'title'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'description' => ['type' => self::T_TEXT],
+            'type'        => ['type' => self::T_KEYWORD],
+            'quantity'    => ['type' => self::T_DOUBLE],
+            'weight'      => ['type' => self::T_INT],
+            'metadata'    => [
+                'properties' => [
+                    'award_revision_id' => ['type' => self::T_INT],
+                ],
+            ],
+        ],
+    ];
+
+    const AWARD_ITEM_MANUAL_MAPPING = [
+        '_parent'    => ['type' => self::O_AWARD],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'              => ['type' => self::T_KEYWORD],
+            'entity_id'       => ['type' => self::T_INT],
+            'title'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'description'     => ['type' => self::T_TEXT],
+            'type'            => ['type' => self::T_KEYWORD],
+            'quantity'        => ['type' => self::T_DOUBLE],
+            'completion_date' => ['type' => self::T_DATE],
+            'certificate'     => ['type' => self::T_OBJECT],
+            'verified'        => ['type' => self::T_BOOL],
+            'weight'          => ['type' => self::T_INT],
+        ],
+    ];
+
+    const AWARD_ENROLMENT_MAPPING = [
+        '_parent'    => ['type' => self::O_AWARD],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'          => ['type' => self::T_KEYWORD],
+            'user_id'     => ['type' => self::T_INT],
+            'assigner_id' => ['type' => self::T_INT],
+            'expiration'  => ['type' => self::T_DATE],
+            'quantity'    => ['type' => self::T_DOUBLE],
+            'status'      => ['type' => self::T_SHORT],
+            // @todo start_date, end_date GO1P-14180
+        ],
+    ];
+
+    const AWARD_ACHIEVEMENT_MAPPING = [
+        '_parent'    => ['type' => self::O_AWARD_ENROLMENT],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'            => ['type' => self::T_KEYWORD],
+            'award_item_id' => ['type' => self::T_INT],
+            'quantity'      => ['type' => self::T_DOUBLE],
+            'created'       => ['type' => self::T_DATE],
+        ]
     ];
 
     public static function portalIndex(int $portalId)
