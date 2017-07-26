@@ -87,6 +87,11 @@ class PortalPricing
         return $portal->data->user_plan->manual_price ?? false;
     }
 
+    public static function getCustomContract(stdClass $portal)
+    {
+        return $portal->data->user_plan->custom_contract ?? false;
+    }
+
     public static function getUserLimitationNumber($portal)
     {
         $userLicenses = static::getLicenses($portal);
