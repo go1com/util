@@ -8,9 +8,6 @@ class NoteStatus
     const LO_STATUS_COURSE  = 1;
     const LO_STATUS_PUBLIC  = 2;
 
-    const PRIVATE   = 1;
-    const PUBLIC    = 0;
-
     const TYPE_LO       = 'lo';
     const TYPE_GROUP    = 'group';
 
