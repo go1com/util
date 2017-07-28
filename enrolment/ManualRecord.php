@@ -51,7 +51,7 @@ class ManualRecord implements JsonSerializable
 
     public function jsonSerialize()
     {
-        return [
+        $return = [
             'id'          => $this->id,
             'instance_id' => $this->instanceId,
             'entity_type' => $this->entityType,
@@ -63,5 +63,11 @@ class ManualRecord implements JsonSerializable
             'updated'     => $this->updated,
             'original'    => $this->original,
         ];
+
+        if (isset($this->entity)) {
+            $return['entity'] = $this->entity;
+        }
+
+        return $return;
     }
 }

@@ -39,10 +39,12 @@ class PortalPricing
     const PLAN_STATUS_FREE              = 0;
     const PLAN_STATUS_TRIAL             = 1;
     const PLAN_STATUS_PAID              = 2;
+    const PLAN_STATUS_OVERDUE_INVOICE   = 3;
     const PLAN_STATUS                   = [
-        self::PLAN_STATUS_FREE    => 'Free',
-        self::PLAN_STATUS_TRIAL   => 'Trial',
-        self::PLAN_STATUS_PAID    => 'Paid'
+        self::PLAN_STATUS_FREE            => 'Free',
+        self::PLAN_STATUS_TRIAL           => 'Trial',
+        self::PLAN_STATUS_PAID            => 'Paid',
+        self::PLAN_STATUS_OVERDUE_INVOICE => 'Overdue invoice'
     ];
 
     const TRIAL_EXPIRE                  = 3600 * 24 * 14;
@@ -85,6 +87,11 @@ class PortalPricing
     public static function getManualPrice(stdClass $portal)
     {
         return $portal->data->user_plan->manual_price ?? false;
+    }
+
+    public static function getCustomContract(stdClass $portal)
+    {
+        return $portal->data->user_plan->custom_contract ?? false;
     }
 
     public static function getUserLimitationNumber($portal)

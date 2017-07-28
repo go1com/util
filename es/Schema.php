@@ -484,7 +484,6 @@ class Schema
             // @todo Handle updating question.
             'question'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'counter'       => ['type' => self::T_INT],
-            'user_id'       => ['type' => self::T_INT],
             'user'          => [
                 'properties' => self::USER_MAPPING['properties'],
             ],
