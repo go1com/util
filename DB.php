@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class DB
 {
     const OBJ      = PDO::FETCH_OBJ;
+    const ARR      = PDO::FETCH_ASSOC;
     const INTEGER  = PDO::PARAM_INT;
     const INTEGERS = Connection::PARAM_INT_ARRAY;
     const STRING   = PDO::PARAM_STR;
@@ -152,5 +153,35 @@ class DB
         return $find->execute()->fetch(DB::OBJ)
             ? $db->update($table, $fields, $keys)
             : $db->insert($table, $fields);
+    }
+
+    public static function loadMultiple(Connection $db, string $tableName, array $ids, string $fetchMode = DB::OBJ)
+    {
+        $entities = $db
+            ->executeQuery("SELECT * FROM $tableName WHERE id IN (?)", [$ids], [DB::INTEGERS])
+            ->fetchAll($fetchMode);
+
+        $entities = array_map(function ($entity) use ($fetchMode) {
+            if (DB::OBJ == $fetchMode) {
+                $data = &$entity->data ?? null;
+            } else {
+                $data = &$entity['data'] ?? null;
+            }
+
+            if (isset($data)) {
+                $data = is_scalar($data) ? json_decode($data, (DB::ARR == $fetchMode)) : $data;
+            }
+
+            return $entity;
+        }, $entities);
+
+        return $entities;
+    }
+
+    public static function load(Connection $db, $tableName, int $id, string $fetchMode = DB::OBJ)
+    {
+        $entities = static::loadMultiple($db, $tableName, [$id], $fetchMode);
+
+        return $entities ? $entities[0] : null;
     }
 }
