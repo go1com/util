@@ -75,13 +75,11 @@ class AwardHelperTest extends UtilTestCase
     /** @dataProvider dataLoad */
     public function testLoad($methodName)
     {
-        $db = $this->db;
-
         $awardData = $this->awardData;
         $awardData['data'] = json_encode($awardData['data']);
-        $awardId = $this->createAward($db, $awardData);
+        $awardId = $this->createAward($this->db, $awardData);
 
-        $award = call_user_func([AwardHelper::class, $methodName], $db, $awardId);
+        $award = call_user_func([AwardHelper::class, $methodName], $this->db, $awardId);
         $this->assertInternalType('int' , $award->id);
         $this->assertInternalType('int' , $award->revision_id);
         $this->assertInternalType('int' , $award->instance_id);
@@ -94,7 +92,24 @@ class AwardHelperTest extends UtilTestCase
         $this->assertEquals(['force', 'award'], $award->tags);
         $this->assertEquals([], $award->locale);
 
-        $emptyAward = call_user_func([AwardHelper::class, $methodName], $db, 99);
+        $emptyAward = call_user_func([AwardHelper::class, $methodName], $this->db, 99);
         $this->assertEmpty($emptyAward);
+    }
+
+    public function testLoadItem()
+    {
+        $awardManualItemId = $this->createAwardItemManual($this->db, [
+            'data' => $data = [
+                'certificate' => [
+                    'url' => 'foo.com',
+                    'size' => '1MB',
+                    'name' => 'foo',
+                ]
+            ]
+        ]);
+        $awardManualItem = AwardHelper::loadManualItem($this->db, $awardManualItemId);
+
+        $this->assertInternalType('object', $awardManualItem->data);
+        $this->assertEquals(json_decode(json_encode($data)), $awardManualItem->data);
     }
 }
