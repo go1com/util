@@ -7,11 +7,11 @@ namespace go1\util\es;
  */
 class Schema
 {
-    const INDEX                 = ES_INDEX;
-    const ALL_INDEX             = ES_INDEX . '*';
-    const MARKETPLACE_INDEX     = ES_INDEX . '_marketplace';
+    const INDEX             = ES_INDEX;
+    const ALL_INDEX         = ES_INDEX . '*';
+    const MARKETPLACE_INDEX = ES_INDEX . '_marketplace';
 
-    const TEMP  = -32;
+    const TEMP = -32;
 
     const DO_INDEX  = 'index';
     const DO_UPDATE = 'update';
@@ -58,7 +58,7 @@ class Schema
 
     // enrolment only belong to lo. account_enrolment is enrolment, but belong to account.
     // This is used to get users that is not enrolled to a course.
-    const O_ACCOUNT_ENROLMENT   = 'account_enrolment';
+    const O_ACCOUNT_ENROLMENT = 'account_enrolment';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -165,9 +165,9 @@ class Schema
     ];
 
     const ACCOUNT_MAPPING = [
-        '_parent'    => ['type' => self::O_USER],
-        '_routing'   => ['required' => true],
-        'properties' => [
+        '_parent'           => ['type' => self::O_USER],
+        '_routing'          => ['required' => true],
+        'properties'        => [
             'id'           => ['type' => self::T_KEYWORD],
             'instance'     => ['type' => self::T_KEYWORD],
             'mail'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
@@ -186,40 +186,40 @@ class Schema
             [
                 'custom_field_string' => [
                     'path_match' => 'fields_*.*.value_string',
-                    'mapping' => ['type' => self::T_KEYWORD] + self::ANALYZED
-                ]
+                    'mapping'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                ],
             ],
             [
                 'custom_field_text' => [
                     'path_match' => 'fields_*.*.value_text',
-                    'mapping' => ['type' => self::T_TEXT]
-                ]
+                    'mapping'    => ['type' => self::T_TEXT],
+                ],
             ],
             [
                 'custom_field_integer' => [
                     'path_match' => 'fields_*.*.value_integer',
-                    'mapping' => ['type' => self::T_INT]
-                ]
+                    'mapping'    => ['type' => self::T_INT],
+                ],
             ],
             [
                 'custom_field_float' => [
                     'path_match' => 'fields_*.*.value_float',
-                    'mapping' => ['type' => self::T_DOUBLE]
-                ]
+                    'mapping'    => ['type' => self::T_DOUBLE],
+                ],
             ],
             [
                 'custom_field_date' => [
                     'path_match' => 'fields_*.*.value_date',
-                    'mapping' => ['type' => self::T_DATE]
-                ]
+                    'mapping'    => ['type' => self::T_DATE],
+                ],
             ],
             [
                 'custom_field_datetime' => [
                     'path_match' => 'fields_*.*.value_datetime',
-                    'mapping' => ['type' => self::T_DATE]
-                ]
-            ]
-        ]
+                    'mapping'    => ['type' => self::T_DATE],
+                ],
+            ],
+        ],
     ];
 
     const LO_MAPPING = [
@@ -249,6 +249,13 @@ class Schema
                     'tax'          => ['type' => self::T_DOUBLE],
                     'tax_included' => ['type' => self::T_BOOL],
                     'total'        => ['type' => self::T_DOUBLE],
+                    'recurring'    => [
+                        'properties' => [
+                            'recurring' => self::T_BOOL,
+                            'interval'  => self::T_TEXT,
+                            'count'     => self::T_INT,
+                        ],
+                    ],
                 ],
             ],
             'duration'       => ['type' => self::T_INT], # Duration in minute
@@ -354,8 +361,8 @@ class Schema
         '_routing'   => ['required' => true],
         'properties' => [
             // Enrolment id.
-            'id'         => ['type' => self::T_KEYWORD],
-            'lo_id'      => ['type' => self::T_INT],
+            'id'    => ['type' => self::T_KEYWORD],
+            'lo_id' => ['type' => self::T_INT],
         ],
     ];
 
@@ -493,11 +500,11 @@ class Schema
             'course'        => [
                 'properties' => self::LO_MAPPING['properties'],
             ],
-            'metadata'   => [
+            'metadata'      => [
                 'properties' => [
-                    'li_id'               => ['type' => self::T_INT],
-                    'course_id'           => ['type' => self::T_INT],
-                    'user_id'             => ['type' => self::T_INT],
+                    'li_id'     => ['type' => self::T_INT],
+                    'course_id' => ['type' => self::T_INT],
+                    'user_id'   => ['type' => self::T_INT],
                 ],
             ],
         ],
@@ -552,7 +559,7 @@ class Schema
                     'created'        => ['type' => self::T_DATE],
                 ],
             ],
-            'items'          => [
+            'items'        => [
                 'type'       => self::T_NESTED,
                 'properties' => self::LO_MAPPING['properties'],
             ],
@@ -563,20 +570,20 @@ class Schema
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_PAYMENT_TRANSACTION],
         'properties' => [
-            'user'           => [
+            'user'      => [
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'lo'         => [
+            'lo'        => [
                 'properties' => self::LO_MAPPING['properties'],
             ],
-            'portal_id'      => ['type' => self::T_INT],
-            'total'          => ['type' => self::T_INT],
-            'used'           => ['type' => self::T_INT],
-            'remaining'      => ['type' => self::T_INT],
-            'metadata'   => [
+            'portal_id' => ['type' => self::T_INT],
+            'total'     => ['type' => self::T_INT],
+            'used'      => ['type' => self::T_INT],
+            'remaining' => ['type' => self::T_INT],
+            'metadata'  => [
                 'properties' => [
-                    'user_id'         => ['type' => self::T_INT],
-                    'lo_id'           => ['type' => self::T_INT],
+                    'user_id' => ['type' => self::T_INT],
+                    'lo_id'   => ['type' => self::T_INT],
                 ],
             ],
         ],
@@ -607,7 +614,7 @@ class Schema
             'postal_code'             => ['type' => self::T_KEYWORD],
             'parent'                  => [
                 'properties' => self::LO_MAPPING['properties'],
-            ]
+            ],
         ],
     ];
 
@@ -692,7 +699,7 @@ class Schema
             'award_item_id' => ['type' => self::T_INT],
             'quantity'      => ['type' => self::T_DOUBLE],
             'created'       => ['type' => self::T_DATE],
-        ]
+        ],
     ];
 
     public static function portalIndex(int $portalId)
