@@ -251,9 +251,9 @@ class Schema
                     'total'        => ['type' => self::T_DOUBLE],
                     'recurring'    => [
                         'properties' => [
-                            'recurring' => self::T_BOOL,
-                            'interval'  => self::T_TEXT,
-                            'count'     => self::T_INT,
+                            'recurring' => ['type' => self::T_BOOL],
+                            'interval'  => ['type' => self::T_TEXT],
+                            'count'     => ['type' => self::T_INT],
                         ],
                     ],
                 ],
