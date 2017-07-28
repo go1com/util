@@ -73,4 +73,19 @@ class AwardHelper
             ->executeQuery('SELECT * FROM award_item WHERE id = ?', [$awardItemId])
             ->fetch(DB::OBJ);
     }
+
+    public static function loadManualItem(Connection $db, int $awardManualItemId)
+    {
+        $awardManualItem = $db
+            ->executeQuery('SELECT * FROM award_item_manual WHERE id = ?', [$awardManualItemId])
+            ->fetch(DB::OBJ);
+
+        if ($awardManualItem) {
+            if (!$awardManualItem->data = json_decode($awardManualItem->data)) {
+                unset($awardManualItem->data);
+            }
+        }
+
+        return $awardManualItem;
+    }
 }

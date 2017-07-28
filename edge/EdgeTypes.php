@@ -109,8 +109,8 @@ class EdgeTypes
 
     # Award relationships
     # ---------------------
-    const  AWARD_PUBLISH_MARKETPLACE_REQUEST_REJECTED = 60; # T: User-Rejecter | S: Award
-    const  AWARD_PUBLISH_MARKETPLACE_REQUEST_APPROVED = 61; # T: User-Acceptor | S: Award
+    const  AWARD_PUBLISH_MARKETPLACE_REQUEST_REJECTED = 60; # T: Timestamp     | S: Award      | W: gc_user.id (Rejecter)
+    const  AWARD_PUBLISH_MARKETPLACE_REQUEST_APPROVED = 61; # T: Timestamp     | S: Award      | W: gc_user.id (Acceptor)
 
     # Portal relationships
     # ---------------------
