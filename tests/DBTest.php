@@ -88,4 +88,58 @@ class DBTest extends UtilTestCase
 
         $this->assertEquals($changedData, array_diff($user, $originalUser));
     }
+
+    public function testLoad()
+    {
+        $fooUserId = $this->createUser($this->db, [
+            'mail' => 'foo@foo.com',
+            'data' => $fooData = ['foo' => 'bar'],
+        ]);
+        $barUserId = $this->createUser($this->db, [
+            'mail' => 'bar@foo.com',
+        ]);
+
+        $fooUserObj = DB::load($this->db, 'gc_user', $fooUserId, DB::OBJ);
+        $barUserObj = DB::load($this->db, 'gc_user', $barUserId, DB::OBJ);
+
+        $this->assertInternalType('object', $fooUserObj);
+        $this->assertEquals((object) $fooData, $fooUserObj->data);
+        $this->assertInternalType('object', $barUserObj);
+        $this->assertEquals([], $barUserObj->data);
+
+        $fooUserArr = DB::load($this->db, 'gc_user', $fooUserId, DB::ASS);
+        $barUserArr = DB::load($this->db, 'gc_user', $barUserId, DB::ASS);
+
+        $this->assertInternalType('array', $fooUserArr);
+        $this->assertEquals($fooData, $fooUserArr['data']);
+        $this->assertInternalType('array', $barUserArr);
+        $this->assertEquals([], $barUserArr['data']);
+    }
+
+    public function testLoadMultiple()
+    {
+        $fooUserId = $this->createUser($this->db, [
+            'mail' => 'foo@foo.com',
+            'data' => $fooData = ['foo' => 'bar'],
+        ]);
+        $barUserId = $this->createUser($this->db, [
+            'mail' => 'bar@foo.com',
+        ]);
+
+        $usersObj = DB::loadMultiple($this->db, 'gc_user', [$fooUserId, $barUserId], DB::OBJ);
+
+        $this->assertCount(2, $usersObj);
+        $this->assertInternalType('object', $usersObj[0]);
+        $this->assertEquals((object) $fooData, $usersObj[0]->data);
+        $this->assertInternalType('object', $usersObj[1]);
+        $this->assertEquals([], $usersObj[1]->data);
+
+        $usersArr = DB::loadMultiple($this->db, 'gc_user', [$fooUserId, $barUserId], DB::ASS);
+
+        $this->assertCount(2, $usersArr);
+        $this->assertInternalType('array', $usersArr[0]);
+        $this->assertEquals($fooData, $usersArr[0]['data']);
+        $this->assertInternalType('array', $usersArr[1]);
+        $this->assertEquals([], $usersArr[1]['data']);
+    }
 }
