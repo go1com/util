@@ -58,8 +58,15 @@ class LoSchema
             $price->addColumn('currency', 'string', ['length' => 4]);
             $price->addColumn('tax', 'float');
             $price->addColumn('tax_included', 'smallint', ['default' => 1]);
+            $price->addColumn('recurring', Type::BLOB, ['notnull' => false]);
             $price->setPrimaryKey(['id']);
             $price->addIndex(['price']);
+        }
+        else {
+            $price = $schema->getTable('gc_lo_pricing');
+            if (!$price->hasColumn('recurring')) {
+                $price->addColumn('recurring', Type::BLOB, ['notnull' => false]);
+            }
         }
 
         if (!$schema->hasTable('gc_lo_group')) {
