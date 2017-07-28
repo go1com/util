@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class DB
 {
     const OBJ      = PDO::FETCH_OBJ;
-    const ASS      = PDO::FETCH_ASSOC;
+    const ARR      = PDO::FETCH_ASSOC;
     const INTEGER  = PDO::PARAM_INT;
     const INTEGERS = Connection::PARAM_INT_ARRAY;
     const STRING   = PDO::PARAM_STR;
@@ -169,7 +169,7 @@ class DB
             }
 
             if (isset($data)) {
-                $data = is_scalar($data) ? json_decode($data, (DB::ASS == $fetchMode)) : $data;
+                $data = is_scalar($data) ? json_decode($data, (DB::ARR == $fetchMode)) : $data;
             }
 
             return $entity;

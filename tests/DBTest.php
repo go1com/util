@@ -107,8 +107,8 @@ class DBTest extends UtilTestCase
         $this->assertInternalType('object', $barUserObj);
         $this->assertEquals([], $barUserObj->data);
 
-        $fooUserArr = DB::load($this->db, 'gc_user', $fooUserId, DB::ASS);
-        $barUserArr = DB::load($this->db, 'gc_user', $barUserId, DB::ASS);
+        $fooUserArr = DB::load($this->db, 'gc_user', $fooUserId, DB::ARR);
+        $barUserArr = DB::load($this->db, 'gc_user', $barUserId, DB::ARR);
 
         $this->assertInternalType('array', $fooUserArr);
         $this->assertEquals($fooData, $fooUserArr['data']);
@@ -134,7 +134,7 @@ class DBTest extends UtilTestCase
         $this->assertInternalType('object', $usersObj[1]);
         $this->assertEquals([], $usersObj[1]->data);
 
-        $usersArr = DB::loadMultiple($this->db, 'gc_user', [$fooUserId, $barUserId], DB::ASS);
+        $usersArr = DB::loadMultiple($this->db, 'gc_user', [$fooUserId, $barUserId], DB::ARR);
 
         $this->assertCount(2, $usersArr);
         $this->assertInternalType('array', $usersArr[0]);
