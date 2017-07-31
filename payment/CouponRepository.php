@@ -115,7 +115,7 @@ class CouponRepository
         return $coupon;
     }
 
-    public function get($instanceId, $idOrCode)
+    public function get($instanceId, $idOrCode, int $userId = null)
     {
         $column = is_numeric($idOrCode) ? 'id' : 'code';
         $coupon = "SELECT * FROM payment_coupon WHERE instance_id = ? AND {$column} = ?";
@@ -126,6 +126,13 @@ class CouponRepository
             $q = $this->db->executeQuery('SELECT entity_type, entity_id FROM payment_coupon_item WHERE coupon_id = ?', [$coupon->id]);
             while ($item = $q->fetch(DB::OBJ)) {
                 $coupon->add($item->entity_type, $item->entity_id);
+            }
+
+            if ($userId) {
+                $coupon->context['usage'] = $this->db->fetchAll(
+                    'SELECT transaction_id, created FROM payment_coupon_usage WHERE user_id = ?',
+                    [$userId]
+                );
             }
         }
 
