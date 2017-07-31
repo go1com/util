@@ -48,7 +48,7 @@ class LoHelper
     {
         $learningObjects = !$ids ? [] : $db
             ->executeQuery(
-                'SELECT lo.*, pricing.price, pricing.currency, pricing.tax, pricing.tax_included'
+                'SELECT lo.*, pricing.price, pricing.currency, pricing.tax, pricing.tax_included, pricing.recurring'
                 . ' FROM gc_lo lo'
                 . ' LEFT JOIN gc_lo_pricing pricing ON lo.id = pricing.id'
                 . ' WHERE lo.id IN (?)',
@@ -68,6 +68,7 @@ class LoHelper
                 'currency'     => $lo->currency ?: 'USD',
                 'tax'          => $lo->tax ? (float) $lo->tax : 0.00,
                 'tax_included' => $lo->tax_included ? true : false,
+                'recurring'    => $lo->recurring ? json_decode($lo->recurring) : null,
             ];
             unset($lo->price, $lo->currency, $lo->tax, $lo->tax_included);
 

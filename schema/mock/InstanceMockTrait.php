@@ -32,7 +32,6 @@ trait InstanceMockTrait
 
     public function createInstancePublicKey(Connection $db, array $options, $magic = 'user.0')
     {
-
         static $profileId = 25;
 
         $db->insert('gc_user', [
