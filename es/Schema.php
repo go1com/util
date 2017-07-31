@@ -10,6 +10,7 @@ class Schema
     const INDEX             = ES_INDEX;
     const ALL_INDEX         = ES_INDEX . '*';
     const MARKETPLACE_INDEX = ES_INDEX . '_marketplace';
+    const LOG_INDEX         = ES_INDEX . '_log';
 
     const TEMP = -32;
 
@@ -38,7 +39,6 @@ class Schema
     const O_PLAN                = 'plan';
     const O_ENROLMENT           = 'enrolment';
     const O_ENROLMENT_REVISION  = 'enrolment_revision';
-    const O_MANUAL_RECORD       = 'manual_record';
     const O_SUBMISSION          = 'asm_submission';
     const O_SUBMISSION_REVISION = 'asm_submission_revision';
     const O_GROUP               = 'group';
@@ -79,7 +79,6 @@ class Schema
         self::O_PLAN                => self::PLAN_MAPPING,
         self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
         self::O_ENROLMENT_REVISION  => self::ENROLMENT_MAPPING_REVISION,
-        self::O_MANUAL_RECORD       => self::MANUAL_RECORD_MAPPING,
         self::O_SUBMISSION          => self::SUBMISSION_MAPPING,
         self::O_SUBMISSION_REVISION => self::SUBMISSION_REVISION_MAPPING,
         self::O_GROUP               => self::GROUP_MAPPING,
@@ -165,7 +164,6 @@ class Schema
     ];
 
     const ACCOUNT_MAPPING = [
-        '_parent'           => ['type' => self::O_USER],
         '_routing'          => ['required' => true],
         'properties'        => [
             'id'           => ['type' => self::T_KEYWORD],
@@ -181,6 +179,12 @@ class Schema
             'roles'        => ['type' => self::T_KEYWORD],
             'groups'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'managers'     => ['type' => self::T_INT],
+            'metadata'     => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
+                ],
+            ],
         ],
         'dynamic_templates' => [
             [
@@ -223,7 +227,6 @@ class Schema
     ];
 
     const LO_MAPPING = [
-        '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
             'id'             => ['type' => self::T_KEYWORD],
@@ -272,6 +275,8 @@ class Schema
                 'properties' => [
                     'parents_authors_ids' => ['type' => self::T_INT],
                     'parents_id'          => ['type' => self::T_INT],
+                    'instance_id'         => ['type' => self::T_INT],
+                    'updated_at'          => ['type' => self::T_INT],
                 ],
             ],
         ],
@@ -297,6 +302,12 @@ class Schema
             'created'     => ['type' => self::T_DATE],
             'due'         => ['type' => self::T_DATE],
             'data'        => ['type' => self::T_OBJECT],
+            'metadata'    => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
@@ -337,6 +348,8 @@ class Schema
                     'status'              => ['type' => self::T_SHORT],
                     'has_assessor'        => ['type' => self::T_SHORT],
                     'user_id'             => ['type' => self::T_INT],
+                    'instance_id'         => ['type' => self::T_INT],
+                    'updated_at'          => ['type' => self::T_INT],
                 ],
             ],
         ],
@@ -353,6 +366,11 @@ class Schema
             'result'     => ['type' => self::T_INT],
             'pass'       => ['type' => self::T_INT],
             'note'       => ['type' => self::T_TEXT],
+            'metadata'   => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
@@ -361,21 +379,14 @@ class Schema
         '_routing'   => ['required' => true],
         'properties' => [
             // Enrolment id.
-            'id'    => ['type' => self::T_KEYWORD],
-            'lo_id' => ['type' => self::T_INT],
-        ],
-    ];
-
-    const MANUAL_RECORD_MAPPING = [
-        'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'entity_type' => ['type' => self::T_KEYWORD],
-            'entity_id'   => ['type' => self::T_INT],
-            'user_id'     => ['type' => self::T_INT],
-            'verified'    => ['type' => self::T_BOOL],
-            'created'     => ['type' => self::T_DATE],
-            'updated'     => ['type' => self::T_DATE],
-            'data'        => ['type' => self::T_OBJECT],
+            'id'       => ['type' => self::T_KEYWORD],
+            'lo_id'    => ['type' => self::T_INT],
+            'metadata' => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
@@ -420,6 +431,12 @@ class Schema
             'visibility' => ['type' => self::T_SHORT],
             'created'    => ['type' => self::T_DATE],
             'updated'    => ['type' => self::T_DATE],
+            'metadata'   => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
@@ -529,6 +546,12 @@ class Schema
                     'max_rows'     => ['type' => self::T_INT],
                     'parent_field' => ['type' => self::T_KEYWORD],
                     'data'         => ['type' => self::T_OBJECT],
+                    'metadata'     => [
+                        'properties' => [
+                            'instance_id' => ['type' => self::T_INT],
+                            'updated_at'  => ['type' => self::T_INT],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -536,7 +559,6 @@ class Schema
 
     const COUPON_MAPPING = [
         '_routing'   => ['required' => true],
-        '_parent'    => ['type' => self::O_USER],
         'properties' => [
             'id'           => ['type' => self::T_KEYWORD],
             'title'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
@@ -563,6 +585,12 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => self::LO_MAPPING['properties'],
             ],
+            'metadata'     => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
@@ -582,8 +610,10 @@ class Schema
             'remaining' => ['type' => self::T_INT],
             'metadata'  => [
                 'properties' => [
-                    'user_id' => ['type' => self::T_INT],
-                    'lo_id'   => ['type' => self::T_INT],
+                    'user_id'     => ['type' => self::T_INT],
+                    'lo_id'       => ['type' => self::T_INT],
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
                 ],
             ],
         ],
@@ -614,6 +644,12 @@ class Schema
             'postal_code'             => ['type' => self::T_KEYWORD],
             'parent'                  => [
                 'properties' => self::LO_MAPPING['properties'],
+            ],
+            'metadata'                => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
+                ],
             ],
         ],
     ];
