@@ -15,15 +15,17 @@ class Plan implements JsonSerializable
     const STATUS_ASSIGNED    = -2; # Learner self-assigned, or by someone.
     const STATUS_ENQUIRED    = -1; # Learner interesting in the object, enquired.
     const STATUS_PENDING     = 0; # The object is not yet available.
+
     // We don't need those statuses since it been stored in enrolment
-//    const STATUS_IN_PROGRESS = 1; # Learning in progress.
-//    const STATUS_COMPLETED   = 2; # The plan is completed.
-//    const STATUS_FAILED      = 3; # The plan is completed, but result is not good.
-    const STATUS_LATE        = 4; # Learning was assigned & was not able to complete the plan ontime.
-    const STATUS_EXPIRED     = 5; # The object is expired.
+    //    const STATUS_IN_PROGRESS = 1; # Learning in progress.
+    //    const STATUS_COMPLETED   = 2; # The plan is completed.
+    //    const STATUS_FAILED      = 3; # The plan is completed, but result is not good.
+
+    const STATUS_LATE    = 4; # Learning was assigned & was not able to complete the plan ontime.
+    const STATUS_EXPIRED = 5; # The object is expired.
 
     const TYPE_AWARD = 'award';
-    const TYPE_LO = 'lo';
+    const TYPE_LO    = 'lo';
 
     /** @var integer */
     public $id;
