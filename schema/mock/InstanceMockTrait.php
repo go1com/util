@@ -3,6 +3,7 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\portal\PortalHelper;
 
 trait InstanceMockTrait
 {
@@ -15,7 +16,7 @@ trait InstanceMockTrait
             'title'      => $title = isset($options['title']) ? $options['title'] : 'az.mygo1.com',
             'status'     => isset($options['status']) ? $options['status'] : 1,
             'is_primary' => isset($options['is_primary']) ? $options['is_primary'] : 1,
-            'version'    => isset($options['version']) ? $options['version'] : 'v3.0.0',
+            'version'    => isset($options['version']) ? $options['version'] : PortalHelper::STABLE_VERSION,
             'data'       => is_scalar($data) ? $data : json_encode($data),
             'timestamp'  => isset($options['timestamp']) ? $options['timestamp'] : time(),
             'created'    => isset($options['created']) ? $options['created'] : time(),
