@@ -130,8 +130,8 @@ class CouponRepository
 
             if ($userId) {
                 $coupon->context['usage'] = $this->db->fetchAll(
-                    'SELECT transaction_id, created FROM payment_coupon_usage WHERE user_id = ?',
-                    [$userId]
+                    'SELECT transaction_id, created FROM payment_coupon_usage WHERE coupon_id = ? AND user_id = ?',
+                    [$coupon->id, $userId]
                 );
             }
         }
