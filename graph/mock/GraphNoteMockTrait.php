@@ -44,8 +44,12 @@ trait GraphNoteMockTrait
             if (in_array($entityType, ['lo', 'portal'])) {
                 list($label, $prop, $propValue) = GraphEdgeTypes::getEntityGraphData($entityType, $entityId);
 
-                $status = isset($data['lo_status']) ? (int) $data['lo_status'] : 1;
-                $enrolment = $data['enrolment'] ?? EnrolmentStatuses::IN_PROGRESS;
+                $context = $data['context'] ?? [];
+                $context += [
+                    'status' => isset($data['lo_status']) ? (int) $data['lo_status'] : 1,
+                    'enrolment' => $data['enrolment'] ?? EnrolmentStatuses::IN_PROGRESS
+                ];
+
                 $stack->push(
                     "MATCH (n:Note { uuid: {uuid} })"
                     . " MERGE (entity:$label { $prop: {entityPropValue} })"
@@ -55,10 +59,7 @@ trait GraphNoteMockTrait
                     [
                         'uuid'              => $uuid,
                         'entityPropValue'   => $propValue,
-                        'data'              => [
-                            'status'    => $status,
-                            'enrolment' => $enrolment,
-                        ]
+                        'data'              => $context
                     ]
                 );
             }
@@ -73,12 +74,14 @@ trait GraphNoteMockTrait
             }
             else if (!in_array($entityType, ['custom', 'lo', 'portal', 'group'])) {
                 $label = ucwords($entityType);
+                $context = $data['context'] ?? [];
                 $stack->push(
                     "MATCH (n:Note { uuid: {uuid} })"
                     . " MERGE (e:Other:$label { id: {$entityId} })"
                     . " MERGE (e)-[:{$this->hasNote}]->(n)"
-                    . " MERGE (n)-[r:{$this->hasMember}]->(e)",
-                    ['uuid' => $uuid]
+                    . " MERGE (n)-[r:{$this->hasMember}]->(e)"
+                    . " SET r = {data}",
+                    ['uuid' => $uuid, 'data' => $context]
                 );
             }
         }
