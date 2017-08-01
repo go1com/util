@@ -41,21 +41,7 @@ trait GraphNoteMockTrait
 
         // Add entity_id direction
         if ($entityId) {
-            if ($entityType == 'portal') {
-                list($label, $prop, $propValue) = GraphEdgeTypes::getEntityGraphData($entityType, $entityId);
-
-                $stack->push(
-                    "MATCH (n:Note { uuid: {uuid} })"
-                    . " MERGE (entity:$label { $prop: {entityPropValue} })"
-                    . " MERGE (entity)-[:{$this->hasNote}]->(n)"
-                    . " MERGE (n)-[:{$this->hasMember}]->(entity)",
-                    [
-                        'uuid'              => $uuid,
-                        'entityPropValue'   => $propValue,
-                    ]
-                );
-            }
-            else if ($entityType == 'lo') {
+            if (in_array($entityType, ['lo', 'portal'])) {
                 list($label, $prop, $propValue) = GraphEdgeTypes::getEntityGraphData($entityType, $entityId);
 
                 $context = $data['context'] ?? [];
@@ -69,7 +55,7 @@ trait GraphNoteMockTrait
                     . " MERGE (entity:$label { $prop: {entityPropValue} })"
                     . " MERGE (entity)-[:{$this->hasNote}]->(n)"
                     . " MERGE (n)-[r:{$this->hasMember}]->(entity)"
-                    . " SET r = {context}",
+                    . ($entityType == 'lo' ? " SET r = {context}" : ''),
                     [
                         'uuid'              => $uuid,
                         'entityPropValue'   => $propValue,
