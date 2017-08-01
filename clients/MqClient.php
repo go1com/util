@@ -17,6 +17,10 @@ class MqClient
     private $user;
     private $pass;
 
+    const CONTEXT_USER_ID = 'actor_id';
+    const CONTEXT_TIMESTAMP = 'timestamp';
+    const CONTEXT_DESCRIPTION = 'description';
+
     public function __construct($host, $port, $user, $pass)
     {
         $this->host = $host;
@@ -44,9 +48,9 @@ class MqClient
     /**
      * Exchange message to process in sequence
      */
-    public function publish($messageBody, $routingKey)
+    public function publish($messageBody, string $routingKey, $context = [])
     {
-        $messageBody = is_scalar($messageBody) ? $messageBody : json_encode($messageBody);
+        $messageBody = $this->processMessage($messageBody, $context);
         $message = new AMQPMessage($messageBody, ['content_type' => 'application/json']);
         $this->channel()->basic_publish($message, 'events', $routingKey);
     }
@@ -54,15 +58,34 @@ class MqClient
     /**
      *  Queue message to process in parallel.
      */
-    public function queue($messageBody, string $routingKey)
+    public function queue($messageBody, string $routingKey, $context = [])
     {
-        $messageBody = is_scalar($messageBody) ? json_decode($messageBody) : $messageBody;
         $message = json_encode([
             'routingKey' => $routingKey,
-            'body'       => $messageBody,
+            'body'       => $this->processQueue($messageBody, $context),
         ]);
         $message = new AMQPMessage($message, ['content_type' => 'application/json']);
         $this->channel()->basic_publish($message, '', Queue::WORKER_QUEUE_NAME);
+    }
+
+    private function processMessage($messageBody, $context = [])
+    {
+        if (is_scalar($messageBody)) {
+            return $messageBody;
+        }
+
+        $context && $messageBody['context'] = $context;
+        return json_encode($messageBody);
+    }
+
+    private function processQueue($messageBody, $context = [])
+    {
+        if (is_scalar($messageBody)) {
+            return $context ? json_decode($messageBody, true) + ['context' => $context] : $messageBody;
+        }
+
+        $context && $messageBody['context'] = $context;
+        return $messageBody;
     }
 
     public function subscribe($bindingKey = '#', callable $callback)
