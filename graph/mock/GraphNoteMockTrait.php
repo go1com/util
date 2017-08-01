@@ -80,8 +80,8 @@ trait GraphNoteMockTrait
                     . " MERGE (e:Other:$label { id: {$entityId} })"
                     . " MERGE (e)-[:{$this->hasNote}]->(n)"
                     . " MERGE (n)-[r:{$this->hasMember}]->(e)"
-                    . " SET r = {data}",
-                    ['uuid' => $uuid, 'data' => $context]
+                    . " SET r = {context}",
+                    ['uuid' => $uuid, 'context' => $context]
                 );
             }
         }
