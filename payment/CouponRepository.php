@@ -129,7 +129,7 @@ class CouponRepository
 
             if ($userId) {
                 $coupon->context['usage'] = [
-                    'all' => $this->db->fetchColumn('SELECT COUNT(*) WHERE coupon_id = ?', [$coupon->id]),
+                    'all' => $this->db->fetchColumn('SELECT COUNT(*) FROM payment_coupon_usage WHERE coupon_id = ?', [$coupon->id]),
                     'my'  => $this->db->fetchColumn('SELECT COUNT(*) FROM payment_coupon_usage WHERE coupon_id = ? AND user_id = ?', [$coupon->id, $userId]),
                 ];
             }
