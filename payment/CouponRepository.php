@@ -117,8 +117,7 @@ class CouponRepository
 
     public function get($instanceId, $idOrCode, int $userId = null)
     {
-        $column = is_numeric($idOrCode) ? 'id' : 'code';
-        $coupon = "SELECT * FROM payment_coupon WHERE instance_id = ? AND {$column} = ?";
+        $coupon = "SELECT * FROM payment_coupon WHERE instance_id = ? AND code = ?";
         $coupon = $this->db->executeQuery($coupon, [$instanceId, $idOrCode])->fetch(DB::OBJ);
         $coupon = $coupon ? Coupon::create($coupon) : false;
 
