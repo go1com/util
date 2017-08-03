@@ -3,6 +3,7 @@
 namespace go1\util\graph\mock;
 
 use go1\util\GraphEdgeTypes;
+use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupStatus;
 use GraphAware\Neo4j\Client\Client;
 
@@ -93,7 +94,7 @@ trait GraphSocialMockTrait
         return $autoGroupId;
     }
 
-    protected function addGraphUserGroup(Client $client, int $accountId, int $groupId)
+    protected function addGraphUserGroup(Client $client, int $accountId, int $groupId, int $status = GroupItemStatus::ACTIVE)
     {
         $hasGroup = GraphEdgeTypes::HAS_GROUP;
         $hasMember = GraphEdgeTypes::HAS_MEMBER;
@@ -101,10 +102,13 @@ trait GraphSocialMockTrait
         $client->run(
             "MATCH (g:Group { id: {$groupId}, name: {groupName} })"
             . " MERGE (acc:User { id: {$accountId} })"
-            . " MERGE (acc)-[:{$hasGroup}]->(g)"
+            . " MERGE (acc)-[r:{$hasGroup}]->(g) SET r = {data}"
             . " MERGE (g)-[:{$hasMember}]->(acc)",
             [
                 'groupName' => "group:{$groupId}",
+                'data'      => [
+                    'status' => $status,
+                ],
             ]
         );
     }
