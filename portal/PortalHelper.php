@@ -102,4 +102,15 @@ class PortalHelper
             [$loId]
         )->fetchColumn();
     }
+
+    public static function logo(stdClass $portal)
+    {
+        self::parseConfig($portal);
+
+        $logo = $portal->data->files->logo
+            ?? ($portal->data->configuration->logo
+                ?? ($portal->data->logo ?? ''));
+
+        return (strpos($logo, 'http:') === false) ? ('http:' . $logo) : $logo;
+    }
 }
