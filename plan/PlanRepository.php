@@ -25,15 +25,15 @@ class PlanRepository
         if (!$schema->hasTable('gc_plan')) {
             $plan = $schema->createTable('gc_plan');
             $plan->addOption('description', 'GO1P-10732: Store learn-planning object.');
-            $plan->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-            $plan->addColumn('user_id', 'integer', ['unsigned' => true]);
-            $plan->addColumn('assigner_id', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $plan->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $plan->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $plan->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $plan->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
-            $plan->addColumn('entity_type', 'string');
-            $plan->addColumn('entity_id', 'integer');
-            $plan->addColumn('status', 'integer');
-            $plan->addColumn('created_date', 'datetime');
-            $plan->addColumn('due_date', 'datetime', ['notnull' => false]);
+            $plan->addColumn('entity_type', Type::STRING);
+            $plan->addColumn('entity_id', Type::INTEGER);
+            $plan->addColumn('status', Type::INTEGER);
+            $plan->addColumn('created_date', Type::DATETIME);
+            $plan->addColumn('due_date', Type::DATETIME, ['notnull' => false]);
             $plan->addColumn('data', 'blob', ['notnull' => false]);
             $plan->setPrimaryKey(['id']);
             $plan->addIndex(['user_id']);
@@ -47,17 +47,17 @@ class PlanRepository
 
         if (!$schema->hasTable('gc_plan_revision')) {
             $planRevision = $schema->createTable('gc_plan_revision');
-            $planRevision->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-            $planRevision->addColumn('plan_id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-            $planRevision->addColumn('user_id', 'integer', ['unsigned' => true]);
-            $planRevision->addColumn('assigner_id', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $planRevision->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $planRevision->addColumn('plan_id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $planRevision->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $planRevision->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $planRevision->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
-            $planRevision->addColumn('entity_type', 'string');
-            $planRevision->addColumn('entity_id', 'integer');
-            $planRevision->addColumn('status', 'integer');
-            $planRevision->addColumn('created_date', 'datetime');
-            $planRevision->addColumn('due_date', 'datetime', ['notnull' => false]);
-            $planRevision->addColumn('data', 'blob', ['notnull' => false]);
+            $planRevision->addColumn('entity_type', Type::STRING);
+            $planRevision->addColumn('entity_id', Type::INTEGER);
+            $planRevision->addColumn('status', Type::INTEGER);
+            $planRevision->addColumn('created_date', Type::DATETIME);
+            $planRevision->addColumn('due_date', Type::DATETIME, ['notnull' => false]);
+            $planRevision->addColumn('data', Type::BLOB, ['notnull' => false]);
             $planRevision->setPrimaryKey(['id']);
             $planRevision->addIndex(['plan_id']);
             $planRevision->addIndex(['user_id']);
