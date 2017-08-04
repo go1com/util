@@ -2,8 +2,10 @@
 
 namespace go1\util\tests;
 
+use go1\util\DateTime;
 use go1\util\plan\Plan;
 use go1\util\plan\PlanRepository;
+use go1\util\plan\PlanStatuses;
 
 class PlanTest extends UtilTestCase
 {
@@ -17,7 +19,7 @@ class PlanTest extends UtilTestCase
             'instance_id'  => 124,
             'entity_type'  => 'lo',
             'entity_id'    => 555,
-            'status'       => Plan::STATUS_INTERESTING,
+            'status'       => PlanStatuses::INTERESTING,
             'created_date' => time(),
             'due_date'     => '+ 2 months',
             'data'         => [
@@ -51,7 +53,7 @@ class PlanTest extends UtilTestCase
             'instance_id'  => 124,
             'entity_type'  => 'lo',
             'entity_id'    => 555,
-            'status'       => Plan::STATUS_INTERESTING,
+            'status'       => PlanStatuses::INTERESTING,
             'created_date' => time(),
             'due_date'     => '+ 2 months',
             'data'         => ['note' => 'Something cool!',],
@@ -61,13 +63,14 @@ class PlanTest extends UtilTestCase
         $original = $repository->load($id);
 
         // Make update
-        $original->status = Plan::STATUS_LATE;
-        $original->data->note = 'OK GO1, I am studying here!';
-        $repository->update($original->id, $original);
+        $new = clone $original;
+        $new->status = PlanStatuses::LATE;
+        $new->data = (object) ['note' => 'OK GO1, I am studying here!'];
+        $repository->update($original, $new);
 
         // Load & check.
         $plan = $repository->load($original->id);
-        $this->assertEquals(Plan::STATUS_LATE, $plan->status);
+        $this->assertEquals(PlanStatuses::LATE, $plan->status);
         $this->assertEquals('OK GO1, I am studying here!', $plan->data->note);
     }
 
@@ -82,7 +85,7 @@ class PlanTest extends UtilTestCase
             'instance_id'  => 124,
             'entity_type'  => 'lo',
             'entity_id'    => 555,
-            'status'       => Plan::STATUS_INTERESTING,
+            'status'       => PlanStatuses::INTERESTING,
             'created_date' => time(),
             'due_date'     => '+ 2 months',
             'data'         => ['note' => 'Something cool!',],
@@ -107,7 +110,7 @@ class PlanTest extends UtilTestCase
             'instance_id'  => 124,
             'entity_type'  => 'lo',
             'entity_id'    => 555,
-            'status'       => Plan::STATUS_INTERESTING,
+            'status'       => PlanStatuses::INTERESTING,
             'created_date' => time(),
             'due_date'     => '+ 2 months',
             'data'         => [
@@ -135,7 +138,7 @@ class PlanTest extends UtilTestCase
             'instance_id'  => 124,
             'entity_type'  => 'lo',
             'entity_id'    => 555,
-            'status'       => Plan::STATUS_INTERESTING,
+            'status'       => PlanStatuses::INTERESTING,
             'created_date' => time(),
             'due_date'     => '+ 2 months',
             'data'         => [
@@ -148,8 +151,18 @@ class PlanTest extends UtilTestCase
 
         $this->assertEquals($id, $plan->id);
 
-        $id2 = $repository->merge($input);
+        // merge with same data
+        $id = $repository->merge($plan);
 
-        $this->assertEquals($id, $id2);
+        $this->assertEquals($id, $plan->id);
+        $this->assertEmpty($repository->loadRevisions($id));
+
+        // merge with different data
+        $plan->due = null;
+
+        $id = $repository->merge($plan);
+
+        $this->assertEquals($id, $plan->id);
+        $this->assertCount(1, $repository->loadRevisions($id));
     }
 }
