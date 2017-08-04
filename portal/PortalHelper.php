@@ -111,6 +111,6 @@ class PortalHelper
             ?? ($portal->data->configuration->logo
                 ?? ($portal->data->logo ?? ''));
 
-        return (strpos($logo, 'http:') === false) ? 'http:' . $logo : $logo;
+        return (strpos($logo, 'http:') === false) ? ('http:' . $logo) : $logo;
     }
 }
