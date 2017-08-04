@@ -30,7 +30,7 @@ class PlanRepository
             $plan->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $plan->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $plan->addColumn('entity_type', Type::STRING);
-            $plan->addColumn('entity_id', Type::INTEGER);
+            $plan->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
             $plan->addColumn('status', Type::INTEGER);
             $plan->addColumn('created_date', Type::DATETIME);
             $plan->addColumn('due_date', Type::DATETIME, ['notnull' => false]);
@@ -53,7 +53,7 @@ class PlanRepository
             $planRevision->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $planRevision->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $planRevision->addColumn('entity_type', Type::STRING);
-            $planRevision->addColumn('entity_id', Type::INTEGER);
+            $planRevision->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
             $planRevision->addColumn('status', Type::INTEGER);
             $planRevision->addColumn('created_date', Type::DATETIME);
             $planRevision->addColumn('due_date', Type::DATETIME, ['notnull' => false]);
