@@ -125,9 +125,17 @@ class PlanRepository
 
     public function loadRevisions(int $planId)
     {
-        return $this->db
+        $revisions = $this->db
             ->executeQuery('SELECT * FROM gc_plan_revision WHERE plan_id = ?', [$planId])
             ->fetchAll(DB::OBJ);
+
+        $revisions = array_map(function ($revision) {
+            $revision->data = $revision->data ? json_decode($revision->data) : $revision->data;
+
+            return $revision;
+        }, $revisions);
+
+        return $revisions;
     }
 
     public function create(Plan &$plan, bool $notify = false)
