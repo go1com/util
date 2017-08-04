@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentStatuses;
+use go1\util\portal\PortalHelper;
 use go1\util\schema\InstallTrait;
 use go1\util\user\Roles;
 
@@ -54,7 +55,7 @@ trait OneMockTrait
 
     // The portal
     public $instanceName          = 'qa.mygo1.com';
-    public $instanceVersion       = 'v3.0.0';
+    public $instanceVersion       = PortalHelper::STABLE_VERSION;
     public $instanceId;
     public $instancePublicKey;
     public $instancePrivateKey;

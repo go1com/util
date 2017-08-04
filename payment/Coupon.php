@@ -34,6 +34,7 @@ class Coupon implements JsonSerializable
     public $status;
     public $created;
     public $updated;
+    public $context = [];
     public $original;
 
     private function __construct()
@@ -186,6 +187,10 @@ class Coupon implements JsonSerializable
 
         if ($this->original) {
             $array['original'] = $this->original;
+        }
+
+        if ($this->context) {
+            $array['context'] = $this->context;
         }
 
         return $array;

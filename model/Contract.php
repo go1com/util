@@ -3,6 +3,7 @@
 namespace go1\util\model;
 
 use Assert\Assertion;
+use DateInterval;
 use go1\util\Currency;
 use go1\util\DateTime;
 use go1\util\Text;
@@ -159,6 +160,23 @@ class Contract implements JsonSerializable
         return $this->initialTerm;
     }
 
+    /**
+     * Extract interval + frequency from initial term
+     *
+     * e.g. 1 year / 1 month / 2 years / 5 months
+     *
+     * @param string $initialTerm
+     * @return array
+     */
+    public function getInitialTermParams(string $initialTerm): array
+    {
+        preg_match_all('/(\d+)(\s|\s?\')(year|years|month|months)$/', $initialTerm, $matches);
+        $interval = $matches[1][0];
+        $frequency = $matches[3][0];
+
+        return [$interval, $frequency];
+    }
+
     public function getNumberUsers()
     {
         return $this->numberUsers;
@@ -204,9 +222,33 @@ class Contract implements JsonSerializable
         return $this->paymentMethod;
     }
 
+    /**
+     * Start Date + RoundUp(today - start date / term) * Term
+     * Contract term will be converted to quantity of months
+     */
     public function getRenewalDate()
     {
-        return $this->renewalDate;
+        if (!$this->startDate) {
+            return null;
+        }
+        list($intervalTerm, $frequencyTerm) = $this->getInitialTermParams($this->initialTerm);
+        if (in_array($frequencyTerm, ['year', 'years'])) {
+            $intervalTerm = $intervalTerm * 12;
+        }
+
+        $start = DateTime::create($this->startDate);
+        $current = DateTime::create('now');
+        $interval = $current->diff($start);
+
+        $intervalY = (int) $interval->format('%y');
+        $intervalM = (int) $interval->format('%m');
+        $intervalD = (int) $interval->format('%d');
+
+        $intervalMonths = ($intervalY * 12) + $intervalM + ($intervalD > 0 ? 1 : 0);
+        $intervalRenewal = ceil($intervalMonths/$intervalTerm) * $intervalTerm;
+        $start->add(new DateInterval("P{$intervalRenewal}M"));
+
+        return $start->format(DATE_ISO8601);
     }
 
     public function getCancelDate()
@@ -250,8 +292,8 @@ class Contract implements JsonSerializable
 
         $row->start_date   = !empty($row->start_date) ? DateTime::create($row->start_date ? $row->start_date : time())->format(DATE_ISO8601) : null;
         $row->signed_date  = !empty($row->signed_date)? DateTime::create($row->signed_date)->format(DATE_ISO8601) : null;
-        $row->renewal_date = !empty($row->renewal_date) ? DateTime::create($row->renewal_date)->format(DATE_ISO8601) : null;
         $row->cancel_date  = !empty($row->cancel_date) ? DateTime::create($row->cancel_date)->format(DATE_ISO8601) : null;
+        $row->renewal_date = null;
 
         $row->price = number_format($row->price, 2, '.', '');
         $row->tax = number_format($row->tax, 2, '.', '');
@@ -346,9 +388,6 @@ class Contract implements JsonSerializable
         if ($origin->getPaymentMethod() != $this->paymentMethod) {
             $values['payment_method'] = $this->paymentMethod;
         }
-        if ($origin->getRenewalDate() != $this->renewalDate) {
-            $values['renewal_date'] = $this->renewalDate;
-        }
         if ($origin->getCancelDate() != $this->cancelDate) {
             $values['cancel_date'] = $this->cancelDate;
         }
@@ -382,7 +421,7 @@ class Contract implements JsonSerializable
             'frequency_other'   => $this->frequencyOther,
             'custom_term'       => $this->customTerm,
             'payment_method'    => $this->paymentMethod,
-            'renewal_date'      => $this->renewalDate,
+            'renewal_date'      => $this->getRenewalDate(),
             'cancel_date'       => $this->cancelDate,
             'data'              => $this->getData(true),
             'created'           => $this->created,
