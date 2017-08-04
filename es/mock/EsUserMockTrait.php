@@ -27,17 +27,23 @@ trait EsUserMockTrait
             'roles'        => $options['roles'] ?? null,
             'avatar'       => $options['avatar'] ?? null,
             'fields'       => $options['fields'] ?? null,
+            'metadata'     => [
+                'instance_id' => $options['instance_id'] ?? 0,
+                'updated_at'  => $options['updated_at'] ?? time(),
+            ]
         ];
 
         $type = $options['type'] ?? Schema::O_USER;
 
-        return $client->create([
-                'index'   => Schema::INDEX,
-                'routing' => Schema::INDEX,
-                'type'    => $type,
-                'id'      => $user['id'],
-                'body'    => $user,
-                'refresh' => true,
-            ] + ($type == Schema::O_ACCOUNT ? ['parent' => $user['user_id'] ?? 0] : []));
+        $client->create([
+            'index'   => $options['index'] ?? Schema::INDEX,
+            'routing' => $options['routing'] ?? Schema::INDEX,
+            'type'    => $type,
+            'id'      => $user['id'],
+            'body'    => $user,
+            'refresh' => true,
+        ]);
+
+        return $user['id'];
     }
 }

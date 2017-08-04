@@ -9,8 +9,8 @@ class GroupStatusTest extends UtilTestCase
 {
     public function test()
     {
+        $this->assertEquals(0, GroupStatus::PRIVATE);
         $this->assertEquals(1, GroupStatus::PUBLIC);
-        $this->assertEquals(0, GroupStatus::LOCKED);
-        $this->assertEquals(2, GroupStatus::PRIVATE);
+        $this->assertEquals(2, GroupStatus::LOCKED);
     }
 }
