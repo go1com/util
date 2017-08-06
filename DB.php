@@ -157,11 +157,16 @@ class DB
 
     public static function loadMultiple(Connection $db, string $tableName, array $ids, string $fetchMode = DB::OBJ)
     {
-        $entities = $db
-            ->executeQuery("SELECT * FROM $tableName WHERE id IN (?)", [$ids], [DB::INTEGERS])
-            ->fetchAll($fetchMode);
+        $q = $db->createQueryBuilder();
+        $q = $q
+            ->select('*')
+            ->from($tableName)
+            ->where($q->expr()->in('id', ':ids'))
+            ->setParameter(':ids', $ids, DB::INTEGERS)
+            ->execute();
 
-        $entities = array_map(function ($entity) use ($fetchMode) {
+        $entities = [];
+        while ($entity = $q->fetch($fetchMode)) {
             if (DB::OBJ == $fetchMode) {
                 $data = &$entity->data ?? null;
             } else {
@@ -172,8 +177,8 @@ class DB
                 $data = is_scalar($data) ? json_decode($data, (DB::ARR == $fetchMode)) : $data;
             }
 
-            return $entity;
-        }, $entities);
+            $entities[] = $entity;
+        }
 
         return $entities;
     }

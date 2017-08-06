@@ -125,15 +125,19 @@ class PlanRepository
 
     public function loadRevisions(int $planId)
     {
-        $revisions = $this->db
-            ->executeQuery('SELECT * FROM gc_plan_revision WHERE plan_id = ?', [$planId])
-            ->fetchAll(DB::OBJ);
+        $q = $this->db
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('gc_plan_revision')
+            ->where('plan_id = :planId')
+            ->setParameter(':planId', $planId)
+            ->execute();
 
-        $revisions = array_map(function ($revision) {
+        $revisions = [];
+        while ($revision = $q->fetch(DB::OBJ)) {
             $revision->data = $revision->data ? json_decode($revision->data) : $revision->data;
-
-            return $revision;
-        }, $revisions);
+            $revisions[] = $revision;
+        }
 
         return $revisions;
     }
@@ -181,11 +185,13 @@ class PlanRepository
             return null;
         }
 
-        $this->createRevision($original);
-        $this->db->update('gc_plan', $diff, ['id' => $original->id]);
-        $plan->original = $original;
-        $plan->notify = $notify;
-        $this->queue->publish($plan, Queue::PLAN_UPDATE);
+        $this->db->transactional(function () use ($original, $plan, $notify, $diff) {
+            $this->createRevision($original);
+            $this->db->update('gc_plan', $diff, ['id' => $original->id]);
+            $plan->original = $original;
+            $plan->notify = $notify;
+            $this->queue->publish($plan, Queue::PLAN_UPDATE);
+        });
     }
 
     public function delete(int $id)
@@ -229,5 +235,20 @@ class PlanRepository
         }
 
         return $planId;
+    }
+
+    public function archive(int $planId)
+    {
+        if (!$plan = $this->load($planId)) {
+            return false;
+        }
+
+        $this->db->transactional(function () use ($plan) {
+            $this->db->delete('gc_plan', ['id' => $plan->id]);
+            $this->createRevision($plan);
+            $this->queue->publish($plan, Queue::PLAN_DELETE);
+        });
+
+        return true;
     }
 }
