@@ -33,12 +33,14 @@ trait EsEnrolmentMockTrait
                 'status'              => $options['metadata']['status'] ?? 0,
                 'has_assessor'        => $options['metadata']['has_assessor'] ?? 0,
                 'user_id'             => $options['metadata']['user_id'] ?? 0,
+                'instance_id'         => $options['instance_id'] ?? 0,
+                'updated_at'          => $options['updated_at'] ?? time(),
             ],
         ];
 
         return $client->create([
-            'index'   => Schema::INDEX,
-            'routing' => Schema::INDEX,
+            'index'   => $options['index'] ?? Schema::INDEX,
+            'routing' => $options['routing'] ?? Schema::INDEX,
             'type'    => Schema::O_ENROLMENT,
             'id'      => $enrolment['id'],
             'parent'  => $enrolment['lo_id'],

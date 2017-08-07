@@ -11,7 +11,7 @@ trait EsLoMockTrait
 {
     public function createEsLo(Client $client, $options = [])
     {
-        static $autoId;
+        static $autoId = 1;
 
         $lo = [
             'id'             => $options['id'] ?? ++$autoId,
@@ -43,18 +43,21 @@ trait EsLoMockTrait
             'metadata'       => [
                 'parents_authors_ids' => $options['metadata']['parents_authors_ids'] ?? null,
                 'parents_id'          => $options['metadata']['parents_id'] ?? null,
+                'instance_id'         => $options['routing'] ?? $options['instance_id'] ?? 0,
+                'updated_at'          => $options['updated_at'] ?? time(),
             ],
             'totalEnrolment' => $options['totalEnrolment'] ?? 0,
         ];
 
-        return $client->create([
-            'index'   => Schema::INDEX,
-            'routing' => Schema::INDEX,
+        $client->create([
+            'index'   => $options['index'] ?? Schema::INDEX,
+            'routing' => $options['routing'] ?? Schema::INDEX,
             'type'    => Schema::O_LO,
             'id'      => $lo['id'],
             'body'    => $lo,
-            'parent'  => $lo['instance_id'],
             'refresh' => true
         ]);
+
+        return $lo['id'];
     }
 }

@@ -25,15 +25,15 @@ class PlanRepository
         if (!$schema->hasTable('gc_plan')) {
             $plan = $schema->createTable('gc_plan');
             $plan->addOption('description', 'GO1P-10732: Store learn-planning object.');
-            $plan->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-            $plan->addColumn('user_id', 'integer', ['unsigned' => true]);
-            $plan->addColumn('assigner_id', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $plan->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $plan->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $plan->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $plan->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
-            $plan->addColumn('entity_type', 'string');
-            $plan->addColumn('entity_id', 'integer');
-            $plan->addColumn('status', 'integer');
-            $plan->addColumn('created_date', 'datetime');
-            $plan->addColumn('due_date', 'datetime', ['notnull' => false]);
+            $plan->addColumn('entity_type', Type::STRING);
+            $plan->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $plan->addColumn('status', Type::INTEGER);
+            $plan->addColumn('created_date', Type::DATETIME);
+            $plan->addColumn('due_date', Type::DATETIME, ['notnull' => false]);
             $plan->addColumn('data', 'blob', ['notnull' => false]);
             $plan->setPrimaryKey(['id']);
             $plan->addIndex(['user_id']);
@@ -43,6 +43,30 @@ class PlanRepository
             $plan->addIndex(['status']);
             $plan->addIndex(['created_date']);
             $plan->addIndex(['due_date']);
+        }
+
+        if (!$schema->hasTable('gc_plan_revision')) {
+            $planRevision = $schema->createTable('gc_plan_revision');
+            $planRevision->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $planRevision->addColumn('plan_id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $planRevision->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $planRevision->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+            $planRevision->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+            $planRevision->addColumn('entity_type', Type::STRING);
+            $planRevision->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $planRevision->addColumn('status', Type::INTEGER);
+            $planRevision->addColumn('created_date', Type::DATETIME);
+            $planRevision->addColumn('due_date', Type::DATETIME, ['notnull' => false]);
+            $planRevision->addColumn('data', Type::BLOB, ['notnull' => false]);
+            $planRevision->setPrimaryKey(['id']);
+            $planRevision->addIndex(['plan_id']);
+            $planRevision->addIndex(['user_id']);
+            $planRevision->addIndex(['assigner_id']);
+            $planRevision->addIndex(['instance_id']);
+            $planRevision->addIndex(['entity_type', 'entity_id']);
+            $planRevision->addIndex(['status']);
+            $planRevision->addIndex(['created_date']);
+            $planRevision->addIndex(['due_date']);
         }
     }
 
@@ -99,6 +123,25 @@ class PlanRepository
         return $plans;
     }
 
+    public function loadRevisions(int $planId)
+    {
+        $q = $this->db
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('gc_plan_revision')
+            ->where('plan_id = :planId')
+            ->setParameter(':planId', $planId)
+            ->execute();
+
+        $revisions = [];
+        while ($revision = $q->fetch(DB::OBJ)) {
+            $revision->data = $revision->data ? json_decode($revision->data) : $revision->data;
+            $revisions[] = $revision;
+        }
+
+        return $revisions;
+    }
+
     public function create(Plan &$plan, bool $notify = false)
     {
         $this->db->insert('gc_plan', [
@@ -120,19 +163,35 @@ class PlanRepository
         return $plan->id;
     }
 
-    public function update(int $id, Plan $plan)
+    public function createRevision(Plan &$plan)
     {
-        if (!$original = $this->load($id)) {
-            return null;
-        }
+        $this->db->insert('gc_plan_revision', [
+            'plan_id'      => $plan->id,
+            'user_id'      => $plan->userId,
+            'assigner_id'  => $plan->assignerId,
+            'instance_id'  => $plan->instanceId,
+            'entity_type'  => $plan->entityType,
+            'entity_id'    => $plan->entityId,
+            'status'       => $plan->status,
+            'created_date' => $plan->created ? $plan->created->format(DATE_ISO8601) : '',
+            'due_date'     => $plan->due ? $plan->due->format(DATE_ISO8601) : '',
+            'data'         => $plan->data ? json_encode($plan->data) : null,
+        ]);
+    }
 
+    public function update(Plan $original, Plan $plan, bool $notify = false)
+    {
         if (!$diff = $original->diff($plan)) {
             return null;
         }
 
-        $this->db->update('gc_plan', $diff, ['id' => $id]);
-        $plan->original = $original;
-        $this->queue->publish($plan, Queue::PLAN_UPDATE);
+        $this->db->transactional(function () use ($original, $plan, $notify, $diff) {
+            $this->createRevision($original);
+            $this->db->update('gc_plan', $diff, ['id' => $original->id]);
+            $plan->original = $original;
+            $plan->notify = $notify;
+            $this->queue->publish($plan, Queue::PLAN_UPDATE);
+        });
     }
 
     public function delete(int $id)
@@ -148,31 +207,48 @@ class PlanRepository
     public function merge(Plan $plan, bool $notify = false)
     {
         $qb = $this->db->createQueryBuilder();
-        $originalPlanId = $qb
-            ->select('p.id')
+        $original = $qb
+            ->select('*')
             ->from('gc_plan', 'p')
             ->where($qb->expr()->eq('user_id', ':userId'))
-            ->andWhere($qb->expr()->eq('assigner_id', ':assignerId'))
             ->andWhere($qb->expr()->eq('instance_id', ':instanceId'))
             ->andWhere($qb->expr()->eq('entity_type', ':entityType'))
             ->andWhere($qb->expr()->eq('entity_id', ':entityId'))
             ->setParameters([
                 ':userId'     => $plan->userId,
-                ':assignerId' => $plan->assignerId,
                 ':instanceId' => $plan->instanceId,
                 ':entityType' => $plan->entityType,
                 ':entityId'   => $plan->entityId,
             ])
             ->execute()
-            ->fetchColumn();
+            ->fetch(DB::OBJ);
 
-        if ($originalPlanId) {
-            $this->update($originalPlanId, $plan);
-            $planId = $originalPlanId;
+        if ($original) {
+            $original = Plan::create($original);
+            if (false === $plan->due) {
+                $plan->due = $original->due;
+            }
+            $this->update($original, $plan, $notify);
+            $planId = $original->id;
         } else {
             $planId = $this->create($plan, $notify);
         }
 
         return $planId;
+    }
+
+    public function archive(int $planId)
+    {
+        if (!$plan = $this->load($planId)) {
+            return false;
+        }
+
+        $this->db->transactional(function () use ($plan) {
+            $this->db->delete('gc_plan', ['id' => $plan->id]);
+            $this->createRevision($plan);
+            $this->queue->publish($plan, Queue::PLAN_DELETE);
+        });
+
+        return true;
     }
 }
