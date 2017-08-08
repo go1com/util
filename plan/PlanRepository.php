@@ -142,7 +142,7 @@ class PlanRepository
         return $revisions;
     }
 
-    public function create(Plan &$plan, bool $notify = false)
+    public function create(Plan $plan, bool $notify = false)
     {
         $this->db->insert('gc_plan', [
             'user_id'      => $plan->userId,
