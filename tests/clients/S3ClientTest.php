@@ -13,6 +13,7 @@ class S3ClientTest extends UtilTestCase
     protected $s3Client;
     private $c;
     private $file;
+    private $content;
 
     public function setUp()
     {
@@ -22,6 +23,13 @@ class S3ClientTest extends UtilTestCase
         $handle = fopen($this->file, 'w');
         fwrite($handle, 'foo');
         fclose($handle);
+
+        $this->content = (object) [
+            'schema' => 'foo',
+            'host'   => 'bar',
+            'path'   => 'baz',
+            'query'  => 'something',
+        ];
     }
 
     public function getMockS3Client($client, array $methods = null)
@@ -67,53 +75,44 @@ class S3ClientTest extends UtilTestCase
 
         return $client;
     }
-    public function testSignatureFile()
+
+    public function testSign()
     {
         $this->c->extend('go1.client.go1s3', function () {
             return $this->getMockS3Client($this->getMockClientPost());
         });
         $this->s3Client = $this->c['go1.client.go1s3'];
         $instanceName = 'foo';
-        $this->s3Client->signatureFile($instanceName,'foo', UserHelper::ROOT_JWT);
+        $this->s3Client->sign($instanceName,'foo', UserHelper::ROOT_JWT);
     }
 
     public function testUploadFile()
     {
-        $content = (object) [
-            'scheme' => 'foo',
-            'host'   => 'bar',
-            'path'   => 'baz',
-            'query'  => 'something',
-        ];
         $app = $this->c;
+        $content = $this->content;
         $this->c->extend('go1.client.go1s3', function () use ($app, $content) {
-            $s3 = $this->getMockS3Client($this->c['client'], ['signatureFile', 'uploadFileToS3']);
+            $s3 = $this->getMockS3Client($this->c['client'], ['sign', 'upload']);
             $s3->expects($this->once())
-               ->method('signatureFile')
-               ->willReturn($content);
+                ->method('sign')
+                ->willReturn($content);
             $s3->expects($this->once())
-               ->method('uploadFileToS3')
-               ->willReturn('foo');
+                ->method('upload')
+                ->willReturn('foo');
 
             return $s3;
         });
         $this->s3Client = $this->c['go1.client.go1s3'];
-        $this->s3Client->uploadFile('mygo1', 'foo', $this->file);
+        $this->s3Client->uploadFile('mygo1', 'something', $this->file);
     }
 
-    public function testUploadToS3()
+    public function testUpload()
     {
         $this->c->extend('go1.client.go1s3', function () {
             return $this->getMockS3Client($this->getMockClientUpdate());
         });
+        $content = $this->content;
         $this->s3Client = $this->c['go1.client.go1s3'];
-        $content = (object) [
-            'scheme' => 'foo',
-            'host'   => 'bar',
-            'path'   => 'baz',
-            'query'  => 'something',
-        ];
-        $this->s3Client->uploadFileToS3($content, $this->file);
+        $this->s3Client->upload($this->file, $content->schema, $content->host, $content->path, $content->query);
     }
 
 }
