@@ -212,7 +212,7 @@ class LoHelperTest extends UtilTestCase
 
         # Course 1 All child
         $childIds = LoHelper::childIds($this->db, $this->course1Id, true);
-        $this->assertEquals(1, count($childIds));
+        $this->assertEquals(2, count($childIds));
         $this->hasChild($this->module1Id, $childIds);
         $this->hasChild($this->resource1Id, $childIds);
 
