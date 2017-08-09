@@ -296,13 +296,14 @@ class LoHelper
         return array_map('intval', $authorIds);
     }
 
-    public static function childIds(Connection $db, int $loId): array
+    public static function childIds(Connection $db, int $loId, $all = false): array
     {
         $q = 'SELECT target_id FROM gc_ro WHERE type IN (?) AND source_id = ?';
         $q = $db->executeQuery($q, [EdgeTypes::LO_HAS_CHILDREN, $loId], [DB::INTEGERS, DB::INTEGER]);
 
         $ids = [];
         while ($id = $q->fetchColumn()) {
+            $all && $ids = array_merge($ids, static::childIds($db, $id));
             $ids[] = (int) $id;
         }
 
