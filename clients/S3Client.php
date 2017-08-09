@@ -22,7 +22,7 @@ class S3Client
 
     public function uploadFile(string $instance, string $fileUrl, string $fileName, string $appName, bool $remove = false)
     {
-        if ($content = $this->sign($instance, $appName, $fileName)) {
+        if ($content = $this->sign($instance, $fileName, $appName)) {
             return $this->upload($fileUrl, $content->scheme, $content->host, $content->path, $content->query, $remove);
         }
         throw new Exception('Can not upload file');
