@@ -26,12 +26,28 @@ class MqClientTest extends UtilTestCase
                 'id',
                 [],
                 'id',
+            ], [
+                '{"id":1}',
+                ['actor_id' => 1],
+                '{"id":1}',
+            ], [
+                '{"id":1}',
+                [],
+                '{"id":1}',
+            ], [
+                (object)["id" => 1],
+                [],
+                '{"id":1}',
+            ], [
+                (object)["id" => 1],
+                ['actor_id' => 1],
+                '{"id":1,"context":{"actor_id":1}}',
             ],
         ];
     }
 
     /** @dataProvider dataMessage */
-    public function testProcessMessage($messageBody, $context, $message)
+    public function testProcessMessage($messageBody, $context, $expectedMsg)
     {
         $obj = $this->getMockBuilder(MqClient::class)
             ->disableOriginalConstructor()
@@ -41,7 +57,7 @@ class MqClientTest extends UtilTestCase
         $method = $class->getMethod('processMessage');
         $method->setAccessible(true);
         $messageBody = $method->invokeArgs($obj, [$messageBody, $context]);
-        $this->assertEquals($messageBody, $message);
+        $this->assertEquals($messageBody, $expectedMsg);
     }
 
     public function dataQueue()
@@ -63,21 +79,29 @@ class MqClientTest extends UtilTestCase
                 '{"id":1}',
                 [],
                 '{"id":1}',
+            ], [
+                (object)["id" => 1],
+                [],
+                (object)["id" => 1],
+            ], [
+                (object)["id" => 1],
+                ['actor_id' => 1],
+                (object)["id" => 1, 'context' => ['actor_id' => 1]],
             ],
         ];
     }
 
     /** @dataProvider dataQueue */
-    public function testProcessQueue($messageBody, $context, $message)
+    public function testProcessQueue($messageBody, $context, $expectedMsg)
     {
         $obj = $this->getMockBuilder(MqClient::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $class = new \ReflectionClass(MqClient::class);
-        $method = $class->getMethod('processQueue');
+        $method = $class->getMethod('processMessage');
         $method->setAccessible(true);
-        $messageBody = $method->invokeArgs($obj, [$messageBody, $context]);
-        $this->assertEquals($messageBody, $message);
+        $messageBody = $method->invokeArgs($obj, [$messageBody, $context, true]);
+        $this->assertEquals($messageBody, $expectedMsg);
     }
 }

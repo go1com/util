@@ -167,6 +167,19 @@ class MailTemplate
         ],
     ];
 
+    const LEARNER_ENROLMENT_EVENT = [
+        'key'    => 'learner.enrol.event',
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!event_name'         => 'Event name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+        ],
+    ];
+
     const AUTHOR_ENROLMENT_COURSE = [
         'key'    => 'author.enrol.course',
         'tokens' => [

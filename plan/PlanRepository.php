@@ -48,7 +48,7 @@ class PlanRepository
         if (!$schema->hasTable('gc_plan_revision')) {
             $planRevision = $schema->createTable('gc_plan_revision');
             $planRevision->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
-            $planRevision->addColumn('plan_id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $planRevision->addColumn('plan_id', Type::INTEGER, ['unsigned' => true]);
             $planRevision->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $planRevision->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $planRevision->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);

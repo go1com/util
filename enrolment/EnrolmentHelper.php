@@ -171,7 +171,8 @@ class EnrolmentHelper
             ->select('COUNT(*)')
             ->from('gc_enrolment')
             ->where('lo_id IN (:lo_ids)')->setParameter(':lo_ids', $requiredLoIds, Connection::PARAM_INT_ARRAY)
-            ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', $profileId);
+            ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', $profileId)
+            ->andWhere('status = :status')->setParameter(':status', EnrolmentStatuses::COMPLETED);
 
         $completedRequiredLos = $enrolmentQuery->execute()->fetchColumn();
 
