@@ -102,10 +102,10 @@ class EnrolmentStatuses
     {
         // Mark status is "pending" enrolment If a user enrolls to a dependency module.
         if (LoTypes::MODULE === $lo->type) {
-            $moduleId = 'SELECT target_id FROM gc_ro WHERE source_id = ? AND type = ?';
-            $moduleId = $db->fetchColumn($moduleId, [$lo->id, EdgeTypes::HAS_MODULE_DEPENDENCY]);
-            if ($moduleId) {
-                if (!$enrolmentId = EnrolmentHelper::enrolmentId($db, $moduleId, $profileId)) {
+            $query = $db->executeQuery('SELECT target_id FROM gc_ro WHERE source_id = ? AND type = ?', [$lo->id, EdgeTypes::HAS_MODULE_DEPENDENCY]);
+
+            while ($dependencyModuleId = $query->fetchColumn()) {
+                if (!$enrolmentId = EnrolmentHelper::enrolmentId($db, $dependencyModuleId, $profileId)) {
                     return self::PENDING;
                 }
                 else {
