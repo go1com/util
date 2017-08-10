@@ -80,7 +80,7 @@ class PortalHelper
 
     public static function loadFromLoId(Connection $db, int $loId)
     {
-        $portal = &DB::cache(static::class, []);
+        $portal = &DB::cache(__METHOD__, []);
 
         if (isset($portal[$loId])) {
             return $portal[$loId];
@@ -101,5 +101,16 @@ class PortalHelper
             . ' WHERE gc_lo.id = ?',
             [$loId]
         )->fetchColumn();
+    }
+
+    public static function logo(stdClass $portal)
+    {
+        self::parseConfig($portal);
+
+        $logo = $portal->data->files->logo
+            ?? ($portal->data->configuration->logo
+                ?? ($portal->data->logo ?? ''));
+
+        return (strpos($logo, 'http:') === false) ? ('http:' . $logo) : $logo;
     }
 }

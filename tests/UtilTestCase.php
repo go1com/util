@@ -80,7 +80,7 @@ abstract class UtilTestCase extends TestCase
                         'user' => 'go1',
                         'pass' => 'go1',
                     ],
-                ] + Service::urls(['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin'], 'qa')
+                ] + Service::urls(['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin', 's3'], 'qa')
             );
     }
 }

@@ -6,24 +6,10 @@ use DateTime as DefaultDateTime;
 use go1\util\DateTime;
 use go1\util\Text;
 use JsonSerializable;
-use ReflectionClass;
 use stdClass;
 
 class Plan implements JsonSerializable
 {
-    const STATUS_INTERESTING = -3; # Learner interest in the object, but no action provided yet.
-    const STATUS_ASSIGNED    = -2; # Learner self-assigned, or by someone.
-    const STATUS_ENQUIRED    = -1; # Learner interesting in the object, enquired.
-    const STATUS_PENDING     = 0; # The object is not yet available.
-
-    // We don't need those statuses since it been stored in enrolment
-    //    const STATUS_IN_PROGRESS = 1; # Learning in progress.
-    //    const STATUS_COMPLETED   = 2; # The plan is completed.
-    //    const STATUS_FAILED      = 3; # The plan is completed, but result is not good.
-
-    const STATUS_LATE    = 4; # Learning was assigned & was not able to complete the plan ontime.
-    const STATUS_EXPIRED = 5; # The object is expired.
-
     const TYPE_AWARD = 'award';
     const TYPE_LO    = 'lo';
 
@@ -68,20 +54,6 @@ class Plan implements JsonSerializable
         // The object should not be created directly.
     }
 
-    public static function allStatus()
-    {
-        $rClass = new ReflectionClass(self::class);
-
-        $statuses = [];
-        foreach ($rClass->getConstants() as $constant => $val) {
-            if (0 === strpos($constant, 'STATUS_')) {
-                $statuses[$constant] = $val;
-            }
-        }
-
-        return $statuses;
-    }
-
     public static function create(stdClass $input): Plan
     {
         $plan = new Plan;
@@ -93,7 +65,7 @@ class Plan implements JsonSerializable
         $plan->entityId = $input->entity_id;
         $plan->status = $input->status;
         $plan->created = DateTime::create($input->created_date ? $input->created_date : time());
-        $plan->due = $input->due_date ? DateTime::create($input->due_date) : null;
+        $plan->due = $input->due_date ? DateTime::create($input->due_date) : $input->due_date;
         $plan->data = !$input->data ? null : (is_scalar($input->data) ? json_decode($input->data) : $input->data);
         Text::purify(null, $plan->data);
 
@@ -102,9 +74,17 @@ class Plan implements JsonSerializable
 
     public function diff(Plan $plan)
     {
+        $processData = function ($data) {
+            return $data
+                ? (is_string($data)
+                    ? json_decode($data)
+                    : json_decode(json_encode($data)))
+                : null;
+        };
+        ($this->assignerId != $plan->assignerId) && $values['assigner_id'] = $plan->assignerId;
         ($this->status != $plan->status) && $values['status'] = $plan->status;
         ($this->due != $plan->due) && $values['due_date'] = $plan->due ? $plan->due->format(DATE_ISO8601) : null;
-        ($this->data != $plan->data) && $values['data'] = is_scalar($plan->data) ? $plan->data : json_encode($plan->data);
+        ($processData($this->data) != $processData($plan->data)) && $values['data'] = is_scalar($plan->data) ? $plan->data : json_encode($plan->data);
 
         return $values ?? [];
     }

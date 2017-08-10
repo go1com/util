@@ -91,6 +91,7 @@ class EdgeTypes
     const HAS_LOCATION                = 40; # T: gc_location.id       | S: gc_event.id
     const HAS_LO_LOCATION             = 41; # T: gc_location.id       | S: gc_lo.id
     const HAS_LO_TOKEN                = 42; # T: gc_instance.id       | S: gc_lo.id              | data: { token_N: STRING }
+    const HAS_AWARD_LOCATION          = 43; # T: gc_location.id       | S: award_award.id
 
     # LO & enrolment scheduling
     # ---------------------
@@ -148,4 +149,5 @@ class EdgeTypes
     const HAS_LO_ASSIGNMENT_REJECTED = 704; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is rejected.
     const HAS_LO_ASSIGNMENT_DUE_DATE = 705; # T: self.SOURCE        | S: suggestion ID | W: Timestamp  | N: See GO1P-8097
     const CREDIT_TRANSFER            = 800; # T: Timestamp          | S: credit.id | D: old owner, new owner, actor
+    const HAS_PLAN                   = 900; # T: gc_plan.id         | S: enrolment.id
 }
