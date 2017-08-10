@@ -81,6 +81,11 @@ class Error
         return new JsonResponse(['message' => ($msg instanceof Exception) ? $msg->getMessage() : $msg], $code);
     }
 
+    public static function jr($msg)
+    {
+        return static::simpleErrorJsonResponse($msg, 400);
+    }
+
     public static function jr403($msg): JsonResponse
     {
         return static::simpleErrorJsonResponse($msg, 403);
