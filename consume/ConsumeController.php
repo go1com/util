@@ -34,13 +34,15 @@ class ConsumeController
         $routingKey = $req->get('routingKey');
         $body = $req->get('body');
         $body = is_scalar($body) ? json_decode($body) : json_decode(json_encode($body));
+        $context = $req->get('context');
+        $context = is_scalar($context) ? json_decode($context) : json_decode(json_encode($context));
         $errors = [];
 
         if ($body) {
             foreach ($this->consumers as $consumer) {
                 if ($consumer->aware($routingKey)) {
                     try {
-                        $consumer->consume($routingKey, $body);
+                        $consumer->consume($routingKey, $body, $context);
                     }
                     catch (Exception $e) {
                         $errors[] = $e->getMessage();
@@ -53,7 +55,7 @@ class ConsumeController
         }
 
         if ($errors) {
-            $this->logger->error(sprintf('Failed to consume [%s] with %s: %s', $routingKey, json_encode($body), json_encode($errors)));
+            $this->logger->error(sprintf('Failed to consume [%s] with %s %s: %s', $routingKey, json_encode($body), json_encode($context), json_encode($errors)));
 
             return new JsonResponse(null, 500);
         }
