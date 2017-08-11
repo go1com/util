@@ -52,6 +52,9 @@ class MqClient
     public function publish($messageBody, string $routingKey, array $context = [])
     {
         $messageBody = is_scalar($messageBody) ? $messageBody : json_encode($messageBody);
+        if ($serviceName = getenv('SERVICE_80_NAME')) {
+            $context['app'] = $serviceName;
+        }
         $message = new AMQPMessage($messageBody, [
             'content_type'        => 'application/json',
             'application_headers' => new AMQPTable($context),
@@ -69,6 +72,9 @@ class MqClient
             'routingKey' => $routingKey,
             'body'       => $messageBody,
         ]);
+        if ($serviceName = getenv('SERVICE_80_NAME')) {
+            $context['app'] = $serviceName;
+        }
         $message = new AMQPMessage($message, [
             'content_type'        => 'application/json',
             'application_headers' => new AMQPTable($context),
