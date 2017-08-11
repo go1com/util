@@ -4,6 +4,7 @@ namespace go1\util\tests\lo;
 
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoChecker;
+use go1\util\lo\LoHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\UserMockTrait;
@@ -43,5 +44,16 @@ class LoCheckerTest extends UtilTestCase
 
         // Check
         $this->assertEquals([$userId, $userId2], LoChecker::authorIds($this->db, $loId));
+    }
+
+    public function testAllowDiscussion()
+    {
+        $loId1 = $this->createLO($this->db);
+        $lo1 = LoHelper::load($this->db, $loId1);
+        $this->assertTrue(LoChecker::allowDiscussion($lo1));
+
+        $loId2 = $this->createLO($this->db, ['data' => [LoHelper::DISCUSSION_ALLOW => false]]);
+        $lo2 = LoHelper::load($this->db, $loId2);
+        $this->assertFalse(LoChecker::allowDiscussion($lo2));
     }
 }

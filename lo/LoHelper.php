@@ -14,6 +14,7 @@ class LoHelper
 {
     # configuration key for LO, which put under gc_lo.data
     # ---------------------
+    const DISCUSSION_ALLOW           = 'allow_discussion';
     const ENROLMENT_ALLOW            = 'allow_enrolment';
     const ENROLMENT_ALLOW_DEFAULT    = 'allow';
     const ENROLMENT_ALLOW_DISABLE    = 'disable';
