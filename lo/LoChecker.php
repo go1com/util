@@ -95,6 +95,13 @@ class LoChecker
         return empty($data[LoHelper::ENROLMENT_ALLOW]) ? LoHelper::ENROLMENT_ALLOW_DEFAULT : $data[LoHelper::ENROLMENT_ALLOW];
     }
 
+    public static function allowDiscussion(stdClass $lo): bool
+    {
+        $data = (new self)->loData($lo);
+
+        return $data['is_discussion_enabled'] ?? true;
+    }
+
     public function requiredSequence(stdClass $lo)
     {
         $data = $this->loData($lo);
