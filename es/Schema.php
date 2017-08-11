@@ -229,23 +229,23 @@ class Schema
     const LO_MAPPING = [
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'             => ['type' => self::T_KEYWORD],
-            'type'           => ['type' => self::T_KEYWORD],
-            'origin_id'      => ['type' => self::T_INT],
-            'remote_id'      => ['type' => self::T_KEYWORD],
-            'status'         => ['type' => self::T_SHORT],
-            'private'        => ['type' => self::T_BOOL],
-            'published'      => ['type' => self::T_INT],
-            'marketplace'    => ['type' => self::T_BOOL],
-            'sharing'        => ['type' => self::T_SHORT],
-            'instance_id'    => ['type' => self::T_INT],
-            'language'       => ['type' => self::T_KEYWORD],
-            'locale'         => ['type' => self::T_KEYWORD],
-            'title'          => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'description'    => ['type' => self::T_TEXT],
-            'tags'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'image'          => ['type' => self::T_TEXT],
-            'pricing'        => [
+            'id'              => ['type' => self::T_KEYWORD],
+            'type'            => ['type' => self::T_KEYWORD],
+            'origin_id'       => ['type' => self::T_INT],
+            'remote_id'       => ['type' => self::T_KEYWORD],
+            'status'          => ['type' => self::T_SHORT],
+            'private'         => ['type' => self::T_BOOL],
+            'published'       => ['type' => self::T_INT],
+            'marketplace'     => ['type' => self::T_BOOL],
+            'sharing'         => ['type' => self::T_SHORT],
+            'instance_id'     => ['type' => self::T_INT],
+            'language'        => ['type' => self::T_KEYWORD],
+            'locale'          => ['type' => self::T_KEYWORD],
+            'title'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'description'     => ['type' => self::T_TEXT],
+            'tags'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'image'           => ['type' => self::T_TEXT],
+            'pricing'         => [
                 'properties' => [
                     'currency'     => ['type' => self::T_KEYWORD],
                     'price'        => ['type' => self::T_DOUBLE],
@@ -261,17 +261,18 @@ class Schema
                     ],
                 ],
             ],
-            'duration'       => ['type' => self::T_INT], # Duration in minute
-            'assessors'      => ['type' => self::T_INT],
-            'totalEnrolment' => ['type' => self::T_INT],
-            'created'        => ['type' => self::T_DATE],
-            'updated'        => ['type' => self::T_DATE],
-            'fields'         => ['type' => self::T_OBJECT],
-            'authors'        => [
+            'duration'        => ['type' => self::T_INT], # Duration in minute
+            'assessors'       => ['type' => self::T_INT],
+            'allow_enrolment' => ['type' => self::T_KEYWORD],
+            'totalEnrolment'  => ['type' => self::T_INT],
+            'created'         => ['type' => self::T_DATE],
+            'updated'         => ['type' => self::T_DATE],
+            'fields'          => ['type' => self::T_OBJECT],
+            'authors'         => [
                 'type'       => self::T_NESTED,
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'metadata'       => [
+            'metadata'        => [
                 'properties' => [
                     'parents_authors_ids' => ['type' => self::T_INT],
                     'parents_id'          => ['type' => self::T_INT],
@@ -741,5 +742,38 @@ class Schema
     public static function portalIndex(int $portalId)
     {
         return static::INDEX . '_portal_' . $portalId;
+    }
+
+    public static function format(array &$response, string $type)
+    {
+        switch ($type) {
+
+            case self::O_LO:
+
+                $put = function (&$node, $properties) use (&$put) {
+                    if ($node['items'] ?? null) {
+                        uasort($node['items'], function ($a, $b) {
+                            return $a['weight'] > $b['weight'];
+                        });
+
+                        foreach ($node['items'] as &$item) {
+                            $put($item, $properties);
+                        }
+                    }
+
+                    uksort($node, function ($a, $b) use ($properties) {
+                        return array_search($a, $properties) > array_search($b, $properties);
+                    });
+
+                    unset($node['weight']);
+                    unset($node['metadata']);
+                };
+
+                $properties = array_merge(array_keys(self::LO_MAPPING['properties']), ['items', 'enrolment']);
+                foreach ($response as &$item) {
+                    $put($item, $properties);
+                }
+                break;
+        }
     }
 }
