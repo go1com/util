@@ -2,6 +2,7 @@
 
 namespace go1\util\location;
 
+use go1\util\Text;
 use JsonSerializable;
 use stdClass;
 
@@ -29,6 +30,8 @@ class Location implements JsonSerializable
 
     public static function create(stdClass $input): Location
     {
+        Text::purify(null, $input);
+
         $location = new Location;
         $location->id = $input->id ?? null;
         $location->title = $input->title ?? null;
