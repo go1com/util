@@ -7,6 +7,7 @@ use go1\util\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Wire\AMQPTable;
 
 class MqClient
 {
@@ -17,7 +18,7 @@ class MqClient
     private $user;
     private $pass;
 
-    const CONTEXT_USER_ID = 'actor_id';
+    const CONTEXT_ACTOR_ID = 'actor_id';
     const CONTEXT_TIMESTAMP = 'timestamp';
     const CONTEXT_DESCRIPTION = 'description';
 
@@ -50,8 +51,11 @@ class MqClient
      */
     public function publish($messageBody, string $routingKey, array $context = [])
     {
-        $messageBody = $this->processMessage($messageBody, $context);
-        $message = new AMQPMessage($messageBody, ['content_type' => 'application/json']);
+        $messageBody = is_scalar($messageBody) ? $messageBody : json_encode($messageBody);
+        $message = new AMQPMessage($messageBody, [
+            'content_type'        => 'application/json',
+            'application_headers' => new AMQPTable($context),
+        ]);
         $this->channel()->basic_publish($message, 'events', $routingKey);
     }
 
@@ -60,30 +64,16 @@ class MqClient
      */
     public function queue($messageBody, string $routingKey, array $context = [])
     {
+        $messageBody = is_scalar($messageBody) ? json_decode($messageBody) : $messageBody;
         $message = json_encode([
             'routingKey' => $routingKey,
-            'body'       => $this->processMessage($messageBody, $context, true),
+            'body'       => $messageBody,
         ]);
-        $message = new AMQPMessage($message, ['content_type' => 'application/json']);
+        $message = new AMQPMessage($message, [
+            'content_type'        => 'application/json',
+            'application_headers' => new AMQPTable($context),
+        ]);
         $this->channel()->basic_publish($message, '', Queue::WORKER_QUEUE_NAME);
-    }
-
-    private function processMessage($messageBody, $context = [], bool $queue = false)
-    {
-        if (is_scalar($messageBody) && $queue) {
-            return $context ? json_decode($messageBody, true) + ['context' => $context] : $messageBody;
-        }
-
-        if (is_scalar($messageBody)) {
-            return $messageBody;
-        }
-
-        if ($context) {
-            is_array($messageBody) && $messageBody['context'] = $context;
-            is_object($messageBody) && $messageBody->context = $context;
-        }
-
-        return $queue ? $messageBody : json_encode($messageBody);
     }
 
     public function subscribe($bindingKey = '#', callable $callback)
