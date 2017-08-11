@@ -45,7 +45,7 @@ class ConsumeControllerTest extends UtilTestCase
                 return $this->isAware;
             }
 
-            public function consume(string $routingKey, stdClass $body): bool
+            public function consume(string $routingKey, stdClass $body, stdClass $context = null): bool
             {
                 if (!$this->exception) {
                     global $consumeCount;
