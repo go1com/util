@@ -4,6 +4,8 @@ namespace go1\util\graph\mock;
 
 use go1\util\edge\EdgeTypes;
 use go1\util\GraphEdgeTypes;
+use go1\util\lo\LoHelper;
+use go1\util\lo\LoTypes;
 use GraphAware\Neo4j\Client\Client;
 use GraphAware\Neo4j\Client\Stack;
 
@@ -104,13 +106,18 @@ trait GraphLoMockTrait
         }
 
         $stack = $client->stack();
+
+        $loProps = ['title' => $course['title']];
+        if ($course['type'] == GraphEdgeTypes::type(LoTypes::COURSE)) {
+            $loProps['discussion'] = $options[LoHelper::DISCUSSION_ALLOW] ?? true;
+        }
         $stack->push(
             "MERGE (lo:{$course['type']}:Group { id: {$course['id']}, name: {name} }) ON CREATE SET lo += {lo} ON MATCH SET lo += {lo}"
             . " MERGE (lo)-[:$hasGroup]->(lo)"
             . " MERGE (lo)-[:$hasMember]->(lo)",
             [
                 'name' => "lo:{$course['id']}",
-                'lo'   => ['title' => $course['title']],
+                'lo'   => $loProps,
             ]
         );
 
