@@ -23,6 +23,7 @@ class LoHelper
     const MANUAL_PAYMENT             = 'manual_payment';
     const MANUAL_PAYMENT_RECIPIENT   = 'manual_payment_recipient';
     const SEQUENCE_ENROL             = 'requiredSequence';
+    const DISCUSSION_ALLOW            = 'allow_discussion';
 
     // GO1P-5665: Expiration for award.
     const AWARD      = 'award';

@@ -52,7 +52,7 @@ class LoCheckerTest extends UtilTestCase
         $lo1 = LoHelper::load($this->db, $loId1);
         $this->assertTrue(LoChecker::allowDiscussion($lo1));
 
-        $loId2 = $this->createLO($this->db, ['data' => ['is_discussion_enabled' => false]]);
+        $loId2 = $this->createLO($this->db, ['data' => [LoHelper::DISCUSSION_ALLOW => false]]);
         $lo2 = LoHelper::load($this->db, $loId2);
         $this->assertFalse(LoChecker::allowDiscussion($lo2));
     }

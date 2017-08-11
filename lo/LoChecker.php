@@ -99,7 +99,7 @@ class LoChecker
     {
         $data = (new self)->loData($lo);
 
-        return $data['is_discussion_enabled'] ?? true;
+        return $data[LoHelper::DISCUSSION_ALLOW] ?? ($data['is_discussion_enabled'] ?? true);
     }
 
     public function requiredSequence(stdClass $lo)
