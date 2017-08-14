@@ -94,6 +94,7 @@ class Queue
     const GROUP_ASSIGN_CREATE      = 'group.assign.create';
     const GROUP_ASSIGN_UPDATE      = 'group.assign.update';
     const GROUP_ASSIGN_DELETE      = 'group.assign.delete';
+    const HISTORY_RECORD           = 'history.record';
     const NOTE_CREATE              = 'note.create';
     const NOTE_UPDATE              = 'note.update';
     const NOTE_DELETE              = 'note.delete';
