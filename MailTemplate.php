@@ -578,6 +578,21 @@ class MailTemplate
         ],
     ];
 
+    const MARKETPLACE_REQUEST = [
+        'key'    => 'marketplace.request',
+        'tokens' => [
+            '!manager_name'   => 'Manager name',
+            '!manager_mail'   => 'Manager mail',
+            '!course_name'    => 'Course name',
+            '!course_url'     => 'Course URL',
+            '!setting_url'    => 'Setting URL',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal logo',
+            '!portal_url'     => 'Portal URL',
+            '!recipient_mail' => 'Recipient mail',
+        ],
+    ];
+
     const MARKETPLACE_APPROVE = [
         'key'    => 'marketplace.approve',
         'tokens' => [
