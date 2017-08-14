@@ -73,7 +73,20 @@ class ConsumeControllerTest extends UtilTestCase
         $this->assertNull($consumeCount);
     }
 
-    public function test204()
+    public function data204()
+    {
+        return [
+            [(object)['foo' => 'bar'], null],
+            [['foo' => 'bar'], null],
+            [[], null],
+            [(object)['foo' => 'bar'], (object)['foo' => 'bar']],
+            [['foo' => 'bar'], ['foo' => 'bar']],
+            [['foo' => 'bar'], []],
+        ];
+    }
+
+    /** @dataProvider data204 */
+    public function test204($body, $context)
     {
         $fooConsumer = $this->consumerClass();
         $barConsumer = $this->consumerClass();
@@ -82,7 +95,8 @@ class ConsumeControllerTest extends UtilTestCase
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
             'routingKey' => self::ROUTING_KEY,
-            'body'       => ['foo' => 'bar'],
+            'body'       => $body,
+            'context'    => $context,
         ]);
         $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $res = $consume->post($req);
