@@ -10,6 +10,7 @@ class Enrolment
     public $profileId;
     public $parentLoId;
     public $loId;
+    public $instanceId;
     public $takenInstanceId;
     public $startDate;
     public $endDate;
