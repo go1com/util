@@ -4,6 +4,7 @@ namespace go1\util\schema\mock;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
+use go1\util\lo\LoHelper;
 
 trait EnrolmentMockTrait
 {
@@ -27,6 +28,25 @@ trait EnrolmentMockTrait
             'data'              => isset($options['data']) ? $options['data'] : '',
         ]);
 
-        return $db->lastInsertId('gc_enrolment');
+        $id = $db->lastInsertId('gc_enrolment');
+        $id && !empty($options['lo_id']) && $this->updateLoEnrolmentCountCache($db, $options['lo_id']);
+
+        return $id;
+    }
+
+    private function updateLoEnrolmentCountCache(Connection $db, int $loId)
+    {
+        $lo = LoHelper::load($db, $loId);
+        if ($lo) {
+            $db->update(
+                'gc_lo',
+                [
+                    'enrolment_count' => (int) $lo->enrolment_count + 1
+                ],
+                [
+                    'id' => $loId
+                ]
+            );
+        }
     }
 }
