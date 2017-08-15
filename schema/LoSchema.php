@@ -27,6 +27,7 @@ class LoSchema
             $lo->addColumn('event_start', 'integer', ['unsigned' => true, 'notnull' => false]);
             $lo->addColumn('locale', 'string', ['notnull' => false]);
             $lo->addColumn('tags', 'string');
+            $lo->addColumn('enrolment_count', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0, 'description' => 'Cache the number of enrolment, so that we can sort it faster.']);
             $lo->addColumn('timestamp', 'integer', ['unsigned' => true]);
             $lo->addColumn('data', 'blob');
             $lo->addColumn('created', 'integer');
@@ -46,6 +47,7 @@ class LoSchema
             $lo->addIndex(['created']);
             $lo->addIndex(['updated']);
             $lo->addIndex(['sharing']);
+            $lo->addIndex(['enrolment_count']);
             $lo->addIndex(['tags']);
             $lo->addIndex(['locale']);
             $lo->addUniqueIndex(['instance_id', 'type', 'remote_id']);
