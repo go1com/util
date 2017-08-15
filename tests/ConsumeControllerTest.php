@@ -78,7 +78,6 @@ class ConsumeControllerTest extends UtilTestCase
         return [
             [(object)['foo' => 'bar'], null],
             [['foo' => 'bar'], null],
-            [[], null],
             [(object)['foo' => 'bar'], (object)['foo' => 'bar']],
             [['foo' => 'bar'], ['foo' => 'bar']],
             [['foo' => 'bar'], []],
