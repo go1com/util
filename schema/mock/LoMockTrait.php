@@ -78,6 +78,7 @@ trait LoMockTrait
             'marketplace' => isset($options['marketplace']) ? $options['marketplace'] : 0,
             'origin_id'   => isset($options['origin_id']) ? $options['origin_id'] : 0,
             'image'       => isset($options['image']) ? $options['image'] : '',
+            'enrolment_count' => isset($options['enrolment_count']) ? $options['enrolment_count'] : 0,
             'data'        => isset($options['data']) ? $options['data'] : '',
             'timestamp'   => isset($options['timestamp']) ? $options['timestamp'] : time(),
             'created'     => isset($options['created']) ? $options['created'] : time(),
