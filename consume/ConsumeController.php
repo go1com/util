@@ -33,7 +33,7 @@ class ConsumeController
 
         $routingKey = $req->get('routingKey');
         $body = $req->get('body');
-        $body = is_scalar($body) ? json_decode($body) : json_decode(json_encode($body, JSON_FORCE_OBJECT));
+        $body = is_scalar($body) ? json_decode($body) : json_decode(json_encode($body));
         $context = $req->get('context');
         $context = is_scalar($context) ? json_decode($context) : json_decode(json_encode($context, JSON_FORCE_OBJECT));
         $errors = [];
