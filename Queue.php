@@ -130,7 +130,9 @@ class Queue
     const ROLE_CREATE              = 'role.create';
     const ROLE_UPDATE              = 'role.update';
     const ROLE_DELETE              = 'role.delete';
-
+    const ACTIVITY_CREATE          = 'activity.create';
+    const ACTIVITY_UPDATE          = 'activity.update';
+    const ACTIVITY_DELETE          = 'activity.delete';
 
     # routingKey that tell some service to do something.
     #
