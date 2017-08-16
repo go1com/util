@@ -15,4 +15,22 @@ class Roles
 
     const ACCOUNTS_ROLES = [self::ROOT, self::AUTHENTICATED];
     const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::STUDENT, self::TUTOR, self::MANAGER];
+
+    const NAMES         = [
+        self::ADMIN    => 'Administrator',
+        self::STUDENT  => 'Student',
+        self::ASSESSOR => 'Assessor',
+        self::MANAGER  => 'Manager',
+    ];
+
+    public static function getRoleByName(string $roleName)
+    {
+        foreach (self::NAMES as $role => $name) {
+            if ($name == $roleName) {
+                return $role;
+            }
+        }
+
+        return false;
+    }
 }
