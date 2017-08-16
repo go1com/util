@@ -22,7 +22,6 @@ class EnrolmentStatuses
 
     # Enrolment statuses
     # ---------------------
-    const ASSIGNED    = 'assigned';    # Someone added this for you to do
     const NOT_STARTED = 'not-started'; # you have enrolled but not yet opened the course
     const IN_PROGRESS = 'in-progress'; # you are learning the LO.
     const PENDING     = 'pending';     # you have enrolled but the enrolment need to be reviewed or blocked by other enrolment
@@ -30,7 +29,6 @@ class EnrolmentStatuses
     const EXPIRED     = 'expired';     # your enrolment was completed, but it's expired.
 
     // Numeric values for the statuses. Being used in ES.
-    const I_ASSIGNED    = -3;
     const I_NOT_STARTED = -2;
     const I_PENDING     = -1;
     const I_IN_PROGRESS = 1;
@@ -43,15 +41,12 @@ class EnrolmentStatuses
      */
     public static function all()
     {
-        return [self::ASSIGNED, self::NOT_STARTED, self::IN_PROGRESS, self::PENDING, self::COMPLETED];
+        return [self::NOT_STARTED, self::IN_PROGRESS, self::PENDING, self::COMPLETED];
     }
 
     public static function toNumeric(string $status): int
     {
         switch ($status) {
-            case self::ASSIGNED:
-                return self::I_ASSIGNED;
-
             case self::NOT_STARTED:
                 return self::I_NOT_STARTED;
 
@@ -75,9 +70,6 @@ class EnrolmentStatuses
     public static function toString(int $status): string
     {
         switch ($status) {
-            case self::I_ASSIGNED:
-                return self::ASSIGNED;
-
             case self::I_NOT_STARTED:
                 return self::NOT_STARTED;
 
