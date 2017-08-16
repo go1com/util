@@ -4,6 +4,7 @@ namespace go1\util\tests\enrolment;
 
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
+use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\lo\LoTypes;
 use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
@@ -167,5 +168,40 @@ class EnrolmentHelperTest extends UtilTestCase
         $completion = EnrolmentHelper::sequenceEnrolmentCompleted($this->db, $this->liInteractiveId, $this->moduleId, LoTypes::MODULE, $this->profileId);
         $this->assertFalse($completion);
 
+    }
+
+    public function testChildrenProcess()
+    {
+        $this->courseId;
+        $module2 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
+        $module3 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
+        $module4 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
+        $module5 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
+
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module2, 2);
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module3, 3);
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module4, 4);
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module5, 5);
+
+        $courseEnrolmentId = $this->createEnrolment($this->db, ['profile_id' => $this->profileId, 'lo_id' => $this->courseId]);
+        $courseEnrolment = EnrolmentHelper::load($this->db, $courseEnrolmentId);
+        $progress = EnrolmentHelper::childrenProgress($this->db, $courseEnrolment);
+        $this->assertEquals(5, $progress['total']);
+
+        $basicModuleData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId, 'parent_lo_id' => $this->courseId];
+        $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $this->moduleId]);
+        $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module2]);
+        $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module3]);
+
+        $progress = EnrolmentHelper::childrenProgress($this->db, $courseEnrolment);
+        $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
+        $this->assertEquals(5, $progress['total']);
+
+        $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module4, 'status' => EnrolmentStatuses::COMPLETED]);
+        $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module5, 'status' => EnrolmentStatuses::COMPLETED]);
+        $progress = EnrolmentHelper::childrenProgress($this->db, $courseEnrolment);
+        $this->assertEquals(2, $progress[EnrolmentStatuses::COMPLETED]);
+        $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
+        $this->assertEquals(5, $progress['total']);
     }
 }
