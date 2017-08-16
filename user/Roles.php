@@ -23,7 +23,7 @@ class Roles
         self::MANAGER  => 'Manager',
     ];
 
-    public static function getRoleByName(string $roleName): string
+    public static function getRoleByName(string $roleName)
     {
         foreach (self::NAMES as $role => $name) {
             if ($name == $roleName) {
@@ -31,6 +31,6 @@ class Roles
             }
         }
 
-        return '';
+        return false;
     }
 }
