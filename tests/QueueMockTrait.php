@@ -9,38 +9,29 @@ trait QueueMockTrait
 {
     protected $queueMessages = [];
 
-    protected function mockMqClient(Container $c)
+    protected function mockMqClient(Container $c, callable $callback = null)
     {
-        $c->extend('go1.client.mq', function () {
+        $c->extend('go1.client.mq', function () use ($callback) {
             $mqClient = $this
                 ->getMockBuilder(MqClient::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['publish', 'queue'])
                 ->getMock();
 
+            $response = function ($body, string $routingKey, $context) use ($callback) {
+                $callback && $callback($body, $routingKey, $context);
+                $this->queueMessages[$routingKey][] = $body;
+            };
+
             $mqClient
                 ->expects($this->any())
                 ->method('publish')
-                ->willReturnCallback(function ($body, string $routingKey, $context) {
-                    if ($context) {
-                        is_array($body) ?
-                            ($body = $body + ['_context' => $context]) :
-                            (is_object($body) && $body->_context = $context);
-                    }
-                    $this->queueMessages[$routingKey][] = $body;
-                });
+                ->willReturnCallback($response);
 
             $mqClient
                 ->expects($this->any())
                 ->method('queue')
-                ->willReturnCallback(function ($body, string $routingKey, $context) {
-                    if ($context) {
-                        is_array($body) ?
-                            ($body = $body + ['_context' => $context]) :
-                            (is_object($body) && $body->_context = $context);
-                    }
-                    $this->queueMessages[$routingKey][] = $body;
-                });
+                ->willReturnCallback($response);
 
             return $mqClient;
         });
