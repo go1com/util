@@ -2,14 +2,14 @@
 
 namespace go1\util\consume;
 
+use Error as SystemError;
+use Exception;
 use go1\util\AccessChecker;
 use go1\util\contract\ConsumerInterface;
 use go1\util\Error;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Exception;
-use Error as SystemError;
 
 class ConsumeController
 {
