@@ -85,6 +85,11 @@ class User implements JsonSerializable
         return $user;
     }
 
+    public function fullName(): string
+    {
+        return trim($this->firstName . ' ' . $this->lastName);
+    }
+
     function jsonSerialize()
     {
         return [
