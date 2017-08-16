@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\util\DB;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
+use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
 use PDO;
 use stdClass;
@@ -177,5 +178,44 @@ class EnrolmentHelper
         $completedRequiredLos = $enrolmentQuery->execute()->fetchColumn();
 
         return $completedRequiredLos >= count($requiredLoIds);
+    }
+
+    public static function childrenProgress(Connection $db, int $enrolmentId)
+    {
+        if ($enrolment = static::load($db, $enrolmentId)) {
+            $progress = [
+                'not_started' => 0,
+                'in_progress' => 0,
+                'completed'   => 0,
+            ];
+
+            if ($childrenId = LoHelper::childIds($db, $enrolment->lo_id)) {
+                $q = 'SELECT id, status FROM gc_enrolment WHERE lo_id IN (?) AND profile_id = ? AND parent_lo_id = ? ';
+                $q = $db->executeQuery($q, [$childrenId, $enrolment->profile_id, $enrolment->lo_id], [DB::INTEGERS, DB::INTEGER, DB::INTEGER]);
+
+                $numOfEnrolment = 0;
+                while ($childEnrolment = $q->fetch(DB::OBJ)) {
+                    switch ($childEnrolment->status) {
+
+                        case EnrolmentStatuses::COMPLETED:
+                            ++$progress['completed'];
+                            break;
+
+                        case EnrolmentStatuses::NOT_STARTED:
+                            ++$progress['not_started'];
+                            break;
+
+                        default:
+                            ++$progress['in_progress'];
+                            break;
+                    }
+                    ++$numOfEnrolment;
+                }
+            }
+
+            $progress['not_started'] += count($childrenId) - $numOfEnrolment;
+
+            return $progress;
+        }
     }
 }
