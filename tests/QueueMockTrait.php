@@ -3,15 +3,15 @@
 namespace go1\util\tests;
 
 use go1\clients\MqClient;
-use go1\lo\App;
+use Pimple\Container;
 
 trait QueueMockTrait
 {
     protected $queueMessages = [];
 
-    protected function mockMqClient(App $app)
+    protected function mockMqClient(Container $c)
     {
-        $app->extend('go1.client.mq', function () {
+        $c->extend('go1.client.mq', function () {
             $mqClient = $this
                 ->getMockBuilder(MqClient::class)
                 ->disableOriginalConstructor()
