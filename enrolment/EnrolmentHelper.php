@@ -180,14 +180,13 @@ class EnrolmentHelper
         return $completedRequiredLos >= count($requiredLoIds);
     }
 
-    public static function childrenProgress(Connection $db, stdClass $enrolment)
+    public static function childrenProgress(Connection $db, stdClass $enrolment): array
     {
+        $progress = [];
         $childrenId = LoHelper::childIds($db, $enrolment->lo_id);
-        $progress = ['total' => count($childrenId)];
         if ($childrenId) {
             $q = 'SELECT status, count(id) as totalEnrolment FROM gc_enrolment WHERE lo_id IN (?) AND profile_id = ? AND parent_lo_id = ? GROUP BY status';
             $q = $db->executeQuery($q, [$childrenId, $enrolment->profile_id, $enrolment->lo_id], [DB::INTEGERS, DB::INTEGER, DB::INTEGER]);
-
             while ($row = $q->fetch(DB::OBJ)) {
                 $progress[$row->status] = $row->totalEnrolment;
             }
