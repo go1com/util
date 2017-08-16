@@ -10,7 +10,7 @@ class Activity implements JsonSerializable
     public $id;
     public $instanceId;
     public $actorId;
-    public $actionType;
+    public $actionId;
     public $entityType;
     public $entityId;
     public $created;
@@ -27,8 +27,8 @@ class Activity implements JsonSerializable
         $activity = new static;
         $activity->id = $row->id ?? null;
         $activity->instanceId = $row->instance_id;
-        $activity->actorId = $row->actor_id ?? null;
-        $activity->actionType = $row->action_type;
+        $activity->actorId = $row->user_id ?? null;
+        $activity->actionId = $row->action_id;
         $activity->entityType = $row->entity_type;
         $activity->entityId = $row->entity_id;
         $activity->created = $row->created ?? time();
@@ -58,8 +58,8 @@ class Activity implements JsonSerializable
         return [
             'id'          => $this->id,
             'instance_id' => $this->instanceId,
-            'actor_id'    => $this->actorId,
-            'action_type' => $this->actionType,
+            'user_id'     => $this->actorId,
+            'action_type' => $this->actionId,
             'entity_type' => $this->entityType,
             'entity_id'   => $this->entityId,
             'created'     => $this->created,
