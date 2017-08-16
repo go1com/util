@@ -42,15 +42,15 @@ class MailClient
         return $this;
     }
 
-    public function post($recipient, Template $template, array $context = [], array $options = [], $attachments = [], $cc = [], $bcc = [])
+    public function post($recipient, Template $template, array $context = [], array $options = [], $attachments = [], $cc = [], $bcc = [], array $queueContext = [])
     {
-        $this->send(null, $recipient, $template->getSubject(), $template->getBody(), $template->getHtml(), $context, $options, $attachments, $cc, $bcc);
+        $this->send(null, $recipient, $template->getSubject(), $template->getBody(), $template->getHtml(), $context, $options, $attachments, $cc, $bcc, $queueContext);
     }
 
     /**
      * @deprecated
      */
-    public function send($privateKey, $recipient, $subject, $body, $html, array $context = [], array $options = [], $attachments = [], $cc = [], $bcc = [])
+    public function send($privateKey, $recipient, $subject, $body, $html, array $context = [], array $options = [], $attachments = [], $cc = [], $bcc = [], array $queueContext = [])
     {
         $data = array_filter(['cc' => $cc, 'bcc' => $bcc]);
 
@@ -72,7 +72,7 @@ class MailClient
             'options'     => $options,
         ];
 
-        $this->queue->queue($data, Queue::DO_MAIL_SEND);
+        $this->queue->queue($data, Queue::DO_MAIL_SEND, $queueContext);
     }
 
     public function template(PortalClient $portalClient, string $instance, string $mailKey, string $defaultSubject, string $defaultBody, string $defaultHtml = null, bool $strict = true): Template
