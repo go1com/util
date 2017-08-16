@@ -340,6 +340,13 @@ class Schema
             'account'    => [
                 'properties' => self::ACCOUNT_MAPPING['properties'],
             ],
+            'progress'   => [
+                'properties' => [
+                    'not_started' => ['type' => self::T_INT],
+                    'in_progress' => ['type' => self::T_INT],
+                    'completed'   => ['type' => self::T_INT],
+                ],
+            ],
             'metadata'   => [
                 'properties' => [
                     'account_id'          => ['type' => self::T_INT],
