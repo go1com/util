@@ -180,42 +180,18 @@ class EnrolmentHelper
         return $completedRequiredLos >= count($requiredLoIds);
     }
 
-    public static function childrenProgress(Connection $db, int $enrolmentId)
+    public static function childrenProgress(Connection $db, stdClass $enrolment)
     {
-        if ($enrolment = static::load($db, $enrolmentId)) {
-            $progress = [
-                'not_started' => 0,
-                'in_progress' => 0,
-                'completed'   => 0,
-            ];
+        $childrenId = LoHelper::childIds($db, $enrolment->lo_id);
+        $progress = ['total' => count($childrenId)];
+        if ($childrenId) {
+            $q = 'SELECT status, count(id) as totalEnrolment FROM gc_enrolment WHERE lo_id IN (?) AND profile_id = ? AND parent_lo_id = ? GROUP BY status';
+            $q = $db->executeQuery($q, [$childrenId, $enrolment->profile_id, $enrolment->lo_id], [DB::INTEGERS, DB::INTEGER, DB::INTEGER]);
 
-            if ($childrenId = LoHelper::childIds($db, $enrolment->lo_id)) {
-                $q = 'SELECT id, status FROM gc_enrolment WHERE lo_id IN (?) AND profile_id = ? AND parent_lo_id = ? ';
-                $q = $db->executeQuery($q, [$childrenId, $enrolment->profile_id, $enrolment->lo_id], [DB::INTEGERS, DB::INTEGER, DB::INTEGER]);
-
-                $numOfEnrolment = 0;
-                while ($childEnrolment = $q->fetch(DB::OBJ)) {
-                    switch ($childEnrolment->status) {
-
-                        case EnrolmentStatuses::COMPLETED:
-                            ++$progress['completed'];
-                            break;
-
-                        case EnrolmentStatuses::NOT_STARTED:
-                            ++$progress['not_started'];
-                            break;
-
-                        default:
-                            ++$progress['in_progress'];
-                            break;
-                    }
-                    ++$numOfEnrolment;
-                }
+            while ($row = $q->fetch(DB::OBJ)) {
+                $progress[$row->status] = $row->totalEnrolment;
             }
-
-            $progress['not_started'] += count($childrenId) - $numOfEnrolment;
-
-            return $progress;
         }
+        return $progress;
     }
 }
