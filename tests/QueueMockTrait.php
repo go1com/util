@@ -15,13 +15,30 @@ trait QueueMockTrait
             $mqClient = $this
                 ->getMockBuilder(MqClient::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['publish'])
+                ->setMethods(['publish', 'queue'])
                 ->getMock();
 
             $mqClient
                 ->expects($this->any())
                 ->method('publish')
-                ->willReturnCallback(function ($body, string $routingKey) {
+                ->willReturnCallback(function ($body, string $routingKey, $context) {
+                    if ($context) {
+                        is_array($body) ?
+                            ($body = $body + ['_context' => $context]) :
+                            (is_object($body) && $body->_context = $context);
+                    }
+                    $this->queueMessages[$routingKey][] = $body;
+                });
+
+            $mqClient
+                ->expects($this->any())
+                ->method('queue')
+                ->willReturnCallback(function ($body, string $routingKey, $context) {
+                    if ($context) {
+                        is_array($body) ?
+                            ($body = $body + ['_context' => $context]) :
+                            (is_object($body) && $body->_context = $context);
+                    }
                     $this->queueMessages[$routingKey][] = $body;
                 });
 
