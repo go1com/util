@@ -186,7 +186,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $courseEnrolmentId = $this->createEnrolment($this->db, ['profile_id' => $this->profileId, 'lo_id' => $this->courseId]);
         $courseEnrolment = EnrolmentHelper::load($this->db, $courseEnrolmentId);
         $progress = EnrolmentHelper::childrenProgress($this->db, $courseEnrolment);
-        $this->assertEquals(5, $progress['total']);
+        $this->assertCount(0, $progress);
 
         $basicModuleData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId, 'parent_lo_id' => $this->courseId];
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $this->moduleId]);
@@ -195,13 +195,11 @@ class EnrolmentHelperTest extends UtilTestCase
 
         $progress = EnrolmentHelper::childrenProgress($this->db, $courseEnrolment);
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
-        $this->assertEquals(5, $progress['total']);
-
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module4, 'status' => EnrolmentStatuses::COMPLETED]);
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module5, 'status' => EnrolmentStatuses::COMPLETED]);
+
         $progress = EnrolmentHelper::childrenProgress($this->db, $courseEnrolment);
         $this->assertEquals(2, $progress[EnrolmentStatuses::COMPLETED]);
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
-        $this->assertEquals(5, $progress['total']);
     }
 }
