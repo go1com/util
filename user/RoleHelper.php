@@ -8,6 +8,7 @@ use go1\clients\MqClient;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\Queue;
+use PDO;
 
 class RoleHelper
 {
@@ -58,12 +59,8 @@ class RoleHelper
 
     public static function roleIds(Connection $db, string $instance, array $roles): array
     {
-        $roles = $db->executeQuery('SELECT id FROM gc_role WHERE instance = ? AND name IN (?)',
-            [$instance, $roles], [\PDO::PARAM_STR, Connection::PARAM_STR_ARRAY])
-            ->fetchAll();
-
-        return array_map(function($role){
-            return $role['id'];
-        }, $roles);
+        return $db->executeQuery('SELECT id FROM gc_role WHERE instance = ? AND name IN (?)',
+            [$instance, $roles], [PDO::PARAM_STR, Connection::PARAM_STR_ARRAY])
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 }
