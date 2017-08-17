@@ -55,4 +55,15 @@ class RoleHelper
 
         return $db->lastInsertId('gc_role');
     }
+
+    public static function roleIds(Connection $db, string $instance, array $roles): array
+    {
+        $roles = $db->executeQuery('SELECT id FROM gc_role WHERE instance = ? AND name IN (?)',
+            [$instance, $roles], [\PDO::PARAM_STR, Connection::PARAM_STR_ARRAY])
+            ->fetchAll();
+
+        return array_map(function($role){
+            return $role['id'];
+        }, $roles);
+    }
 }
