@@ -9,7 +9,7 @@ use go1\util\user\RoleHelper;
 
 class RoleHelperTest extends UtilTestCase
 {
-    private $instance = 'instance.mygo1.com';
+    private $instance = 'qa.mygo1.com';
 
     public function testAdd()
     {
