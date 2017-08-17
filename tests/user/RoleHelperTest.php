@@ -47,5 +47,8 @@ class RoleHelperTest extends UtilTestCase
         $ids = RoleHelper::roleIds($this->db, $this->instance, ['admin', 'student']);
         $this->assertTrue(in_array($adminRoleId, $ids));
         $this->assertTrue(in_array($studentRoleId, $ids));
+
+        $emptyIds = RoleHelper::roleIds($this->db, $this->instance, ['wrong role']);
+        $this->assertEmpty($emptyIds);
     }
 }
