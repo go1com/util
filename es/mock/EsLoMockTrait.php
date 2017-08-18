@@ -29,6 +29,7 @@ trait EsLoMockTrait
             'description'    => $options['description'] ?? '',
             'tags'           => $options['tags'] ?? [],
             'image'          => $options['image'] ?? '',
+            'items_count'    => $options['items_count'] ?? 0,
             'pricing'        => [
                 'currency'     => $options['currency'] ?? 'USD',
                 'price'        => $options['price'] ?? 0.00,

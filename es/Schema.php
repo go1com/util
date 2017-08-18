@@ -269,7 +269,7 @@ class Schema
             'created'        => ['type' => self::T_DATE],
             'updated'        => ['type' => self::T_DATE],
             'fields'         => ['type' => self::T_OBJECT],
-            'num_items'      => ['type' => self::T_INT],
+            'items_count'    => ['type' => self::T_INT], # Only count first child level
             'authors'        => [
                 'type'       => self::T_NESTED,
                 'properties' => self::USER_MAPPING['properties'],
@@ -583,7 +583,7 @@ class Schema
             'expiration'   => ['type' => self::T_DATE],
             'created'      => ['type' => self::T_DATE],
             'updated'      => ['type' => self::T_DATE],
-            'num_usage'    => ['type' => self::T_INT],
+            'usage_count'  => ['type' => self::T_INT],
             'usage'        => [
                 'type'       => self::T_NESTED,
                 'properties' => [
