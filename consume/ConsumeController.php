@@ -4,6 +4,7 @@ namespace go1\util\consume;
 
 use Error as SystemError;
 use Exception;
+use go1\clients\MqClient;
 use go1\util\AccessChecker;
 use go1\util\contract\ConsumerInterface;
 use go1\util\Error;
@@ -42,6 +43,10 @@ class ConsumeController
             foreach ($this->consumers as $consumer) {
                 if ($consumer->aware($routingKey)) {
                     try {
+                        if (isset($context->messagePriority)) {
+                            MqClient::$priority = $context->messagePriority;
+                        }
+
                         $consumer->consume($routingKey, $body, $context);
                     }
                     catch (Exception $e) {
