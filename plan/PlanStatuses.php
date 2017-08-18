@@ -15,6 +15,15 @@ class PlanStatuses
     const LATE        = 4; # Learning was assigned & was not able to complete the plan ontime.
     const EXPIRED     = 5; # The object is expired.
 
+
+    const S_INTERESTING = 'Interesting';
+    const S_SCHEDULED   = 'Scheduled';
+    const S_ASSIGNED    = 'Assigned';
+    const S_ENQUIRED    = 'Enquired';
+    const S_PENDING     = 'Pending';
+    const S_LATE        = 'Late';
+    const S_EXPIRED     = 'Expired';
+
     public static function all()
     {
         $rClass = new ReflectionClass(self::class);

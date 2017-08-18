@@ -5,6 +5,7 @@ namespace go1\util\enrolment;
 use Doctrine\DBAL\Connection;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoTypes;
+use go1\util\plan\PlanStatuses;
 use InvalidArgumentException;
 use stdClass;
 
@@ -29,10 +30,10 @@ class EnrolmentStatuses
     const EXPIRED     = 'expired';     # your enrolment was completed, but it's expired.
 
     // Numeric values for the statuses. Being used in ES.
-    const I_NOT_STARTED = -2;
-    const I_PENDING     = -1;
-    const I_IN_PROGRESS = 1;
-    const I_EXPIRED     = 2;
+    const I_NOT_STARTED = -20;
+    const I_PENDING     = -10;
+    const I_IN_PROGRESS = 10;
+    const I_EXPIRED     = 20;
     const I_COMPLETED   = 100;
 
     /**
@@ -52,6 +53,9 @@ class EnrolmentStatuses
 
             case self::PENDING:
                 return self::I_PENDING;
+
+            case PlanStatuses::S_ASSIGNED:
+                return PlanStatuses::ASSIGNED;
 
             case self::IN_PROGRESS:
                 return self::I_IN_PROGRESS;
@@ -84,6 +88,9 @@ class EnrolmentStatuses
 
             case self::I_COMPLETED:
                 return self::COMPLETED;
+
+            case PlanStatuses::ASSIGNED:
+                return PlanStatuses::S_ASSIGNED;
 
             default:
                 throw new InvalidArgumentException('Unknown enrolment status: ' . $status);
