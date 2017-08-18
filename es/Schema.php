@@ -231,23 +231,23 @@ class Schema
     const LO_MAPPING = [
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'             => ['type' => self::T_KEYWORD],
-            'type'           => ['type' => self::T_KEYWORD],
-            'origin_id'      => ['type' => self::T_INT],
-            'remote_id'      => ['type' => self::T_KEYWORD],
-            'status'         => ['type' => self::T_SHORT],
-            'private'        => ['type' => self::T_BOOL],
-            'published'      => ['type' => self::T_INT],
-            'marketplace'    => ['type' => self::T_BOOL],
-            'sharing'        => ['type' => self::T_SHORT],
-            'instance_id'    => ['type' => self::T_INT],
-            'language'       => ['type' => self::T_KEYWORD],
-            'locale'         => ['type' => self::T_KEYWORD],
-            'title'          => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'description'    => ['type' => self::T_TEXT],
-            'tags'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'image'          => ['type' => self::T_TEXT],
-            'pricing'        => [
+            'id'              => ['type' => self::T_KEYWORD],
+            'type'            => ['type' => self::T_KEYWORD],
+            'origin_id'       => ['type' => self::T_INT],
+            'remote_id'       => ['type' => self::T_KEYWORD],
+            'status'          => ['type' => self::T_SHORT],
+            'private'         => ['type' => self::T_BOOL],
+            'published'       => ['type' => self::T_INT],
+            'marketplace'     => ['type' => self::T_BOOL],
+            'sharing'         => ['type' => self::T_SHORT],
+            'instance_id'     => ['type' => self::T_INT],
+            'language'        => ['type' => self::T_KEYWORD],
+            'locale'          => ['type' => self::T_KEYWORD],
+            'title'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'description'     => ['type' => self::T_TEXT],
+            'tags'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'image'           => ['type' => self::T_TEXT],
+            'pricing'         => [
                 'properties' => [
                     'currency'     => ['type' => self::T_KEYWORD],
                     'price'        => ['type' => self::T_DOUBLE],
@@ -263,18 +263,19 @@ class Schema
                     ],
                 ],
             ],
-            'duration'       => ['type' => self::T_INT], # Duration in minute
-            'assessors'      => ['type' => self::T_INT],
-            'totalEnrolment' => ['type' => self::T_INT],
-            'created'        => ['type' => self::T_DATE],
-            'updated'        => ['type' => self::T_DATE],
-            'fields'         => ['type' => self::T_OBJECT],
-            'items_count'    => ['type' => self::T_INT], # Only count first child level
-            'authors'        => [
+            'duration'        => ['type' => self::T_INT], # Duration in minute
+            'assessors'       => ['type' => self::T_INT],
+            'totalEnrolment'  => ['type' => self::T_INT],
+            'created'         => ['type' => self::T_DATE],
+            'updated'         => ['type' => self::T_DATE],
+            'fields'          => ['type' => self::T_OBJECT],
+            'items_count'     => ['type' => self::T_INT], # Only count first child level
+            'authors'         => [
                 'type'       => self::T_NESTED,
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'metadata'       => [
+            'allow_enrolment' => ['type' => self::T_KEYWORD],
+            'metadata'        => [
                 'properties' => [
                     'parents_authors_ids' => ['type' => self::T_INT],
                     'parents_id'          => ['type' => self::T_INT],
