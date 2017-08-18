@@ -274,4 +274,19 @@ class GroupHelper
 
         return $q->execute()->fetchAll(DB::OBJ);
     }
+
+    public static function findGroupIdsByItem(Connection $db, string $type, int $id, int $offset = 0, $limit = 100): array
+    {
+        $q = $db->createQueryBuilder();
+        return $q->select('DISTINCT group_id')
+            ->from('social_group_item')
+            ->where('entity_type = ?')
+            ->andWhere('entity_id = ?')
+            ->andWhere('status = ?')
+            ->setParameters([$type, $id, GroupItemStatus::ACTIVE], [DB::STRING, DB::INTEGER, DB::INTEGER])
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->execute()
+            ->fetchAll(DB::COL);
+    }
 }
