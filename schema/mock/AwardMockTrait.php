@@ -3,7 +3,9 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\award\AwardEnrolmentStatuses;
 use go1\util\award\AwardStatuses;
+use go1\util\DateTime;
 
 trait AwardMockTrait
 {
@@ -80,7 +82,7 @@ trait AwardMockTrait
         $options['data'] = json_encode($options['data']);
 
         $db->insert('award_item_manual', [
-            'award_id'        => $options['award_id'] ?? 0,
+            'award_id'        => $options['award_id'],
             'title'           => $options['title'] ?? null,
             'type'            => $options['type'] ?? null,
             'description'     => $options['description'] ?? null,
@@ -96,5 +98,29 @@ trait AwardMockTrait
         ]);
 
         return $db->lastInsertId('award_item_manual');
+    }
+
+    protected function createAwardEnrolment(Connection $db, array $options)
+    {
+        $data = isset($options['data'])
+            ? (is_scalar($options['data']) ? json_decode($options['data'], true) : $options['data'])
+            : [];
+        $data = json_encode($data);
+
+        $db->insert('award_enrolment', [
+            'award_id'    => $options['award_id'],
+            'user_id'     => $options['user_id'],
+            'instance_id' => $options['instance_id'],
+            'expire'      => isset($options['expire']) ? DateTime::create($options['expire'])->getTimestamp() : null,
+            'start_date'  => isset($options['start_date']) ? DateTime::create($options['start_date'])->getTimestamp() : null,
+            'end_date'    => isset($options['end_date']) ? DateTime::create($options['end_date'])->getTimestamp() : null,
+            'status'      => $options['status'] ?? AwardEnrolmentStatuses::IN_PROGRESS,
+            'quantity'    => $options['quantity'] ?? 0,
+            'data'        => $data,
+            'created'     => isset($options['created']) ? DateTime::create($options['created'])->getTimestamp() : time(),
+            'updated'     => isset($options['updated']) ? DateTime::create($options['updated'])->getTimestamp() : time(),
+        ]);
+
+        return $db->lastInsertId('award_enrolment');
     }
 }

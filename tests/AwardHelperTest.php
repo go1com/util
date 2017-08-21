@@ -99,13 +99,14 @@ class AwardHelperTest extends UtilTestCase
     public function testLoadItem()
     {
         $awardManualItemId = $this->createAwardItemManual($this->db, [
-            'data' => $data = [
+            'award_id' => 1,
+            'data'     => $data = [
                 'certificate' => [
-                    'url' => 'foo.com',
+                    'url'  => 'foo.com',
                     'size' => '1MB',
                     'name' => 'foo',
-                ]
-            ]
+                ],
+            ],
         ]);
         $awardManualItem = AwardHelper::loadManualItem($this->db, $awardManualItemId);
 

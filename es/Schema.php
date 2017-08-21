@@ -808,13 +808,18 @@ class Schema
         '_parent'    => ['type' => self::O_AWARD],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'user_id'     => ['type' => self::T_INT],
-            'assigner_id' => ['type' => self::T_INT],
-            'expiration'  => ['type' => self::T_DATE],
-            'quantity'    => ['type' => self::T_DOUBLE],
-            'status'      => ['type' => self::T_SHORT],
-            // @todo start_date, end_date GO1P-14180
+            'id'           => ['type' => self::T_KEYWORD],
+            'user_id'      => ['type' => self::T_INT],
+            'assigner_id'  => ['type' => self::T_INT],
+            'expiration'   => ['type' => self::T_DATE],
+            'quantity'     => ['type' => self::T_DOUBLE],
+            'status'       => ['type' => self::T_SHORT],
+            'start_date'   => ['type' => self::T_DATE],
+            'end_date'     => ['type' => self::T_DATE],
+            'achievements' => [
+                'type'       => self::T_NESTED,
+                'properties' => self::AWARD_ACHIEVEMENT_MAPPING['properties'],
+            ]
         ],
     ];
 
