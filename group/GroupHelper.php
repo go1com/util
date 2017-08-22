@@ -222,6 +222,16 @@ class GroupHelper
         return $check ? true : false;
     }
 
+    public static function premiumStatus(stdClass $group)
+    {
+        return self::isPremium($group)
+            ? GroupStatus::PREMIUM_CONTENT
+            : (self::isMarketplace($group)
+                ? GroupStatus::PREMIUM_MARKETPLACE
+                : GroupStatus::PREMIUM_NORMAL
+            );
+    }
+
     public static function format(stdClass &$group)
     {
         $group->data = is_scalar($group->data) ? json_decode($group->data) : $group->data;
