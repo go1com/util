@@ -131,6 +131,7 @@ class Schema
             'created'       => ['type' => self::T_DATE],
             'configuration' => ['type' => self::T_OBJECT],
             'legacy'        => ['type' => self::T_BOOL],
+            'logo'          => ['type' => self::T_TEXT],
             'score'         => ['type' => self::T_INT], # activity score
         ],
     ];
