@@ -17,6 +17,7 @@ trait EsInstanceMockTrait
             'name'          => $options['name'] ?? 'GO1',
             'title'         => $options['title'] ?? 'az.mygo1.com',
             'status'        => $options['status'] ?? 1,
+            'logo'          => $options['logo'] ?? null,
             'version'       => $options['version'] ?? '',
             'created'       => DateTime::formatDate($options['created'] ?? time()),
             'configuration' => $options['configuration'] ?? null,
