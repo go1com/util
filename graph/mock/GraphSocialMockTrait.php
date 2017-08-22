@@ -53,12 +53,13 @@ trait GraphSocialMockTrait
         static $autoGroupId;
 
         $group = [
-            'id'          => isset($option['id']) ? $option['id'] : ++$autoGroupId,
-            'title'       => isset($option['title']) ? $option['title'] : uniqid('group'),
-            'created'     => isset($option['created']) ? $option['created'] : time(),
-            'visibility'  => isset($option['visibility']) ? $option['visibility'] : GroupStatus::PUBLIC,
-            'instance_id' => isset($option['instance_id']) ? $option['instance_id'] : 0,
-            'account_id'  => isset($option['account_id']) ? $option['account_id'] : 0,
+            'id'              => isset($option['id']) ? $option['id'] : ++$autoGroupId,
+            'title'           => isset($option['title']) ? $option['title'] : uniqid('group'),
+            'created'         => isset($option['created']) ? $option['created'] : time(),
+            'visibility'      => isset($option['visibility']) ? $option['visibility'] : GroupStatus::PUBLIC,
+            'instance_id'     => isset($option['instance_id']) ? $option['instance_id'] : 0,
+            'account_id'      => isset($option['account_id']) ? $option['account_id'] : 0,
+            'content_sharing' => isset($option['content_sharing']) ? $option['content_sharing'] : false,
         ];
 
         $stack = $client->stack();
@@ -66,9 +67,10 @@ trait GraphSocialMockTrait
             [
                 'name' => "group:{$group['id']}",
                 'data' => [
-                    'title'      => $group['title'],
-                    'created'    => $group['created'],
-                    'visibility' => $group['visibility'],
+                    'title'            => $group['title'],
+                    'created'          => $group['created'],
+                    'visibility'       => $group['visibility'],
+                    'isContentSharing' => $group['content_sharing'],
                 ],
             ]
         );
