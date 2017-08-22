@@ -13,6 +13,10 @@ use Traversable;
 
 class Text
 {
+    # 47 === JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_NUMERIC_CHECK
+    # https://github.com/symfony/http-foundation/blob/master/JsonResponse.php#L31
+    const JSON_ENCODING_OPTIONS = 47;
+
     public static function defaultPurifier(): HTMLPurifier
     {
         $cnf = HTMLPurifier_Config::createDefault();
