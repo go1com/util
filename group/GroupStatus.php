@@ -8,4 +8,8 @@ class GroupStatus
     const PUBLIC  = 1;
     const LOCKED  = 2;
     const ALL     = [self::PUBLIC, self::LOCKED, self::PRIVATE];
+
+    const PREMIUM_NORMAL        = 0;
+    const PREMIUM_CONTENT       = 1;
+    const PREMIUM_MARKETPLACE   = 2;
 }

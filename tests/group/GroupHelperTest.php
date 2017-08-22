@@ -10,6 +10,7 @@ use go1\util\group\GroupAssignTypes;
 use go1\util\group\GroupHelper;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupItemTypes;
+use go1\util\group\GroupStatus;
 use go1\util\schema\mock\GroupMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
@@ -198,6 +199,21 @@ class GroupHelperTest extends UtilTestCase
         $group2 = GroupHelper::load($this->db, $groupId2);
 
         $this->assertFalse(GroupHelper::isMarketplace($group2));
+    }
+
+    public function testPremiumStatus()
+    {
+        $groupId = $this->createGroup($this->db, []);
+        $group = GroupHelper::load($this->db, $groupId);
+        $this->assertEquals(GroupStatus::PREMIUM_NORMAL, GroupHelper::premiumStatus($group));
+
+        $groupPremiumId = $this->createGroup($this->db, ['data' => ['premium' => 1]]);
+        $groupPremium = GroupHelper::load($this->db, $groupPremiumId);
+        $this->assertEquals(GroupStatus::PREMIUM_CONTENT, GroupHelper::premiumStatus($groupPremium));
+
+        $groupMarketplaceId = $this->createGroup($this->db, ['data' => ['marketplace' => 1]]);
+        $groupMarketplace = GroupHelper::load($this->db, $groupMarketplaceId);
+        $this->assertEquals(GroupStatus::PREMIUM_MARKETPLACE, GroupHelper::premiumStatus($groupMarketplace));
     }
 
     public function testFindItems()
