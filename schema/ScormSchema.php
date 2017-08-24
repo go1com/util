@@ -22,14 +22,14 @@ class ScormSchema {
             $package->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $package->addColumn('uuid', Type::STRING);
             $package->addColumn('pc_id', Type::INTEGER, ['unsigned' => true, 'notnull'  => false]);
-            $package->addColumn('loId', Type::INTEGER);
+            $package->addColumn('lo_id', Type::INTEGER);
             $package->addColumn('created', 'integer');
             $package->addColumn('updated', 'integer', ['notnull' => false]);
             $package->addColumn('expire', 'integer');
             $package->addColumn('data', 'blob');
             $package->setPrimaryKey(['id']);
             $package->addUniqueIndex(['uuid']);
-            $package->addIndex(['loId']);
+            $package->addIndex(['lo_id']);
             $package->addIndex(['pc_id']);
             $package->addIndex(['created']);
             $package->addIndex(['updated']);
