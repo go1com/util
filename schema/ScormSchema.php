@@ -7,8 +7,8 @@ use Doctrine\DBAL\Types\Type;
 
 class ScormSchema {
     public static function install(Schema $schema) {
-        if (!$schema->hasTable('portal_credential')) {
-            $credential = $schema->createTable('portal_credential');
+        if (!$schema->hasTable('scorm_credential')) {
+            $credential = $schema->createTable('scorm_redential');
             $credential->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $credential->addColumn('instance', Type::STRING);
             $credential->addColumn('client_id', Type::STRING);
@@ -17,8 +17,8 @@ class ScormSchema {
             $credential->addUniqueIndex(['instance']);
         }
 
-        if (!$schema->hasTable('portal_scorm_package')) {
-            $package = $schema->createTable('portal_scorm_package');
+        if (!$schema->hasTable('scorm_package')) {
+            $package = $schema->createTable('scorm_package');
             $package->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $package->addColumn('uuid', Type::STRING);
             $package->addColumn('pc_id', Type::INTEGER, ['unsigned' => true, 'notnull'  => false]);
