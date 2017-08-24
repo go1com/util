@@ -23,9 +23,9 @@ class ScormSchema {
             $package->addColumn('uuid', Type::STRING);
             $package->addColumn('pc_id', Type::INTEGER, ['unsigned' => true, 'notnull'  => false]);
             $package->addColumn('lo_id', Type::INTEGER);
-            $package->addColumn('created', 'integer');
-            $package->addColumn('updated', 'integer', ['notnull' => false]);
-            $package->addColumn('expire', 'integer');
+            $package->addColumn('created', Type::INTEGER);
+            $package->addColumn('updated', Type::INTEGER, ['notnull' => false]);
+            $package->addColumn('expire', Type::INTEGER);
             $package->addColumn('data', 'blob');
             $package->setPrimaryKey(['id']);
             $package->addUniqueIndex(['uuid']);
