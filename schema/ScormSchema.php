@@ -34,7 +34,6 @@ class ScormSchema {
             $package->addIndex(['created']);
             $package->addIndex(['updated']);
             $package->addIndex(['expire']);
-            $package->addForeignKeyConstraint($credential, ['pc_id'], ['id'], ['onUpdate' => 'CASCADE', 'onDelete' => 'CASCADE']);
         }
     }
 }
