@@ -28,7 +28,10 @@ class PaymentClientTest extends UtilTestCase
 
         $c['client'] = $client;
         $c['payment_url'] = $this->paymentUrl;
-
+        $c['payment.options'] = [
+            'api_key'    => 'API_KEY',
+            'secret_key' => 'SECRECT_KEY'
+        ];
         /** @var PaymentClient $paymentClient */
         $paymentClient = $c['go1.client.payment'];
         $paymentClient->updateCODTransaction(1000);
@@ -70,6 +73,10 @@ class PaymentClientTest extends UtilTestCase
 
         $c['client'] = $client;
         $c['payment_url'] = $this->paymentUrl;
+        $c['payment.options'] = [
+            'api_key'    => 'API_KEY',
+            'secret_key' => 'SECRECT_KEY'
+        ];
 
         /** @var PaymentClient $paymentClient */
         $paymentClient = $c['go1.client.payment'];

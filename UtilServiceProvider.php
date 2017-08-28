@@ -138,7 +138,7 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.payment'] = function (Container $c) {
-            return new PaymentClient($c['logger'], $c['client'], $c['payment_url']);
+            return new PaymentClient($c['logger'], $c['client'], $c['payment_url'], $c['payment.options']['api_key'], $c['payment.options']['secret_key']);
         };
 
         $c['go1.client.realtime'] = function (Container $c) {
