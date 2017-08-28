@@ -188,6 +188,7 @@ class PlanRepository
         $this->db->transactional(function () use ($original, $plan, $notify, $diff) {
             $this->createRevision($original);
             $this->db->update('gc_plan', $diff, ['id' => $original->id]);
+            $plan->id = $original->id;
             $plan->original = $original;
             $plan->notify = $notify;
             $this->queue->publish($plan, Queue::PLAN_UPDATE);
