@@ -19,11 +19,13 @@ class PaymentClient
     private $appId;
     private $appSecret;
 
-    public function __construct(LoggerInterface $logger, Client $client, string $paymentUrl)
+    public function __construct(LoggerInterface $logger, Client $client, string $paymentUrl, $appId = null, $appSecret = null)
     {
         $this->logger = $logger;
         $this->client = $client;
         $this->paymentUrl = rtrim($paymentUrl, '/');
+        $this->appId = $appId;
+        $this->appSecret = $appSecret;
     }
 
     public function setAppId(string $appId)
