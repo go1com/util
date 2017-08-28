@@ -149,6 +149,7 @@ class Queue
     # The #consumer auto routing the message to #SERVICE when the routing key is "do.SERVICE".
     # -------
     const DO_CONSUMER_HTTP_REQUEST             = 'do.consumer.HttpRequest'; # { method: STRING, url: STRING, query: STRING, headers: map[STRING][STRING], body: STRING }
+    const DO_FINDER                            = 'do.finder';
     const DO_PUBLIC_API_WEBHOOK_REQUEST        = 'do.public-api.webhook-request'; # { appId: INT, url: STRING, subject: OBJECT, original: null|OBJECT }
     const DO_MAIL_SEND                         = 'do.mail.send'; # { subject: STRING, body: STRING, html: STRING, context: OBJECT, attachments: STRING[], options: OBJECT }
     const DO_HISTORY_RECORD                    = 'do.history.record';
