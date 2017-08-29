@@ -101,7 +101,7 @@ class PaymentClient
         ];
 
         $options['cartOptions']['items'][] = [
-            'instance_id'  => $product->instance_id,
+            'instanceId'   => $product->instance_id,
             'productId'    => "lo-{$product->id}",
             'type'         => 'product',
             'price'        => $product->pricing->price,
