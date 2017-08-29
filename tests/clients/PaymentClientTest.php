@@ -52,8 +52,8 @@ class PaymentClientTest extends UtilTestCase
                     $this->assertEquals("application/json", $options['headers']['Content-Type']);
 
                     $item = $options['json']['cartOptions']['items'][0];
-                    $this->assertEquals("lo-100", $item['productId']);
-                    $this->assertEquals("product", $item['type']);
+                    $this->assertEquals(100, $item['productId']);
+                    $this->assertEquals("lo", $item['type']);
                     $this->assertEquals(1000, $item['price']);
                     $this->assertEquals(10, $item['tax']);
                     $this->assertTrue($item['tax_included']);
