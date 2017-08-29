@@ -2,38 +2,24 @@
 
 namespace go1\clients;
 
-use go1\util\portal\PortalChecker;
 use go1\util\user\UserHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Log\LoggerInterface;
 use stdClass;
-use Symfony\Component\HttpFoundation\Request;
 
 class PaymentClient
 {
     private $logger;
     private $client;
     private $paymentUrl;
-    private $appId;
-    private $appSecret;
 
     public function __construct(LoggerInterface $logger, Client $client, string $paymentUrl)
     {
         $this->logger = $logger;
         $this->client = $client;
         $this->paymentUrl = rtrim($paymentUrl, '/');
-    }
-
-    public function setAppId(string $appId)
-    {
-        $this->appId = $appId;
-    }
-
-    public function setAppSecret(string $appSecret)
-    {
-        $this->appSecret = $appSecret;
     }
 
     public function stripeConnectionId(string $instance)
@@ -107,7 +93,6 @@ class PaymentClient
     ): array
     {
         $options = [
-            'applicationId'  => $this->appId,
             'timestamp'      => time(),
             'paymentMethod'  => $paymentMethod,
             'paymentOptions' => $paymentOptions,
@@ -126,11 +111,7 @@ class PaymentClient
             'data'         => ['title' => $product->title],
         ];
 
-        ksort($options);
-        $signature = http_build_query($options);
-        $signature = sha1($signature . $this->appSecret);
-
-        return $options + ['signature' => $signature];
+        return $options;
     }
 
     public function updateCODTransaction($id): bool
