@@ -50,7 +50,6 @@ class PaymentClientTest extends UtilTestCase
                 $this->callback(function ($options) {
                     $this->assertEquals("USER_JWT", $options['headers']['Authorization']);
                     $this->assertEquals("application/json", $options['headers']['Content-Type']);
-                    $this->assertEquals("APP_ID", $options['json']['applicationId']);
 
                     $item = $options['json']['cartOptions']['items'][0];
                     $this->assertEquals("lo-100", $item['productId']);
@@ -83,8 +82,6 @@ class PaymentClientTest extends UtilTestCase
                 'currency'      => 'AUD'
             ]
         ];
-        $paymentClient->setAppId('APP_ID');
-        $paymentClient->setAppSecret('SECRET_KEY');
         $paymentClient->create($product, 10, 'cod', [], 'USER_JWT');
     }
 }
