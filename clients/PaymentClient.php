@@ -102,8 +102,8 @@ class PaymentClient
 
         $options['cartOptions']['items'][] = [
             'instanceId'   => $product->instance_id,
-            'productId'    => "lo-{$product->id}",
-            'type'         => 'product',
+            'productId'    => $product->id,
+            'type'         => 'lo',
             'price'        => $product->pricing->price,
             'tax'          => isset($product->pricing->tax) ? $product->pricing->tax : 0.00,
             'tax_included' => isset($product->pricing->tax_included) ? $product->pricing->tax_included : true,
