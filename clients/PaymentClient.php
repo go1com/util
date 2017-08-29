@@ -64,7 +64,7 @@ class PaymentClient
             $res = $this->client->post(
                 "{$this->paymentUrl}/cart/process",
                 [
-                    'headers' => ['Authorization' => $authorization, 'Content-Type'  => 'application/json'],
+                    'headers' => ['Authorization' => $authorization, 'Content-Type' => 'application/json'],
                     'json'    => $this->buildCartOptions($product, $qty, $paymentMethod, $paymentOptions, $metadata),
                 ]
             );
@@ -96,7 +96,7 @@ class PaymentClient
             'timestamp'      => time(),
             'paymentMethod'  => $paymentMethod,
             'paymentOptions' => $paymentOptions,
-            'cartOptions'    => [],
+            'cartOptions'    => array_filter(['coupon' => $paymentOptions['coupon'] ?? null]),
             'metadata'       => $metadata,
         ];
 
