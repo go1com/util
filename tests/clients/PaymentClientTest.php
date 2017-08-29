@@ -43,10 +43,10 @@ class PaymentClientTest extends UtilTestCase
             ->expects($this->once())
             ->method('post')
             ->with($this->callback(function ($url) {
-                    $this->assertEquals("{$this->paymentUrl}/cart/process", $url);
+                $this->assertEquals("{$this->paymentUrl}/cart/process", $url);
 
-                    return true;
-                }),
+                return true;
+            }),
                 $this->callback(function ($options) {
                     $this->assertEquals("USER_JWT", $options['headers']['Authorization']);
                     $this->assertEquals("application/json", $options['headers']['Content-Type']);
@@ -73,14 +73,15 @@ class PaymentClientTest extends UtilTestCase
         /** @var PaymentClient $paymentClient */
         $paymentClient = $c['go1.client.payment'];
         $product = (object) [
-            'id'        => 100,
-            'title'     => 'test product',
-            'pricing'   => (object) [
-                'price'         => 1000,
-                'tax'           => 10,
-                'tax_included'  => true,
-                'currency'      => 'AUD'
-            ]
+            'id'          => 100,
+            'title'       => 'test product',
+            'instance_id' => 555,
+            'pricing'     => (object) [
+                'price'        => 1000,
+                'tax'          => 10,
+                'tax_included' => true,
+                'currency'     => 'AUD',
+            ],
         ];
         $paymentClient->create($product, 10, 'cod', [], 'USER_JWT');
     }
