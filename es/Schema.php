@@ -163,6 +163,7 @@ class Schema
             'allow_public' => ['type' => self::T_BOOL],
             'avatar'       => ['type' => self::T_TEXT],
             'roles'        => ['type' => self::T_KEYWORD],
+            'timestamp'    => ['type' => self::T_DATE],
         ],
     ];
 
@@ -181,6 +182,7 @@ class Schema
             'allow_public' => ['type' => self::T_BOOL],
             'roles'        => ['type' => self::T_KEYWORD],
             'groups'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'timestamp'    => ['type' => self::T_DATE],
             'managers'     => ['type' => self::T_INT],
             'metadata'     => [
                 'properties' => [
