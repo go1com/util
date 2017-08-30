@@ -296,6 +296,19 @@ class MailTemplate
         ],
     ];
 
+    const GROUP_ASSIGN = [
+        'key'    => 'group.assign',
+        'tokens' => [
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!group_name'         => 'Group name',
+            '!group_url'          => 'Group URL',
+            '!portal_name'        => 'Portal name',
+            '!portal_url'         => 'Portal URL',
+            '!portal_image'       => 'Portal image',
+        ],
+    ];
+
     const ONBOARD_WELCOME = [
         'key'    => 'onboard.welcome',
         'tokens' => [
