@@ -300,4 +300,25 @@ class GroupHelperTest extends UtilTestCase
         $this->assertCount(2, GroupHelper::groupAssignments($this->db, $groupId));
         $this->assertCount(1, GroupHelper::groupAssignments($this->db, $groupId, ['status' => GroupAssignStatuses::ARCHIVED]));
     }
+
+    public function testFindGroupIdsByItem()
+    {
+        $fooGroupId = 1;
+        $barGroupId = 2;
+
+        $this->createGroupItem($this->db, ['group_id' => $fooGroupId, 'entity_type' => GroupItemTypes::LO, 'entity_id' => 1]);
+        $this->createGroupItem($this->db, ['group_id' => $fooGroupId, 'entity_type' => GroupItemTypes::LO, 'entity_id' => 2]);
+        $this->createGroupItem($this->db, ['group_id' => $barGroupId, 'entity_type' => GroupItemTypes::LO, 'entity_id' => 1]);
+        $this->createGroupItem($this->db, ['group_id' => $fooGroupId, 'entity_type' => GroupItemTypes::USER, 'entity_id' => 1]);
+        $this->createGroupItem($this->db, ['group_id' => $barGroupId, 'entity_type' => GroupItemTypes::USER, 'entity_id' => 2]);
+
+        $groupIds = GroupHelper::findGroupIdsByItem($this->db, GroupItemTypes::LO, 1);
+        $this->assertCount(2, $groupIds);
+        $this->assertTrue(in_array($fooGroupId, $groupIds));
+        $this->assertTrue(in_array($barGroupId, $groupIds));
+
+        $groupIds = GroupHelper::findGroupIdsByItem($this->db, GroupItemTypes::LO, 2);
+        $this->assertCount(1, $groupIds);
+        $this->assertTrue(in_array($fooGroupId, $groupIds));
+    }
 }
