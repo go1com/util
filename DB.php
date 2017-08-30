@@ -19,7 +19,7 @@ class DB
     const STRING   = PDO::PARAM_STR;
     const STRINGS  = Connection::PARAM_STR_ARRAY;
 
-    public static function connectionOptions(string $name, $forceSlave = false, callable $callback = null): array
+    public static function connectionOptions(string $name, $forceSlave = false, $forceMaster = false): array
     {
         if (function_exists('__db_connection_options')) {
             return __db_connection_options($name);
@@ -28,13 +28,12 @@ class DB
         $prefix = strtoupper(class_exists(App::class, false) ? "{$name}_DB" : "_DOCKER_{$name}_DB");
         $prefix = getenv("{$prefix}_NAME") ? $prefix : strtoupper("_DOCKER_{$name}_DB");
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
-
         $slave = getenv("{$prefix}_HOST");
-        if (
-            (('GET' === $method) && (getenv("{$prefix}_SLAVE")))
-            || $forceSlave
-        ) {
-            $slave = getenv("{$prefix}_SLAVE");
+
+        if ((('GET' === $method) && (getenv("{$prefix}_SLAVE"))) || $forceSlave) {
+            if (!$forceMaster) {
+                $slave = getenv("{$prefix}_SLAVE");
+            }
         }
 
         $dbName = "{$name}_dev";
@@ -42,7 +41,7 @@ class DB
             $dbName = in_array(getenv('_DOCKER_ENV'), ['staging', 'production']) ? 'gc_go1' : 'dev_go1';
         }
 
-        $options = [
+        return [
             'driver'        => 'pdo_mysql',
             'dbname'        => getenv("{$prefix}_NAME") ?: $dbName,
             'host'          => $slave ?: 'microservice.cluster-csb6wde17f7d.ap-southeast-2.rds.amazonaws.com',
@@ -51,8 +50,6 @@ class DB
             'port'          => getenv("{$prefix}_PORT") ?: '3306',
             'driverOptions' => [1002 => 'SET NAMES utf8'],
         ];
-
-        return $callback ? $callback($options) : $options;
     }
 
     public static function transactional(Connection $db, callable $callback)
