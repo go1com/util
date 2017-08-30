@@ -19,7 +19,7 @@ class DB
     const STRING   = PDO::PARAM_STR;
     const STRINGS  = Connection::PARAM_STR_ARRAY;
 
-    public static function connectionOptions(string $name, $forceSlave = false): array
+    public static function connectionOptions(string $name, $forceSlave = false, callable $callback = null): array
     {
         if (function_exists('__db_connection_options')) {
             return __db_connection_options($name);
@@ -42,7 +42,7 @@ class DB
             $dbName = in_array(getenv('_DOCKER_ENV'), ['staging', 'production']) ? 'gc_go1' : 'dev_go1';
         }
 
-        return [
+        $options = [
             'driver'        => 'pdo_mysql',
             'dbname'        => getenv("{$prefix}_NAME") ?: $dbName,
             'host'          => $slave ?: 'microservice.cluster-csb6wde17f7d.ap-southeast-2.rds.amazonaws.com',
@@ -51,6 +51,8 @@ class DB
             'port'          => getenv("{$prefix}_PORT") ?: '3306',
             'driverOptions' => [1002 => 'SET NAMES utf8'],
         ];
+
+        return $callback ? $callback($options) : $options;
     }
 
     public static function transactional(Connection $db, callable $callback)
@@ -170,7 +172,8 @@ class DB
         while ($entity = $q->fetch($fetchMode)) {
             if (DB::OBJ == $fetchMode) {
                 $data = &$entity->data ?? null;
-            } else {
+            }
+            else {
                 $data = &$entity['data'] ?? null;
             }
 
