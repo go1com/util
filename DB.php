@@ -44,9 +44,9 @@ class DB
         return [
             'driver'        => 'pdo_mysql',
             'dbname'        => getenv("{$prefix}_NAME") ?: $dbName,
-            'host'          => $slave ?: 'microservice.cluster-csb6wde17f7d.ap-southeast-2.rds.amazonaws.com',
-            'user'          => getenv("{$prefix}_USERNAME") ?: 'gc_dev',
-            'password'      => getenv("{$prefix}_PASSWORD") ?: 'gc_dev#2016',
+            'host'          => $slave ?: getenv("{$prefix}_HOST"),
+            'user'          => getenv("{$prefix}_USERNAME"),
+            'password'      => getenv("{$prefix}_PASSWORD"),
             'port'          => getenv("{$prefix}_PORT") ?: '3306',
             'driverOptions' => [1002 => 'SET NAMES utf8'],
         ];
