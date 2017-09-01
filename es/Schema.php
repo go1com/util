@@ -277,7 +277,13 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'group_ids'      => ['type' => self::T_INT],
+            'group'          => [
+                'type'       => self::T_NESTED,
+                'properties' => [
+                    'type'     => ['type' => self::T_KEYWORD],
+                    'group_id' => ['type' => self::T_INT],
+                ],
+            ],
             'metadata'       => [
                 'properties' => [
                     'parents_authors_ids' => ['type' => self::T_INT],

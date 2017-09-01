@@ -15,6 +15,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupHelper
 {
+    const G_TYPE_PREMIUM     = 'premium';
+    const G_TYPE_MARKETPLACE = 'marketplace';
+    const G_TYPE_DEFAULT     = 'default';
+
     public static function load(Connection $db, int $id)
     {
         $sql = 'SELECT * FROM social_group WHERE id = ?';

@@ -41,7 +41,7 @@ trait EsLoMockTrait
             'created'        => DateTime::formatDate($options['created'] ?? time()),
             'updated'        => DateTime::formatDate($options['updated'] ?? time()),
             'authors'        => $options['authors'] ?? [],
-            'group_ids'      => $options['group_ids'] ?? [],
+            'group'          => $options['group'] ?? [],
             'metadata'       => [
                 'parents_authors_ids' => $options['metadata']['parents_authors_ids'] ?? null,
                 'parents_id'          => $options['metadata']['parents_id'] ?? null,
