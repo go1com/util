@@ -16,13 +16,13 @@ class PlanStatuses
     const EXPIRED     = 5; # The object is expired.
 
 
-    const S_INTERESTING = 'Interesting';
-    const S_SCHEDULED   = 'Scheduled';
-    const S_ASSIGNED    = 'Assigned';
-    const S_ENQUIRED    = 'Enquired';
-    const S_PENDING     = 'Pending';
-    const S_LATE        = 'Late';
-    const S_EXPIRED     = 'Expired';
+    const S_INTERESTING = 'interesting';
+    const S_SCHEDULED   = 'scheduled';
+    const S_ASSIGNED    = 'assigned';
+    const S_ENQUIRED    = 'enquired';
+    const S_PENDING     = 'pending';
+    const S_LATE        = 'late';
+    const S_EXPIRED     = 'expired';
 
     public static function all()
     {
