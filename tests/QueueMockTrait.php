@@ -20,6 +20,10 @@ trait QueueMockTrait
 
             $response = function ($body, string $routingKey, $context) use ($callback) {
                 $callback && $callback($body, $routingKey, $context);
+                if ($context) {
+                    is_array($body) && $body['_context'] = $context;
+                    is_object($body) && $body->_context = (object) $context;
+                }
                 $this->queueMessages[$routingKey][] = $body;
             };
 
