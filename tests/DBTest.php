@@ -142,4 +142,21 @@ class DBTest extends UtilTestCase
         $this->assertInternalType('array', $usersArr[1]);
         $this->assertEquals([], $usersArr[1]['data']);
     }
+
+    public function testDefaultConfig()
+    {
+        putenv('DEV_DB_USERNAME=dev_username');
+        putenv('DEV_DB_PASSWORD=dev_password');
+        putenv('DEV_DB_HOST=dev.com');
+        $bar = DB::connectionOptions('bar');
+        $this->assertEquals('pdo_mysql', $bar['driver']);
+        $this->assertEquals('bar_dev', $bar['dbname']);
+        $this->assertEquals('dev_username', $bar['user']);
+        $this->assertEquals('dev_password', $bar['password']);
+        $this->assertEquals('dev.com', $bar['host']);
+
+        putenv('DEV_DB_SLAVE=slave.dev.com');
+        $bar = DB::connectionOptions('bar');
+        $this->assertEquals('slave.dev.com', $bar['host']);
+    }
 }

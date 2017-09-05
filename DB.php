@@ -44,9 +44,9 @@ class DB
         return [
             'driver'        => 'pdo_mysql',
             'dbname'        => getenv("{$prefix}_NAME") ?: $dbName,
-            'host'          => $slave ?: getenv("{$prefix}_HOST"),
-            'user'          => getenv("{$prefix}_USERNAME"),
-            'password'      => getenv("{$prefix}_PASSWORD"),
+            'host'          => $slave ?: (getenv("{$prefix}_HOST") ?: (getenv('DEV_DB_SLAVE') ?: getenv('DEV_DB_HOST'))),
+            'user'          => getenv("{$prefix}_USERNAME") ?: getenv('DEV_DB_USERNAME'),
+            'password'      => getenv("{$prefix}_PASSWORD") ?: getenv('DEV_DB_PASSWORD'),
             'port'          => getenv("{$prefix}_PORT") ?: '3306',
             'driverOptions' => [1002 => 'SET NAMES utf8'],
         ];
