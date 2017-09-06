@@ -2,10 +2,14 @@
 
 namespace go1\util\tests\enrolment;
 
+use go1\util\DateTime;
+use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
 use go1\util\enrolment\EnrolmentStatuses;
+use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\Queue;
 use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
@@ -203,5 +207,35 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals(2, $progress[EnrolmentStatuses::COMPLETED]);
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
         $this->assertEquals(5, $progress['total']);
+    }
+
+    public function testCreate()
+    {
+        $lo = LoHelper::load($this->db, $this->courseId);
+        $status = EnrolmentStatuses::NOT_STARTED;
+        $date = DateTime::formatDate('now');
+        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date);
+
+        $e = EnrolmentHelper::load($this->db, 1);
+        $this->assertEquals($status, $e->status);
+
+        $message = $this->queueMessages[Queue::ENROLMENT_CREATE];
+        $this->assertCount(1, $message);
+    }
+
+    public function testCreateWithMarketplaceLO()
+    {
+        $instanceId = $this->createInstance($this->db, []);
+        $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId, 'marketplace' => 1]);
+        $lo = LoHelper::load($this->db, $courseId);
+        $status = EnrolmentStatuses::NOT_STARTED;
+        $date = DateTime::formatDate('now');
+        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date);
+
+        $e = EnrolmentHelper::load($this->db, 1);
+        $this->assertEquals($status, $e->status);
+
+        $this->assertCount(1, $this->queueMessages[Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT]);
+        $this->assertCount(1, $this->queueMessages[Queue::ENROLMENT_CREATE]);
     }
 }
