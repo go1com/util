@@ -29,8 +29,7 @@ class TaskHelperTest extends UtilTestCase
         $this->assertTrue($task instanceof Task);
         $this->assertEquals('task_type', $task->getDataType());
 
-        $data = $task->getData();
-        $this->assertEquals(1000, $data['lo_id']);
+        $this->assertEquals(1000, $task->data['lo_id']);
     }
 
     public function testLoadTaskItemByStatus()
@@ -51,7 +50,6 @@ class TaskHelperTest extends UtilTestCase
         $this->assertTrue($taskItem instanceof TaskItem);
         $this->assertEquals('task_item_type', $taskItem->getDataType());
 
-        $data = $taskItem->getData();
-        $this->assertEquals(1000, $data['lo_id']);
+        $this->assertEquals(1000, $taskItem->data['lo_id']);
     }
 }

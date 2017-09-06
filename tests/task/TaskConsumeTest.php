@@ -63,16 +63,16 @@ class TaskConsumeTest extends UtilTestCase
 
                 if ($this->complete) {
                     $taskItem = $this->getTaskItem($taskId);
-                    $taskItem->setStatus(TaskItem::STATUS_COMPLETED);
-                    TaskHelper::updateTaskItemStatus($this->db, $taskItem);
+                    $taskItem->status = Task::STATUS_COMPLETED;
+                    TaskHelper::updateTaskStatus($this->db, $taskItem->id, $taskItem->status, $taskItem->name);
 
                     $this->completeTask();
                 }
 
                 if ($this->error) {
                     $taskItem = $this->getTaskItem($taskId);
-                    $taskItem->setStatus(TaskItem::STATUS_FAILED);
-                    TaskHelper::updateTaskItemStatus($this->db, $taskItem);
+                    $taskItem->status = Task::STATUS_FAILED;
+                    TaskHelper::updateTaskStatus($this->db, $taskItem->id, $taskItem->status, $taskItem->name);
 
                     $this->error('Failed to process task item.');
                 }
@@ -92,7 +92,7 @@ class TaskConsumeTest extends UtilTestCase
         $consumer->consume('', (object)['task' => $this->taskName]);
 
         $task = TaskHelper::loadTask($this->db, $taskId, $this->taskName);
-        $this->assertEquals(Task::STATUS_PROCESSING, $task->getStatus());
+        $this->assertEquals(Task::STATUS_PROCESSING, $task->status);
     }
 
     public function testProcessTaskItem()
@@ -119,7 +119,7 @@ class TaskConsumeTest extends UtilTestCase
         $consumer->consume('', (object)['task' => $this->taskItemName, 'task_id' => $taskId]);
 
         $taskItem = TaskHelper::loadTaskItem($this->db, $taskItemId1, $this->taskItemName);
-        $this->assertEquals(TaskItem::STATUS_PROCESSING, $taskItem->getStatus());
+        $this->assertEquals(TaskItem::STATUS_PROCESSING, $taskItem->status);
     }
 
     public function testProcessTaskItemComplete()
@@ -147,15 +147,15 @@ class TaskConsumeTest extends UtilTestCase
         $consumer = $this->taskClass(true);
         $consumer->consume('', (object)['task' => $this->taskItemName, 'task_id' => $taskId]);
         $taskItem1 = TaskHelper::loadTaskItem($this->db, $taskItemId1, $this->taskItemName);
-        $this->assertEquals(TaskItem::STATUS_COMPLETED, $taskItem1->getStatus());
+        $this->assertEquals(TaskItem::STATUS_COMPLETED, $taskItem1->status);
 
         $consumer = $this->taskClass(true);
         $consumer->consume('', (object)['task' => $this->taskItemName, 'task_id' => $taskId]);
         $taskItem2 = TaskHelper::loadTaskItem($this->db, $taskItemId2, $this->taskItemName);
-        $this->assertEquals(TaskItem::STATUS_COMPLETED, $taskItem2->getStatus());
+        $this->assertEquals(TaskItem::STATUS_COMPLETED, $taskItem2->status);
 
         $task = TaskHelper::loadTask($this->db, $taskId, $this->taskName);
-        $this->assertEquals(Task::STATUS_COMPLETED, $task->getStatus());
+        $this->assertEquals(Task::STATUS_COMPLETED, $task->status);
     }
 
     public function testProcessTaskItemError()
@@ -177,8 +177,7 @@ class TaskConsumeTest extends UtilTestCase
         $consumer = $this->taskClass(false, true);
         $consumer->consume('', (object)['task' => $this->taskItemName, 'task_id' => $taskId]);
         $taskItem1 = TaskHelper::loadTaskItem($this->db, $taskItemId1, $this->taskItemName);
-        $this->assertEquals(TaskItem::STATUS_FAILED, $taskItem1->getStatus());
-        $data = $taskItem1->getData();
-        $this->assertEquals("Failed to process task item.", $data['error']);
+        $this->assertEquals(TaskItem::STATUS_FAILED, $taskItem1->status);
+        $this->assertEquals("Failed to process task item.", $taskItem1->data['error']);
     }
 }

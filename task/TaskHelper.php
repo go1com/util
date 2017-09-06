@@ -20,12 +20,12 @@ class TaskHelper
         $db->insert($name, $task);
     }
 
-    public static function updateTaskStatus(Connection $db, Task $task)
+    public static function updateTaskStatus(Connection $db, int $id, string $status, string $name)
     {
-        $db->update($task->getName(), ['status' => $task->getStatus()], ['id' => $task->getId()]);
+        $db->update($name, ['status' => $status], ['id' => $id]);
     }
 
-    public static function updateTaskData(Connection $db, string $name, int $id, array $data)
+    public static function updateTaskData(Connection $db, int $id, array $data, string $name)
     {
         $db->update($name, ['data' => json_encode($data)], ['id' => $id]);
     }
@@ -97,10 +97,5 @@ class TaskHelper
         $row->name = $name;
 
         return TaskItem::create($row);
-    }
-
-    public static function updateTaskItemStatus(Connection $db, TaskItem $task)
-    {
-        $db->update($task->getName(), ['status' => $task->getStatus()], ['id' => $task->getId()]);
     }
 }

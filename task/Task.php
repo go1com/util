@@ -12,21 +12,21 @@ class Task implements JsonSerializable
     const STATUS_COMPLETED      = 2;
     const STATUS_FAILED         = 3;
 
-    private $id;
-    private $instanceId;
-    private $userId;
-    private $created;
-    private $data;
-    private $name;
-    private $status;
-    private $updated;
+    public $id;
+    public $instanceId;
+    public $userId;
+    public $created;
+    public $data;
+    public $name;
+    public $status;
+    public $updated;
 
     public function __construct(
         int $id = null,
         int $instanceId,
         int $userId,
         int $created = null,
-        $data = null,
+        array $data = [],
         string $name = '',
         int $status = self::STATUS_PENDING,
         int $updated = null
@@ -42,56 +42,21 @@ class Task implements JsonSerializable
         $this->updated = $updated;
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getInstanceId(): int
-    {
-        return $this->instanceId;
-    }
-
-    public function getUserId(): int
-    {
-        return $this->userId;
-    }
-
-    public function getData(): array
-    {
-        return is_scalar($this->data) ? json_decode($this->data, true) : $this->data;
-    }
-
     public function getDataType(): string
     {
-        $data = $this->getData();
-
-        return $data['type'];
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getStatus(): int
-    {
-        return $this->status;
-    }
-
-    public function setStatus(int $status)
-    {
-        $this->status = $status;
+        return $this->data['type'];
     }
 
     public static function create(stdClass $row): Task
     {
+        $data = is_scalar($row->data) ? json_decode($row->data, true) : $row->data;
+
         return new Task(
             $row->id ?? null,
             $row->instance_id,
             $row->user_id,
             $row->created,
-            $row->data,
+            $data,
             $row->name,
             $row->status,
             $row->updated
@@ -105,7 +70,7 @@ class Task implements JsonSerializable
             'instance_id' => $this->instanceId,
             'user_id'     => $this->userId,
             'created'     => $this->created,
-            'data'        => $this->getData(),
+            'data'        => $this->data,
             'name'        => $this->name,
             'status'      => $this->status,
             'updated'     => $this->updated,

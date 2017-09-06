@@ -81,8 +81,8 @@ class TaskConsumer implements ConsumerInterface
     protected function processTask(string $type = ''){
         $task = $this->getTask();
         if ($task && ($task->getDataType() == $type)) {
-            $task->setStatus(Task::STATUS_PROCESSING);
-            TaskHelper::updateTaskStatus($this->db, $task);
+            $task->status = Task::STATUS_PROCESSING;
+            TaskHelper::updateTaskStatus($this->db, $task->id, $task->status, $task->name);
             $this->task = $task;
         }
     }
@@ -91,17 +91,17 @@ class TaskConsumer implements ConsumerInterface
     {
         $taskItem = $this->getTaskItem($taskId);
         if ($taskItem && ($taskItem->getDataType() == $type)) {
-            $taskItem->setStatus(Task::STATUS_PROCESSING);
-            TaskHelper::updateTaskItemStatus($this->db, $taskItem);
+            $taskItem->status = Task::STATUS_PROCESSING;
+            TaskHelper::updateTaskStatus($this->db, $taskItem->id, $taskItem->status, $taskItem->name);
             $this->taskItem = $taskItem;
         }
     }
 
     protected function error(string $message)
     {
-        $data = $this->taskItem->getData();
+        $data = $this->taskItem->data;
         $data['error'] = $message;
-        TaskHelper::updateTaskData($this->db, $this->taskItemName, $this->taskItem->getId(), $data);
+        TaskHelper::updateTaskData($this->db, $this->taskItem->id, $data, $this->taskItem->name);
     }
 
     /**
@@ -109,13 +109,11 @@ class TaskConsumer implements ConsumerInterface
      */
     protected function completeTask()
     {
-        $task = TaskHelper::loadTask($this->db, $this->taskItem->getTaskId(), $this->taskName);
-        $name = $this->taskItemName;
-        $sql = "SELECT 1 FROM {$name} WHERE task_id = ? AND status = ?";
-        $isCompleted = $this->db->fetchColumn($sql, [$task->getId(), TaskItem::STATUS_PENDING]);
+        $task = TaskHelper::loadTask($this->db, $this->taskItem->taskId, $this->taskName);
+        $sql = "SELECT 1 FROM {$this->taskItemName} WHERE task_id = ? AND status = ?";
+        $isCompleted = $this->db->fetchColumn($sql, [$task->id, TaskItem::STATUS_PENDING]);
         if ($isCompleted) {
-            $task->setStatus(Task::STATUS_COMPLETED);
-            TaskHelper::updateTaskStatus($this->db, $task);
+            TaskHelper::updateTaskStatus($this->db, $task->id, Task::STATUS_COMPLETED, $this->taskName);
         }
     }
 }
