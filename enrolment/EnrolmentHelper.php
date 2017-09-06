@@ -238,9 +238,12 @@ class EnrolmentHelper
 
         $db->insert('gc_enrolment', $enrolment);
 
-        $portal = PortalHelper::load($db, $lo->instance_id);
-        if ($lo->marketplace && (new PortalChecker)->isVirtual($portal)) {
-            $queue->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
+        if ($lo->marketplace) {
+            if ($portal = PortalHelper::load($db, $lo->instance_id)) {
+                if ((new PortalChecker)->isVirtual($portal)) {
+                    $queue->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
+                }
+            }
         }
 
         $queue->publish($enrolment, Queue::ENROLMENT_CREATE);
