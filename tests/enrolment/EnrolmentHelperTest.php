@@ -213,7 +213,7 @@ class EnrolmentHelperTest extends UtilTestCase
     {
         $lo = LoHelper::load($this->db, $this->courseId);
         $status = EnrolmentStatuses::NOT_STARTED;
-        $date = (new \DateTime())->format('Y-m-d h:i:s');
+        $date = DateTime::formatDate('now');
         EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date);
 
         $e = EnrolmentHelper::load($this->db, 1);
