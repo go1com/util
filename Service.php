@@ -90,4 +90,20 @@ class Service
 
         return S3_BUCKET;
     }
+
+    public static function isLocalIp(): bool
+    {
+        $localIps = getenv('LOCAL_IPS');
+        if ($localIps) {
+            $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+            $localIps = explode(' ', $localIps);
+            foreach ($localIps as $localIp) {
+                if (false !== strpos($ip, $localIp)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
