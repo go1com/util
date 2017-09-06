@@ -2,9 +2,9 @@
 
 namespace go1\util\enrolment;
 
-use DateTime;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
+use go1\util\DateTime;
 use go1\util\DB;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
@@ -217,7 +217,7 @@ class EnrolmentHelper
         array $data = []
     )
     {
-        $date = (new DateTime())->format('Y-m-d h:i:s');
+        $date = DateTime::formatDate('now');
 
         $enrolment = [
             'id'                => $id,

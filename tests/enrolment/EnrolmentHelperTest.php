@@ -2,6 +2,7 @@
 
 namespace go1\util\tests\enrolment;
 
+use go1\util\DateTime;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
@@ -228,7 +229,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId, 'marketplace' => 1]);
         $lo = LoHelper::load($this->db, $courseId);
         $status = EnrolmentStatuses::NOT_STARTED;
-        $date = (new \DateTime())->format('Y-m-d h:i:s');
+        $date = DateTime::formatDate('now');
         EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date);
 
         $e = EnrolmentHelper::load($this->db, 1);
