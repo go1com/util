@@ -24,7 +24,7 @@ class TaskConsumeTest extends UtilTestCase
     private $taskType = 'task_type';
     private $taskItemType = 'task_item_type';
 
-    private function taskClass(bool $comlete = false, bool $error = false)
+    private function taskClass(bool $complete = false, bool $error = false)
     {
         $db = $this->db;
         $client = $this->queue;
@@ -32,7 +32,7 @@ class TaskConsumeTest extends UtilTestCase
         $taskName = $this->taskName;
         $taskItemName = $this->taskItemName;
 
-        return new class($db, $client, $event, $taskName, $taskItemName, $comlete, $error) extends TaskConsumer {
+        return new class($db, $client, $event, $taskName, $taskItemName, $complete, $error) extends TaskConsumer {
             private $complete;
             private $error;
 
@@ -177,10 +177,8 @@ class TaskConsumeTest extends UtilTestCase
         $consumer = $this->taskClass(false, true);
         $consumer->consume('', (object)['task' => $this->taskItemName, 'task_id' => $taskId]);
         $taskItem1 = TaskHelper::loadTaskItem($this->db, $taskItemId1, $this->taskItemName);
-//        $this->assertEquals(TaskItem::STATUS_FAILED, $taskItem1->getStatus());
+        $this->assertEquals(TaskItem::STATUS_FAILED, $taskItem1->getStatus());
         $data = $taskItem1->getData();
         $this->assertEquals("Failed to process task item.", $data['error']);
-
-
     }
 }
