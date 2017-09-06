@@ -3,11 +3,16 @@
 namespace go1\util\enrolment;
 
 use Doctrine\DBAL\Connection;
+use go1\clients\MqClient;
+use go1\util\DateTime;
 use go1\util\DB;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\portal\PortalChecker;
+use go1\util\portal\PortalHelper;
+use go1\util\Queue;
 use PDO;
 use stdClass;
 
@@ -193,5 +198,54 @@ class EnrolmentHelper
             }
         }
         return $progress;
+    }
+
+    public static function create(
+        Connection $db,
+        MqClient $queue,
+        int $id,
+        int $profileId,
+        int $parentLoId = 0,
+        stdClass $lo,
+        int $instanceId,
+        string $status = EnrolmentStatuses::IN_PROGRESS,
+        string $startDate = null,
+        string $endDate = null,
+        int $result = 0,
+        int $pass = 0,
+        string $changed = null,
+        array $data = []
+    )
+    {
+        $date = DateTime::formatDate('now');
+
+        $enrolment = [
+            'id'                => $id,
+            'profile_id'        => $profileId,
+            'parent_lo_id'      => $parentLoId,
+            'lo_id'             => $lo->id,
+            'instance_id'       => 0,
+            'taken_instance_id' => $instanceId,
+            'status'            => $status,
+            'start_date'        => $startDate ?? $date,
+            'end_date'          => $endDate,
+            'result'            => $result,
+            'pass'              => $pass,
+            'changed'           => $changed ?? $date,
+            'timestamp'         => time(),
+            'data'              => json_encode($data),
+        ];
+
+        $db->insert('gc_enrolment', $enrolment);
+
+        if ($lo->marketplace) {
+            if ($portal = PortalHelper::load($db, $lo->instance_id)) {
+                if ((new PortalChecker)->isVirtual($portal)) {
+                    $queue->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
+                }
+            }
+        }
+
+        $queue->publish($enrolment, Queue::ENROLMENT_CREATE);
     }
 }
