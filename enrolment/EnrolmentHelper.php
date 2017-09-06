@@ -202,7 +202,7 @@ class EnrolmentHelper
 
     public static function create(
         Connection $db,
-        MqClient $client,
+        MqClient $queue,
         int $id,
         int $profileId,
         int $parentLoId = 0,
@@ -240,9 +240,9 @@ class EnrolmentHelper
 
         $portal = PortalHelper::load($db, $lo->instance_id);
         if ($lo->marketplace && (new PortalChecker)->isVirtual($portal)) {
-            $client->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
+            $queue->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
         }
 
-        $client->publish($enrolment, Queue::ENROLMENT_CREATE);
+        $queue->publish($enrolment, Queue::ENROLMENT_CREATE);
     }
 }
