@@ -7,6 +7,7 @@ use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
 use go1\util\enrolment\EnrolmentStatuses;
+use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
 use go1\util\Queue;
@@ -174,39 +175,71 @@ class EnrolmentHelperTest extends UtilTestCase
 
     }
 
-    public function testChildrenProcess()
+    public function testChildrenProgressCount()
     {
         $this->courseId;
         $module2 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
         $module3 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
         $module4 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
         $module5 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
-
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module2, 2);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module3, 3);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module4, 4);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module5, 5);
-
         $courseEnrolmentId = $this->createEnrolment($this->db, ['profile_id' => $this->profileId, 'lo_id' => $this->courseId]);
         $courseEnrolment = EnrolmentHelper::load($this->db, $courseEnrolmentId);
-        $progress = EnrolmentHelper::childrenProgress($this->db, $courseEnrolment);
+        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment);
         $this->assertEquals(5, $progress['total']);
-
         $basicModuleData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId, 'parent_lo_id' => $this->courseId];
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $this->moduleId]);
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module2]);
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module3]);
-
-        $progress = EnrolmentHelper::childrenProgress($this->db, $courseEnrolment);
+        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment);
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
         $this->assertEquals(5, $progress['total']);
-
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module4, 'status' => EnrolmentStatuses::COMPLETED]);
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module5, 'status' => EnrolmentStatuses::COMPLETED]);
-        $progress = EnrolmentHelper::childrenProgress($this->db, $courseEnrolment);
+        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment);
         $this->assertEquals(2, $progress[EnrolmentStatuses::COMPLETED]);
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
         $this->assertEquals(5, $progress['total']);
+    }
+    public function testLearningItemProgressCount()
+    {
+        $course1 = $this->createCourse($this->db, ['instance_id' => $this->instanceId]);
+        $module2 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
+        $module3 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
+        $learningItemIds = [
+            $this->createCourse($this->db, ['type' => LiTypes::DOCUMENT, 'instance_id' => $this->instanceId]),
+            $this->createCourse($this->db, ['type' => LiTypes::DOCUMENT, 'instance_id' => $this->instanceId]),
+            $this->createCourse($this->db, ['type' => LiTypes::DOCUMENT, 'instance_id' => $this->instanceId]),
+            $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->instanceId]),
+            $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->instanceId]),
+            $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->instanceId]),
+        ];
+        $courseEvent = $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->instanceId]);
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $course1, $module2, 2);
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $course1, $module3, 3);
+        $this->link($this->db, EdgeTypes::HAS_LI, $course1, $courseEvent, 3);
+        foreach ($learningItemIds as $key => $learningItemId) {
+            $this->link($this->db, EdgeTypes::HAS_LI, $module2, $learningItemId, $key);
+        }
+        $courseEnrolmentId = $this->createEnrolment($this->db, ['profile_id' => $this->profileId, 'lo_id' => $course1]);
+        $courseEnrolment = EnrolmentHelper::load($this->db, $courseEnrolmentId);
+        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment, true, LiTypes::all());
+        $this->assertEquals(7, $progress['total']);
+        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId, 'parent_lo_id' => $module2];
+        $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $learningItemIds[0]]);
+        $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $learningItemIds[5]]);
+        $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $learningItemIds[3]]);
+        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment,true, LiTypes::all());
+        $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
+        $this->assertEquals(7, $progress['total']);
+        $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $courseEvent, 'status' => EnrolmentStatuses::COMPLETED]);
+        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment,true, LiTypes::all());
+        $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
+        $this->assertEquals(1, $progress[EnrolmentStatuses::COMPLETED]);
+        $this->assertEquals(7, $progress['total']);
     }
 
     public function testCreate()
