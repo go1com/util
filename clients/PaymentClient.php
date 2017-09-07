@@ -2,38 +2,24 @@
 
 namespace go1\clients;
 
-use go1\util\portal\PortalChecker;
 use go1\util\user\UserHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Log\LoggerInterface;
 use stdClass;
-use Symfony\Component\HttpFoundation\Request;
 
 class PaymentClient
 {
     private $logger;
     private $client;
     private $paymentUrl;
-    private $appId;
-    private $appSecret;
 
     public function __construct(LoggerInterface $logger, Client $client, string $paymentUrl)
     {
         $this->logger = $logger;
         $this->client = $client;
         $this->paymentUrl = rtrim($paymentUrl, '/');
-    }
-
-    public function setAppId(string $appId)
-    {
-        $this->appId = $appId;
-    }
-
-    public function setAppSecret(string $appSecret)
-    {
-        $this->appSecret = $appSecret;
     }
 
     public function stripeConnectionId(string $instance)
@@ -78,7 +64,7 @@ class PaymentClient
             $res = $this->client->post(
                 "{$this->paymentUrl}/cart/process",
                 [
-                    'headers' => ['Authorization' => $authorization, 'Content-Type'  => 'application/json'],
+                    'headers' => ['Authorization' => $authorization, 'Content-Type' => 'application/json'],
                     'json'    => $this->buildCartOptions($product, $qty, $paymentMethod, $paymentOptions, $metadata),
                 ]
             );
@@ -107,17 +93,17 @@ class PaymentClient
     ): array
     {
         $options = [
-            'applicationId'  => $this->appId,
             'timestamp'      => time(),
             'paymentMethod'  => $paymentMethod,
             'paymentOptions' => $paymentOptions,
-            'cartOptions'    => [],
+            'cartOptions'    => array_filter(['coupon' => $paymentOptions['coupon'] ?? null]),
             'metadata'       => $metadata,
         ];
 
         $options['cartOptions']['items'][] = [
-            'productId'    => "lo-{$product->id}",
-            'type'         => 'product',
+            'instanceId'   => $product->instance_id,
+            'productId'    => $product->id,
+            'type'         => 'lo',
             'price'        => $product->pricing->price,
             'tax'          => isset($product->pricing->tax) ? $product->pricing->tax : 0.00,
             'tax_included' => isset($product->pricing->tax_included) ? $product->pricing->tax_included : true,
@@ -126,11 +112,7 @@ class PaymentClient
             'data'         => ['title' => $product->title],
         ];
 
-        ksort($options);
-        $signature = http_build_query($options);
-        $signature = sha1($signature . $this->appSecret);
-
-        return $options + ['signature' => $signature];
+        return $options;
     }
 
     public function updateCODTransaction($id): bool

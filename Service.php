@@ -4,7 +4,7 @@ namespace go1\util;
 
 class Service
 {
-    const VERSION = 'v17.8.2.0';
+    const VERSION = 'v17.9.1.0';
 
     public static function cacheOptions($root)
     {
@@ -89,5 +89,23 @@ class Service
         !defined('S3_BUCKET') && define('S3_BUCKET', getenv('S3_BUCKET') ?: 'dev.mygo1.com');
 
         return S3_BUCKET;
+    }
+
+    public static function isLocalIp(): bool
+    {
+        $localIps = getenv('LOCAL_IPS');
+        if ($localIps) {
+            $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null);
+            if ($ip) {
+                $localIps = explode(' ', $localIps);
+                foreach ($localIps as $localIp) {
+                    if (false !== strpos($ip, $localIp)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

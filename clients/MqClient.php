@@ -78,6 +78,8 @@ class MqClient
     public function publish($messageBody, string $routingKey, array $context = [], int $priority = null)
     {
         $messageBody = is_scalar($messageBody) ? $messageBody : json_encode($messageBody);
+        $this->processMessage(json_decode($messageBody), $routingKey);
+
         if ($serviceName = getenv('SERVICE_80_NAME')) {
             $context['app'] = $serviceName;
         }
@@ -95,6 +97,8 @@ class MqClient
     public function queue($messageBody, string $routingKey, array $context = [], int $priority = null)
     {
         $messageBody = is_scalar($messageBody) ? json_decode($messageBody) : $messageBody;
+        $this->processMessage($messageBody, $routingKey);
+
         $message = json_encode([
             'routingKey' => $routingKey,
             'body'       => $messageBody,
@@ -108,6 +112,18 @@ class MqClient
             'priority'            => $this->priority($priority),
         ]);
         $this->channel()->basic_publish($message, '', Queue::WORKER_QUEUE_NAME);
+    }
+
+    private function processMessage($messageBody, string $routingKey)
+    {
+        if (strpos($routingKey, '.update')) {
+            if (
+                (is_array($messageBody) && !(array_key_exists('id', $messageBody) && $messageBody['id'])) ||
+                (is_object($messageBody) && !(property_exists($messageBody, 'id') && $messageBody->id))
+            ) {
+                throw new Exception("Missing entity ID.");
+            }
+        }
     }
 
     public function subscribe($bindingKey = '#', callable $callback)

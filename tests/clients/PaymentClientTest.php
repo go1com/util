@@ -43,18 +43,17 @@ class PaymentClientTest extends UtilTestCase
             ->expects($this->once())
             ->method('post')
             ->with($this->callback(function ($url) {
-                    $this->assertEquals("{$this->paymentUrl}/cart/process", $url);
+                $this->assertEquals("{$this->paymentUrl}/cart/process", $url);
 
-                    return true;
-                }),
+                return true;
+            }),
                 $this->callback(function ($options) {
                     $this->assertEquals("USER_JWT", $options['headers']['Authorization']);
                     $this->assertEquals("application/json", $options['headers']['Content-Type']);
-                    $this->assertEquals("APP_ID", $options['json']['applicationId']);
 
                     $item = $options['json']['cartOptions']['items'][0];
-                    $this->assertEquals("lo-100", $item['productId']);
-                    $this->assertEquals("product", $item['type']);
+                    $this->assertEquals(100, $item['productId']);
+                    $this->assertEquals("lo", $item['type']);
                     $this->assertEquals(1000, $item['price']);
                     $this->assertEquals(10, $item['tax']);
                     $this->assertTrue($item['tax_included']);
@@ -74,17 +73,16 @@ class PaymentClientTest extends UtilTestCase
         /** @var PaymentClient $paymentClient */
         $paymentClient = $c['go1.client.payment'];
         $product = (object) [
-            'id'        => 100,
-            'title'     => 'test product',
-            'pricing'   => (object) [
-                'price'         => 1000,
-                'tax'           => 10,
-                'tax_included'  => true,
-                'currency'      => 'AUD'
-            ]
+            'id'          => 100,
+            'title'       => 'test product',
+            'instance_id' => 555,
+            'pricing'     => (object) [
+                'price'        => 1000,
+                'tax'          => 10,
+                'tax_included' => true,
+                'currency'     => 'AUD',
+            ],
         ];
-        $paymentClient->setAppId('APP_ID');
-        $paymentClient->setAppSecret('SECRET_KEY');
         $paymentClient->create($product, 10, 'cod', [], 'USER_JWT');
     }
 }

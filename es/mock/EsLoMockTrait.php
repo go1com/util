@@ -29,6 +29,7 @@ trait EsLoMockTrait
             'description'    => $options['description'] ?? '',
             'tags'           => $options['tags'] ?? [],
             'image'          => $options['image'] ?? '',
+            'items_count'    => $options['items_count'] ?? 0,
             'pricing'        => [
                 'currency'     => $options['currency'] ?? 'USD',
                 'price'        => $options['price'] ?? 0.00,
@@ -40,6 +41,7 @@ trait EsLoMockTrait
             'created'        => DateTime::formatDate($options['created'] ?? time()),
             'updated'        => DateTime::formatDate($options['updated'] ?? time()),
             'authors'        => $options['authors'] ?? [],
+            'group_ids'      => $options['group_ids'] ?? [],
             'metadata'       => [
                 'parents_authors_ids' => $options['metadata']['parents_authors_ids'] ?? null,
                 'parents_id'          => $options['metadata']['parents_id'] ?? null,

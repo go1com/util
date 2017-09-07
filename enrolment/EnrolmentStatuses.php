@@ -5,6 +5,7 @@ namespace go1\util\enrolment;
 use Doctrine\DBAL\Connection;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoTypes;
+use go1\util\plan\PlanStatuses;
 use InvalidArgumentException;
 use stdClass;
 
@@ -22,7 +23,6 @@ class EnrolmentStatuses
 
     # Enrolment statuses
     # ---------------------
-    const ASSIGNED    = 'assigned';    # Someone added this for you to do
     const NOT_STARTED = 'not-started'; # you have enrolled but not yet opened the course
     const IN_PROGRESS = 'in-progress'; # you are learning the LO.
     const PENDING     = 'pending';     # you have enrolled but the enrolment need to be reviewed or blocked by other enrolment
@@ -30,11 +30,10 @@ class EnrolmentStatuses
     const EXPIRED     = 'expired';     # your enrolment was completed, but it's expired.
 
     // Numeric values for the statuses. Being used in ES.
-    const I_ASSIGNED    = -3;
-    const I_NOT_STARTED = -2;
-    const I_PENDING     = -1;
-    const I_IN_PROGRESS = 1;
-    const I_EXPIRED     = 2;
+    const I_NOT_STARTED = -20;
+    const I_PENDING     = -10;
+    const I_IN_PROGRESS = 10;
+    const I_EXPIRED     = 20;
     const I_COMPLETED   = 100;
 
     /**
@@ -43,20 +42,20 @@ class EnrolmentStatuses
      */
     public static function all()
     {
-        return [self::ASSIGNED, self::NOT_STARTED, self::IN_PROGRESS, self::PENDING, self::COMPLETED];
+        return [self::NOT_STARTED, self::IN_PROGRESS, self::PENDING, self::COMPLETED];
     }
 
     public static function toNumeric(string $status): int
     {
         switch ($status) {
-            case self::ASSIGNED:
-                return self::I_ASSIGNED;
-
             case self::NOT_STARTED:
                 return self::I_NOT_STARTED;
 
             case self::PENDING:
                 return self::I_PENDING;
+
+            case PlanStatuses::S_ASSIGNED:
+                return PlanStatuses::ASSIGNED;
 
             case self::IN_PROGRESS:
                 return self::I_IN_PROGRESS;
@@ -75,9 +74,6 @@ class EnrolmentStatuses
     public static function toString(int $status): string
     {
         switch ($status) {
-            case self::I_ASSIGNED:
-                return self::ASSIGNED;
-
             case self::I_NOT_STARTED:
                 return self::NOT_STARTED;
 
@@ -92,6 +88,9 @@ class EnrolmentStatuses
 
             case self::I_COMPLETED:
                 return self::COMPLETED;
+
+            case PlanStatuses::ASSIGNED:
+                return PlanStatuses::S_ASSIGNED;
 
             default:
                 throw new InvalidArgumentException('Unknown enrolment status: ' . $status);

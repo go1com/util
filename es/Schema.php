@@ -2,6 +2,8 @@
 
 namespace go1\util\es;
 
+use go1\util\enrolment\EnrolmentStatuses;
+
 /**
  * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
  */
@@ -129,6 +131,7 @@ class Schema
             'created'       => ['type' => self::T_DATE],
             'configuration' => ['type' => self::T_OBJECT],
             'legacy'        => ['type' => self::T_BOOL],
+            'logo'          => ['type' => self::T_TEXT],
             'score'         => ['type' => self::T_INT], # activity score
         ],
     ];
@@ -160,6 +163,7 @@ class Schema
             'allow_public' => ['type' => self::T_BOOL],
             'avatar'       => ['type' => self::T_TEXT],
             'roles'        => ['type' => self::T_KEYWORD],
+            'timestamp'    => ['type' => self::T_DATE],
         ],
     ];
 
@@ -178,6 +182,7 @@ class Schema
             'allow_public' => ['type' => self::T_BOOL],
             'roles'        => ['type' => self::T_KEYWORD],
             'groups'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'timestamp'    => ['type' => self::T_DATE],
             'managers'     => ['type' => self::T_INT],
             'metadata'     => [
                 'properties' => [
@@ -267,9 +272,17 @@ class Schema
             'created'        => ['type' => self::T_DATE],
             'updated'        => ['type' => self::T_DATE],
             'fields'         => ['type' => self::T_OBJECT],
+            'items_count'    => ['type' => self::T_INT], # Only count first child level
             'authors'        => [
                 'type'       => self::T_NESTED,
                 'properties' => self::USER_MAPPING['properties'],
+            ],
+            'group'          => [
+                'type'       => self::T_NESTED,
+                'properties' => [
+                    'type'     => ['type' => self::T_KEYWORD],
+                    'group_id' => ['type' => self::T_INT],
+                ],
             ],
             'metadata'       => [
                 'properties' => [
@@ -342,9 +355,10 @@ class Schema
             ],
             'progress'   => [
                 'properties' => [
-                    'not_started' => ['type' => self::T_INT],
-                    'in_progress' => ['type' => self::T_INT],
-                    'completed'   => ['type' => self::T_INT],
+                    EnrolmentStatuses::NOT_STARTED => ['type' => self::T_INT],
+                    EnrolmentStatuses::IN_PROGRESS => ['type' => self::T_INT],
+                    EnrolmentStatuses::COMPLETED   => ['type' => self::T_INT],
+                    EnrolmentStatuses::EXPIRED     => ['type' => self::T_INT],
                 ],
             ],
             'metadata'   => [
@@ -579,7 +593,7 @@ class Schema
             'expiration'   => ['type' => self::T_DATE],
             'created'      => ['type' => self::T_DATE],
             'updated'      => ['type' => self::T_DATE],
-            'num_usage'    => ['type' => self::T_INT],
+            'usage_count'  => ['type' => self::T_INT],
             'usage'        => [
                 'type'       => self::T_NESTED,
                 'properties' => [

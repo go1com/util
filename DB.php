@@ -13,12 +13,13 @@ class DB
 {
     const OBJ      = PDO::FETCH_OBJ;
     const ARR      = PDO::FETCH_ASSOC;
+    const COL      = PDO::FETCH_COLUMN;
     const INTEGER  = PDO::PARAM_INT;
     const INTEGERS = Connection::PARAM_INT_ARRAY;
     const STRING   = PDO::PARAM_STR;
     const STRINGS  = Connection::PARAM_STR_ARRAY;
 
-    public static function connectionOptions(string $name, $forceSlave = false): array
+    public static function connectionOptions(string $name, $forceSlave = false, $forceMaster = false): array
     {
         if (function_exists('__db_connection_options')) {
             return __db_connection_options($name);
@@ -27,13 +28,12 @@ class DB
         $prefix = strtoupper(class_exists(App::class, false) ? "{$name}_DB" : "_DOCKER_{$name}_DB");
         $prefix = getenv("{$prefix}_NAME") ? $prefix : strtoupper("_DOCKER_{$name}_DB");
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
-
         $slave = getenv("{$prefix}_HOST");
-        if (
-            (('GET' === $method) && (getenv("{$prefix}_SLAVE")))
-            || $forceSlave
-        ) {
-            $slave = getenv("{$prefix}_SLAVE");
+
+        if ((('GET' === $method) && (getenv("{$prefix}_SLAVE"))) || $forceSlave) {
+            if (!$forceMaster) {
+                $slave = getenv("{$prefix}_SLAVE");
+            }
         }
 
         $dbName = "{$name}_dev";
@@ -44,9 +44,9 @@ class DB
         return [
             'driver'        => 'pdo_mysql',
             'dbname'        => getenv("{$prefix}_NAME") ?: $dbName,
-            'host'          => $slave ?: 'microservice.cluster-csb6wde17f7d.ap-southeast-2.rds.amazonaws.com',
-            'user'          => getenv("{$prefix}_USERNAME") ?: 'gc_dev',
-            'password'      => getenv("{$prefix}_PASSWORD") ?: 'gc_dev#2016',
+            'host'          => $slave ?: (getenv("{$prefix}_HOST") ?: (getenv('DEV_DB_SLAVE') ?: getenv('DEV_DB_HOST'))),
+            'user'          => getenv("{$prefix}_USERNAME") ?: getenv('DEV_DB_USERNAME'),
+            'password'      => getenv("{$prefix}_PASSWORD") ?: getenv('DEV_DB_PASSWORD'),
             'port'          => getenv("{$prefix}_PORT") ?: '3306',
             'driverOptions' => [1002 => 'SET NAMES utf8'],
         ];
@@ -169,7 +169,8 @@ class DB
         while ($entity = $q->fetch($fetchMode)) {
             if (DB::OBJ == $fetchMode) {
                 $data = &$entity->data ?? null;
-            } else {
+            }
+            else {
                 $data = &$entity['data'] ?? null;
             }
 

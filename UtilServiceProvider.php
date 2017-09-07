@@ -23,8 +23,8 @@ use go1\clients\PortalClient;
 use go1\clients\QueueClient;
 use go1\clients\RealtimeClient;
 use go1\clients\RulesClient;
+use go1\clients\S3Client as Go1S3Client;
 use go1\clients\SmsClient;
-use \go1\clients\S3Client as Go1S3Client;
 use go1\clients\UserClient;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
@@ -73,14 +73,20 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.es'] = function (Container $c) {
-            $client = EsClientBuilder::create();
+            $builder = EsClientBuilder::create();
 
-            if (($o = $c['esOptions']) && $o['credential']) {
-                $provider = CredentialProvider::fromCredentials(new Credentials($o['key'], $o['secret']));
-                $client->setHandler(new ElasticsearchPhpHandler($o['region'], $provider));
+            if ($o = $c['esOptions']) {
+                if ($o['credential']) {
+                    $provider = CredentialProvider::fromCredentials(new Credentials($o['key'], $o['secret']));
+                    $builder->setHandler(new ElasticsearchPhpHandler($o['region'], $provider));
+                }
             }
 
-            return $client
+            if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
+                $builder->setLogger($c['profiler.collectors.es']);
+            }
+
+            return $builder
                 ->setHosts([parse_url($o['endpoint'])])
                 ->build();
         };

@@ -16,6 +16,8 @@ use go1\util\schema\EckSchema;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Service;
+use go1\util\task\Task;
+use go1\util\task\TaskSchema;
 use go1\util\UtilServiceProvider;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +33,7 @@ abstract class UtilTestCase extends TestCase
     protected $db;
     protected $queue;
     protected $queueMessages;
+    protected $taskService;
 
     public function setUp()
     {
@@ -44,6 +47,9 @@ abstract class UtilTestCase extends TestCase
                 CreditSchema::install($schema);
                 EckSchema::install($schema);
                 PlanRepository::install($schema);
+                if ($this->taskService) {
+                    TaskSchema::install($schema, $this->taskService);
+                }
             },
         ]);
 
