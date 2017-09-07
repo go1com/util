@@ -4,6 +4,7 @@ namespace go1\util\portal;
 
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
+use stdClass;
 
 class PortalChecker
 {
@@ -94,6 +95,13 @@ class PortalChecker
         }
 
         return PortalHelper::FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT;
+    }
+
+    public static function allowGroup(stdClass $portal): bool
+    {
+        PortalHelper::parseConfig($portal);
+
+        return $portal->configuration->{PortalHelper::ALLOW_GROUP} ?? ($portal->configuration->publicGroupsEnabled ?? true);
     }
 
     public function useCustomSMTP($portal)

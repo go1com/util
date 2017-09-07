@@ -26,6 +26,8 @@ class PortalHelper
     const FEATURE_NOTIFY_NEW_ENROLMENT         = 'notify_on_enrolment_create';
     const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
 
+    const ALLOW_GROUP                          = 'allow_group';
+
     public static function load(Connection $db, $nameOrId)
     {
         $column = is_numeric($nameOrId) ? 'id' : 'title';
