@@ -8,4 +8,3 @@ namespace go1\util;
 class Queue extends \go1\util\queue\Queue
 {
 }
-
