@@ -23,12 +23,10 @@ class Queue
         self::NOTIFY_PORTAL_USER_PLAN,
     ];
 
-    const CONTEXT_ACTION = [
-        'USER_CREATE_ADMIN_CREATE' => 'action.user_create.admin_create',  // context.is_new is required
-        'USER_CREATE_REGISTER'     => 'action.user_create.register',      // context.is_new is required
-        'USER_CREATE_INVITE'       => 'action.user_create.invite',        // context.is_new is required
-        'USER_CREATE_IMPORT'       => 'action.user_create.import',        // context.is_new is required
-    ];
+    const ACTION_USER_CREATE_ADMIN_CREATE = 'action.user_create.admin_create';  // context.is_new is required
+    const ACTION_USER_CREATE_REGISTER     = 'action.user_create.register';      // context.is_new is required
+    const ACTION_USER_CREATE_INVITE       = 'action.user_create.invite';        // context.is_new is required
+    const ACTION_USER_CREATE_IMPORT       = 'action.user_create.import';        // context.is_new is required
 
     # The entity events
     # -------
