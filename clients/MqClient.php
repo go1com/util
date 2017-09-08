@@ -17,10 +17,28 @@ class MqClient
     private $port;
     private $user;
     private $pass;
+    public static $priority = self::PRIORITY_NORMAL;
 
     const CONTEXT_ACTOR_ID = 'actor_id';
     const CONTEXT_TIMESTAMP = 'timestamp';
     const CONTEXT_DESCRIPTION = 'description';
+
+    const PRIORITY_BLOCKER  = 9;
+    const PRIORITY_CRITICAL = 8;
+    const PRIORITY_HIGH     = 7;
+    const PRIORITY_NORMAL   = 4;
+    const PRIORITY_LOW      = 2;
+    const PRIORITY_TRIVIAL  = 0;
+    const PRIORITY_DISABLED = -1;
+    const PRIORITIES = [
+        self::PRIORITY_BLOCKER,
+        self::PRIORITY_CRITICAL,
+        self::PRIORITY_HIGH,
+        self::PRIORITY_NORMAL,
+        self::PRIORITY_LOW,
+        self::PRIORITY_TRIVIAL,
+        self::PRIORITY_DISABLED,
+    ];
 
     public function __construct($host, $port, $user, $pass)
     {
@@ -46,10 +64,18 @@ class MqClient
         $this->channel()->close();
     }
 
+    public function priority(int $priority = null) {
+        if (null === $priority) {
+            return self::$priority;
+        }
+
+        return self::$priority = in_array($priority, self::PRIORITIES) ? $priority : self::PRIORITY_NORMAL;
+    }
+
     /**
      * Exchange message to process in sequence
      */
-    public function publish($messageBody, string $routingKey, array $context = [])
+    public function publish($messageBody, string $routingKey, array $context = [], int $priority = null)
     {
         $messageBody = is_scalar($messageBody) ? $messageBody : json_encode($messageBody);
         $this->processMessage(json_decode($messageBody), $routingKey);
@@ -60,6 +86,7 @@ class MqClient
         $message = new AMQPMessage($messageBody, [
             'content_type'        => 'application/json',
             'application_headers' => new AMQPTable($context),
+            'priority'            => $this->priority($priority),
         ]);
         $this->channel()->basic_publish($message, 'events', $routingKey);
     }
@@ -67,7 +94,7 @@ class MqClient
     /**
      *  Queue message to process in parallel.
      */
-    public function queue($messageBody, string $routingKey, array $context = [])
+    public function queue($messageBody, string $routingKey, array $context = [], int $priority = null)
     {
         $messageBody = is_scalar($messageBody) ? json_decode($messageBody) : $messageBody;
         $this->processMessage($messageBody, $routingKey);
@@ -82,6 +109,7 @@ class MqClient
         $message = new AMQPMessage($message, [
             'content_type'        => 'application/json',
             'application_headers' => new AMQPTable($context),
+            'priority'            => $this->priority($priority),
         ]);
         $this->channel()->basic_publish($message, '', Queue::WORKER_QUEUE_NAME);
     }
