@@ -149,6 +149,9 @@ class TaskConsumeTest extends UtilTestCase
         $taskItem1 = TaskHelper::loadTaskItem($this->db, $taskItemId1, $this->taskItemName);
         $this->assertEquals(TaskItem::STATUS_COMPLETED, $taskItem1->status);
 
+        $task = TaskHelper::loadTask($this->db, $taskId, $this->taskName);
+        $this->assertEquals(Task::STATUS_PROCESSING, $task->status);
+
         $consumer = $this->taskClass(true);
         $consumer->consume('', (object)['task' => $this->taskItemName, 'task_id' => $taskId]);
         $taskItem2 = TaskHelper::loadTaskItem($this->db, $taskItemId2, $this->taskItemName);

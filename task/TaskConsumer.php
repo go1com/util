@@ -111,8 +111,8 @@ class TaskConsumer implements ConsumerInterface
     {
         $task = TaskHelper::loadTask($this->db, $this->taskItem->taskId, $this->taskName);
         $sql = "SELECT 1 FROM {$this->taskItemName} WHERE task_id = ? AND status = ?";
-        $isCompleted = $this->db->fetchColumn($sql, [$task->id, TaskItem::STATUS_PENDING]);
-        if ($isCompleted) {
+        $pending = $this->db->fetchColumn($sql, [$task->id, TaskItem::STATUS_PENDING]);
+        if (!$pending) {
             TaskHelper::updateTaskStatus($this->db, $task->id, Task::STATUS_COMPLETED, $this->taskName);
         }
     }
