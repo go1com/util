@@ -26,13 +26,12 @@ class PortalHelper
     const FEATURE_NOTIFY_NEW_ENROLMENT         = 'notify_on_enrolment_create';
     const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
 
-    public static function load(Connection $db, $nameOrId)
+    public static function load(Connection $db, $nameOrId, $columns = '*')
     {
         $column = is_numeric($nameOrId) ? 'id' : 'title';
-
-        $portal = "SELECT * FROM gc_instance WHERE $column = ?";
+        $portal = "SELECT {$columns} FROM gc_instance WHERE $column = ?";
         $portal = $db->executeQuery($portal, [$nameOrId])->fetch(DB::OBJ);
-        if ($portal) {
+        if ($portal && isset($portal->data)) {
             $portal->data = json_decode($portal->data);
         }
 
