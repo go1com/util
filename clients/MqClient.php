@@ -18,8 +18,8 @@ class MqClient
     private $user;
     private $pass;
 
-    const CONTEXT_ACTOR_ID = 'actor_id';
-    const CONTEXT_TIMESTAMP = 'timestamp';
+    const CONTEXT_ACTOR_ID    = 'actor_id';
+    const CONTEXT_TIMESTAMP   = 'timestamp';
     const CONTEXT_DESCRIPTION = 'description';
 
     public function __construct($host, $port, $user, $pass)
@@ -46,52 +46,38 @@ class MqClient
         $this->channel()->close();
     }
 
-    /**
-     * Exchange message to process in sequence
-     */
-    public function publish($messageBody, string $routingKey, array $context = [])
+    public function publish($body, string $routingKey, array $context = [])
     {
-        $messageBody = is_scalar($messageBody) ? $messageBody : json_encode($messageBody);
-        $this->processMessage(json_decode($messageBody), $routingKey);
-
-        if ($serviceName = getenv('SERVICE_80_NAME')) {
-            $context['app'] = $serviceName;
-        }
-        $message = new AMQPMessage($messageBody, [
-            'content_type'        => 'application/json',
-            'application_headers' => new AMQPTable($context),
-        ]);
-        $this->channel()->basic_publish($message, 'events', $routingKey);
+        $this->queue($body, $routingKey, $context, 'events');
     }
 
-    /**
-     *  Queue message to process in parallel.
-     */
-    public function queue($messageBody, string $routingKey, array $context = [])
+    public function queue($body, string $routingKey, array $context = [], $exchange = '')
     {
-        $messageBody = is_scalar($messageBody) ? json_decode($messageBody) : $messageBody;
-        $this->processMessage($messageBody, $routingKey);
+        $body = is_scalar($body) ? json_decode($body) : $body;
+        $this->processMessage($body, $routingKey);
 
-        $message = json_encode([
-            'routingKey' => $routingKey,
-            'body'       => $messageBody,
-        ]);
-        if ($serviceName = getenv('SERVICE_80_NAME')) {
-            $context['app'] = $serviceName;
+        if ($service = getenv('SERVICE_80_NAME')) {
+            $context['app'] = $service;
         }
-        $message = new AMQPMessage($message, [
-            'content_type'        => 'application/json',
-            'application_headers' => new AMQPTable($context),
-        ]);
-        $this->channel()->basic_publish($message, '', Queue::WORKER_QUEUE_NAME);
+
+        if (!$exchange) {
+            $body = json_encode(['routingKey' => $routingKey, 'body' => $body]);
+            $routingKey = Queue::WORKER_QUEUE_NAME;
+        }
+
+        $this->channel()->basic_publish(
+            new AMQPMessage($body, ['content_type' => 'application/json', 'application_headers' => new AMQPTable($context)]),
+            $exchange,
+            $routingKey
+        );
     }
 
     private function processMessage($messageBody, string $routingKey)
     {
         if (strpos($routingKey, '.update')) {
             if (
-                (is_array($messageBody) && !(array_key_exists('id', $messageBody) && $messageBody['id'])) ||
-                (is_object($messageBody) && !(property_exists($messageBody, 'id') && $messageBody->id))
+                (is_array($messageBody) && !(array_key_exists('id', $messageBody) && $messageBody['id']))
+                || (is_object($messageBody) && !(property_exists($messageBody, 'id') && $messageBody->id))
             ) {
                 throw new Exception("Missing entity ID.");
             }
