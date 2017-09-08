@@ -30,7 +30,7 @@
     "jsq/amazon-es-php": "^0.2.0"
   },
   "require-dev": {
-    "behat/transliterator": "^1.1",
+    "behat/transliterator": "^1.2",
     "ezyang/htmlpurifier": "^4.7.0"
   }
 }
