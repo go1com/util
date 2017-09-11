@@ -20,7 +20,7 @@ class Schema
     const DO_UPDATE = 'update';
     const DO_DELETE = 'delete';
 
-    const T_BOOL    = 'boolean';
+    const T_BOOL    = 'boolean'; # Don't use this, because query_string will match true always, use T_INT instead.
     const T_SHORT   = 'short';
     const T_INT     = 'integer';
     const T_FLOAT   = 'float';
@@ -130,7 +130,7 @@ class Schema
             'version'       => ['type' => self::T_KEYWORD],
             'created'       => ['type' => self::T_DATE],
             'configuration' => ['type' => self::T_OBJECT],
-            'legacy'        => ['type' => self::T_BOOL],
+            'legacy'        => ['type' => self::T_INT],
             'logo'          => ['type' => self::T_TEXT],
             'score'         => ['type' => self::T_INT], # activity score
         ],
@@ -143,7 +143,7 @@ class Schema
             'instance'  => ['type' => self::T_KEYWORD],
             'namespace' => ['type' => self::T_KEYWORD],
             'name'      => ['type' => self::T_KEYWORD],
-            'public'    => ['type' => self::T_BOOL],
+            'public'    => ['type' => self::T_INT],
             'data'      => ['type' => self::T_OBJECT],
         ],
     ];
@@ -160,7 +160,7 @@ class Schema
             'login'        => ['type' => self::T_DATE],
             'access'       => ['type' => self::T_DATE],
             'status'       => ['type' => self::T_SHORT],
-            'allow_public' => ['type' => self::T_BOOL],
+            'allow_public' => ['type' => self::T_INT],
             'avatar'       => ['type' => self::T_TEXT],
             'roles'        => ['type' => self::T_KEYWORD],
             'timestamp'    => ['type' => self::T_DATE],
@@ -179,7 +179,8 @@ class Schema
             'created'      => ['type' => self::T_DATE],
             'access'       => ['type' => self::T_DATE],
             'status'       => ['type' => self::T_SHORT],
-            'allow_public' => ['type' => self::T_BOOL],
+            'allow_public' => ['type' => self::T_INT],
+            'avatar'       => ['type' => self::T_TEXT],
             'roles'        => ['type' => self::T_KEYWORD],
             'groups'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'timestamp'    => ['type' => self::T_DATE],
@@ -239,9 +240,9 @@ class Schema
             'origin_id'      => ['type' => self::T_INT],
             'remote_id'      => ['type' => self::T_KEYWORD],
             'status'         => ['type' => self::T_SHORT],
-            'private'        => ['type' => self::T_BOOL],
+            'private'        => ['type' => self::T_INT],
             'published'      => ['type' => self::T_INT],
-            'marketplace'    => ['type' => self::T_BOOL],
+            'marketplace'    => ['type' => self::T_INT],
             'sharing'        => ['type' => self::T_SHORT],
             'instance_id'    => ['type' => self::T_INT],
             'language'       => ['type' => self::T_KEYWORD],
@@ -255,11 +256,11 @@ class Schema
                     'currency'     => ['type' => self::T_KEYWORD],
                     'price'        => ['type' => self::T_DOUBLE],
                     'tax'          => ['type' => self::T_DOUBLE],
-                    'tax_included' => ['type' => self::T_BOOL],
+                    'tax_included' => ['type' => self::T_INT],
                     'total'        => ['type' => self::T_DOUBLE],
                     'recurring'    => [
                         'properties' => [
-                            'recurring' => ['type' => self::T_BOOL],
+                            'recurring' => ['type' => self::T_INT],
                             'interval'  => ['type' => self::T_TEXT],
                             'count'     => ['type' => self::T_INT],
                         ],
@@ -549,7 +550,7 @@ class Schema
             'qty'          => ['type' => self::T_INT],
             'price'        => ['type' => self::T_DOUBLE],
             'tax'          => ['type' => self::T_DOUBLE],
-            'tax_included' => ['type' => self::T_BOOL],
+            'tax_included' => ['type' => self::T_INT],
         ],
     ];
 
@@ -560,9 +561,9 @@ class Schema
             'answer'        => ['type' => self::T_TEXT],
             'created'       => ['type' => self::T_DATE],
             'updated'       => ['type' => self::T_DATE],
-            'is_correct'    => ['type' => self::T_BOOL],
-            'is_skipped'    => ['type' => self::T_BOOL],
-            'is_evaluated'  => ['type' => self::T_BOOL],
+            'is_correct'    => ['type' => self::T_INT],
+            'is_skipped'    => ['type' => self::T_INT],
+            'is_evaluated'  => ['type' => self::T_INT],
             'points'        => ['type' => self::T_INT],
             // @todo Handle updating question.
             'question'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
@@ -767,7 +768,7 @@ class Schema
             'quantity'        => ['type' => self::T_DOUBLE],
             'completion_date' => ['type' => self::T_DATE],
             'certificate'     => ['type' => self::T_OBJECT],
-            'verified'        => ['type' => self::T_BOOL],
+            'verified'        => ['type' => self::T_INT],
             'weight'          => ['type' => self::T_INT],
         ],
     ];
