@@ -34,7 +34,7 @@ trait EsLoMockTrait
                 'currency'     => $options['currency'] ?? 'USD',
                 'price'        => $options['price'] ?? 0.00,
                 'tax'          => $options['tax'] ?? 0.00,
-                'tax_included' => $options['tax_included'] ?? true,
+                'tax_included' => $options['tax_included'] ?? 1,
             ],
             'duration'       => $options['duration'] ?? 0,
             'assessors'      => $options['assessors'] ?? [],
