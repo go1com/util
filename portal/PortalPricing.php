@@ -94,6 +94,11 @@ class PortalPricing
         return $portal->data->user_plan->custom_contract ?? false;
     }
 
+    public static function getPartnerCustomer(stdClass $portal)
+    {
+        return $portal->data->user_plan->partner_customer ?? false;
+    }
+
     public static function getUserLimitationNumber($portal)
     {
         $userLicenses = static::getLicenses($portal);
