@@ -66,18 +66,18 @@ class MqClient
         }
 
         $this->channel()->basic_publish(
-            new AMQPMessage($body, ['content_type' => 'application/json', 'application_headers' => new AMQPTable($context)]),
+            new AMQPMessage(is_scalar($body) ? $body : json_encode($body), ['content_type' => 'application/json', 'application_headers' => new AMQPTable($context)]),
             $exchange,
             $routingKey
         );
     }
 
-    private function processMessage($messageBody, string $routingKey)
+    private function processMessage($body, string $routingKey)
     {
         if (strpos($routingKey, '.update')) {
             if (
-                (is_array($messageBody) && !(array_key_exists('id', $messageBody) && $messageBody['id']))
-                || (is_object($messageBody) && !(property_exists($messageBody, 'id') && $messageBody->id))
+                (is_array($body) && !(array_key_exists('id', $body) && $body['id']))
+                || (is_object($body) && !(property_exists($body, 'id') && $body->id))
             ) {
                 throw new Exception("Missing entity ID.");
             }
