@@ -66,16 +66,17 @@ class Portal
             $trial = PortalPricing::getTrial($portalData);
 
             $portal->plan = (object)[
-                'license'         => PortalPricing::getLicenses($portalData),
-                'product'         => PortalPricing::getProduct($portalData),
-                'regional'        => PortalPricing::getRegional($portalData),
-                'trial'           => $trial,
-                'trialText'       => PortalPricing::PLAN_STATUS[$trial],
-                'expire'          => PortalPricing::getExpire($portalData),
-                'price'           => $price,
-                'currency'        => $currency,
-                'manual_price'    => PortalPricing::getManualPrice($portalData),
-                'custom_contract' => PortalPricing::getCustomContract($portalData),
+                'license'          => PortalPricing::getLicenses($portalData),
+                'product'          => PortalPricing::getProduct($portalData),
+                'regional'         => PortalPricing::getRegional($portalData),
+                'trial'            => $trial,
+                'trialText'        => PortalPricing::PLAN_STATUS[$trial],
+                'expire'           => PortalPricing::getExpire($portalData),
+                'price'            => $price,
+                'currency'         => $currency,
+                'manual_price'     => PortalPricing::getManualPrice($portalData),
+                'custom_contract'  => PortalPricing::getCustomContract($portalData),
+                'partner_customer' => PortalPricing::getPartnerCustomer($portalData)
             ];
         }
 
