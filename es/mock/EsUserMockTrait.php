@@ -23,7 +23,7 @@ trait EsUserMockTrait
             'login'        => DateTime::formatDate($options['login'] ?? time()),
             'access'       => DateTime::formatDate($options['access'] ?? time()),
             'status'       => $options['status'] ?? 1,
-            'allow_public' => $options['allow_public'] ?? false,
+            'allow_public' => $options['allow_public'] ?? 0,
             'roles'        => $options['roles'] ?? null,
             'avatar'       => $options['avatar'] ?? null,
             'fields'       => $options['fields'] ?? null,
