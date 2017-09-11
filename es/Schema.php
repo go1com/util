@@ -351,6 +351,22 @@ class Schema
             'lo'         => [
                 'properties' => self::LO_MAPPING['properties'],
             ],
+            'parent_lo'         => [
+                'properties' => [
+                    'id'             => ['type' => self::T_KEYWORD],
+                    'type'           => ['type' => self::T_KEYWORD],
+                    'title'          => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                ]
+            ],
+            'assessor'         => [
+                'properties' => [
+                    'id'           => ['type' => self::T_KEYWORD],
+                    'mail'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'first_name'   => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'last_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                ]
+            ],
             'account'    => [
                 'properties' => self::ACCOUNT_MAPPING['properties'],
             ],
