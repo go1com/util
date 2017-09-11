@@ -374,6 +374,44 @@ class Schema
                 ],
             ],
         ],
+        'dynamic_templates' => [
+            [
+                'custom_field_string' => [
+                    'path_match' => 'account.fields_*.*.value_string',
+                    'mapping'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                ],
+            ],
+            [
+                'custom_field_text' => [
+                    'path_match' => 'account.fields_*.*.value_text',
+                    'mapping'    => ['type' => self::T_TEXT],
+                ],
+            ],
+            [
+                'custom_field_integer' => [
+                    'path_match' => 'account.fields_*.*.value_integer',
+                    'mapping'    => ['type' => self::T_INT],
+                ],
+            ],
+            [
+                'custom_field_float' => [
+                    'path_match' => 'account.fields_*.*.value_float',
+                    'mapping'    => ['type' => self::T_DOUBLE],
+                ],
+            ],
+            [
+                'custom_field_date' => [
+                    'path_match' => 'account.fields_*.*.value_date',
+                    'mapping'    => ['type' => self::T_DATE],
+                ],
+            ],
+            [
+                'custom_field_datetime' => [
+                    'path_match' => 'account.fields_*.*.value_datetime',
+                    'mapping'    => ['type' => self::T_DATE],
+                ],
+            ],
+        ],
     ];
 
     const ENROLMENT_MAPPING_REVISION = [
