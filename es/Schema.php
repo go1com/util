@@ -505,16 +505,17 @@ class Schema
     ];
 
     const GROUP_MAPPING = [
-        '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'         => ['type' => self::T_KEYWORD],
-            'title'      => ['type' => self::T_KEYWORD],
-            'user_id'    => ['type' => self::T_INT],
-            'visibility' => ['type' => self::T_SHORT],
-            'created'    => ['type' => self::T_DATE],
-            'updated'    => ['type' => self::T_DATE],
-            'metadata'   => [
+            'id'           => ['type' => self::T_KEYWORD],
+            'title'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'description'  => ['type' => self::T_TEXT],
+            'image'        => ['type' => self::T_TEXT],
+            'user_id'      => ['type' => self::T_INT],
+            'visibility'   => ['type' => self::T_SHORT],
+            'created'      => ['type' => self::T_DATE],
+            'updated'      => ['type' => self::T_DATE],
+            'metadata'     => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
                     'updated_at'  => ['type' => self::T_INT],
