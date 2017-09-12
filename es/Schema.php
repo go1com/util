@@ -344,6 +344,7 @@ class Schema
             'assessors'  => ['type' => self::T_INT],
             'start_date' => ['type' => self::T_DATE],
             'end_date'   => ['type' => self::T_DATE],
+            'due_date'   => ['type' => self::T_DATE],
             'changed'    => ['type' => self::T_DATE],
             // Duration between end date and start date (hours).
             // @todo Support quiz and interactive.
@@ -438,6 +439,7 @@ class Schema
             'id'         => ['type' => self::T_KEYWORD],
             'start_date' => ['type' => self::T_DATE],
             'end_date'   => ['type' => self::T_DATE],
+            'due_date'   => ['type' => self::T_DATE],
             'status'     => ['type' => self::T_SHORT],
             'result'     => ['type' => self::T_INT],
             'pass'       => ['type' => self::T_INT],
