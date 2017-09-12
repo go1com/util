@@ -18,13 +18,17 @@ class Roles
 
     const NAMES         = [
         self::ADMIN    => 'Administrator',
-        self::STUDENT  => 'Student',
+        self::STUDENT  => 'Learner',
         self::ASSESSOR => 'Assessor',
         self::MANAGER  => 'Manager',
     ];
 
     public static function getRoleByName(string $roleName)
     {
+        if ($roleName == self::STUDENT) {
+            return self::STUDENT;
+        }
+
         foreach (self::NAMES as $role => $name) {
             if ($name == $roleName) {
                 return $role;
