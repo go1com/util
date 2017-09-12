@@ -8,6 +8,8 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 class MqClient
 {
@@ -17,17 +19,19 @@ class MqClient
     private $port;
     private $user;
     private $pass;
+    private $logger;
 
     const CONTEXT_ACTOR_ID    = 'actor_id';
     const CONTEXT_TIMESTAMP   = 'timestamp';
     const CONTEXT_DESCRIPTION = 'description';
 
-    public function __construct($host, $port, $user, $pass)
+    public function __construct($host, $port, $user, $pass, LoggerInterface $logger = null)
     {
         $this->host = $host;
         $this->port = $port;
         $this->user = $user;
         $this->pass = $pass;
+        $this->logger = $logger ?: new NullLogger;
     }
 
     private function channel()
@@ -66,10 +70,12 @@ class MqClient
         }
 
         $this->channel()->basic_publish(
-            new AMQPMessage(is_scalar($body) ? $body : json_encode($body), ['content_type' => 'application/json', 'application_headers' => new AMQPTable($context)]),
+            new AMQPMessage($body = is_scalar($body) ? $body : json_encode($body), ['content_type' => 'application/json', 'application_headers' => new AMQPTable($context)]),
             $exchange,
             $routingKey
         );
+
+        $this->logger->debug($body, ['exchange' => $exchange, 'routingKey' => $routingKey, 'context' => $context]);
     }
 
     private function processMessage($body, string $routingKey)
