@@ -131,8 +131,13 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.mq'] = function (Container $c) {
             $options = $c['queueOptions'];
+            $logger = null;
 
-            return new MqClient($options['host'], $options['port'], $options['user'], $options['pass']);
+            if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
+                $logger = $c['profiler.collectors.mq'];
+            }
+
+            return new MqClient($options['host'], $options['port'], $options['user'], $options['pass'], $logger);
         };
 
         $c['go1.client.lo'] = function (Container $c) {
