@@ -135,6 +135,9 @@ class Queue
     const ACTIVITY_DELETE            = 'activity.delete';
     const PAYMENT_STRIPE_AUTHORIZE   = 'payment.stripe.authorize';
     const PAYMENT_STRIPE_DEAUTHORIZE = 'payment.stripe.deauthorize';
+    const NOTIFY_CREATE              = 'notify.create';
+    const NOTIFY_UPDATE              = 'notify.update';
+    const NOTIFY_DELETE              = 'notify.delete';
 
     # routingKey that tell some service to do something.
     #
