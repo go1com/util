@@ -13,6 +13,7 @@ trait EnrolmentMockTrait
         $profileId = isset($options['profile_id']) ? $options['profile_id'] : 0;
 
         $db->insert('gc_enrolment', [
+            'id'                => $options['id'] ?? null,
             'profile_id'        => $profileId,
             'parent_lo_id'      => isset($options['parent_lo_id']) ? $options['parent_lo_id'] : 0,
             'lo_id'             => isset($options['lo_id']) ? $options['lo_id'] : 0,
@@ -28,7 +29,7 @@ trait EnrolmentMockTrait
             'data'              => isset($options['data']) ? $options['data'] : '',
         ]);
 
-        $id = $db->lastInsertId('gc_enrolment');
+        $id = $options['id'] ?? $db->lastInsertId('gc_enrolment');
         $id && !empty($options['lo_id']) && $this->updateLoEnrolmentCountCache($db, $options['lo_id']);
 
         return $id;

@@ -285,6 +285,11 @@ class Schema
                     'group_id' => ['type' => self::T_INT],
                 ],
             ],
+            'data'           => [
+                'properties' => [
+                    'path' => ['type' => self::T_TEXT],
+                ]
+            ],
             'metadata'       => [
                 'properties' => [
                     'parents_authors_ids' => ['type' => self::T_INT],
@@ -344,12 +349,29 @@ class Schema
             'assessors'  => ['type' => self::T_INT],
             'start_date' => ['type' => self::T_DATE],
             'end_date'   => ['type' => self::T_DATE],
+            'due_date'   => ['type' => self::T_DATE],
             'changed'    => ['type' => self::T_DATE],
             // Duration between end date and start date (hours).
             // @todo Support quiz and interactive.
             'duration'   => ['type' => self::T_INT],
             'lo'         => [
                 'properties' => self::LO_MAPPING['properties'],
+            ],
+            'parent_lo'         => [
+                'properties' => [
+                    'id'             => ['type' => self::T_KEYWORD],
+                    'type'           => ['type' => self::T_KEYWORD],
+                    'title'          => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                ]
+            ],
+            'assessor'         => [
+                'properties' => [
+                    'id'           => ['type' => self::T_KEYWORD],
+                    'mail'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'first_name'   => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'last_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                ]
             ],
             'account'    => [
                 'properties' => self::ACCOUNT_MAPPING['properties'],
@@ -422,6 +444,7 @@ class Schema
             'id'         => ['type' => self::T_KEYWORD],
             'start_date' => ['type' => self::T_DATE],
             'end_date'   => ['type' => self::T_DATE],
+            'due_date'   => ['type' => self::T_DATE],
             'status'     => ['type' => self::T_SHORT],
             'result'     => ['type' => self::T_INT],
             'pass'       => ['type' => self::T_INT],

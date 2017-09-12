@@ -34,7 +34,7 @@ trait EsLoMockTrait
                 'currency'     => $options['currency'] ?? 'USD',
                 'price'        => $options['price'] ?? 0.00,
                 'tax'          => $options['tax'] ?? 0.00,
-                'tax_included' => $options['tax_included'] ?? true,
+                'tax_included' => $options['tax_included'] ?? 1,
             ],
             'duration'       => $options['duration'] ?? 0,
             'assessors'      => $options['assessors'] ?? [],
@@ -47,6 +47,9 @@ trait EsLoMockTrait
                 'parents_id'          => $options['metadata']['parents_id'] ?? null,
                 'instance_id'         => $options['routing'] ?? $options['instance_id'] ?? 0,
                 'updated_at'          => $options['updated_at'] ?? time(),
+            ],
+            'data'           => [
+                'path' => $options['data']['path'] ?? '',
             ],
             'totalEnrolment' => $options['totalEnrolment'] ?? 0,
         ];
