@@ -48,6 +48,9 @@ trait EsLoMockTrait
                 'instance_id'         => $options['routing'] ?? $options['instance_id'] ?? 0,
                 'updated_at'          => $options['updated_at'] ?? time(),
             ],
+            'data'           => [
+                'path' => $options['data']['path'] ?? '',
+            ],
             'totalEnrolment' => $options['totalEnrolment'] ?? 0,
         ];
 

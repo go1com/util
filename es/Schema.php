@@ -285,6 +285,11 @@ class Schema
                     'group_id' => ['type' => self::T_INT],
                 ],
             ],
+            'data'           => [
+                'properties' => [
+                    'path' => ['type' => self::T_TEXT],
+                ]
+            ],
             'metadata'       => [
                 'properties' => [
                     'parents_authors_ids' => ['type' => self::T_INT],
