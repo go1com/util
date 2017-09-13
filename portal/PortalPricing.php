@@ -13,8 +13,10 @@ class PortalPricing
     const PRODUCT_PREMIUM               = 'premium';
     const REGIONAL                      = ['AU', 'EU', 'UK', 'US'];
     const REGIONAL_DEFAULT              = 'AU';
+    const REGIONAL_US                   = 'US';
+    const REGIONAL_REST                 = 'REST';
     const PLATFORM_FREE_LICENSE         = 5;
-    const PLATFORM_UNLIMITED_LICENSE      = -1;
+    const PLATFORM_UNLIMITED_LICENSE    = -1;
     const PLATFORM_H5                   = [ // > 5 licenses
         'AU'    => ['currency' => 'AUD', 'price' => 2],
         'EU'    => ['currency' => 'EUR', 'price' => 1.6],
@@ -158,5 +160,14 @@ class PortalPricing
         list($price,) = self::getPrice($portal, true);
 
         return ($price > 0) ? self::PLAN_STATUS_TRIAL : self::PLAN_STATUS_FREE;
+    }
+
+    public static function premiumGroupOptions($env): array
+    {
+        return $env ? json_decode($env) : [
+            self::REGIONAL_DEFAULT => 517,
+            self::REGIONAL_US      => 1206,
+            self::REGIONAL_REST    => 517
+        ];
     }
 }
