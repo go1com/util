@@ -28,4 +28,15 @@ class Cache
         $cache->save("{$cacheId}:eTag", $eTag);
         $cache->save($eTag, time());
     }
+
+    public static function invalidate(CacheInterface $cache, string $cacheId)
+    {
+        if ($cache->contains("{$cacheId}:eTag")) {
+            if ($prevETag = $cache->fetch("{$cacheId}:eTag")) {
+                $cache->delete($prevETag);
+            }
+
+            $cache->delete("$cacheId:eTag");
+        }
+    }
 }
