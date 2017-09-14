@@ -163,14 +163,16 @@ class GroupHelper
     {
         $userId  = UserHelper::userId($go1, $accountId, $accountsName);
 
-        $sql = 'SELECT g.title FROM social_group g ';
-        $sql .= 'WHERE g.user_id = ? OR g.id IN (';
-        $sql .= '    SELECT gi.group_id FROM social_group_item gi';
-        $sql .= '    WHERE gi.entity_type = ?';
-        $sql .= '    AND gi.entity_id = ?';
-        $sql .= ')';
+        $sql = 'SELECT id, title FROM social_group WHERE user_id = ?';
+        $ownerGroups = $social->executeQuery($sql, [$userId])->fetchAll(PDO::FETCH_KEY_PAIR);
 
-        return $social->executeQuery($sql, [$userId, GroupItemTypes::USER, $accountId])->fetchAll(PDO::FETCH_COLUMN);
+        $sql = 'SELECT g.id, g.title FROM social_group g ';
+        $sql .= 'INNER JOIN social_group_item gi ON g.id = gi.group_id ';
+        $sql .= 'WHERE gi.entity_type = ? ';
+        $sql .= 'AND gi.entity_id = ?';
+        $memberGroups = $social->executeQuery($sql, [GroupItemTypes::USER, $accountId])->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        return array_values(array_replace($ownerGroups, $memberGroups));
     }
 
     public static function getEntityId(Connection $go1, Connection $dbNote, Connection $dbSocial, $entityType, $entityId, $instance = '')
