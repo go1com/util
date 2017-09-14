@@ -163,16 +163,15 @@ class GroupHelper
     {
         $userId  = UserHelper::userId($go1, $accountId, $accountsName);
 
-        $sql = 'SELECT id, title FROM social_group WHERE user_id = ?';
-        $ownerGroups = $social->executeQuery($sql, [$userId])->fetchAll(PDO::FETCH_KEY_PAIR);
+        $sql = 'SELECT group_id FROM social_group_item ';
+        $sql .= 'WHERE entity_type = ? ';
+        $sql .= 'AND entity_id = ?';
+        $memberGroupIds = $social->executeQuery($sql, [GroupItemTypes::USER, $accountId])->fetchAll(PDO::FETCH_COLUMN);
 
-        $sql = 'SELECT g.id, g.title FROM social_group g ';
-        $sql .= 'INNER JOIN social_group_item gi ON g.id = gi.group_id ';
-        $sql .= 'WHERE gi.entity_type = ? ';
-        $sql .= 'AND gi.entity_id = ?';
-        $memberGroups = $social->executeQuery($sql, [GroupItemTypes::USER, $accountId])->fetchAll(PDO::FETCH_KEY_PAIR);
+        $sql = 'SELECT title FROM social_group WHERE user_id = ? OR id IN (?)';
+        $groups = $social->executeQuery($sql, [$userId, $memberGroupIds], [PDO::PARAM_INT, Connection::PARAM_INT_ARRAY])->fetchAll(PDO::FETCH_COLUMN);
 
-        return array_values(array_replace($ownerGroups, $memberGroups));
+        return $groups;
     }
 
     public static function getEntityId(Connection $go1, Connection $dbNote, Connection $dbSocial, $entityType, $entityId, $instance = '')
