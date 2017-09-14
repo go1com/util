@@ -300,4 +300,37 @@ class GroupHelperTest extends UtilTestCase
         $this->assertCount(2, GroupHelper::groupAssignments($this->db, $groupId));
         $this->assertCount(1, GroupHelper::groupAssignments($this->db, $groupId, ['status' => GroupAssignStatuses::ARCHIVED]));
     }
+
+    public function testGetUserGroups()
+    {
+        $c = $this->getContainer();
+        $user1Id = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'mail' => 'user-groups-testing-1@foo.com']);
+        $user2Id = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'mail' => 'user-groups-testing-2@foo.com']);
+        $user3Id = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'mail' => 'user-groups-testing-3@foo.com']);
+
+        $portalId = $this->createInstance($this->db, ['title' => $portalName = 'foo.com']);
+
+        $account1Id = $this->createUser($this->db, ['instance' => $portalName, 'mail' => 'user-groups-testing-1@foo.com']);
+        $account2Id = $this->createUser($this->db, ['instance' => $portalName, 'mail' => 'user-groups-testing-2@foo.com']);
+        $account3Id = $this->createUser($this->db, ['instance' => $portalName, 'mail' => 'user-groups-testing-3@foo.com']);
+
+        $group1Id = $this->createGroup($this->db, ['title' => 'Group 1', 'instance_id' => $portalId, 'user_id' => $user1Id]);
+        $group2Id = $this->createGroup($this->db, ['title' => 'Group 2', 'instance_id' => $portalId, 'user_id' => $user2Id]);
+        $group3Id = $this->createGroup($this->db, ['title' => 'Group 3', 'instance_id' => $portalId, 'user_id' => $user2Id]);
+        $group4Id = $this->createGroup($this->db, ['title' => 'Group 4', 'instance_id' => $portalId, 'user_id' => $user3Id]);
+
+        $this->createGroupItem($this->db, ['group_id' => $group1Id, 'entity_id' => $account1Id]);
+        $this->createGroupItem($this->db, ['group_id' => $group2Id, 'entity_id' => $account1Id]);
+        $this->createGroupItem($this->db, ['group_id' => $group2Id, 'entity_id' => $account2Id]);
+        $this->createGroupItem($this->db, ['group_id' => $group3Id, 'entity_id' => $account3Id]);
+
+        $groups = GroupHelper::userGroups($this->db, $this->db, $account1Id, $c['accounts_name']);
+        $this->assertEquals(['Group 1', 'Group 2'], $groups);
+
+        $groups = GroupHelper::userGroups($this->db, $this->db, $account2Id, $c['accounts_name']);
+        $this->assertEquals(['Group 2', 'Group 3'], $groups);
+
+        $groups = GroupHelper::userGroups($this->db, $this->db, $account3Id, $c['accounts_name']);
+        $this->assertEquals(['Group 4', 'Group 3'], $groups);
+    }
 }
