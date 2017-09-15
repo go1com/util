@@ -112,4 +112,9 @@ class PortalHelper
 
         return (filter_var($logo, FILTER_VALIDATE_URL) === false) ? ('https:' . $logo) : $logo;
     }
+
+    public static function roles(Connection $db, string $portalName)
+    {
+        return $db->executeQuery('SELECT id, name FROM gc_role WHERE instance = ?', [$portalName])->fetchAll(DB::PAIR);
+    }
 }

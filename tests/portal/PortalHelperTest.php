@@ -23,4 +23,12 @@ class PortalHelperTest extends UtilTestCase
         $logo = PortalHelper::logo($portal);
         $this->assertEquals('https://www.go1.com/logo.png', $logo);
     }
+
+    public function testRoles()
+    {
+        $id = $this->createPortalAdminRole($this->db, ['instance' => $portalName = 'abc.go1.co']);
+        $roles = PortalHelper::roles($this->db, $portalName);
+        $this->assertCount(1, $roles);
+        $this->assertEquals($roles[$id], 'administrator');
+    }
 }
