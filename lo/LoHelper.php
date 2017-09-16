@@ -47,6 +47,7 @@ class LoHelper
      */
     public static function loadMultiple(Connection $db, array $ids, int $instanceId = null): array
     {
+        $ids = array_map('intval', $ids);
         $learningObjects = !$ids ? [] : $db
             ->executeQuery(
                 'SELECT lo.*, pricing.price, pricing.currency, pricing.tax, pricing.tax_included, pricing.recurring'
