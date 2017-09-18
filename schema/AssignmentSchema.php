@@ -63,7 +63,6 @@ class AssignmentSchema
             $revision->setPrimaryKey(['id']);
             $revision->addIndex(['created']);
             $revision->addIndex(['status']);
-            $revision->addForeignKeyConstraint('asm_submission', ['submission_id'], ['id']);
         }
 
         if (!$schema->hasTable('asm_feedback')) {
