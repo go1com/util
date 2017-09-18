@@ -18,6 +18,9 @@ class ReportTest extends TestCase
                         'key' => 'testing key',
                         'secret' => 'testing secret',
                         'region' => 'testing region',
+                        'bucket' => 'test bucket',
+                        'version' => 'latest',
+                        'endpoint' => 'test endpoint',
                     ],
                     'esOptions'    => [
                         'credential' => true,
