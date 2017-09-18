@@ -19,7 +19,7 @@ class Export
         $this->elasticsearchClient = $elasticsearchClient;
     }
 
-    public function doExport($bucket, $key, $fields, $headers, $params, $selectedIds, $excludedIds, $formatters = [])
+    public function doExport($bucket, $key, $fields, $headers, $params, $selectedIds, $excludedIds, $allSelected, $formatters = [])
     {
         $this->s3Client->registerStreamWrapper();
         $context = stream_context_create(array(
@@ -33,7 +33,7 @@ class Export
         // Write header.
         fputcsv($stream, $headers);
 
-        if ($selectedIds !== ['All']) {
+        if (!$allSelected) {
             // Improve performance by not loading all records then filter out.
             $params['body']['query']['bool']['must'][] = [
                 'terms' => [
@@ -88,7 +88,8 @@ class Export
 
     public function getFile($region, $bucket, $key)
     {
-        return "https://s3-{$region}.amazonaws.com/$bucket/{$key}";
+        $domain = getenv('MONOLITH') ? getenv('AWS_S3_ENDPOINT') : "https://s3-{$region}.amazonaws.com";
+        return "$domain/$bucket/$key";
     }
 
     private function getValues($fields, $hit, $formatters = [])

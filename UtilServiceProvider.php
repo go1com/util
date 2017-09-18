@@ -94,11 +94,17 @@ class UtilServiceProvider implements ServiceProviderInterface
         $c['go1.client.s3'] = function (Container $c) {
             $o = $c['s3Options'];
 
-            return new S3Client([
+            $args = [
                 'region'      => $o['region'],
-                'version'     => '2006-03-01',
+                'version'     => $o['version'],
                 'credentials' => new Credentials($o['key'], $o['secret']),
-            ]);
+            ];
+            if (getenv('MONOLITH')) {
+                // https://github.com/minio/cookbook/blob/master/docs/aws-sdk-for-php-with-minio.md
+                $args['endpoint'] = $o['endpoint'];
+                $args['use_path_style_endpoint'] = true;
+            }
+            return new S3Client($args);
         };
 
         $c['go1.client.user'] = function (Container $c) {
