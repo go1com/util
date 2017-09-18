@@ -44,7 +44,7 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         if (class_exists(Whip::class)) {
             $c['whip'] = function () {
-                return new Whip(Whip::REMOTE_ADDR);
+                return new Whip(Whip::PROXY_HEADERS | Whip::REMOTE_ADDR);
             };
         }
 
