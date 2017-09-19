@@ -245,9 +245,9 @@ class GroupHelper
         return $group->type == GroupTypes::DEFAULT;
     }
 
-    public static function isVirtual(stdClass $group)
+    public static function isSystem(stdClass $group)
     {
-        return $group->type == GroupTypes::VIRTUAL;
+        return $group->type == GroupTypes::SYSTEM;
     }
 
     public static function format(stdClass &$group)
