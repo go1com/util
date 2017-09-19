@@ -495,6 +495,19 @@ class MailTemplate
         ],
     ];
 
+    const AWARD_LIST = [
+        'key'    => 'award.list',
+        'tokens' => [
+            '!award_name'    => 'Award name',
+            '!award_image'   => 'Award image',
+            '!award_url'     => 'Award URL',
+            '!award_content' => 'Award html content',
+            '!portal_name'   => 'Portal name',
+            '!portal_image'  => 'Portal logo',
+            '!portal_url'    => 'Portal URL',
+        ],
+    ];
+
     const COURSE_COMPLETE = [
         'key'    => 'course.complete',
         'tokens' => [
