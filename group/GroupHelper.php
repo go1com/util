@@ -218,10 +218,10 @@ class GroupHelper
         return $validEntity ? $id : 0;
     }
 
-    public static function isPremium(stdClass $group)
+    public static function isContent(stdClass $group)
     {
         if (isset($group->type)) {
-            return $group->type == GroupTypes::PREMIUM;
+            return $group->type == GroupTypes::CONTENT;
         }
 
         $check = $group->data->premium ?? false;
@@ -229,15 +229,31 @@ class GroupHelper
         return $check ? true : false;
     }
 
-    public static function isMarketplace(stdClass $group)
+    public static function isContentPackage(stdClass $group)
     {
         if (isset($group->type)) {
-            return $group->type == GroupTypes::MARKETPLACE;
+            return $group->type == GroupTypes::CONTENT_PACKAGE;
         }
 
         $check = $group->data->marketplace ?? 0;
 
         return $check ? true : false;
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function isPremium(stdClass $group)
+    {
+        return self::isContent($group);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function isMarketplace(stdClass $group)
+    {
+        return self::isContentPackage($group);
     }
 
     public static function isDefault(stdClass $group)
