@@ -4,6 +4,7 @@ namespace go1\util\schema;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use go1\util\group\GroupTypes;
 
 class SocialSchema
 {
@@ -15,7 +16,7 @@ class SocialSchema
             $group->addColumn('title', Type::STRING);
             $group->addColumn('user_id', Type::INTEGER, ['unsigned' => true, 'comment' => 'Author of group']);
             $group->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
-            $group->addColumn('type', Type::STRING);
+            $group->addColumn('type', Type::STRING, ['default' => GroupTypes::DEFAULT]);
             $group->addColumn('visibility', Type::INTEGER);
             $group->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $group->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
