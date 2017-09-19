@@ -10,6 +10,7 @@ use go1\util\group\GroupAssignTypes;
 use go1\util\group\GroupHelper;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupItemTypes;
+use go1\util\group\GroupTypes;
 use go1\util\schema\mock\GroupMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
@@ -166,38 +167,28 @@ class GroupHelperTest extends UtilTestCase
 
     public function testIsPremium()
     {
-        $groupPremiumId = $this->createGroup($this->db, ['data' => ['premium' => 1]]);
+        $groupPremiumId = $this->createGroup($this->db, ['type' => GroupTypes::PREMIUM]);
         $groupPremium = GroupHelper::load($this->db, $groupPremiumId);
 
         $this->assertTrue(GroupHelper::isPremium($groupPremium));
 
-        $groupId1 = $this->createGroup($this->db, ['data' => ['premium' => 0]]);
+        $groupId1 = $this->createGroup($this->db, []);
         $group1 = GroupHelper::load($this->db, $groupId1);
 
         $this->assertFalse(GroupHelper::isPremium($group1));
-
-        $groupId2 = $this->createGroup($this->db, []);
-        $group2 = GroupHelper::load($this->db, $groupId2);
-
-        $this->assertFalse(GroupHelper::isPremium($group2));
     }
 
     public function testIsMarketplace()
     {
-        $groupMarketId = $this->createGroup($this->db, ['data' => ['marketplace' => 1]]);
+        $groupMarketId = $this->createGroup($this->db, ['type' => GroupTypes::MARKETPLACE]);
         $groupMarket = GroupHelper::load($this->db, $groupMarketId);
 
         $this->assertTrue(GroupHelper::isMarketplace($groupMarket));
 
-        $groupId1 = $this->createGroup($this->db, ['data' => ['marketplace' => 0]]);
+        $groupId1 = $this->createGroup($this->db, []);
         $group1 = GroupHelper::load($this->db, $groupId1);
 
         $this->assertFalse(GroupHelper::isMarketplace($group1));
-
-        $groupId2 = $this->createGroup($this->db, []);
-        $group2 = GroupHelper::load($this->db, $groupId2);
-
-        $this->assertFalse(GroupHelper::isMarketplace($group2));
     }
 
     public function testFindItems()
@@ -237,7 +228,7 @@ class GroupHelperTest extends UtilTestCase
 
     public function testFormat()
     {
-        $groupId = $this->createGroup($this->db, ['data' => ['marketplace' => 1, 'description' => 'group description']]);
+        $groupId = $this->createGroup($this->db, ['type' => GroupTypes::MARKETPLACE,  'data' => ['description' => 'group description']]);
         $group = GroupHelper::load($this->db, $groupId);
 
         $this->assertTrue(GroupHelper::isMarketplace($group));

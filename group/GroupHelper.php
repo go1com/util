@@ -218,26 +218,36 @@ class GroupHelper
         return $validEntity ? $id : 0;
     }
 
-    /**
-     * @deprecated
-     * Ref: GroupTypes::isPremium
-     */
     public static function isPremium(stdClass $group)
     {
+        if (isset($group->type)) {
+            return $group->type == GroupTypes::PREMIUM;
+        }
+
         $check = $group->data->premium ?? false;
 
         return $check ? true : false;
     }
 
-    /**
-     * @deprecated
-     * Ref: GroupTypes::isMarketplace
-     */
     public static function isMarketplace(stdClass $group)
     {
+        if (isset($group->type)) {
+            return $group->type == GroupTypes::MARKETPLACE;
+        }
+
         $check = $group->data->marketplace ?? 0;
 
         return $check ? true : false;
+    }
+
+    public static function isDefault(stdClass $group)
+    {
+        return $group->type == GroupTypes::DEFAULT;
+    }
+
+    public static function isVirtual(stdClass $group)
+    {
+        return $group->type == GroupTypes::VIRTUAL;
     }
 
     public static function format(stdClass &$group)
