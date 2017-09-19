@@ -15,6 +15,7 @@ class SocialSchema
             $group->addColumn('title', Type::STRING);
             $group->addColumn('user_id', Type::INTEGER, ['unsigned' => true, 'comment' => 'Author of group']);
             $group->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
+            $group->addColumn('type', Type::STRING);
             $group->addColumn('visibility', Type::INTEGER);
             $group->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $group->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
@@ -23,6 +24,7 @@ class SocialSchema
             $group->addIndex(['title']);
             $group->addIndex(['user_id']);
             $group->addIndex(['instance_id']);
+            $group->addIndex(['type']);
             $group->addIndex(['visibility']);
             $group->addIndex(['created']);
             $group->addIndex(['updated']);

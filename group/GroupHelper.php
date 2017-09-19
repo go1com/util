@@ -5,6 +5,7 @@ namespace go1\util\group;
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\DB;
+use go1\util\Error;
 use go1\util\lo\LoHelper;
 use go1\util\note\NoteHelper;
 use go1\util\portal\PortalHelper;
@@ -217,6 +218,10 @@ class GroupHelper
         return $validEntity ? $id : 0;
     }
 
+    /**
+     * @deprecated
+     * Ref: GroupTypes::isPremium
+     */
     public static function isPremium(stdClass $group)
     {
         $check = $group->data->premium ?? false;
@@ -224,6 +229,10 @@ class GroupHelper
         return $check ? true : false;
     }
 
+    /**
+     * @deprecated
+     * Ref: GroupTypes::isMarketplace
+     */
     public static function isMarketplace(stdClass $group)
     {
         $check = $group->data->marketplace ?? 0;
@@ -282,5 +291,17 @@ class GroupHelper
             ->setParameter('entityType', $options['entityType']);
 
         return $q->execute()->fetchAll(DB::OBJ);
+    }
+
+    public static function groupTypePermission(stdClass $group, Request $req)
+    {
+        $accessChecker = new AccessChecker;
+        $access = GroupTypes::isDefault($group) && $accessChecker->validUser($req);
+
+        if (!$access) {
+            $access = $accessChecker->isAccountsAdmin($req);
+        }
+
+        return $access;
     }
 }
