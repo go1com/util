@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\util\group\GroupAssignStatuses;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupStatus;
+use go1\util\group\GroupTypes;
 
 trait GroupMockTrait
 {
@@ -15,6 +16,7 @@ trait GroupMockTrait
             'user_id'     => $title = isset($options['user_id']) ? $options['user_id'] : 1,
             'title'       => isset($options['title']) ? $options['title'] : 'Group Foo',
             'visibility'  => isset($options['visibility']) ? $options['visibility'] : GroupStatus::PUBLIC,
+            'type'        => isset($options['type']) ? $options['type'] : GroupTypes::DEFAULT,
             'instance_id' => isset($options['instance_id']) ? $options['instance_id'] : 1,
             'created'     => isset($options['created']) ? $options['created'] : time(),
             'updated'     => isset($options['updated']) ? $options['updated'] : time(),

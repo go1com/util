@@ -5,6 +5,7 @@ namespace go1\util\group;
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\DB;
+use go1\util\Error;
 use go1\util\lo\LoHelper;
 use go1\util\note\NoteHelper;
 use go1\util\portal\PortalHelper;
@@ -217,18 +218,52 @@ class GroupHelper
         return $validEntity ? $id : 0;
     }
 
-    public static function isPremium(stdClass $group)
+    public static function isContent(stdClass $group)
     {
+        if (isset($group->type)) {
+            return $group->type == GroupTypes::CONTENT;
+        }
+
         $check = $group->data->premium ?? false;
 
         return $check ? true : false;
     }
 
-    public static function isMarketplace(stdClass $group)
+    public static function isContentPackage(stdClass $group)
     {
+        if (isset($group->type)) {
+            return $group->type == GroupTypes::CONTENT_PACKAGE;
+        }
+
         $check = $group->data->marketplace ?? 0;
 
         return $check ? true : false;
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function isPremium(stdClass $group)
+    {
+        return self::isContent($group);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function isMarketplace(stdClass $group)
+    {
+        return self::isContentPackage($group);
+    }
+
+    public static function isDefault(stdClass $group)
+    {
+        return $group->type == GroupTypes::DEFAULT;
+    }
+
+    public static function isSystem(stdClass $group)
+    {
+        return $group->type == GroupTypes::SYSTEM;
     }
 
     public static function format(stdClass &$group)
@@ -282,5 +317,17 @@ class GroupHelper
             ->setParameter('entityType', $options['entityType']);
 
         return $q->execute()->fetchAll(DB::OBJ);
+    }
+
+    public static function groupTypePermission(stdClass $group, Request $req)
+    {
+        $accessChecker = new AccessChecker;
+        $access = GroupTypes::isDefault($group) && $accessChecker->validUser($req);
+
+        if (!$access) {
+            $access = $accessChecker->isAccountsAdmin($req);
+        }
+
+        return $access;
     }
 }
