@@ -128,7 +128,7 @@ class PortalChecker
         if ($portal->title == PortalHelper::WEBSITE_PUBLIC_INSTANCE) {
             $domain = PortalHelper::WEBSITE_DOMAIN;
 
-            return "https://{$domain}/#!/{$uri}";
+            return "https://{$domain}/{$uri}";
         }
         else {
             $domain = $this->getPrimaryDomain($portal);
