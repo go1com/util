@@ -177,6 +177,7 @@ class Schema
             'first_name'   => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'last_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'created'      => ['type' => self::T_DATE],
+            'login'        => ['type' => self::T_DATE],
             'access'       => ['type' => self::T_DATE],
             'status'       => ['type' => self::T_SHORT],
             'allow_public' => ['type' => self::T_INT],
