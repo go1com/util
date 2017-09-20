@@ -322,10 +322,10 @@ class GroupHelper
     public static function groupTypePermission(stdClass $group, Request $req)
     {
         $accessChecker = new AccessChecker;
-        $access = GroupTypes::isDefault($group) && $accessChecker->validUser($req);
+        $access = self::isDefault($group) && ($accessChecker->validUser($req) ? true : false);
 
         if (!$access) {
-            $access = $accessChecker->isAccountsAdmin($req);
+            $access = $accessChecker->isAccountsAdmin($req) ? true : false;
         }
 
         return $access;

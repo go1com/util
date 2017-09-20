@@ -2,6 +2,7 @@
 
 namespace go1\util\tests\group;
 
+use Firebase\JWT\JWT;
 use go1\util\AccessChecker;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
@@ -165,30 +166,46 @@ class GroupHelperTest extends UtilTestCase
         $this->assertEquals($groupId, $entityId);
     }
 
-    public function testIsPremium()
+    public function testIsContent()
     {
-        $groupPremiumId = $this->createGroup($this->db, ['type' => GroupTypes::PREMIUM]);
+        $groupPremiumId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT]);
         $groupPremium = GroupHelper::load($this->db, $groupPremiumId);
 
-        $this->assertTrue(GroupHelper::isPremium($groupPremium));
+        $this->assertTrue(GroupHelper::isContent($groupPremium));
 
         $groupId1 = $this->createGroup($this->db, []);
         $group1 = GroupHelper::load($this->db, $groupId1);
 
-        $this->assertFalse(GroupHelper::isPremium($group1));
+        $this->assertFalse(GroupHelper::isContent($group1));
     }
 
-    public function testIsMarketplace()
+    public function testIsContentPackage()
     {
-        $groupMarketId = $this->createGroup($this->db, ['type' => GroupTypes::MARKETPLACE]);
+        $groupMarketId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_PACKAGE]);
         $groupMarket = GroupHelper::load($this->db, $groupMarketId);
 
-        $this->assertTrue(GroupHelper::isMarketplace($groupMarket));
+        $this->assertTrue(GroupHelper::isContentPackage($groupMarket));
 
         $groupId1 = $this->createGroup($this->db, []);
         $group1 = GroupHelper::load($this->db, $groupId1);
 
-        $this->assertFalse(GroupHelper::isMarketplace($group1));
+        $this->assertFalse(GroupHelper::isContentPackage($group1));
+    }
+
+    public function testGroupTypePermission()
+    {
+        $req = new Request();
+        $req->query->set('jwt.payload', $this->getAdminPayload('az.mygo1.com'));
+
+        $groupMarketId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_PACKAGE]);
+        $groupMarket = GroupHelper::load($this->db, $groupMarketId);
+
+        $this->assertFalse(GroupHelper::groupTypePermission($groupMarket, $req));
+
+        $groupId = $this->createGroup($this->db, []);
+        $group = GroupHelper::load($this->db, $groupId);
+
+        $this->assertTrue(GroupHelper::groupTypePermission($group, $req));
     }
 
     public function testFindItems()
@@ -228,10 +245,10 @@ class GroupHelperTest extends UtilTestCase
 
     public function testFormat()
     {
-        $groupId = $this->createGroup($this->db, ['type' => GroupTypes::MARKETPLACE,  'data' => ['description' => 'group description']]);
+        $groupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_PACKAGE,  'data' => ['description' => 'group description']]);
         $group = GroupHelper::load($this->db, $groupId);
 
-        $this->assertTrue(GroupHelper::isMarketplace($group));
+        $this->assertTrue(GroupHelper::isContentPackage($group));
         $this->assertEquals('group description', $group->description);
     }
 
