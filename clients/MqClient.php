@@ -82,10 +82,19 @@ class MqClient
     {
         if (strpos($routingKey, '.update')) {
             if (
-                (is_array($body) && !(array_key_exists('id', $body) && $body['id']))
-                || (is_object($body) && !(property_exists($body, 'id') && $body->id))
+                (
+                    is_array($body)
+                    && !(2 === count(array_filter($body, function($value, $key) {
+                            return (in_array($key, ['id', 'original']) && $value);
+                        }, ARRAY_FILTER_USE_BOTH)))
+                )
+                ||
+                (
+                    is_object($body)
+                    && ( !(property_exists($body, 'id') && $body->id) || !(property_exists($body, 'original') && $body->original) )
+                )
             ) {
-                throw new Exception("Missing entity ID.");
+                throw new Exception("Missing entity ID or original data.");
             }
         }
     }
