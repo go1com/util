@@ -176,48 +176,62 @@ class GroupHelper
         return $groups;
     }
 
-    public static function getEntityId(array $dbs, string $entityType, $entityId, $instance = '')
+    public static function getEntityId(
+        string $entityType,
+        $entityId,
+        $instance = '',
+        Connection $go1 = null,
+        Connection $dbNote = null,
+        Connection $dbSocial = null,
+        Connection $dbAward = null
+    )
     {
         $validEntity = false;
         $id = $entityId;
 
         switch ($entityType) {
             case GroupItemTypes::PORTAL:
-                $portalEntity = PortalHelper::load($dbs['go1'], $entityId);
+                $portalEntity = PortalHelper::load($go1, $entityId);
                 $validEntity = is_object($portalEntity);
                 break;
 
             case GroupItemTypes::USER:
-                $target = (array) UserHelper::load($dbs['go1'], $entityId);
+                $target = (array) UserHelper::load($go1, $entityId);
                 if (!empty($target) && $instance) {
-                    $id = static::getAccountId($dbs['go1'], $target, $instance);
+                    $id = static::getAccountId($go1, $target, $instance);
                     $validEntity = true;
                 }
                 break;
 
             case GroupItemTypes::LO:
-                $lo = LoHelper::load($dbs['go1'], $entityId);
+                $lo = LoHelper::load($go1, $entityId);
                 $validEntity = is_object($lo);
                 break;
 
             case GroupItemTypes::NOTE:
-                $note = NoteHelper::loadByUUID($dbs['note'], $entityId);
-                if (is_object($note)) {
-                    $id = $note->id;
-                    $validEntity = true;
+                if ($dbNote) {
+                    $note = NoteHelper::loadByUUID($dbNote, $entityId);
+                    if (is_object($note)) {
+                        $id = $note->id;
+                        $validEntity = true;
+                    }
                 }
 
                 break;
 
             case GroupItemTypes::GROUP:
-                $group = GroupHelper::load($dbs['social'], $entityId);
-                $validEntity = is_object($group);
+                if ($dbSocial) {
+                    $group = GroupHelper::load($dbSocial, $entityId);
+                    $validEntity = is_object($group);
+                }
 
                 break;
 
             case GroupItemTypes::AWARD:
-                $group = AwardHelper::load($dbs['award'], $entityId);
-                $validEntity = is_object($group);
+                if ($dbAward) {
+                    $group = AwardHelper::load($dbAward, $entityId);
+                    $validEntity = is_object($group);
+                }
 
                 break;
         }

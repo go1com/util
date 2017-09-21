@@ -12,6 +12,7 @@ use go1\util\group\GroupHelper;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupItemTypes;
 use go1\util\group\GroupTypes;
+use go1\util\schema\mock\AwardMockTrait;
 use go1\util\schema\mock\GroupMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
@@ -28,6 +29,7 @@ class GroupHelperTest extends UtilTestCase
     use InstanceMockTrait;
     use LoMockTrait;
     use NoteMockTrait;
+    use AwardMockTrait;
 
     public function testInstanceId()
     {
@@ -123,12 +125,7 @@ class GroupHelperTest extends UtilTestCase
     public function testGetEntityIdPortal()
     {
         $instanceId = $this->createInstance($this->db, []);
-        $dbs = [
-            'go1'    => $this->db,
-            'note'   => $this->db,
-            'social' => $this->db,
-        ];
-        $entityId = GroupHelper::getEntityId($dbs, GroupItemTypes::PORTAL, $instanceId);
+        $entityId = GroupHelper::getEntityId(GroupItemTypes::PORTAL, $instanceId, null, $this->db);
 
         $this->assertEquals($instanceId, $entityId);
     }
@@ -139,12 +136,7 @@ class GroupHelperTest extends UtilTestCase
         $accountId = $this->createUser($this->db, ['mail' => 'user@go1.com']);
         EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId, $accountId);
 
-        $dbs = [
-            'go1'    => $this->db,
-            'note'   => $this->db,
-            'social' => $this->db,
-        ];
-        $entityId = GroupHelper::getEntityId($dbs, GroupItemTypes::USER, $userId, 'az.mygo1.com');
+        $entityId = GroupHelper::getEntityId(GroupItemTypes::USER, $userId, 'az.mygo1.com', $this->db);
 
         $this->assertEquals($accountId, $entityId);
     }
@@ -152,13 +144,7 @@ class GroupHelperTest extends UtilTestCase
     public function testGetEntityIdLo()
     {
         $loId = $this->createCourse($this->db, []);
-
-        $dbs = [
-            'go1'    => $this->db,
-            'note'   => $this->db,
-            'social' => $this->db,
-        ];
-        $entityId = GroupHelper::getEntityId($dbs, GroupItemTypes::LO, $loId);
+        $entityId = GroupHelper::getEntityId(GroupItemTypes::LO, $loId, null, $this->db);
 
         $this->assertEquals($loId, $entityId);
     }
@@ -166,13 +152,7 @@ class GroupHelperTest extends UtilTestCase
     public function testGetEntityIdNote()
     {
         $noteId = $this->createNote($this->db, []);
-
-        $dbs = [
-            'go1'    => $this->db,
-            'note'   => $this->db,
-            'social' => $this->db,
-        ];
-        $entityId = GroupHelper::getEntityId($dbs, GroupItemTypes::NOTE, 'NOTE_UUID');
+        $entityId = GroupHelper::getEntityId(GroupItemTypes::NOTE, 'NOTE_UUID', null, null, $this->db);
 
         $this->assertEquals($noteId, $entityId);
     }
@@ -180,15 +160,17 @@ class GroupHelperTest extends UtilTestCase
     public function testGetEntityIdGroup()
     {
         $groupId = $this->createGroup($this->db, []);
-
-        $dbs = [
-            'go1'    => $this->db,
-            'note'   => $this->db,
-            'social' => $this->db,
-        ];
-        $entityId = GroupHelper::getEntityId($dbs, GroupItemTypes::GROUP, $groupId);
+        $entityId = GroupHelper::getEntityId(GroupItemTypes::GROUP, $groupId, null, null, null, $this->db);
 
         $this->assertEquals($groupId, $entityId);
+    }
+
+    public function testGetEntityIdAward()
+    {
+        $awardId = $this->createAward($this->db, []);
+        $entityId = GroupHelper::getEntityId(GroupItemTypes::AWARD, $awardId, null, null, null, null, $this->db);
+
+        $this->assertEquals($awardId, $entityId);
     }
 
     public function testIsContent()
