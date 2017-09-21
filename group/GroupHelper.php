@@ -4,6 +4,7 @@ namespace go1\util\group;
 
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
+use go1\util\award\AwardHelper;
 use go1\util\DB;
 use go1\util\Error;
 use go1\util\lo\LoHelper;
@@ -175,7 +176,15 @@ class GroupHelper
         return $groups;
     }
 
-    public static function getEntityId(Connection $go1, Connection $dbNote, Connection $dbSocial, $entityType, $entityId, $instance = '')
+    public static function getEntityId(
+        string $entityType,
+        $entityId,
+        $instance = '',
+        Connection $go1 = null,
+        Connection $dbNote = null,
+        Connection $dbSocial = null,
+        Connection $dbAward = null
+    )
     {
         $validEntity = false;
         $id = $entityId;
@@ -200,17 +209,29 @@ class GroupHelper
                 break;
 
             case GroupItemTypes::NOTE:
-                $note = NoteHelper::loadByUUID($dbNote, $entityId);
-                if (is_object($note)) {
-                    $id = $note->id;
-                    $validEntity = true;
+                if ($dbNote) {
+                    $note = NoteHelper::loadByUUID($dbNote, $entityId);
+                    if (is_object($note)) {
+                        $id = $note->id;
+                        $validEntity = true;
+                    }
                 }
 
                 break;
 
             case GroupItemTypes::GROUP:
-                $group = GroupHelper::load($dbSocial, $entityId);
-                $validEntity = is_object($group);
+                if ($dbSocial) {
+                    $group = GroupHelper::load($dbSocial, $entityId);
+                    $validEntity = is_object($group);
+                }
+
+                break;
+
+            case GroupItemTypes::AWARD:
+                if ($dbAward) {
+                    $group = AwardHelper::load($dbAward, $entityId);
+                    $validEntity = is_object($group);
+                }
 
                 break;
         }

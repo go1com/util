@@ -9,7 +9,9 @@ class GroupItemTypes
     const PORTAL = 'portal';
     const LO     = 'lo';
     const GROUP  = 'group';
-    const ALL    = [self::USER, self::NOTE, self::PORTAL, self::LO, self::GROUP];
+    const AWARD  = 'award';
+
+    const ALL    = [self::USER, self::NOTE, self::PORTAL, self::LO, self::GROUP, self::AWARD];
 
     public static function items(string $type): array
     {
