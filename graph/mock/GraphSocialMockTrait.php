@@ -5,6 +5,7 @@ namespace go1\util\graph\mock;
 use go1\util\GraphEdgeTypes;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupStatus;
+use go1\util\group\GroupTypes;
 use GraphAware\Neo4j\Client\Client;
 
 trait GraphSocialMockTrait
@@ -53,24 +54,24 @@ trait GraphSocialMockTrait
         static $autoGroupId;
 
         $group = [
-            'id'              => isset($option['id']) ? $option['id'] : ++$autoGroupId,
-            'title'           => isset($option['title']) ? $option['title'] : uniqid('group'),
-            'created'         => isset($option['created']) ? $option['created'] : time(),
-            'visibility'      => isset($option['visibility']) ? $option['visibility'] : GroupStatus::PUBLIC,
-            'instance_id'     => isset($option['instance_id']) ? $option['instance_id'] : 0,
-            'account_id'      => isset($option['account_id']) ? $option['account_id'] : 0,
-            'content_sharing' => isset($option['content_sharing']) ? $option['content_sharing'] : false,
+            'id'              => $option['id'] ?? ++$autoGroupId,
+            'title'           => $option['title'] ?? uniqid('group'),
+            'created'         => $option['created'] ?? time(),
+            'visibility'      => $option['visibility'] ?? GroupStatus::PUBLIC,
+            'type'            => $option['type'] ?? GroupTypes::DEFAULT,
+            'instance_id'     => $option['instance_id'] ?? 0,
+            'account_id'      => $option['account_id'] ?? 0
         ];
 
+        $label = GroupTypes::graphLabel($group['type']);
         $stack = $client->stack();
-        $stack->push("MERGE (g:Group { id: {$group['id']}, name: {name} }) SET g += {data}",
+        $stack->push("MERGE (g:Group:{$label} { id: {$group['id']}, name: {name} }) SET g += {data}",
             [
                 'name' => "group:{$group['id']}",
                 'data' => [
                     'title'            => $group['title'],
                     'created'          => $group['created'],
-                    'visibility'       => $group['visibility'],
-                    'isContentSharing' => $group['content_sharing'],
+                    'visibility'       => $group['visibility']
                 ],
             ]
         );
