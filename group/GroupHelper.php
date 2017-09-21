@@ -4,6 +4,7 @@ namespace go1\util\group;
 
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
+use go1\util\award\AwardHelper;
 use go1\util\DB;
 use go1\util\Error;
 use go1\util\lo\LoHelper;
@@ -175,32 +176,32 @@ class GroupHelper
         return $groups;
     }
 
-    public static function getEntityId(Connection $go1, Connection $dbNote, Connection $dbSocial, $entityType, $entityId, $instance = '')
+    public static function getEntityId(array $dbs, string $entityType, $entityId, $instance = '')
     {
         $validEntity = false;
         $id = $entityId;
 
         switch ($entityType) {
             case GroupItemTypes::PORTAL:
-                $portalEntity = PortalHelper::load($go1, $entityId);
+                $portalEntity = PortalHelper::load($dbs['go1'], $entityId);
                 $validEntity = is_object($portalEntity);
                 break;
 
             case GroupItemTypes::USER:
-                $target = (array) UserHelper::load($go1, $entityId);
+                $target = (array) UserHelper::load($dbs['go1'], $entityId);
                 if (!empty($target) && $instance) {
-                    $id = static::getAccountId($go1, $target, $instance);
+                    $id = static::getAccountId($dbs['go1'], $target, $instance);
                     $validEntity = true;
                 }
                 break;
 
             case GroupItemTypes::LO:
-                $lo = LoHelper::load($go1, $entityId);
+                $lo = LoHelper::load($dbs['go1'], $entityId);
                 $validEntity = is_object($lo);
                 break;
 
             case GroupItemTypes::NOTE:
-                $note = NoteHelper::loadByUUID($dbNote, $entityId);
+                $note = NoteHelper::loadByUUID($dbs['note'], $entityId);
                 if (is_object($note)) {
                     $id = $note->id;
                     $validEntity = true;
@@ -209,7 +210,13 @@ class GroupHelper
                 break;
 
             case GroupItemTypes::GROUP:
-                $group = GroupHelper::load($dbSocial, $entityId);
+                $group = GroupHelper::load($dbs['social'], $entityId);
+                $validEntity = is_object($group);
+
+                break;
+
+            case GroupItemTypes::AWARD:
+                $group = AwardHelper::load($dbs['award'], $entityId);
                 $validEntity = is_object($group);
 
                 break;
