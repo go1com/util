@@ -335,49 +335,50 @@ class Schema
      * @TODO Make sure the revisions are indexed on content re-indexing.
      */
     const ENROLMENT_MAPPING = [
-        '_parent'    => ['type' => self::O_LO],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'         => ['type' => self::T_KEYWORD],
+        '_parent'           => ['type' => self::O_LO],
+        '_routing'          => ['required' => true],
+        'properties'        => [
+            'id'          => ['type' => self::T_KEYWORD],
             // Type of enrolment: enrolment, manual-record, plan-assigned.
-            'type'       => ['type' => self::T_KEYWORD],
-            'profile_id' => ['type' => self::T_INT],
-            'lo_id'      => ['type' => self::T_INT],
-            'parent_id'  => ['type' => self::T_INT],
-            'status'     => ['type' => self::T_SHORT],
-            'result'     => ['type' => self::T_INT],
-            'pass'       => ['type' => self::T_INT],
-            'assessors'  => ['type' => self::T_INT],
-            'start_date' => ['type' => self::T_DATE],
-            'end_date'   => ['type' => self::T_DATE],
-            'due_date'   => ['type' => self::T_DATE],
-            'changed'    => ['type' => self::T_DATE],
+            'type'        => ['type' => self::T_KEYWORD],
+            'profile_id'  => ['type' => self::T_INT],
+            'lo_id'       => ['type' => self::T_INT],
+            'parent_id'   => ['type' => self::T_INT],
+            'status'      => ['type' => self::T_SHORT],
+            'result'      => ['type' => self::T_INT],
+            'pass'        => ['type' => self::T_INT],
+            'assessors'   => ['type' => self::T_INT],
+            'start_date'  => ['type' => self::T_DATE],
+            'end_date'    => ['type' => self::T_DATE],
+            'due_date'    => ['type' => self::T_DATE],
+            'changed'     => ['type' => self::T_DATE],
             // Duration between end date and start date (hours).
             // @todo Support quiz and interactive.
-            'duration'   => ['type' => self::T_INT],
-            'lo'         => [
+            'duration'    => ['type' => self::T_INT],
+            'is_assigned' => ['type' => self::T_SHORT],
+            'lo'          => [
                 'properties' => self::LO_MAPPING['properties'],
             ],
-            'parent_lo'         => [
+            'parent_lo'   => [
                 'properties' => [
-                    'id'             => ['type' => self::T_KEYWORD],
-                    'type'           => ['type' => self::T_KEYWORD],
-                    'title'          => ['type' => self::T_KEYWORD] + self::ANALYZED,
-                ]
+                    'id'    => ['type' => self::T_KEYWORD],
+                    'type'  => ['type' => self::T_KEYWORD],
+                    'title' => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                ],
             ],
-            'assessor'         => [
+            'assessor'    => [
                 'properties' => [
-                    'id'           => ['type' => self::T_KEYWORD],
-                    'mail'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-                    'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-                    'first_name'   => ['type' => self::T_KEYWORD] + self::ANALYZED,
-                    'last_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
-                ]
+                    'id'         => ['type' => self::T_KEYWORD],
+                    'mail'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'name'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'first_name' => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'last_name'  => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                ],
             ],
-            'account'    => [
+            'account'     => [
                 'properties' => self::ACCOUNT_MAPPING['properties'],
             ],
-            'progress'   => [
+            'progress'    => [
                 'properties' => [
                     EnrolmentStatuses::NOT_STARTED => ['type' => self::T_INT],
                     EnrolmentStatuses::IN_PROGRESS => ['type' => self::T_INT],
@@ -385,7 +386,7 @@ class Schema
                     EnrolmentStatuses::EXPIRED     => ['type' => self::T_INT],
                 ],
             ],
-            'metadata'   => [
+            'metadata'    => [
                 'properties' => [
                     'account_id'          => ['type' => self::T_INT],
                     'course_enrolment_id' => ['type' => self::T_INT],
