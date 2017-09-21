@@ -5,7 +5,7 @@ namespace go1\util\schema\tests;
 use go1\clients\MailClient;
 use go1\clients\portal\config\MailTemplate;
 use go1\util\portal\PortalHelper;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\tests\UtilTestCase;
 

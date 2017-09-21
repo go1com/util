@@ -5,7 +5,7 @@ namespace go1\util\location;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
 use go1\util\DB;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 
 class LocationRepository
 {

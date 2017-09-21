@@ -7,7 +7,7 @@ use Doctrine\DBAL\DBALException;
 use go1\clients\MqClient;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use PDO;
 
 class RoleHelper

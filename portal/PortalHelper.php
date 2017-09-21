@@ -5,7 +5,7 @@ namespace go1\util\portal;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
 use go1\util\DB;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use stdClass;
 
 class PortalHelper

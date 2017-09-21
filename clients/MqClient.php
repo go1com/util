@@ -3,7 +3,7 @@
 namespace go1\clients;
 
 use Exception;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;

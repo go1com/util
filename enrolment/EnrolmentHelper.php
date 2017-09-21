@@ -12,7 +12,7 @@ use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use PDO;
 use stdClass;
 

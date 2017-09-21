@@ -2,7 +2,7 @@
 
 namespace go1\clients;
 
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use GuzzleHttp\Client;
 
 class SmsClient

@@ -7,7 +7,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use go1\clients\MqClient;
 use go1\util\DB;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 
 class PlanRepository
 {

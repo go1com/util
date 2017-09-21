@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\clients\portal\config\MailTemplate as Template;
 use go1\util\MailTemplate;
 use go1\util\portal\PortalChecker;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use InvalidArgumentException;
 
 class MailClient

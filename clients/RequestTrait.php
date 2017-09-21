@@ -2,7 +2,7 @@
 
 namespace go1\clients;
 
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Psr\Http\Message\ResponseInterface;

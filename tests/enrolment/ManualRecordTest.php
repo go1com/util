@@ -6,7 +6,7 @@ use Doctrine\DBAL\Schema\Schema;
 use go1\util\DB;
 use go1\util\enrolment\ManualRecord;
 use go1\util\enrolment\ManualRecordRepository;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use go1\util\schema\EnrolmentSchema;
 use go1\util\tests\UtilTestCase;
 

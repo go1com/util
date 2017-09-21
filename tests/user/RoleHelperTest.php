@@ -3,7 +3,7 @@
 namespace go1\util\tests\user;
 
 use go1\util\edge\EdgeTypes;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use go1\util\tests\UtilTestCase;
 use go1\util\user\RoleHelper;
 
