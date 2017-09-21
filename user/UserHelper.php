@@ -164,7 +164,7 @@ class UserHelper
         return JWT::encode($array, 'INTERNAL');
     }
 
-    public function format(stdClass $user)
+    public static function format(stdClass $user)
     {
         $data = is_scalar($user->data) ? json_decode($user->data, true) : $user->data;
 
