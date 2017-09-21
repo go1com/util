@@ -11,14 +11,16 @@ class MqClientTest extends UtilTestCase
     public function dataMessage()
     {
         return [
-            [(object) ['foo' => 'bar'], 'user.update', 'Missing entity ID.'],
-            [(object) ['id' => 1], 'user.update', ''],
-            [(object) ['id' => null], 'user.update', 'Missing entity ID.'],
-            [(object) [], 'user.update', 'Missing entity ID.'],
-            [['foo' => 'bar'], 'user.update', 'Missing entity ID.'],
-            [['id' => 1], 'user.update', ''],
-            [['id' => null], 'user.update', 'Missing entity ID.'],
-            [[], 'user.update', 'Missing entity ID.'],
+            [(object) ['foo' => 'bar'], 'user.update', 'Missing entity ID or original data.'],
+            [(object) ['id' => 1, 'original'=> ['id']], 'user.update', ''],
+            [(object) ['id' => null], 'user.update', 'Missing entity ID or original data.'],
+            [(object) ['original' => null], 'user.update', 'Missing entity ID or original data.'],
+            [(object) [], 'user.update', 'Missing entity ID or original data.'],
+            [['foo' => 'bar'], 'user.update', 'Missing entity ID or original data.'],
+            [['id' => 1, 'original'=> ['id']], 'user.update', ''],
+            [['id' => null], 'user.update', 'Missing entity ID or original data.'],
+            [['original' => null], 'user.update', 'Missing entity ID or original data.'],
+            [[], 'user.update', 'Missing entity ID or original data.'],
             [[], '', ''],
         ];
     }
