@@ -740,7 +740,6 @@ class Schema
     ];
 
     const AWARD_MAPPING = [
-        '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
             'id'          => ['type' => self::T_KEYWORD],
@@ -759,6 +758,12 @@ class Schema
             'items_count' => ['type' => self::T_INT],
             'tags'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'locale'      => ['type' => self::T_KEYWORD],
+            'metadata'    => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
