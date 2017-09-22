@@ -152,6 +152,6 @@ class EdgeTypes
     const HAS_PLAN                   = 900; # T: gc_plan.id         | S: enrolment.id
 
     # Group relationships
-    const HAS_GROUP_SYSTEM          = 1000;
-    const HAS_GROUP_CONTENT_SHARING = 1001;
+    const HAS_GROUP_SYSTEM          = 1000; # T: social_group.id    | S: gc_instance.id
+    const HAS_GROUP_CONTENT_SHARING = 1001; # T: social_group.id    | S: gc_lo.id
 }
