@@ -21,12 +21,13 @@ class ScormSchema {
             $package = $schema->createTable('scorm_package');
             $package->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $package->addColumn('uuid', Type::STRING);
-            $package->addColumn('pc_id', Type::INTEGER, ['unsigned' => true, 'notnull'  => false]);
+            $package->addColumn('pc_id', Type::INTEGER);
             $package->addColumn('lo_id', Type::INTEGER);
-            $package->addColumn('created', Type::INTEGER);
-            $package->addColumn('updated', Type::INTEGER, ['notnull' => false]);
-            $package->addColumn('expire', Type::INTEGER);
-            $package->addColumn('data', 'blob');
+            $package->addColumn('created', Type::INTEGER, ['unsigned' => true]);
+            $package->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
+            $package->addColumn('expire', Type::INTEGER, ['unsigned' => true]);
+            $package->addColumn('data', Type::BLOB);
+            $package->addColumn('status', Type::SMALLINT);
             $package->setPrimaryKey(['id']);
             $package->addUniqueIndex(['uuid']);
             $package->addIndex(['lo_id']);
@@ -34,6 +35,7 @@ class ScormSchema {
             $package->addIndex(['created']);
             $package->addIndex(['updated']);
             $package->addIndex(['expire']);
+            $package->addIndex(['status']);
         }
     }
 }
