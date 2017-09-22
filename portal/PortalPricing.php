@@ -14,26 +14,29 @@ class PortalPricing
     const REGIONAL                      = ['AU', 'EU', 'UK', 'US'];
     const REGIONAL_DEFAULT              = 'AU';
     const PLATFORM_FREE_LICENSE         = 5;
-    const PLATFORM_UNLIMITED_LICENSE      = -1;
+    const PLATFORM_UNLIMITED_LICENSE    = -1;
     const PLATFORM_H5                   = [ // > 5 licenses
-        'AU'    => ['currency' => 'AUD', 'price' => 2],
-        'EU'    => ['currency' => 'EUR', 'price' => 1.6],
-        'UK'    => ['currency' => 'GBP', 'price' => 1.5],
-        'US'    => ['currency' => 'USD', 'price' => 2],
+        'AU'    => ['currency' => 'AUD', 'price' => 5],
+        'EU'    => ['currency' => 'EUR', 'price' => 4.5],
+        'UK'    => ['currency' => 'GBP', 'price' => 4],
+        'US'    => ['currency' => 'USD', 'price' => 5],
+        'OTHER' => ['currency' => 'USD', 'price' => 5],
     ];
 
     const PREMIUM_LICENSE               = 20;
     const PREMIUM_LE20                  = [// <= 20 licenses
-        'AU'    => ['currency' => 'AUD', 'price' => 9],
-        'EU'    => ['currency' => 'EUR', 'price' => 7],
-        'UK'    => ['currency' => 'GBP', 'price' => 6],
-        'US'    => ['currency' => 'USD', 'price' => 9],
+       'AU'    => ['currency' => 'AUD', 'price' => 9],
+       'EU'    => ['currency' => 'EUR', 'price' => 7],
+       'UK'    => ['currency' => 'GBP', 'price' => 6],
+       'US'    => ['currency' => 'USD', 'price' => 9],
+       'OTHER' => ['currency' => 'USD', 'price' => 9],
     ];
     const PREMIUM_H20                   = [// > 20 licenses
-        'AU'    => ['currency' => 'AUD', 'price' => 8],
-        'EU'    => ['currency' => 'EUR', 'price' => 6],
-        'UK'    => ['currency' => 'GBP', 'price' => 5],
-        'US'    => ['currency' => 'USD', 'price' => 8],
+       'AU'    => ['currency' => 'AUD', 'price' => 8],
+       'EU'    => ['currency' => 'EUR', 'price' => 6],
+       'UK'    => ['currency' => 'GBP', 'price' => 5],
+       'US'    => ['currency' => 'USD', 'price' => 8],
+       'OTHER' => ['currency' => 'USD', 'price' => 8],
     ];
 
     const PLAN_STATUS_FREE              = 0;
