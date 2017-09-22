@@ -110,6 +110,10 @@ class PortalHelper
             ?? ($portal->data->configuration->logo
                 ?? ($portal->data->logo ?? ''));
 
+        if (!$logo) {
+            return $logo;
+        }
+
         return (filter_var($logo, FILTER_VALIDATE_URL) === false) ? ('https:' . $logo) : $logo;
     }
 
