@@ -8,6 +8,10 @@ class AwardEnrolmentStatuses
     const COMPLETED   = 2;
     const EXPIRED     = 3;
 
+    const S_IN_PROGRESS = 'in-progress';
+    const S_COMPLETED   = 'completed';
+    const S_EXPIRED     = 'expired';
+
     public static function all()
     {
         return [

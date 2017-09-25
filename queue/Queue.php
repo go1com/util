@@ -113,6 +113,9 @@ class Queue
     const AWARD_ACHIEVEMENT_CREATE   = 'award.achievement.create';
     const AWARD_ACHIEVEMENT_UPDATE   = 'award.achievement.update';
     const AWARD_ACHIEVEMENT_DELETE   = 'award.achievement.delete';
+    const AWARD_ENROLMENT_CREATE     = 'award.enrolment.create';
+    const AWARD_ENROLMENT_UPDATE     = 'award.enrolment.update';
+    const AWARD_ENROLMENT_DELETE     = 'award.enrolment.delete';
     const WORKER_QUEUE_NAME          = 'worker';
     const MAIL_LOG_CREATE            = 'mail-log.create';
     const NOTIFY_PORTAL_USER_PLAN    = 'notify.portal.user_plan_reached';
@@ -173,4 +176,5 @@ class Queue
     const DO_USER_UNBLOCK_MAIL                 = 'do.user.unblock.mail'; # String mail
     const DO_USER_UNBLOCK_IP                   = 'do.user.unblock.ip'; # String ip
     const DO_NOTIFY                            = 'do.notify'; # {task: string NOTIFY_TASKS, body: array TASK_BODY}
+    const DO_AWARD_CRON                        = 'do.award.cron'; # { task: STRING }
 }
