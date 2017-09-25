@@ -111,7 +111,7 @@ class AwardSchema
             $enrolment->addColumn('start_date', Type::INTEGER, ['notnull' => false]);
             $enrolment->addColumn('end_date', Type::INTEGER, ['notnull' => false]);
             $enrolment->addColumn('status', Type::SMALLINT, ['description' => ['1: In progress, 2: Completed, 3: Expired']]);
-            $enrolment->addColumn('quantity', Type::FLOAT, ['description' => 'Number of award enrolment current quantity']);
+            $enrolment->addColumn('quantity', Type::FLOAT, ['description' => 'Number of award enrolment current quantity', 'default' => 0.0]);
             $enrolment->addColumn('data', 'blob', ['notnull' => false]);
             $enrolment->addColumn('created', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('updated', 'integer', ['unsigned' => true]);
@@ -139,6 +139,7 @@ class AwardSchema
             $enrolmentRevision->addColumn('start_date', Type::INTEGER, ['notnull' => false]);
             $enrolmentRevision->addColumn('end_date', Type::INTEGER, ['notnull' => false]);
             $enrolmentRevision->addColumn('status', Type::SMALLINT);
+            $enrolmentRevision->addColumn('quantity', Type::FLOAT, ['default' => 0.0]);
             $enrolmentRevision->addColumn('data', 'blob', ['notnull' => false]);
             $enrolmentRevision->addColumn('created', 'integer', ['unsigned' => true]);
 
@@ -149,6 +150,7 @@ class AwardSchema
             $enrolmentRevision->addIndex(['start_date']);
             $enrolmentRevision->addIndex(['end_date']);
             $enrolmentRevision->addIndex(['status']);
+            $enrolmentRevision->addIndex(['quantity']);
             $enrolmentRevision->addIndex(['created']);
         }
     }
