@@ -246,6 +246,7 @@ class Schema
             'marketplace'    => ['type' => self::T_INT],
             'sharing'        => ['type' => self::T_SHORT],
             'instance_id'    => ['type' => self::T_INT],
+            'portal_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'language'       => ['type' => self::T_KEYWORD],
             'locale'         => ['type' => self::T_KEYWORD],
             'title'          => ['type' => self::T_KEYWORD] + self::ANALYZED,
