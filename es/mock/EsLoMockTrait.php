@@ -24,6 +24,7 @@ trait EsLoMockTrait
             'sharing'        => $options['sharing'] ?? 0,
             'language'       => $options['language'] ?? 'en',
             'instance_id'    => $options['instance_id'] ?? 0,
+            'portal_name'    => $options['portal_name'] ?? 'az.mygo1.com',
             'locale'         => $options['locale'] ?? 0,
             'title'          => $options['title'] ?? 'Foo course',
             'description'    => $options['description'] ?? '',
