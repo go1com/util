@@ -59,13 +59,17 @@ class EdgeTypes
         self::HAS_FOLLOWING,
     ];
 
+    # Event relationships
+    # - Course => HAS_LI => LI(type = event) => HAS_EVENT => gc_event
+    # - Course/Module => HAS_EVENT => gc_event
+
     # Learning object relationships
     # ---------------------
     const HAS_LP_ITEM                 = 1;  # T: ?                    | S: Learning object (LP only)
     const HAS_PRODUCT                 = 2;  # T: ?                    | S: Learning object
-    const HAS_EVENT                   = 3;  # T: ?                    | S: Learning object (course, module)
+    const HAS_EVENT                   = 3;  # T: gc_event.id          | S: Learning object (course, module, li type event)
     const HAS_TAG                     = 4;  # T: Tag                  | S: Learning object
-    const HAS_LI                      = 5;  # T: ?                    | S: Learning object (module only)
+    const HAS_LI                      = 5;  # T: ?                    | S: Learning object (module only, course if li type event)
     const HAS_WORKSHOP                = 6;  # T: ?                    | S: ?
     const HAS_MODULE                  = 7;  # T: gc_lo.id             | S: gc_lo.id
     const HAS_ELECTIVE_LO             = 8;  # T: ?                    | S: ?
