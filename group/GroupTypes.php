@@ -15,7 +15,7 @@ class GroupTypes
     {
         switch ($type) {
             case self::CONTENT:
-                $label = 'GroupDefault';
+                $label = 'GroupContent';
 
                 break;
             case self::CONTENT_PACKAGE:
