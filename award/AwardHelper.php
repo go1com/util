@@ -89,26 +89,33 @@ class AwardHelper
         return $awardManualItem;
     }
 
-    public static function loadAchievementBy(Connection $db, array $wheres, array $whereTypes = [], $select = '*', $fetchMode = DB::OBJ)
+    public static function loadAchievement(Connection $db, int $achievementId)
     {
-        return ($achievements = self::loadAchievementsBy($db, $wheres, $whereTypes, $select, $fetchMode))
+        return $db
+            ->executeQuery('SELECT * FROM award_achievement WHERE id = ?', [$achievementId])
+            ->fetch(DB::OBJ);
+    }
+
+    public static function loadAchievementBy(Connection $db, int $awardItemId, int $userId)
+    {
+        return ($achievements = self::loadAchievementsBy($db, [$awardItemId], [$userId]))
             ? $achievements[0]
             : null;
     }
 
-    public static function loadAchievementsBy(Connection $db, array $wheres, array $whereTypes = [], $select = '*', $fetchMode = DB::OBJ)
+    public static function loadAchievementsBy(Connection $db, array $awardItemIds, array $userIds = [])
     {
         $q = $db->createQueryBuilder();
         $q
-            ->select($select)
-            ->from('award_achievement');
-        foreach ($wheres as $key => $value) {
-            $expr = is_array($value) ? $q->expr()->in($key, ":$key") : $q->expr()->eq($key, ":$key");
-            $type = $whereTypes[$key] ?? (is_array($value) ? DB::INTEGERS : DB::INTEGER);
-            $q->andWhere($expr)->setParameter(":$key", $value, $type);
-        }
+            ->select('*')
+            ->from('award_achievement')
+            ->where($q->expr()->in('award_item_id', ':award_item_id'))
+            ->setParameter(':award_item_id', $awardItemIds, DB::INTEGERS);
+        $userIds && $q
+            ->andWhere($q->expr()->in('user_id', ':user_id'))
+            ->setParameter(':user_id', $userIds, DB::INTEGERS);
 
-        return $q->execute()->fetchAll($fetchMode);
+        return $q->execute()->fetchAll(DB::OBJ);
     }
 
     public static function loadEnrolment(Connection $db, int $awardEnrolmentId)
