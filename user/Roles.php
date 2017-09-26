@@ -11,12 +11,13 @@ class Roles
     const TUTOR         = 'tutor';
     const ASSESSOR      = 'tutor';
     const MANAGER       = 'manager';
+    const TAM           = 'training account manager';
     const ANONYMOUS     = 'anonymous';
 
     const ACCOUNTS_ROLES = [self::ROOT, self::AUTHENTICATED];
     const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::STUDENT, self::TUTOR, self::MANAGER];
 
-    const NAMES         = [
+    const NAMES = [
         self::ADMIN    => 'Administrator',
         self::STUDENT  => 'Learner',
         self::ASSESSOR => 'Assessor',
