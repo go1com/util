@@ -67,7 +67,12 @@ class Text
 
     public static function parseInlineTags(string $string)
     {
-        return array_filter(explode('] [', trim($string, '[]')));
+        preg_match_all('/\[+([^[]+)\]/', $string, $tags);
+        $tags = array_map(function ($tag) {
+            return trim(preg_replace(['/\[/', '/\]/'], '', $tag, 1));
+        }, $tags[0]);
+
+        return array_filter($tags);
     }
 
     public static function toSnakeCase($input)

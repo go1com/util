@@ -75,4 +75,26 @@ class TextTest extends TestCase
     {
         $this->assertEquals($validString, Text::fileName($fileName));
     }
+
+    public function dataParseInlineTags()
+    {
+        return [
+            ['', []],
+            ['foo', []],
+            ['[foo]', ['foo']],
+            ['[foo bar]', ['foo bar']],
+            ['[[foo]', ['[foo']],
+            ['[foo]]', ['foo]']],
+            ['[[foo]]', ['[foo]']],
+            ['[[foo bar]] [[baz qux] [qux quux]]', ['[foo bar]', '[baz qux', 'qux quux]']],
+        ];
+    }
+
+    /**
+     * @dataProvider dataParseInlineTags
+     */
+    public function testParseInlineTags($tagString, $expectedTags)
+    {
+        $this->assertEquals($expectedTags, Text::parseInlineTags($tagString));
+    }
 }
