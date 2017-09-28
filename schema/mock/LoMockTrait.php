@@ -7,6 +7,7 @@ use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\Text;
 
 trait LoMockTrait
 {
@@ -98,11 +99,9 @@ trait LoMockTrait
         }
 
         if (!empty($options['tags'])) {
-            foreach (explode(' ', $options['tags']) as $tag) {
-                $tag = trim($tag, '[] ');
-                if ($tag) {
-                    $this->postTag($db, $instanceId, $tag);
-                }
+            $tags = Text::parseInlineTags($options['tags']);
+            foreach ($tags as $tag) {
+                $this->postTag($db, $instanceId, $tag);
             }
         }
 
