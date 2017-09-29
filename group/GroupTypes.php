@@ -16,19 +16,18 @@ class GroupTypes
         switch ($type) {
             case self::CONTENT:
                 $label = "Content";
-
                 break;
+
             case self::CONTENT_PACKAGE:
                 $label = "Recipient";
-
                 break;
+
             case self::DEFAULT:
                 $label = "Discussion";
-
                 break;
+
             default:
                 $label = "";
-
                 break;
         }
 
