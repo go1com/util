@@ -13,6 +13,7 @@ class Schema
     const ALL_INDEX         = ES_INDEX . '*';
     const MARKETPLACE_INDEX = ES_INDEX . '_marketplace';
     const LOG_INDEX         = ES_INDEX . '_log';
+    const ACTIVITY_INDEX    = ES_INDEX . '_activity';
 
     const TEMP = -32;
 
@@ -37,6 +38,7 @@ class Schema
     const O_CONFIG              = 'configuration';
     const O_USER                = 'user';
     const O_ACCOUNT             = 'account';
+    const O_ACTIVITY            = 'activity';
     const O_LO                  = 'lo';
     const O_PLAN                = 'plan';
     const O_ENROLMENT           = 'enrolment';
@@ -833,6 +835,28 @@ class Schema
             'quantity'      => ['type' => self::T_DOUBLE],
             'created'       => ['type' => self::T_DATE],
         ],
+    ];
+
+    const ACTIVITY_MAPPING = [
+        '_parent'    => ['type' => self::O_ACTIVITY],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'          => ['type' => self::T_KEYWORD],
+            'instance_id' => ['type' => self::T_INT],
+            'actor_id'    => ['type' => self::T_INT],
+            'user_id'     => ['type' => self::T_INT],
+            'entity_type' => ['type' => self::T_KEYWORD],
+            'entity_id'   => ['type' => self::T_INT],
+            'created'     => ['type' => self::T_DATE],
+            'updated'     => ['type' => self::T_DATE],
+            'tokens'      => [
+                'properties' => [
+                    'actor'  => ['type' => self::T_KEYWORD],
+                    'user'   => ['type' => self::T_KEYWORD],
+                    'entity' => ['type' => self::T_KEYWORD],
+                ],
+            ],
+        ]
     ];
 
     public static function portalIndex(int $portalId)
