@@ -849,7 +849,7 @@ class Schema
             'entity_id'   => ['type' => self::T_INT],
             'created'     => ['type' => self::T_DATE],
             'updated'     => ['type' => self::T_DATE],
-            'tokens'      => [
+            'context'     => [
                 'properties' => [
                     'actor'  => ['type' => self::T_KEYWORD],
                     'user'   => ['type' => self::T_KEYWORD],
