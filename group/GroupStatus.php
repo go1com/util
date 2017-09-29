@@ -14,19 +14,18 @@ class GroupStatus
         switch ($status) {
             case self::PRIVATE:
                 $label = "Private";
-
                 break;
+
             case self::PUBLIC:
                 $label = "Public";
-
                 break;
+
           case self::LOCKED:
                 $label = "Locked";
-
                 break;
+
             default:
                 $label = "";
-
                 break;
         }
 
@@ -39,21 +38,20 @@ class GroupStatus
             case "Private":
             case "private":
                 $status = self::PRIVATE;
-
                 break;
+
             case "Public":
             case "public":
                 $status = self::PUBLIC;
-
                 break;
+
             case "Locked":
             case "locked":
                 $status = self::LOCKED;
-
                 break;
+
             default:
                 $status = 0;
-
                 break;
         }
 

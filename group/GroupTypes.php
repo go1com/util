@@ -40,26 +40,22 @@ class GroupTypes
         switch ($type) {
             case self::CONTENT:
                 $label = 'GroupContent';
-
                 break;
+
             case self::CONTENT_PACKAGE:
                 $label = 'GroupContentPackage';
-
                 break;
 
             case self::CONTENT_SHARING:
                 $label = 'GroupContentSharing';
-
                 break;
 
             case self::SYSTEM:
                 $label = 'GroupSystem';
-
                 break;
 
             default:
                 $label = 'GroupDefault';
-
                 break;
         }
 
@@ -72,21 +68,20 @@ class GroupTypes
             case "Content":
             case "content":
                 $type = self::CONTENT;
-
                 break;
+
             case "Recipient":
             case "recipient":
                 $type = self::CONTENT_PACKAGE;
-
                 break;
+
             case "Discussion":
             case "discussion":
                 $type = self::DEFAULT;
-
                 break;
+
             default:
                 $type = '';
-
                 break;
         }
 
