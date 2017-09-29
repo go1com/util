@@ -17,4 +17,6 @@ class QueueContext
     const ACTION_USER_CREATE_REGISTER     = 'action.user_create.register';      // context.is_new is required
     const ACTION_USER_CREATE_INVITE       = 'action.user_create.invite';        // context.is_new is required
     const ACTION_USER_CREATE_IMPORT       = 'action.user_create.import';        // context.is_new is required
+
+    const ACTION_ONBOARD_WELCOME          = 'action.onboard.welcome';
 }
