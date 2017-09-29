@@ -61,7 +61,7 @@ class GroupTypes
         return $label;
     }
 
-    public static function value(string $label): int
+    public static function value(string $label): string
     {
         switch ($label) {
             case "Content":
