@@ -294,6 +294,14 @@ class Schema
                     'path' => ['type' => self::T_TEXT],
                 ]
             ],
+            'location'       => [
+                'properties' => [
+                    'id'           => ['type' => self::T_KEYWORD],
+                    'country'      => ['type' => self::T_KEYWORD],
+                    'locality'     => ['type' => self::T_KEYWORD],
+                    'thoroughfare' => ['type' => self::T_KEYWORD],
+                ],
+            ],
             'metadata'       => [
                 'properties' => [
                     'parents_authors_ids' => ['type' => self::T_INT],
