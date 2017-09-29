@@ -13,6 +13,7 @@ class ActivitySchema
             $activity = $schema->createTable('activity');
             $activity->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $activity->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
+            $activity->addColumn('actor_id', Type::INTEGER, ['unsigned' => true]);
             $activity->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $activity->addColumn('action_id', Type::INTEGER, ['unsigned' => true]);
             $activity->addColumn('entity_type', Type::STRING);
@@ -22,6 +23,7 @@ class ActivitySchema
             $activity->addColumn('data', Type::BLOB, ['notnull' => false]);
             $activity->setPrimaryKey(['id']);
             $activity->addIndex(['instance_id']);
+            $activity->addIndex(['actor_id']);
             $activity->addIndex(['user_id']);
             $activity->addIndex(['entity_type']);
             $activity->addIndex(['entity_id']);
