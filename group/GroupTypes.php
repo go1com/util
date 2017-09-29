@@ -11,6 +11,30 @@ class GroupTypes
     const SYSTEM          = 'system';          # Portal group, created by onboard wizard or portal sharing process, contain any items shared to a portal
     const ALL             = [self::DEFAULT, self::CONTENT_PACKAGE, self::CONTENT_SHARING, self::CONTENT, self::SYSTEM];
 
+    public static function label(string $type): string
+    {
+        switch ($type) {
+            case self::CONTENT:
+                $label = "Content";
+
+                break;
+            case self::CONTENT_PACKAGE:
+                $label = "Recipient";
+
+                break;
+            case self::DEFAULT:
+                $label = "Discussion";
+
+                break;
+            default:
+                $label = "";
+
+                break;
+        }
+
+        return $label;
+    }
+
     public static function graphLabel(string $type)
     {
         switch ($type) {
@@ -40,5 +64,32 @@ class GroupTypes
         }
 
         return $label;
+    }
+
+    public static function value(string $label): int
+    {
+        switch ($label) {
+            case "Content":
+            case "content":
+                $type = self::CONTENT;
+
+                break;
+            case "Recipient":
+            case "recipient":
+                $type = self::CONTENT_PACKAGE;
+
+                break;
+            case "Discussion":
+            case "discussion":
+                $type = self::DEFAULT;
+
+                break;
+            default:
+                $type = '';
+
+                break;
+        }
+
+        return $type;
     }
 }
