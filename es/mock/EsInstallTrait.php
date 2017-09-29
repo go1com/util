@@ -33,6 +33,13 @@ trait EsInstallTrait
                 'body'  => Schema::BODY + $settings,
             ]);
         }
+
+        if (!$client->indices()->exists(['index' => Schema::ACTIVITY_INDEX])) {
+            $client->indices()->create([
+                'index' => Schema::ACTIVITY_INDEX,
+                'body'  => Schema::BODY + $settings,
+            ]);
+        }
     }
 
     public function installPortalIndex(Client $client, int $portalId)
