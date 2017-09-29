@@ -243,6 +243,18 @@ class UserHelper
         return $db->fetchColumn('SELECT id FROM gc_role WHERE name = ? AND instance = ?', [$roleName, $instance]);
     }
 
+    public static function isStaff(array $userRoles): bool
+    {
+        $staffRoles = array_diff(Roles::ACCOUNTS_ROLES, [Roles::AUTHENTICATED]);
+        foreach ($userRoles as $userRole) {
+            if (in_array($userRole, $staffRoles)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function userInstanceIds(Connection $db, string $mail): array
     {
         $sql = 'SELECT gc_instance.id FROM gc_instance ';
