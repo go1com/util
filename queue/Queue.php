@@ -62,6 +62,9 @@ class Queue
     const TAG_UPDATE                 = 'tag.update';
     const TAG_DELETE                 = 'tag.delete';
     const CUSTOM_TAG_PUSH            = 'custom-tag.push'; # Body: {instance_id: INT, lo_id: INT}
+    const CUSTOM_TAG_CREATE          = 'custom-tag.create';
+    const CUSTOM_TAG_UPDATE          = 'custom-tag.update';
+    const CUSTOM_TAG_DELETE          = 'custom-tag.delete';
     const COUPON_CREATE              = 'coupon.create';
     const COUPON_UPDATE              = 'coupon.update';
     const COUPON_DELETE              = 'coupon.delete';

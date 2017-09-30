@@ -171,4 +171,14 @@ trait LoMockTrait
 
         return $eventId;
     }
+
+    public function createCustomTag(Connection $db, int $instanceId, int $loId, string $tag, bool $status = true)
+    {
+        $db->insert('gc_lo_tag', [
+            'instance_id' => $instanceId,
+            'lo_id'       => $loId,
+            'tag'         => $tag,
+            'status'      => $status,
+        ]);
+    }
 }
