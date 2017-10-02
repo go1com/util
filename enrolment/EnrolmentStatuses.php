@@ -29,6 +29,12 @@ class EnrolmentStatuses
     const COMPLETED   = 'completed';   # you get this state when you finish the course
     const EXPIRED     = 'expired';     # your enrolment was completed, but it's expired.
 
+    # Enrolment pass
+    # ---------------------
+    # passed:          1
+    # not passed:      0
+    # pending review: -1
+
     // Numeric values for the statuses. Being used in ES.
     const I_NOT_STARTED = -20;
     const I_PENDING     = -10;
