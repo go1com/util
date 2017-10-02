@@ -56,6 +56,7 @@ class AssignmentSchema
             $revision = $schema->createTable('asm_submission_revision');
             $revision->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $revision->addColumn('submission_id', 'integer', ['unsigned' => true]);
+            $revision->addColumn('actor_id', 'integer', ['unsigned' => true, 'not_null' => false, 'description' => 'Person mark assignment submission for users.']);
             $revision->addColumn('created', 'integer', ['unsigned' => true]);
             $revision->addColumn('updated', 'integer', ['unsigned' => true]);
             $revision->addColumn('status', 'smallint', ['notnull' => false]);
