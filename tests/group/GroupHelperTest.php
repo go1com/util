@@ -347,4 +347,12 @@ class GroupHelperTest extends UtilTestCase
         $groups = GroupHelper::userGroups($this->db, $this->db, $account3Id, $c['accounts_name']);
         $this->assertEquals(['Group 4', 'Group 3'], $groups);
     }
+
+    public function testHostContentSharingGroup()
+    {
+        $groupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => 'lo:345']);
+
+        $this->assertEquals($groupId, GroupHelper::hostContentSharingGroup($this->db, 'lo', 345)->id);
+        $this->assertFalse(GroupHelper::hostContentSharingGroup($this->db, 'lo', 456));
+    }
 }

@@ -40,6 +40,14 @@ class GroupHelper
         return $groups ?? [];
     }
 
+    public static function hostContentSharingGroup(Connection $db, string $hostEntityType, $hostEntityId)
+    {
+        $groupId = 'SELECT id FROM social_group WHERE type = ? AND title = ?';
+        $groupId = $db->fetchColumn($groupId, [GroupTypes::CONTENT_SHARING, "{$hostEntityType}:{$hostEntityId}"]);
+
+        return $groupId ? self::load($db, $groupId) : false;
+    }
+
     public static function instanceId(Connection $db, int $groupId)
     {
         static $instanceIds = [];
