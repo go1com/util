@@ -11,8 +11,9 @@ class PortalPricing
     const USER_LICENSES_MULTIPLY_RATE   = 2;
     const PRODUCT_PLATFORM              = 'platform';
     const PRODUCT_PREMIUM               = 'premium';
-    const REGIONAL                      = ['AU', 'EU', 'UK', 'US'];
+    const REGIONAL                      = ['AU', 'EU', 'UK', 'US', self::REGIONAL_OTHER];
     const REGIONAL_DEFAULT              = 'AU';
+    const REGIONAL_OTHER                = 'OTHER';
     const PLATFORM_FREE_LICENSE         = 5;
     const PLATFORM_UNLIMITED_LICENSE    = -1;
     const PLATFORM_H5                   = [ // > 5 licenses
