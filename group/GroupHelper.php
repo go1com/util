@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\award\AwardHelper;
 use go1\util\DB;
-use go1\util\Error;
 use go1\util\lo\LoHelper;
 use go1\util\note\NoteHelper;
 use go1\util\portal\PortalHelper;
@@ -23,33 +22,22 @@ class GroupHelper
 
     public static function load(Connection $db, int $id)
     {
-        $sql = 'SELECT * FROM social_group WHERE id = ?';
+        $groups = self::loadMultiple($db, [$id]);
 
-        $group = $db->executeQuery($sql, [$id])->fetch(DB::OBJ);
-        if ($group) {
-            self::format($group);
-            $groups = [$group];
-            self::countMembers($db, $groups);
-            $group = $groups[0];
-        }
-
-        return $group;
+        return $groups[0] ?? false;
     }
 
     public static function loadMultiple(Connection $db, array $ids)
     {
-        $groups = [];
-        $sql = 'SELECT * FROM social_group WHERE id IN (?) ORDER BY id DESC';
-
-        $query = $db->executeQuery($sql, [$ids], [Connection::PARAM_INT_ARRAY]);
-        while ($group = $query->fetch(DB::OBJ)) {
+        $q = $db->executeQuery('SELECT * FROM social_group WHERE id IN (?) ORDER BY id DESC', [$ids], [Connection::PARAM_INT_ARRAY]);
+        while ($group = $q->fetch(DB::OBJ)) {
             self::format($group);
             $groups[] = $group;
         }
 
         !empty($groups) && self::countMembers($db, $groups);
 
-        return $groups;
+        return $groups ?? [];
     }
 
     public static function instanceId(Connection $db, int $groupId)
@@ -70,29 +58,24 @@ class GroupHelper
     public static function findItems(Connection $db, int $groupId, string $entityType = null, $limit = 50, $offset = 0, $all = false)
     {
         while (true) {
-            $qb = $db->createQueryBuilder();
-            $qb->select('*')
-               ->from('social_group_item', 'item')
-               ->where('status = :status')
-               ->setParameter(':status', GroupItemStatus::ACTIVE)
-               ->andWhere('group_id = :groupId')
-               ->setParameter(':groupId', $groupId);
-            $entityType && $qb
-                ->andWhere('entity_type = :entityType')
-                ->setParameter(':entityType', $entityType);
-            $items = $qb
-                ->setFirstResult($offset)
-                ->setMaxResults($limit)
-                ->execute()
-                ->fetchAll(DB::OBJ);
-            if ($items) {
-                foreach ($items as $item) {
-                    yield $item;
-                }
+            $continue = false;
+            $q = $db->createQueryBuilder();
+            $q->select('*')
+              ->setFirstResult($offset)
+              ->setMaxResults($limit)
+              ->from('social_group_item', 'item')
+              ->where('status = :status')->setParameter(':status', GroupItemStatus::ACTIVE)
+              ->andWhere('group_id = :groupId')->setParameter(':groupId', $groupId);
+
+            $entityType && $q->andWhere('entity_type = :entityType')->setParameter(':entityType', $entityType);
+            $q = $q->execute();
+            while ($item = $q->fetch(DB::OBJ)) {
+                $continue = true;
+                yield $item;
             }
 
             $offset += $limit;
-            if (!$items || !$all) {
+            if (!$continue || !$all) {
                 break;
             }
         }
@@ -100,14 +83,15 @@ class GroupHelper
 
     public static function isItemOf(Connection $db, string $entityType, int $entityId, int $groupId, int $status = GroupItemStatus::ACTIVE): bool
     {
-        $sql = 'SELECT 1 FROM social_group_item WHERE entity_type = ? AND entity_id = ? AND group_id = ? AND status = ?';
-
-        return $db->fetchColumn($sql, [$entityType, $entityId, $groupId, $status]) ? true : false;
+        return $db->fetchColumn(
+            'SELECT 1 FROM social_group_item WHERE entity_type = ? AND entity_id = ? AND group_id = ? AND status = ?',
+            [$entityType, $entityId, $groupId, $status]
+        );
     }
 
-    public static function canAccess(Connection $dbGo1, Connection $dbSocial, int $userId, int $groupId): bool
+    public static function canAccess(Connection $go1, Connection $social, int $userId, int $groupId): bool
     {
-        if (!$group = static::load($dbSocial, $groupId)) {
+        if (!$group = static::load($social, $groupId)) {
             return false;
         }
 
@@ -115,19 +99,19 @@ class GroupHelper
             return true;
         }
 
-        if (!$portalName = PortalHelper::nameFromId($dbGo1, $group->instance_id)) {
+        if (!$instance = PortalHelper::nameFromId($go1, $group->instance_id)) {
             return false;
         }
 
-        if (!$user = UserHelper::load($dbGo1, $userId)) {
+        if (!$user = UserHelper::load($go1, $userId)) {
             return false;
         }
 
-        if (!$account = UserHelper::loadByEmail($dbGo1, $portalName, $user->mail)) {
+        if (!$account = UserHelper::loadByEmail($go1, $instance, $user->mail)) {
             return false;
         }
 
-        return static::isItemOf($dbSocial, GroupItemTypes::USER, $account->id, $groupId);
+        return static::isItemOf($social, GroupItemTypes::USER, $account->id, $groupId);
     }
 
     public static function groupAccess(int $groupUserId, int $userId, AccessChecker $accessChecker = null, Request $req = null, string $instance = ''): bool
@@ -154,26 +138,19 @@ class GroupHelper
         $users = [(array) $user];
         (new UserHelper)->attachRootAccount($db, $users, $instance);
 
-        if (!isset($users[0]['root']['id'])) {
-            return 0;
-        }
-
-        return $users[0]['root']['id'];
+        return $users[0]['root']['id'] ?? 0;
     }
 
-    public static function userGroups(Connection $go1, Connection $social, int $accountId, $accountsName)
+    public static function userGroups(Connection $go1, Connection $social, int $accountId, string $accountsName)
     {
-        $userId  = UserHelper::userId($go1, $accountId, $accountsName);
+        $userId = UserHelper::userId($go1, $accountId, $accountsName);
+        $memberGroupIds = $social
+            ->executeQuery('SELECT group_id FROM social_group_item WHERE entity_type = ? AND entity_id = ?', [GroupItemTypes::USER, $accountId])
+            ->fetchAll(PDO::FETCH_COLUMN);
 
-        $sql = 'SELECT group_id FROM social_group_item ';
-        $sql .= 'WHERE entity_type = ? ';
-        $sql .= 'AND entity_id = ?';
-        $memberGroupIds = $social->executeQuery($sql, [GroupItemTypes::USER, $accountId])->fetchAll(PDO::FETCH_COLUMN);
-
-        $sql = 'SELECT title FROM social_group WHERE user_id = ? OR id IN (?)';
-        $groups = $social->executeQuery($sql, [$userId, $memberGroupIds], [PDO::PARAM_INT, Connection::PARAM_INT_ARRAY])->fetchAll(PDO::FETCH_COLUMN);
-
-        return $groups;
+        return $social
+            ->executeQuery('SELECT title FROM social_group WHERE user_id = ? OR id IN (?)', [$userId, $memberGroupIds], [PDO::PARAM_INT, Connection::PARAM_INT_ARRAY])
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     public static function getEntityId(
@@ -245,9 +222,7 @@ class GroupHelper
             return $group->type == GroupTypes::CONTENT;
         }
 
-        $check = $group->data->premium ?? false;
-
-        return $check ? true : false;
+        return ($group->data->premium ?? false) ? true : false;
     }
 
     public static function isContentPackage(stdClass $group)
@@ -256,9 +231,7 @@ class GroupHelper
             return $group->type == GroupTypes::CONTENT_PACKAGE;
         }
 
-        $check = $group->data->marketplace ?? 0;
-
-        return $check ? true : false;
+        return ($group->data->marketplace ?? 0) ? true : false;
     }
 
     /**
@@ -333,6 +306,7 @@ class GroupHelper
                 ':groupId' => $groupId,
                 ':status'  => isset($options['status']) ? $options['status'] : GroupAssignStatuses::PUBLISHED,
             ]);
+
         isset($options['entityType']) && $q
             ->andWhere('entity_type = :entityType')
             ->setParameter('entityType', $options['entityType']);

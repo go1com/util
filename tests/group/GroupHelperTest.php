@@ -2,7 +2,6 @@
 
 namespace go1\util\tests\group;
 
-use Firebase\JWT\JWT;
 use go1\util\AccessChecker;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
@@ -252,7 +251,7 @@ class GroupHelperTest extends UtilTestCase
 
     public function testFormat()
     {
-        $groupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_PACKAGE,  'data' => ['description' => 'group description']]);
+        $groupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_PACKAGE, 'data' => ['description' => 'group description']]);
         $group = GroupHelper::load($this->db, $groupId);
 
         $this->assertTrue(GroupHelper::isContentPackage($group));
