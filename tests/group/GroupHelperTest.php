@@ -10,6 +10,7 @@ use go1\util\group\GroupAssignTypes;
 use go1\util\group\GroupHelper;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupItemTypes;
+use go1\util\group\GroupRepository;
 use go1\util\group\GroupStatus;
 use go1\util\group\GroupTypes;
 use go1\util\schema\mock\AwardMockTrait;
@@ -31,6 +32,16 @@ class GroupHelperTest extends UtilTestCase
     use NoteMockTrait;
     use AwardMockTrait;
 
+    /** @var  GroupRepository */
+    private $repository;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->repository = new GroupRepository($this->db, $this->queue);
+    }
+
     public function testInstanceId()
     {
         $groupId = $this->createGroup($this->db, ['instance_id' => 555]);
@@ -40,9 +51,7 @@ class GroupHelperTest extends UtilTestCase
 
     public function testCreate()
     {
-        $groupId = GroupHelper::create(
-            $this->db,
-            $this->queue,
+        $groupId = $this->repository->create(
             $type = GroupTypes::CONTENT_SHARING,
             $instanceId = 555,
             $title = 'Testing group',
@@ -62,8 +71,8 @@ class GroupHelperTest extends UtilTestCase
 
     public function testCreateItem()
     {
-        $groupId = GroupHelper::create($this->db, $this->queue, GroupTypes::CONTENT_SHARING, 555, 'Testing group');
-        $groupItemId = GroupHelper::createItem($this->db, $this->queue, $groupId, 'lo', 456, GroupItemStatus::ACTIVE);
+        $groupId = $this->repository->create(GroupTypes::CONTENT_SHARING, 555, 'Testing group');
+        $groupItemId = $this->repository->createItem($groupId, 'lo', 456, GroupItemStatus::ACTIVE);
         $groupItem = GroupHelper::loadItem($this->db, $groupItemId);
 
         $this->assertEquals($groupId, $groupItem->group_id);
@@ -74,15 +83,15 @@ class GroupHelperTest extends UtilTestCase
 
     public function testRemoveItem()
     {
-        $groupId = GroupHelper::create($this->db, $this->queue, GroupTypes::CONTENT_SHARING, 555, 'Testing group');
-        $groupItemId = GroupHelper::createItem($this->db, $this->queue, $groupId, 'lo', 456, GroupItemStatus::ACTIVE);
+        $groupId = $this->repository->create( GroupTypes::CONTENT_SHARING, 555, 'Testing group');
+        $groupItemId = $this->repository->createItem($groupId, 'lo', 456, GroupItemStatus::ACTIVE);
 
         # Create item
         $groupItem = GroupHelper::loadItem($this->db, $groupItemId);
         $this->assertNotEmpty($groupItem);
 
         # Remove item.
-        GroupHelper::removeItem($this->db, $this->queue, $groupItemId);
+        $this->repository->removeItem($groupItemId);
         $groupItem = GroupHelper::loadItem($this->db, $groupItemId);
         $this->assertEmpty($groupItem);
     }
