@@ -49,6 +49,23 @@ class GroupHelper
         return $row['id'];
     }
 
+    public static function createItem(Connection $db, MqClient $queue, int $groupId, string $entityType, int $entityId, int $status)
+    {
+        $db->insert('social_group_item', $row = [
+            'group_id'    => $groupId,
+            'entity_type' => $entityType,
+            'entity_id'   => $entityId,
+            'status'      => $status,
+            'created'     => $time = time(),
+            'updated'     => $time,
+        ]);
+
+        $row['id'] = $db->lastInsertId('social_group_item');
+        $queue->publish($row, Queue::GROUP_ITEM_CREATE);
+
+        return $row['id'];
+    }
+
     public static function load(Connection $db, int $id)
     {
         $groups = self::loadMultiple($db, [$id]);
@@ -67,6 +84,11 @@ class GroupHelper
         !empty($groups) && self::countMembers($db, $groups);
 
         return $groups ?? [];
+    }
+
+    public static function loadItem(Connection $db, int $id)
+    {
+        return $db->executeQuery('SELECT * FROM social_group_item WHERE id = ?', [$id])->fetch(DB::OBJ);
     }
 
     public static function hostContentSharingGroup(Connection $db, string $hostEntityType, $hostEntityId, bool $marketplace = false)

@@ -60,6 +60,29 @@ class GroupHelperTest extends UtilTestCase
         $this->assertEquals((object) $data, $group->data);
     }
 
+    public function testCreateItem()
+    {
+
+        $groupId = GroupHelper::create(
+            $this->db,
+            $this->queue,
+            $type = GroupTypes::CONTENT_SHARING,
+            $instanceId = 555,
+            $title = 'Testing group',
+            $visibility = GroupStatus::PUBLIC,
+            $userId = 333,
+            $data = ['foo' => 'bar']
+        );
+
+        $groupItemId = GroupHelper::createItem($this->db, $this->queue, $groupId, 'lo', 456, GroupItemStatus::ACTIVE);
+        $groupItem = GroupHelper::loadItem($this->db, $groupItemId);
+
+        $this->assertEquals($groupId, $groupItem->group_id);
+        $this->assertEquals('lo', $groupItem->entity_type);
+        $this->assertEquals(456, $groupItem->entity_id);
+        $this->assertEquals(GroupItemStatus::ACTIVE, $groupItem->status);
+    }
+
     public function testIsItemOf()
     {
         $groupId = $this->createGroup($this->db);
