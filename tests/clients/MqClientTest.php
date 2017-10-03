@@ -22,6 +22,7 @@ class MqClientTest extends UtilTestCase
             [['original' => null], 'user.update', 'Missing entity ID or original data.'],
             [[], 'user.update', 'Missing entity ID or original data.'],
             [[], '', ''],
+            [[], 'do.enrolment.update', ''],
         ];
     }
 

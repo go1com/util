@@ -80,7 +80,10 @@ class MqClient
 
     private function processMessage($body, string $routingKey)
     {
-        if (strpos($routingKey, '.update')) {
+        $explode = explode('.', $routingKey);
+        $isLazy = isset($explode[0]) && ('do' == $explode[0]); # Lazy = do.SERVICE.#
+
+        if (strpos($routingKey, '.update') && !$isLazy) {
             if (
                 (
                     is_array($body)
