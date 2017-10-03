@@ -13,8 +13,8 @@ class ActivitySchema
             $activity = $schema->createTable('activity');
             $activity->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $activity->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
-            $activity->addColumn('actor_id', Type::INTEGER, ['unsigned' => true]);
-            $activity->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $activity->addColumn('actor_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+            $activity->addColumn('user_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $activity->addColumn('action_id', Type::INTEGER, ['unsigned' => true]);
             $activity->addColumn('entity_type', Type::STRING);
             $activity->addColumn('entity_id', Type::STRING);
