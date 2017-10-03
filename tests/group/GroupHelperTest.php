@@ -83,7 +83,7 @@ class GroupHelperTest extends UtilTestCase
 
     public function testRemoveItem()
     {
-        $groupId = $this->repository->create( GroupTypes::CONTENT_SHARING, 555, 'Testing group');
+        $groupId = $this->repository->create(GroupTypes::CONTENT_SHARING, 555, 'Testing group');
         $groupItemId = $this->repository->createItem($groupId, 'lo', 456, GroupItemStatus::ACTIVE);
 
         # Create item

@@ -66,7 +66,7 @@ class GroupHelper
     {
         return self::loadGroupByTitle(
             $db,
-            $marketplace ? "{$hostEntityType}:{$hostEntityId}:marketplace" : "{$hostEntityType}:{$hostEntityId}",
+            $marketplace ? "go1:{$hostEntityType}:{$hostEntityId}:marketplace" : "go1:{$hostEntityType}:{$hostEntityId}",
             GroupTypes::CONTENT_SHARING
         );
     }
