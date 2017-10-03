@@ -45,13 +45,30 @@ class GroupHelper
         return $db->executeQuery('SELECT * FROM social_group_item WHERE id = ?', [$id])->fetch(DB::OBJ);
     }
 
+    public static function loadGroupByTitle(Connection $db, string $title, string $type = null)
+    {
+        $q = $db
+            ->createQueryBuilder()
+            ->select('id')
+            ->from('social_group')
+            ->where('title = :title')->setParameter(':title', $title);
+
+        $type && $q
+            ->andWhere('type = :type')
+            ->setParameter(':type', $type);
+
+        return ($id = $q->execute()->fetchColumn())
+            ? self::load($db, $id)
+            : false;
+    }
+
     public static function hostContentSharingGroup(Connection $db, string $hostEntityType, $hostEntityId, bool $marketplace = false)
     {
-        $title = $marketplace ? "{$hostEntityType}:{$hostEntityId}:marketplace" : "{$hostEntityType}:{$hostEntityId}";
-        $groupId = 'SELECT id FROM social_group WHERE type = ? AND title = ?';
-        $groupId = $db->fetchColumn($groupId, [GroupTypes::CONTENT_SHARING, $title]);
-
-        return $groupId ? self::load($db, $groupId) : false;
+        return self::loadGroupByTitle(
+            $db,
+            $marketplace ? "{$hostEntityType}:{$hostEntityId}:marketplace" : "{$hostEntityType}:{$hostEntityId}",
+            GroupTypes::CONTENT_SHARING
+        );
     }
 
     public static function instanceId(Connection $db, int $groupId)
