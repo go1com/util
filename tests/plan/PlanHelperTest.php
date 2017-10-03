@@ -17,15 +17,15 @@ class PlanHelperTest extends UtilTestCase
 
     public function testLoadByEntityAndUser()
     {
-        $plan = PlanHelper::loadByEntityUserAndStatus($this->db, $this->entityType, $this->entityId, $this->userId);
+        $plan = PlanHelper::loadByEntityAndUser($this->db, $this->entityType, $this->entityId, $this->userId);
         $this->assertFalse($plan);
 
         $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::EXPIRED]);
-        $plan = PlanHelper::loadByEntityUserAndStatus($this->db, $this->entityType, $this->entityId, $this->userId);
+        $plan = PlanHelper::loadByEntityAndUser($this->db, $this->entityType, $this->entityId, $this->userId);
         $this->assertFalse($plan);
 
         $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId]);
-        $plan = PlanHelper::loadByEntityUserAndStatus($this->db, $this->entityType, $this->entityId, $this->userId);
+        $plan = PlanHelper::loadByEntityAndUser($this->db, $this->entityType, $this->entityId, $this->userId);
         $this->assertNotFalse($plan);
     }
 

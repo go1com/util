@@ -97,7 +97,6 @@ class Schema
         self::O_AWARD               => self::AWARD_MAPPING,
         self::O_AWARD_ITEM          => self::AWARD_ITEM_MAPPING,
         self::O_AWARD_ITEM_MANUAL   => self::AWARD_ITEM_MANUAL_MAPPING,
-        self::O_AWARD_ENROLMENT     => self::AWARD_ENROLMENT_MAPPING,
         self::O_AWARD_ACHIEVEMENT   => self::AWARD_ACHIEVEMENT_MAPPING,
         self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
     ];
@@ -292,7 +291,7 @@ class Schema
             'data'           => [
                 'properties' => [
                     'path' => ['type' => self::T_TEXT],
-                ]
+                ],
             ],
             'location'       => [
                 'properties' => [
@@ -520,15 +519,15 @@ class Schema
     const GROUP_MAPPING = [
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'           => ['type' => self::T_KEYWORD],
-            'title'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'description'  => ['type' => self::T_TEXT],
-            'image'        => ['type' => self::T_TEXT],
-            'user_id'      => ['type' => self::T_INT],
-            'visibility'   => ['type' => self::T_SHORT],
-            'created'      => ['type' => self::T_DATE],
-            'updated'      => ['type' => self::T_DATE],
-            'metadata'     => [
+            'id'          => ['type' => self::T_KEYWORD],
+            'title'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'description' => ['type' => self::T_TEXT],
+            'image'       => ['type' => self::T_TEXT],
+            'user_id'     => ['type' => self::T_INT],
+            'visibility'  => ['type' => self::T_SHORT],
+            'created'     => ['type' => self::T_DATE],
+            'updated'     => ['type' => self::T_DATE],
+            'metadata'    => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
                     'updated_at'  => ['type' => self::T_INT],
@@ -815,25 +814,6 @@ class Schema
         ],
     ];
 
-    const AWARD_ENROLMENT_MAPPING = [
-        '_parent'    => ['type' => self::O_AWARD],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'           => ['type' => self::T_KEYWORD],
-            'user_id'      => ['type' => self::T_INT],
-            'assigner_id'  => ['type' => self::T_INT],
-            'expiration'   => ['type' => self::T_DATE],
-            'quantity'     => ['type' => self::T_DOUBLE],
-            'status'       => ['type' => self::T_SHORT],
-            'start_date'   => ['type' => self::T_DATE],
-            'end_date'     => ['type' => self::T_DATE],
-            'achievements' => [
-                'type'       => self::T_NESTED,
-                'properties' => self::AWARD_ACHIEVEMENT_MAPPING['properties'],
-            ]
-        ],
-    ];
-
     const AWARD_ACHIEVEMENT_MAPPING = [
         '_parent'    => ['type' => self::O_AWARD_ENROLMENT],
         '_routing'   => ['required' => true],
@@ -864,7 +844,7 @@ class Schema
                     'entity' => ['type' => self::T_KEYWORD],
                 ],
             ],
-        ]
+        ],
     ];
 
     public static function portalIndex(int $portalId)

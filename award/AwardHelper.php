@@ -67,11 +67,18 @@ class AwardHelper
         return $award;
     }
 
-    public static function loadItem(Connection $db, int $awardItemId)
+    public static function loadItems(Connection $db, array $awardItemIds)
     {
         return $db
-            ->executeQuery('SELECT * FROM award_item WHERE id = ?', [$awardItemId])
-            ->fetch(DB::OBJ);
+            ->executeQuery('SELECT * FROM award_item WHERE id IN (?)', [$awardItemIds], [DB::INTEGERS])
+            ->fetchAll(DB::OBJ);
+    }
+
+    public static function loadItem(Connection $db, int $awardItemId)
+    {
+        return ($items = static::loadItems($db, [$awardItemId]))
+            ? $items[0]
+            : false;
     }
 
     public static function loadManualItem(Connection $db, int $awardManualItemId, $status = AwardStatuses::PUBLISHED)
@@ -89,11 +96,18 @@ class AwardHelper
         return $awardManualItem;
     }
 
-    public static function loadAchievement(Connection $db, int $achievementId)
+    public static function loadAchievements(Connection $db, array $achievementIds)
     {
         return $db
-            ->executeQuery('SELECT * FROM award_achievement WHERE id = ?', [$achievementId])
-            ->fetch(DB::OBJ);
+            ->executeQuery('SELECT * FROM award_achievement WHERE id IN (?)', [$achievementIds], [DB::INTEGERS])
+            ->fetchAll(DB::OBJ);
+    }
+
+    public static function loadAchievement(Connection $db, int $achievementId)
+    {
+        return ($achievements = static::loadAchievements($db, [$achievementId]))
+            ? $achievements[0]
+            : false;
     }
 
     public static function loadAchievementBy(Connection $db, int $awardItemId, int $userId)
@@ -118,10 +132,30 @@ class AwardHelper
         return $q->execute()->fetchAll(DB::OBJ);
     }
 
-    public static function loadEnrolment(Connection $db, int $awardEnrolmentId)
+    public static function loadEnrolments(Connection $db, array $awardEnrolmentIds)
     {
         return $db
-            ->executeQuery('SELECT * FROM award_enrolment WHERE id = ?', [$awardEnrolmentId])
+            ->executeQuery('SELECT * FROM award_enrolment WHERE id IN (?)', [$awardEnrolmentIds], [DB::INTEGERS])
+            ->fetchAll(DB::OBJ);
+    }
+
+    public static function loadEnrolment(Connection $db, int $awardEnrolmentId)
+    {
+        return ($enrolments = static::loadEnrolments($db, [$awardEnrolmentId]))
+            ? $enrolments[0]
+            : false;
+    }
+
+    public static function loadEnrolmentBy(Connection $db, int $awardId, int $userId, int $instanceId)
+    {
+        return $db
+            ->executeQuery('SELECT * FROM award_enrolment WHERE award_id = ? AND user_id = ? AND instance_id = ?', [$awardId, $userId, $instanceId])
             ->fetch(DB::OBJ);
+    }
+
+    public static function countEnrolment(Connection $db, int $awardId)
+    {
+        return $db
+            ->fetchColumn('SELECT COUNT(*) FROM award_enrolment WHERE award_id = ?', [$awardId]);
     }
 }
