@@ -11,10 +11,15 @@ class GroupRepository
     private $db;
     private $queue;
 
-    public function __construct(Connection $db, MqClient $queue = null)
+    public function __construct(Connection $db, MqClient $queue)
     {
         $this->db = $db;
         $this->queue = $queue;
+    }
+
+    public function db(): Connection
+    {
+        return $this->db;
     }
 
     public function create(
