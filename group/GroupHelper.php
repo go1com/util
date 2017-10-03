@@ -141,12 +141,12 @@ class GroupHelper
         }
     }
 
-    public static function isItemOf(Connection $db, string $entityType, int $entityId, int $groupId, int $status = GroupItemStatus::ACTIVE): bool
+    public static function isItemOf(Connection $db, string $entityType, int $entityId, int $groupId, int $status = GroupItemStatus::ACTIVE)
     {
-        return $db->fetchColumn(
-            'SELECT 1 FROM social_group_item WHERE entity_type = ? AND entity_id = ? AND group_id = ? AND status = ?',
-            [$entityType, $entityId, $groupId, $status]
-        );
+        $id = 'SELECT id FROM social_group_item WHERE entity_type = ? AND entity_id = ? AND group_id = ? AND status = ?';
+        $id = $db->fetchColumn($id, [$entityType, $entityId, $groupId, $status]);
+        
+        return $id ? intval($id) : false;
     }
 
     public static function canAccess(Connection $go1, Connection $social, int $userId, int $groupId): bool
