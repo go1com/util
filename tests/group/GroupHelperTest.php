@@ -409,7 +409,7 @@ class GroupHelperTest extends UtilTestCase
 
     public function testHostContentSharingGroup()
     {
-        $groupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => 'lo:345']);
+        $groupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => 'go1:lo:345']);
 
         $this->assertEquals($groupId, GroupHelper::hostContentSharingGroup($this->db, 'lo', 345)->id);
         $this->assertFalse(GroupHelper::hostContentSharingGroup($this->db, 'lo', 456));
