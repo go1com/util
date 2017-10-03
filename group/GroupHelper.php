@@ -10,7 +10,7 @@ use go1\util\DB;
 use go1\util\lo\LoHelper;
 use go1\util\note\NoteHelper;
 use go1\util\portal\PortalHelper;
-use go1\util\Queue;
+use go1\util\queue\Queue;
 use go1\util\user\UserHelper;
 use PDO;
 use stdClass;
@@ -64,6 +64,14 @@ class GroupHelper
         $queue->publish($row, Queue::GROUP_ITEM_CREATE);
 
         return $row['id'];
+    }
+
+    public static function removeItem(Connection $db, MqClient $queue, int $itemId)
+    {
+        if ($item = self::loadItem($db, $itemId)) {
+            $db->delete('social_group_item', ['id' => $itemId]);
+            $queue->publish($item, Queue::GROUP_ITEM_DELETE);
+        }
     }
 
     public static function load(Connection $db, int $id)
@@ -145,7 +153,7 @@ class GroupHelper
     {
         $id = 'SELECT id FROM social_group_item WHERE entity_type = ? AND entity_id = ? AND group_id = ? AND status = ?';
         $id = $db->fetchColumn($id, [$entityType, $entityId, $groupId, $status]);
-        
+
         return $id ? intval($id) : false;
     }
 

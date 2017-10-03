@@ -62,18 +62,7 @@ class GroupHelperTest extends UtilTestCase
 
     public function testCreateItem()
     {
-
-        $groupId = GroupHelper::create(
-            $this->db,
-            $this->queue,
-            $type = GroupTypes::CONTENT_SHARING,
-            $instanceId = 555,
-            $title = 'Testing group',
-            $visibility = GroupStatus::PUBLIC,
-            $userId = 333,
-            $data = ['foo' => 'bar']
-        );
-
+        $groupId = GroupHelper::create($this->db, $this->queue, GroupTypes::CONTENT_SHARING, 555, 'Testing group');
         $groupItemId = GroupHelper::createItem($this->db, $this->queue, $groupId, 'lo', 456, GroupItemStatus::ACTIVE);
         $groupItem = GroupHelper::loadItem($this->db, $groupItemId);
 
@@ -83,11 +72,26 @@ class GroupHelperTest extends UtilTestCase
         $this->assertEquals(GroupItemStatus::ACTIVE, $groupItem->status);
     }
 
+    public function testRemoveItem()
+    {
+        $groupId = GroupHelper::create($this->db, $this->queue, GroupTypes::CONTENT_SHARING, 555, 'Testing group');
+        $groupItemId = GroupHelper::createItem($this->db, $this->queue, $groupId, 'lo', 456, GroupItemStatus::ACTIVE);
+
+        # Create item
+        $groupItem = GroupHelper::loadItem($this->db, $groupItemId);
+        $this->assertNotEmpty($groupItem);
+
+        # Remove item.
+        GroupHelper::removeItem($this->db, $this->queue, $groupItemId);
+        $groupItem = GroupHelper::loadItem($this->db, $groupItemId);
+        $this->assertEmpty($groupItem);
+    }
+
     public function testIsItemOf()
     {
         $groupId = $this->createGroup($this->db);
         $this->createGroupItem($this->db, ['group_id' => $groupId, 'entity_type' => 'lo', 'entity_id' => 100]);
-        $this->assertTrue(GroupHelper::isItemOf($this->db, 'lo', 100, $groupId));
+        $this->assertNotEmpty(GroupHelper::isItemOf($this->db, 'lo', 100, $groupId));
         $this->assertFalse(GroupHelper::isItemOf($this->db, 'lo', 1001, $groupId));
     }
 
