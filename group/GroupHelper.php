@@ -3,12 +3,14 @@
 namespace go1\util\group;
 
 use Doctrine\DBAL\Connection;
+use go1\clients\MqClient;
 use go1\util\AccessChecker;
 use go1\util\award\AwardHelper;
 use go1\util\DB;
 use go1\util\lo\LoHelper;
 use go1\util\note\NoteHelper;
 use go1\util\portal\PortalHelper;
+use go1\util\Queue;
 use go1\util\user\UserHelper;
 use PDO;
 use stdClass;
@@ -19,6 +21,33 @@ class GroupHelper
     const G_TYPE_PREMIUM     = 'premium';
     const G_TYPE_MARKETPLACE = 'marketplace';
     const G_TYPE_DEFAULT     = 'default';
+
+    public static function create(
+        Connection $db,
+        MqClient $queue,
+        string $type,
+        string $instanceId,
+        string $title = '',
+        bool $visibility = GroupStatus::PRIVATE,
+        int $userId = 1,
+        array $data = null)
+    {
+        $db->insert('social_group', $row = [
+            'title'       => $title,
+            'user_id'     => $userId,
+            'instance_id' => $instanceId,
+            'type'        => $type,
+            'visibility'  => $visibility,
+            'created'     => $time = time(),
+            'updated'     => $time,
+            'data'        => is_scalar($data) ? $data : json_encode($data),
+        ]);
+
+        $row['id'] = $db->lastInsertId('social_group');
+        $queue->publish($row, Queue::GROUP_CREATE);
+        
+        return $row['id'];
+    }
 
     public static function load(Connection $db, int $id)
     {
