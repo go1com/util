@@ -45,7 +45,7 @@ class GroupHelper
 
         $row['id'] = $db->lastInsertId('social_group');
         $queue->publish($row, Queue::GROUP_CREATE);
-        
+
         return $row['id'];
     }
 
@@ -69,10 +69,11 @@ class GroupHelper
         return $groups ?? [];
     }
 
-    public static function hostContentSharingGroup(Connection $db, string $hostEntityType, $hostEntityId)
+    public static function hostContentSharingGroup(Connection $db, string $hostEntityType, $hostEntityId, bool $marketplace = false)
     {
+        $title = $marketplace ? "{$hostEntityType}:{$hostEntityId}:marketplace" : "{$hostEntityType}:{$hostEntityId}";
         $groupId = 'SELECT id FROM social_group WHERE type = ? AND title = ?';
-        $groupId = $db->fetchColumn($groupId, [GroupTypes::CONTENT_SHARING, "{$hostEntityType}:{$hostEntityId}"]);
+        $groupId = $db->fetchColumn($groupId, [GroupTypes::CONTENT_SHARING, $title]);
 
         return $groupId ? self::load($db, $groupId) : false;
     }
