@@ -10,6 +10,7 @@ use go1\util\group\GroupAssignTypes;
 use go1\util\group\GroupHelper;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupItemTypes;
+use go1\util\group\GroupStatus;
 use go1\util\group\GroupTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\schema\mock\GroupMockTrait;
@@ -35,6 +36,28 @@ class GroupHelperTest extends UtilTestCase
         $groupId = $this->createGroup($this->db, ['instance_id' => 555]);
         $this->assertEquals(555, GroupHelper::instanceId($this->db, $groupId));
         $this->assertEquals(null, GroupHelper::instanceId($this->db, $groupId + 666));
+    }
+
+    public function testCreate()
+    {
+        $groupId = GroupHelper::create(
+            $this->db,
+            $this->queue,
+            $type = GroupTypes::CONTENT_SHARING,
+            $instanceId = 555,
+            $title = 'Testing group',
+            $visibility = GroupStatus::PUBLIC,
+            $userId = 333,
+            $data = ['foo' => 'bar']
+        );
+        $group = GroupHelper::load($this->db, $groupId);
+
+        $this->assertEquals($type, $group->type);
+        $this->assertEquals($instanceId, $group->instance_id);
+        $this->assertEquals($title, $group->title);
+        $this->assertEquals($visibility, $group->visibility);
+        $this->assertEquals($userId, $group->user_id);
+        $this->assertEquals((object) $data, $group->data);
     }
 
     public function testIsItemOf()
