@@ -15,8 +15,8 @@ class Roles
     const TAM           = 'training account manager';
     const ANONYMOUS     = 'anonymous';
 
-    const ACCOUNTS_ROLES = [self::ROOT, self::AUTHENTICATED, self::TAM];
-    const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::DEVELOPER, self::STUDENT, self::TUTOR, self::MANAGER];
+    const ACCOUNTS_ROLES = [self::ROOT, self::DEVELOPER, self::AUTHENTICATED, self::TAM];
+    const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::STUDENT, self::TUTOR, self::MANAGER];
 
     const NAMES = [
         self::ADMIN    => 'Administrator',
