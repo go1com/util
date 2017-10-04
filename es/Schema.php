@@ -276,6 +276,9 @@ class Schema
             'created'        => ['type' => self::T_DATE],
             'updated'        => ['type' => self::T_DATE],
             'fields'         => ['type' => self::T_OBJECT],
+            'event'          => [
+                'properties' => self::EVENT_PROPERTIES
+            ],
             'items_count'    => ['type' => self::T_INT], # Only count first child level
             'authors'        => [
                 'type'       => self::T_NESTED,
@@ -715,29 +718,32 @@ class Schema
         ],
     ];
 
+    const EVENT_PROPERTIES = [
+        'id'                      => ['type' => self::T_KEYWORD],
+        'lo_id'                   => ['type' => self::T_INT],
+        'title'                   => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'start'                   => ['type' => self::T_DATE],
+        'end'                     => ['type' => self::T_DATE],
+        'timezone'                => ['type' => self::T_KEYWORD],
+        'seats'                   => ['type' => self::T_INT],
+        'available_seats'         => ['type' => self::T_INT],
+        'country'                 => ['type' => self::T_KEYWORD],
+        'administrative_area'     => ['type' => self::T_KEYWORD],
+        'sub_administrative_area' => ['type' => self::T_KEYWORD],
+        'locality'                => ['type' => self::T_KEYWORD],
+        'dependent_locality'      => ['type' => self::T_KEYWORD],
+        'thoroughfare'            => ['type' => self::T_KEYWORD],
+        'premise'                 => ['type' => self::T_KEYWORD],
+        'sub_premise'             => ['type' => self::T_KEYWORD],
+        'organisation_name'       => ['type' => self::T_KEYWORD],
+        'name_line'               => ['type' => self::T_KEYWORD],
+        'postal_code'             => ['type' => self::T_KEYWORD],
+    ];
+
     const EVENT_MAPPING = [
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_LO],
-        'properties' => [
-            'id'                      => ['type' => self::T_KEYWORD],
-            'lo_id'                   => ['type' => self::T_INT],
-            'title'                   => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'start'                   => ['type' => self::T_DATE],
-            'end'                     => ['type' => self::T_DATE],
-            'timezone'                => ['type' => self::T_KEYWORD],
-            'seats'                   => ['type' => self::T_INT],
-            'available_seats'         => ['type' => self::T_INT],
-            'country'                 => ['type' => self::T_KEYWORD],
-            'administrative_area'     => ['type' => self::T_KEYWORD],
-            'sub_administrative_area' => ['type' => self::T_KEYWORD],
-            'locality'                => ['type' => self::T_KEYWORD],
-            'dependent_locality'      => ['type' => self::T_KEYWORD],
-            'thoroughfare'            => ['type' => self::T_KEYWORD],
-            'premise'                 => ['type' => self::T_KEYWORD],
-            'sub_premise'             => ['type' => self::T_KEYWORD],
-            'organisation_name'       => ['type' => self::T_KEYWORD],
-            'name_line'               => ['type' => self::T_KEYWORD],
-            'postal_code'             => ['type' => self::T_KEYWORD],
+        'properties' => self::EVENT_PROPERTIES + [
             'parent'                  => [
                 'properties' => self::LO_MAPPING['properties'],
             ],

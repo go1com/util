@@ -30,6 +30,7 @@ trait EsEventMockTrait
             'organisation_name'       => $options['organisation_name'] ?? '',
             'name_line'               => $options['name_line'] ?? '',
             'postal_code'             => $options['postal_code'] ?? '',
+            'parent'                  => $options['parent'] ?? null,
             'metadata'                => [
                 'instance_id' => $options['instance_id'] ?? 0,
                 'updated_at'  => $options['updated_at'] ?? time(),
@@ -42,7 +43,7 @@ trait EsEventMockTrait
             'type'    => Schema::O_EVENT,
             'id'      => $options['id'] ?? ($autoId + 1),
             'body'    => $event,
-            'parent'  => $options['parent'] ?? $options['lo_id'],
+            'parent'  => $options['parent']['id'] ?? $options['lo_id'],
             'refresh' => true,
         ]);
     }
