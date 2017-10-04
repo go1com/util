@@ -8,17 +8,25 @@ use PDO;
 
 class PlanHelper
 {
-    public static function loadByEntityAndUser(Connection $db, string $entityType, int $entityId, int $userId, int $status = PlanStatuses::ASSIGNED)
+    public static function loadByEntityAndUser(Connection $db, string $entityType, int $entityId, int $userId, array $statuses = [PlanStatuses::ASSIGNED, PlanStatuses::SCHEDULED])
     {
         return $db
-            ->executeQuery('SELECT * FROM gc_plan WHERE entity_type = ? AND entity_id = ? AND user_id = ? AND status = ?', [$entityType, $entityId, $userId, $status])
+            ->executeQuery(
+                'SELECT * FROM gc_plan WHERE entity_type = ? AND entity_id = ? AND user_id = ? AND status IN (?)',
+                [$entityType, $entityId, $userId, $statuses],
+                [DB::STRING, DB::INTEGER, DB::INTEGER, DB::INTEGERS]
+            )
             ->fetch(DB::OBJ);
     }
 
-    public static function loadByEntityAndAssigner(Connection $db, string $entityType, int $entityId, int $assignerId, int $status = PlanStatuses::ASSIGNED)
+    public static function loadByEntityAndAssigner(Connection $db, string $entityType, int $entityId, int $assignerId, array $statuses = [PlanStatuses::ASSIGNED, PlanStatuses::SCHEDULED])
     {
         return $db
-            ->executeQuery('SELECT * FROM gc_plan WHERE entity_type = ? AND entity_id = ? AND assigner_id = ? AND status = ?', [$entityType, $entityId, $assignerId, $status])
+            ->executeQuery(
+                'SELECT * FROM gc_plan WHERE entity_type = ? AND entity_id = ? AND assigner_id = ? AND status IN (?)',
+                [$entityType, $entityId, $assignerId, $statuses],
+                [DB::STRING, DB::INTEGER, DB::INTEGER, DB::INTEGERS]
+            )
             ->fetch(DB::OBJ);
     }
 
