@@ -53,6 +53,7 @@ trait AssignmentMockTrait
         $db->insert('asm_submission_revision', [
             'id'            => isset($options['id']) ? $options['id'] : null,
             'submission_id' => isset($options['submission_id']) ? $options['submission_id'] : 1,
+            'actor_id'      => isset($options['actor_id']) ? $options['actor_id'] : 1,
             'created'       => isset($options['created']) ? $options['created'] : time(),
             'updated'       => isset($options['updated']) ? $options['updated'] : time(),
             'status'        => isset($options['status']) ? $options['status'] : 1,
