@@ -2,6 +2,9 @@
 
 namespace go1\util\award;
 
+use go1\util\enrolment\EnrolmentStatuses;
+use InvalidArgumentException;
+
 class AwardEnrolmentStatuses
 {
     const IN_PROGRESS = 1;
@@ -19,5 +22,22 @@ class AwardEnrolmentStatuses
             static::COMPLETED,
             static::EXPIRED,
         ];
+    }
+
+    public static function toEsNumeric(int $status): int
+    {
+        switch ($status) {
+            case self::IN_PROGRESS:
+                return EnrolmentStatuses::I_IN_PROGRESS;
+
+            case self::COMPLETED:
+                return EnrolmentStatuses::I_COMPLETED;
+
+            case self::EXPIRED:
+                return EnrolmentStatuses::I_EXPIRED;
+
+            default:
+                throw new InvalidArgumentException('Unknown enrolment status: ' . $status);
+        }
     }
 }
