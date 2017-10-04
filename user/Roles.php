@@ -6,6 +6,7 @@ class Roles
 {
     const ROOT          = 'Admin on #Accounts';
     const ADMIN         = 'administrator';
+    const DEVELOPER     = 'developer';
     const AUTHENTICATED = 'authenticated user';
     const STUDENT       = 'Student';
     const TUTOR         = 'tutor';
@@ -15,7 +16,7 @@ class Roles
     const ANONYMOUS     = 'anonymous';
 
     const ACCOUNTS_ROLES = [self::ROOT, self::AUTHENTICATED, self::TAM];
-    const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::STUDENT, self::TUTOR, self::MANAGER];
+    const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::DEVELOPER, self::STUDENT, self::TUTOR, self::MANAGER]];
 
     const NAMES = [
         self::ADMIN    => 'Administrator',
