@@ -361,4 +361,14 @@ class GroupHelper
 
         return $access;
     }
+
+    public static function hostIdFromGroupTitle(string $title)
+    {
+        return explode(":", $title)[2];
+    }
+
+    public static function hostTypeFromGroupTitle(string $title)
+    {
+        return explode(":", $title)[1];
+    }
 }
