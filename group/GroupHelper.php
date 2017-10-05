@@ -364,13 +364,11 @@ class GroupHelper
 
     public static function hostIdFromGroupTitle(string $title)
     {
-        $explode = explode(":", $title);
-        return $explode[2] ?? 0;
+        return explode(":", $title)[2];
     }
 
     public static function hostTypeFromGroupTitle(string $title)
     {
-        $explode = explode(":", $title);
-        return $explode[1] ?? 0;
+        return explode(":", $title)[1];
     }
 }
