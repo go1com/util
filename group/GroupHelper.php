@@ -256,6 +256,11 @@ class GroupHelper
         return ($group->data->premium ?? false) ? true : false;
     }
 
+    public static function isContentSharing(stdClass $group)
+    {
+        return $group->type == GroupTypes::CONTENT_SHARING;
+    }
+
     public static function isContentPackage(stdClass $group)
     {
         if (isset($group->type)) {
