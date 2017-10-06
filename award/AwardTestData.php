@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\util\plan\Plan;
 use go1\util\plan\PlanRepository;
 use go1\util\plan\PlanStatuses;
+use go1\util\plan\PlanTypes;
 use go1\util\schema\mock\AwardMockTrait;
 
 class AwardTestData
@@ -110,7 +111,7 @@ class AwardTestData
                 'user_id'      => $option['user_id'] ?? $option['assigner_id'],
                 'assigner_id'  => $option['assigner_id'],
                 'instance_id'  => $option['instance_id'] ?? $this->award->instance_id,
-                'entity_type'  => Plan::TYPE_AWARD,
+                'entity_type'  => PlanTypes::ENTITY_AWARD,
                 'entity_id'    => $this->award->revision_id,
                 'status'       => $option['status'] ?? PlanStatuses::ASSIGNED,
                 'due_date'     => $option['due_date'] ?? null,
