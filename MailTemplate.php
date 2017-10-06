@@ -56,10 +56,12 @@ class MailTemplate
     const USER_PASSWORD_CHANGED = [
         'key'    => 'user.password.changed',
         'tokens' => [
-            '@user_name'     => 'Name of user.',
-            '!site_name'     => 'Human name of the portal',
-            '!portal_url'    => 'The portal URL.',
+            '!first_name'    => 'User first name',
+            '!user_mail'     => 'User mail.',
             '!forget_pw_url' => 'Link to forget password page.',
+            '!portal_name'   => 'Portal name.',
+            '!portal_image'  => 'Portal logo.',
+            '!portal_url'    => 'Portal URL.',
         ],
     ];
 
