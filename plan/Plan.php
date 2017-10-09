@@ -10,11 +10,16 @@ use stdClass;
 
 class Plan implements JsonSerializable
 {
+    /** @deprecated */
     const TYPE_AWARD = 'award';
+    /** @deprecated */
     const TYPE_LO    = 'lo';
 
     /** @var integer */
     public $id;
+
+    /** @var integer */
+    public $type;
 
     /** @var integer */
     public $userId;
@@ -58,6 +63,7 @@ class Plan implements JsonSerializable
     {
         $plan = new Plan;
         $plan->id = isset($input->id) ? $input->id : null;
+        $plan->type = isset($input->type) ? $input->type : PlanTypes::ASSIGN;
         $plan->userId = isset($input->user_id) ? $input->user_id : null;
         $plan->assignerId = isset($input->assigner_id) ? $input->assigner_id : null;
         $plan->instanceId = $input->instance_id ?? null;
@@ -81,6 +87,7 @@ class Plan implements JsonSerializable
                     : json_decode(json_encode($data)))
                 : null;
         };
+        ($this->type != $plan->type) && $values['type'] = $plan->type;
         ($this->assignerId != $plan->assignerId) && $values['assigner_id'] = $plan->assignerId;
         ($this->status != $plan->status) && $values['status'] = $plan->status;
         ($this->due != $plan->due) && $values['due_date'] = $plan->due ? $plan->due->format(DATE_ISO8601) : null;
@@ -93,6 +100,7 @@ class Plan implements JsonSerializable
     {
         return [
             'id'           => $this->id,
+            'type'         => $this->type,
             'user_id'      => $this->userId,
             'assigner_id'  => $this->assignerId,
             'instance_id'  => $this->instanceId,

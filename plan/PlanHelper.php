@@ -8,32 +8,32 @@ use PDO;
 
 class PlanHelper
 {
-    public static function loadByEntityAndUser(Connection $db, string $entityType, int $entityId, int $userId, array $statuses = [PlanStatuses::ASSIGNED, PlanStatuses::SCHEDULED])
+    public static function loadByEntityAndUser(Connection $db, string $entityType, int $entityId, int $userId, array $statuses = [PlanStatuses::ASSIGNED, PlanStatuses::SCHEDULED], $type = PlanTypes::ASSIGN)
     {
         return $db
             ->executeQuery(
-                'SELECT * FROM gc_plan WHERE entity_type = ? AND entity_id = ? AND user_id = ? AND status IN (?)',
-                [$entityType, $entityId, $userId, $statuses],
-                [DB::STRING, DB::INTEGER, DB::INTEGER, DB::INTEGERS]
+                'SELECT * FROM gc_plan WHERE `type` = ? AND entity_type = ? AND entity_id = ? AND user_id = ? AND status IN (?)',
+                [$type, $entityType, $entityId, $userId, $statuses],
+                [DB::INTEGER, DB::STRING, DB::INTEGER, DB::INTEGER, DB::INTEGERS]
             )
             ->fetch(DB::OBJ);
     }
 
-    public static function loadByEntityAndAssigner(Connection $db, string $entityType, int $entityId, int $assignerId, array $statuses = [PlanStatuses::ASSIGNED, PlanStatuses::SCHEDULED])
+    public static function loadByEntityAndAssigner(Connection $db, string $entityType, int $entityId, int $assignerId, array $statuses = [PlanStatuses::ASSIGNED, PlanStatuses::SCHEDULED], $type = PlanTypes::ASSIGN)
     {
         return $db
             ->executeQuery(
-                'SELECT * FROM gc_plan WHERE entity_type = ? AND entity_id = ? AND assigner_id = ? AND status IN (?)',
-                [$entityType, $entityId, $assignerId, $statuses],
-                [DB::STRING, DB::INTEGER, DB::INTEGER, DB::INTEGERS]
+                'SELECT * FROM gc_plan WHERE `type` = ? AND entity_type = ? AND entity_id = ? AND assigner_id = ? AND status IN (?)',
+                [$type, $entityType, $entityId, $assignerId, $statuses],
+                [DB::INTEGER, DB::STRING, DB::INTEGER, DB::INTEGER, DB::INTEGERS]
             )
             ->fetch(DB::OBJ);
     }
 
-    public static function userPlanIds(Connection $db, string $entityType, int $userId, int $status = PlanStatuses::ASSIGNED): array
+    public static function userPlanIds(Connection $db, string $entityType, int $userId, int $status = PlanStatuses::ASSIGNED, $type = PlanTypes::ASSIGN): array
     {
         return $db
-            ->executeQuery('SELECT id FROM gc_plan WHERE entity_type = ? AND user_id = ? AND status = ?', [$entityType, $userId, $status])
+            ->executeQuery('SELECT id FROM gc_plan WHERE `type` = ? AND entity_type = ? AND user_id = ? AND status = ?', [$type, $entityType, $userId, $status])
             ->fetchAll(PDO::FETCH_COLUMN);
     }
 }
