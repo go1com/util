@@ -115,7 +115,7 @@ class PlanRepository
         return $plans;
     }
 
-    public function loadByEntity(string $entityType, int $entityId, int $status = null, $type = Plan::TYPE_ASSIGN)
+    public function loadByEntity(string $entityType, int $entityId, int $status = null, $type = PlanTypes::ASSIGN)
     {
         $q = $this->db->createQueryBuilder();
         $q
