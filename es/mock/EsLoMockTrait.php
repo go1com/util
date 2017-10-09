@@ -13,6 +13,10 @@ trait EsLoMockTrait
     {
         static $autoId = 1;
 
+        $options['data'] = isset($options['data'])
+            ? (is_scalar($options['data']) ? json_decode($options['data'], true) : json_decode(json_encode($options['data']), true))
+            : [];
+
         $lo = [
             'id'             => $options['id'] ?? ++$autoId,
             'type'           => $options['type'] ?? LoTypes::COURSE,
