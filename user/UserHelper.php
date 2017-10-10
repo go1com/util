@@ -92,7 +92,7 @@ class UserHelper
             : false;
     }
 
-    public function name(stdClass $user, bool $last = false)
+    public static function name(stdClass $user, bool $last = false)
     {
         $name = $last ? "{$user->first_name} {$user->last_name}" : $user->first_name;
 
