@@ -10,12 +10,14 @@ class Activity implements JsonSerializable
     public $id;
     public $instanceId;
     public $actorId;
+    public $userId;
     public $actionId;
     public $entityType;
     public $entityId;
     public $created;
     public $updated;
     public $data;
+    public $context;
 
     private function __construct()
     {
@@ -24,16 +26,19 @@ class Activity implements JsonSerializable
 
     public static function create(stdClass $row)
     {
+        $row->data = $row->data ?? [];
         $activity = new static;
         $activity->id = $row->id ?? null;
-        $activity->instanceId = $row->instance_id;
-        $activity->actorId = $row->user_id ?? null;
-        $activity->actionId = $row->action_id;
-        $activity->entityType = $row->entity_type;
-        $activity->entityId = $row->entity_id;
+        $activity->instanceId = $row->instance_id ?? null;
+        $activity->actorId = $row->action_id ?? null;
+        $activity->userId = $row->user_id ?? null;
+        $activity->actionId = $row->action_id ?? null;
+        $activity->entityType = $row->entity_type ?? null;
+        $activity->entityId = $row->entity_id ?? null;
         $activity->created = $row->created ?? time();
         $activity->updated = $row->updated ?? $activity->created;
-        $activity->data = is_null($row->data) ? null : (is_string($row->data) ? json_decode($row->data) : (object) []);
+        $activity->data = is_null($row->data) ? [] : (is_string($row->data) ? json_decode($row->data) : (object) []);
+        $activity->context = $row->data->context ?? [];
 
         return $activity;
     }
@@ -55,16 +60,18 @@ class Activity implements JsonSerializable
 
     function jsonSerialize()
     {
+        $this->data->context = $this->context;
         return [
             'id'          => $this->id,
             'instance_id' => $this->instanceId,
-            'user_id'     => $this->actorId,
-            'action_type' => $this->actionId,
+            'actor_id'    => $this->actorId,
+            'user_id'     => $this->userId,
+            'action_id'   => $this->actionId,
             'entity_type' => $this->entityType,
             'entity_id'   => $this->entityId,
             'created'     => $this->created,
             'updated'     => $this->updated,
-            'data'        => $this->data,
+            'data'        => json_encode($this->data),
         ];
     }
 }
