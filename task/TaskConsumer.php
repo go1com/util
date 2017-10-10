@@ -115,5 +115,6 @@ class TaskConsumer implements ConsumerInterface
         if (!$pending) {
             TaskHelper::updateTaskStatus($this->db, $task->id, Task::STATUS_COMPLETED, $this->taskName);
         }
+        $this->taskItem = null;
     }
 }
