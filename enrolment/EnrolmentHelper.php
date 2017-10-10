@@ -221,6 +221,9 @@ class EnrolmentHelper
     )
     {
         $date = DateTime::formatDate('now');
+        if (!$startDate && ($status != EnrolmentStatuses::NOT_STARTED)) {
+            $startDate = $date;
+        }
 
         $enrolment = [
             'id'                => $id,
@@ -230,7 +233,7 @@ class EnrolmentHelper
             'instance_id'       => 0,
             'taken_instance_id' => $instanceId,
             'status'            => $status,
-            'start_date'        => $startDate ?? $date,
+            'start_date'        => $startDate,
             'end_date'          => $endDate,
             'result'            => $result,
             'pass'              => $pass,
