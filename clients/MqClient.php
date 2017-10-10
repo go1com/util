@@ -3,6 +3,7 @@
 namespace go1\clients;
 
 use Exception;
+use go1\util\AccessChecker;
 use go1\util\queue\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -10,6 +11,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpFoundation\Request;
 
 class MqClient
 {
@@ -20,18 +22,30 @@ class MqClient
     private $user;
     private $pass;
     private $logger;
+    private $accessChecker;
+    private $request;
 
     const CONTEXT_ACTOR_ID    = 'actor_id';
     const CONTEXT_TIMESTAMP   = 'timestamp';
     const CONTEXT_DESCRIPTION = 'description';
 
-    public function __construct($host, $port, $user, $pass, LoggerInterface $logger = null)
+    public function __construct(
+        $host,
+        $port,
+        $user,
+        $pass,
+        LoggerInterface $logger = null,
+        AccessChecker $accessChecker,
+        Request $request = null
+    )
     {
         $this->host = $host;
         $this->port = $port;
         $this->user = $user;
         $this->pass = $pass;
         $this->logger = $logger ?: new NullLogger;
+        $this->accessChecker = $accessChecker;
+        $this->request = $request;
     }
 
     private function channel()
@@ -62,6 +76,11 @@ class MqClient
 
         if ($service = getenv('SERVICE_80_NAME')) {
             $context['app'] = $service;
+        }
+
+        if (!isset($context[self::CONTEXT_ACTOR_ID]) && $this->request) {
+            $user = $this->accessChecker->validUser($this->request);
+            $user && $context[self::CONTEXT_ACTOR_ID] = $user->id;
         }
 
         if (!$exchange) {
