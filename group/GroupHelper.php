@@ -62,11 +62,16 @@ class GroupHelper
             : false;
     }
 
+    public static function hostGroupName(string $hostEntityType, int $hostEntityId, bool $marketplace): string
+    {
+        return $marketplace ? "go1:{$hostEntityType}:{$hostEntityId}:marketplace" : "go1:{$hostEntityType}:{$hostEntityId}";
+    }
+
     public static function hostContentSharingGroup(Connection $db, string $hostEntityType, $hostEntityId, bool $marketplace = false)
     {
         return self::loadGroupByTitle(
             $db,
-            $marketplace ? "go1:{$hostEntityType}:{$hostEntityId}:marketplace" : "go1:{$hostEntityType}:{$hostEntityId}",
+            self::hostGroupName($hostEntityType, $hostEntityId, $marketplace),
             GroupTypes::CONTENT_SHARING
         );
     }
