@@ -23,6 +23,7 @@ class Error
     const PRECONDITION_FAILED           = 412;
     const PAYLOAD_TOO_LARGE             = 413;
     const UPGRADE_REQUIRED              = 426;
+    const TOO_MANY_REQUESTS             = 429;
     const HEADER_TOO_LARGE              = 431;
     const SERVICE_UNAVAILABLE           = 503;
     const GATEWAY_TIMEOUT               = 504;
