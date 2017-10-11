@@ -82,7 +82,7 @@ class MailClient
         }
 
         try {
-            return $portalClient->mailTemplate($instance, $mailKey, $defaultSubject, $defaultBody, $defaultHtml);
+            return $portalClient->mailTemplate($instance, $mailKey);
         }
         catch (InvalidArgumentException $e) {
             return new Template($defaultSubject, $defaultBody, $defaultHtml);
