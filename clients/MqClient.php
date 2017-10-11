@@ -28,6 +28,7 @@ class MqClient
     const CONTEXT_ACTOR_ID    = 'actor_id';
     const CONTEXT_TIMESTAMP   = 'timestamp';
     const CONTEXT_DESCRIPTION = 'description';
+    const CONTEXT_REQUEST_ID  = 'request_id';
 
     public function __construct(
         $host,
@@ -81,6 +82,10 @@ class MqClient
         if (!isset($context[self::CONTEXT_ACTOR_ID]) && $this->request) {
             $user = $this->accessChecker->validUser($this->request);
             $user && $context[self::CONTEXT_ACTOR_ID] = $user->id;
+        }
+
+        if ($this->request && ($requestId = $this->request->headers->get('X-Request-Id'))) {
+            $context[self::CONTEXT_REQUEST_ID] = $requestId;
         }
 
         if (!$exchange) {
