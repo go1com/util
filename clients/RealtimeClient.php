@@ -18,7 +18,7 @@ class RealtimeClient
         $this->realtimeUrl = $realtimeUrl;
     }
 
-    public function notify(int $instanceId, int $profileId, string $body)
+    public function notify(int $profileId, array $data)
     {
         $this->queue->publish(
             [
@@ -27,9 +27,12 @@ class RealtimeClient
                 'query'   => '',
                 'headers' => ['Content-Type' => 'application/json'],
                 'body'    => json_encode([
-                    'instance_id' => $instanceId,
                     'pid'         => $profileId,
-                    'message'     => $this->html->purify($body),
+                    'message'     => $this->html->purify($data['message']),
+                    'image'       => $data['image'] ?? null,
+                    'tag'         => $data['tag'] ?? null,
+                    'from'        => $data['from'] ?? null,
+                    'instance_id' => $data['instance_id'] ?? null,
                 ]),
             ],
             Queue::DO_CONSUMER_HTTP_REQUEST
