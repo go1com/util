@@ -134,6 +134,11 @@ class Schema
             'legacy'        => ['type' => self::T_INT],
             'logo'          => ['type' => self::T_TEXT],
             'score'         => ['type' => self::T_INT], # activity score
+            'csm'           => [
+                'properties' => [
+                    'user_id' => ['type' => self::T_INT],
+                ]
+            ],
         ],
     ];
 
