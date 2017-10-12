@@ -25,7 +25,13 @@ class EckClient
         $fields = [];
         if (!empty($data)) {
             foreach ($data['fields'] as $fieldName => $item) {
-                $fields[$fieldName] = ['label' => $item['label'], 'type' => $item['type']];
+                $fields[$fieldName] = [
+                    'label'     => $item['label'],
+                    'type'      => $item['type'],
+                    'enum'      => $item['enum'],
+                    'mandatory' => $item['mandatory'],
+                    'published' => $item['published']
+                ];
             }
         }
 
