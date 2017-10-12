@@ -18,6 +18,8 @@ class UserHelper
     const DEFAULT_ACCOUNTS_ROLES = [Roles::AUTHENTICATED];
     const DEFAULT_PORTAL_ROLES   = [Roles::STUDENT, Roles::AUTHENTICATED];
 
+    const SYSTEM_USER_ID               = -1;
+    const CRON_USER_ID                 = -11;
     const INTERACTIVE_ADMIN_USER_ID    = -100;
     const INTERACTIVE_ADMIN_PROFILE_ID = -100;
     const QUIZ_ADMIN_USER_ID           = -200;
