@@ -72,10 +72,10 @@ class UtilServiceProvider implements ServiceProviderInterface
             return new QueueClient($c['client'], $c['queue_url']);
         };
 
-        $c['go1.client.es'] = function (Container $c) {
+        $c['go1.client.es-builder'] = function (Container $c) {
             $builder = EsClientBuilder::create();
 
-            if ($o = $c['esOptions']) {
+            if ($o = $c->offsetGet('esOptions')) {
                 if ($o['credential']) {
                     $provider = CredentialProvider::fromCredentials(new Credentials($o['key'], $o['secret']));
                     $builder->setHandler(new ElasticsearchPhpHandler($o['region'], $provider));
@@ -85,10 +85,16 @@ class UtilServiceProvider implements ServiceProviderInterface
             if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
                 $builder->setLogger($c['profiler.collectors.es']);
             }
+            return $builder;
+        };
 
-            return $builder
-                ->setHosts([parse_url($o['endpoint'])])
-                ->build();
+        $c['go1.client.es'] = function (Container $c) {
+            $builder = $c->offsetGet('go1.client.es-builder');
+            if ($o = $c->offsetGet('esOptions')) {
+                $builder->setHosts([parse_url($o['endpoint'])]);
+            }
+
+            return $builder->build();
         };
 
         $c['go1.client.s3'] = function (Container $c) {
