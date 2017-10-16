@@ -21,11 +21,11 @@ class GroupItemTypes
                 $types = [self::USER, self::NOTE, self::LO];
                 break;
 
-            case 'premium':
+            case GroupTypes::CONTENT:
                 $types = [self::LO];
                 break;
 
-            case 'marketplace':
+            case GroupTypes::CONTENT_PACKAGE:
                 $types = [self::GROUP, self::PORTAL];
                 break;
 
