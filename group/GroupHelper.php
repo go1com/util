@@ -304,16 +304,8 @@ class GroupHelper
     public static function format(stdClass &$group)
     {
         $group->data = is_scalar($group->data) ? json_decode($group->data) : $group->data;
-
-        if (isset($group->data->description)) {
-            $group->description = $group->data->description;
-            unset($group->data->description);
-        }
-
-        if (isset($group->data->image)) {
-            $group->image = $group->data->image;
-            unset($group->data->image);
-        }
+        $group->description = $group->data->description ?? '';
+        $group->image = $group->data->image ?? '';
     }
 
     public static function countMembers(Connection $db, array &$groups)
