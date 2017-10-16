@@ -28,6 +28,7 @@ abstract class UtilTestCase extends TestCase
 {
     use InstallTrait;
     use UserMockTrait;
+    use QueueMockTrait;
 
     /** @var  Connection */
     protected $db;
@@ -53,18 +54,9 @@ abstract class UtilTestCase extends TestCase
             },
         ]);
 
-        $this->queue = $this->getMockBuilder(MqClient::class)->setMethods(['publish', 'queue'])->disableOriginalConstructor()->getMock();
-        $this->queue
-            ->method('publish')
-            ->willReturnCallback(function ($body, $routingKey) {
-                $this->queueMessages[$routingKey][] = $body;
-            });
-
-        $this->queue
-            ->method('queue')
-            ->willReturnCallback(function ($body, $routingKey) {
-                $this->queueMessages[$routingKey][] = $body;
-            });
+        $c = $this->getContainer();
+        $this->mockMqClient($c);
+        $this->queue = $c['go1.client.mq'];
     }
 
     protected function getContainer()

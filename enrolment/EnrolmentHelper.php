@@ -217,7 +217,8 @@ class EnrolmentHelper
         int $result = 0,
         int $pass = 0,
         string $changed = null,
-        array $data = []
+        array $data = [],
+        $notify = true
     )
     {
         $date = DateTime::formatDate('now');
@@ -252,6 +253,6 @@ class EnrolmentHelper
             }
         }
 
-        $queue->publish($enrolment, Queue::ENROLMENT_CREATE);
+        $queue->publish($enrolment, Queue::ENROLMENT_CREATE, ['notify_email' => $notify]);
     }
 }
