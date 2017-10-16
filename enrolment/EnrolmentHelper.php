@@ -218,6 +218,7 @@ class EnrolmentHelper
         int $pass = 0,
         string $changed = null,
         array $data = [],
+        $assignerId = null,
         $notify = true
     )
     {
@@ -253,6 +254,6 @@ class EnrolmentHelper
             }
         }
 
-        $queue->publish($enrolment, Queue::ENROLMENT_CREATE, ['notify_email' => $notify]);
+        $queue->publish($enrolment, Queue::ENROLMENT_CREATE, ['notify_email' => $notify, MqClient::CONTEXT_ACTOR_ID => $assignerId]);
     }
 }
