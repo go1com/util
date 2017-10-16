@@ -19,17 +19,44 @@ class EckClientTest extends UtilTestCase
 
     private function mockClient()
     {
-        $qeliFields = '{"instance": "qeli.mygo1.com","entity_type": "user","fields": {"field_area": {"label": "Specialist area","type": "string"},"field_phone": {"label": "Phone","type": "string"},"field_position": {"label": "Position","type": "string"}}}';
+        $qeliFields = [
+            'instance'    => 'qeli.mygo1.com',
+            'entity_type' => 'user',
+            'fields'      => [
+                'field_area' => [
+                    'label'     => 'Specialist area',
+                    'type'      => 'string',
+                    'enum'      => [],
+                    'mandatory' => 0,
+                    'published' => 1,
+                ],
+                'field_phone' => [
+                    'label'     => 'Phone',
+                    'type'      => 'string',
+                    'enum'      => [],
+                    'mandatory' => 0,
+                    'published' => 1,
+                ],
+                'field_position' => [
+                    'label'     => 'Position',
+                    'type'      => 'string',
+                    'enum'      => [],
+                    'mandatory' => 0,
+                    'published' => 1,
+                ],
+            ],
+        ];
+
         $client = $this->getMockBuilder(Client::class)->setMethods(['get'])->getMock();
         $client
             ->expects($this->once())
             ->method('get')
-            ->with($this->callback(function ($url) use ($qeliFields){
+            ->with($this->callback(function ($url) use ($qeliFields) {
                 $this->assertContains("{$this->eckUrl}/fields/{$this->instance}/user", $url);
 
                 return true;
             }))
-            ->willReturn(new Response(200, [], $qeliFields));
+            ->willReturn(new Response(200, [], json_encode($qeliFields)));
 
         return $client;
     }
@@ -38,12 +65,12 @@ class EckClientTest extends UtilTestCase
     {
         $c = $this->getContainer();
 
-        $c['client'] = $this->mockClient();
+        $c['client']  = $this->mockClient();
         $c['eck_url'] = $this->eckUrl;
 
         /** @var EckClient $eckClient */
         $eckClient = $c['go1.client.eck'];
-        $fields = $eckClient->fields($this->instance, 'user');
+        $fields    = $eckClient->fields($this->instance, 'user');
 
         $fieldArea = $fields['field_area'];
         $this->assertEquals('Specialist area', $fieldArea['label']);
