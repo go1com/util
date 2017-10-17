@@ -261,6 +261,11 @@ class GroupHelper
         return ($group->data->premium ?? false) ? true : false;
     }
 
+    public static function isContentSharing(stdClass $group)
+    {
+        return $group->type == GroupTypes::CONTENT_SHARING;
+    }
+
     public static function isContentPackage(stdClass $group)
     {
         if (isset($group->type)) {
@@ -299,16 +304,8 @@ class GroupHelper
     public static function format(stdClass &$group)
     {
         $group->data = is_scalar($group->data) ? json_decode($group->data) : $group->data;
-
-        if (isset($group->data->description)) {
-            $group->description = $group->data->description;
-            unset($group->data->description);
-        }
-
-        if (isset($group->data->image)) {
-            $group->image = $group->data->image;
-            unset($group->data->image);
-        }
+        $group->description = $group->data->description ?? '';
+        $group->image = $group->data->image ?? '';
     }
 
     public static function countMembers(Connection $db, array &$groups)
@@ -360,5 +357,15 @@ class GroupHelper
         }
 
         return $access;
+    }
+
+    public static function hostIdFromGroupTitle(string $title)
+    {
+        return explode(":", $title)[2];
+    }
+
+    public static function hostTypeFromGroupTitle(string $title)
+    {
+        return explode(":", $title)[1];
     }
 }

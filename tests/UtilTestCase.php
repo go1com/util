@@ -6,7 +6,6 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
-use go1\clients\MqClient;
 use go1\util\DB;
 use go1\util\plan\PlanRepository;
 use go1\util\schema\AssignmentSchema;
@@ -16,7 +15,6 @@ use go1\util\schema\EckSchema;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Service;
-use go1\util\task\Task;
 use go1\util\task\TaskSchema;
 use go1\util\UtilServiceProvider;
 use GuzzleHttp\Client;
@@ -28,6 +26,7 @@ abstract class UtilTestCase extends TestCase
 {
     use InstallTrait;
     use UserMockTrait;
+    use QueueMockTrait;
 
     /** @var  Connection */
     protected $db;
@@ -53,18 +52,9 @@ abstract class UtilTestCase extends TestCase
             },
         ]);
 
-        $this->queue = $this->getMockBuilder(MqClient::class)->setMethods(['publish', 'queue'])->disableOriginalConstructor()->getMock();
-        $this->queue
-            ->method('publish')
-            ->willReturnCallback(function ($body, $routingKey) {
-                $this->queueMessages[$routingKey][] = $body;
-            });
-
-        $this->queue
-            ->method('queue')
-            ->willReturnCallback(function ($body, $routingKey) {
-                $this->queueMessages[$routingKey][] = $body;
-            });
+        $c = $this->getContainer();
+        $this->mockMqClient($c);
+        $this->queue = $c['go1.client.mq'];
     }
 
     protected function getContainer()
@@ -86,7 +76,7 @@ abstract class UtilTestCase extends TestCase
                         'user' => 'go1',
                         'pass' => 'go1',
                     ],
-                ] + Service::urls(['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin', 's3'], 'qa')
+                ] + Service::urls(['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin', 's3', 'realtime'], 'qa')
             );
     }
 }

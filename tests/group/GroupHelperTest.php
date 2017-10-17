@@ -414,4 +414,11 @@ class GroupHelperTest extends UtilTestCase
         $this->assertEquals($groupId, GroupHelper::hostContentSharingGroup($this->db, 'lo', 345)->id);
         $this->assertFalse(GroupHelper::hostContentSharingGroup($this->db, 'lo', 456));
     }
+
+    public function testHostIdFromGroupTitle()
+    {
+        $title = "go1:lo:100:marketplace";
+        $this->assertEquals(100, GroupHelper::hostIdFromGroupTitle($title));
+        $this->assertEquals('lo', GroupHelper::hostTypeFromGroupTitle($title));
+    }
 }

@@ -18,7 +18,7 @@ class EnrolmentSchema
             $enrolment->addColumn('lo_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('instance_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('taken_instance_id', 'integer', ['unsigned' => true]);
-            $enrolment->addColumn('start_date', 'datetime');
+            $enrolment->addColumn('start_date', 'datetime', ['notnull' => false]);
             $enrolment->addColumn('end_date', 'datetime', ['notnull' => false]);
             $enrolment->addColumn('status', 'string');
             $enrolment->addColumn('result', 'float', ['notnull' => false]);

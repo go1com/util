@@ -124,16 +124,31 @@ class Schema
         '_parent'    => ['type' => self::O_USER],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'            => ['type' => self::T_KEYWORD],
-            'title'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'status'        => ['type' => self::T_SHORT],
-            'name'          => ['type' => self::T_KEYWORD],
-            'version'       => ['type' => self::T_KEYWORD],
-            'created'       => ['type' => self::T_DATE],
-            'configuration' => ['type' => self::T_OBJECT],
-            'legacy'        => ['type' => self::T_INT],
-            'logo'          => ['type' => self::T_TEXT],
-            'score'         => ['type' => self::T_INT], # activity score
+            'id'                => ['type' => self::T_KEYWORD],
+            'title'             => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'status'            => ['type' => self::T_SHORT],
+            'name'              => ['type' => self::T_KEYWORD],
+            'version'           => ['type' => self::T_KEYWORD],
+            'created'           => ['type' => self::T_DATE],
+            'configuration'     => ['type' => self::T_OBJECT],
+            'legacy'            => ['type' => self::T_INT],
+            'logo'              => ['type' => self::T_TEXT],
+            'score'             => ['type' => self::T_INT], # activity score
+            'user_count'        => ['type' => self::T_INT],
+            'active_user_count' => ['type' => self::T_INT], # last 30 days
+            'plan'              => [
+                'properties' => [
+                    'name'     => ['type' => self::T_KEYWORD], # platform|premium
+                    'status'   => ['type' => self::T_INT], # 0: Free, 1: Trial, 2: Paid, 3: Overdue invoice
+                    'license'  => ['type' => self::T_INT],
+                    'regional' => ['type' => self::T_KEYWORD],
+                ],
+            ],
+            'csm'               => [
+                'properties' => [
+                    'user_id' => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
@@ -301,7 +316,7 @@ class Schema
                     'id'           => ['type' => self::T_KEYWORD],
                     'country'      => ['type' => self::T_KEYWORD],
                     'locality'     => ['type' => self::T_KEYWORD],
-                    'thoroughfare' => ['type' => self::T_KEYWORD],
+                    'thoroughfare' => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
             ],
             'metadata'       => [

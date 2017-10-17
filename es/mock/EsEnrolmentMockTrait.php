@@ -4,6 +4,7 @@ namespace go1\util\es\mock;
 
 use Elasticsearch\Client;
 use go1\util\DateTime;
+use go1\util\enrolment\EnrolmentTypes;
 use go1\util\es\Schema;
 
 trait EsEnrolmentMockTrait
@@ -14,6 +15,7 @@ trait EsEnrolmentMockTrait
 
         $enrolment = [
             'id'          => $options['id'] ?? ++$autoId,
+            'type'        => $options['type'] ?? EnrolmentTypes::TYPE_ENROLMENT,
             'profile_id'  => $options['profile_id'] ?? 0,
             'lo_id'       => $options['lo_id'] ?? 0,
             'parent_id'   => $options['parent_id'] ?? 0,

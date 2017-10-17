@@ -163,4 +163,11 @@ class PortalPricing
 
         return ($price > 0) ? self::PLAN_STATUS_TRIAL : self::PLAN_STATUS_FREE;
     }
+
+    public static function countCurrentActiveUser(Connection $db, $instance, string $since = '- 1 month'): int
+    {
+        $userCount = static::countPortalUsers($db, $instance);
+        $userActiveCount = $db->executeQuery('SELECT COUNT(*) FROM gc_user WHERE instance = ? AND login >= ?', [$instance, strtotime($since)])->fetchColumn();
+        return min($userCount, $userActiveCount);
+    }
 }

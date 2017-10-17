@@ -53,10 +53,10 @@ class PortalClient
         return $is404 ? null : $portal;
     }
 
-    public function configuration(string $instance, string $namespace, string $key)
+    public function configuration(string $instance, string $namespace, string $key, int $default = 1)
     {
         try {
-            $res = $this->client->get("{$this->portalUrl}/conf/{$instance}/{$namespace}/{$key}?jwt=" . UserHelper::ROOT_JWT);
+            $res = $this->client->get("{$this->portalUrl}/conf/{$instance}/{$namespace}/{$key}?default={$default}&jwt=" . UserHelper::ROOT_JWT);
             if ($json = json_decode($res->getBody()->getContents())) {
                 if (isset($json->data)) {
                     return $json->data;
@@ -71,7 +71,7 @@ class PortalClient
 
     public function mailTemplate($instance, $mailKey): MailTemplate
     {
-        if (!$template = $this->configuration($instance, 'mail-template', $mailKey)) {
+        if (!$template = $this->configuration($instance, 'mail-template', $mailKey, 0)) {
             throw new InvalidArgumentException('Template not found.');
         }
 

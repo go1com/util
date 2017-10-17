@@ -141,9 +141,9 @@ class Queue
     const ACTIVITY_DELETE            = 'activity.delete';
     const PAYMENT_STRIPE_AUTHORIZE   = 'payment.stripe.authorize';
     const PAYMENT_STRIPE_DEAUTHORIZE = 'payment.stripe.deauthorize';
-    const USER_EMAIL_CREATE          = 'user.email.create';
-    const USER_EMAIL_UPDATE          = 'user.email.update';
-    const USER_EMAIL_DELETE          = 'user.email.delete';
+    const USER_EMAIL_CREATE          = 'user-email.create';
+    const USER_EMAIL_UPDATE          = 'user-email.update';
+    const USER_EMAIL_DELETE          = 'user-email.delete';
 
     # routingKey that tell some service to do something.
     #
@@ -183,4 +183,6 @@ class Queue
     const DO_USER_UNBLOCK_IP                   = 'do.user.unblock.ip'; # String ip
     const DO_NOTIFY                            = 'do.notify'; # {task: string NOTIFY_TASKS, body: array TASK_BODY}
     const DO_AWARD_CRON                        = 'do.award.cron'; # { task: STRING }
+    const DO_AWARD_CALCULATE                   = 'do.award.calculate'; # {task: AWARD_TASK, body: array TASK_BODY}
+    const DO_AWARD_PLAN_CREATE                 = 'do.award.plan.create'; # Plan Object
 }

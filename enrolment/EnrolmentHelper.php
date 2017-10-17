@@ -217,10 +217,15 @@ class EnrolmentHelper
         int $result = 0,
         int $pass = 0,
         string $changed = null,
-        array $data = []
+        array $data = [],
+        $assignerId = null,
+        $notify = true
     )
     {
         $date = DateTime::formatDate('now');
+        if (!$startDate && ($status != EnrolmentStatuses::NOT_STARTED)) {
+            $startDate = $date;
+        }
 
         $enrolment = [
             'id'                => $id,
@@ -230,7 +235,7 @@ class EnrolmentHelper
             'instance_id'       => 0,
             'taken_instance_id' => $instanceId,
             'status'            => $status,
-            'start_date'        => $startDate ?? $date,
+            'start_date'        => $startDate,
             'end_date'          => $endDate,
             'result'            => $result,
             'pass'              => $pass,
@@ -249,6 +254,6 @@ class EnrolmentHelper
             }
         }
 
-        $queue->publish($enrolment, Queue::ENROLMENT_CREATE);
+        $queue->publish($enrolment, Queue::ENROLMENT_CREATE, ['notify_email' => $notify, MqClient::CONTEXT_ACTOR_ID => $assignerId]);
     }
 }

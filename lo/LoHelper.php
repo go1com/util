@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\util\DB;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
+use go1\util\enrolment\EnrolmentHelper;
 use HTMLPurifier_Config;
 use PDO;
 use stdClass;
@@ -250,6 +251,17 @@ class LoHelper
             ->get($db, [$loId], [], [EdgeTypes::COURSE_ASSESSOR], PDO::FETCH_COLUMN);
     }
 
+    public static function enrolmentAssessorIds(Connection $db, int $loId, int $learnerProfileId): array
+    {
+        if ($enrolmentId = EnrolmentHelper::enrolmentId($db, $loId, $learnerProfileId)) {
+            return EdgeHelper
+                ::select('source_id')
+                ->get($db, [], [$enrolmentId], [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE], PDO::FETCH_COLUMN);
+        }
+
+        return [];
+    }
+
     public static function hasActiveMembership(Connection $db, int $loId, int $instanceId): bool
     {
         $sql = 'SELECT 1 FROM gc_lo_group WHERE lo_id = ? AND instance_id = ?';
@@ -291,6 +303,8 @@ class LoHelper
         if (!isset($parentLoIds)) {
             $parentLoIds = static::parentIds($db, $loId);
         }
+        $parentLoIds[] = $loId;
+
         foreach ($parentLoIds as $parentLoId) {
             $authorIds = array_merge($authorIds, LoChecker::authorIds($db, $parentLoId));
         }
@@ -298,6 +312,27 @@ class LoHelper
         $authorIds = array_values(array_unique($authorIds));
 
         return array_map('intval', $authorIds);
+    }
+
+    public static function parentsAssessorIds(Connection $db, int $loId, array $parentLoIds = null, int $learnerProfileId = null): array
+    {
+        $assessorIds = [];
+        if (!isset($parentLoIds)) {
+            $parentLoIds = static::parentIds($db, $loId);
+        }
+        $parentLoIds[] = $loId;
+
+        foreach ($parentLoIds as $parentLoId) {
+            $assessorIds = array_merge($assessorIds, self::assessorIds($db, $parentLoId));
+
+            if ($learnerProfileId) {
+                $assessorIds = array_merge($assessorIds, self::enrolmentAssessorIds($db, $parentLoId, $learnerProfileId));
+            }
+        }
+
+        $assessorIds = array_values(array_unique($assessorIds));
+
+        return array_map('intval', $assessorIds);
     }
 
     public static function childIds(Connection $db, int $loId, $all = false): array

@@ -68,6 +68,23 @@ class PlanRepository
             $planRevision->addIndex(['created_date']);
             $planRevision->addIndex(['due_date']);
         }
+
+        self::update01($schema);
+    }
+
+    private static function update01(Schema $schema)
+    {
+        $plan = $schema->getTable('gc_plan');
+        if (!$plan->hasColumn('type')) {
+            $plan->addColumn('type', Type::SMALLINT, ['default' => PlanTypes::ASSIGN]);
+            $plan->addIndex(['type']);
+        }
+
+        $planRevision = $schema->getTable('gc_plan_revision');
+        if (!$planRevision->hasColumn('type')) {
+            $planRevision->addColumn('type', Type::SMALLINT, ['default' => PlanTypes::ASSIGN]);
+            $planRevision->addIndex(['type']);
+        }
     }
 
     public function load(int $id)
@@ -98,20 +115,22 @@ class PlanRepository
         return $plans;
     }
 
-    public function loadByEntity(string $entityType, int $entityId, int $status = null)
+    public function loadByEntity(string $entityType, int $entityId, int $status = null, $type = PlanTypes::ASSIGN)
     {
         $q = $this->db->createQueryBuilder();
         $q
             ->select('*')
             ->from('gc_plan')
             ->where($q->expr()->eq('entity_type', ':entityType'))
-            ->andWhere($q->expr()->eq('entity_id', ':entityId'));
+            ->andWhere($q->expr()->eq('entity_id', ':entityId'))
+            ->andWhere($q->expr()->eq('type', ':type'));
         !is_null($status) && $q
             ->andWhere($q->expr()->eq('status', ':status'));
 
         $q = $q->setParameters([
             ':entityType' => $entityType,
             ':entityId'   => $entityId,
+            ':type'       => $type,
             ':status'     => $status,
         ])->execute();
 
@@ -145,6 +164,7 @@ class PlanRepository
     public function create(Plan &$plan, bool $notify = false)
     {
         $this->db->insert('gc_plan', [
+            'type'         => $plan->type,
             'user_id'      => $plan->userId,
             'assigner_id'  => $plan->assignerId,
             'instance_id'  => $plan->instanceId,
@@ -167,6 +187,7 @@ class PlanRepository
     {
         $this->db->insert('gc_plan_revision', [
             'plan_id'      => $plan->id,
+            'type'         => $plan->type,
             'user_id'      => $plan->userId,
             'assigner_id'  => $plan->assignerId,
             'instance_id'  => $plan->instanceId,
@@ -211,11 +232,13 @@ class PlanRepository
         $original = $qb
             ->select('*')
             ->from('gc_plan', 'p')
-            ->where($qb->expr()->eq('user_id', ':userId'))
+            ->where($qb->expr()->eq('type', ':type'))
+            ->andWhere($qb->expr()->eq('user_id', ':userId'))
             ->andWhere($qb->expr()->eq('instance_id', ':instanceId'))
             ->andWhere($qb->expr()->eq('entity_type', ':entityType'))
             ->andWhere($qb->expr()->eq('entity_id', ':entityId'))
             ->setParameters([
+                ':type'       => $plan->type,
                 ':userId'     => $plan->userId,
                 ':instanceId' => $plan->instanceId,
                 ':entityType' => $plan->entityType,

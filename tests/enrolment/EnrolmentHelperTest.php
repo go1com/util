@@ -2,6 +2,7 @@
 
 namespace go1\util\tests\enrolment;
 
+use go1\clients\MqClient;
 use go1\util\DateTime;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
@@ -28,7 +29,7 @@ class EnrolmentHelperTest extends UtilTestCase
     protected $instancePublicKey;
     protected $instancePrivateKey;
     protected $instanceName = 'az.mygo1.com';
-    protected $profileId    = 11;
+    protected $profileId = 11;
     protected $userId, $jwt;
     protected $lpId, $courseId, $moduleId, $liVideoId, $liResourceId, $liInteractiveId, $electiveQuestionId, $electiveTextId, $electiveQuizId;
 
@@ -204,6 +205,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
         $this->assertEquals(5, $progress['total']);
     }
+
     public function testLearningItemProgressCount()
     {
         $course1 = $this->createCourse($this->db, ['instance_id' => $this->instanceId]);
@@ -232,11 +234,11 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $learningItemIds[0]]);
         $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $learningItemIds[5]]);
         $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $learningItemIds[3]]);
-        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment,true, LiTypes::all());
+        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment, true, LiTypes::all());
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
         $this->assertEquals(7, $progress['total']);
         $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $courseEvent, 'status' => EnrolmentStatuses::COMPLETED]);
-        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment,true, LiTypes::all());
+        $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment, true, LiTypes::all());
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
         $this->assertEquals(1, $progress[EnrolmentStatuses::COMPLETED]);
         $this->assertEquals(7, $progress['total']);
@@ -247,13 +249,15 @@ class EnrolmentHelperTest extends UtilTestCase
         $lo = LoHelper::load($this->db, $this->courseId);
         $status = EnrolmentStatuses::NOT_STARTED;
         $date = DateTime::formatDate('now');
-        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date);
+        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date, null, 0, 0, 0, [], null, true);
 
         $e = EnrolmentHelper::load($this->db, 1);
         $this->assertEquals($status, $e->status);
 
         $message = $this->queueMessages[Queue::ENROLMENT_CREATE];
         $this->assertCount(1, $message);
+        $this->assertTrue($message[0]['_context']['notify_email']);
+        $this->assertNull($message[0]['_context'][MqClient::CONTEXT_ACTOR_ID]);
     }
 
     public function testCreateWithMarketplaceLO()
