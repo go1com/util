@@ -319,6 +319,14 @@ class Schema
                     'thoroughfare' => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
             ],
+            'vote'        => [
+                'properties' => [
+                    'percent'   => ['type' => self::T_INT],
+                    'rank'      => ['type' => self::T_INT],
+                    'like'      => ['type' => self::T_INT],
+                    'dislike'   => ['type' => self::T_INT],
+                ],
+            ],
             'metadata'       => [
                 'properties' => [
                     'parents_authors_ids' => ['type' => self::T_INT],
