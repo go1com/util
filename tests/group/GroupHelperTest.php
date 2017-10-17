@@ -421,4 +421,13 @@ class GroupHelperTest extends UtilTestCase
         $this->assertEquals(100, GroupHelper::hostIdFromGroupTitle($title));
         $this->assertEquals('lo', GroupHelper::hostTypeFromGroupTitle($title));
     }
+
+    public function testLoadItemByGroupAndEntity()
+    {
+        $groupId = $this->repository->create(GroupTypes::CONTENT_SHARING, 555, 'Testing group');
+        $groupItemId = $this->repository->createItem($groupId, 'lo', 456, GroupItemStatus::ACTIVE);
+        $groupItem = GroupHelper::loadItemByGroupAndEntity($this->db, $groupId, 'lo', 456);
+
+        $this->assertEquals($groupItem->id, $groupItemId);
+    }
 }
