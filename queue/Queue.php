@@ -184,4 +184,5 @@ class Queue
     const DO_NOTIFY                            = 'do.notify'; # {task: string NOTIFY_TASKS, body: array TASK_BODY}
     const DO_AWARD_CRON                        = 'do.award.cron'; # { task: STRING }
     const DO_AWARD_CALCULATE                   = 'do.award.calculate'; # {task: AWARD_TASK, body: array TASK_BODY}
+    const DO_AWARD_PLAN_CREATE                 = 'do.award.plan.create'; # Plan Object
 }
