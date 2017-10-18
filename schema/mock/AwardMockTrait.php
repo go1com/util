@@ -86,6 +86,7 @@ trait AwardMockTrait
             'title'           => $options['title'] ?? null,
             'type'            => $options['type'] ?? null,
             'description'     => $options['description'] ?? null,
+            'categories'      => $options['categories'] ?? null,
             'user_id'         => $options['user_id'] ?? 0,
             'entity_id'       => $options['entity_id'] ?? null,
             'verified'        => $options['verified'] ?? false,
