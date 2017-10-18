@@ -153,5 +153,16 @@ class AwardSchema
             $enrolmentRevision->addIndex(['quantity']);
             $enrolmentRevision->addIndex(['created']);
         }
+
+        self::update01($schema);
+    }
+
+    private static function update01(Schema $schema)
+    {
+        $awardItemManual = $schema->getTable('award_item_manual');
+        if (!$awardItemManual->hasColumn('categories')) {
+            $awardItemManual->addColumn('categories', Type::STRING, ['notnull' => false]);
+            $awardItemManual->addIndex(['categories']);
+        }
     }
 }
