@@ -56,4 +56,15 @@ class LoCheckerTest extends UtilTestCase
         $lo2 = LoHelper::load($this->db, $loId2);
         $this->assertFalse(LoChecker::allowDiscussion($lo2));
     }
+
+    public function testPassRate()
+    {
+        $id1 = $this->createLO($this->db);
+        $lo1 = LoHelper::load($this->db, $id1);
+        $this->assertEquals(0, LoChecker::passRate($lo1));
+
+        $id2 = $this->createLO($this->db, ['data' => [LoHelper::PASS_RATE => 80]]);
+        $lo2 = LoHelper::load($this->db, $id2);
+        $this->assertEquals(80, LoChecker::passRate($lo2));
+    }
 }
