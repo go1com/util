@@ -374,4 +374,42 @@ class GroupHelper
     {
         return explode(":", $title)[1];
     }
+
+    public static function findGroupIdsByItem(Connection $db, string $entityType, int $entityId, int $offset = 0, int $limit = 50): array
+    {
+        $q = $db->createQueryBuilder();
+        return $q->select('group_id')
+            ->from('social_group_item', 'item')
+            ->where('entity_type = ?')
+            ->andWhere('entity_id = ?')
+            ->andWhere('status = ?')
+            ->setParameters([$entityType, $entityId, GroupItemStatus::ACTIVE], [DB::STRING, DB::INTEGER, DB::INTEGER])
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->execute()
+            ->fetchAll(DB::COL);
+    }
+
+    public static function countGroupByItem(Connection $db, string $entityType, int $entityId): int
+    {
+        $q = $db->createQueryBuilder();
+        return $q->select('count(group_id)')
+            ->from('social_group_item', 'item')
+            ->where('entity_type = ?')
+            ->andWhere('entity_id = ?')
+            ->andWhere('status = ?')
+            ->setParameters([$entityType, $entityId, GroupItemStatus::ACTIVE], [DB::STRING, DB::INTEGER, DB::INTEGER])
+            ->execute()
+            ->fetchColumn();
+    }
+
+    public static function isPortalSystemGroup(string $title)
+    {
+        $explode = explode(":", $title);
+        if ((count($explode) == 3) && ($explode[0] == 'go1') && ($explode[1] == 'portal')) {
+            return true;
+        }
+
+        return false;
+    }
 }

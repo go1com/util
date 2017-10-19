@@ -430,4 +430,29 @@ class GroupHelperTest extends UtilTestCase
 
         $this->assertEquals($groupItem->id, $groupItemId);
     }
+
+    public function testFindGroupIdsByItem()
+    {
+        $groupId = $this->repository->create(GroupTypes::CONTENT_SHARING, 555, 'Testing group');
+        $this->repository->createItem($groupId, 'lo', 456, GroupItemStatus::ACTIVE);
+        $groupIds = GroupHelper::findGroupIdsByItem($this->db, 'lo', 456);
+
+        $this->assertEquals($groupIds[0], $groupId);
+    }
+
+    public function testCountGroupByItem()
+    {
+        $groupId = $this->repository->create(GroupTypes::CONTENT_SHARING, 555, 'Testing group');
+        $this->repository->createItem($groupId, 'lo', 456, GroupItemStatus::ACTIVE);
+        $numOfGroup = GroupHelper::countGroupByItem($this->db, 'lo', 456);
+
+        $this->assertEquals(1, $numOfGroup);
+    }
+
+    public function testIsPortalSystemGroup()
+    {
+        $this->assertTrue(GroupHelper::isPortalSystemGroup('go1:portal:1'));
+        $this->assertFalse(GroupHelper::isPortalSystemGroup('go1:foo:1'));
+        $this->assertFalse(GroupHelper::isPortalSystemGroup('Foo'));
+    }
 }
