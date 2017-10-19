@@ -270,6 +270,7 @@ class Schema
             'description'    => ['type' => self::T_TEXT],
             'tags'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'image'          => ['type' => self::T_TEXT],
+            'quantity'       => ['type' => self::T_DOUBLE],
             'pricing'        => [
                 'properties' => [
                     'currency'     => ['type' => self::T_KEYWORD],
@@ -384,6 +385,7 @@ class Schema
             'lo_id'       => ['type' => self::T_INT],
             'parent_id'   => ['type' => self::T_INT],
             'status'      => ['type' => self::T_SHORT],
+            'quantity'    => ['type' => self::T_DOUBLE],
             'result'      => ['type' => self::T_INT],
             'pass'        => ['type' => self::T_INT],
             'assessors'   => ['type' => self::T_INT],
