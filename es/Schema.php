@@ -14,6 +14,7 @@ class Schema
     const MARKETPLACE_INDEX = ES_INDEX . '_marketplace';
     const LOG_INDEX         = ES_INDEX . '_log';
     const ACTIVITY_INDEX    = ES_INDEX . '_activity';
+    const PORTALS_INDEX     = ES_INDEX . '_portal*';
 
     const TEMP = -32;
 
@@ -334,6 +335,7 @@ class Schema
                     'parents_id'          => ['type' => self::T_INT],
                     'instance_id'         => ['type' => self::T_INT],
                     'updated_at'          => ['type' => self::T_INT],
+                    'shared'              => ['type' => self::T_SHORT],
                 ],
             ],
         ],
