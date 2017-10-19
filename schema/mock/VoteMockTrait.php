@@ -8,7 +8,7 @@ use go1\util\vote\VoteHelper;
 
 trait VoteMockTrait
 {
-    protected function createVote(Connection $db, $type, $entityType, $entityId, $profileId, $value)
+    protected function createVote(Connection $db, string $type, string $entityType, int $entityId, $profileId, $value)
     {
         $db->insert('vote_items', [
             'type'        => $type,
@@ -19,23 +19,38 @@ trait VoteMockTrait
             'timestamp'   => time(),
         ]);
         $id = $db->lastInsertId('vote_items');
-        $this->cacheVote($db, $id);
+        $this->cacheVote($db, $type, $entityType, $entityId);
 
         return $id;
     }
 
-    private function cacheVote(Connection $db, int $voteId)
+    protected function editVote(Connection $db, array $values, int $id, string $type, string $entityType, int $entityId)
     {
-        $vote = VoteHelper::load($db, $voteId);
-        $data = VoteHelper::getCacheData($db, $vote->type, $vote->entity_type, $vote->entity_id);
+        $db->update('vote_items', $values, ['id' => $id]);
+        $this->cacheVote($db, $type, $entityType, $entityId);
+
+        return $id;
+    }
+
+    protected function deleteVote(Connection $db, int $id, string $type, string $entityType, int $entityId)
+    {
+        $db->delete('vote_items', ['id' => $id]);
+        $this->cacheVote($db, $type, $entityType, $entityId);
+
+        return $id;
+    }
+
+    private function cacheVote(Connection $db, string $type, string $entityType, int $entityId)
+    {
+        $data = VoteHelper::getCacheData($db, $type, $entityType, $entityId);
         if (!$data) {
             return;
         }
-        $percent = VoteHelper::calculatePercent($vote->type, $data);
+        $percent = VoteHelper::calculatePercent($type, $data);
 
         $voteCache = $db->executeQuery(
             'SELECT `data` FROM vote_caches WHERE type = ? AND entity_type = ? AND entity_id = ?',
-            [$vote->type, $vote->entity_type, $vote->entity_id]
+            [$type, $entityType, $entityId]
         )->fetchColumn();
 
         if ($voteCache) {
@@ -46,9 +61,9 @@ trait VoteMockTrait
                     'percent' => $percent,
                 ],
                 [
-                    'type'        => $vote->type,
-                    'entity_type' => $vote->entity_type,
-                    'entity_id'   => $vote->entity_id,
+                    'type'        => $type,
+                    'entity_type' => $entityType,
+                    'entity_id'   => $entityId,
                 ]
             );
         }
@@ -56,9 +71,9 @@ trait VoteMockTrait
             $db->insert(
                 'vote_caches',
                 [
-                    'type'        => $vote->type,
-                    'entity_type' => $vote->entity_type,
-                    'entity_id'   => $vote->entity_id,
+                    'type'        => $type,
+                    'entity_type' => $entityType,
+                    'entity_id'   => $entityId,
                     'data'        => json_encode($data),
                     'percent'     => $percent,
                 ]

@@ -45,6 +45,12 @@ class GroupHelper
         return $db->executeQuery('SELECT * FROM social_group_item WHERE id = ?', [$id])->fetch(DB::OBJ);
     }
 
+    public static function loadItemByGroupAndEntity(Connection $db, int $groupId, string $entityType, int $entityId)
+    {
+        $sql = 'SELECT * FROM social_group_item WHERE group_id = ? AND entity_type = ? AND entity_id = ?';
+        return $db->executeQuery($sql, [$groupId, $entityType, $entityId], [DB::INTEGER, DB::STRING, DB::INTEGER])->fetch(DB::OBJ);
+    }
+
     public static function loadGroupByTitle(Connection $db, string $title, string $type = null)
     {
         $q = $db
