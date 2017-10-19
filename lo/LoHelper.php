@@ -27,6 +27,7 @@ class LoHelper
     const SEQUENCE_ENROL             = 'requiredSequence';
     const SUGGESTED_COMPLETION_TIME  = 'suggested_completion_time';
     const SUGGESTED_COMPLETION_UNIT  = 'suggested_completion_unit';
+    const PASS_RATE                  = 'pass_rate';
 
     // GO1P-5665: Expiration for award.
     const AWARD      = 'award';

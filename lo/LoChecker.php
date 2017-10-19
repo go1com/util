@@ -149,4 +149,11 @@ class LoChecker
     {
         return $accessChecker->isPortalTutor($req, $instanceName) || $accessChecker->isPortalManager($req, $instanceName);
     }
+
+    public static function passRate(stdClass $lo)
+    {
+        $data = (new static)->loData($lo);
+
+        return $data[LoHelper::PASS_RATE] ?? 0;
+    }
 }
