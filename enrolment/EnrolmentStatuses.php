@@ -31,9 +31,8 @@ class EnrolmentStatuses
 
     # Enrolment pass
     # ---------------------
-    # passed:          1
-    # not passed:      0
-    # pending review: -1
+    const PASSED = 1;
+    const FAILED = 0;
 
     // Numeric values for the statuses. Being used in ES.
     const I_NOT_STARTED = -20;
