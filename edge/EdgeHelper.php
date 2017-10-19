@@ -74,7 +74,7 @@ class EdgeHelper
 
     public static function hasLink(Connection $db, $type, $sourceId, $targetId)
     {
-        return $db->fetchColumn('SELECT 1 FROM gc_ro WHERE type = ? AND source_id = ? AND target_id = ?', [$type, $sourceId, $targetId]);
+        return $db->fetchColumn('SELECT id FROM gc_ro WHERE type = ? AND source_id = ? AND target_id = ?', [$type, $sourceId, $targetId]);
     }
 
     public static function unlink(Connection $db, MqClient $queue, $type, $sourceId = null, $targetId = null, $weight = null)

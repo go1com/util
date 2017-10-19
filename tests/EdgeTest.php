@@ -85,10 +85,10 @@ class EdgeTest extends UtilTestCase
 
     public function testHasLink()
     {
-        $this->assertEquals(true, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 2));
-        $this->assertEquals(true, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 3));
-        $this->assertEquals(true, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 4));
-        $this->assertEquals(false, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 5));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 2));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 3));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 4));
+        $this->assertEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 5));
     }
 
     public function testUnlinkBadCall()
@@ -107,9 +107,9 @@ class EdgeTest extends UtilTestCase
         $this->assertFalse(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId, $accountId = 4));
 
         // Other relationships should not be removed by accident.
-        $this->assertEquals(true, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 2));
-        $this->assertEquals(true, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 3));
-        $this->assertEquals(true, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 4));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 2));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 3));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 4));
     }
 
     public function unlinkByTarget()
