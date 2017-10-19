@@ -393,6 +393,7 @@ class Schema
             'end_date'    => ['type' => self::T_DATE],
             'due_date'    => ['type' => self::T_DATE],
             'changed'     => ['type' => self::T_DATE],
+            'created'     => ['type' => self::T_DATE],
             // Duration between end date and start date (hours).
             // @todo Support quiz and interactive.
             'duration'    => ['type' => self::T_INT],
