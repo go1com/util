@@ -175,11 +175,13 @@ class EdgeTest extends UtilTestCase
     {
         $courseId = 123;
         $instanceId = 555;
-        $edgeId = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_LO_TOKEN, $courseId, $instanceId, 0, $data = [
-            'token_1' => 'value 1',
-            'token_2' => 'value 2',
+        $edgeId = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_LO_CUSTOMISATION, $courseId, $instanceId, 0, [
+            'tokens' => $tokens = [
+                'token_1' => 'value 1',
+                'token_2' => 'value 2',
+            ],
         ]);
 
-        $this->assertEquals($data, (array) EdgeHelper::load($this->db, $edgeId)->data);
+        $this->assertEquals($tokens, (array) EdgeHelper::load($this->db, $edgeId)->data->tokens);
     }
 }
