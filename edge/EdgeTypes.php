@@ -94,7 +94,7 @@ class EdgeTypes
     const HAS_CREDIT_REQUEST_REJECTED = 39; # T: User (learner)       | S: LO                    | Weight: Manager ID — who reject.
     const HAS_LOCATION                = 40; # T: gc_location.id       | S: gc_event.id
     const HAS_LO_LOCATION             = 41; # T: gc_location.id       | S: gc_lo.id
-    const HAS_LO_CUSTOMISATION        = 42; # T: gc_instance.id       | S: gc_lo.id              | data: { token_N: STRING }
+    const HAS_LO_CUSTOMISATION        = 42; # T: gc_instance.id       | S: gc_lo.id              | data: { KEY: VALUE }
     const HAS_AWARD_LOCATION          = 43; # T: gc_location.id       | S: award_award.id
 
     # LO & enrolment scheduling

@@ -29,6 +29,7 @@ class MqClient
     const CONTEXT_TIMESTAMP   = 'timestamp';
     const CONTEXT_DESCRIPTION = 'description';
     const CONTEXT_REQUEST_ID  = 'request_id';
+    const CONTEXT_INTERNAL    = 'internal';
 
     public function __construct(
         $host,

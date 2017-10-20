@@ -172,7 +172,7 @@ class PlanRepository
             'entity_id'    => $plan->entityId,
             'status'       => $plan->status,
             'created_date' => $plan->created ? $plan->created->format(DATE_ISO8601) : '',
-            'due_date'     => $plan->due ? $plan->due->format(DATE_ISO8601) : '',
+            'due_date'     => $plan->due ? $plan->due->format(DATE_ISO8601) : null,
             'data'         => $plan->data ? json_encode($plan->data) : null,
         ]);
 
