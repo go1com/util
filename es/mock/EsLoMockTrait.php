@@ -65,7 +65,7 @@ trait EsLoMockTrait
             'index'   => $options['index'] ?? Schema::INDEX,
             'routing' => $options['routing'] ?? Schema::INDEX,
             'type'    => Schema::O_LO,
-            'id'      => $lo['id'],
+            'id'      => $options['_id'] ?? $lo['id'],
             'body'    => $lo,
             'refresh' => true
         ]);
