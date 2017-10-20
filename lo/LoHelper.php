@@ -363,4 +363,16 @@ class LoHelper
 
         return $db->fetchColumn($sql, [$loId]);
     }
+
+    public static function getCustomisation(Connection $db, int $loId, int $portalId): array
+    {
+        $edges = EdgeHelper::edges($db, [$loId], [$portalId], [EdgeTypes::HAS_LO_CUSTOMISATION]);
+        if ($edge = reset($edges)) {
+            $data = $edge->data ?? [];
+
+            return is_scalar($data) ? json_decode($data, true) : [];
+        }
+
+        return [];
+    }
 }
