@@ -3,9 +3,11 @@
 namespace go1\util\tests\lo;
 
 use DateTime;
+use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
+use go1\util\lo\LoStatuses;
 use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
@@ -335,6 +337,23 @@ class LoHelperTest extends UtilTestCase
         $this->createEnrolment($this->db, ['profile_id' => 2, 'lo_id' => $this->course1Id]);
         $this->createEnrolment($this->db, ['profile_id' => 3, 'lo_id' => $this->course1Id]);
         $this->assertEquals(3, LoHelper::countEnrolment($this->db, $this->course1Id));
+    }
+
+    public function testGetCustomisation()
+    {
+        $courseId = 123;
+        $instanceId = 555;
+        $this->link($this->db,EdgeTypes::HAS_LO_CUSTOMISATION, $courseId, $instanceId, 0, [
+            'tokens' => $tokens = [
+                'token_1' => 'value 1',
+                'token_2' => 'value 2',
+            ],
+            'published' => LoStatuses::ARCHIVED
+        ]);
+
+        $customize = LoHelper::getCustomisation($this->db, $courseId, $instanceId);
+        $this->assertEquals($customize['published'], LoStatuses::ARCHIVED);
+        $this->assertEquals($customize['tokens']['token_1'], $tokens['token_1']);
     }
 
     private function hasAuthor($authorId, array $source)
