@@ -28,7 +28,6 @@ use go1\clients\SmsClient;
 use go1\clients\UserClient;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
-use go1\util\report\Export;
 use GraphAware\Neo4j\Client\ClientBuilder;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -58,10 +57,6 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['lo_checker'] = function () {
             return new LoChecker;
-        };
-
-        $c['report_export'] = function (Container $c) {
-            return new Export($c['go1.client.s3'], $c['go1.client.es']);
         };
 
         $c['go1.client.accounts'] = function (Container $c) {
