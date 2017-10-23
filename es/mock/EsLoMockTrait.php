@@ -54,6 +54,8 @@ trait EsLoMockTrait
                 'parents_id'          => $options['metadata']['parents_id'] ?? null,
                 'instance_id'         => $options['routing'] ?? $options['instance_id'] ?? 0,
                 'updated_at'          => $options['updated_at'] ?? time(),
+                'customized'          => $options['metadata']['customized'] ?? 0,
+                'shared'              => $options['metadata']['shared'] ?? 0,
             ],
             'data'           => [
                 'path' => $options['data']['path'] ?? '',
