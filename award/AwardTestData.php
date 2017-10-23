@@ -58,15 +58,15 @@ class AwardTestData
         return $this;
     }
 
-    public function setAwardItemManual(array $options = [])
+    public function setAwardItemManuals(array $options = [])
     {
         $this->checkAward();
 
         foreach ($options as $option) {
             $option['award_id'] = $this->award->id;
-            $awardItemManualId = $this->createAwardItemManual($this->dbAward, $option);
-            $this->awardItemManuals[] = $awardItemManualId;
+            $awardItemManualIds[] = $this->createAwardItemManual($this->dbAward, $option);
         }
+        $this->awardItemManuals = isset($awardItemManualIds) ? AwardHelper::loadManualItems($this->dbAward, $awardItemManualIds) : [];
 
         return $this;
     }

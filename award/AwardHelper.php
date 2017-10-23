@@ -81,22 +81,32 @@ class AwardHelper
             : false;
     }
 
-    public static function loadManualItem(Connection $db, int $awardManualItemId, $status = AwardStatuses::PUBLISHED)
+    public static function loadManualItem(Connection $db, int $manualItemId, $status = AwardStatuses::PUBLISHED)
     {
-        $awardManualItem = $db
-            ->executeQuery('SELECT * FROM award_item_manual WHERE id = ? AND published = ?', [$awardManualItemId, $status])
-            ->fetch(DB::OBJ);
+        return ($manualItems = static::loadManualItems($db, [$manualItemId], $status))
+            ? $manualItems[0]
+            : false;
+    }
 
-        if ($awardManualItem) {
-            if (!$awardManualItem->data = json_decode($awardManualItem->data)) {
-                unset($awardManualItem->data);
+    public static function loadManualItems(Connection $db, array $manualItemIds, $status = AwardStatuses::PUBLISHED)
+    {
+        $manualItems = [];
+        $manualItemQuery = $db
+            ->executeQuery('SELECT * FROM award_item_manual WHERE id IN (?) AND published = ?', [$manualItemIds, $status], [DB::INTEGERS, DB::INTEGER]);
+
+        while ($manualItem = $manualItemQuery->fetch(DB::OBJ)) {
+            if (!$manualItem->data = json_decode($manualItem->data)) {
+                unset($manualItem->data);
             }
-            if (!empty($awardManualItem->categories)) {
-                $awardManualItem->categories = Text::parseInlineTags($awardManualItem->categories);
+
+            if (!empty($manualItem->categories)) {
+                $manualItem->categories = Text::parseInlineTags($manualItem->categories);
             }
+
+            $manualItems[] = $manualItem;
         }
 
-        return $awardManualItem;
+        return $manualItems;
     }
 
     public static function loadAchievements(Connection $db, array $achievementIds)
