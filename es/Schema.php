@@ -341,6 +341,7 @@ class Schema
                     'instance_id'         => ['type' => self::T_INT],
                     'updated_at'          => ['type' => self::T_INT],
                     'shared'              => ['type' => self::T_SHORT],
+                    'customized'          => ['type' => self::T_SHORT],
                 ],
             ],
         ],
