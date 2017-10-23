@@ -17,6 +17,7 @@ class Schema
     const PORTALS_INDEX     = ES_INDEX . '_portal*';
 
     const TEMP = -32;
+    const MAX_INPUT_LENGTH = 50;
 
     const DO_INDEX  = 'index';
     const DO_UPDATE = 'update';
@@ -65,6 +66,8 @@ class Schema
     // enrolment only belong to lo. account_enrolment is enrolment, but belong to account.
     // This is used to get users that is not enrolled to a course.
     const O_ACCOUNT_ENROLMENT = 'account_enrolment';
+
+    const A_SIMPLE = 'simple';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -847,7 +850,13 @@ class Schema
             'certificate'     => ['type' => self::T_OBJECT],
             'verified'        => ['type' => self::T_INT],
             'weight'          => ['type' => self::T_INT],
-            'categories'      => ['type' => self::T_COMPLETION],
+            'categories'      => [
+                'type'                         => self::T_COMPLETION,
+                'analyzer'                     => self::A_SIMPLE,
+                'preserve_separators'          => true,
+                'preserve_position_increments' => true,
+                'max_input_length'             => self::MAX_INPUT_LENGTH,
+            ],
         ],
     ];
 
