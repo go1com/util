@@ -91,6 +91,9 @@ class AwardHelper
             if (!$awardManualItem->data = json_decode($awardManualItem->data)) {
                 unset($awardManualItem->data);
             }
+            if (!empty($awardManualItem->categories)) {
+                $awardManualItem->categories = Text::parseInlineTags($awardManualItem->categories);
+            }
         }
 
         return $awardManualItem;

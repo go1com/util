@@ -22,17 +22,18 @@ class Schema
     const DO_UPDATE = 'update';
     const DO_DELETE = 'delete';
 
-    const T_BOOL    = 'boolean'; # Don't use this, because query_string will match true always, use T_INT instead.
-    const T_SHORT   = 'short';
-    const T_INT     = 'integer';
-    const T_FLOAT   = 'float';
-    const T_DOUBLE  = 'double'; # Use double if you want to use aggregation feature.
-    const T_TEXT    = 'text';
-    const T_KEYWORD = 'keyword';
-    const T_DATE    = 'date';
-    const T_ARRAY   = 'array';
-    const T_OBJECT  = 'object';
-    const T_NESTED  = 'nested';
+    const T_BOOL       = 'boolean'; # Don't use this, because query_string will match true always, use T_INT instead.
+    const T_SHORT      = 'short';
+    const T_INT        = 'integer';
+    const T_FLOAT      = 'float';
+    const T_DOUBLE     = 'double'; # Use double if you want to use aggregation feature.
+    const T_TEXT       = 'text';
+    const T_KEYWORD    = 'keyword';
+    const T_DATE       = 'date';
+    const T_ARRAY      = 'array';
+    const T_COMPLETION = 'completion';
+    const T_OBJECT     = 'object';
+    const T_NESTED     = 'nested';
 
     const O_EDGE                = 'edge';
     const O_PORTAL              = 'portal';
@@ -294,7 +295,7 @@ class Schema
             'updated'        => ['type' => self::T_DATE],
             'fields'         => ['type' => self::T_OBJECT],
             'event'          => [
-                'properties' => self::EVENT_PROPERTIES
+                'properties' => self::EVENT_PROPERTIES,
             ],
             'items_count'    => ['type' => self::T_INT], # Only count first child level
             'authors'        => [
@@ -322,12 +323,12 @@ class Schema
                     'thoroughfare' => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
             ],
-            'vote'        => [
+            'vote'           => [
                 'properties' => [
-                    'percent'   => ['type' => self::T_INT],
-                    'rank'      => ['type' => self::T_INT],
-                    'like'      => ['type' => self::T_INT],
-                    'dislike'   => ['type' => self::T_INT],
+                    'percent' => ['type' => self::T_INT],
+                    'rank'    => ['type' => self::T_INT],
+                    'like'    => ['type' => self::T_INT],
+                    'dislike' => ['type' => self::T_INT],
                 ],
             ],
             'metadata'       => [
@@ -773,16 +774,16 @@ class Schema
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_LO],
         'properties' => self::EVENT_PROPERTIES + [
-            'parent'                  => [
-                'properties' => self::LO_MAPPING['properties'],
-            ],
-            'metadata'                => [
-                'properties' => [
-                    'instance_id' => ['type' => self::T_INT],
-                    'updated_at'  => ['type' => self::T_INT],
+                'parent'   => [
+                    'properties' => self::LO_MAPPING['properties'],
+                ],
+                'metadata' => [
+                    'properties' => [
+                        'instance_id' => ['type' => self::T_INT],
+                        'updated_at'  => ['type' => self::T_INT],
+                    ],
                 ],
             ],
-        ],
     ];
 
     const AWARD_MAPPING = [
@@ -846,6 +847,7 @@ class Schema
             'certificate'     => ['type' => self::T_OBJECT],
             'verified'        => ['type' => self::T_INT],
             'weight'          => ['type' => self::T_INT],
+            'categories'      => ['type' => self::T_COMPLETION],
         ],
     ];
 
