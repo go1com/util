@@ -412,4 +412,14 @@ class GroupHelper
 
         return false;
     }
+
+    public static function isMemberOfContentSharingGroup(Connection $db, int $loId, int $instanceId, bool $marketplace = false) :bool
+    {
+        $hostGroup = self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, $marketplace);
+        if ($hostGroup && self::isItemOf($db, GroupItemTypes::PORTAL, $instanceId, $hostGroup->id)) {
+            return true;
+        }
+
+        return false;
+    }
 }
