@@ -2,7 +2,7 @@
   "name": "go1/util",
   "license": "proprietary",
   "prefer-stable": true,
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
       "go1\\util\\": "./",
@@ -31,6 +31,7 @@
   },
   "require-dev": {
     "behat/transliterator": "^1.2",
-    "ezyang/htmlpurifier": "^4.7.0"
+    "ezyang/htmlpurifier": "^4.7.0",
+    "rappasoft/laravel-helpers": "dev-master"
   }
 }

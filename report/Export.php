@@ -36,8 +36,8 @@ class Export
         if (!$allSelected) {
             // Improve performance by not loading all records then filter out.
             $params['body']['query']['bool']['must'][] = [
-                'terms' => [
-                    'id' => $selectedIds
+                'ids' => [
+                    'values' => $selectedIds
                 ]
             ];
         }
@@ -53,7 +53,7 @@ class Export
         while (\true) {
             if (count($docs['hits']['hits']) > 0) {
                 foreach ($docs['hits']['hits'] as $hit) {
-                    if (empty($excludedIds) || !in_array($hit['_source']['id'], $excludedIds)) {
+                    if (empty($excludedIds) || !in_array($hit['_id'], $excludedIds)) {
                         $csv = $this->getValues($fields, $hit, $formatters);
                         // Write row.
                         fputcsv($stream, $csv);
@@ -92,7 +92,7 @@ class Export
         return "$domain/$bucket/$key";
     }
 
-    private function getValues($fields, $hit, $formatters = [])
+    protected function getValues($fields, $hit, $formatters = [])
     {
         $values = [];
         foreach ($fields as $key) {
