@@ -46,10 +46,14 @@ class MailTemplate
     const USER_PASSWORD_FORGET = [
         'key'    => 'user.password.forget',
         'tokens' => [
-            '@user_name'   => 'User name',
-            '!site_name'   => 'Human name of the portal.',
-            '!portal_url'  => 'The portal URL.',
-            '!onetime_url' => 'Onetime login link.',
+            '!user_name'      => 'User name',
+            '!user_mail'      => 'User mail',
+            '!site_name'      => 'Human name of the portal',
+            '!primary_domain' => 'Primary domain of portal',
+            '!onetime_url'    => 'Onetime login link',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal logo',
+            '!portal_url'     => 'Portal URL',
         ],
     ];
 

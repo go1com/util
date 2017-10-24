@@ -40,6 +40,7 @@ class Queue
     const USER_CREATE                = 'user.create';
     const USER_UPDATE                = 'user.update';
     const USER_DELETE                = 'user.delete';
+    const USER_FORGET_PASSWORD       = 'user.forget-password';
     const RO_CREATE                  = 'ro.create';
     const RO_UPDATE                  = 'ro.update';
     const RO_DELETE                  = 'ro.delete';
