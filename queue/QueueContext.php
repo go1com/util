@@ -24,4 +24,5 @@ class QueueContext
     const ACTION_USER_MAIL_SECONDARY_VERIFIED = 'action.user_mail_secondary.verified';
 
     const ACTION_USER_PASSWORD_CHANGED        = 'action.user.password_changed';
+    const ACTION_USER_PASSWORD_FORGET         = 'action.user.password.forget';
 }
