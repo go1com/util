@@ -15,6 +15,7 @@ class NoteSchema
             $note->addColumn('entity_id', Type::BIGINT, ['unsigned' => true]);
             $note->addColumn('entity_type', Type::STRING, ['notnull' => false, 'length' => 11, 'default' => 'lo']);
             $note->addColumn('profile_id', Type::INTEGER, ['unsigned' => true]);
+            $note->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'default' => 0]);
             $note->addColumn('uuid', Type::STRING, ['notnull' => false, 'length' => 36]);
             $note->addColumn('created', Type::INTEGER, ['unsigned' => true, 'length' => 11]);
             $note->addColumn('private', Type::SMALLINT, ['default' => 0, 'length' => 2]);
@@ -23,6 +24,7 @@ class NoteSchema
             $note->addUniqueIndex(['uuid']);
             $note->addIndex(['entity_id']);
             $note->addIndex(['profile_id']);
+            $note->addIndex(['instance_id']);
             $note->addIndex(['uuid']);
             $note->addIndex(['created']);
             $note->addIndex(['entity_type']);
