@@ -147,6 +147,7 @@ class EdgeTypes
     const HAS_REQUEST_GROUP          = 610; # T: submitted times    | S: group.id | W: gc_user.id - we use weight to store user.id to avoid the table constrain, target_id to store the number of submitted times
     const HAS_REQUEST_GROUP_ACCEPT   = 611; # T: submitted times    | S: group.id | W: gc_user.id
     const HAS_REQUEST_GROUP_REJECT   = 612; # T: submitted times    | S: group.id | W: gc_user.id
+    const HAS_REQUEST_GROUP_BLOCK    = 613; # T: submitted times    | S: group.id | W: gc_user.id
     const HAS_ASSIGN                 = 701; # T: enrolment.id       | S: gc_user.id
     const HAS_LO_ASSIGNMENT          = 702; # T: suggested LO       | S: gc_user.id | Weight: Suggesting user.
     const HAS_LO_ASSIGNMENT_ACCEPTED = 703; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is accepted.
