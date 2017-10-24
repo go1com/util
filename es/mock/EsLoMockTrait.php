@@ -23,6 +23,7 @@ trait EsLoMockTrait
         if ($event) {
             $event = [
                 'lo_id'                   => $loId,
+                'id'                      => $event['id'] ?? null,
                 'start'                   => $event['start'] ?? DateTime::formatDate(time()),
                 'end'                     => $event['end'] ?? DateTime::formatDate(time()),
                 'timezone'                => $event['timezone'] ?? 'UTC',
