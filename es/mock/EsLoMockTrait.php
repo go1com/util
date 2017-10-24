@@ -17,8 +17,33 @@ trait EsLoMockTrait
             ? (is_scalar($options['data']) ? json_decode($options['data'], true) : json_decode(json_encode($options['data']), true))
             : [];
 
+        $loId = $options['id'] ?? ++$autoId;
+
+        $event = $options['event'] ?? null;
+        if ($event) {
+            $event = [
+                'lo_id'                   => $loId,
+                'start'                   => $event['start'] ?? DateTime::formatDate(time()),
+                'end'                     => $event['end'] ?? DateTime::formatDate(time()),
+                'timezone'                => $event['timezone'] ?? 'UTC',
+                'seats'                   => $event['seats'] ?? 10,
+                'available_seats'         => $event['available_seats'] ?? 10,
+                'country'                 => $event['country'] ?? 'AU',
+                'administrative_area'     => $event['administrative_area'] ?? '',
+                'sub_administrative_area' => $event['sub_administrative_area'] ?? '',
+                'locality'                => $event['locality'] ?? '',
+                'dependent_locality'      => $event['dependent_locality'] ?? '',
+                'thoroughfare'            => $event['thoroughfare'] ?? '',
+                'premise'                 => $event['premise'] ?? '',
+                'sub_premise'             => $event['sub_premise'] ?? '',
+                'organisation_name'       => $event['organisation_name'] ?? '',
+                'name_line'               => $event['name_line'] ?? '',
+                'postal_code'             => $event['postal_code'] ?? '',
+            ];
+        }
+
         $lo = [
-            'id'             => $options['id'] ?? ++$autoId,
+            'id'             => $loId,
             'type'           => $options['type'] ?? LoTypes::COURSE,
             'origin_id'      => $options['origin_id'] ?? 0,
             'status'         => $options['status'] ?? 0,
@@ -48,7 +73,7 @@ trait EsLoMockTrait
             'authors'        => $options['authors'] ?? [],
             'group_ids'      => $options['group_ids'] ?? [],
             'location'       => $options['location'] ?? [],
-            'event'          => $options['event'] ?? null,
+            'event'          => $event,
             'metadata'       => [
                 'parents_authors_ids' => $options['metadata']['parents_authors_ids'] ?? null,
                 'parents_id'          => $options['metadata']['parents_id'] ?? null,
