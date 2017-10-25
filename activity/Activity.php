@@ -40,7 +40,7 @@ class Activity implements JsonSerializable
         $activity->updated = $row->updated ?? $activity->created;
         $activity->data = is_null($row->data) ? [] : (is_string($row->data) ? json_decode($row->data) : (object) []);
         $activity->context = $row->data->context ?? [];
-        $activity->tags = $row->tags ?? [];
+        $activity->tags = $row->data->tags ?? [];
 
         return $activity;
     }
