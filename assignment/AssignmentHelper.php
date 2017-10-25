@@ -38,15 +38,9 @@ class AssignmentHelper
 
     public static function getEnrolment(Connection $go1, int $studentProfileId, int $assignmentId, int $moduleId = null)
     {
-        $assignment = $go1
-            ->executeQuery('SELECT * FROM asm_assignment WHERE id = ?', [$assignmentId])
-            ->fetch(DB::OBJ);
-
-        if ($assignment) {
-            $liAssignment = self::locateLiAssignment($go1, $assignment->id);
-            if ($liAssignment) {
-                return $enrolment = EnrolmentHelper::loadByLoAndProfileId($go1, $liAssignment->id, $studentProfileId, $moduleId);
-            }
+        $liAssignment = self::locateLiAssignment($go1, $assignmentId);
+        if ($liAssignment) {
+            return $enrolment = EnrolmentHelper::loadByLoAndProfileId($go1, $liAssignment->id, $studentProfileId, $moduleId);
         }
 
         return null;
