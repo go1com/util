@@ -318,7 +318,8 @@ class Schema
                     'pass_rate' => ['type' => self::T_FLOAT],
                 ],
             ],
-            'location'       => [
+            'locations'      => [
+                'type'       => self::T_NESTED,
                 'properties' => [
                     'id'           => ['type' => self::T_KEYWORD],
                     'country'      => ['type' => self::T_KEYWORD],
