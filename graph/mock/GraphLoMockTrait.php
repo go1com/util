@@ -91,7 +91,7 @@ trait GraphLoMockTrait
             'privacy'     => isset($options['privacy']) ? $options['privacy'] : [],
             'tags'        => isset($options['tags']) ? $options['tags'] : [],
             'groups'      => isset($options['groups']) ? $options['groups'] : [],
-            'tutors'      => isset($options['tutors']) ? $options['tutors'] : [],
+            'assessors'   => isset($options['assessors']) ? $options['assessors'] : [],
             'authors'     => isset($options['authors']) ? $options['authors'] : [],
             'roles'       => isset($options['roles']) ? $options['roles'] : [],
             'event'       => isset($options['event']) ? $options['event'] : [],
@@ -123,7 +123,7 @@ trait GraphLoMockTrait
 
         $this
             ->linkCourseAuthors($stack, $course)
-            ->linkCourseTutors($stack, $course)
+            ->linkCourseAssessors($stack, $course)
             ->linkCoursePortal($stack, $course)
             ->linkCourseRoles($stack, $course)
             ->linkCoursePublicGroup($stack, $course)
@@ -156,17 +156,17 @@ trait GraphLoMockTrait
         return $this;
     }
 
-    private function linkCourseTutors(Stack $stack, $course)
+    private function linkCourseAssessors(Stack $stack, $course)
     {
-        $hasTutor = GraphEdgeTypes::HAS_TUTOR;
+        $hasAssessor = GraphEdgeTypes::HAS_ASSESSOR;
         $hasLo = GraphEdgeTypes::HAS_LO;
 
-        foreach ($course['tutors'] as $tutorId) {
+        foreach ($course['assessors'] as $assessorId) {
             $stack->push(
                 "MATCH (lo:{$course['type']} { id: {$course['id']} })"
-                . " MERGE (tutor:User { id: $tutorId })"
-                . " MERGE (lo)-[:$hasTutor]->(tutor)"
-                . " MERGE (tutor)-[:$hasLo]->(lo)"
+                . " MERGE (assessor:User { id: $assessorId })"
+                . " MERGE (lo)-[:$hasAssessor]->(assessor)"
+                . " MERGE (assessor)-[:$hasLo]->(lo)"
             );
         }
 
