@@ -18,7 +18,7 @@ class GraphEdgeTypes
     const HAS_PRODUCT      = 'HAS_PRODUCT';
     const HAS_REMOTE       = 'HAS_REMOTE';
     const HAS_AUTHOR       = 'HAS_AUTHOR';
-    const HAS_TUTOR        = 'HAS_TUTOR';
+    const HAS_ASSESSOR     = 'HAS_ASSESSOR';
     const HAS_ENROLMENT    = 'HAS_ENROLMENT';
     const HAS_MANAGER      = 'HAS_MANAGER';
     const HAS_LEARNER      = 'HAS_LEARNER';
