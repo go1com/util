@@ -73,7 +73,7 @@ trait EsLoMockTrait
             'updated'        => DateTime::formatDate($options['updated'] ?? time()),
             'authors'        => $options['authors'] ?? [],
             'group_ids'      => $options['group_ids'] ?? [],
-            'location'       => $options['location'] ?? [],
+            'locations'      => $options['locations'] ?? [],
             'event'          => $event,
             'metadata'       => [
                 'parents_authors_ids' => $options['metadata']['parents_authors_ids'] ?? null,
