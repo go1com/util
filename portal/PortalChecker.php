@@ -128,6 +128,10 @@ class PortalChecker
         if ($portal->title == PortalHelper::WEBSITE_PUBLIC_INSTANCE) {
             $domain = PortalHelper::WEBSITE_DOMAIN;
 
+            if (stripos($domain, 'www.') === false) {
+                $domain = 'www.' . $domain;
+            }
+
             return "https://{$domain}/{$uri}";
         }
         else {
