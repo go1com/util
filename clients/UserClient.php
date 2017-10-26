@@ -20,6 +20,11 @@ class UserClient
         $this->mqClient = $mqClient;
     }
 
+    public function client(): Client
+    {
+        return $this->client;
+    }
+
     public function unblockEmail($mail)
     {
         $this->mqClient->publish(['mail' => $mail], Queue::DO_USER_UNBLOCK_MAIL);
