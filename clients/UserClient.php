@@ -13,11 +13,16 @@ class UserClient
     private $userUrl;
     private $mqClient;
 
-    public function __construct(Client $client, $userUrl, MqClient $mqClient)
+    public function __construct(Client $client, string $userUrl, MqClient $mqClient)
     {
         $this->client = $client;
         $this->userUrl = rtrim($userUrl, '/');
         $this->mqClient = $mqClient;
+    }
+
+    public function userUrl(): string
+    {
+        return $this->userUrl;
     }
 
     public function client(): Client
