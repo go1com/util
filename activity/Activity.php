@@ -18,6 +18,7 @@ class Activity implements JsonSerializable
     public $updated;
     public $data;
     public $context;
+    public $tags;
 
     private function __construct()
     {
@@ -39,6 +40,7 @@ class Activity implements JsonSerializable
         $activity->updated = $row->updated ?? $activity->created;
         $activity->data = is_null($row->data) ? [] : (is_string($row->data) ? json_decode($row->data) : (object) []);
         $activity->context = $row->data->context ?? [];
+        $activity->tags = $row->data->tags ?? [];
 
         return $activity;
     }
@@ -61,6 +63,7 @@ class Activity implements JsonSerializable
     function jsonSerialize()
     {
         $this->data->context = $this->context;
+        $this->data->tags = $this->tags;
         return [
             'id'          => $this->id,
             'instance_id' => $this->instanceId,
