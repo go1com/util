@@ -69,7 +69,7 @@ trait UserMockTrait
     }
 
     # NOTE: This is not yet stable, JWT is large, not good for production usage.
-    protected function jwtForUser(Connection $db, $userId, string $instance = null): string
+    protected function jwtForUser(Connection $db, int $userId, string $instance = null): string
     {
         $user = UserHelper::load($db, $userId);
         $user = $user ? User::create($user, $db, true, $instance) : null;
@@ -78,10 +78,7 @@ trait UserMockTrait
             'iss'    => 'go1.user',
             'ver'    => '1.1',
             'exp'    => strtotime('+ 1 year'),
-            'object' => (object) [
-                'type'    => 'user',
-                'content' => $user,
-            ],
+            'object' => (object) ['type' => 'user', 'content' => $user],
         ];
 
         return JWT::encode($payload, 'INTERNAL');

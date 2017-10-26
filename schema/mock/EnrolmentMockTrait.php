@@ -4,6 +4,7 @@ namespace go1\util\schema\mock;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
+use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\lo\LoHelper;
 
 trait EnrolmentMockTrait
@@ -21,7 +22,7 @@ trait EnrolmentMockTrait
             'taken_instance_id' => isset($options['taken_instance_id']) ? $options['taken_instance_id'] : 0,
             'start_date'        => isset($options['start_date']) ? $options['start_date'] : (new DateTime)->format('Y-m-d h:i:s'),
             'end_date'          => isset($options['end_date']) ? $options['end_date'] : null,
-            'status'            => isset($options['status']) ? $options['status'] : 'in-progress',
+            'status'            => isset($options['status']) ? $options['status'] : EnrolmentStatuses::IN_PROGRESS,
             'result'            => isset($options['result']) ? $options['result'] : 0,
             'pass'              => isset($options['pass']) ? $options['pass'] : 0,
             'timestamp'         => isset($options['timestamp']) ? $options['timestamp'] : time(),

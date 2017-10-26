@@ -2,6 +2,11 @@
 
 namespace go1\util;
 
+use ReflectionObject;
+use Silex\Application;
+use Silex\Controller;
+use Silex\ControllerCollection;
+
 class Service
 {
     const VERSION = 'v17.10.4.0';
@@ -100,5 +105,40 @@ class Service
         }
 
         return false;
+    }
+
+    /**
+     * Simple method to print application resources.
+     *
+     * @param Application $app
+     */
+    public static function endpointsInfo(Application $app)
+    {
+        $app->boot();
+
+        /** @var ControllerCollection $controllers */
+        $controllers = $app['controllers'];
+        $rControllers = new ReflectionObject($controllers);
+        $pControllers = $rControllers->getProperty('controllers');
+        $pControllers->setAccessible(true);
+
+        /** @var Controller $ctrl */
+        foreach ($pControllers->getValue($controllers) as $ctrl) {
+            if ($ctrl instanceof Controller) {
+                $route = $ctrl->getRoute();
+
+                foreach ($route->getMethods() as $method) {
+                    echo '- ' . str_pad($method, 7) . ' ' . str_pad($route->getPath(), 70);
+
+                    if ($service = $route->getDefault('_controller')) {
+                        if (is_scalar($service)) {
+                            echo 'Handler: ' . $service;
+                        }
+                    }
+
+                    echo "\n";
+                }
+            }
+        }
     }
 }

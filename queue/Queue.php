@@ -59,6 +59,7 @@ class Queue
     const MANUAL_RECORD_CREATE       = 'manual-record.create';
     const MANUAL_RECORD_UPDATE       = 'manual-record.update';
     const MANUAL_RECORD_DELETE       = 'manual-record.delete';
+    const ONBOARD_COMPLETE           = 'onboard.complete';
     const TAG_CREATE                 = 'tag.create';
     const TAG_UPDATE                 = 'tag.update';
     const TAG_DELETE                 = 'tag.delete';
