@@ -16,7 +16,7 @@ class Schema
     const ACTIVITY_INDEX    = ES_INDEX . '_activity';
     const PORTALS_INDEX     = ES_INDEX . '_portal*';
 
-    const TEMP = -32;
+    const TEMP             = -32;
     const MAX_INPUT_LENGTH = 50;
 
     const DO_INDEX  = 'index';
@@ -62,6 +62,7 @@ class Schema
     const O_AWARD_ITEM_MANUAL   = 'award_item_manual';
     const O_AWARD_ENROLMENT     = 'award_enrolment';
     const O_AWARD_ACHIEVEMENT   = 'award_achievement';
+    const O_SUGGESTION_CATEGORY = 'suggestion_category'; # Suggestion for award manual item's category
 
     // enrolment only belong to lo. account_enrolment is enrolment, but belong to account.
     // This is used to get users that is not enrolled to a course.
@@ -104,6 +105,7 @@ class Schema
         self::O_AWARD_ITEM_MANUAL   => self::AWARD_ITEM_MANUAL_MAPPING,
         self::O_AWARD_ACHIEVEMENT   => self::AWARD_ACHIEVEMENT_MAPPING,
         self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
+        self::O_SUGGESTION_CATEGORY => self::SUGGESTION_CATEGORY_MAPPING,
     ];
 
     const ANALYZED = [
@@ -852,13 +854,7 @@ class Schema
             'certificate'     => ['type' => self::T_OBJECT],
             'verified'        => ['type' => self::T_INT],
             'weight'          => ['type' => self::T_INT],
-            'categories'      => [
-                'type'                         => self::T_COMPLETION,
-                'analyzer'                     => self::A_SIMPLE,
-                'preserve_separators'          => true,
-                'preserve_position_increments' => true,
-                'max_input_length'             => self::MAX_INPUT_LENGTH,
-            ],
+            'categories'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
         ],
     ];
 
@@ -891,6 +887,19 @@ class Schema
                     'user'   => ['type' => self::T_KEYWORD],
                     'entity' => ['type' => self::T_KEYWORD],
                 ],
+            ],
+        ],
+    ];
+
+    const SUGGESTION_CATEGORY_MAPPING = [
+        '_routing' => ['required' => true],
+        'properties' => [
+            'category' => [
+                'type'                         => self::T_COMPLETION,
+                'analyzer'                     => self::A_SIMPLE,
+                'preserve_separators'          => true,
+                'preserve_position_increments' => true,
+                'max_input_length'             => self::MAX_INPUT_LENGTH,
             ],
         ],
     ];

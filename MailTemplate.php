@@ -329,8 +329,8 @@ class MailTemplate
         ],
     ];
 
-    const ONBOARD_SENT = [
-        'key'    => 'onboard.sent',
+    const ONBOARD_COMPLETE = [
+        'key'    => 'onboard.complete',
         'tokens' => [
             '!first_name'   => 'First name',
             '!full_name'    => 'Full name',
