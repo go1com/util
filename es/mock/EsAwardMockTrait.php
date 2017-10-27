@@ -74,6 +74,27 @@ trait EsAwardMockTrait
             'refresh' => true,
         ]);
 
+        foreach ($awardItemManual['categories'] as $category) {
+            $client->update([
+                'index'   => $options['index'] ?? Schema::INDEX,
+                'routing' => $options['routing'] ?? Schema::INDEX,
+                'type'    => Schema::O_SUGGESTION_CATEGORY,
+                'id'      => md5($category),
+                'body'    => [
+                    'script' => [
+                        'inline' => 'ctx._source.weight += 1',
+                    ],
+                    'upsert' => [
+                        'category' => [
+                            'input'  => $category,
+                            'weight' => 1,
+                        ],
+                    ],
+                ],
+                'refresh' => true,
+            ]);
+        }
+
         return $awardItemManual['id'];
     }
 }
