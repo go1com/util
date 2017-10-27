@@ -892,7 +892,7 @@ class Schema
     ];
 
     const SUGGESTION_CATEGORY_MAPPING = [
-        '_routing' => ['required' => true],
+        '_routing'   => ['required' => true],
         'properties' => [
             'category' => [
                 'type'                         => self::T_COMPLETION,
@@ -900,6 +900,11 @@ class Schema
                 'preserve_separators'          => true,
                 'preserve_position_increments' => true,
                 'max_input_length'             => self::MAX_INPUT_LENGTH,
+            ],
+            'metadata' => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                ],
             ],
         ],
     ];
