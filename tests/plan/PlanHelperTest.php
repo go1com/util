@@ -46,4 +46,17 @@ class PlanHelperTest extends UtilTestCase
         $this->assertEquals($plan1Id, $plans[0]);
         $this->assertEquals($plan2Id, $plans[1]);
     }
+
+    public function testLoad()
+    {
+        $id = $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::EXPIRED]);
+        $plan = PlanHelper::load($this->db, $id);
+
+        $this->assertEquals($id, $plan->id);
+        $this->assertObjectHasAttribute('entity_type', $plan);
+        $this->assertObjectHasAttribute('entity_id', $plan);
+        $this->assertObjectHasAttribute('user_id', $plan);
+        $this->assertObjectHasAttribute('status', $plan);
+        $this->assertObjectHasAttribute('instance_id', $plan);
+    }
 }
