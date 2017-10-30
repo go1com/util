@@ -36,4 +36,9 @@ class PlanHelper
             ->executeQuery('SELECT id FROM gc_plan WHERE `type` = ? AND entity_type = ? AND user_id = ? AND status = ?', [$type, $entityType, $userId, $status])
             ->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    public static function load(Connection $db, int $id)
+    {
+        return $db->executeQuery('SELECT * FROM gc_plan WHERE id = ?', [$id])->fetch(DB::OBJ);
+    }
 }
