@@ -318,6 +318,7 @@ class Schema
                 'properties' => [
                     'path'      => ['type' => self::T_TEXT],
                     'pass_rate' => ['type' => self::T_FLOAT],
+                    'label'     => ['type' => self::T_KEYWORD],
                 ],
             ],
             'locations'      => [
