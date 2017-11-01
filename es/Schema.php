@@ -880,6 +880,7 @@ class Schema
             'user_id'     => ['type' => self::T_INT],
             'entity_type' => ['type' => self::T_KEYWORD],
             'entity_id'   => ['type' => self::T_INT],
+            'tags'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'created'     => ['type' => self::T_DATE],
             'updated'     => ['type' => self::T_DATE],
             'context'     => [
