@@ -174,7 +174,7 @@ class CouponRepository
         return DB::transactional($this->db, function () use (&$coupon, &$diff, &$original) {
             unset($diff['entities']);
             if ($diff) {
-                $diff->updated = time();
+                $diff['updated'] = time();
                 $this->db->update('payment_coupon', $diff, ['id' => $coupon->id]);
             }
 
