@@ -13,9 +13,10 @@ class TaskHelper
             'instance_id' => $instanceId,
             'user_id'     => $userId,
             'created'     => time(),
-            'data'        => json_encode($data),
+            'data'        => $encoded = json_encode($data),
             'updated'     => time(),
             'status'      => $status,
+            'checksum'    => md5($encoded)
         ];
         $db->insert($name, $task);
     }
@@ -99,8 +100,11 @@ class TaskHelper
         return TaskItem::create($row);
     }
 
-    public static function checksum(Connection $db, string $name, string $string): bool
+    public static function checksum(Connection $db, string $name, $string): bool
     {
-        return $db->fetchColumn("SELECT 1 FROM {$name} WHERE checksum = ?", [md5($string)]) ? true : false;
+        $string = is_string($string) ? $string : json_encode($string);
+        $checksum = md5($string);
+
+        return $db->fetchColumn("SELECT 1 FROM {$name} WHERE checksum = ?", [$checksum]) ? true : false;
     }
 }
