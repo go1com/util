@@ -5,6 +5,7 @@ namespace go1\util\schema\mock;
 use Doctrine\DBAL\Connection;
 use go1\util\task\Task;
 use go1\util\task\TaskItem;
+use Ramsey\Uuid\Uuid;
 
 trait TaskMockTrait
 {
@@ -18,6 +19,7 @@ trait TaskMockTrait
             'data'        => json_encode($data),
             'updated'     => time(),
             'status'      => $options['status'] ?? Task::STATUS_PENDING,
+            'checksum'    => $options['checksum'] ?? Uuid::uuid4()
         ]);
 
         return $db->lastInsertId($options['name']);

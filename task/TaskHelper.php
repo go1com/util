@@ -98,4 +98,9 @@ class TaskHelper
 
         return TaskItem::create($row);
     }
+
+    public static function checksum(Connection $db, string $name, string $string): bool
+    {
+        return $db->fetchColumn("SELECT 1 FROM {$name} WHERE checksum = ?", [md5($string)]) ? true : false;
+    }
 }

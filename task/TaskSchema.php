@@ -19,10 +19,12 @@ class TaskSchema
             $task->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $task->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
             $task->addColumn('data', 'blob');
+            $task->addColumn('checksum', Type::STRING, ['length' => 32]);
             $task->setPrimaryKey(['id']);
             $task->addIndex(['user_id']);
             $task->addIndex(['instance_id']);
             $task->addIndex(['status']);
+            $task->addIndex(['checksum']);
         }
 
         $taskItemName = "{$name}_task_item";
