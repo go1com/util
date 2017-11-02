@@ -84,7 +84,10 @@ trait EsLoMockTrait
                 'shared'              => $options['metadata']['shared'] ?? 0,
             ],
             'data'           => [
-                'path' => $options['data']['path'] ?? '',
+                'allow_resubmit' => $options['data']['allow_resubmit'] ?? null,
+                'label'          => $options['data']['label'] ?? null,
+                'pass_rate'      => $options['data']['pass_rate'] ?? null,
+                'url'            => $options['data']['url'] ?? null,
             ],
             'totalEnrolment' => $options['totalEnrolment'] ?? 0,
         ];

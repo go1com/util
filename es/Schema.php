@@ -316,9 +316,10 @@ class Schema
             ],
             'data'           => [
                 'properties' => [
-                    'path'      => ['type' => self::T_TEXT],
-                    'pass_rate' => ['type' => self::T_FLOAT],
-                    'label'     => ['type' => self::T_KEYWORD],
+                    'allow_resubmit' => ['type' => self::T_INT],
+                    'label'          => ['type' => self::T_KEYWORD],
+                    'pass_rate'      => ['type' => self::T_FLOAT],
+                    'url'            => ['type' => self::T_TEXT],
                 ],
             ],
             'locations'      => [
