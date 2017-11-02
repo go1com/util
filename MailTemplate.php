@@ -74,14 +74,17 @@ class MailTemplate
         'tokens' => [/* @TODO */],
     ];
 
-    const USER_LOGIN_FAIL = [
-        'key'    => 'user.onetime-login',
+    const USER_LOGIN_FAILED = [
+        'key'    => 'user.login.failed',
         'tokens' => [
-            '@user_name'   => 'Name of user.',
-            '!user_name'   => 'User mail',
-            '!site_name'   => 'Human name of the portal',
-            '!portal_url'  => 'The portal URL.',
-            '!onetime_url' => 'Onetime login link.',
+            '!user_name'      => 'Name of user',
+            '!user_mail'      => 'User mail',
+            '!site_name'      => 'Human name of the portal',
+            '!primary_domain' => 'Primary domain of portal',
+            '!onetime_url'    => 'Onetime login link',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal logo',
+            '!portal_url'     => 'Portal URL',
         ],
     ];
 
