@@ -20,7 +20,7 @@ trait EsLoMockTrait
         $loId = $options['id'] ?? ++$autoId;
 
         $event = $options['event'] ?? null;
-        if ($event) {
+        if (is_array($event) && $event) {
             $event = [
                 'lo_id'                   => $loId,
                 'id'                      => $event['id'] ?? null,
