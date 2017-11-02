@@ -52,4 +52,15 @@ class TaskHelperTest extends UtilTestCase
 
         $this->assertEquals(1000, $taskItem->data['lo_id']);
     }
+
+    public function testChecksum()
+    {
+        $this->createTask($this->db, [
+            'name' => $this->taskName,
+            'data' => $data = ['type' => 'task_type', 'lo_id' => 1000]
+        ]);
+
+        $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, 'NEW_TASK'));
+    }
 }

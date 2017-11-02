@@ -47,6 +47,6 @@ class EckClient
     public function update(string $instance, string $entityType, int $entityId, array $fields)
     {
         $eckUrl = "{$this->url}/entity/{$instance}/{$entityType}/{$entityId}?jwt={$this->jwt}";
-        $this->client->put($eckUrl, ['json' => ['fields' => $fields]]);
+        return $this->client->put($eckUrl, ['json' => ['fields' => $fields]]);
     }
 }
