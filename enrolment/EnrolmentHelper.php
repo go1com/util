@@ -73,6 +73,13 @@ class EnrolmentHelper
         return $q->execute()->fetch($fetchMode);
     }
 
+    public static function loadRevision(Connection $db, int $id)
+    {
+        return $db
+            ->executeQuery('SELECT * FROM gc_enrolment_revision WHERE enrolment_id = ?', [$id])
+            ->fetch(DB::OBJ);
+    }
+
     public static function becomeCompleted(stdClass $enrolment, stdClass $original, bool $passAware = true): bool
     {
         $status = $enrolment->status;
