@@ -95,7 +95,7 @@ class Service
         if ($localIps) {
             $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null);
             if ($ip) {
-                $localIps = explode(' ', $localIps);
+                $localIps = explode(':', $localIps);
                 foreach ($localIps as $localIp) {
                     if (false !== strpos($ip, $localIp)) {
                         return true;
