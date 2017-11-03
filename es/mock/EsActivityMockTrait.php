@@ -39,6 +39,7 @@ trait EsActivityMockTrait
 
         $client->create([
             'index'   => $options['index'] ?? Schema::ACTIVITY_INDEX,
+            'routing' => $options['instance_id'] ?? Schema::ACTIVITY_INDEX,
             'type'    => Schema::O_ACTIVITY,
             'id'      => $options['_id'] ?? $activity['id'],
             'body'    => $activity,
