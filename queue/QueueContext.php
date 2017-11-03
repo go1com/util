@@ -25,4 +25,7 @@ class QueueContext
 
     const ACTION_USER_PASSWORD_CHANGED        = 'action.user.password_changed';
     const ACTION_USER_PASSWORD_FORGET         = 'action.user.password.forget';
+
+    # Award context
+    const AWARD_NO_CONSUME_FLAG               = 'award.no-consume.flag'; // award stop consume flag
 }
