@@ -161,7 +161,7 @@ class PlanRepository
         return $revisions;
     }
 
-    public function create(Plan &$plan, bool $notify = false)
+    public function create(Plan &$plan, bool $notify = false, array $queueContext = [])
     {
         $this->db->insert('gc_plan', [
             'type'         => $plan->type,
@@ -178,7 +178,7 @@ class PlanRepository
 
         $plan->id = $this->db->lastInsertId('gc_plan');
         $plan->notify = $notify;
-        $this->queue->publish($plan, Queue::PLAN_CREATE);
+        $this->queue->publish($plan, Queue::PLAN_CREATE, $queueContext);
 
         return $plan->id;
     }
