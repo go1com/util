@@ -6,6 +6,7 @@ use go1\util\edge\EdgeTypes;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Text;
+use go1\util\user\Roles;
 use go1\util\user\UserHelper;
 
 class UserHelperTest extends UtilTestCase
@@ -76,5 +77,27 @@ class UserHelperTest extends UtilTestCase
 
         $this->assertEquals($userId, $user->id);
         $this->assertEquals($accountId, $user->accounts[0]->id);
+    }
+
+
+    public function dataIsStaff()
+    {
+        return [
+            [],
+            [[Roles::AUTHENTICATED]],
+            [[Roles::AUTHENTICATED, Roles::STUDENT]],
+            [[Roles::AUTHENTICATED, Roles::MANAGER]],
+            [[Roles::AUTHENTICATED, Roles::TUTOR]],
+            [[Roles::AUTHENTICATED, Roles::ADMIN]],
+            [[Roles::AUTHENTICATED, Roles::TAM], true],
+            [[Roles::AUTHENTICATED, Roles::DEVELOPER], true],
+            [[Roles::AUTHENTICATED, Roles::ROOT], true],
+        ];
+    }
+
+    /** @dataProvider dataIsStaff */
+    public function testIsStaff(array $roles = null, $valid = false)
+    {
+        $this->assertEquals($valid, UserHelper::isStaff($roles));
     }
 }

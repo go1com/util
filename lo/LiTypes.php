@@ -23,6 +23,12 @@ class LiTypes
     const EVENT       = 'event';
     const COMPLEX     = ['assignment', 'h5p', 'interactive', 'quiz', 'lti', 'event'];
 
+    const PRIVATE_PROPERTIES = [
+        self::DOCUMENT    => ['path'],
+        self::H5P         => ['path'],
+        self::INTERACTIVE => ['url'],
+    ];
+
     public static function all()
     {
         $rSelf = new ReflectionClass(__CLASS__);

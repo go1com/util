@@ -275,4 +275,24 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertCount(1, $this->queueMessages[Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT]);
         $this->assertCount(1, $this->queueMessages[Queue::ENROLMENT_CREATE]);
     }
+
+    public function testLoadRevision()
+    {
+        $instanceId = $this->createInstance($this->db, []);
+        $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId]);
+        $status = EnrolmentStatuses::NOT_STARTED;
+        $date = DateTime::formatDate('now');
+        $this->createRevisionEnrolment($this->db, [
+            'lo_id'        => $courseId,
+            'status'       => $status,
+            'start_date'   => $date,
+            'enrolment_id' => 1000
+        ]);
+
+        $revisionEnrolment = EnrolmentHelper::loadRevision($this->db, 1000);
+
+        $this->assertEquals($courseId, $revisionEnrolment->lo_id);
+        $this->assertEquals($status, $revisionEnrolment->status);
+        $this->assertEquals($date, $revisionEnrolment->start_date);
+    }
 }
