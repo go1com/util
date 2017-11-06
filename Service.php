@@ -9,7 +9,7 @@ use Silex\ControllerCollection;
 
 class Service
 {
-    const VERSION = 'v17.10.5.0';
+    const VERSION = 'v17.11.1.0';
 
     public static function cacheOptions($root)
     {
