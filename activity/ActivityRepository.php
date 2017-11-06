@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ActivityRepository
 {
-    public static function searchActivityByUserId($client, $portal, int $accountId, int $offset, int $limit)
+    public static function getByUserId($client, $portalId, int $accountId, int $offset, int $limit)
     {
         try {
             $userQuery = new BoolQuery();
@@ -26,7 +26,7 @@ class ActivityRepository
             $userQuery->add(new TermQuery('user_id', $accountId), BoolQuery::SHOULD);
 
             $query = new BoolQuery();
-            $query->add(new TermQuery('instance_id', $portal->id), BoolQuery::MUST);
+            $query->add(new TermQuery('instance_id', $$portalId), BoolQuery::MUST);
             $query->add($userQuery, BoolQuery::MUST);
 
             $search = new Search();
@@ -48,11 +48,11 @@ class ActivityRepository
         }
     }
 
-    public static function searchActivityByPortal($client, $portal, int $offset, int $limit)
+    public static function getByPortal($client, $portalId, int $offset, int $limit)
     {
         try {
             $query = new BoolQuery();
-            $query->add(new TermQuery('instance_id', $portal->id), BoolQuery::MUST);
+            $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
 
             $search = new Search();
             $search
@@ -73,12 +73,12 @@ class ActivityRepository
         }
     }
 
-    public static function searchActivityByLoId($client, $portal, $loId, int $offset, int $limit)
+    public static function getByLoId($client, $portalId, $loId, int $offset, int $limit)
     {
         try {
             $query = new BoolQuery();
             $query->add(new TermQuery('tags', "lo:$loId"), BoolQuery::MUST);
-            $query->add(new TermQuery('instance_id', $portal->id), BoolQuery::MUST);
+            $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
 
             $search = new Search();
             $search
