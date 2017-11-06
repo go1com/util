@@ -90,6 +90,12 @@ trait EsLoMockTrait
                 'url'            => $options['data']['url'] ?? null,
             ],
             'totalEnrolment' => $options['totalEnrolment'] ?? 0,
+            'vote'           => [
+                'percent' => $options['vote']['percent'] ?? null,
+                'rank'    => $options['vote']['rank'] ?? null,
+                'like'    => $options['vote']['like'] ?? null,
+                'dislike' => $options['vote']['dislike'] ?? null,
+            ]
         ];
 
         $client->create([
