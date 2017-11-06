@@ -76,7 +76,7 @@ class MqClient
         $body = is_scalar($body) ? json_decode($body) : $body;
         $this->processMessage($body, $routingKey);
 
-        self::parseRequestContext($this->request, $context, $this->accessChecker);
+        $this->request && self::parseRequestContext($this->request, $context, $this->accessChecker);
 
         if ($service = getenv('SERVICE_80_NAME')) {
             $context['app'] = $service;
