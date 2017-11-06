@@ -31,7 +31,7 @@ class Activity implements JsonSerializable
         $activity = new static;
         $activity->id = $row->id ?? null;
         $activity->instanceId = $row->instance_id ?? null;
-        $activity->actorId = $row->action_id ?? null;
+        $activity->actorId = $row->actor_id ?? null;
         $activity->userId = $row->user_id ?? null;
         $activity->actionId = $row->action_id ?? null;
         $activity->entityType = $row->entity_type ?? null;
