@@ -16,20 +16,27 @@ class GroupAssignHelper
         int $instanceId,
         int $userId,
         string $entityType,
-        int $entityId
+        int $entityId,
+        $dueDate = null,
+        $data = null
     )
     {
+        $data = is_scalar($data) ? json_decode($data, true) : $data;
+        $data = is_array($data) ? $data : json_decode(json_encode($data), true);
+
         $keys = [
             'group_id'    => $groupId,
             'instance_id' => $instanceId,
             'entity_type' => $entityType,
             'entity_id'   => $entityId,
         ];
-        $values = $keys + [
+        $values = $keys + array_filter([
                 'user_id'     => $userId,
                 'status'      => GroupAssignStatuses::PUBLISHED,
                 'updated'     => time(),
-            ];
+                'due_date'    => $dueDate,
+                'data'        => $data ? json_encode($data) : $data,
+            ]);
 
         $originalAssign = self::loadBy($db, $groupId, $instanceId, $entityType, $entityId);
         $values += $originalAssign ? [] : ['created' => time()];
@@ -77,7 +84,7 @@ class GroupAssignHelper
         int $entityId
     )
     {
-        return $db
+        $groupAssign = $db
             ->createQueryBuilder()
             ->select('*')
             ->from('social_group_assign', 'a')
@@ -93,5 +100,11 @@ class GroupAssignHelper
             ])
             ->execute()
             ->fetch(DB::OBJ);
+
+        if (!empty($groupAssign->data)) {
+            $groupAssign->data = is_scalar($groupAssign->data) ? json_decode($groupAssign->data, true) : $groupAssign->data;
+        }
+
+        return $groupAssign;
     }
 }

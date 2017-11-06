@@ -42,6 +42,9 @@ trait GroupMockTrait
 
     public function createGroupAssign(Connection $db, array $options = [])
     {
+        $data = isset($options['data']) ? (is_scalar($options['data']) ? json_decode($options['data'], true) : $options['data']) : null;
+        $data = $data ? json_encode($data) : $data;
+
         $db->insert('social_group_assign', [
             'group_id'    => $options['group_id'],
             'instance_id' => $options['instance_id'],
@@ -51,6 +54,8 @@ trait GroupMockTrait
             'status'      => isset($options['status']) ? $options['status'] : GroupAssignStatuses::PUBLISHED,
             'created'     => isset($options['created']) ? $options['created'] : time(),
             'updated'     => isset($options['updated']) ? $options['updated'] : time(),
+            'due_date'    => isset($options['due_date']) ? $options['due_date'] : null,
+            'data'        => $data,
         ]);
     }
 }
