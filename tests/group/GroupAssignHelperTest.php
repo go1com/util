@@ -15,6 +15,8 @@ class GroupAssignHelperTest extends UtilTestCase
     private $userId = 1;
     private $entityType = GroupAssignTypes::LO;
     private $entityId = 1;
+    private $dueDate;
+    private $data = ['foo' => 'bar'];
 
     public function testMerge()
     {
@@ -37,6 +39,8 @@ class GroupAssignHelperTest extends UtilTestCase
             'entity_id'   => $this->entityId,
             'user_id'     => $this->userId,
             'status'      => GroupAssignStatuses::PUBLISHED,
+            'due_date'    => null,
+            'data'        => null,
         ], (array) $this->queueMessages[Queue::GROUP_ASSIGN_CREATE][0]);
 
         GroupAssignHelper::merge(
@@ -46,7 +50,9 @@ class GroupAssignHelperTest extends UtilTestCase
             $this->instanceId,
             $this->userId,
             GroupAssignTypes::LO,
-            $this->entityId
+            $this->entityId,
+            $this->dueDate = time(),
+            $this->data
         );
 
         $this->assertCount(1, $this->queueMessages[Queue::GROUP_ASSIGN_UPDATE]);
@@ -58,6 +64,8 @@ class GroupAssignHelperTest extends UtilTestCase
             'entity_id'   => $this->entityId,
             'user_id'     => $this->userId,
             'status'      => GroupAssignStatuses::PUBLISHED,
+            'due_date'    => $this->dueDate,
+            'data'        => json_encode($this->data),
         ], (array) $this->queueMessages[Queue::GROUP_ASSIGN_UPDATE][0]);
     }
 
@@ -73,6 +81,8 @@ class GroupAssignHelperTest extends UtilTestCase
             'entity_id'   => $this->entityId,
             'user_id'     => $this->userId,
             'status'      => GroupAssignStatuses::PUBLISHED,
+            'due_date'    => $this->dueDate,
+            'data'        => $this->data,
         ], (array) $groupAssign);
     }
 
@@ -90,6 +100,8 @@ class GroupAssignHelperTest extends UtilTestCase
             'entity_id'   => $this->entityId,
             'user_id'     => $this->userId,
             'status'      => GroupAssignStatuses::PUBLISHED,
+            'due_date'    => $this->dueDate,
+            'data'        => $this->data,
         ], (array) $this->queueMessages[Queue::GROUP_ASSIGN_DELETE][0]);
     }
 
