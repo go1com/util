@@ -76,17 +76,10 @@ class MqClient
         $body = is_scalar($body) ? json_decode($body) : $body;
         $this->processMessage($body, $routingKey);
 
+        self::parseRequestContext($this->request, $context, $this->accessChecker);
+
         if ($service = getenv('SERVICE_80_NAME')) {
             $context['app'] = $service;
-        }
-
-        if (!isset($context[self::CONTEXT_ACTOR_ID]) && $this->request) {
-            $user = $this->accessChecker->validUser($this->request);
-            $user && $context[self::CONTEXT_ACTOR_ID] = $user->id;
-        }
-
-        if ($this->request && ($requestId = $this->request->headers->get('X-Request-Id'))) {
-            $context[self::CONTEXT_REQUEST_ID] = $requestId;
         }
 
         if (!$exchange) {
@@ -144,6 +137,21 @@ class MqClient
             catch (Exception $e) {
                 $channel->close();
             }
+        }
+    }
+
+    public static function parseRequestContext(Request $request, array &$context = [], AccessChecker $accessChecker = null)
+    {
+        if (!isset($context[self::CONTEXT_REQUEST_ID])) {
+            if ($requestId = $request->headers->get('X-Request-Id')) {
+                $context[self::CONTEXT_REQUEST_ID] = $requestId;
+            }
+        }
+
+        $accessChecker = $accessChecker ?: new AccessChecker;
+        if (!isset($context[self::CONTEXT_ACTOR_ID]) && $accessChecker) {
+            $user = $accessChecker->validUser($request);
+            $user && $context[self::CONTEXT_ACTOR_ID] = $user->id;
         }
     }
 }
