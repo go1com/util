@@ -563,6 +563,7 @@ class Schema
         'properties' => [
             'id'          => ['type' => self::T_KEYWORD],
             'title'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'type'        => ['type' => self::T_KEYWORD],
             'description' => ['type' => self::T_TEXT],
             'image'       => ['type' => self::T_TEXT],
             'user_id'     => ['type' => self::T_INT],
