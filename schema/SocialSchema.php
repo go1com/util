@@ -72,6 +72,8 @@ class SocialSchema
             $assign->addColumn('status', Type::INTEGER);
             $assign->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $assign->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
+            $assign->addColumn('due_date', Type::STRING, ['notnull' => false, 'description' => 'due date of assignment, can be absolute or relative']);
+            $assign->addColumn('data', Type::BLOB, ['notnull' => false]);
             $assign->setPrimaryKey(['id']);
             $assign->addIndex(['instance_id']);
             $assign->addIndex(['entity_type']);
@@ -80,6 +82,21 @@ class SocialSchema
             $assign->addIndex(['status']);
             $assign->addIndex(['created']);
             $assign->addIndex(['updated']);
+            $assign->addIndex(['due_date']);
+        }
+
+        static::update01($schema);
+    }
+
+    private static function update01(Schema $schema)
+    {
+        $socialAssign = $schema->getTable('social_group_assign');
+        if (!$socialAssign->hasColumn('due_date')) {
+            $socialAssign->addColumn('due_date', Type::STRING, ['notnull' => false, 'description' => 'due date of assignment, can be absolute or relative']);
+            $socialAssign->addIndex(['due_date']);
+        }
+        if (!$socialAssign->hasColumn('data')) {
+            $socialAssign->addColumn('data', Type::BLOB, ['notnull' => false]);
         }
     }
 }

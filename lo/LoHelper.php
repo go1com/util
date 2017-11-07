@@ -29,6 +29,7 @@ class LoHelper
     const SUGGESTED_COMPLETION_TIME  = 'suggested_completion_time';
     const SUGGESTED_COMPLETION_UNIT  = 'suggested_completion_unit';
     const PASS_RATE                  = 'pass_rate';
+    const SINGLE_LI                  = 'single_li';
 
     // GO1P-5665: Expiration for award.
     const AWARD      = 'award';
@@ -285,14 +286,14 @@ class LoHelper
             ->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public static function parentIds(Connection $db, int $loId): array
+    public static function parentIds(Connection $db, int $loId, $allParent = true): array
     {
         $q = 'SELECT source_id FROM gc_ro WHERE type IN (?) AND target_id = ?';
         $q = $db->executeQuery($q, [EdgeTypes::LO_HAS_CHILDREN, $loId], [DB::INTEGERS, DB::INTEGER]);
 
         $ids = [];
         while ($id = $q->fetchColumn()) {
-            $ids = array_merge($ids, static::parentIds($db, $id));
+            $allParent && $ids = array_merge($ids, static::parentIds($db, $id));
             $ids[] = (int) $id;
         }
 
@@ -375,5 +376,12 @@ class LoHelper
         }
 
         return [];
+    }
+
+    public static function isSingleLi(stdClass $lo)
+    {
+        return in_array($lo->type, LiTypes::all())
+            ? boolval($lo->data->{self::SINGLE_LI} ?? false)
+            : false;
     }
 }
