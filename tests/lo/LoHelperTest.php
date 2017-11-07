@@ -356,6 +356,14 @@ class LoHelperTest extends UtilTestCase
         $this->assertEquals($customize['tokens']['token_1'], $tokens['token_1']);
     }
 
+    public function testIsSingleLi()
+    {
+        $videoId = $this->createVideo($this->db, ['instance_id' => $this->createInstance($this->db, []), 'data' => [LoHelper::SINGLE_LI => true]]);
+        $video = LoHelper::load($this->db, $videoId);
+        $this->assertTrue(LoHelper::isSingleLi($video));
+        $this->assertFalse(LoHelper::isSingleLi(LoHelper::load($this->db, $this->course1Id)));
+    }
+
     private function hasAuthor($authorId, array $source)
     {
         $this->assertTrue(in_array($authorId, $source));

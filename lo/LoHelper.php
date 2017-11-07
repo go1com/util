@@ -29,6 +29,7 @@ class LoHelper
     const SUGGESTED_COMPLETION_TIME  = 'suggested_completion_time';
     const SUGGESTED_COMPLETION_UNIT  = 'suggested_completion_unit';
     const PASS_RATE                  = 'pass_rate';
+    const SINGLE_LI                  = 'single_li';
 
     // GO1P-5665: Expiration for award.
     const AWARD      = 'award';
@@ -375,5 +376,12 @@ class LoHelper
         }
 
         return [];
+    }
+
+    public static function isSingleLi(stdClass $lo)
+    {
+        return in_array($lo->type, LiTypes::all())
+            ? boolval($lo->data->{self::SINGLE_LI} ?? false)
+            : false;
     }
 }
