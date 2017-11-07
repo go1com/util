@@ -18,7 +18,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ActivityRepository
 {
-    public static function getByUserId($client, $portalId, int $accountId, int $offset, int $limit)
+    private $repository;
+
+    public function __construct(Client $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    public function getByUserId($portalId, int $accountId, int $offset, int $limit)
     {
         try {
             $userQuery = new BoolQuery();
@@ -36,19 +43,19 @@ class ActivityRepository
                 ->addSort(new FieldSort('created', FieldSort::ASC))
                 ->addQuery($query);
 
-            $response = $client->search($a = [
+            $response = $this->repository->search($a = [
                 'index' => Schema::ACTIVITY_INDEX,
                 'type'  => Schema::O_ACTIVITY,
                 'body'  => $search->toArray()
             ]);
-            return new JsonResponse($response);
+            return new $response;
         }
         catch (Exception $e) {
             return Error::simpleErrorJsonResponse($e->getMessage(), 400);
         }
     }
 
-    public static function getByPortal($client, $portalId, int $offset, int $limit)
+    public function getByPortal($portalId, int $offset, int $limit)
     {
         try {
             $query = new BoolQuery();
@@ -61,19 +68,19 @@ class ActivityRepository
                 ->addSort(new FieldSort('created', FieldSort::ASC))
                 ->addQuery($query);
 
-            $response = $client->search([
+            $response = $this->repository->search([
                 'index' => Schema::ACTIVITY_INDEX,
                 'type'  => Schema::O_ACTIVITY,
                 'body'  => $search->toArray()
             ]);
-            return new JsonResponse($response);
+            return $response;
         }
         catch (Exception $e) {
             return Error::simpleErrorJsonResponse($e->getMessage(), 400);
         }
     }
 
-    public static function getByLoId($client, $portalId, $loId, int $offset, int $limit)
+    public function getByLoId($portalId, $loId, int $offset, int $limit)
     {
         try {
             $query = new BoolQuery();
@@ -87,12 +94,12 @@ class ActivityRepository
                 ->addSort(new FieldSort('created', FieldSort::ASC))
                 ->addQuery($query);
 
-            $response = $client->search([
+            $response = $this->repository->search([
                 'index' => Schema::ACTIVITY_INDEX,
                 'type'  => Schema::O_ACTIVITY,
                 'body'  => $search->toArray()
             ]);
-            return new JsonResponse($response);
+            return $response;
         }
         catch (Exception $e) {
             return Error::simpleErrorJsonResponse($e->getMessage(), 400);
