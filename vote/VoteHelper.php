@@ -41,6 +41,7 @@ class VoteHelper
                 $cacheData = [
                     'like' => isset($data[VoteTypes::VALUE_LIKE]) ? $data[VoteTypes::VALUE_LIKE] : 0,
                     'dislike' => isset($data[VoteTypes::VALUE_DISLIKE]) ? $data[VoteTypes::VALUE_DISLIKE] : 0,
+                    'dismiss' => isset($data[VoteTypes::VALUE_DISMISS]) ? $data[VoteTypes::VALUE_DISMISS] : 0,
                 ];
                 break;
 

@@ -284,6 +284,13 @@ class LoHelperTest extends UtilTestCase
             ->hasParent($this->course1Id, $parentIds)
             ->hasParent($this->course2Id, $parentIds);
 
+        # Resource 1 without recursive
+        $parentIds = LoHelper::parentIds($this->db, $this->resource1Id, false);
+        $this->assertEquals(2, count($parentIds));
+        $this
+            ->hasParent($this->module1Id, $parentIds)
+            ->hasParent($this->module2Id, $parentIds);
+
         # Resource 2
         $parentIds = LoHelper::parentIds($this->db, $this->resource2Id);
         $this->assertEquals(2, count($parentIds));
@@ -354,6 +361,14 @@ class LoHelperTest extends UtilTestCase
         $customize = LoHelper::getCustomisation($this->db, $courseId, $instanceId);
         $this->assertEquals($customize['published'], LoStatuses::ARCHIVED);
         $this->assertEquals($customize['tokens']['token_1'], $tokens['token_1']);
+    }
+
+    public function testIsSingleLi()
+    {
+        $videoId = $this->createVideo($this->db, ['instance_id' => $this->createInstance($this->db, []), 'data' => [LoHelper::SINGLE_LI => true]]);
+        $video = LoHelper::load($this->db, $videoId);
+        $this->assertTrue(LoHelper::isSingleLi($video));
+        $this->assertFalse(LoHelper::isSingleLi(LoHelper::load($this->db, $this->course1Id)));
     }
 
     private function hasAuthor($authorId, array $source)
