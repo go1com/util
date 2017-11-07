@@ -889,7 +889,12 @@ class Schema
                 'properties' => [
                     'actor'  => ['type' => self::T_KEYWORD],
                     'user'   => ['type' => self::T_KEYWORD],
-                    'entity' => ['type' => self::T_KEYWORD],
+                    'entity' => [
+                        'properties' => [
+                            'title' => ['type' => self::T_KEYWORD],
+                            'type'  => ['type' => self::T_KEYWORD],
+                        ],
+                    ],
                 ],
             ],
         ],
