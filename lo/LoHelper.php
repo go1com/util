@@ -286,14 +286,14 @@ class LoHelper
             ->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public static function parentIds(Connection $db, int $loId): array
+    public static function parentIds(Connection $db, int $loId, $allParent = true): array
     {
         $q = 'SELECT source_id FROM gc_ro WHERE type IN (?) AND target_id = ?';
         $q = $db->executeQuery($q, [EdgeTypes::LO_HAS_CHILDREN, $loId], [DB::INTEGERS, DB::INTEGER]);
 
         $ids = [];
         while ($id = $q->fetchColumn()) {
-            $ids = array_merge($ids, static::parentIds($db, $id));
+            $allParent && $ids = array_merge($ids, static::parentIds($db, $id));
             $ids[] = (int) $id;
         }
 
