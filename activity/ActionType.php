@@ -4,12 +4,12 @@ namespace go1\util\activity;
 
 class ActionType
 {
-    const CREATE  = 1;
-    const IMPORT  = 2;
-    const UPDATE  = 3;
-    const DELETE  = 4;
-    const APPROVE = 5;
-    const REJECT  = 6;
+    const CREATE  = 0;
+    const UPDATE  = 1;
+    const DELETE  = 2;
+    const IMPORT  = 3;
+    const APPROVE = 4;
+    const REJECT  = 5;
 
     # User actions.
     const USER_LOGIN_SUCCESS = 100;
