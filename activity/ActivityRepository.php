@@ -30,7 +30,7 @@ class ActivityRepository
         $userQuery->add(new TermQuery('user_id', $accountId), BoolQuery::SHOULD);
 
         $query = new BoolQuery();
-        $query->add(new TermQuery('instance_id', $$portalId), BoolQuery::MUST);
+        $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
         $query->add($userQuery, BoolQuery::MUST);
 
         $search = new Search();
@@ -40,7 +40,7 @@ class ActivityRepository
             ->addSort(new FieldSort('created', FieldSort::ASC))
             ->addQuery($query);
 
-        return  $this->client->search([
+        return $this->client->search([
             'index'              => Schema::ACTIVITY_INDEX,
             'type'               => Schema::O_ACTIVITY,
             'body'               => $search->toArray(),
@@ -60,7 +60,7 @@ class ActivityRepository
             ->addSort(new FieldSort('created', FieldSort::ASC))
             ->addQuery($query);
 
-        return  $this->client->search([
+        return $this->client->search([
             'index'              => Schema::ACTIVITY_INDEX,
             'type'               => Schema::O_ACTIVITY,
             'body'               => $search->toArray(),
@@ -68,7 +68,7 @@ class ActivityRepository
         ]);
     }
 
-    public function getByLoId(intt $portalId, $loId, int $offset, int $limit): array
+    public function getByLoId(int $portalId, int $loId, int $offset, int $limit): array
     {
         $query = new BoolQuery();
         $query->add(new TermQuery('tags', "lo:$loId"), BoolQuery::MUST);
@@ -81,7 +81,7 @@ class ActivityRepository
             ->addSort(new FieldSort('created', FieldSort::ASC))
             ->addQuery($query);
 
-        return  $this->client->search([
+        return $this->client->search([
             'index'              => Schema::ACTIVITY_INDEX,
             'type'               => Schema::O_ACTIVITY,
             'body'               => $search->toArray(),

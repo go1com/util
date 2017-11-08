@@ -5,9 +5,9 @@ namespace go1\util\activity;
 class ActionType
 {
     const CREATE  = 1;
-    const IMPORT  = 2;
-    const UPDATE  = 3;
-    const DELETE  = 4;
+    const UPDATE  = 2;
+    const DELETE  = 3;
+    const IMPORT  = 4;
     const APPROVE = 5;
     const REJECT  = 6;
 
