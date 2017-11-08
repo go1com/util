@@ -6,9 +6,7 @@ use Assert\Assert;
 use Assert\LazyAssertionException;
 use Doctrine\DBAL\Connection;
 use Elasticsearch\Client;
-use go1\util\Error;
 use go1\util\es\Schema;
-use Exception;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
@@ -27,7 +25,6 @@ class ActivityRepository
 
     public function getByUserId(int $portalId, int $accountId, int $offset, int $limit): array
     {
-
         $userQuery = new BoolQuery();
         $userQuery->add(new TermQuery('actor_id', $accountId), BoolQuery::SHOULD);
         $userQuery->add(new TermQuery('user_id', $accountId), BoolQuery::SHOULD);
@@ -43,7 +40,7 @@ class ActivityRepository
             ->addSort(new FieldSort('created', FieldSort::ASC))
             ->addQuery($query);
 
-        return $this->repository->search($a = [
+        return $this->repository->search([
             'index'              => Schema::ACTIVITY_INDEX,
             'type'               => Schema::O_ACTIVITY,
             'body'               => $search->toArray(),
@@ -53,7 +50,6 @@ class ActivityRepository
 
     public function getByPortal(int $portalId, int $offset, int $limit): array
     {
-
         $query = new BoolQuery();
         $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
 
