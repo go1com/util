@@ -25,84 +25,71 @@ class ActivityRepository
         $this->repository = $repository;
     }
 
-    public function getByUserId($portalId, int $accountId, int $offset, int $limit)
+    public function getByUserId(int $portalId, int $accountId, int $offset, int $limit): array
     {
-        try {
-            $userQuery = new BoolQuery();
-            $userQuery->add(new TermQuery('actor_id', $accountId), BoolQuery::SHOULD);
-            $userQuery->add(new TermQuery('user_id', $accountId), BoolQuery::SHOULD);
 
-            $query = new BoolQuery();
-            $query->add(new TermQuery('instance_id', $$portalId), BoolQuery::MUST);
-            $query->add($userQuery, BoolQuery::MUST);
+        $userQuery = new BoolQuery();
+        $userQuery->add(new TermQuery('actor_id', $accountId), BoolQuery::SHOULD);
+        $userQuery->add(new TermQuery('user_id', $accountId), BoolQuery::SHOULD);
 
-            $search = new Search();
-            $search
-                ->setFrom($offset)
-                ->setSize($limit)
-                ->addSort(new FieldSort('created', FieldSort::ASC))
-                ->addQuery($query);
+        $query = new BoolQuery();
+        $query->add(new TermQuery('instance_id', $$portalId), BoolQuery::MUST);
+        $query->add($userQuery, BoolQuery::MUST);
 
-            $response = $this->repository->search($a = [
-                'index' => Schema::ACTIVITY_INDEX,
-                'type'  => Schema::O_ACTIVITY,
-                'body'  => $search->toArray()
-            ]);
-            return new $response;
-        }
-        catch (Exception $e) {
-            return Error::simpleErrorJsonResponse($e->getMessage(), 400);
-        }
+        $search = new Search();
+        $search
+            ->setFrom($offset)
+            ->setSize($limit)
+            ->addSort(new FieldSort('created', FieldSort::ASC))
+            ->addQuery($query);
+
+        return $this->repository->search($a = [
+            'index'              => Schema::ACTIVITY_INDEX,
+            'type'               => Schema::O_ACTIVITY,
+            'body'               => $search->toArray(),
+            'ignore_unavailable' => true,
+        ]);
     }
 
-    public function getByPortal($portalId, int $offset, int $limit)
+    public function getByPortal(int $portalId, int $offset, int $limit): array
     {
-        try {
-            $query = new BoolQuery();
-            $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
 
-            $search = new Search();
-            $search
-                ->setFrom($offset)
-                ->setSize($limit)
-                ->addSort(new FieldSort('created', FieldSort::ASC))
-                ->addQuery($query);
+        $query = new BoolQuery();
+        $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
 
-            $response = $this->repository->search([
-                'index' => Schema::ACTIVITY_INDEX,
-                'type'  => Schema::O_ACTIVITY,
-                'body'  => $search->toArray()
-            ]);
-            return $response;
-        }
-        catch (Exception $e) {
-            return Error::simpleErrorJsonResponse($e->getMessage(), 400);
-        }
+        $search = new Search();
+        $search
+            ->setFrom($offset)
+            ->setSize($limit)
+            ->addSort(new FieldSort('created', FieldSort::ASC))
+            ->addQuery($query);
+
+        return $this->repository->search([
+            'index'              => Schema::ACTIVITY_INDEX,
+            'type'               => Schema::O_ACTIVITY,
+            'body'               => $search->toArray(),
+            'ignore_unavailable' => true,
+        ]);
     }
 
-    public function getByLoId($portalId, $loId, int $offset, int $limit)
+    public function getByLoId(intt $portalId, $loId, int $offset, int $limit): array
     {
-        try {
-            $query = new BoolQuery();
-            $query->add(new TermQuery('tags', "lo:$loId"), BoolQuery::MUST);
-            $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
+        $query = new BoolQuery();
+        $query->add(new TermQuery('tags', "lo:$loId"), BoolQuery::MUST);
+        $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
 
-            $search = new Search();
-            $search
-                ->setFrom($offset)
-                ->setSize($limit)
-                ->addSort(new FieldSort('created', FieldSort::ASC))
-                ->addQuery($query);
+        $search = new Search();
+        $search
+            ->setFrom($offset)
+            ->setSize($limit)
+            ->addSort(new FieldSort('created', FieldSort::ASC))
+            ->addQuery($query);
 
-            $response = $this->repository->search([
-                'index' => Schema::ACTIVITY_INDEX,
-                'type'  => Schema::O_ACTIVITY,
-                'body'  => $search->toArray()
-            ]);
-            return $response;
-        }
-        catch (Exception $e) {
-            return Error::simpleErrorJsonResponse($e->getMessage(), 400);
-        }
+        return $this->repository->search([
+            'index'              => Schema::ACTIVITY_INDEX,
+            'type'               => Schema::O_ACTIVITY,
+            'body'               => $search->toArray(),
+            'ignore_unavailable' => true,
+        ]);
     }
 }
