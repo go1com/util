@@ -8,50 +8,50 @@ use stdClass;
 
 class PortalPricing
 {
-    const USER_LICENSES_MULTIPLY_RATE   = 2;
-    const PRODUCT_PLATFORM              = 'platform';
-    const PRODUCT_PREMIUM               = 'premium';
-    const REGIONAL                      = ['AU', 'EU', 'UK', 'US', self::REGIONAL_OTHER];
-    const REGIONAL_DEFAULT              = 'AU';
-    const REGIONAL_OTHER                = 'OTHER';
-    const PLATFORM_FREE_LICENSE         = 5;
-    const PLATFORM_UNLIMITED_LICENSE    = -1;
-    const PLATFORM_H5                   = [ // > 5 licenses
-        'AU'    => ['currency' => 'AUD', 'price' => 5],
-        'EU'    => ['currency' => 'EUR', 'price' => 4.5],
-        'UK'    => ['currency' => 'GBP', 'price' => 4],
-        'US'    => ['currency' => 'USD', 'price' => 5],
-        'OTHER' => ['currency' => 'USD', 'price' => 5],
+    const USER_LICENSES_MULTIPLY_RATE = 2;
+    const PRODUCT_PLATFORM            = 'platform';
+    const PRODUCT_PREMIUM             = 'premium';
+    const REGIONAL                    = ['AU', 'EU', 'UK', 'US', self::REGIONAL_OTHER];
+    const REGIONAL_DEFAULT            = 'AU';
+    const REGIONAL_OTHER              = 'OTHER';
+    const PLATFORM_FREE_LICENSE       = 5;
+    const PLATFORM_UNLIMITED_LICENSE  = -1;
+    const PLATFORM_H5                 = [ // > 5 licenses
+                                          'AU'    => ['currency' => 'AUD', 'price' => 5],
+                                          'EU'    => ['currency' => 'EUR', 'price' => 4.5],
+                                          'UK'    => ['currency' => 'GBP', 'price' => 4],
+                                          'US'    => ['currency' => 'USD', 'price' => 5],
+                                          'OTHER' => ['currency' => 'USD', 'price' => 5],
     ];
 
-    const PREMIUM_LICENSE               = 20;
-    const PREMIUM_LE20                  = [// <= 20 licenses
-       'AU'    => ['currency' => 'AUD', 'price' => 9],
-       'EU'    => ['currency' => 'EUR', 'price' => 7],
-       'UK'    => ['currency' => 'GBP', 'price' => 6],
-       'US'    => ['currency' => 'USD', 'price' => 9],
-       'OTHER' => ['currency' => 'USD', 'price' => 9],
+    const PREMIUM_LICENSE = 20;
+    const PREMIUM_LE20    = [// <= 20 licenses
+                             'AU'    => ['currency' => 'AUD', 'price' => 9],
+                             'EU'    => ['currency' => 'EUR', 'price' => 7],
+                             'UK'    => ['currency' => 'GBP', 'price' => 6],
+                             'US'    => ['currency' => 'USD', 'price' => 9],
+                             'OTHER' => ['currency' => 'USD', 'price' => 9],
     ];
-    const PREMIUM_H20                   = [// > 20 licenses
-       'AU'    => ['currency' => 'AUD', 'price' => 8],
-       'EU'    => ['currency' => 'EUR', 'price' => 6],
-       'UK'    => ['currency' => 'GBP', 'price' => 5],
-       'US'    => ['currency' => 'USD', 'price' => 8],
-       'OTHER' => ['currency' => 'USD', 'price' => 8],
+    const PREMIUM_H20     = [// > 20 licenses
+                             'AU'    => ['currency' => 'AUD', 'price' => 8],
+                             'EU'    => ['currency' => 'EUR', 'price' => 6],
+                             'UK'    => ['currency' => 'GBP', 'price' => 5],
+                             'US'    => ['currency' => 'USD', 'price' => 8],
+                             'OTHER' => ['currency' => 'USD', 'price' => 8],
     ];
 
-    const PLAN_STATUS_FREE              = 0;
-    const PLAN_STATUS_TRIAL             = 1;
-    const PLAN_STATUS_PAID              = 2;
-    const PLAN_STATUS_OVERDUE_INVOICE   = 3;
-    const PLAN_STATUS                   = [
+    const PLAN_STATUS_FREE            = 0;
+    const PLAN_STATUS_TRIAL           = 1;
+    const PLAN_STATUS_PAID            = 2;
+    const PLAN_STATUS_OVERDUE_INVOICE = 3;
+    const PLAN_STATUS                 = [
         self::PLAN_STATUS_FREE            => 'Free',
         self::PLAN_STATUS_TRIAL           => 'Trial',
         self::PLAN_STATUS_PAID            => 'Paid',
-        self::PLAN_STATUS_OVERDUE_INVOICE => 'Overdue invoice'
+        self::PLAN_STATUS_OVERDUE_INVOICE => 'Overdue invoice',
     ];
 
-    const TRIAL_EXPIRE                  = 3600 * 24 * 14;
+    const TRIAL_EXPIRE = 3600 * 24 * 14;
 
     public static function getLicenses(stdClass $portal)
     {
@@ -110,7 +110,7 @@ class PortalPricing
         // System default user: user.0, user.1, portal author
         $systemUsersNumber = 3;
 
-        return  ($userLicenses == static::PLATFORM_UNLIMITED_LICENSE)
+        return ($userLicenses == static::PLATFORM_UNLIMITED_LICENSE)
             ? static::PLATFORM_UNLIMITED_LICENSE
             : $userLicenses * static::USER_LICENSES_MULTIPLY_RATE + $systemUsersNumber;
     }
@@ -154,7 +154,7 @@ class PortalPricing
             }
         }
 
-        return !empty($basePrice) ? [$basePrice['price']*$license*12, $basePrice['currency']] : [0, 'AUD'];
+        return !empty($basePrice) ? [$basePrice['price'] * $license * 12, $basePrice['currency']] : [0, 'AUD'];
     }
 
     public static function calculateTrialStatus(stdClass $portal)
@@ -168,6 +168,7 @@ class PortalPricing
     {
         $userCount = static::countPortalUsers($db, $instance);
         $userActiveCount = $db->executeQuery('SELECT COUNT(*) FROM gc_user WHERE instance = ? AND login >= ?', [$instance, strtotime($since)])->fetchColumn();
+
         return min($userCount, $userActiveCount);
     }
 }
