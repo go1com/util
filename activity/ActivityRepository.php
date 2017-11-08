@@ -16,11 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ActivityRepository
 {
-    private $repository;
+    private $client;
 
-    public function __construct(Client $repository)
+    public function __construct(Client $client)
     {
-        $this->repository = $repository;
+        $this->client = $client;
     }
 
     public function getByUserId(int $portalId, int $accountId, int $offset, int $limit): array
@@ -40,7 +40,7 @@ class ActivityRepository
             ->addSort(new FieldSort('created', FieldSort::ASC))
             ->addQuery($query);
 
-        return $this->repository->search([
+        return  $this->client->search([
             'index'              => Schema::ACTIVITY_INDEX,
             'type'               => Schema::O_ACTIVITY,
             'body'               => $search->toArray(),
@@ -60,7 +60,7 @@ class ActivityRepository
             ->addSort(new FieldSort('created', FieldSort::ASC))
             ->addQuery($query);
 
-        return $this->repository->search([
+        return  $this->client->search([
             'index'              => Schema::ACTIVITY_INDEX,
             'type'               => Schema::O_ACTIVITY,
             'body'               => $search->toArray(),
@@ -81,7 +81,7 @@ class ActivityRepository
             ->addSort(new FieldSort('created', FieldSort::ASC))
             ->addQuery($query);
 
-        return $this->repository->search([
+        return  $this->client->search([
             'index'              => Schema::ACTIVITY_INDEX,
             'type'               => Schema::O_ACTIVITY,
             'body'               => $search->toArray(),
