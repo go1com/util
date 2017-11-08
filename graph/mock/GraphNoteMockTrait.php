@@ -4,7 +4,8 @@ namespace go1\util\graph\mock;
 
 use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\GraphEdgeTypes;
-use go1\util\note\NoteType;
+use go1\util\note\NoteEntityType;
+use go1\util\note\NoteStatus;
 use GraphAware\Neo4j\Client\Client;
 
 trait GraphNoteMockTrait
@@ -20,7 +21,7 @@ trait GraphNoteMockTrait
         $id = isset($data['id']) ? $data['id'] : 0;
         $uuid = isset($data['uuid']) ? $data['uuid'] : 'NOTE_UUID';
         $entityId = isset($data['entity_id']) ? (int) $data['entity_id'] : 0;
-        $entityType = isset($data['entity_type']) ? $data['entity_type'] : NoteType::TYPE_LO;
+        $entityType = isset($data['entity_type']) ? $data['entity_type'] : NoteEntityType::TYPE_LO;
         $private = isset($data['private']) ? (int) $data['private'] : 0;
 
         static $created = 1000000;
@@ -46,7 +47,7 @@ trait GraphNoteMockTrait
 
                 $context = $data['context'] ?? [];
                 $context += [
-                    'status' => isset($data['lo_status']) ? (int) $data['lo_status'] : 1,
+                    'status'    => isset($data['lo_status']) ? (int)$data['lo_status'] : NoteStatus::ENTITY_STATUS_ENROLLED,
                     'enrolment' => $data['enrolment'] ?? EnrolmentStatuses::IN_PROGRESS
                 ];
 

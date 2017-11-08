@@ -2,7 +2,7 @@
 
 namespace go1\util\note;
 
-class NoteType
+class NoteEntityType
 {
     const TYPE_LO         = 'lo';
     const TYPE_GROUP      = 'group';
