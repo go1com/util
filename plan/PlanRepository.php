@@ -254,7 +254,8 @@ class PlanRepository
             }
             $this->update($original, $plan, $notify);
             $planId = $original->id;
-        } else {
+        }
+        else {
             $planId = $this->create($plan, $notify);
         }
 

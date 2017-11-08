@@ -142,7 +142,6 @@ class AwardSchema
             $enrolmentRevision->addColumn('quantity', Type::FLOAT, ['default' => 0.0]);
             $enrolmentRevision->addColumn('data', 'blob', ['notnull' => false]);
             $enrolmentRevision->addColumn('created', 'integer', ['unsigned' => true]);
-
             $enrolmentRevision->setPrimaryKey(['id']);
             $enrolmentRevision->addIndex(['award_enrolment_id']);
             $enrolmentRevision->addIndex(['award_id']);
