@@ -4,7 +4,7 @@ namespace go1\util\graph\mock;
 
 use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\GraphEdgeTypes;
-use go1\util\group\GroupStatus;
+use go1\util\note\NoteType;
 use GraphAware\Neo4j\Client\Client;
 
 trait GraphNoteMockTrait
@@ -20,7 +20,7 @@ trait GraphNoteMockTrait
         $id = isset($data['id']) ? $data['id'] : 0;
         $uuid = isset($data['uuid']) ? $data['uuid'] : 'NOTE_UUID';
         $entityId = isset($data['entity_id']) ? (int) $data['entity_id'] : 0;
-        $entityType = isset($data['entity_type']) ? $data['entity_type'] : 'lo';
+        $entityType = isset($data['entity_type']) ? $data['entity_type'] : NoteType::TYPE_LO;
         $private = isset($data['private']) ? (int) $data['private'] : 0;
 
         static $created = 1000000;
@@ -55,7 +55,7 @@ trait GraphNoteMockTrait
                     . " MERGE (entity:$label { $prop: {entityPropValue} })"
                     . " MERGE (entity)-[:{$this->hasNote}]->(n)"
                     . " MERGE (n)-[r:{$this->hasMember}]->(entity)"
-                    . ($entityType == 'lo' ? " SET r = {context}" : ''),
+                    . " SET r = {context}",
                     [
                         'uuid'              => $uuid,
                         'entityPropValue'   => $propValue,
