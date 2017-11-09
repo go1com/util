@@ -184,6 +184,7 @@ class Queue
     const DO_ALGOLIA_INDEX                     = 'do.algolia.index'; # Object { offset: INT, limit: INT}
     const DO_USER_UNBLOCK_MAIL                 = 'do.user.unblock.mail'; # String mail
     const DO_USER_UNBLOCK_IP                   = 'do.user.unblock.ip'; # String ip
+    const DO_USER_CRON                         = 'do.user.cron'; # { task: STRING }
     const DO_NOTIFY                            = 'do.notify'; # {task: string NOTIFY_TASKS, body: array TASK_BODY}
     const DO_AWARD_CRON                        = 'do.award.cron'; # { task: STRING }
     const DO_AWARD_CALCULATE                   = 'do.award.calculate'; # {task: AWARD_TASK, body: array TASK_BODY}
