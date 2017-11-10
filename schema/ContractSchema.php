@@ -15,6 +15,7 @@
                 $contract->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
                 $contract->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
                 $contract->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+                $contract->addColumn('staff_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
                 $contract->addColumn('status', Type::INTEGER);
                 $contract->addColumn('name', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('start_date', Type::DATETIME, ['notnull' => false]);

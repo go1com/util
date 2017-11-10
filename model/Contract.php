@@ -21,6 +21,7 @@ class Contract implements JsonSerializable
     private $id;
     private $instanceId;
     private $userId;
+    private $staffId;
     private $name;
     private $status;
     private $startDate;
@@ -48,6 +49,7 @@ class Contract implements JsonSerializable
         int $id = null,
         int $instanceId,
         int $userId,
+        int $staffId = null,
         string $name = null,
         string $status = Contract::STATUS_ACTIVE,
         string $startDate = null,
@@ -72,6 +74,7 @@ class Contract implements JsonSerializable
         $this->id = $id;
         $this->instanceId = $instanceId;
         $this->userId = $userId;
+        $this->staffId = $staffId;
         $this->name = $name;
         $this->status = $status;
         $this->startDate = $startDate;
@@ -106,6 +109,11 @@ class Contract implements JsonSerializable
     public function getUserId(): int
     {
         return $this->userId;
+    }
+
+    public function getStaffId(): ?int
+    {
+        return $this->staffId;
     }
 
     public function getName(): string
@@ -319,6 +327,7 @@ class Contract implements JsonSerializable
             $row->id ?? null,
             $row->instance_id,
             $row->user_id,
+            $row->staff_id ?? null,
             $row->name,
             $row->status,
             $row->start_date,
@@ -351,6 +360,9 @@ class Contract implements JsonSerializable
         }
         if ($origin->getUserId() != $this->userId) {
             $values['user_id'] = $this->userId;
+        }
+        if ($origin->getStaffId() != $this->staffId) {
+            $values['staff_id'] = $this->staffId;
         }
         if ($origin->getStartDate() != $this->startDate) {
             $values['start_date'] = $this->startDate;
@@ -407,6 +419,7 @@ class Contract implements JsonSerializable
             'id'                => $this->id,
             'instance_id'       => $this->instanceId,
             'user_id'           => $this->userId,
+            'staff_id'           => $this->staffId,
             'name'              => $this->name,
             'status'            => $this->getStatus(true),
             'start_date'        => $this->startDate,
