@@ -105,14 +105,14 @@ class MqClient
             if (
                 (
                     is_array($body)
-                    && !(2 === count(array_filter($body, function($value, $key) {
+                    && !(2 === count(array_filter($body, function ($value, $key) {
                             return (in_array($key, ['id', 'original']) && $value);
                         }, ARRAY_FILTER_USE_BOTH)))
                 )
                 ||
                 (
                     is_object($body)
-                    && ( !(property_exists($body, 'id') && $body->id) || !(property_exists($body, 'original') && $body->original) )
+                    && (!(property_exists($body, 'id') && $body->id) || !(property_exists($body, 'original') && $body->original))
                 )
             ) {
                 throw new Exception("Missing entity ID or original data.");
