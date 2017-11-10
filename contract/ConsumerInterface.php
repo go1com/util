@@ -2,11 +2,9 @@
 
 namespace go1\util\contract;
 
-use stdClass;
-
-interface ConsumerInterface
+/**
+ * @deprecated
+ */
+interface ConsumerInterface extends \go1\util\ConsumerInterface
 {
-    public function aware(string $event): bool;
-
-    public function consume(string $routingKey, stdClass $body, stdClass $context = null): bool;
 }
