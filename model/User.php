@@ -48,19 +48,20 @@ class User implements JsonSerializable
     {
         $user = new User;
         $user->id = $row->id;
-        $user->profileId = isset($row->profile_id) ? $row->profile_id : null;
-        $user->instance = $row->instance;
-        $user->name = isset($row->name) ? $row->name : null;
-        $user->mail = $row->mail;
-        $user->firstName = $row->first_name;
-        $user->lastName = $row->last_name;
-        $user->status = $row->status;
-        $user->created = $row->created;
-        $user->access = $row->access;
-        $user->login = $row->login;
-        $user->timestamp = $row->timestamp;
-        $user->data = is_string($row->data) ? json_decode($row->data) : $row->data;
-        $user->avatar = $user->data->avatar->uri ?? null;
+        $user->profileId = $row->profile_id ?? null;
+        $user->instance = $row->instance ?? null;
+        $user->name = $row->name ?? null;
+        $user->mail = $row->mail ?? null;
+        $user->firstName = $row->first_name ?? null;
+        $user->lastName = $row->last_name ?? null;
+        $user->status = $row->status ?? null;
+        $user->created = $row->created ?? null;
+        $user->access = $row->access ?? null;
+        $user->login = $row->login ?? null;
+        $user->timestamp = $row->timestamp ?? null;
+        $user->data = is_scalar($row->data) ? json_decode($row->data) : $row->data;
+        $user->roles = $row->roles ?? $user->data->roles ?? null;
+        $user->avatar = $row->avatar ?? $user->data->avatar->uri ?? null;
 
         if ($db) {
             // Fill the roles
@@ -110,5 +111,22 @@ class User implements JsonSerializable
             'accounts'   => $this->accounts,
             'data'       => $this->data,
         ];
+    }
+
+    public function diff(stdClass $user2)
+    {
+        $user1 = $this->jsonSerialize();
+        $user2 = static::create($user2)->jsonSerialize();
+
+        $diff = [];
+        foreach ($user1 as $property => $value) {
+            if ($user2[$property] != $value) {
+                $diff[$property] = [
+                    'source' => $value,
+                    'target' => $user2[$property],
+                ];
+            }
+        }
+        return $diff;
     }
 }
