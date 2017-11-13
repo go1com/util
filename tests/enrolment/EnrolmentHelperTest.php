@@ -295,4 +295,21 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals($status, $revisionEnrolment->status);
         $this->assertEquals($date, $revisionEnrolment->start_date);
     }
+
+    public function testCountUserEnrolment()
+    {
+        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId];
+        $enrolments = [
+            'lp'       => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->lpId]),
+            'course'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->courseId, 'parent_lo_id' => $this->lpId]),
+            'module'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->moduleId, 'parent_lo_id' => $this->courseId]),
+            'video'    => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->liVideoId, 'parent_lo_id' => $this->moduleId]),
+            'resource' => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->liResourceId, 'parent_lo_id' => $this->moduleId]),
+            'question' => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveQuestionId, 'parent_lo_id' => $this->moduleId]),
+            'text'     => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveTextId, 'parent_lo_id' => $this->moduleId]),
+        ];
+        $this->assertEquals(count($enrolments), EnrolmentHelper::countUserEnrolment($this->db, $this->profileId));
+        $this->assertEquals(count($enrolments), EnrolmentHelper::countUserEnrolment($this->db, $this->profileId, $this->instanceId));
+        $this->assertEquals(0, EnrolmentHelper::countUserEnrolment($this->db, 20202));
+    }
 }
