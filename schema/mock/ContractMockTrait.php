@@ -15,6 +15,8 @@ trait ContractMockTrait
         $db->insert('contract', [
             'instance_id'       => $options['instance_id'] ?? 0,
             'user_id'           => $options['user_id'] ?? 0,
+            'staff_id'          => $options['staff_id'] ?? 0,
+            'parent_id'         => $options['parent_id'] ?? 0,
             'name'              => $options['name'] ?? '',
             'status'            => $options['status'] ?? Contract::STATUS_ACTIVE,
             'start_date'        => $options['start_date'] ?? (new DateTime)->format('Y-m-d'),
@@ -25,6 +27,7 @@ trait ContractMockTrait
             'tax'               => $options['tax'] ?? 0,
             'tax_included'      => $options['tax_included'] ?? '',
             'currency'          => $options['currency'] ?? Currency::DEFAULT,
+            'aud_net_amount'    => $options['aud_net_amount'] ?? 0,
             'frequency'         => $options['frequency'] ?? '',
             'frequency_other'   => $options['frequency_other'] ?? '',
             'custom_term'       => $options['custom_term'] ?? '',
