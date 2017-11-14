@@ -22,6 +22,8 @@ class Contract implements JsonSerializable
     private $instanceId;
     private $userId;
     private $staffId;
+    private $parentId;
+    private $audNetAmount;
     private $name;
     private $status;
     private $startDate;
@@ -50,6 +52,8 @@ class Contract implements JsonSerializable
         int $instanceId,
         int $userId,
         int $staffId = null,
+        int $parentId = null,
+        float $audNetAmount = null,
         string $name = null,
         string $status = Contract::STATUS_ACTIVE,
         string $startDate = null,
@@ -75,6 +79,8 @@ class Contract implements JsonSerializable
         $this->instanceId = $instanceId;
         $this->userId = $userId;
         $this->staffId = $staffId;
+        $this->parentId = $parentId;
+        $this->audNetAmount = $audNetAmount;
         $this->name = $name;
         $this->status = $status;
         $this->startDate = $startDate;
@@ -114,6 +120,11 @@ class Contract implements JsonSerializable
     public function getStaffId(): ?int
     {
         return $this->staffId;
+    }
+
+    public function getParentId(): ?int
+    {
+        return $this->parentId;
     }
 
     public function getName(): string
@@ -208,6 +219,11 @@ class Contract implements JsonSerializable
     public function getCurrency()
     {
         return $this->currency ?? Currency::DEFAULT;
+    }
+
+    public function getAudNetAmount()
+    {
+        return $this->audNetAmount;
     }
 
     public function getFrequency(): string
@@ -328,6 +344,8 @@ class Contract implements JsonSerializable
             $row->instance_id,
             $row->user_id,
             $row->staff_id ?? null,
+            $row->parent_id ?? null,
+            $row->aud_net_amount ?? null,
             $row->name,
             $row->status,
             $row->start_date,
@@ -364,6 +382,9 @@ class Contract implements JsonSerializable
         if ($origin->getStaffId() != $this->staffId) {
             $values['staff_id'] = $this->staffId;
         }
+        if ($origin->getParentId() != $this->parentId) {
+            $values['parent_id'] = $this->parentId;
+        }
         if ($origin->getStartDate() != $this->startDate) {
             $values['start_date'] = $this->startDate;
         }
@@ -387,6 +408,9 @@ class Contract implements JsonSerializable
         }
         if ($origin->getCurrency() != $this->currency) {
             $values['currency'] = $this->currency;
+        }
+        if ($origin->getAudNetAmount() != $this->audNetAmount) {
+            $values['aud_net_amount'] = $this->audNetAmount;
         }
         if ($origin->getFrequency() != $this->frequency) {
             $values['frequency'] = $this->frequency;
@@ -419,7 +443,8 @@ class Contract implements JsonSerializable
             'id'                => $this->id,
             'instance_id'       => $this->instanceId,
             'user_id'           => $this->userId,
-            'staff_id'           => $this->staffId,
+            'staff_id'          => $this->staffId,
+            'parent_id'         => $this->parentId,
             'name'              => $this->name,
             'status'            => $this->getStatus(true),
             'start_date'        => $this->startDate,
@@ -430,6 +455,7 @@ class Contract implements JsonSerializable
             'tax'               => $this->tax,
             'tax_included'      => $this->taxIncluded,
             'currency'          => $this->currency,
+            'aud_net_amount'    => $this->audNetAmount,
             'frequency'         => $this->frequency,
             'frequency_other'   => $this->frequencyOther,
             'custom_term'       => $this->customTerm,
