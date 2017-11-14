@@ -78,7 +78,7 @@ trait EsLoMockTrait
             'metadata'       => [
                 'parents_authors_ids' => $options['metadata']['parents_authors_ids'] ?? null,
                 'parents_id'          => $options['metadata']['parents_id'] ?? null,
-                'instance_id'         => $options['routing'] ?? $options['instance_id'] ?? 0,
+                'instance_id'         => intval($options['routing'] ?? $options['instance_id'] ?? 0),
                 'updated_at'          => $options['updated_at'] ?? time(),
                 'customized'          => $options['metadata']['customized'] ?? 0,
                 'shared'              => $options['metadata']['shared'] ?? 0,
