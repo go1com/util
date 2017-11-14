@@ -64,6 +64,7 @@ class Schema
     const O_AWARD_ACHIEVEMENT   = 'award_achievement';
     const O_SUGGESTION_CATEGORY = 'suggestion_category'; # Suggestion for award manual item's category
     const O_CONTRACT            = 'contract';
+    const O_METRIC              = 'metric';
 
     // enrolment only belong to lo. account_enrolment is enrolment, but belong to account.
     // This is used to get users that is not enrolled to a course.
@@ -108,6 +109,7 @@ class Schema
         self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
         self::O_SUGGESTION_CATEGORY => self::SUGGESTION_CATEGORY_MAPPING,
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
+        self::O_METRIC              => self::METRIC_MAPPING,
     ];
 
     const ANALYZED = [
@@ -169,7 +171,7 @@ class Schema
             'namespace' => ['type' => self::T_KEYWORD],
             'name'      => ['type' => self::T_KEYWORD],
             'public'    => ['type' => self::T_INT],
-            'data'      => ['type' => self::T_OBJECT],
+            'value'     => ['type' => self::T_OBJECT],
         ],
     ];
 
@@ -943,6 +945,21 @@ class Schema
             'payment_method'  => ['type' => self::T_KEYWORD],
             'renewal_date'    => ['type' => self::T_DATE],
             'cancel_date'     => ['type' => self::T_DATE],
+            'created'         => ['type' => self::T_DATE],
+            'updated'         => ['type' => self::T_DATE],
+        ],
+    ];
+
+    const METRIC_MAPPING = [
+        'properties' => [
+            'id'              => ['type' => self::T_KEYWORD],
+            'title'           => ['type' => self::T_KEYWORD],
+            'user_id'         => ['type' => self::T_INT],
+            'type'            => ['type' => self::T_KEYWORD],
+            'metric_value'    => ['type' => self::T_DOUBLE],
+            'status'          => ['type' => self::T_SHORT],
+            'start_date'      => ['type' => self::T_DATE],
+            'description'     => ['type' => self::T_TEXT],
             'created'         => ['type' => self::T_DATE],
             'updated'         => ['type' => self::T_DATE],
         ],
