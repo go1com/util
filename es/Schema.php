@@ -406,6 +406,8 @@ class Schema
             'start_date'  => ['type' => self::T_DATE],
             'end_date'    => ['type' => self::T_DATE],
             'due_date'    => ['type' => self::T_DATE],
+            // For award enrolment only
+            'expire_date' => ['type' => self::T_DATE],
             'changed'     => ['type' => self::T_DATE],
             'created'     => ['type' => self::T_DATE],
             // Duration between end date and start date (hours).
