@@ -956,7 +956,9 @@ class Schema
         'properties' => [
             'id'              => ['type' => self::T_KEYWORD],
             'title'           => ['type' => self::T_KEYWORD],
-            'user_id'         => ['type' => self::T_INT],
+            'user'            => [
+                'properties'  => self::USER_MAPPING['properties'],
+            ],
             'type'            => ['type' => self::T_KEYWORD],
             'metric_value'    => ['type' => self::T_DOUBLE],
             'status'          => ['type' => self::T_SHORT],
@@ -964,6 +966,11 @@ class Schema
             'description'     => ['type' => self::T_TEXT],
             'created'         => ['type' => self::T_DATE],
             'updated'         => ['type' => self::T_DATE],
+            'metadata' => [
+                'properties' => [
+                    'user_id' => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
