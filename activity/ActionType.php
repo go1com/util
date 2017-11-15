@@ -10,6 +10,8 @@ class ActionType
     const IMPORT  = 4;
     const APPROVE = 5;
     const REJECT  = 6;
+    const PASSED  = 1;
+    const FAILED  = 0;
 
     # User actions.
     const USER_LOGIN_SUCCESS = 100;
