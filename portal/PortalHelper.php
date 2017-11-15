@@ -13,7 +13,7 @@ class PortalHelper
     const LEGACY_VERSION = 'v2.11.0';
     const STABLE_VERSION = 'v3.0.0';
 
-    const WEBSITE_DOMAIN          = 'go1.com';
+    const WEBSITE_DOMAIN          = 'www.go1.com';
     const WEBSITE_PUBLIC_INSTANCE = 'public.mygo1.com';
 
     const FEATURE_CREDIT                       = 'credit';

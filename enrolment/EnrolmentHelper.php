@@ -268,4 +268,20 @@ class EnrolmentHelper
     {
         return static::loadByLoAndProfileId($db, $loId, $profileId, $parentLoId, '1', DB::COL);
     }
+
+    public static function countUserEnrolment(Connection $db, int $profileId, int $takenInstanceId = null): int
+    {
+        $q = $db->createQueryBuilder();
+        $q
+            ->select('count(*)')
+            ->from('gc_enrolment')
+            ->where('profile_id = :profile_id')
+            ->setParameter('profile_id', $profileId);
+
+        $takenInstanceId && $q
+            ->andWhere('taken_instance_id = :taken_instance_id')
+            ->setParameter('taken_instance_id', $takenInstanceId);
+
+        return $q->execute()->fetchColumn();
+    }
 }

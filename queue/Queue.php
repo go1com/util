@@ -145,6 +145,9 @@ class Queue
     const ACTIVITY_CREATE            = 'activity.create';
     const ACTIVITY_UPDATE            = 'activity.update';
     const ACTIVITY_DELETE            = 'activity.delete';
+    const METRIC_CREATE              = 'metric.create';
+    const METRIC_UPDATE              = 'metric.update';
+    const METRIC_DELETE              = 'metric.delete';
     const PAYMENT_STRIPE_AUTHORIZE   = 'payment.stripe.authorize';
     const PAYMENT_STRIPE_DEAUTHORIZE = 'payment.stripe.deauthorize';
 

@@ -54,4 +54,20 @@ class UserModelTest extends UtilTestCase
         $this->assertEquals(1, count($user->accounts));
         $this->assertEquals($account1Id, $user->accounts[0]->id);
     }
+
+    public function testDiff()
+    {
+        $id = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com', 'first_name' => 'Foo']);
+        $original = UserHelper::load($this->db, $id);
+        $originalModel = User::create($original);
+
+        $user = clone $original;
+        $this->assertCount(0, $originalModel->diff($user));
+
+        $user->first_name = 'Bar';
+        $diff = $originalModel->diff($user);
+        $this->assertCount(1, $diff);
+        $this->assertEquals('Foo', $diff['first_name']['source']);
+        $this->assertEquals('Bar', $diff['first_name']['target']);
+    }
 }

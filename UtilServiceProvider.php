@@ -99,6 +99,7 @@ class UtilServiceProvider implements ServiceProviderInterface
                 $args['endpoint'] = $o['endpoint'];
                 $args['use_path_style_endpoint'] = true;
             }
+
             return new S3Client($args);
         };
 
