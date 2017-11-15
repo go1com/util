@@ -23,7 +23,7 @@ class ActivityRepository
         $this->client = $client;
     }
 
-    public function getByUserId(int $portalId, int $accountId, int $offset, int $limit): array
+    public function getByUserId(int $portalId, int $accountId, int $offset, int $limit, string $sort = FieldSort::ASC): array
     {
         $userQuery = new BoolQuery();
         $userQuery->add(new TermQuery('actor_id', $accountId), BoolQuery::SHOULD);
@@ -37,7 +37,7 @@ class ActivityRepository
         $search
             ->setFrom($offset)
             ->setSize($limit)
-            ->addSort(new FieldSort('created', FieldSort::ASC))
+            ->addSort(new FieldSort('created', $sort))
             ->addQuery($query);
 
         return $this->client->search([
@@ -48,7 +48,7 @@ class ActivityRepository
         ]);
     }
 
-    public function getByPortal(int $portalId, int $offset, int $limit): array
+    public function getByPortal(int $portalId, int $offset, int $limit, string $sort = FieldSort::ASC): array
     {
         $query = new BoolQuery();
         $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
@@ -57,7 +57,7 @@ class ActivityRepository
         $search
             ->setFrom($offset)
             ->setSize($limit)
-            ->addSort(new FieldSort('created', FieldSort::ASC))
+            ->addSort(new FieldSort('created', $sort))
             ->addQuery($query);
 
         return $this->client->search([
@@ -68,7 +68,7 @@ class ActivityRepository
         ]);
     }
 
-    public function getByLoId(int $portalId, int $loId, int $offset, int $limit): array
+    public function getByLoId(int $portalId, int $loId, int $offset, int $limit, string $sort = FieldSort::ASC): array
     {
         $query = new BoolQuery();
         $query->add(new TermQuery('tags', "lo:$loId"), BoolQuery::MUST);
@@ -78,7 +78,7 @@ class ActivityRepository
         $search
             ->setFrom($offset)
             ->setSize($limit)
-            ->addSort(new FieldSort('created', FieldSort::ASC))
+            ->addSort(new FieldSort('created', $sort))
             ->addQuery($query);
 
         return $this->client->search([
