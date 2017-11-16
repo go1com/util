@@ -3,6 +3,7 @@
 namespace go1\util\award;
 
 use go1\util\enrolment\EnrolmentStatuses;
+use go1\util\plan\PlanStatuses;
 use InvalidArgumentException;
 
 class AwardEnrolmentStatuses
@@ -52,6 +53,9 @@ class AwardEnrolmentStatuses
 
             case self::EXPIRED:
                 return EnrolmentStatuses::I_EXPIRED;
+
+            case PlanStatuses::ASSIGNED:
+                return PlanStatuses::ASSIGNED;
 
             default:
                 throw new InvalidArgumentException('Unknown enrolment status: ' . $status);
