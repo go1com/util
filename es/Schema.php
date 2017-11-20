@@ -930,12 +930,15 @@ class Schema
             'id'              => ['type' => self::T_KEYWORD],
             'name'            => ['type' => self::T_KEYWORD],
             'instance_id'     => ['type' => self::T_INT],
+            'parent_id'       => ['type' => self::T_INT],
+            'csm_id'          => ['type' => self::T_INT],
             'portal'          => ['type' => self::T_KEYWORD],
             'user_id'         => ['type' => self::T_INT],
             'staff_id'        => ['type' => self::T_INT],
             'number_users'    => ['type' => self::T_INT],
             'price'           => ['type' => self::T_DOUBLE],
             'currency'        => ['type' => self::T_KEYWORD],
+            'aud_net_amount'  => ['type' => self::T_FLOAT],
             'status'          => ['type' => self::T_SHORT],
             'start_date'      => ['type' => self::T_DATE],
             'signed_date'     => ['type' => self::T_DATE],
@@ -956,7 +959,9 @@ class Schema
         'properties' => [
             'id'              => ['type' => self::T_KEYWORD],
             'title'           => ['type' => self::T_KEYWORD],
-            'user_id'         => ['type' => self::T_INT],
+            'user'            => [
+                'properties'  => self::USER_MAPPING['properties'],
+            ],
             'type'            => ['type' => self::T_KEYWORD],
             'metric_value'    => ['type' => self::T_DOUBLE],
             'status'          => ['type' => self::T_SHORT],
@@ -964,6 +969,11 @@ class Schema
             'description'     => ['type' => self::T_TEXT],
             'created'         => ['type' => self::T_DATE],
             'updated'         => ['type' => self::T_DATE],
+            'metadata' => [
+                'properties' => [
+                    'user_id' => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 

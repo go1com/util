@@ -9,6 +9,7 @@ use go1\util\DateTime;
 use go1\util\Text;
 use JsonSerializable;
 use stdClass;
+use InvalidArgumentException;
 
 class Contract implements JsonSerializable
 {
@@ -148,6 +149,26 @@ class Contract implements JsonSerializable
         }
 
         return (int) $this->status;
+    }
+
+    public static function statusToNumeric($status)
+    {
+        if (is_numeric($status)) {
+            return $status;
+        }
+
+        switch ($status) {
+            case 'canceled':
+                return static::STATUS_CANCELED;
+
+            case 'inactive':
+                return static::STATUS_INACTIVE;
+
+            case 'active':
+                return static::STATUS_ACTIVE;
+        }
+
+        throw new InvalidArgumentException('Unknown status: ' . $status);
     }
 
     public function setStatus(int $status)
