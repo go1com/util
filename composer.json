@@ -29,10 +29,10 @@
     "symfony/var-dumper": "^3.0",
     "ongr/elasticsearch-dsl": "^5.0",
     "jsq/amazon-es-php": "^0.2.0",
-    "ralouphie/mimey": "^1.0",
-    "behat/transliterator": "^1.2",
-    "ezyang/htmlpurifier": "^4.9"
+    "ralouphie/mimey": "^1.0"
   },
   "require-dev": {
+    "behat/transliterator": "^1.2",
+    "ezyang/htmlpurifier": "^4.9"
   }
 }
