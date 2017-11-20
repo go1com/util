@@ -930,6 +930,8 @@ class Schema
             'id'              => ['type' => self::T_KEYWORD],
             'name'            => ['type' => self::T_KEYWORD],
             'instance_id'     => ['type' => self::T_INT],
+            'parent_id'       => ['type' => self::T_INT],
+            'csm_id'          => ['type' => self::T_INT],
             'portal'          => ['type' => self::T_KEYWORD],
             'user_id'         => ['type' => self::T_INT],
             'staff_id'        => ['type' => self::T_INT],
