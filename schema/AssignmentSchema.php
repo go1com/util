@@ -40,6 +40,7 @@ class AssignmentSchema
             $submission->addColumn('created', 'integer', ['unsigned' => true]);
             $submission->addColumn('updated', 'integer', ['unsigned' => true]);
             $submission->addColumn('published', 'smallint', ['default' => 0]);
+            $submission->addColumn('enrolment_id', 'integer', ['unsigned' => true, 'default' => 0]);
             $submission->setPrimaryKey(['id']);
             $submission->addIndex(['assignment_id']);
             $submission->addIndex(['profile_id']);
@@ -49,7 +50,7 @@ class AssignmentSchema
             $submission->addIndex(['status']);
             $submission->addForeignKeyConstraint('asm_assignment', ['assignment_id'], ['id']);
             $submission->addForeignKeyConstraint('asm_submission_revision', ['revision_id'], ['id'], ['onDelete' => 'SET NULL']);
-            $submission->addUniqueIndex(['assignment_id', 'profile_id']);
+            $submission->addUniqueIndex(['assignment_id', 'profile_id', 'enrolment_id']);
         }
 
         if (!$schema->hasTable('asm_submission_revision')) {
