@@ -63,6 +63,8 @@ class Schema
     const O_AWARD_ENROLMENT     = 'award_enrolment';
     const O_AWARD_ACHIEVEMENT   = 'award_achievement';
     const O_SUGGESTION_CATEGORY = 'suggestion_category'; # Suggestion for award manual item's category
+    const O_CONTRACT            = 'contract';
+    const O_METRIC              = 'metric';
 
     // enrolment only belong to lo. account_enrolment is enrolment, but belong to account.
     // This is used to get users that is not enrolled to a course.
@@ -106,6 +108,8 @@ class Schema
         self::O_AWARD_ACHIEVEMENT   => self::AWARD_ACHIEVEMENT_MAPPING,
         self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
         self::O_SUGGESTION_CATEGORY => self::SUGGESTION_CATEGORY_MAPPING,
+        self::O_CONTRACT            => self::CONTRACT_MAPPING,
+        self::O_METRIC              => self::METRIC_MAPPING,
     ];
 
     const ANALYZED = [
@@ -167,7 +171,7 @@ class Schema
             'namespace' => ['type' => self::T_KEYWORD],
             'name'      => ['type' => self::T_KEYWORD],
             'public'    => ['type' => self::T_INT],
-            'data'      => ['type' => self::T_OBJECT],
+            'value'     => ['type' => self::T_OBJECT],
         ],
     ];
 
@@ -402,6 +406,8 @@ class Schema
             'start_date'  => ['type' => self::T_DATE],
             'end_date'    => ['type' => self::T_DATE],
             'due_date'    => ['type' => self::T_DATE],
+            // For award enrolment only
+            'expire_date' => ['type' => self::T_DATE],
             'changed'     => ['type' => self::T_DATE],
             'created'     => ['type' => self::T_DATE],
             // Duration between end date and start date (hours).
@@ -914,6 +920,58 @@ class Schema
             'metadata' => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
+                ],
+            ],
+        ],
+    ];
+
+    const CONTRACT_MAPPING = [
+        'properties' => [
+            'id'              => ['type' => self::T_KEYWORD],
+            'name'            => ['type' => self::T_KEYWORD],
+            'instance_id'     => ['type' => self::T_INT],
+            'parent_id'       => ['type' => self::T_INT],
+            'csm_id'          => ['type' => self::T_INT],
+            'portal'          => ['type' => self::T_KEYWORD],
+            'user_id'         => ['type' => self::T_INT],
+            'staff_id'        => ['type' => self::T_INT],
+            'number_users'    => ['type' => self::T_INT],
+            'price'           => ['type' => self::T_DOUBLE],
+            'currency'        => ['type' => self::T_KEYWORD],
+            'aud_net_amount'  => ['type' => self::T_FLOAT],
+            'status'          => ['type' => self::T_SHORT],
+            'start_date'      => ['type' => self::T_DATE],
+            'signed_date'     => ['type' => self::T_DATE],
+            'initial_term'    => ['type' => self::T_KEYWORD],
+            'tax'             => ['type' => self::T_DOUBLE],
+            'frequency'       => ['type' => self::T_KEYWORD],
+            'frequency_other' => ['type' => self::T_KEYWORD],
+            'custom_term'     => ['type' => self::T_TEXT],
+            'payment_method'  => ['type' => self::T_KEYWORD],
+            'renewal_date'    => ['type' => self::T_DATE],
+            'cancel_date'     => ['type' => self::T_DATE],
+            'created'         => ['type' => self::T_DATE],
+            'updated'         => ['type' => self::T_DATE],
+        ],
+    ];
+
+    const METRIC_MAPPING = [
+        'properties' => [
+            'id'              => ['type' => self::T_KEYWORD],
+            'title'           => ['type' => self::T_KEYWORD],
+            'user'            => [
+                'properties'  => self::USER_MAPPING['properties'],
+            ],
+            'type'            => ['type' => self::T_KEYWORD],
+            'metric_value'    => ['type' => self::T_DOUBLE],
+            'status'          => ['type' => self::T_SHORT],
+            'start_date'      => ['type' => self::T_DATE],
+            'description'     => ['type' => self::T_TEXT],
+            'created'         => ['type' => self::T_DATE],
+            'updated'         => ['type' => self::T_DATE],
+            'metadata' => [
+                'properties' => [
+                    'user_id' => ['type' => self::T_INT],
                 ],
             ],
         ],

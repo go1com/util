@@ -92,4 +92,12 @@ class Text
     {
         return Transliterator::transliterate($fileName, '-');
     }
+
+    public static function hmacBase64($data, $key)
+    {
+        return strtr(
+            base64_encode(hash_hmac('sha256', (string) $data, (string) $key, true)),
+            ['+' => '-', '/' => '_', '=' => '']
+        );
+    }
 }

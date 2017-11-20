@@ -108,8 +108,8 @@ class AwardTestData
 
         foreach ($options as $option) {
             $plan = Plan::create((object) [
-                'user_id'      => $option['user_id'] ?? $option['assigner_id'],
-                'assigner_id'  => $option['assigner_id'],
+                'user_id'      => $option['user_id'],
+                'assigner_id'  => $option['assigner_id'] ?? null,
                 'instance_id'  => $option['instance_id'] ?? $this->award->instance_id,
                 'entity_type'  => PlanTypes::ENTITY_AWARD,
                 'entity_id'    => $this->award->revision_id,

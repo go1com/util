@@ -15,6 +15,8 @@
                 $contract->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
                 $contract->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
                 $contract->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+                $contract->addColumn('staff_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+                $contract->addColumn('parent_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
                 $contract->addColumn('status', Type::INTEGER);
                 $contract->addColumn('name', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('start_date', Type::DATETIME, ['notnull' => false]);
@@ -25,6 +27,7 @@
                 $contract->addColumn('tax', Type::FLOAT, ['notnull' => false]);
                 $contract->addColumn('tax_included', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('currency', Type::STRING, ['notnull' => false]);
+                $contract->addColumn('aud_net_amount', Type::FLOAT, ['notnull' => false]);
                 $contract->addColumn('frequency', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('frequency_other', Type::STRING, ['notnull' => false]);
                 $contract->addColumn('custom_term', Type::TEXT, ['notnull' => false]);
@@ -38,6 +41,8 @@
                 $contract->setPrimaryKey(['id']);
                 $contract->addIndex(['instance_id']);
                 $contract->addIndex(['user_id']);
+                $contract->addIndex(['staff_id']);
+                $contract->addIndex(['parent_id']);
                 $contract->addIndex(['status']);
                 $contract->addIndex(['initial_term']);
                 $contract->addIndex(['created']);
