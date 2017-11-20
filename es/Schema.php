@@ -938,6 +938,7 @@ class Schema
             'number_users'    => ['type' => self::T_INT],
             'price'           => ['type' => self::T_DOUBLE],
             'currency'        => ['type' => self::T_KEYWORD],
+            'aud_net_amount'  => ['type' => self::T_FLOAT],
             'status'          => ['type' => self::T_SHORT],
             'start_date'      => ['type' => self::T_DATE],
             'signed_date'     => ['type' => self::T_DATE],

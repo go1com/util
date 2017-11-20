@@ -446,7 +446,7 @@ class Contract implements JsonSerializable
             'staff_id'          => $this->staffId,
             'parent_id'         => $this->parentId,
             'name'              => $this->name,
-            'status'            => $this->getStatus(true),
+            'status'            => $this->getStatus(),
             'start_date'        => $this->startDate,
             'signed_date'       => $this->signedDate,
             'initial_term'      => $this->initialTerm,
