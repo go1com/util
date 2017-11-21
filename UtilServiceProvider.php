@@ -18,6 +18,7 @@ use go1\clients\GraphinClient;
 use go1\clients\LoClient;
 use go1\clients\MailClient;
 use go1\clients\MqClient;
+use go1\clients\Neo4jBuilderClient;
 use go1\clients\NotificationClient;
 use go1\clients\PaymentClient;
 use go1\clients\PortalClient;
@@ -121,7 +122,8 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.graph'] = function (Container $c) {
-            $builder = ClientBuilder::create();
+            $config = ['client_class' => Neo4jBuilderClient::class];
+            $builder = ClientBuilder::create($config);
             $builder->addConnection('default', $c['graph_url']);
             if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
                 foreach (Neo4jLoggerSubscriber::getSubscribedEvents() as $subscribedEvent => $methodName) {
