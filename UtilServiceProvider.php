@@ -120,7 +120,14 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.graph'] = function (Container $c) {
-            return ClientBuilder::create()->addConnection('default', $c['graph_url'])->build();
+            $builder = ClientBuilder::create();
+            $builder->addConnection('default', $c['graph_url']);
+
+            if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
+                $c['profiler.collectors.neo4j']->attachEventListeners($builder);
+            }
+
+            return $builder->build();
         };
 
         $c['go1.client.rules'] = function (Container $c) {
