@@ -10,6 +10,7 @@ use go1\util\es\Schema;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
+use ONGR\ElasticsearchDSL\BuilderInterface;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,7 @@ class ActivityRepository
         $this->client = $client;
     }
 
-    public function getByUserId(int $portalId, int $accountId, int $offset, int $limit, string $sort = FieldSort::ASC): array
+    public function getByUserId(int $portalId, int $accountId, int $offset, int $limit, string $sort = FieldSort::ASC, BuilderInterface $filter = null): array
     {
         $userQuery = new BoolQuery();
         $userQuery->add(new TermQuery('actor_id', $accountId), BoolQuery::SHOULD);
@@ -31,7 +32,7 @@ class ActivityRepository
 
         $query = new BoolQuery();
         $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
-        $query->add($userQuery, BoolQuery::MUST);
+        $filter && $query->add($filter, BoolQuery::MUST);
 
         $search = new Search();
         $search
@@ -48,10 +49,11 @@ class ActivityRepository
         ]);
     }
 
-    public function getByPortal(int $portalId, int $offset, int $limit, string $sort = FieldSort::ASC): array
+    public function getByPortal(int $portalId, int $offset, int $limit, string $sort = FieldSort::ASC, BuilderInterface $filter = null): array
     {
         $query = new BoolQuery();
         $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
+        $filter && $query->add($filter, BoolQuery::MUST);
 
         $search = new Search();
         $search
@@ -68,11 +70,12 @@ class ActivityRepository
         ]);
     }
 
-    public function getByLoId(int $portalId, int $loId, int $offset, int $limit, string $sort = FieldSort::ASC): array
+    public function getByLoId(int $portalId, int $loId, int $offset, int $limit, string $sort = FieldSort::ASC, BuilderInterface $filter = null): array
     {
         $query = new BoolQuery();
         $query->add(new TermQuery('tags', "lo:$loId"), BoolQuery::MUST);
         $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
+        $filter && $query->add($filter, BoolQuery::MUST);
 
         $search = new Search();
         $search
@@ -88,4 +91,5 @@ class ActivityRepository
             'ignore_unavailable' => true,
         ]);
     }
+
 }
