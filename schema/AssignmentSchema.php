@@ -41,6 +41,7 @@ class AssignmentSchema
             $submission->addColumn('updated', 'integer', ['unsigned' => true]);
             $submission->addColumn('published', 'smallint', ['default' => 0]);
             $submission->addColumn('enrolment_id', 'integer', ['unsigned' => true, 'default' => 0]);
+            $submission->addColumn('archived', 'smallint', ['default' => 0]);
             $submission->setPrimaryKey(['id']);
             $submission->addIndex(['assignment_id']);
             $submission->addIndex(['profile_id']);
