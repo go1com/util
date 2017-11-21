@@ -778,7 +778,7 @@ class Schema
         'sub_administrative_area' => ['type' => self::T_KEYWORD],
         'locality'                => ['type' => self::T_KEYWORD],
         'dependent_locality'      => ['type' => self::T_KEYWORD],
-        'thoroughfare'            => ['type' => self::T_KEYWORD],
+        'thoroughfare'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
         'premise'                 => ['type' => self::T_KEYWORD],
         'sub_premise'             => ['type' => self::T_KEYWORD],
         'organisation_name'       => ['type' => self::T_KEYWORD],
