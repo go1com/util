@@ -3,6 +3,8 @@
 namespace go1\clients;
 
 use \GraphAware\Neo4j\Client\Client;
+use GraphAware\Neo4j\Client\Connection\ConnectionManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Neo4jBuilderClient extends Client
 {
@@ -19,6 +21,18 @@ class Neo4jBuilderClient extends Client
 
     private $cyphers;
     private $context;
+
+    public function __construct(ConnectionManager $connectionManager = null, EventDispatcherInterface $eventDispatcher = null)
+    {
+        if ($connectionManager) {
+            parent::__construct($connectionManager, $eventDispatcher);
+        }
+    }
+
+    public function setConnectionManager(ConnectionManager $connectionManager)
+    {
+        $this->connectionManager = $connectionManager;
+    }
 
     public function match(string $cypher)
     {
@@ -123,7 +137,11 @@ class Neo4jBuilderClient extends Client
 
     public function execute()
     {
-        return parent::run($this->getQuery(), $this->context);
+        if ($this->connectionManager) {
+            return parent::run($this->getQuery(), $this->context);
+        }
+
+        return $this->__toString();
     }
 
     public function __toString()
