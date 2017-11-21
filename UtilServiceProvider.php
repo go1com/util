@@ -7,6 +7,7 @@ use Aws\Credentials\Credentials;
 use Aws\ElasticsearchService\ElasticsearchPhpHandler;
 use Aws\S3\S3Client;
 use Elasticsearch\ClientBuilder as EsClientBuilder;
+use go1\app\domain\profiler\Neo4jLoggerSubscriber;
 use go1\clients\AccountsClient;
 use go1\clients\CurrencyClient;
 use go1\clients\DownloadPDFClient;
@@ -17,6 +18,7 @@ use go1\clients\GraphinClient;
 use go1\clients\LoClient;
 use go1\clients\MailClient;
 use go1\clients\MqClient;
+use go1\clients\Neo4jBuilderClient;
 use go1\clients\NotificationClient;
 use go1\clients\PaymentClient;
 use go1\clients\PortalClient;
@@ -120,9 +122,10 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.graph'] = function (Container $c) {
-            $builder = ClientBuilder::create();
+            $config = ['client_class' => Neo4jBuilderClient::class];
+            $builder = ClientBuilder::create($config);
             $builder->addConnection('default', $c['graph_url']);
-
+            
             if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
                 $c['profiler.collectors.neo4j']->attachEventListeners($builder);
             }
