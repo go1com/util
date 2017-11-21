@@ -125,10 +125,9 @@ class UtilServiceProvider implements ServiceProviderInterface
             $config = ['client_class' => Neo4jBuilderClient::class];
             $builder = ClientBuilder::create($config);
             $builder->addConnection('default', $c['graph_url']);
+            
             if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
-                foreach (Neo4jLoggerSubscriber::getSubscribedEvents() as $subscribedEvent => $methodName) {
-                    $builder->registerEventListener($subscribedEvent, [$c['subscriber.neo4j'], $methodName]);
-                }
+                $c['profiler.collectors.neo4j']->attachEventListeners($builder);
             }
 
             return $builder->build();
