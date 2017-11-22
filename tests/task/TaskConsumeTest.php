@@ -52,9 +52,9 @@ class TaskConsumeTest extends UtilTestCase
                 $this->error = $error;
             }
 
-            protected function processTask(string $type = 'task_type')
+            protected function processTask(int $taskId = 0, string $type = 'task_type')
             {
-                parent::processTask($type);
+                parent::processTask($taskId, $type);
             }
 
             protected function processTaskItem(int $taskId, string $type = 'task_item_type')
@@ -182,5 +182,37 @@ class TaskConsumeTest extends UtilTestCase
         $taskItem1 = TaskHelper::loadTaskItem($this->db, $taskItemId1, $this->taskItemName);
         $this->assertEquals(TaskItem::STATUS_FAILED, $taskItem1->status);
         $this->assertEquals("Failed to process task item.", $taskItem1->data['error']);
+    }
+
+    public function testProcessTaskParallel()
+    {
+        $taskId1 = $this->createTask($this->db, [
+            'name' => $this->taskName,
+            'data' => ['type' => $this->taskType, 'lo_id' => 1001]
+        ]);
+
+        $taskId2 = $this->createTask($this->db, [
+            'name' => $this->taskName,
+            'data' => ['type' => $this->taskType, 'lo_id' => 1002]
+        ]);
+
+        $taskId3 = $this->createTask($this->db, [
+            'name' => $this->taskName,
+            'data' => ['type' => $this->taskType, 'lo_id' => 1003]
+        ]);
+
+        $consumer = $this->taskClass();
+        $consumer->consume('', (object)['task' => $this->taskName, 'task_id' => $taskId1]);
+        $consumer->consume('', (object)['task' => $this->taskName, 'task_id' => $taskId2]);
+        $consumer->consume('', (object)['task' => $this->taskName, 'task_id' => $taskId3]);
+
+        $task1 = TaskHelper::loadTask($this->db, $taskId1, $this->taskName);
+        $this->assertEquals(Task::STATUS_PROCESSING, $task1->status);
+
+        $task2 = TaskHelper::loadTask($this->db, $taskId2, $this->taskName);
+        $this->assertEquals(Task::STATUS_PROCESSING, $task2->status);
+
+        $task3 = TaskHelper::loadTask($this->db, $taskId3, $this->taskName);
+        $this->assertEquals(Task::STATUS_PROCESSING, $task3->status);
     }
 }
