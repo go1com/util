@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "259efcecf3866f777d29a8fe70dce056",
+    "content-hash": "1b01604b9569aaee9952bbd0f0d53bc8",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.38.5",
+            "version": "3.39.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "13ffa481127c08e04244f116ae85a64b4172479c"
+                "reference": "314ab6aedfde4364f2a5321153638324182e8c13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/13ffa481127c08e04244f116ae85a64b4172479c",
-                "reference": "13ffa481127c08e04244f116ae85a64b4172479c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/314ab6aedfde4364f2a5321153638324182e8c13",
+                "reference": "314ab6aedfde4364f2a5321153638324182e8c13",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-11-17T22:08:25+00:00"
+            "time": "2017-11-22T01:18:54+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -799,6 +799,32 @@
                 "MIT"
             ],
             "time": "2016-09-30T03:38:47+00:00"
+        },
+        {
+            "name": "go1/neo4j-builder",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/go1com/neo4j_builder.git",
+                "reference": "c26e0771475baef98319b076407ea8e0a292046b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/go1com/neo4j_builder/zipball/c26e0771475baef98319b076407ea8e0a292046b",
+                "reference": "c26e0771475baef98319b076407ea8e0a292046b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "go1\\neo4j_builder\\": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "time": "2017-11-22T04:16:14+00:00"
         },
         {
             "name": "graphaware/neo4j-bolt",
@@ -2975,7 +3001,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "go1/neo4j-builder": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
