@@ -44,14 +44,15 @@ class TaskConsumer implements ConsumerInterface
     public function consume(string $routingKey, stdClass $message, stdClass $context = null): bool
     {
         $taskName = $message->task ?? null;
+        $taskId = $message->task_id ?? 0;
         if ($taskName) {
             switch ($taskName) {
                 case $this->taskName:
-                    $this->processTask();
+                    $this->processTask($taskId);
                     break;
 
                 case $this->taskItemName:
-                    $this->processTaskItem($message->task_id);
+                    $this->processTaskItem($taskId);
                     break;
 
             }
@@ -60,10 +61,17 @@ class TaskConsumer implements ConsumerInterface
         return true;
     }
 
-    protected function getTask()
+    protected function getTask(int $taskId = 0)
     {
         if (!$this->task) {
-            $this->task = TaskHelper::loadTaskByStatus($this->db, Task::STATUS_PENDING, $this->taskName);
+            $this->task = $taskId
+                ? TaskHelper::loadTask($this->db, $taskId, $this->taskName)
+                : TaskHelper::loadTaskByStatus($this->db, Task::STATUS_PENDING, $this->taskName);
+        }
+        else {
+            if ($taskId && ($this->task->id != $taskId)) {
+                $this->task = TaskHelper::loadTask($this->db, $taskId, $this->taskName);
+            }
         }
 
         return $this->task;
@@ -78,8 +86,8 @@ class TaskConsumer implements ConsumerInterface
         return $this->taskItem;
     }
 
-    protected function processTask(string $type = ''){
-        $task = $this->getTask();
+    protected function processTask(int $taskId = 0, string $type = ''){
+        $task = $this->getTask($taskId);
         if ($task && ($task->getDataType() == $type)) {
             $task->status = Task::STATUS_PROCESSING;
             TaskHelper::updateTaskStatus($this->db, $task->id, $task->status, $task->name);
