@@ -26,6 +26,7 @@ use go1\clients\RulesClient;
 use go1\clients\S3Client as Go1S3Client;
 use go1\clients\SmsClient;
 use go1\clients\UserClient;
+use go1\neo4j_builder\Neo4jBuilder;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
 use GraphAware\Neo4j\Client\ClientBuilder;
@@ -120,7 +121,8 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.graph'] = function (Container $c) {
-            $builder = ClientBuilder::create();
+            $config = class_exists('Neo4jBuilder') ? ['client_class' => Neo4jBuilder::class] : [];
+            $builder = ClientBuilder::create($config);
             $builder->addConnection('default', $c['graph_url']);
 
             if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
