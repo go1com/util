@@ -33,6 +33,7 @@
   },
   "require-dev": {
     "behat/transliterator": "^1.2",
+    "go1/neo4j-builder": "dev-master",
     "ezyang/htmlpurifier": "^4.9"
   }
 }
