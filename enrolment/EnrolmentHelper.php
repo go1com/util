@@ -13,6 +13,7 @@ use go1\util\lo\LoTypes;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\queue\Queue;
+use LengthException;
 use PDO;
 use stdClass;
 
@@ -59,6 +60,10 @@ class EnrolmentHelper
             ->fetchAll(DB::OBJ);
     }
 
+    /**
+     * @deprecated
+     * @see EnrolmentHelper::loadByLoProfileAndPortal()
+     */
     public static function loadByLoAndProfileId(Connection $db, int $loId, int $profileId, int $parentLoId = null, $select = '*', $fetchMode = DB::OBJ)
     {
         $q = $db
@@ -67,6 +72,25 @@ class EnrolmentHelper
             ->from('gc_enrolment')
             ->where('lo_id = :lo_id')->setParameter(':lo_id', $loId)
             ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', $profileId);
+
+        $parentLoId && $q->andWhere('parent_lo_id = :parent_lo_id')->setParameter(':parent_lo_id', $parentLoId);
+        $enrolments = $q->execute()->fetchAll($fetchMode);
+        if (count($enrolments) > 1) {
+            throw new LengthException('More than one enrolment return.');
+        }
+
+        return $enrolments ? $enrolments[0] : null;
+    }
+
+    public static function loadByLoProfileAndPortal(Connection $db, int $loId, int $profileId, int $portalId, int $parentLoId = null, $select = '*', $fetchMode = DB::OBJ)
+    {
+        $q = $db
+            ->createQueryBuilder()
+            ->select($select)
+            ->from('gc_enrolment')
+            ->where('lo_id = :lo_id')->setParameter(':lo_id', $loId)
+            ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', $profileId)
+            ->andWhere('taken_instance_id = :taken_instance_id')->setParameter(':taken_instance_id', $portalId);
 
         $parentLoId && $q->andWhere('parent_lo_id = :parent_lo_id')->setParameter(':parent_lo_id', $parentLoId);
 

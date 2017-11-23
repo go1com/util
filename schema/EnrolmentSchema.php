@@ -28,7 +28,7 @@ class EnrolmentSchema
             $enrolment->addColumn('data', 'blob', ['notnull' => false]);
 
             $enrolment->setPrimaryKey(['id']);
-            $enrolment->addUniqueIndex(['profile_id', 'parent_lo_id', 'lo_id']);
+            $enrolment->addUniqueIndex(['profile_id', 'parent_lo_id', 'lo_id', 'taken_instance_id']);
             $enrolment->addIndex(['profile_id']);
             $enrolment->addIndex(['instance_id']);
             $enrolment->addIndex(['taken_instance_id']);
@@ -63,6 +63,8 @@ class EnrolmentSchema
             $revision->addIndex(['status']);
             $revision->addIndex(['lo_id']);
         }
+
+        static::update01($schema);
     }
 
     public static function installManualRecord(Schema $schema)
@@ -87,6 +89,24 @@ class EnrolmentSchema
             $manual->addIndex(['verified']);
             $manual->addIndex(['created']);
             $manual->addIndex(['updated']);
+        }
+    }
+
+    public static function update01(Schema $schema)
+    {
+        if ($schema->hasTable('gc_enrolment')) {
+            $enrolment = $schema->getTable('gc_enrolment');
+            $indexes = $enrolment->getIndexes();
+            foreach ($indexes as $index) {
+                if (
+                    $index->isUnique()
+                    && !$index->isPrimary()
+                    && (['profile_id', 'parent_lo_id', 'lo_id'] == $index->getColumns())
+                ) {
+                    $enrolment->dropIndex($index->getName());
+                    $enrolment->addUniqueIndex(['profile_id', 'parent_lo_id', 'lo_id', 'taken_instance_id']);
+                }
+            }
         }
     }
 }
