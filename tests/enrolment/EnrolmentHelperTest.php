@@ -4,7 +4,6 @@ namespace go1\util\tests\enrolment;
 
 use go1\clients\MqClient;
 use go1\util\DateTime;
-use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
 use go1\util\enrolment\EnrolmentStatuses;
@@ -311,5 +310,24 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals(count($enrolments), EnrolmentHelper::countUserEnrolment($this->db, $this->profileId));
         $this->assertEquals(count($enrolments), EnrolmentHelper::countUserEnrolment($this->db, $this->profileId, $this->instanceId));
         $this->assertEquals(0, EnrolmentHelper::countUserEnrolment($this->db, 20202));
+    }
+
+    public function testLoadByLoAndProfileId()
+    {
+        $enrolmentId = $this->createEnrolment($this->db, ['profile_id' => 1, 'taken_instance_id' => 1, 'lo_id' => 1]);
+        $this->assertEquals($enrolmentId, EnrolmentHelper::loadByLoAndProfileId($this->db, 1, 1)->id);
+
+        $this->createEnrolment($this->db, ['profile_id' => 1, 'taken_instance_id' => 2, 'lo_id' => 1]);
+        $this->expectException(\Exception::class);
+        EnrolmentHelper::loadByLoAndProfileId($this->db, 1, 1);
+    }
+
+    public function testLoadByLoProfileAndPortal()
+    {
+        $fooEnrolmentId = $this->createEnrolment($this->db, ['profile_id' => 1, 'taken_instance_id' => 1, 'lo_id' => 1]);
+        $barEnrolmentId = $this->createEnrolment($this->db, ['profile_id' => 1, 'taken_instance_id' => 2, 'lo_id' => 1]);
+
+        $this->assertEquals($fooEnrolmentId, EnrolmentHelper::loadByLoProfileAndPortal($this->db, 1, 1, 1)->id);
+        $this->assertEquals($barEnrolmentId, EnrolmentHelper::loadByLoProfileAndPortal($this->db, 1, 1, 2)->id);
     }
 }
