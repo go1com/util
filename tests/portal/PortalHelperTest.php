@@ -42,16 +42,16 @@ class PortalHelperTest extends UtilTestCase
     public function testGetPortalAdmins()
     {
         $admin1Id = $this->createUser($this->db, [
-            'instance'   => $this->portalName,
-            'mail' => 'a1@mail.com'
+            'instance' => $this->portalName,
+            'mail'     => 'a1@mail.com',
         ]);
         $admin2Id = $this->createUser($this->db, [
-            'instance'   => $this->portalName,
-            'mail' => 'a2@mail.com'
+            'instance' => $this->portalName,
+            'mail'     => 'a2@mail.com',
         ]);
         $this->createUser($this->db, [
-            'instance'   => $this->portalName,
-            'mail' => 'a3@mail.com'
+            'instance' => $this->portalName,
+            'mail'     => 'a3@mail.com',
         ]);
         $adminIds = [$admin1Id, $admin2Id];
 
@@ -62,7 +62,7 @@ class PortalHelperTest extends UtilTestCase
                 ->setMethods(['findAdministrators'])
                 ->getMock();
             $userClient
-                ->expects($this->once())
+                ->expects($this->any())
                 ->method('findAdministrators')
                 ->willReturnCallback(function () use ($adminIds) {
                     foreach ($adminIds as $adminId) {
@@ -78,5 +78,21 @@ class PortalHelperTest extends UtilTestCase
         $this->assertEquals(2, count($admins));
         $this->assertEquals($admin1Id, $admins[0]->id);
         $this->assertEquals($admin2Id, $admins[1]->id);
+
+        return [$userClient];
+    }
+
+    /** @depends testGetPortalAdmins */
+    public function testGetPortalAdminIds(array $params)
+    {
+        list($userClient) = $params;
+        $admin1Id = $this->createUser($this->db, ['instance' => $this->portalName, 'mail' => 'a1@mail.com']);
+        $admin2Id = $this->createUser($this->db, ['instance' => $this->portalName, 'mail' => 'a2@mail.com']);
+
+        $admins = PortalHelper::getPortalAdminIds($this->db, $userClient, $this->portalName);
+
+        $this->assertEquals(2, count($admins));
+        $this->assertEquals($admin1Id, $admins[0]);
+        $this->assertEquals($admin2Id, $admins[1]);
     }
 }

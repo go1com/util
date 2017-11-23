@@ -27,6 +27,7 @@ class PortalHelper
     const FEATURE_CREDIT_REQUEST_DEFAULT       = false;
     const FEATURE_NOTIFY_NEW_ENROLMENT         = 'notify_on_enrolment_create';
     const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
+    const TIMEZONE_DEFAULT                     = "Australia/Brisbane";
 
     public static function load(Connection $db, $nameOrId, $columns = '*')
     {
@@ -124,6 +125,13 @@ class PortalHelper
         return $db->executeQuery('SELECT id, name FROM gc_role WHERE instance = ?', [$portalName])->fetchAll(DB::PAIR);
     }
 
+    public static function timezone(stdClass $portal)
+    {
+        self::parseConfig($portal);
+
+        return $portal->configuration->timezone ?? self::TIMEZONE_DEFAULT;
+    }
+
     public static function getPortalAdmins(Connection $db, UserClient $userClient, string $portalName): array
     {
         $adminIds = [];
@@ -131,8 +139,22 @@ class PortalHelper
             $adminIds[] = $admin->id;
         }
 
-        return $adminIds
-            ? UserHelper::loadMultiple($db, $adminIds)
-            : [];
+        return !$adminIds ? [] : UserHelper::loadMultiple($db, $adminIds);
+    }
+
+    public static function getPortalAdminIds(Connection $db, UserClient $userClient, string $portalName): array
+    {
+        $adminIds = [];
+        foreach ($userClient->findAdministrators($portalName, true) as $admin) {
+            $adminIds[] = $admin->id;
+        }
+
+        $admins = !$adminIds ? [] : UserHelper::loadMultiple($db, $adminIds);
+        $adminIds = [];
+        foreach ($admins as $admin) {
+            $adminIds[] = $admin->id;
+        }
+
+        return $adminIds;
     }
 }

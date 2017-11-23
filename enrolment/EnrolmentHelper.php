@@ -287,20 +287,31 @@ class EnrolmentHelper
         return $q->execute()->fetchColumn();
     }
 
-    public static function getEnrolmentAssessors(Connection $db, $enrolment): array
+    public static function getEnrolmentAssessors(Connection $db, int $enrolmentId): array
     {
-        if (!is_object($enrolment)) {
-            return [];
-        }
-
         $assessorIds = [];
-        $ros = EdgeHelper::edgesFromTarget($db, $enrolment->id, [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE]);
+        $ros = EdgeHelper::edgesFromTarget($db, $enrolmentId, [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE]);
         foreach ($ros as $ro) {
             $assessorIds[] = $ro->source_id;
         }
 
-        return $assessorIds
-            ? UserHelper::loadMultiple($db, $assessorIds)
-            : [];
+        return !$assessorIds ? [] : UserHelper::loadMultiple($db, $assessorIds);
+    }
+
+    public static function getEnrolmentAssessorIds(Connection $db, int $enrolmentId): array
+    {
+        $assessorIds = [];
+        $ros = EdgeHelper::edgesFromTarget($db, $enrolmentId, [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE]);
+        foreach ($ros as $ro) {
+            $assessorIds[] = $ro->source_id;
+        }
+
+        $assessors = !$assessorIds ? [] : UserHelper::loadMultiple($db, $assessorIds);
+        $assessorIds = [];
+        foreach ($assessors as $assessor) {
+            $assessorIds[] = $assessor->id;
+        }
+
+        return $assessorIds;
     }
 }

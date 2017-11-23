@@ -394,8 +394,23 @@ class LoHelper
             $authorIds[] = $ro->target_id;
         }
 
-        return $authorIds
-            ? UserHelper::loadMultiple($db, $authorIds)
-            : [];
+        return !$authorIds ? [] : UserHelper::loadMultiple($db, $authorIds);
+    }
+
+    public static function getCourseAuthorIds(Connection $db, int $courseId): array
+    {
+        $authorIds = [];
+        $ros = EdgeHelper::edgesFromSource($db, $courseId, [EdgeTypes::HAS_AUTHOR_EDGE]);
+        foreach ($ros as $ro) {
+            $authorIds[] = $ro->target_id;
+        }
+
+        $authors = !$authorIds ? [] : UserHelper::loadMultiple($db, $authorIds);
+        $authorIds = [];
+        foreach ($authors as $author) {
+            $authorIds[] = $author->id;
+        }
+
+        return $authorIds;
     }
 }
