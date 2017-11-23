@@ -25,6 +25,7 @@ class PortalHelper
     const FEATURE_CREDIT_REQUEST_DEFAULT       = false;
     const FEATURE_NOTIFY_NEW_ENROLMENT         = 'notify_on_enrolment_create';
     const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
+    const TIMEZONE_DEFAULT                     = "Australia/Brisbane";
 
     public static function load(Connection $db, $nameOrId, $columns = '*')
     {
@@ -120,5 +121,12 @@ class PortalHelper
     public static function roles(Connection $db, string $portalName)
     {
         return $db->executeQuery('SELECT id, name FROM gc_role WHERE instance = ?', [$portalName])->fetchAll(DB::PAIR);
+    }
+
+    public static function timezone(stdClass $portal)
+    {
+        self::parseConfig($portal);
+
+        return $portal->configuration->timezone ?? self::TIMEZONE_DEFAULT;
     }
 }
