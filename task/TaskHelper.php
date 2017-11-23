@@ -19,6 +19,8 @@ class TaskHelper
             'checksum'    => md5($encoded)
         ];
         $db->insert($name, $task);
+
+        return $db->lastInsertId($name);
     }
 
     public static function updateTaskStatus(Connection $db, int $id, string $status, string $name)
