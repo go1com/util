@@ -52,4 +52,12 @@ class PortalHelperTest extends UtilTestCase
         $portal = PortalHelper::loadFromLoId($mockDb, $courseId);
         $portal = PortalHelper::loadFromLoId($mockDb, $courseId);
     }
+
+    public function testTimeZone()
+    {
+        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com', 'data' => ['configuration' => ['timezone' => "Australia/Canberra"]]]);
+
+        $portal = PortalHelper::load($this->db, $instanceId);
+        $this->assertEquals("Australia/Canberra", PortalHelper::timezone($portal));
+    }
 }
