@@ -3,6 +3,7 @@
 namespace go1\util\tests\enrolment;
 
 use go1\clients\MqClient;
+use go1\clients\UserClient;
 use go1\util\DateTime;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
@@ -311,5 +312,23 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals(count($enrolments), EnrolmentHelper::countUserEnrolment($this->db, $this->profileId));
         $this->assertEquals(count($enrolments), EnrolmentHelper::countUserEnrolment($this->db, $this->profileId, $this->instanceId));
         $this->assertEquals(0, EnrolmentHelper::countUserEnrolment($this->db, 20202));
+    }
+
+    public function testGetEnrolmentAssessors()
+    {
+        $enrolmentId = $this->createEnrolment($this->db, ['lo_id' => 1, 'profile_id' => 1]);
+        $assessor1Id = $this->createUser($this->db, ['mail' => 'assessor1@mail.com']);
+        $assessor2Id = $this->createUser($this->db, ['mail' => 'assessor2@mail.com']);
+        $this->createUser($this->db, ['mail' => 'assessor3@mail.com']);
+
+        $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor1Id, $enrolmentId);
+        $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor2Id, $enrolmentId);
+
+        $enrolment = EnrolmentHelper::load($this->db, $enrolmentId);
+        $assessors = EnrolmentHelper::getEnrolmentAssessors($this->db, $enrolment);
+
+        $this->assertEquals(2, count($assessors));
+        $this->assertEquals($assessor1Id, $assessors[0]->id);
+        $this->assertEquals($assessor2Id, $assessors[1]->id);
     }
 }

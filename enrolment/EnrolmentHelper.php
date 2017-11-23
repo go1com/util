@@ -4,6 +4,7 @@ namespace go1\util\enrolment;
 
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
+use go1\clients\UserClient;
 use go1\util\DateTime;
 use go1\util\DB;
 use go1\util\edge\EdgeHelper;
@@ -13,6 +14,7 @@ use go1\util\lo\LoTypes;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\queue\Queue;
+use go1\util\user\UserHelper;
 use PDO;
 use stdClass;
 
@@ -283,5 +285,22 @@ class EnrolmentHelper
             ->setParameter('taken_instance_id', $takenInstanceId);
 
         return $q->execute()->fetchColumn();
+    }
+
+    public static function getEnrolmentAssessors(Connection $db, $enrolment): array
+    {
+        if (!is_object($enrolment)) {
+            return [];
+        }
+
+        $assessorIds = [];
+        $ros = EdgeHelper::edgesFromTarget($db, $enrolment->id, [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE]);
+        foreach ($ros as $ro) {
+            $assessorIds[] = $ro->source_id;
+        }
+
+        return $assessorIds
+            ? UserHelper::loadMultiple($db, $assessorIds)
+            : [];
     }
 }

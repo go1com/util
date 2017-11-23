@@ -160,7 +160,7 @@ class LoHelperTest extends UtilTestCase
         $authors = LoHelper::parentsAuthorIds($this->db, $this->module2Id);
         $this->assertEquals(1, count($authors));
         $this
-        ->hasAuthor($this->author4Id, $authors);
+            ->hasAuthor($this->author4Id, $authors);
 
         # Resource 1
         $authors = LoHelper::parentsAuthorIds($this->db, $this->resource1Id);
@@ -397,5 +397,14 @@ class LoHelperTest extends UtilTestCase
         $this->assertTrue(in_array($childId, $source));
 
         return $this;
+    }
+
+    public function testGetCourseAuthors()
+    {
+        $authors = LoHelper::getCourseAuthors($this->db, $this->course1Id);
+
+        $this->assertEquals(2, count($authors));
+        $this->assertEquals($this->author1Id, $authors[0]->id);
+        $this->assertEquals($this->author2Id, $authors[1]->id);
     }
 }

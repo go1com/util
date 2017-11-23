@@ -7,6 +7,7 @@ use go1\util\DB;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
+use go1\util\user\UserHelper;
 use HTMLPurifier_Config;
 use PDO;
 use stdClass;
@@ -383,5 +384,18 @@ class LoHelper
         return in_array($lo->type, LiTypes::all())
             ? boolval($lo->data->{self::SINGLE_LI} ?? false)
             : false;
+    }
+
+    public static function getCourseAuthors(Connection $db, int $courseId): array
+    {
+        $authorIds = [];
+        $ros = EdgeHelper::edgesFromSource($db, $courseId, [EdgeTypes::HAS_AUTHOR_EDGE]);
+        foreach ($ros as $ro) {
+            $authorIds[] = $ro->target_id;
+        }
+
+        return $authorIds
+            ? UserHelper::loadMultiple($db, $authorIds)
+            : [];
     }
 }

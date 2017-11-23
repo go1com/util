@@ -4,8 +4,10 @@ namespace go1\util\portal;
 
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
+use go1\clients\UserClient;
 use go1\util\DB;
 use go1\util\queue\Queue;
+use go1\util\user\UserHelper;
 use stdClass;
 
 class PortalHelper
@@ -120,5 +122,17 @@ class PortalHelper
     public static function roles(Connection $db, string $portalName)
     {
         return $db->executeQuery('SELECT id, name FROM gc_role WHERE instance = ?', [$portalName])->fetchAll(DB::PAIR);
+    }
+
+    public static function getPortalAdmins(Connection $db, UserClient $userClient, string $portalName): array
+    {
+        $adminIds = [];
+        foreach ($userClient->findAdministrators($portalName, true) as $admin) {
+            $adminIds[] = $admin->id;
+        }
+
+        return $adminIds
+            ? UserHelper::loadMultiple($db, $adminIds)
+            : [];
     }
 }
