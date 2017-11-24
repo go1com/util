@@ -386,31 +386,18 @@ class LoHelper
             : false;
     }
 
-    public static function getCourseAuthors(Connection $db, int $courseId): array
+    public static function loAuthorIds(Connection $db, int $loId): array
     {
-        $authorIds = [];
-        $ros = EdgeHelper::edgesFromSource($db, $courseId, [EdgeTypes::HAS_AUTHOR_EDGE]);
-        foreach ($ros as $ro) {
-            $authorIds[] = $ro->target_id;
-        }
+        $sql = 'SELECT ro.target_id FROM gc_ro ro ';
+        $sql .= 'WHERE ro.source_id = ? AND ro.type = ?';
 
-        return !$authorIds ? [] : UserHelper::loadMultiple($db, $authorIds);
+        return $db->executeQuery($sql, [$loId, EdgeTypes::HAS_AUTHOR_EDGE])->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public static function getCourseAuthorIds(Connection $db, int $courseId): array
+    public static function loAuthors(Connection $db, int $loId): array
     {
-        $authorIds = [];
-        $ros = EdgeHelper::edgesFromSource($db, $courseId, [EdgeTypes::HAS_AUTHOR_EDGE]);
-        foreach ($ros as $ro) {
-            $authorIds[] = $ro->target_id;
-        }
+        $authorIds = self::loAuthorIds($db, $loId);
 
-        $authors = !$authorIds ? [] : UserHelper::loadMultiple($db, $authorIds);
-        $authorIds = [];
-        foreach ($authors as $author) {
-            $authorIds[] = $author->id;
-        }
-
-        return $authorIds;
+        return !$authorIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $authorIds));
     }
 }

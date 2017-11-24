@@ -401,21 +401,21 @@ class LoHelperTest extends UtilTestCase
         return $this;
     }
 
-    public function testGetCourseAuthors()
+    public function testLoAuthorIds()
     {
-        $authors = LoHelper::getCourseAuthors($this->db, $this->course1Id);
-
-        $this->assertEquals(2, count($authors));
-        $this->assertEquals($this->author1Id, $authors[0]->id);
-        $this->assertEquals($this->author2Id, $authors[1]->id);
-    }
-
-    public function testGetCourseAuthorIds()
-    {
-        $authors = LoHelper::getCourseAuthorIds($this->db, $this->course1Id);
+        $authors = LoHelper::loAuthorIds($this->db, $this->course1Id);
 
         $this->assertEquals(2, count($authors));
         $this->assertEquals($this->author1Id, $authors[0]);
         $this->assertEquals($this->author2Id, $authors[1]);
+    }
+
+    public function testLoAuthors()
+    {
+        $authors = LoHelper::loAuthors($this->db, $this->course1Id);
+
+        $this->assertEquals(2, count($authors));
+        $this->assertEquals($this->author1Id, $authors[0]->id);
+        $this->assertEquals($this->author2Id, $authors[1]->id);
     }
 }

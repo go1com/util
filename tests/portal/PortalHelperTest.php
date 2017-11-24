@@ -74,7 +74,7 @@ class PortalHelperTest extends UtilTestCase
         });
 
         $userClient = $app['go1.client.user'];
-        $admins = PortalHelper::getPortalAdmins($this->db, $userClient, $this->portalName);
+        $admins = PortalHelper::portalAdmins($this->db, $userClient, $this->portalName);
         $this->assertEquals(2, count($admins));
         $this->assertEquals($admin1Id, $admins[0]->id);
         $this->assertEquals($admin2Id, $admins[1]->id);
@@ -89,7 +89,7 @@ class PortalHelperTest extends UtilTestCase
         $admin1Id = $this->createUser($this->db, ['instance' => $this->portalName, 'mail' => 'a1@mail.com']);
         $admin2Id = $this->createUser($this->db, ['instance' => $this->portalName, 'mail' => 'a2@mail.com']);
 
-        $admins = PortalHelper::getPortalAdminIds($this->db, $userClient, $this->portalName);
+        $admins = PortalHelper::portalAdminIds($this->db, $userClient, $this->portalName);
 
         $this->assertEquals(2, count($admins));
         $this->assertEquals($admin1Id, $admins[0]);

@@ -132,17 +132,7 @@ class PortalHelper
         return $portal->configuration->timezone ?? self::TIMEZONE_DEFAULT;
     }
 
-    public static function getPortalAdmins(Connection $db, UserClient $userClient, string $portalName): array
-    {
-        $adminIds = [];
-        foreach ($userClient->findAdministrators($portalName, true) as $admin) {
-            $adminIds[] = $admin->id;
-        }
-
-        return !$adminIds ? [] : UserHelper::loadMultiple($db, $adminIds);
-    }
-
-    public static function getPortalAdminIds(Connection $db, UserClient $userClient, string $portalName): array
+    public static function portalAdminIds(Connection $db, UserClient $userClient, string $portalName): array
     {
         $adminIds = [];
         foreach ($userClient->findAdministrators($portalName, true) as $admin) {
@@ -156,5 +146,15 @@ class PortalHelper
         }
 
         return $adminIds;
+    }
+
+    public static function portalAdmins(Connection $db, UserClient $userClient, string $portalName): array
+    {
+        $adminIds = [];
+        foreach ($userClient->findAdministrators($portalName, true) as $admin) {
+            $adminIds[] = $admin->id;
+        }
+
+        return !$adminIds ? [] : UserHelper::loadMultiple($db, $adminIds);
     }
 }

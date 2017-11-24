@@ -4,7 +4,6 @@ namespace go1\util\enrolment;
 
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
-use go1\clients\UserClient;
 use go1\util\DateTime;
 use go1\util\DB;
 use go1\util\edge\EdgeHelper;
@@ -153,6 +152,13 @@ class EnrolmentHelper
         return EdgeHelper
             ::select('source_id')
             ->get($db, [], [$enrolmentId], [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE], PDO::FETCH_COLUMN);
+    }
+
+    public static function assessors(Connection $db, int $enrolmentId): array
+    {
+        $assessorIds = self::assessorIds($db, $enrolmentId);
+
+        return !$assessorIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $assessorIds));
     }
 
     public static function findParentEnrolment(Connection $db, stdClass $enrolment, $parentLoType = LoTypes::COURSE)
@@ -309,33 +315,5 @@ class EnrolmentHelper
             ->setParameter('taken_instance_id', $takenInstanceId);
 
         return $q->execute()->fetchColumn();
-    }
-
-    public static function getEnrolmentAssessors(Connection $db, int $enrolmentId): array
-    {
-        $assessorIds = [];
-        $ros = EdgeHelper::edgesFromTarget($db, $enrolmentId, [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE]);
-        foreach ($ros as $ro) {
-            $assessorIds[] = $ro->source_id;
-        }
-
-        return !$assessorIds ? [] : UserHelper::loadMultiple($db, $assessorIds);
-    }
-
-    public static function getEnrolmentAssessorIds(Connection $db, int $enrolmentId): array
-    {
-        $assessorIds = [];
-        $ros = EdgeHelper::edgesFromTarget($db, $enrolmentId, [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE]);
-        foreach ($ros as $ro) {
-            $assessorIds[] = $ro->source_id;
-        }
-
-        $assessors = !$assessorIds ? [] : UserHelper::loadMultiple($db, $assessorIds);
-        $assessorIds = [];
-        foreach ($assessors as $assessor) {
-            $assessorIds[] = $assessor->id;
-        }
-
-        return $assessorIds;
     }
 }

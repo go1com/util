@@ -3,7 +3,6 @@
 namespace go1\util\tests\enrolment;
 
 use go1\clients\MqClient;
-use go1\clients\UserClient;
 use go1\util\DateTime;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
@@ -332,7 +331,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals($barEnrolmentId, EnrolmentHelper::loadByLoProfileAndPortal($this->db, 1, 1, 2)->id);
     }
 
-    public function testGetEnrolmentAssessors()
+    public function testAssessors()
     {
         $enrolmentId = $this->createEnrolment($this->db, ['lo_id' => 1, 'profile_id' => 1]);
         $assessor1Id = $this->createUser($this->db, ['mail' => 'assessor1@mail.com']);
@@ -342,26 +341,10 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor1Id, $enrolmentId);
         $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor2Id, $enrolmentId);
 
-        $assessors = EnrolmentHelper::getEnrolmentAssessors($this->db, $enrolmentId);
+        $assessors = EnrolmentHelper::assessors($this->db, $enrolmentId);
 
         $this->assertEquals(2, count($assessors));
         $this->assertEquals($assessor1Id, $assessors[0]->id);
         $this->assertEquals($assessor2Id, $assessors[1]->id);
-    }
-
-    public function testGetEnrolmentAssessorIds()
-    {
-        $enrolmentId = $this->createEnrolment($this->db, ['lo_id' => 1, 'profile_id' => 1]);
-        $assessor1Id = $this->createUser($this->db, ['mail' => 'assessor1@mail.com']);
-        $assessor2Id = $this->createUser($this->db, ['mail' => 'assessor2@mail.com']);
-
-        $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor1Id, $enrolmentId);
-        $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor2Id, $enrolmentId);
-
-        $assessors = EnrolmentHelper::getEnrolmentAssessorIds($this->db, $enrolmentId);
-
-        $this->assertEquals(2, count($assessors));
-        $this->assertEquals($assessor1Id, $assessors[0]);
-        $this->assertEquals($assessor2Id, $assessors[1]);
     }
 }
