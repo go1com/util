@@ -208,11 +208,11 @@ class Contract implements JsonSerializable
      * @param string $initialTerm
      * @return array
      */
-    public function getInitialTermParams(string $initialTerm): array
+    public static function getInitialTermParams(string $initialTerm): array
     {
         preg_match_all('/(\d+)(\s|\s?\')(year|years|month|months)$/', $initialTerm, $matches);
-        $interval = $matches[1][0];
-        $frequency = $matches[3][0];
+        $interval = $matches[1][0] ?? null;
+        $frequency = $matches[3][0] ?? null;
 
         return [$interval, $frequency];
     }
