@@ -310,7 +310,7 @@ class LoHelper
         $parentLoIds[] = $loId;
 
         foreach ($parentLoIds as $parentLoId) {
-            $authorIds = array_merge($authorIds, LoChecker::authorIds($db, $parentLoId));
+            $authorIds = array_merge($authorIds, self::authorIds($db, $parentLoId));
         }
 
         $authorIds = array_values(array_unique($authorIds));
@@ -386,17 +386,16 @@ class LoHelper
             : false;
     }
 
-    public static function loAuthorIds(Connection $db, int $loId): array
+    public static function authorIds(Connection $db, int $loId): array
     {
-        $sql = 'SELECT ro.target_id FROM gc_ro ro ';
-        $sql .= 'WHERE ro.source_id = ? AND ro.type = ?';
-
-        return $db->executeQuery($sql, [$loId, EdgeTypes::HAS_AUTHOR_EDGE])->fetchAll(PDO::FETCH_COLUMN);
+        return EdgeHelper
+            ::select('target_id')
+            ->get($db, [$loId], [], [EdgeTypes::HAS_AUTHOR_EDGE], PDO::FETCH_COLUMN);
     }
 
-    public static function loAuthors(Connection $db, int $loId): array
+    public static function authors(Connection $db, int $loId): array
     {
-        $authorIds = self::loAuthorIds($db, $loId);
+        $authorIds = self::authorIds($db, $loId);
 
         return !$authorIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $authorIds));
     }

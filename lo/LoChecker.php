@@ -50,7 +50,7 @@ class LoChecker
     }
 
     /**
-     * @deprecated
+     * @deprecated Use LoHelper::authorIds() instead.
      */
     public static function authorIds(Connection $db, int $loId): array
     {

@@ -39,7 +39,7 @@ class PortalHelperTest extends UtilTestCase
         $this->assertEquals($roles[$id], 'administrator');
     }
 
-    public function testGetPortalAdmins()
+    public function testPortalAdminIds()
     {
         $admin1Id = $this->createUser($this->db, [
             'instance' => $this->portalName,
@@ -74,25 +74,25 @@ class PortalHelperTest extends UtilTestCase
         });
 
         $userClient = $app['go1.client.user'];
-        $admins = PortalHelper::portalAdmins($this->db, $userClient, $this->portalName);
+        $admins = PortalHelper::portalAdminIds($userClient, $this->portalName);
         $this->assertEquals(2, count($admins));
-        $this->assertEquals($admin1Id, $admins[0]->id);
-        $this->assertEquals($admin2Id, $admins[1]->id);
+        $this->assertEquals($admin1Id, $admins[0]);
+        $this->assertEquals($admin2Id, $admins[1]);
 
         return [$userClient];
     }
 
-    /** @depends testGetPortalAdmins */
-    public function testGetPortalAdminIds(array $params)
+    /** @depends testPortalAdminIds */
+    public function testPortalAdmins(array $params)
     {
         list($userClient) = $params;
         $admin1Id = $this->createUser($this->db, ['instance' => $this->portalName, 'mail' => 'a1@mail.com']);
         $admin2Id = $this->createUser($this->db, ['instance' => $this->portalName, 'mail' => 'a2@mail.com']);
 
-        $admins = PortalHelper::portalAdminIds($this->db, $userClient, $this->portalName);
+        $admins = PortalHelper::portalAdmins($this->db, $userClient, $this->portalName);
 
         $this->assertEquals(2, count($admins));
-        $this->assertEquals($admin1Id, $admins[0]);
-        $this->assertEquals($admin2Id, $admins[1]);
+        $this->assertEquals($admin1Id, $admins[0]->id);
+        $this->assertEquals($admin2Id, $admins[1]->id);
     }
 }
