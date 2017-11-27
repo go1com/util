@@ -4,8 +4,10 @@ namespace go1\util\portal;
 
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
+use go1\clients\UserClient;
 use go1\util\DB;
 use go1\util\queue\Queue;
+use go1\util\user\UserHelper;
 use stdClass;
 
 class PortalHelper
@@ -128,5 +130,22 @@ class PortalHelper
         self::parseConfig($portal);
 
         return $portal->configuration->timezone ?? self::TIMEZONE_DEFAULT;
+    }
+
+    public static function portalAdminIds(UserClient $userClient, string $portalName): array
+    {
+        $adminIds = [];
+        foreach ($userClient->findAdministrators($portalName, true) as $admin) {
+            $adminIds[] = $admin->id;
+        }
+
+        return $adminIds;
+    }
+
+    public static function portalAdmins(Connection $db, UserClient $userClient, string $portalName): array
+    {
+        $adminIds = self::portalAdminIds($userClient, $portalName);
+
+        return !$adminIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $adminIds));
     }
 }

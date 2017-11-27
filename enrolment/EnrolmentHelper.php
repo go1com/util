@@ -13,6 +13,7 @@ use go1\util\lo\LoTypes;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\queue\Queue;
+use go1\util\user\UserHelper;
 use LengthException;
 use PDO;
 use stdClass;
@@ -151,6 +152,13 @@ class EnrolmentHelper
         return EdgeHelper
             ::select('source_id')
             ->get($db, [], [$enrolmentId], [EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE], PDO::FETCH_COLUMN);
+    }
+
+    public static function assessors(Connection $db, int $enrolmentId): array
+    {
+        $assessorIds = self::assessorIds($db, $enrolmentId);
+
+        return !$assessorIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $assessorIds));
     }
 
     public static function findParentEnrolment(Connection $db, stdClass $enrolment, $parentLoType = LoTypes::COURSE)
