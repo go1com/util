@@ -456,7 +456,19 @@ class GroupHelperTest extends UtilTestCase
         $this->assertFalse(GroupHelper::isPortalSystemGroup('Foo'));
     }
 
-    public function testIsMemberOfContentSharingGroup()
+
+
+    public function dataTestContentSharingTypes()
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+
+    /**
+     * @dataProvider dataTestContentSharingTypes
+     */public function testIsMemberOfContentSharingGroup($addToMyPortalContent)
     {
         $originalInstanceId = $this->createInstance($this->db, ['title' => $portalName = 'origin.go1.com']);
         $loId = $this->createCourse($this->db, ['title' => 'Sharing Course', 'instance_id' => $originalInstanceId]);
@@ -464,11 +476,17 @@ class GroupHelperTest extends UtilTestCase
         $instanceYId = $this->createInstance($this->db, ['title' => $portalName = 'portalY.go1.com']);
         $instanceZId = $this->createInstance($this->db, ['title' => $portalName = 'portalZ.go1.com']);
 
-        $sharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}"]);
+        if ($addToMyPortalContent) {
+            $sharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}:marketplace"]);
+        }
+        else {
+            $sharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}"]);
+        }
         $this->repository->createItem($sharingGroupId, GroupItemTypes::PORTAL, $instanceXId, GroupItemStatus::ACTIVE);
         $this->repository->createItem($sharingGroupId, GroupItemTypes::PORTAL, $instanceYId, GroupItemStatus::BLOCKED);
 
         $this->assertTrue(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceXId));
+        $this->assertTrue(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceXId, $addToMyPortalContent));
         $this->assertFalse(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceYId));
         $this->assertFalse(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceZId));
     }
