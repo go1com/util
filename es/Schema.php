@@ -945,6 +945,9 @@ class Schema
             'portal'          => ['type' => self::T_KEYWORD],
             'user_id'         => ['type' => self::T_INT],
             'staff_id'        => ['type' => self::T_INT],
+            'staff'           => [
+                'properties' => self::USER_MAPPING['properties'],
+            ],
             'number_users'    => ['type' => self::T_INT],
             'price'           => ['type' => self::T_DOUBLE],
             'currency'        => ['type' => self::T_KEYWORD],
