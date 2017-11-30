@@ -912,7 +912,7 @@ class Schema
                 ],
                 'target' => [
                     'properties' =>[
-                        'id'    => ['type' => self::T_INT],
+                        'id'    => ['type' => self::T_KEYWORD],
                         'title' => ['type' => self::T_KEYWORD],
                         'type'  => ['type' => self::T_KEYWORD],
                     ],
