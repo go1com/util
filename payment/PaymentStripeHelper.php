@@ -184,23 +184,28 @@ class PaymentStripeHelper
 
     /**
      * @see https://support.stripe.com/questions/what-is-the-minimum-amount-i-can-charge-with-stripe
+     * @see https://stripe.com/docs/currencies#zero-decimal
+     *
      * @return array
      */
     public static function currenciesMinimumCharge() : array
     {
         return [
-            'USD' => 0.50, # $0.50
-            'CAD' => 0.50, # $0.50
-            'GBP' => 0.30, # £0.30
-            'EUR' => 0.50, # €0.50
-            'DKK' => 2.50, # 2.50-kr
-            'NOK' => 3.00, # 3.00-kr
-            'SEK' => 3.00, # 3.00-kr
-            'AUD' => 0.50, # $0.50
+            'USD' => 0.50,  # $0.50
+            'AUD' => 0.50,  # $0.50
+            'BRL' => 0.50,  # R$0.50
+            'CAD' => 0.50,  # $0.50
+            'CHF' => 0.50,  # 0.50 Fr
+            'DKK' => 2.50,  # 2.50-kr
+            'EUR' => 0.50,  # €0.50
+            'GBP' => 0.30,  # £0.30
+            'HKD' => 4.00,  # $4.00
             'JPY' => 50.00, # ¥50
             'MXN' => 10.00, # $10
-            'SGD' => 0.50, # $0.50
-            'HKD' => 4.00, # $4.00
+            'NOK' => 3.00,  # 3.00-kr
+            'NZD' => 0.50,  # $0.50
+            'SEK' => 3.00,  # 3.00-kr
+            'SGD' => 0.50,  # $0.50
         ];
     }
 }

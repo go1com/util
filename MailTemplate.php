@@ -622,6 +622,39 @@ class MailTemplate
         ],
     ];
 
+    // Contact us enquiry form
+    const CONTACT_US_ENQUIRY = [
+        'key'    => 'user.contact-us-enquiry',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!user_phone'      => 'User phone',
+            '!user_message'    => 'User message',
+        ],
+    ];
+
+    // Decision and Action started
+    const DECISION_AND_ACTION_START = [
+        'key'    => 'bos.decision.start',
+        'tokens' => [
+            '!user_first_name'   => 'User first name',
+            '!user_mail'         => 'User mail',
+            '!project_name'      => 'Project name',
+            '!collaborator_name' => 'Collaborator name',
+        ],
+    ];
+
+    // Decision and Action ended
+    const DECISION_AND_ACTION_END = [
+        'key'    => 'bos.decision.end',
+        'tokens' => [
+            '!user_first_name'   => 'User first name',
+            '!user_mail'         => 'User mail',
+            '!project_name'      => 'Project name',
+            '!collaborator_name' => 'Collaborator name',
+        ],
+    ];
+
     const MARKETPLACE_REQUEST = [
         'key'    => 'marketplace.request',
         'tokens' => [
