@@ -904,14 +904,18 @@ class Schema
                     ],
                 ],
                 'diff'   => [
-                    'field' => ['type' => self::T_TEXT],
-                    'old'   => ['type' => self::T_TEXT],
-                    'new'   => ['type' => self::T_TEXT],
+                    'properties' =>[
+                        'field' => ['type' => self::T_TEXT],
+                        'old'   => ['type' => self::T_TEXT],
+                        'new'   => ['type' => self::T_TEXT],
+                    ],
                 ],
                 'target' => [
-                    'id'    => ['type' => self::T_INT],
-                    'title' => ['type' => self::T_TEXT],
-                    'type'  => ['type' => self::T_TEXT],
+                    'properties' =>[
+                        'id'    => ['type' => self::T_INT],
+                        'title' => ['type' => self::T_KEYWORD],
+                        'type'  => ['type' => self::T_KEYWORD],
+                    ],
                 ],
             ],
         ],
