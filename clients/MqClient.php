@@ -12,6 +12,7 @@ use PhpAmqpLib\Wire\AMQPTable;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
+use Pimple\Container;
 
 class MqClient
 {
@@ -23,7 +24,7 @@ class MqClient
     private $pass;
     private $logger;
     private $accessChecker;
-    private $request;
+    private $container;
 
     const CONTEXT_ACTOR_ID    = 'actor_id';
     const CONTEXT_TIMESTAMP   = 'timestamp';
@@ -38,7 +39,7 @@ class MqClient
         $pass,
         LoggerInterface $logger = null,
         AccessChecker $accessChecker,
-        Request $request = null
+        Container $container
     )
     {
         $this->host = $host;
@@ -47,7 +48,7 @@ class MqClient
         $this->pass = $pass;
         $this->logger = $logger ?: new NullLogger;
         $this->accessChecker = $accessChecker;
-        $this->request = $request;
+        $this->container = $container;
     }
 
     private function channel()
@@ -76,7 +77,8 @@ class MqClient
         $body = is_scalar($body) ? json_decode($body) : $body;
         $this->processMessage($body, $routingKey);
 
-        $this->request && self::parseRequestContext($this->request, $context, $this->accessChecker);
+        $currentRequest = $this->getCurrentRequest();
+        self::parseRequestContext($currentRequest, $context, $this->accessChecker);
 
         if ($service = getenv('SERVICE_80_NAME')) {
             $context['app'] = $service;
@@ -120,6 +122,15 @@ class MqClient
         }
     }
 
+    private function getCurrentRequest()
+    {
+        $currentRequest = $this->container->offsetExists('request_stack')
+            ? $this->container['request_stack']->getCurrentRequest()
+            : null;
+
+        return $currentRequest;
+    }
+
     public function subscribe($bindingKey = '#', callable $callback)
     {
         $channel = $this->channel();
@@ -140,8 +151,12 @@ class MqClient
         }
     }
 
-    public static function parseRequestContext(Request $request, array &$context = [], AccessChecker $accessChecker = null)
+    public static function parseRequestContext(Request $request = null, array &$context = [], AccessChecker $accessChecker = null)
     {
+        if (!$request) {
+            return;
+        }
+
         if (!isset($context[self::CONTEXT_REQUEST_ID])) {
             if ($requestId = $request->headers->get('X-Request-Id')) {
                 $context[self::CONTEXT_REQUEST_ID] = $requestId;
