@@ -31,6 +31,25 @@ class PortalHelperTest extends UtilTestCase
         $this->assertEmpty($logo);
     }
 
+    public function testScale()
+    {
+        $instanceId = $this->createInstance($this->db, ['data' => ['files' => ['logo' => 'http://www.go1.com/logo.png']]]);
+        $portal = PortalHelper::load($this->db, $instanceId);
+        $logo = PortalHelper::logo($portal);
+
+        $scaledUrl = PortalHelper::scale($logo, 100);
+        $this->assertEquals('https://res.cloudinary.com/go1/image/fetch/w_100/http://www.go1.com/logo.png', $scaledUrl);
+
+        $scaledUrl = PortalHelper::scale($logo, 100, 200);
+        $this->assertEquals('https://res.cloudinary.com/go1/image/fetch/w_100,h_200/http://www.go1.com/logo.png', $scaledUrl);
+
+        $scaledUrl = PortalHelper::scale($logo, 0, 200);
+        $this->assertEquals('https://res.cloudinary.com/go1/image/fetch/h_200/http://www.go1.com/logo.png', $scaledUrl);
+
+        $scaledUrl = PortalHelper::scale($logo);
+        $this->assertEquals('http://www.go1.com/logo.png', $scaledUrl);
+    }
+
     public function testRoles()
     {
         $id = $this->createPortalAdminRole($this->db, ['instance' => $portalName = 'abc.go1.co']);
