@@ -160,7 +160,7 @@ class LoHelperTest extends UtilTestCase
         $authors = LoHelper::parentsAuthorIds($this->db, $this->module2Id);
         $this->assertEquals(1, count($authors));
         $this
-        ->hasAuthor($this->author4Id, $authors);
+            ->hasAuthor($this->author4Id, $authors);
 
         # Resource 1
         $authors = LoHelper::parentsAuthorIds($this->db, $this->resource1Id);
@@ -177,7 +177,8 @@ class LoHelperTest extends UtilTestCase
         $this->hasAuthor($this->author4Id, $authors);
     }
 
-    public function testParentAssessorIds() {
+    public function testParentAssessorIds()
+    {
         $assessors = LoHelper::parentsAssessorIds($this->db, $this->course1Id);
         $this->assertEquals(2, count($assessors));
         $this
@@ -209,7 +210,8 @@ class LoHelperTest extends UtilTestCase
             ->hasAssessor($this->assessor2Id, $assessors);
     }
 
-    public function testParentAssessorIdsIncludeEnrolmentAssessors() {
+    public function testParentAssessorIdsIncludeEnrolmentAssessors()
+    {
         $course1EnrolmentId = $this->createEnrolment($this->db, ['lo_id' => $this->course1Id, 'profile_id' => $learnerProfileId = 123]);
         $module1EnrolmentId = $this->createEnrolment($this->db, ['lo_id' => $this->module1Id, 'profile_id' => $learnerProfileId]);
         $li1EnrolmentId = $this->createEnrolment($this->db, ['lo_id' => $this->resource1Id, 'profile_id' => $learnerProfileId]);
@@ -350,12 +352,12 @@ class LoHelperTest extends UtilTestCase
     {
         $courseId = 123;
         $instanceId = 555;
-        $this->link($this->db,EdgeTypes::HAS_LO_CUSTOMISATION, $courseId, $instanceId, 0, [
-            'tokens' => $tokens = [
+        $this->link($this->db, EdgeTypes::HAS_LO_CUSTOMISATION, $courseId, $instanceId, 0, [
+            'tokens'    => $tokens = [
                 'token_1' => 'value 1',
                 'token_2' => 'value 2',
             ],
-            'published' => LoStatuses::ARCHIVED
+            'published' => LoStatuses::ARCHIVED,
         ]);
 
         $customize = LoHelper::getCustomisation($this->db, $courseId, $instanceId);
@@ -397,5 +399,23 @@ class LoHelperTest extends UtilTestCase
         $this->assertTrue(in_array($childId, $source));
 
         return $this;
+    }
+
+    public function testAuthorIds()
+    {
+        $authors = LoHelper::authorIds($this->db, $this->course1Id);
+
+        $this->assertEquals(2, count($authors));
+        $this->assertEquals($this->author1Id, $authors[0]);
+        $this->assertEquals($this->author2Id, $authors[1]);
+    }
+
+    public function testAuthors()
+    {
+        $authors = LoHelper::authors($this->db, $this->course1Id);
+
+        $this->assertEquals(2, count($authors));
+        $this->assertEquals($this->author1Id, $authors[0]->id);
+        $this->assertEquals($this->author2Id, $authors[1]->id);
     }
 }

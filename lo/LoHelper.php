@@ -7,6 +7,7 @@ use go1\util\DB;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
+use go1\util\user\UserHelper;
 use HTMLPurifier_Config;
 use PDO;
 use stdClass;
@@ -309,7 +310,7 @@ class LoHelper
         $parentLoIds[] = $loId;
 
         foreach ($parentLoIds as $parentLoId) {
-            $authorIds = array_merge($authorIds, LoChecker::authorIds($db, $parentLoId));
+            $authorIds = array_merge($authorIds, self::authorIds($db, $parentLoId));
         }
 
         $authorIds = array_values(array_unique($authorIds));
@@ -383,5 +384,19 @@ class LoHelper
         return in_array($lo->type, LiTypes::all())
             ? boolval($lo->data->{self::SINGLE_LI} ?? false)
             : false;
+    }
+
+    public static function authorIds(Connection $db, int $loId): array
+    {
+        return EdgeHelper
+            ::select('target_id')
+            ->get($db, [$loId], [], [EdgeTypes::HAS_AUTHOR_EDGE], PDO::FETCH_COLUMN);
+    }
+
+    public static function authors(Connection $db, int $loId): array
+    {
+        $authorIds = self::authorIds($db, $loId);
+
+        return !$authorIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $authorIds));
     }
 }

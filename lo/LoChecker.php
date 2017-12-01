@@ -49,6 +49,9 @@ class LoChecker
         return $db->fetchColumn($sql, [$instanceId, EdgeTypes::HAS_AUTHOR_EDGE, $userId]) ? true : false;
     }
 
+    /**
+     * @deprecated Use LoHelper::authorIds() instead.
+     */
     public static function authorIds(Connection $db, int $loId): array
     {
         // @todo Consider move this method to LoHelper.

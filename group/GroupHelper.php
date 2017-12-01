@@ -413,9 +413,15 @@ class GroupHelper
         return false;
     }
 
-    public static function isMemberOfContentSharingGroup(Connection $db, int $loId, int $instanceId, bool $marketplace = false) :bool
+    public static function isMemberOfContentSharingGroup(Connection $db, int $loId, int $instanceId, bool $marketplace = null) :bool
     {
-        $hostGroup = self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, $marketplace);
+        $hostGroup = !is_null($marketplace)
+            ? self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, $marketplace)
+            : (
+                self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, true)
+                    ?: self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, false)
+            );
+
         if ($hostGroup && self::isItemOf($db, GroupItemTypes::PORTAL, $instanceId, $hostGroup->id)) {
             return true;
         }

@@ -110,6 +110,7 @@ class Schema
         self::O_SUGGESTION_CATEGORY => self::SUGGESTION_CATEGORY_MAPPING,
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
         self::O_METRIC              => self::METRIC_MAPPING,
+        self::O_ACTIVITY            => self::ACTIVITY_MAPPING,
     ];
 
     const ANALYZED = [
@@ -879,7 +880,6 @@ class Schema
     ];
 
     const ACTIVITY_MAPPING = [
-        '_parent'    => ['type' => self::O_ACTIVITY],
         '_routing'   => ['required' => true],
         'properties' => [
             'id'          => ['type' => self::T_KEYWORD],
@@ -898,6 +898,20 @@ class Schema
                     'user'   => ['type' => self::T_KEYWORD],
                     'entity' => [
                         'properties' => [
+                            'title' => ['type' => self::T_KEYWORD],
+                            'type'  => ['type' => self::T_KEYWORD],
+                        ],
+                    ],
+                    'diff'   => [
+                        'properties' => [
+                            'diff_field_name' => ['type' => self::T_TEXT], # Can not use `field` because it already used
+                            'old'             => ['type' => self::T_TEXT],
+                            'new'             => ['type' => self::T_TEXT],
+                        ],
+                    ],
+                    'target' => [
+                        'properties' => [
+                            'id'    => ['type' => self::T_KEYWORD],
                             'title' => ['type' => self::T_KEYWORD],
                             'type'  => ['type' => self::T_KEYWORD],
                         ],
@@ -935,6 +949,9 @@ class Schema
             'portal'          => ['type' => self::T_KEYWORD],
             'user_id'         => ['type' => self::T_INT],
             'staff_id'        => ['type' => self::T_INT],
+            'staff'           => [
+                'properties' => self::USER_MAPPING['properties'],
+            ],
             'number_users'    => ['type' => self::T_INT],
             'price'           => ['type' => self::T_DOUBLE],
             'currency'        => ['type' => self::T_KEYWORD],

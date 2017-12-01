@@ -285,7 +285,7 @@ class EnrolmentHelperTest extends UtilTestCase
             'lo_id'        => $courseId,
             'status'       => $status,
             'start_date'   => $date,
-            'enrolment_id' => 1000
+            'enrolment_id' => 1000,
         ]);
 
         $revisionEnrolment = EnrolmentHelper::loadRevision($this->db, 1000);
@@ -329,5 +329,22 @@ class EnrolmentHelperTest extends UtilTestCase
 
         $this->assertEquals($fooEnrolmentId, EnrolmentHelper::loadByLoProfileAndPortal($this->db, 1, 1, 1)->id);
         $this->assertEquals($barEnrolmentId, EnrolmentHelper::loadByLoProfileAndPortal($this->db, 1, 1, 2)->id);
+    }
+
+    public function testAssessors()
+    {
+        $enrolmentId = $this->createEnrolment($this->db, ['lo_id' => 1, 'profile_id' => 1]);
+        $assessor1Id = $this->createUser($this->db, ['mail' => 'assessor1@mail.com']);
+        $assessor2Id = $this->createUser($this->db, ['mail' => 'assessor2@mail.com']);
+        $this->createUser($this->db, ['mail' => 'assessor3@mail.com']);
+
+        $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor1Id, $enrolmentId);
+        $this->link($this->db, EdgeTypes::HAS_TUTOR_ENROLMENT_EDGE, $assessor2Id, $enrolmentId);
+
+        $assessors = EnrolmentHelper::assessors($this->db, $enrolmentId);
+
+        $this->assertEquals(2, count($assessors));
+        $this->assertEquals($assessor1Id, $assessors[0]->id);
+        $this->assertEquals($assessor2Id, $assessors[1]->id);
     }
 }
