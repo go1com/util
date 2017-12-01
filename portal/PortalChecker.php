@@ -143,10 +143,14 @@ class PortalChecker
         }
     }
 
-    public function allowPublicGroup($portal)
+    public function allowPublicGroup($portal) : bool
     {
         PortalHelper::parseConfig($portal);
+        if (!empty($portal->configuration)) {
+            return boolval($portal->configuration->public_group ?? false)
+                ?: boolval($portal->configuration->publicGroupsEnabled ?? false);
+        }
 
-        return !empty($portal->configuration->public_group) ? $portal->configuration->public_group : !empty($portal->configuration->publicGroupsEnabled) ? $portal->configuration->publicGroupsEnabled : false;
+        return false;
     }
 }
