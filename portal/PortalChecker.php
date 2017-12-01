@@ -142,4 +142,15 @@ class PortalChecker
                 : "https://{$domain}/webapp/#/{$uri}";
         }
     }
+
+    public function allowPublicGroup($portal) : bool
+    {
+        PortalHelper::parseConfig($portal);
+        if (!empty($portal->configuration)) {
+            return boolval($portal->configuration->public_group ?? false)
+                ?: boolval($portal->configuration->publicGroupsEnabled ?? false);
+        }
+
+        return false;
+    }
 }
