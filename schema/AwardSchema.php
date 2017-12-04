@@ -71,20 +71,24 @@ class AwardSchema
             $itemManual->addColumn('type', Type::STRING, ['notnull' => false]);
             $itemManual->addColumn('description', Type::STRING, ['notnull' => false]);
             $itemManual->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $itemManual->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $itemManual->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.', 'notnull' => false]); // deprecated
             $itemManual->addColumn('verified', Type::BOOLEAN);
             $itemManual->addColumn('verifier_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $itemManual->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
             $itemManual->addColumn('completion_date', Type::INTEGER, ['unsigned' => true]);
+            $itemManual->addColumn('categories', Type::STRING, ['notnull' => false]);
             $itemManual->addColumn('data', Type::BLOB);
             $itemManual->addColumn('published', Type::BOOLEAN, ['default' => AwardStatuses::PUBLISHED]);
             $itemManual->addColumn('weight', Type::INTEGER, ['unsigned' => true]);
             $itemManual->setPrimaryKey(['id']);
             $itemManual->addIndex(['award_id']);
             $itemManual->addIndex(['user_id']);
+            $itemManual->addIndex(['assigner_id']);
             $itemManual->addIndex(['entity_id']);
             $itemManual->addIndex(['verified']);
             $itemManual->addIndex(['verifier_id']);
+            $itemManual->addIndex(['categories']);
             $itemManual->addIndex(['published']);
             $itemManual->addIndex(['weight']);
         }
@@ -153,15 +157,15 @@ class AwardSchema
             $enrolmentRevision->addIndex(['created']);
         }
 
-        self::update01($schema);
+        self::update($schema);
     }
 
-    private static function update01(Schema $schema)
+    private static function update(Schema $schema)
     {
         $awardItemManual = $schema->getTable('award_item_manual');
-        if (!$awardItemManual->hasColumn('categories')) {
-            $awardItemManual->addColumn('categories', Type::STRING, ['notnull' => false]);
-            $awardItemManual->addIndex(['categories']);
+        if (!$awardItemManual->hasColumn('assigner_id')) {
+            $awardItemManual->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+            $awardItemManual->addIndex(['assigner_id']);
         }
     }
 }
