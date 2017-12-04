@@ -119,6 +119,7 @@ class MailTemplate
         'tokens' => [
             '!learner_name' => 'Learn name',
             '!course_name'  => 'Course name',
+            '!course_url'   => 'Course URL',
             '!portal_name'  => 'Portal name',
             '!portal_image' => 'Portal image',
             '!learner_mail' => 'Learner mail',
@@ -141,6 +142,7 @@ class MailTemplate
         'tokens' => [
             '!learner_name' => 'Learn name',
             '!course_name'  => 'Course name',
+            '!course_url'   => 'Course URL',
             '!portal_name'  => 'Portal name',
             '!portal_image' => 'Portal image',
             '!learner_mail' => 'Learner mail',
@@ -192,12 +194,13 @@ class MailTemplate
     const AUTHOR_ENROLMENT_COURSE = [
         'key'    => 'author.enrol.course',
         'tokens' => [
-            '!author_first_name'  => 'Author first name',
-            '!author_mail'        => 'Author mail',
-            '!learner_first_name' => 'Learner first name',
-            '!course_name'        => 'Course name',
-            '!portal_name'        => 'Portal name',
-            '!portal_image'       => 'Portal image',
+            '!author_first_name' => 'Author first name',
+            '!author_mail'       => 'Author mail',
+            '!learner_name'      => 'Learner name',
+            '!learner_mail'      => 'Learner mail',
+            '!course_name'       => 'Course name',
+            '!portal_name'       => 'Portal name',
+            '!portal_image'      => 'Portal image',
         ],
     ];
 
@@ -290,6 +293,7 @@ class MailTemplate
             '!recipient_name'       => 'Recipient full name',
             '!recipient_first_name' => 'Recipient first name',
             '!group_name'           => 'Group name',
+            '!group_url'            => 'Group URL',
             '!portal_name'          => 'Portal name',
             '!portal_image'         => 'Portal image',
             '!portal_url'           => 'The portal URL',
@@ -302,6 +306,7 @@ class MailTemplate
             '!recipient_name'       => 'Recipient full name',
             '!recipient_first_name' => 'Recipient first name',
             '!group_name'           => 'Group name',
+            '!group_url'            => 'Group URL',
             '!portal_name'          => 'Portal name',
             '!portal_image'         => 'Portal image',
             '!portal_url'           => 'The portal URL',
