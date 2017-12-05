@@ -9,6 +9,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
+use Pimple\Container;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ class MqClient
     private $pass;
     private $logger;
     private $accessChecker;
+    private $container;
     private $request;
 
     const CONTEXT_ACTOR_ID    = 'actor_id';
@@ -38,6 +40,7 @@ class MqClient
         $pass,
         LoggerInterface $logger = null,
         AccessChecker $accessChecker,
+        Container $container,
         Request $request = null
     )
     {
@@ -47,6 +50,7 @@ class MqClient
         $this->pass = $pass;
         $this->logger = $logger ?: new NullLogger;
         $this->accessChecker = $accessChecker;
+        $this->container = $container;
         $this->request = $request;
     }
 
@@ -71,12 +75,25 @@ class MqClient
         $this->queue($body, $routingKey, $context, 'events');
     }
 
+    private function currentRequest()
+    {
+        if ($this->request) {
+            return $this->request;
+        }
+
+        return $this->container->offsetExists('request_stack')
+            ? $this->container['request_stack']->getCurrentRequest()
+            : null;
+    }
+
     public function queue($body, string $routingKey, array $context = [], $exchange = '')
     {
         $body = is_scalar($body) ? json_decode($body) : $body;
         $this->processMessage($body, $routingKey);
 
-        $this->request && self::parseRequestContext($this->request, $context, $this->accessChecker);
+        if ($request = $this->currentRequest()) {
+            self::parseRequestContext($request, $context, $this->accessChecker);
+        }
 
         if ($service = getenv('SERVICE_80_NAME')) {
             $context['app'] = $service;
