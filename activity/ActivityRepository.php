@@ -32,6 +32,7 @@ class ActivityRepository
 
         $query = new BoolQuery();
         $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
+        $query->add($userQuery, BoolQuery::MUST);
         $filter && $query->add($filter, BoolQuery::MUST);
 
         $search = new Search();
