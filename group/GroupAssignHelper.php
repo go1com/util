@@ -66,7 +66,7 @@ class GroupAssignHelper
         int $entityId
     )
     {
-        if ($assign = self::loadBy($db, $groupId, $instanceId, $entityType, $entityId)) {
+        if ($assign = self::loadBy($db, $groupId, $instanceId, $entityType, $entityId, true)) {
             $db->update(
                 'social_group_assign',
                 ['user_id' => $userId, 'status' => GroupAssignStatuses::ARCHIVED],
@@ -81,10 +81,11 @@ class GroupAssignHelper
         int $groupId,
         int $instanceId,
         string $entityType,
-        int $entityId
+        int $entityId,
+        bool $excludeArchived = false
     )
     {
-        $groupAssign = $db
+        $q = $db
             ->createQueryBuilder()
             ->select('*')
             ->from('social_group_assign', 'a')
@@ -97,10 +98,12 @@ class GroupAssignHelper
                 'instanceId' => $instanceId,
                 'entityType' => $entityType,
                 'entityId'   => $entityId,
-            ])
-            ->execute()
-            ->fetch(DB::OBJ);
+            ]);
+        $excludeArchived && $q
+            ->andWhere('status <> :archiveStatus')
+            ->setParameter('archiveStatus', GroupAssignStatuses::ARCHIVED);
 
+        $groupAssign = $q->execute()->fetch(DB::OBJ);
         if (!empty($groupAssign->data)) {
             $groupAssign->data = is_scalar($groupAssign->data) ? json_decode($groupAssign->data, true) : $groupAssign->data;
         }
