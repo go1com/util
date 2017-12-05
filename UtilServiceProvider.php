@@ -153,7 +153,16 @@ class UtilServiceProvider implements ServiceProviderInterface
                 ? $c['request_stack']->getCurrentRequest()
                 : null;
 
-            return new MqClient($options['host'], $options['port'], $options['user'], $options['pass'], $logger, $c['access_checker'], $currentRequest);
+            return new MqClient(
+                $options['host'],
+                $options['port'],
+                $options['user'],
+                $options['pass'],
+                $logger,
+                $c['access_checker'],
+                $c,
+                $currentRequest
+            );
         };
 
         $c['go1.client.lo'] = function (Container $c) {
