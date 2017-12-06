@@ -2,10 +2,10 @@
 
 namespace go1\util\tests\portal;
 
+use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\tests\UtilTestCase;
-use go1\util\portal\PortalChecker;
 
 class PortalCheckerTest extends UtilTestCase
 {
@@ -102,18 +102,15 @@ class PortalCheckerTest extends UtilTestCase
         ];
     }
 
-    /** @dataProvider dataBuildLink */
-    public function testBuildLink($env, $portalName, $uri, $prefix = '', string $expectedLink)
+    /**
+     * @dataProvider dataBuildLink
+     */
+    public function testBuildLink(string $env, string $instance, string $uri, string $prefix, string $expecting)
     {
         putenv("ENV=$env");
-        $instanceId = $this->createInstance($this->db, [
-            'title' => $portalName,
-        ]);
-
+        $instanceId = $this->createInstance($this->db, ['title' => $instance]);
         $portal = PortalHelper::load($this->db, $instanceId);
-        $portalChecker = new PortalChecker();
-        $link = $portalChecker->buildLink($portal, $uri, $prefix);
 
-        $this->assertEquals($link, $expectedLink);
+        $this->assertEquals($expecting, (new PortalChecker)->buildLink($portal, $uri, $prefix));
     }
 }

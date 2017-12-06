@@ -124,43 +124,38 @@ class PortalChecker
     public function buildLink($portal, $uri, $prefix = '')
     {
         $uri = ltrim($uri, '/');
-
         $env = getenv('ENV') ?: 'dev';
         switch ($env) {
             case 'production':
                 if (PortalHelper::WEBSITE_PUBLIC_INSTANCE == $portal->title) {
                     $domain = PortalHelper::WEBSITE_DOMAIN;
-
                     if (stripos($domain, 'www.') === false) {
                         $domain = 'www.' . $domain;
                     }
                 }
                 else {
                     $domain = $this->getPrimaryDomain($portal);
-
-                    $domain = $this->isVirtual($portal)
-                        ? "{$domain}/p"
-                        : "{$domain}/webapp";
+                    $domain = $this->isVirtual($portal) ? "{$domain}/p" : "{$domain}/webapp";
                 }
                 break;
 
             case 'staging':
-                $domain = PortalHelper::WEBSITE_STAGING_INSTANCE.'/p';
+                $domain = PortalHelper::WEBSITE_STAGING_INSTANCE . '/p';
                 break;
 
             case 'dev':
-                $domain = PortalHelper::WEBSITE_DEV_INSTANCE.'/p';
+                $domain = PortalHelper::WEBSITE_DEV_INSTANCE . '/p';
                 break;
         }
 
-        if (getenv('MONOLITH')) {
-            $domain = getenv('ENV_HOSTNAME').'/p';
+        if (getenv('MONOLITH') && getenv('ENV_HOSTNAME')) {
+            $domain = getenv('ENV_HOSTNAME') . '/p';
         }
 
         return "https://{$domain}/{$prefix}#/{$uri}";
     }
 
-    public function allowPublicGroup($portal) : bool
+    public function allowPublicGroup($portal): bool
     {
         PortalHelper::parseConfig($portal);
         if (!empty($portal->configuration)) {
