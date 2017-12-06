@@ -121,7 +121,7 @@ class PortalChecker
         return $portal->configuration->modulesEnabled->allowRegister ?? true;
     }
 
-    public function buildLink($portal, $uri)
+    public function buildLink($portal, $uri, $prefix = '')
     {
         $uri = ltrim($uri, '/');
 
@@ -137,9 +137,7 @@ class PortalChecker
         else {
             $domain = $this->getPrimaryDomain($portal);
 
-            return ($this->isVirtual($portal))
-                ? "https://{$domain}/p/#/{$uri}"
-                : "https://{$domain}/webapp/#/{$uri}";
+            return ($this->isVirtual($portal)) ? "https://{$domain}/p/{$prefix}#/{$uri}" : "https://{$domain}/webapp/{$prefix}#/{$uri}";
         }
     }
 
