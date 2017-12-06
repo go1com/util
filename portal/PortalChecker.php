@@ -125,20 +125,39 @@ class PortalChecker
     {
         $uri = ltrim($uri, '/');
 
-        if ($portal->title == PortalHelper::WEBSITE_PUBLIC_INSTANCE) {
-            $domain = PortalHelper::WEBSITE_DOMAIN;
+        $env = getenv('ENV') ?: 'dev';
+        switch ($env) {
+            case 'production':
+                if (PortalHelper::WEBSITE_PUBLIC_INSTANCE == $portal->title) {
+                    $domain = PortalHelper::WEBSITE_DOMAIN;
 
-            if (stripos($domain, 'www.') === false) {
-                $domain = 'www.' . $domain;
-            }
+                    if (stripos($domain, 'www.') === false) {
+                        $domain = 'www.' . $domain;
+                    }
+                }
+                else {
+                    $domain = $this->getPrimaryDomain($portal);
 
-            return "https://{$domain}/{$uri}";
+                    $domain = $this->isVirtual($portal)
+                        ? "{$domain}/p"
+                        : "{$domain}/webapp";
+                }
+                break;
+
+            case 'staging':
+                $domain = PortalHelper::WEBSITE_STAGING_INSTANCE.'/p';
+                break;
+
+            case 'dev':
+                $domain = PortalHelper::WEBSITE_DEV_INSTANCE.'/p';
+                break;
         }
-        else {
-            $domain = $this->getPrimaryDomain($portal);
 
-            return ($this->isVirtual($portal)) ? "https://{$domain}/p/{$prefix}#/{$uri}" : "https://{$domain}/webapp/{$prefix}#/{$uri}";
+        if (getenv('MONOLITH')) {
+            $domain = getenv('ENV_HOSTNAME').'/p';
         }
+
+        return "https://{$domain}/{$prefix}#/{$uri}";
     }
 
     public function allowPublicGroup($portal) : bool
