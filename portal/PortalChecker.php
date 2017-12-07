@@ -124,7 +124,7 @@ class PortalChecker
     public function buildLink($portal, $uri, $prefix = '')
     {
         $uri = ltrim($uri, '/');
-        $env = getenv('ENV') ?: 'dev';
+        $env = getenv('ENV') ?: 'production';
         switch ($env) {
             case 'production':
                 if (PortalHelper::WEBSITE_PUBLIC_INSTANCE == $portal->title) {
@@ -152,7 +152,7 @@ class PortalChecker
             $domain = getenv('ENV_HOSTNAME') . '/p';
         }
 
-        return "https://{$domain}/{$prefix}#/{$uri}";
+        return (PortalHelper::WEBSITE_DOMAIN == $domain) ? "https://{$domain}/{$uri}" : "https://{$domain}/{$prefix}#/{$uri}";
     }
 
     public function allowPublicGroup($portal): bool
