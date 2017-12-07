@@ -94,7 +94,7 @@ class PortalCheckerTest extends UtilTestCase
         return [
             ['production', 'az.mygo1.com', '', '', 'https://az.mygo1.com/p/#/'],
             ['production', 'az.mygo1.com', '/', '', 'https://az.mygo1.com/p/#/'],
-            ['production', 'public.mygo1.com', '', '', 'https://www.go1.com/#/'],
+            ['production', 'public.mygo1.com', '', '', 'https://www.go1.com/'],
             ['production', 'az.mygo1.com', 'embed-course/12345/', 'embed.html', 'https://az.mygo1.com/p/embed.html#/embed-course/12345/'],
             ['staging', 'staging.mygo1.com', '', '', 'https://staging.mygo1.com/p/#/'],
             ['dev', 'dev.mygo1.com', '', '', 'https://dev.mygo1.com/p/#/'],
