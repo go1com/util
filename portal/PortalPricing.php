@@ -11,7 +11,7 @@ class PortalPricing
     const USER_LICENSES_MULTIPLY_RATE = 2;
     const PRODUCT_PLATFORM            = 'platform';
     const PRODUCT_PREMIUM             = 'premium';
-    const REGIONAL                    = ['AU', 'EU', 'UK', 'US', self::REGIONAL_OTHER];
+    const REGIONAL                    = ['AU', 'EU', 'UK', 'US', 'MY', self::REGIONAL_OTHER];
     const REGIONAL_DEFAULT            = 'AU';
     const REGIONAL_OTHER              = 'OTHER';
     const PLATFORM_FREE_LICENSE       = 5;
@@ -21,6 +21,7 @@ class PortalPricing
                                           'EU'    => ['currency' => 'EUR', 'price' => 4.5],
                                           'UK'    => ['currency' => 'GBP', 'price' => 4],
                                           'US'    => ['currency' => 'USD', 'price' => 5],
+                                          'MY'    => ['currency' => 'MYR', 'price' => 20],
                                           'OTHER' => ['currency' => 'USD', 'price' => 5],
     ];
 
@@ -30,6 +31,7 @@ class PortalPricing
                              'EU'    => ['currency' => 'EUR', 'price' => 7],
                              'UK'    => ['currency' => 'GBP', 'price' => 6],
                              'US'    => ['currency' => 'USD', 'price' => 9],
+                             'MY'    => ['currency' => 'MYR', 'price' => 36],
                              'OTHER' => ['currency' => 'USD', 'price' => 9],
     ];
     const PREMIUM_H20     = [// > 20 licenses
@@ -37,6 +39,7 @@ class PortalPricing
                              'EU'    => ['currency' => 'EUR', 'price' => 6],
                              'UK'    => ['currency' => 'GBP', 'price' => 5],
                              'US'    => ['currency' => 'USD', 'price' => 8],
+                             'MY'    => ['currency' => 'MYR', 'price' => 32],
                              'OTHER' => ['currency' => 'USD', 'price' => 8],
     ];
 
