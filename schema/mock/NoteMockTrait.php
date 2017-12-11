@@ -19,6 +19,7 @@ trait NoteMockTrait
             'created'       => !empty($options['created']) ? $options['created'] : time(),
             'entity_type'   => !empty($options['entity_type']) ? $options['entity_type'] : 'lo',
             'private'       => !empty($options['private']) ? $options['private'] : 0,
+            'description'   => !empty($options['description']) ? $options['description'] : '',
             'data'          => json_encode($data),
         ]);
 

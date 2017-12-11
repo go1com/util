@@ -19,6 +19,7 @@ class NoteSchema
             $note->addColumn('uuid', Type::STRING, ['notnull' => false, 'length' => 36]);
             $note->addColumn('created', Type::INTEGER, ['unsigned' => true, 'length' => 11]);
             $note->addColumn('private', Type::SMALLINT, ['default' => 0, 'length' => 2]);
+            $note->addColumn('description', Type::TEXT);
             $note->addColumn('data', Type::BLOB);
             $note->setPrimaryKey(['id']);
             $note->addUniqueIndex(['uuid']);
