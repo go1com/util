@@ -31,7 +31,6 @@ abstract class UtilTestCase extends TestCase
     /** @var  Connection */
     protected $db;
     protected $queue;
-    protected $queueMessages;
     protected $taskService;
 
     public function setUp()
