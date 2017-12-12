@@ -53,7 +53,7 @@ class NoteHelperTest extends UtilTestCase
             'description' => 'note comment description'
         ]);
 
-        $comment = NoteHelper::loadNoteComment($this->db, $id, $this->db);
+        $comment = NoteHelper::loadComment($this->db, $id, $this->db);
         $this->assertEquals(1000, $comment->note_id);
         $this->assertEquals('note comment description', $comment->description);
         $this->assertEquals($userId, $comment->user->id);
