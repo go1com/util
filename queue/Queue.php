@@ -151,6 +151,9 @@ class Queue
     const METRIC_DELETE              = 'metric.delete';
     const PAYMENT_STRIPE_AUTHORIZE   = 'payment.stripe.authorize';
     const PAYMENT_STRIPE_DEAUTHORIZE = 'payment.stripe.deauthorize';
+    const NOTE_COMMENT_CREATE        = 'note_comment.create';
+    const NOTE_COMMENT_UPDATE        = 'note_comment.update';
+    const NOTE_COMMENT_DELETE        = 'note_comment.delete';
 
     # routingKey that tell some service to do something.
     #
