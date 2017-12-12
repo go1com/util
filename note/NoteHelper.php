@@ -62,7 +62,7 @@ class NoteHelper
 
     public static function loadComment(Connection $db, int $id, Connection $go1 = null)
     {
-        $sql = 'SELECT * FROM gc_note_comment WHERE id = ?';
+        $sql = 'SELECT * FROM note_comment WHERE id = ?';
 
         $comment = $db->executeQuery($sql, [$id])->fetch(DB::OBJ);
 

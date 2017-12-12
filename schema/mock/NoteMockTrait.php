@@ -29,7 +29,7 @@ trait NoteMockTrait
 
     protected function createNoteComment(Connection $db, array $options)
     {
-        $db->insert('gc_note_comment', [
+        $db->insert('note_comment', [
             'note_id'     => !empty($options['note_id']) ? $options['note_id'] : 1,
             'user_id'     => !empty($options['user_id']) ? $options['user_id'] : 1,
             'status'      => !empty($options['status']) ? $options['status'] : NoteCommentStatus::ENABLED,
@@ -38,6 +38,6 @@ trait NoteMockTrait
             'description' => !empty($options['description']) ? $options['description'] : null,
         ]);
 
-        return $db->lastInsertId('gc_note_comment');
+        return $db->lastInsertId('note_comment');
     }
 }
