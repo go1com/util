@@ -37,12 +37,16 @@ class NoteSchema
             $comment->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $comment->addColumn('note_id', Type::BIGINT, ['unsigned' => true]);
             $comment->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $comment->addColumn('status', Type::SMALLINT, ['unsigned' => true]);
             $comment->addColumn('created', Type::INTEGER, ['unsigned' => true, 'length' => 11]);
+            $comment->addColumn('updated', Type::INTEGER, ['unsigned' => true, 'length' => 11]);
             $comment->addColumn('description', Type::TEXT, ['notnull' => false]);
             $comment->setPrimaryKey(['id']);
             $comment->addIndex(['note_id']);
             $comment->addIndex(['user_id']);
+            $comment->addIndex(['status']);
             $comment->addIndex(['created']);
+            $comment->addIndex(['updated']);
         }
     }
 }
