@@ -8,12 +8,10 @@ class MetricTypes
     const NEW_ARR      = 1;
     const TOTAL_ARR    = 2;
     const NET_CHURN    = 3;
-    const TOTAL_PORTAL = 4;
 
     const S_NEW_ARR      = 'New ARR';
     const S_TOTAL_ARR    = 'Total ARR';
     const S_NET_CHURN    = 'Net Churn';
-    const S_TOTAL_PORTAL = 'Total Portal';
 
     public static function all()
     {
@@ -21,7 +19,6 @@ class MetricTypes
             self::NEW_ARR,
             self::TOTAL_ARR,
             self::NET_CHURN,
-            self::TOTAL_PORTAL,
         ];
     }
 
@@ -36,9 +33,6 @@ class MetricTypes
 
             case self::S_NET_CHURN:
                 return self::NET_CHURN;
-
-            case self::S_TOTAL_PORTAL:
-                return self::TOTAL_PORTAL;
 
             default:
                 throw new InvalidArgumentException('Unknown metric type: ' . $type);
@@ -56,9 +50,6 @@ class MetricTypes
 
             case self::NET_CHURN:
                 return self::S_NET_CHURN;
-
-            case self::TOTAL_PORTAL:
-                return self::S_TOTAL_PORTAL;
 
             default:
                 throw new InvalidArgumentException('Unknown metric type: ' . $type);
