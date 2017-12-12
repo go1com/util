@@ -2,18 +2,16 @@
 
 namespace go1\util\activity;
 
-use Assert\Assert;
-use Assert\LazyAssertionException;
-use Doctrine\DBAL\Connection;
 use Elasticsearch\Client;
+use go1\util\DateTime;
+use go1\util\es\dsl\TermsAggregation;
 use go1\util\es\Schema;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\BuilderInterface;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 class ActivityRepository
 {
@@ -91,6 +89,35 @@ class ActivityRepository
             'body'               => $search->toArray(),
             'ignore_unavailable' => true,
         ]);
+    }
+
+    public function getPortalActive($start, $end): array
+    {
+        $query = new BoolQuery();
+        $query->add(new RangeQuery('created', [
+            RangeQuery::GTE => $start,
+            RangeQuery::LTE => $end]),
+            BoolQuery::MUST);
+
+        $termsAgg = new TermsAggregation('aggs', 'instance_id', null, 0);
+        $search = new Search();
+        $search->setSize(0)
+            ->addAggregation($termsAgg)
+            ->addQuery($query);
+        $searchResult = $this->client->search([
+            'index'              => Schema::ACTIVITY_INDEX,
+            'type'               => Schema::O_ACTIVITY,
+            'body'               => $search->toArray(),
+            'ignore_unavailable' => true,
+        ]);
+        $result = [];
+        foreach ($searchResult['aggregations']['aggs']['buckets'] as $item) {
+            array_push($result, (object)[
+                'id'    => $item['key'],
+                'value' => $item['doc_count'],
+            ]);
+        }
+        return $result;
     }
 
 }
