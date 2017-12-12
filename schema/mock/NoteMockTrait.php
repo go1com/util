@@ -25,4 +25,16 @@ trait NoteMockTrait
 
         return $db->lastInsertId('gc_note');
     }
+
+    protected function createNoteComment(Connection $db, array $options)
+    {
+        $db->insert('gc_note_comment', [
+            'note_id'     => !empty($options['note_id']) ? $options['note_id'] : 1,
+            'user_id'     => !empty($options['user_id']) ? $options['user_id'] : 1,
+            'created'     => !empty($options['created']) ? $options['created'] : time(),
+            'description' => !empty($options['description']) ? $options['description'] : null,
+        ]);
+
+        return $db->lastInsertId('gc_note_comment');
+    }
 }

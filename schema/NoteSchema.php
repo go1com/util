@@ -31,5 +31,18 @@ class NoteSchema
             $note->addIndex(['entity_type']);
             $note->addIndex(['private']);
         }
+
+        if (!$schema->hasTable('gc_note_comment')) {
+            $comment = $schema->createTable('gc_note_comment');
+            $comment->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $comment->addColumn('note_id', Type::BIGINT, ['unsigned' => true]);
+            $comment->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $comment->addColumn('created', Type::INTEGER, ['unsigned' => true, 'length' => 11]);
+            $comment->addColumn('description', Type::TEXT, ['notnull' => false]);
+            $comment->setPrimaryKey(['id']);
+            $comment->addIndex(['note_id']);
+            $comment->addIndex(['user_id']);
+            $comment->addIndex(['created']);
+        }
     }
 }
