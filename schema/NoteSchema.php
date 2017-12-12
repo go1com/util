@@ -32,8 +32,8 @@ class NoteSchema
             $note->addIndex(['private']);
         }
 
-        if (!$schema->hasTable('gc_note_comment')) {
-            $comment = $schema->createTable('gc_note_comment');
+        if (!$schema->hasTable('note_comment')) {
+            $comment = $schema->createTable('note_comment');
             $comment->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $comment->addColumn('note_id', Type::BIGINT, ['unsigned' => true]);
             $comment->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
