@@ -4,8 +4,12 @@ namespace go1\util\user;
 
 class Roles
 {
+    /** @deprecated */
+    const ADMIN = 'administrator';
+
     const ROOT          = 'Admin on #Accounts';
-    const ADMIN         = 'administrator';
+    const ADMIN_ACCOUNT = 'account administrator';
+    const ADMIN_CONTENT = 'content administrator';
     const DEVELOPER     = 'developer';
     const AUTHENTICATED = 'authenticated user';
     const STUDENT       = 'Student';
@@ -16,7 +20,7 @@ class Roles
     const ANONYMOUS     = 'anonymous';
 
     const ACCOUNTS_ROLES = [self::ROOT, self::DEVELOPER, self::AUTHENTICATED, self::TAM];
-    const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::STUDENT, self::TUTOR, self::MANAGER];
+    const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::ADMIN_ACCOUNT, self::ADMIN_CONTENT, self::STUDENT, self::TUTOR, self::MANAGER];
 
     const NAMES = [
         self::ADMIN    => 'Administrator',
