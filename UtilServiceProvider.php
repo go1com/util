@@ -95,6 +95,7 @@ class UtilServiceProvider implements ServiceProviderInterface
                 'version'     => $o['version'],
                 'credentials' => new Credentials($o['key'], $o['secret']),
             ];
+
             if (getenv('MONOLITH')) {
                 // https://github.com/minio/cookbook/blob/master/docs/aws-sdk-for-php-with-minio.md
                 $args['endpoint'] = $o['endpoint'];
@@ -142,27 +143,16 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.mq'] = function (Container $c) {
-            $options = $c['queueOptions'];
             $logger = null;
+            $o = $c['queueOptions'];
 
             if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
                 $logger = $c['profiler.collectors.mq'];
             }
 
-            $currentRequest = $c->offsetExists('request_stack')
-                ? $c['request_stack']->getCurrentRequest()
-                : null;
+            $currentRequest = $c->offsetExists('request_stack') ? $c['request_stack']->getCurrentRequest() : null;
 
-            return new MqClient(
-                $options['host'],
-                $options['port'],
-                $options['user'],
-                $options['pass'],
-                $logger,
-                $c['access_checker'],
-                $c,
-                $currentRequest
-            );
+            return new MqClient($o['host'], $o['port'], $o['user'], $o['pass'], $logger, $c['access_checker'], $c, $currentRequest);
         };
 
         $c['go1.client.lo'] = function (Container $c) {
@@ -182,9 +172,9 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.firebase'] = function (Container $c) {
-            $opt = $c['firebase'];
+            $o = $c['firebase'];
 
-            return new FirebaseClient($opt['base_uri'], $opt['token'], $opt['default_path']);
+            return new FirebaseClient($o['base_uri'], $o['token'], $o['default_path']);
         };
 
         $c['go1.client.sms'] = function (Container $c) {

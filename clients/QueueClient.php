@@ -9,7 +9,7 @@ class QueueClient
     private $client;
     private $queueUrl;
 
-    public function __construct(Client $client, $queueUrl)
+    public function __construct(Client $client, string $queueUrl)
     {
         $this->client = $client;
         $this->queueUrl = rtrim($queueUrl, '/');
