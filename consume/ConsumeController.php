@@ -5,6 +5,7 @@ namespace go1\util\consume;
 use Error as SystemError;
 use Exception;
 use go1\util\AccessChecker;
+use go1\util\consume\exception\NotifyException;
 use go1\util\contract\ConsumerInterface;
 use go1\util\Error;
 use Psr\Log\LoggerInterface;
@@ -43,6 +44,9 @@ class ConsumeController
                 if ($consumer->aware($routingKey)) {
                     try {
                         $consumer->consume($routingKey, $body, $context);
+                    }
+                    catch (NotifyException $e) {
+                        $this->logger->log($e->getNotifyExceptionType(), sprintf('Failed to consume [%s] with %s %s: %s', $routingKey, json_encode($body), json_encode($context), json_encode($e->getNotifyExceptionMessage())));
                     }
                     catch (Exception $e) {
                         $errors[] = $e->getMessage();
