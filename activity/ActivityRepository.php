@@ -2,10 +2,11 @@
 
 namespace go1\util\activity;
 
+use Doctrine\DBAL\Connection;
 use Elasticsearch\Client;
-use go1\util\DateTime;
 use go1\util\es\dsl\TermsAggregation;
 use go1\util\es\Schema;
+use go1\util\portal\PortalHelper;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
@@ -16,10 +17,12 @@ use ONGR\ElasticsearchDSL\Sort\FieldSort;
 class ActivityRepository
 {
     private $client;
+    private $go1;
 
-    public function __construct(Client $client)
+    public function __construct(Connection $db, Client $client)
     {
         $this->client = $client;
+        $this->go1 = $db;
     }
 
     public function getByUserId(int $portalId, int $accountId, int $offset, int $limit, string $sort = FieldSort::ASC, BuilderInterface $filter = null): array
@@ -104,19 +107,26 @@ class ActivityRepository
         $search->setSize(0)
             ->addAggregation($termsAgg)
             ->addQuery($query);
+
         $searchResult = $this->client->search([
             'index'              => Schema::ACTIVITY_INDEX,
             'type'               => Schema::O_ACTIVITY,
             'body'               => $search->toArray(),
             'ignore_unavailable' => true,
         ]);
+
         $result = [];
         foreach ($searchResult['aggregations']['aggs']['buckets'] as $item) {
-            array_push($result, (object)[
-                'id'    => $item['key'],
-                'value' => $item['doc_count'],
-            ]);
+            if ($portal = PortalHelper::load($this->go1, $item['key'] ?? 0)) {
+                array_push($result, (object)[
+                    'id'    => $item['key'] ?? '',
+                    'value' => $item['doc_count'] ?? 0,
+                    'title' => $portal->title,
+                    'color' => '#' . dechex(rand(0x000000, 0xFFFFFF)),
+                ]);
+            }
         }
+
         return $result;
     }
 
