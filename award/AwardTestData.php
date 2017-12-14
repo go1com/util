@@ -112,7 +112,7 @@ class AwardTestData
                 'assigner_id'  => $option['assigner_id'] ?? null,
                 'instance_id'  => $option['instance_id'] ?? $this->award->instance_id,
                 'entity_type'  => PlanTypes::ENTITY_AWARD,
-                'entity_id'    => $this->award->revision_id,
+                'entity_id'    => $this->award->id,
                 'status'       => $option['status'] ?? PlanStatuses::ASSIGNED,
                 'due_date'     => $option['due_date'] ?? null,
                 'created_date' => $option['created_date'] ?? time(),

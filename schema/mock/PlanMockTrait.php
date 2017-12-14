@@ -21,7 +21,7 @@ trait PlanMockTrait
             'status'       => isset($options['status']) ? $options['status'] : PlanStatuses::ASSIGNED,
             'due_date'     => isset($options['due_date']) ? DateTime::create($options['due_date'])->format(DATE_ISO8601) : null,
             'created_date' => DateTime::create(isset($options['created_date']) ? $options['created_date'] : time())->format(DATE_ISO8601),
-            'data'         => empty($options['data']) ? null : (is_scalar($options['data']) ? json_decode($options['data']) : $options['data']),
+            'data'         => empty($options['data']) ? null : json_encode(is_scalar($options['data']) ? json_decode($options['data']) : $options['data']),
         ]);
 
         return $db->lastInsertId('gc_plan');
