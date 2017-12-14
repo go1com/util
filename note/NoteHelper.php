@@ -54,7 +54,6 @@ class NoteHelper
             default:
                 $portalId = $entityId;
                 break;
-
         }
 
         return $portalChecker->load($this->go1, $portalId);

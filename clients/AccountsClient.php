@@ -91,12 +91,12 @@ class AccountsClient
         }
 
         $bundles = [
-            'instance' => 'gc_instance',
-            'course' => 'gc_lo',
+            'instance'      => 'gc_instance',
+            'course'        => 'gc_lo',
             'learning_item' => 'gc_lo',
-            'enrollment' => 'gc_enrolment',
-            'domain' => 'gc_domain',
-            'relationship' => 'gc_ro',
+            'enrollment'    => 'gc_enrolment',
+            'domain'        => 'gc_domain',
+            'relationship'  => 'gc_ro',
         ];
         if (getenv('MONOLITH') && ($type == 'simple') && isset($bundles[$bundle])) {
             return (int) $this->go1->fetchColumn("SELECT MAX(id) FROM $bundles[$bundle]") + 1;

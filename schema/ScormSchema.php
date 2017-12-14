@@ -5,8 +5,10 @@ namespace go1\util\schema;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
-class ScormSchema {
-    public static function install(Schema $schema) {
+class ScormSchema
+{
+    public static function install(Schema $schema)
+    {
         if (!$schema->hasTable('scorm_credential')) {
             $credential = $schema->createTable('scorm_credential');
             $credential->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);

@@ -1,17 +1,17 @@
 <?php
+
 namespace go1\util\metric;
 
 use InvalidArgumentException;
 
 class MetricTypes
 {
-    const NEW_ARR      = 1;
-    const TOTAL_ARR    = 2;
-    const NET_CHURN    = 3;
-
-    const S_NEW_ARR      = 'New ARR';
-    const S_TOTAL_ARR    = 'Total ARR';
-    const S_NET_CHURN    = 'Net Churn';
+    const NEW_ARR     = 1;
+    const TOTAL_ARR   = 2;
+    const NET_CHURN   = 3;
+    const S_NEW_ARR   = 'New ARR';
+    const S_TOTAL_ARR = 'Total ARR';
+    const S_NET_CHURN = 'Net Churn';
 
     public static function all()
     {
