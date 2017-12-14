@@ -80,6 +80,16 @@ class PortalHelper
                 }
             }
         }
+
+        if (!isset($portal->features)) {
+            if (!empty($portal->data)) {
+                $portal->data = is_scalar($portal->data) ? json_decode($portal->data) : $portal->data;
+                if (!empty($portal->data->features)) {
+                    $portal->features = $portal->data->features;
+                    unset($portal->data->features);
+                }
+            }
+        }
     }
 
     public static function loadFromLoId(Connection $db, int $loId)
