@@ -59,4 +59,35 @@ class PlanHelperTest extends UtilTestCase
         $this->assertObjectHasAttribute('status', $plan);
         $this->assertObjectHasAttribute('instance_id', $plan);
     }
+
+    public function dataIsVersion()
+    {
+        return [
+            [null, '2', false],
+            ['2', '2', false],
+            ['{"version":2}', '2', true],
+            ['{"version":"2"}', '2', true],
+            ['{"version":2}', 2, true],
+            ['{"version":"2"}', 2, true],
+            ['{"version":"2", "foo": "bar"}', 2, true],
+            [['version' => 2], '2', true],
+            [['version' => '2'], '2', true],
+            [['version' => 2], 2, true],
+            [['version' => '2'], 2, true],
+            [['version' => 2], 2, true],
+            [['version' => 2, "foo" => "bar"], 2, true],
+            [(object) ['version' => 2], '2', true],
+            [(object) ['version' => '2'], '2', true],
+            [(object) ['version' => 2], 2, true],
+            [(object) ['version' => '2'], 2, true],
+            [(object) ['version' => 2], 2, true],
+            [(object) ['version' => 2, "foo" => "bar"], 2, true],
+        ];
+    }
+
+    /** @dataProvider dataIsVersion */
+    public function testIsVersion($data, $version, $expected)
+    {
+        $this->assertEquals($expected, PlanHelper::isVersion($data, $version));
+    }
 }
