@@ -48,6 +48,7 @@ class AwardTestData
             $awardItemIds[] = $this->createAwardItem(
                 $this->dbAward,
                 $this->award->revision_id,
+                $option['type'],
                 $option['entity_id'],
                 $option['quantity'] ?? null,
                 $option['weight'] ?? null
@@ -113,30 +114,6 @@ class AwardTestData
                 'instance_id'  => $option['instance_id'] ?? $this->award->instance_id,
                 'entity_type'  => PlanTypes::ENTITY_AWARD,
                 'entity_id'    => $this->award->id,
-                'status'       => $option['status'] ?? PlanStatuses::ASSIGNED,
-                'due_date'     => $option['due_date'] ?? null,
-                'created_date' => $option['created_date'] ?? time(),
-                'data'         => $option['data'] ?? null,
-            ]);
-            $planIds[] = $rPlan->create($plan);
-        }
-        $this->plans = isset($planIds) ? $rPlan->loadMultiple($planIds) : [];
-
-        return $this;
-    }
-
-    /** @deprecated */
-    public function setPlansLegacy(PlanRepository $rPlan, array $options = [])
-    {
-        $this->checkAward();
-
-        foreach ($options as $option) {
-            $plan = Plan::create((object) [
-                'user_id'      => $option['user_id'] ?? $option['assigner_id'],
-                'assigner_id'  => $option['assigner_id'],
-                'instance_id'  => $option['instance_id'] ?? $this->award->instance_id,
-                'entity_type'  => PlanTypes::ENTITY_AWARD,
-                'entity_id'    => $this->award->revision_id,
                 'status'       => $option['status'] ?? PlanStatuses::ASSIGNED,
                 'due_date'     => $option['due_date'] ?? null,
                 'created_date' => $option['created_date'] ?? time(),

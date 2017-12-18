@@ -41,4 +41,12 @@ class PlanHelper
     {
         return $db->executeQuery('SELECT * FROM gc_plan WHERE id = ?', [$id])->fetch(DB::OBJ);
     }
+
+    public static function isVersion($data, $version)
+    {
+        $data = is_string($data) ? json_decode($data) : json_decode(json_encode($data));
+        $checkVersion = $data->version ?? null;
+
+        return $version == $checkVersion;
+    }
 }

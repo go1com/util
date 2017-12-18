@@ -54,11 +54,13 @@ class AwardSchema
             $item = $schema->createTable('award_item');
             $item->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $item->addColumn('award_revision_id', Type::INTEGER, ['unsigned' => true]);
+            $item->addColumn('type', Type::STRING, ['description' => 'Item types: lo, li, award']);
             $item->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.']);
             $item->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
             $item->addColumn('weight', Type::INTEGER, ['unsigned' => true]);
             $item->setPrimaryKey(['id']);
             $item->addIndex(['award_revision_id']);
+            $item->addIndex(['type']);
             $item->addIndex(['entity_id']);
             $item->addIndex(['weight']);
         }
@@ -99,9 +101,13 @@ class AwardSchema
             $achievement->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $achievement->addColumn('award_item_id', Type::INTEGER, ['unsigned' => true]);
             $achievement->addColumn('created', Type::INTEGER);
+            $achievement->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of award item current quantity']);
+            $achievement->addColumn('expire', Type::INTEGER, ['notnull' => false, 'unsigned' => true, 'description' => 'Award item expire time']);
             $achievement->setPrimaryKey(['id']);
             $achievement->addIndex(['user_id']);
             $achievement->addIndex(['award_item_id']);
+            $achievement->addIndex(['quantity']);
+            $achievement->addIndex(['expire']);
             $achievement->addIndex(['created']);
         }
 
@@ -162,10 +168,20 @@ class AwardSchema
 
     private static function update(Schema $schema)
     {
-        $awardItemManual = $schema->getTable('award_item_manual');
-        if (!$awardItemManual->hasColumn('assigner_id')) {
-            $awardItemManual->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
-            $awardItemManual->addIndex(['assigner_id']);
+        $awardItem = $schema->getTable('award_item');
+        if (!$awardItem->hasColumn('type')) {
+            $awardItem->addColumn('type', Type::STRING, ['default' => 'lo']);
+            $awardItem->addIndex(['type']);
+        }
+
+        $awardAchievement = $schema->getTable('award_achievement');
+        if (!$awardAchievement->hasColumn('quantity')) {
+            $awardAchievement->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of award item current quantity']);
+            $awardAchievement->addIndex(['quantity']);
+        }
+        if (!$awardAchievement->hasColumn('expire')) {
+            $awardAchievement->addColumn('expire', Type::INTEGER, ['notnull' => false, 'unsigned' => true, 'description' => 'Award item expire time']);
+            $awardAchievement->addIndex(['expire']);
         }
     }
 }
