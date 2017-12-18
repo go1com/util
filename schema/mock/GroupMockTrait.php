@@ -13,6 +13,7 @@ trait GroupMockTrait
     public function createGroup(Connection $db, array $options = [])
     {
         $db->insert('social_group', [
+            'id'          => $options['id'] ?? null,
             'user_id'     => $title = isset($options['user_id']) ? $options['user_id'] : 1,
             'title'       => isset($options['title']) ? $options['title'] : 'Group Foo',
             'visibility'  => isset($options['visibility']) ? $options['visibility'] : GroupStatus::PUBLIC,
@@ -29,6 +30,7 @@ trait GroupMockTrait
     public function createGroupItem(Connection $db, array $options = [])
     {
         $db->insert('social_group_item', [
+            'id'          => $options['id'] ?? null,
             'group_id'    => $title = isset($options['group_id']) ? $options['group_id'] : 1,
             'entity_type' => isset($options['entity_type']) ? $options['entity_type'] : 'user',
             'entity_id'   => isset($options['entity_id']) ? $options['entity_id'] : 1,
@@ -46,6 +48,7 @@ trait GroupMockTrait
         $data = $data ? json_encode($data) : $data;
 
         $db->insert('social_group_assign', [
+            'id'          => $options['id'] ?? null,
             'group_id'    => $options['group_id'],
             'instance_id' => $options['instance_id'],
             'entity_type' => $options['entity_type'],
