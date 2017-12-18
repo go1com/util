@@ -3,6 +3,7 @@
 namespace go1\util\tests;
 
 use go1\util\award\AwardHelper;
+use go1\util\award\AwardItemTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\Text;
 
@@ -36,6 +37,7 @@ class AwardHelperTest extends UtilTestCase
             'enrolment'   => 'false',
             'items'       => [
                 [
+                    'type'              => AwardItemTypes::LO,
                     'award_revision_id' => 1,
                     'entity_id'         => 1,
                     'quantity'          => 1,
@@ -96,7 +98,7 @@ class AwardHelperTest extends UtilTestCase
         $this->assertEmpty($emptyAward);
     }
 
-    public function testLoadItem()
+    public function testLoadManualItem()
     {
         $awardManualItemId = $this->createAwardItemManual($this->db, [
             'award_id' => 1,

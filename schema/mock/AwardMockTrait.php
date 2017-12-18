@@ -37,7 +37,7 @@ trait AwardMockTrait
         if (isset($options['items']) && is_array($options['items'])) {
             foreach ($options['items'] as $item) {
                 $weight = $item['weight'] ?? 0;
-                $this->createAwardItem($db, $revisionId, $item['entity_id'], $item['quantity'], $weight);
+                $this->createAwardItem($db, $revisionId, $item['type'], $item['entity_id'], $item['quantity'], $weight);
             }
         }
 
@@ -51,10 +51,11 @@ trait AwardMockTrait
         return $db->lastInsertId('award_revision');
     }
 
-    protected function createAwardItem(Connection $db, int $awardRevId, int $entityId, float $quantity = null, $weight = null)
+    protected function createAwardItem(Connection $db, int $awardRevId, string $type, int $entityId, float $quantity = null, $weight = null)
     {
         $db->insert('award_item', [
             'award_revision_id' => $awardRevId,
+            'type'              => $type,
             'entity_id'         => $entityId,
             'quantity'          => $quantity ? round($quantity, 2) : $quantity,
             'weight'            => $weight ?? 0,
