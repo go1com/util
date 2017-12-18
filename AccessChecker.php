@@ -27,13 +27,7 @@ class AccessChecker
         return $this->isPortalAdmin($req, $instance, Roles::ADMIN_CONTENT);
     }
 
-    public function isAccountAdministrator(Request $req, $instance)
-    {
-        return $this->isPortalAdmin($req, $instance, Roles::ADMIN_ACCOUNT);
-    }
-
     /**
-     * @deprecated Use admin-user or admin-account instead.
      * @param Request $req
      * @param string  $instance
      * @return null|bool|stdClass
