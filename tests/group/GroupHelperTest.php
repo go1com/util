@@ -456,7 +456,19 @@ class GroupHelperTest extends UtilTestCase
         $this->assertFalse(GroupHelper::isPortalSystemGroup('Foo'));
     }
 
+    public function testIsPassiveContentSharing()
+    {
+        $originalInstanceId = $this->createInstance($this->db, ['title' => $portalName = 'origin.go1.com']);
+        $loId = $this->createCourse($this->db, ['title' => 'Sharing Course', 'instance_id' => $originalInstanceId]);
 
+        $groupId = $this->createGroup($this->db, []);
+        $sharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}"]);
+        $marketplaceSharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}:marketplace"]);
+
+        $this->assertFalse(GroupHelper::isPassiveContentSharing(GroupHelper::load($this->db, $groupId)));
+        $this->assertFalse(GroupHelper::isPassiveContentSharing(GroupHelper::load($this->db, $sharingGroupId)));
+        $this->assertTrue(GroupHelper::isPassiveContentSharing(GroupHelper::load($this->db, $marketplaceSharingGroupId)));
+    }
 
     public function dataTestContentSharingTypes()
     {
