@@ -127,6 +127,7 @@ class AwardHelper
                 $manualItem->categories = Text::parseInlineTags($manualItem->categories);
             }
 
+            $manualItem->pass = !empty($manualItem->pass);
             $manualItems[] = $manualItem;
         }
 
