@@ -39,8 +39,8 @@ class MqClient
         $user,
         $pass,
         LoggerInterface $logger = null,
-        AccessChecker $accessChecker,
-        Container $container,
+        AccessChecker $accessChecker = null,
+        Container $container = null,
         Request $request = null
     )
     {
@@ -81,7 +81,7 @@ class MqClient
             return $this->request;
         }
 
-        return $this->container->offsetExists('request_stack')
+        return ($this->container && $this->container->offsetExists('request_stack'))
             ? $this->container['request_stack']->getCurrentRequest()
             : null;
     }
