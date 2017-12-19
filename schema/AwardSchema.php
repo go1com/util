@@ -83,6 +83,7 @@ class AwardSchema
             $itemManual->addColumn('data', Type::BLOB);
             $itemManual->addColumn('published', Type::BOOLEAN, ['default' => AwardStatuses::PUBLISHED]);
             $itemManual->addColumn('weight', Type::INTEGER, ['unsigned' => true]);
+            $itemManual->addColumn('pass', Type::BOOLEAN, ['default' => false]);
             $itemManual->setPrimaryKey(['id']);
             $itemManual->addIndex(['award_id']);
             $itemManual->addIndex(['user_id']);
@@ -182,6 +183,11 @@ class AwardSchema
         if (!$awardAchievement->hasColumn('expire')) {
             $awardAchievement->addColumn('expire', Type::INTEGER, ['notnull' => false, 'unsigned' => true, 'description' => 'Award item expire time']);
             $awardAchievement->addIndex(['expire']);
+        }
+
+        $awardManualItem = $schema->getTable('award_item_manual');
+        if (!$awardManualItem->hasColumn('pass')) {
+            $awardManualItem->addColumn('pass', Type::BOOLEAN, ['default' => false]);
         }
     }
 }

@@ -35,36 +35,60 @@ class AwardHelper
         $award->created   = intval($award->created);
     }
 
-    public static function load(Connection $db, int $awardId, $statuses = [AwardStatuses::PUBLISHED, AwardStatuses::UNPUBLISHED])
+    public static function load(Connection $db, int $awardId, array $statuses = [])
     {
         $awards = static::loadMultiple($db, [$awardId], $statuses);
 
         return $awards ? $awards[0] : null;
     }
 
-    public static function loadMultiple(Connection $db, array $awardIds, $statuses = [AwardStatuses::PUBLISHED, AwardStatuses::UNPUBLISHED])
+    public static function loadMultiple(Connection $db, array $awardIds, array $statuses = [])
     {
-        $awards = $db
-            ->executeQuery('SELECT * FROM award_award WHERE id IN (?) AND published IN (?)', [$awardIds, $statuses], [DB::INTEGERS, DB::INTEGERS])
-            ->fetchAll(DB::OBJ);
+        $q = $db->createQueryBuilder();
+        $q
+            ->select('*')
+            ->from('award_award')
+            ->where($q->expr()->in('id', ':ids'))
+            ->setParameter('ids', $awardIds, DB::INTEGERS);
+        $statuses && $q
+            ->andWhere($q->expr()->in('published', ':published'))
+            ->setParameter('published', $statuses, DB::INTEGERS);
+        $q = $q->execute();
 
-        if ($awards) {
-            foreach ($awards as &$award) {
-                static::format($award);
-            }
+        while ($award = $q->fetch(DB::OBJ)) {
+            self::format($award);
+            $awards[] = $award;
         }
 
-        return $awards;
+        return $awards ?? [];
     }
 
-    public static function loadByRevision(Connection $db, int $revisionId)
+    public static function loadByRevision(Connection $db, int $revisionId, array $statuses = [])
     {
-        $award = $db
-            ->executeQuery('SELECT * FROM award_award WHERE revision_id = ?', [$revisionId])
-            ->fetch(DB::OBJ);
-        $award && static::format($award);
+        $awards = self::loadMultipleByRevision($db, [$revisionId], $statuses);
 
-        return $award;
+        return $awards ? $awards[0] : null;
+    }
+
+    public static function loadMultipleByRevision(Connection $db, array $revisionIds, array $statuses = [])
+    {
+        $q = $db->createQueryBuilder();
+        $q
+            ->select('*')
+            ->from('award_award')
+            ->where($q->expr()->in('revision_id', ':revisionIds'))
+            ->setParameter('revisionIds', $revisionIds, DB::INTEGERS);
+        $statuses && $q
+            ->andWhere($q->expr()->in('published', ':published'))
+            ->setParameter('published', $statuses, DB::INTEGERS);
+        $q = $q->execute();
+
+        while ($award = $q->fetch(DB::OBJ)) {
+            self::format($award);
+            $awards[] = $award;
+        }
+
+        return $awards ?? [];
     }
 
     public static function loadItems(Connection $db, array $awardItemIds)
@@ -103,6 +127,7 @@ class AwardHelper
                 $manualItem->categories = Text::parseInlineTags($manualItem->categories);
             }
 
+            $manualItem->pass = !empty($manualItem->pass);
             $manualItems[] = $manualItem;
         }
 

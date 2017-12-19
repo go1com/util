@@ -272,6 +272,11 @@ class GroupHelper
         return $group->type == GroupTypes::CONTENT_SHARING;
     }
 
+    public static function isPassiveContentSharing(stdClass $group)
+    {
+        return self::isContentSharing($group) && (strpos($group->title, 'marketplace') !== false);
+    }
+
     public static function isContentPackage(stdClass $group)
     {
         if (isset($group->type)) {
@@ -415,15 +420,21 @@ class GroupHelper
 
     public static function isMemberOfContentSharingGroup(Connection $db, int $loId, int $instanceId, bool $marketplace = null) :bool
     {
-        $hostGroup = !is_null($marketplace)
-            ? self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, $marketplace)
-            : (
-                self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, true)
-                    ?: self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, false)
-            );
+        if (!is_null($marketplace)) {
+            $hostGroup = self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, $marketplace);
+            return $hostGroup && self::isItemOf($db, GroupItemTypes::PORTAL, $instanceId, $hostGroup->id);
+        }
 
-        if ($hostGroup && self::isItemOf($db, GroupItemTypes::PORTAL, $instanceId, $hostGroup->id)) {
-            return true;
+        if ($hostGroup = self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, true)) {
+            if (self::isItemOf($db, GroupItemTypes::PORTAL, $instanceId, $hostGroup->id)) {
+                return true;
+            }
+        }
+
+        if ($hostGroup = self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, false)) {
+            if (self::isItemOf($db, GroupItemTypes::PORTAL, $instanceId, $hostGroup->id)) {
+                return true;
+            }
         }
 
         return false;
