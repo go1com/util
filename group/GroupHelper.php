@@ -272,6 +272,11 @@ class GroupHelper
         return $group->type == GroupTypes::CONTENT_SHARING;
     }
 
+    public static function isPassiveContentSharing(stdClass $group)
+    {
+        return self::isContentSharing($group) && (strpos($group->title, 'marketplace') !== false);
+    }
+
     public static function isContentPackage(stdClass $group)
     {
         if (isset($group->type)) {
