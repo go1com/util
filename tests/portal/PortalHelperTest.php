@@ -3,6 +3,7 @@
 namespace go1\util\tests\portal;
 
 use go1\clients\UserClient;
+use go1\util\model\Portal;
 use go1\util\portal\PortalHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\tests\UtilTestCase;
@@ -58,15 +59,15 @@ class PortalHelperTest extends UtilTestCase
         $app = $this->getContainer();
         $app->extend('go1.client.user', function () use ($adminIds) {
             $userClient = $this->getMockBuilder(UserClient::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['findAdministrators'])
-                ->getMock();
+                               ->disableOriginalConstructor()
+                               ->setMethods(['findAdministrators'])
+                               ->getMock();
             $userClient
                 ->expects($this->any())
                 ->method('findAdministrators')
                 ->willReturnCallback(function () use ($adminIds) {
                     foreach ($adminIds as $adminId) {
-                        yield (object)['id' => $adminId];
+                        yield (object) ['id' => $adminId];
                     }
                 });
 
@@ -94,5 +95,14 @@ class PortalHelperTest extends UtilTestCase
         $this->assertEquals(2, count($admins));
         $this->assertEquals($admin1Id, $admins[0]->id);
         $this->assertEquals($admin2Id, $admins[1]->id);
+    }
+
+    public function testPortalLanguage()
+    {
+        $portalEnglish = (object) ['data' => (object) [PortalHelper::LANGUAGE => PortalHelper::LANGUAGE_DEFAULT]];
+        $this->assertEquals(PortalHelper::LANGUAGE_DEFAULT, PortalHelper::language($portalEnglish));
+
+        $portalCatalan = (object) ['data' => (object) [PortalHelper::LANGUAGE => 'ca']];
+        $this->assertEquals('ca', PortalHelper::language($portalCatalan));
     }
 }
