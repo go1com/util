@@ -82,6 +82,7 @@ trait EsLoMockTrait
                 'updated_at'          => $options['updated_at'] ?? time(),
                 'customized'          => $options['metadata']['customized'] ?? 0,
                 'shared'              => $options['metadata']['shared'] ?? 0,
+                'shared_passive'      => $options['metadata']['shared_passive'] ?? null,
             ],
             'data'           => [
                 'allow_resubmit' => $options['data']['allow_resubmit'] ?? null,
