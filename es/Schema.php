@@ -863,6 +863,7 @@ class Schema
             'completion_date' => ['type' => self::T_DATE],
             'certificate'     => ['type' => self::T_OBJECT],
             'verified'        => ['type' => self::T_INT],
+            'pass'            => ['type' => self::T_INT],
             'weight'          => ['type' => self::T_INT],
             'categories'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
         ],
