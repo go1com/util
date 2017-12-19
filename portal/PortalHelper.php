@@ -20,6 +20,8 @@ class PortalHelper
     const WEBSITE_STAGING_INSTANCE = 'staging.mygo1.com';
     const WEBSITE_DEV_INSTANCE     = 'dev.mygo1.com';
 
+    const LANGUAGE                             = 'language';
+    const LANGUAGE_DEFAULT                     = 'en';
     const FEATURE_CREDIT                       = 'credit';
     const FEATURE_CREDIT_DEFAULT               = true;
     const FEATURE_SEND_WELCOME_EMAIL           = 'send_welcome_email';
@@ -121,10 +123,7 @@ class PortalHelper
     {
         self::parseConfig($portal);
 
-        $logo = $portal->data->files->logo
-            ?? ($portal->data->configuration->logo
-                ?? ($portal->data->logo ?? ''));
-
+        $logo = $portal->data->files->logo ?? ($portal->data->configuration->logo ?? ($portal->data->logo ?? ''));
         if (!$logo) {
             return $logo;
         }
@@ -146,12 +145,11 @@ class PortalHelper
 
     public static function portalAdminIds(UserClient $userClient, string $portalName): array
     {
-        $adminIds = [];
         foreach ($userClient->findAdministrators($portalName, true) as $admin) {
             $adminIds[] = $admin->id;
         }
 
-        return $adminIds;
+        return $adminIds ?? [];
     }
 
     public static function portalAdmins(Connection $db, UserClient $userClient, string $portalName): array
@@ -159,5 +157,12 @@ class PortalHelper
         $adminIds = self::portalAdminIds($userClient, $portalName);
 
         return !$adminIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $adminIds));
+    }
+
+    public static function language(stdClass $portal)
+    {
+        self::parseConfig($portal);
+
+        return $portal->data->{self::LANGUAGE} ?? self::LANGUAGE_DEFAULT;
     }
 }
