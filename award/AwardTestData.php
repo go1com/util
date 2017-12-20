@@ -51,10 +51,28 @@ class AwardTestData
                 $option['type'],
                 $option['entity_id'],
                 $option['quantity'] ?? null,
+                $option['parent_award_item_id'] ?? null,
                 $option['weight'] ?? null
             );
         }
         $this->awardItems = isset($awardItemIds) ? AwardHelper::loadItems($this->dbAward, $awardItemIds) : [];
+
+        return $this;
+    }
+
+    public function addAwardItem(array $option = [])
+    {
+        $this->checkAward();
+        $awardItemId = $this->createAwardItem(
+            $this->dbAward,
+            $this->award->revision_id,
+            $option['type'],
+            $option['entity_id'],
+            $option['quantity'] ?? null,
+            $option['parent_award_item_id'] ?? null,
+            $option['weight'] ?? null
+        );
+        $this->awardItems[] = AwardHelper::loadItem($this->dbAward, $awardItemId);
 
         return $this;
     }

@@ -51,14 +51,15 @@ trait AwardMockTrait
         return $db->lastInsertId('award_revision');
     }
 
-    protected function createAwardItem(Connection $db, int $awardRevId, string $type, int $entityId, float $quantity = null, $weight = null)
+    protected function createAwardItem(Connection $db, int $awardRevId, string $type, int $entityId, float $quantity = null, int $parentAwardItemId = null, $weight = null)
     {
         $db->insert('award_item', [
-            'award_revision_id' => $awardRevId,
-            'type'              => $type,
-            'entity_id'         => $entityId,
-            'quantity'          => $quantity ? round($quantity, 2) : $quantity,
-            'weight'            => $weight ?? 0,
+            'award_revision_id'    => $awardRevId,
+            'type'                 => $type,
+            'entity_id'            => $entityId,
+            'parent_award_item_id' => $parentAwardItemId,
+            'quantity'             => $quantity ? round($quantity, 2) : $quantity,
+            'weight'               => $weight ?? 0,
         ]);
 
         return $db->lastInsertId('award_item');
