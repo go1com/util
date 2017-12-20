@@ -53,12 +53,14 @@ class AwardSchema
         if (!$schema->hasTable('award_item')) {
             $item = $schema->createTable('award_item');
             $item->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $item->addColumn('parent_award_item_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $item->addColumn('award_revision_id', Type::INTEGER, ['unsigned' => true]);
             $item->addColumn('type', Type::STRING, ['description' => 'Item types: lo, li, award']);
             $item->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.']);
             $item->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
             $item->addColumn('weight', Type::INTEGER, ['unsigned' => true]);
             $item->setPrimaryKey(['id']);
+            $item->addIndex(['parent_award_item_id']);
             $item->addIndex(['award_revision_id']);
             $item->addIndex(['type']);
             $item->addIndex(['entity_id']);
@@ -94,6 +96,7 @@ class AwardSchema
             $itemManual->addIndex(['categories']);
             $itemManual->addIndex(['published']);
             $itemManual->addIndex(['weight']);
+            $itemManual->addIndex(['pass']);
         }
 
         if (!$schema->hasTable('award_achievement')) {
@@ -175,6 +178,11 @@ class AwardSchema
             $awardItem->addIndex(['type']);
         }
 
+        if (!$awardItem->hasColumn('parent_award_item_id')) {
+            $awardItem->addColumn('parent_award_item_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+            $awardItem->addIndex(['parent_award_item_id']);
+        }
+
         $awardAchievement = $schema->getTable('award_achievement');
         if (!$awardAchievement->hasColumn('quantity')) {
             $awardAchievement->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of award item current quantity']);
@@ -188,6 +196,14 @@ class AwardSchema
         $awardManualItem = $schema->getTable('award_item_manual');
         if (!$awardManualItem->hasColumn('pass')) {
             $awardManualItem->addColumn('pass', Type::BOOLEAN, ['default' => false]);
+        }
+
+        $hasIndexPass = false;
+        foreach ($awardManualItem->getIndexes() as $index) {
+            $hasIndexPass = in_array('pass', $index->getColumns());
+        }
+        if (!$hasIndexPass) {
+            $awardManualItem->addIndex(['pass']);
         }
     }
 }
