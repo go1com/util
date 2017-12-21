@@ -143,6 +143,10 @@ class PortalChecker
                 $domain = PortalHelper::WEBSITE_STAGING_INSTANCE . '/p';
                 break;
 
+            case 'qa':
+                $domain = PortalHelper::WEBSITE_QA_INSTANCE . '/p';
+                break;
+
             case 'dev':
                 $domain = PortalHelper::WEBSITE_DEV_INSTANCE . '/p';
                 break;
