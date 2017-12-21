@@ -182,6 +182,7 @@ class Queue
     const DO_ENROLMENT_DELETE                  = 'do.enrolment.delete'; # { KEY_N: MIXED|NULL }
     const DO_ENROLMENT_PLAN_CREATE             = 'do.enrolment.plan.create'; # Plan Object
     const DO_EXIM_IMPORT_ENROLLMENT            = 'do.exim.import-enrolment'; # {user_id, lo_id, instance_id, notify, manager_id}
+    const DO_EXIM_IMPORT_AWARD_ENROLLMENT      = 'do.exim.import-award-enrolment'; # {award_id, instance_id, user_ids}
     const DO_EXIM_IMPORT_USER                  = 'do.exim.import-user'; # {$instance, $mail, $first, $last, $status, $manager}
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
