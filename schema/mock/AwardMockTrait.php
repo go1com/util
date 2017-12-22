@@ -37,7 +37,8 @@ trait AwardMockTrait
         if (isset($options['items']) && is_array($options['items'])) {
             foreach ($options['items'] as $item) {
                 $weight = $item['weight'] ?? 0;
-                $this->createAwardItem($db, $revisionId, $item['type'], $item['entity_id'], $item['quantity'], $weight);
+                $parentId = $item['parent_award_item_id'] ?? null;
+                $this->createAwardItem($db, $revisionId, $item['type'], $item['entity_id'], $item['quantity'], $parentId, $weight);
             }
         }
 
