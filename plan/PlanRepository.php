@@ -263,4 +263,26 @@ class PlanRepository
 
         return true;
     }
+
+    public function loadSuggestedPlan(string $entityType, int $entityId, int $userId): ?Plan
+    {
+        $q = $this->db->createQueryBuilder();
+        $plan = $q
+            ->select('*')
+            ->from('gc_plan')
+            ->where('type = :type')
+            ->andWhere('entity_type = :entityType')
+            ->andWhere('entity_id = :entityId')
+            ->andWhere('user_id = :userId')
+            ->setParameters([
+                ':type'       => PlanTypes::SUGGESTED,
+                ':entityType' => $entityType,
+                ':entityId'   => $entityId,
+                ':userId'     => $userId,
+            ])
+            ->execute()
+            ->fetch(DB::OBJ);
+
+        return $plan ? Plan::create($plan) : null;
+    }
 }
