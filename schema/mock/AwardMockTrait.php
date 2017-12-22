@@ -98,6 +98,7 @@ trait AwardMockTrait
             'data'            => $options['data'],
             'published'       => $options['published'] ?? AwardStatuses::PUBLISHED,
             'weight'          => $options['weight'] ?? 0,
+            'pass'            => !empty($options['pass']) ? 1 : 0
         ]);
 
         return $db->lastInsertId('award_item_manual');
