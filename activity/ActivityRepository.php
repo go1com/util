@@ -94,13 +94,14 @@ class ActivityRepository
         ]);
     }
 
-    public function getPortalActive($start, $end): array
+    public function getPortalActive(string $from,string $to, BuilderInterface $filter = null): array
     {
         $query = new BoolQuery();
         $query->add(new RangeQuery('created', [
-            RangeQuery::GTE => $start,
-            RangeQuery::LTE => $end]),
+            RangeQuery::GTE => $from,
+            RangeQuery::LTE => $to]),
             BoolQuery::MUST);
+        $filter && $query->add($filter, BoolQuery::MUST);
 
         $termsAgg = new TermsAggregation('aggs', 'instance_id', null, 0);
         $search = new Search();
@@ -122,7 +123,6 @@ class ActivityRepository
                     'id'    => $item['key'] ?? '',
                     'value' => $item['doc_count'] ?? 0,
                     'title' => $portal->title,
-                    'color' => '#' . dechex(rand(0x000000, 0xFFFFFF)),
                 ]);
             }
         }
