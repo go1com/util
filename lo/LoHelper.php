@@ -399,4 +399,19 @@ class LoHelper
 
         return !$authorIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $authorIds));
     }
+
+    public static function getSuggestedCompletion(Connection $db, int $loId): array
+    {
+        $edges = EdgeHelper::edgesFromSource($db, $loId, [EdgeTypes::HAS_SUGGESTED_COMPLETION]);
+        if ($edge = reset($edges)) {
+            $data = (is_scalar($edge->data)) ? json_decode($edge->data, true) : [];
+
+            return [
+                $data['type'],
+                $data['value'],
+            ];
+        }
+
+        return [];
+    }
 }

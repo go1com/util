@@ -8,6 +8,7 @@ use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoStatuses;
+use go1\util\lo\LoSuggestedCompletionTypes;
 use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
@@ -417,5 +418,18 @@ class LoHelperTest extends UtilTestCase
         $this->assertEquals(2, count($authors));
         $this->assertEquals($this->author1Id, $authors[0]->id);
         $this->assertEquals($this->author2Id, $authors[1]->id);
+    }
+
+    public function testGetSuggestedCompletion()
+    {
+        $courseId = 123;
+        $this->link($this->db, EdgeTypes::HAS_SUGGESTED_COMPLETION, $courseId, 0, 0, json_encode([
+            'type'  => 2,
+            'value' => '3 days',
+        ]));
+
+        list($type, $value) = LoHelper::getSuggestedCompletion($this->db, $courseId);
+        $this->assertEquals($type, LoSuggestedCompletionTypes::E_DURATION);
+        $this->assertEquals($value, '3 days');
     }
 }
