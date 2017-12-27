@@ -322,7 +322,7 @@ class EnrolmentHelper
     public static function dueDate(Connection $db, int $enrolmentId): ?DefaultDateTime
     {
         $edges = EdgeHelper::edgesFromSources($db, [$enrolmentId], [EdgeTypes::HAS_PLAN]);
-        if (($edge = reset($edges)) && ($plan = PlanHelper::load($db, $edge->target_id))) {
+        if ($edges && ($edge = array_pop($edges)) && ($plan = PlanHelper::load($db, $edge->target_id))) {
             return $plan->due_date ? DateTime::create($plan->due_date) : null;
         }
 

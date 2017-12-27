@@ -358,9 +358,8 @@ class EnrolmentHelperTest extends UtilTestCase
 
         # Plan does not have due date
         $planId = $this->createPlan($this->db, []);
-        $linkId = $this->link($this->db, EdgeTypes::HAS_PLAN, $enrolmentId, $planId);
+        $this->link($this->db, EdgeTypes::HAS_PLAN, $enrolmentId, $planId);
         $this->assertNull(EnrolmentHelper::dueDate($this->db, $enrolmentId));
-        $this->db->delete('gc_ro', ['id' => $linkId]);
 
         # Plan does have due date
         $planId = $this->createPlan($this->db, ['due_date' => '4 days']);
