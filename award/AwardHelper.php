@@ -193,7 +193,16 @@ class AwardHelper
 
     public static function countEnrolment(Connection $db, int $awardId)
     {
-        return $db
-            ->fetchColumn('SELECT COUNT(*) FROM award_enrolment WHERE award_id = ?', [$awardId]);
+        return $db->fetchColumn('SELECT COUNT(*) FROM award_enrolment WHERE award_id = ?', [$awardId]);
+    }
+
+    public static function id2revisionId(Connection $db, int $awardId)
+    {
+        return $db->fetchColumn('SELECT revision_id FROM award_award WHERE id = ?', [$awardId]);
+    }
+
+    public static function revisionId2id(Connection $db, int $awardRevisionId)
+    {
+        return $db->fetchColumn('SELECT id FROM award_award WHERE revision_id = ?', [$awardRevisionId]);
     }
 }
