@@ -12,7 +12,7 @@ class ActionType
     const REJECT      = 6;
     const PASSED      = 7;
     const FAILED      = 8;
-    const MASQUERADE  = 9;
+    const TOUCH       = 9;
 
     # User actions.
     const USER_LOGIN_SUCCESS = 100;
