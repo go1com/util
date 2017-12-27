@@ -10,10 +10,12 @@ use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\plan\PlanTypes;
 use go1\util\queue\Queue;
 use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
+use go1\util\schema\mock\PlanMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\tests\UtilTestCase;
 
@@ -21,6 +23,7 @@ class EnrolmentHelperTest extends UtilTestCase
 {
     use UserMockTrait;
     use EnrolmentMockTrait;
+    use PlanMockTrait;
     use InstanceMockTrait;
     use LoMockTrait;
 
@@ -346,5 +349,26 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertEquals(2, count($assessors));
         $this->assertEquals($assessor1Id, $assessors[0]->id);
         $this->assertEquals($assessor2Id, $assessors[1]->id);
+    }
+
+    public function testDueDate()
+    {
+        $enrolmentId = $this->createEnrolment($this->db, ['lo_id' => 1, 'profile_id' => 1]);
+        $this->assertNull(EnrolmentHelper::dueDate($this->db, $enrolmentId));
+
+        # Plan does not have due date
+        $planId = $this->createPlan($this->db, []);
+        $this->link($this->db, EdgeTypes::HAS_PLAN, $enrolmentId, $planId);
+        $this->assertNull(EnrolmentHelper::dueDate($this->db, $enrolmentId));
+
+        # Plan does have due date
+        $planId = $this->createPlan($this->db, ['due_date' => '4 days']);
+        $this->link($this->db, EdgeTypes::HAS_PLAN, $enrolmentId, $planId);
+        $this->assertTrue(EnrolmentHelper::dueDate($this->db, $enrolmentId)->getTimestamp() > 0);
+
+        # Enrolment has multiple plans
+        $planId = $this->createPlan($this->db, ['due_date' => '4 days', 'type' => PlanTypes::SUGGESTED]);
+        $this->link($this->db, EdgeTypes::HAS_PLAN, $enrolmentId, $planId);
+        $this->assertTrue(EnrolmentHelper::dueDate($this->db, $enrolmentId)->getTimestamp() > 0);
     }
 }

@@ -10,12 +10,14 @@ use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\plan\PlanHelper;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\queue\Queue;
 use go1\util\user\UserHelper;
 use LengthException;
 use PDO;
+use DateTime as DefaultDateTime;
 use stdClass;
 
 /**
@@ -315,5 +317,15 @@ class EnrolmentHelper
             ->setParameter('taken_instance_id', $takenInstanceId);
 
         return $q->execute()->fetchColumn();
+    }
+
+    public static function dueDate(Connection $db, int $enrolmentId): ?DefaultDateTime
+    {
+        $edges = EdgeHelper::edgesFromSources($db, [$enrolmentId], [EdgeTypes::HAS_PLAN]);
+        if ($edges && ($edge = array_pop($edges)) && ($plan = PlanHelper::load($db, $edge->target_id))) {
+            return $plan->due_date ? DateTime::create($plan->due_date) : null;
+        }
+
+        return null;
     }
 }
