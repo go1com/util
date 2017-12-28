@@ -28,16 +28,16 @@ class SubmissionHelper
     public static function getSubmittedDate(Connection $db, int $submissionId)
     {
         $submittedDate = $db
-            ->executeQuery('SELECT MAX(created) FROM asm_submission_revision WHERE submission_id = ?', [$submissionId])
+            ->executeQuery('SELECT created FROM asm_submission_revision WHERE submission_id = ? ORDER BY id DESC', [$submissionId])
             ->fetch(DB::COL);
 
         return $submittedDate;
     }
 
-    public static function getMarkedDate(Connection $db, int $enrolmentId, int $userId)
+    public static function getMarkedDate(Connection $db, int $submissionId, int $userId)
     {
         $markedDate = $db
-            ->executeQuery('SELECT MAX(updated) FROM asm_submission_revision WHERE submission_id = ? AND actor_id > 1 AND actor_id != ?', [$submissionId, $userId])
+            ->executeQuery('SELECT updated FROM asm_submission_revision WHERE submission_id = ? AND actor_id > 0 ORDER BY id DESC', [$submissionId])
             ->fetch(DB::COL);
 
         return $markedDate;

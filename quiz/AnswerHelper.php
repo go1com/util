@@ -16,7 +16,7 @@ class AnswerHelper
         return $answer;
     }
 
-    public static function loadByQuestionUuid(Connection $db, int $questionUuid)
+    public static function loadByQuestionUuid(Connection $db, string $questionUuid)
     {
         $answer = $db
             ->executeQuery('SELECT * FROM answer WHERE question_uuid = ?', [$questionUuid])

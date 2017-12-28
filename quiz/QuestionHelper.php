@@ -10,7 +10,7 @@ class QuestionHelper
     public static function load(Connection $db, int $id)
     {
         $question = $db
-            ->executeQuery('SELECT * FROM question WHERE question_id = ?', [$id])
+            ->executeQuery('SELECT * FROM question WHERE li_id = ?', [$id])
             ->fetch(DB::OBJ);
 
         return $question;
