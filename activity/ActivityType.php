@@ -25,6 +25,7 @@ class ActivityType
     const TYPE_ECK_ENTITY            = 'eck_entity';
     const TYPE_CREDIT                = 'credit';
     const TYPE_ENROLMENT_MANUAL      = 'enrolment_manual';
+    const TYPE_CONTRACT              = 'contract';
 
     public static function all()
     {
