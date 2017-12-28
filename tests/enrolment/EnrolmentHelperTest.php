@@ -205,6 +205,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment);
         $this->assertEquals(2, $progress[EnrolmentStatuses::COMPLETED]);
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
+        $this->assertEquals(40, $progress[EnrolmentStatuses::PERCENTAGE]);
         $this->assertEquals(5, $progress['total']);
     }
 
@@ -243,6 +244,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment, true, LiTypes::all());
         $this->assertEquals(3, $progress[EnrolmentStatuses::IN_PROGRESS]);
         $this->assertEquals(1, $progress[EnrolmentStatuses::COMPLETED]);
+        $this->assertEquals(14, $progress[EnrolmentStatuses::PERCENTAGE]);
         $this->assertEquals(7, $progress['total']);
     }
 

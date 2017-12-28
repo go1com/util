@@ -444,6 +444,7 @@ class Schema
                     EnrolmentStatuses::IN_PROGRESS => ['type' => self::T_INT],
                     EnrolmentStatuses::COMPLETED   => ['type' => self::T_INT],
                     EnrolmentStatuses::EXPIRED     => ['type' => self::T_INT],
+                    EnrolmentStatuses::PERCENTAGE  => ['type' => self::T_INT],
                 ],
             ],
             'metadata'    => [

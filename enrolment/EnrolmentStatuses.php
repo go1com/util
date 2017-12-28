@@ -41,6 +41,8 @@ class EnrolmentStatuses
     const I_EXPIRED     = 20;
     const I_COMPLETED   = 100;
 
+    const PERCENTAGE    = 'percentage';
+
     /**
      * All available values that user can input.
      * Expired is only set by our background logic.

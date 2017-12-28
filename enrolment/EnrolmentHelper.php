@@ -241,6 +241,11 @@ class EnrolmentHelper
                 $progress[$row->status] = $row->totalEnrolment;
             }
         }
+
+        $numCompleted = $progress[EnrolmentStatuses::COMPLETED] ?? 0;
+        $progress[EnrolmentStatuses::PERCENTAGE] = ($progress['total'] > 0) ? ($numCompleted / $progress['total']) : 0;
+        $progress[EnrolmentStatuses::PERCENTAGE] = round($progress[EnrolmentStatuses::PERCENTAGE] * 100);
+
         return $progress;
     }
 
