@@ -1,9 +1,10 @@
 <?php
 
-namespace go1\util\tests;
+namespace go1\util\tests\assignment;
 
 use go1\util\assignment\SubmissionHelper;
 use go1\util\schema\mock\AssignmentMockTrait;
+use go1\util\tests\UtilTestCase;
 
 class SubmissionHelperTest extends UtilTestCase
 {
