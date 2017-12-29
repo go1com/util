@@ -16,6 +16,13 @@ class QuizHelper
             ->fetch(DB::OBJ);
     }
 
+    public static function loadByLiId(Connection $db, int $id)
+    {
+        return $db
+            ->executeQuery('SELECT * FROM quiz WHERE li_id = ?', [$id])
+            ->fetch(DB::OBJ);
+    }
+
     public static function load(Connection $db, int $id)
     {
         return $db
@@ -25,7 +32,7 @@ class QuizHelper
 
     public static function questionCount(Connection $db, stdClass $quiz)
     {
-        return $db->fetchColumn('SELECT count(*) FROM quiz_questions WHERE quiz_uuid = ?', [$quiz->uuid]);
+        return $db->fetchColumn('SELECT count(*) FROM quiz_questions WHERE quiz_ruuid = ?', [$quiz->ruuid]);
     }
 
     public static function answerCountByEnrolment(Connection $db, int $enrolmentId)

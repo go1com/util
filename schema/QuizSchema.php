@@ -39,6 +39,7 @@ class QuizSchema
         $tbl->addColumn('taken', 'boolean', ['default' => 0, 'comment' => 'Boolean indicating whether the user can taken a quiz.']);
         $tbl->addColumn('is_redo_correct', 'boolean', ['default' => 1, 'comment' => 'Boolean indicating whether user has to redo correct answers.']);
         $tbl->addColumn('editor', 'integer', ['unsigned' => true, 'notnull' => true, 'comment' => 'Person who created this quiz']);
+        $tbl->addColumn('li_id', 'integer', ['notnull' => false, 'default' => null, 'comment' => 'Learning item id']);
         $tbl->addColumn('data', 'text', ['notnull' => false, 'default' => null, 'comment' => 'Json encoded extra data.']);
         $tbl->setPrimaryKey(['quiz_id']);
         $tbl->addUniqueIndex(['quiz_rid'], 'unq_quiz_quiz_rid');
