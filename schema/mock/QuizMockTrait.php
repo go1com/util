@@ -38,6 +38,28 @@ trait QuizMockTrait
         return $db->lastInsertId('person');
     }
 
+    protected function createQuestion(Connection $db, array $options = [])
+    {
+        $db->insert('question', [
+            'question_id'   => isset($options['question_id']) ? $options['question_id'] : 0,
+            'question_type' => isset($options['question_type']) ? $options['question_type'] : '',
+            'uuid'          => isset($options['uuid']) ? $options['uuid'] : '',
+            'ruuid'         => isset($options['ruuid']) ? $options['ruuid'] : '',
+            'title'         => isset($options['title']) ? $options['title'] : '',
+            'description'   => isset($options['description']) ? $options['description'] : '',
+            'feedback'      => isset($options['feedback']) ? $options['feedback'] : '',
+            'status'        => isset($options['status']) ? $options['status'] : 1,
+            'created'       => isset($options['created']) ? $options['created'] : time() * 1000,
+            'changed'       => isset($options['changed']) ? $options['changed'] : time() * 1000,
+            'editor'        => isset($options['editor']) ? $options['editor'] : 0,
+            'data'          => isset($options['data']) ? $options['data'] : '',
+            'config'        => isset($options['config']) ? $options['config'] : '',
+            'li_id'         => isset($options['li_id']) ? $options['li_id'] : 0,
+        ]);
+
+        return $db->lastInsertId('question');
+    }
+
     protected function createQuizQuestionRevision(Connection $db, array $options = [])
     {
         $db->insert('question_revisions', [
