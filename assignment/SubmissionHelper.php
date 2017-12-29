@@ -34,7 +34,7 @@ class SubmissionHelper
         return $submittedDate;
     }
 
-    public static function getMarkedDate(Connection $db, int $submissionId, int $userId)
+    public static function getMarkedDate(Connection $db, int $submissionId)
     {
         $markedDate = $db
             ->executeQuery('SELECT updated FROM asm_submission_revision WHERE submission_id = ? AND actor_id > 0 ORDER BY id DESC', [$submissionId])
