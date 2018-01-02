@@ -312,13 +312,7 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'group'          => [
-                'type'       => self::T_NESTED,
-                'properties' => [
-                    'type'     => ['type' => self::T_KEYWORD],
-                    'group_id' => ['type' => self::T_INT],
-                ],
-            ],
+            'group_ids'      => ['type' => self::T_INT],
             'data'           => [
                 'properties' => [
                     'allow_resubmit' => ['type' => self::T_INT],
