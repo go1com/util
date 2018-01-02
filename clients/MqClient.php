@@ -54,7 +54,7 @@ class MqClient
         $this->accessChecker = $accessChecker;
         $this->container = $container;
         $this->request = $request;
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        //$this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
     private function channel()
@@ -118,6 +118,7 @@ class MqClient
 
     private function processMessage($body, string $routingKey)
     {
+        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
         $explode = explode('.', $routingKey);
         $isLazy = isset($explode[0]) && ('do' == $explode[0]); # Lazy = do.SERVICE.#
 
