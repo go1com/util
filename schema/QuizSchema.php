@@ -185,8 +185,12 @@ class QuizSchema
         $tbl->addColumn('person_id', 'integer', ['unsigned' => true, 'notnull' => true, 'autoincrement' => true, 'comment' => 'Internal primary identifier for person.']);
         $tbl->addColumn('external_source', 'string', ['length' => 255, 'notnull' => true, 'default' => '', 'comment' => 'The external source.']);
         $tbl->addColumn('external_identifier', 'string', ['length' => 255, 'notnull' => true, 'default' => '', 'comment' => 'The external identifier.']);
+        $tbl->addColumn('secondary_identifier', 'string', ['length' => 255, 'notnull' => false, 'default' => null, 'comment' => 'Secondary identifier.']);
+        $tbl->addColumn('mail', 'string', ['length' => 255, 'notnull' => false, 'default' => null, 'comment' => 'Email']);
         $tbl->addColumn('created', 'bigint', ['notnull' => true, 'default' => 0, 'comment' => 'The unix timestamp when this person was added.']);
+        $tbl->addColumn('custom', 'text', ['notnull' => false, 'default' => null, 'comment' => 'Json encoded data.']);
         $tbl->setPrimaryKey(['person_id']);
+        $tbl->addIndex(['external_source', 'external_identifier'], 'idx_person_external_source_external_identifier');
 
         // question table
         $tbl = $schema->createTable('question');

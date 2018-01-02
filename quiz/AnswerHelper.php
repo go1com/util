@@ -16,10 +16,10 @@ class AnswerHelper
         return $answer;
     }
 
-    public static function loadByQuestionRuuid(Connection $db, string $questionRuuid)
+    public static function loadByQuestionRuuid(Connection $db, int $personId, string $questionRuuid)
     {
         $answer = $db
-            ->executeQuery('SELECT * FROM answer WHERE question_ruuid = ?', [$questionRuuid])
+            ->executeQuery('SELECT * FROM answer WHERE taker = ? AND question_ruuid = ?', [$personId, $questionRuuid])
             ->fetch(DB::OBJ);
 
         return $answer;

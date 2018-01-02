@@ -20,11 +20,11 @@ class AnswerHelperTest extends UtilTestCase
 
     public function testLoadByQuestionUuid()
     {
-        $this->createQuizUserAnswer($this->db, ['question_ruuid' => 123]);
-        $this->createQuizUserAnswer($this->db, ['question_ruuid' => 234]);
+        $this->createQuizUserAnswer($this->db, ['taker' => 111, 'question_ruuid' => 123]);
+        $this->createQuizUserAnswer($this->db, ['taker' => 112, 'question_ruuid' => 234]);
 
-        $this->assertTrue(is_object(AnswerHelper::loadByQuestionRuuid($this->db, 123)));
-        $this->assertTrue(is_object(AnswerHelper::loadByQuestionRuuid($this->db, 234)));
-        $this->assertFalse(AnswerHelper::loadByQuestionRuuid($this->db, 345));
+        $this->assertTrue(is_object(AnswerHelper::loadByQuestionRuuid($this->db, 111, 123)));
+        $this->assertFalse(AnswerHelper::loadByQuestionRuuid($this->db, 111, 234));
+        $this->assertFalse(AnswerHelper::loadByQuestionRuuid($this->db, 111, 345));
     }
 }

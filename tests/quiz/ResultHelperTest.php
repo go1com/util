@@ -22,35 +22,38 @@ class ResultHelperTest extends UtilTestCase
     {
         $ruuid = 'abc-123';
         $this->createQuiz($this->db, ['ruuid' => $ruuid]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'time_start' => 345]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'time_start' => 123]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'time_start' => 234]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'time_start' => 345]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'time_start' => 123]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'time_start' => 234]);
+        $this->createQuizResult($this->db, ['taker' => 112, 'quiz_ruuid' => $ruuid, 'time_start' => 999]);
 
-        $this->assertEquals(234, ResultHelper::getSubmittedDate($this->db, $ruuid));
+        $this->assertEquals(234, ResultHelper::getSubmittedDate($this->db, 111, $ruuid));
     }
 
     public function testGetMarkedDateNull()
     {
         $ruuid = 'abc-123';
         $this->createQuiz($this->db, ['ruuid' => $ruuid]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 345]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 234]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 121]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 56]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 87]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 345]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 234]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 121]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 56]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 87]);
+        $this->createQuizResult($this->db, ['taker' => 112, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 998]);
 
-        $this->assertEquals(null, ResultHelper::getMarkedDate($this->db, $ruuid));
+        $this->assertEquals(null, ResultHelper::getMarkedDate($this->db, 111, $ruuid));
     }
 
     public function testGetMarkedDate()
     {
         $ruuid = 'abc-123';
         $this->createQuiz($this->db, ['ruuid' => $ruuid]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 345]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 234]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 121]);
-        $this->createQuizResult($this->db, ['quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 56]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 345]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 0, 'time_end' => 234]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 121]);
+        $this->createQuizResult($this->db, ['taker' => 111, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 56]);
+        $this->createQuizResult($this->db, ['taker' => 112, 'quiz_ruuid' => $ruuid, 'is_evaluated' => 1, 'time_end' => 998]);
 
-        $this->assertEquals(56, ResultHelper::getMarkedDate($this->db, $ruuid));
+        $this->assertEquals(56, ResultHelper::getMarkedDate($this->db, 111, $ruuid));
     }
 }

@@ -32,7 +32,10 @@ trait QuizMockTrait
         $db->insert('person', [
             'external_source'      => isset($options['external_source']) ? $options['external_source'] : 'go1.user',
             'external_identifier'  => isset($options['external_identifier']) ? $options['external_identifier'] : 0,
+            'secondary_identifier' => isset($options['secondary_identifier']) ? $options['secondary_identifier'] : 0,
+            'mail'                 => isset($options['mail']) ? $options['mail'] : '',
             'created'              => isset($options['created']) ? $options['created'] : time() * 1000,
+            'custom'               => isset($options['custom']) ? $options['custom'] : '',
         ]);
 
         return $db->lastInsertId('person');
