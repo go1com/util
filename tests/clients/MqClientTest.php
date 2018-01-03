@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use ReflectionObject;
 use Symfony\Component\HttpFoundation\RequestStack;
 use PhpAmqpLib\Wire\AMQPTable;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MqClientTest extends UtilTestCase
 {
@@ -43,6 +44,11 @@ class MqClientTest extends UtilTestCase
     {
         $queue = $this->getMockBuilder(MqClient::class)->disableOriginalConstructor()->getMock();
         $class = new ReflectionClass(MqClient::class);
+
+        $rPropertyAccessor = $class->getProperty('propertyAccessor');
+        $rPropertyAccessor->setAccessible(true);
+        $rPropertyAccessor->setValue($queue, $propertyAccessor = PropertyAccess::createPropertyAccessor());
+
         $method = $class->getMethod('processMessage');
         $method->setAccessible(true);
         if ($expectedString) {
