@@ -67,7 +67,7 @@ class EdgeTypes
     # ---------------------
     const HAS_LP_ITEM                 = 1;  # T: ?                    | S: Learning object (LP only)
     const HAS_PRODUCT                 = 2;  # T: ?                    | S: Learning object
-    const HAS_EVENT                   = 3;  # T: gc_event.id          | S: Learning object (course, module, li type event)
+    const HAS_EVENT                   = 3;  # T: Simple event         | S: Learning object (course, module, li type event)
     const HAS_TAG                     = 4;  # T: Tag                  | S: Learning object
     const HAS_LI                      = 5;  # T: ?                    | S: Learning object (module only, course if li type event)
     const HAS_WORKSHOP                = 6;  # T: ?                    | S: ?
