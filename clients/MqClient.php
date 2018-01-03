@@ -118,6 +118,11 @@ class MqClient
 
     private function processMessage($body, string $routingKey)
     {
+        # Quiz does not have `id` property.
+        if (Queue::QUIZ_USER_ANSWER_UPDATE == $routingKey) {
+            return null;
+        }
+
         $explode = explode('.', $routingKey);
         $isLazy = isset($explode[0]) && ('do' == $explode[0]); # Lazy = do.SERVICE.#
 
