@@ -17,7 +17,6 @@ use go1\clients\GraphinClient;
 use go1\clients\LoClient;
 use go1\clients\MailClient;
 use go1\clients\MqClient;
-use go1\clients\NotificationClient;
 use go1\clients\PaymentClient;
 use go1\clients\PortalClient;
 use go1\clients\QueueClient;
@@ -157,10 +156,6 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.lo'] = function (Container $c) {
             return new LoClient($c['client'], $c['lo_url']);
-        };
-
-        $c['go1.client.notification'] = function (Container $c) {
-            return new NotificationClient($c['client'], $c['notification_url']);
         };
 
         $c['go1.client.payment'] = function (Container $c) {
