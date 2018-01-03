@@ -13,6 +13,7 @@ use Pimple\Container;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MqClient
 {
@@ -26,6 +27,7 @@ class MqClient
     private $accessChecker;
     private $container;
     private $request;
+    private $propertyAccessor;
 
     const CONTEXT_ACTOR_ID    = 'actor_id';
     const CONTEXT_TIMESTAMP   = 'timestamp';
@@ -52,6 +54,7 @@ class MqClient
         $this->accessChecker = $accessChecker;
         $this->container = $container;
         $this->request = $request;
+        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
     private function channel()
@@ -129,7 +132,8 @@ class MqClient
                 ||
                 (
                     is_object($body)
-                    && (!(property_exists($body, 'id') && $body->id) || !(property_exists($body, 'original') && $body->original))
+                    && (!(property_exists($body, 'id') && $this->propertyAccessor->getValue($body,'id'))
+                        || !(property_exists($body, 'original') && $this->propertyAccessor->getValue($body,'original')))
                 )
             ) {
                 throw new Exception("Missing entity ID or original data.");
