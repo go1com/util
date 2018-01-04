@@ -68,9 +68,11 @@ class EnrolmentSchema
             $map = $schema->createTable('gc_enrolment_transaction');
             $map->addColumn('enrolment_id', Type::INTEGER, ['unsigned' => true]);
             $map->addColumn('transaction_id', Type::INTEGER, ['unsigned' => true]);
+            $map->addColumn('payment_method', Type::STRING);
             $map->addUniqueIndex(['enrolment_id', 'transaction_id']);
             $map->addIndex(['enrolment_id']);
             $map->addIndex(['transaction_id']);
+            $map->addIndex(['payment_method']);
         }
 
         static::update01($schema);
