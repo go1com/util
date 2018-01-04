@@ -26,7 +26,7 @@ class PlanRepository
             $plan = $schema->createTable('gc_plan');
             $plan->addOption('description', 'GO1P-10732: Store learn-planning object.');
             $plan->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
-            $plan->addColumn('type', Type::SMALLINT);
+            $plan->addColumn('type', Type::SMALLINT, ['default' => PlanTypes::ASSIGN]);
             $plan->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $plan->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $plan->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
