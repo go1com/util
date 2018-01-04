@@ -69,6 +69,8 @@ class EnrolmentSchema
             $map->addColumn('enrolment_id', Type::INTEGER, ['unsigned' => true]);
             $map->addColumn('transaction_id', Type::INTEGER, ['unsigned' => true]);
             $map->addUniqueIndex(['enrolment_id', 'transaction_id']);
+            $map->addIndex(['enrolment_id']);
+            $map->addIndex(['transaction_id']);
         }
 
         static::update01($schema);
