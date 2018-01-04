@@ -43,7 +43,7 @@ class QuizHelper
 
     public static function answerCount(Connection $db, string $resultUuid)
     {
-        return $db->fetchColumn('SELECT COUNT(sequence_id) FROM sequence WHERE result_uuid = ?', [$resultUuid]);
+        return $db->fetchColumn('SELECT COUNT(sequence_id) FROM sequence WHERE result_uuid = ? AND answer_uuid IS NOT NULL', [$resultUuid]);
     }
 
     public static function progress(Connection $db, stdClass $quiz, int $enrolmentId)
