@@ -63,28 +63,28 @@ trait LoMockTrait
         }
 
         $db->insert('gc_lo', [
-            'id'          => $options['id'] ?? null,
-            'type'        => isset($options['type']) ? $options['type'] : LoTypes::COURSE,
-            'instance_id' => $instanceId = isset($options['instance_id']) ? $options['instance_id'] : 0,
-            'remote_id'   => isset($options['remote_id']) ? $options['remote_id'] : $db->fetchColumn('SELECT 1 + MAX(remote_id) FROM gc_lo') ?: 1,
-            'title'       => isset($options['title']) ? $options['title'] : 'Example course',
-            'description' => isset($options['description']) ? $options['description'] : '…',
-            'private'     => isset($options['private']) ? $options['private'] : 0,
-            'published'   => isset($options['published']) ? $options['published'] : 1,
-            'language'    => isset($options['language']) ? $options['language'] : 'en',
-            'tags'        => isset($options['tags']) ? $options['tags'] : '',
-            'locale'      => isset($locale) ? $locale : null,
-            'event'       => isset($options['event']) ? (is_scalar($options['event']) ? $options['event'] : json_encode($options['event'])) : '',
-            'event_start' => isset($start) ? $start : 0,
-            'marketplace' => isset($options['marketplace']) ? $options['marketplace'] : 0,
-            'origin_id'   => isset($options['origin_id']) ? $options['origin_id'] : 0,
-            'image'       => isset($options['image']) ? $options['image'] : '',
+            'id'              => $options['id'] ?? null,
+            'type'            => isset($options['type']) ? $options['type'] : LoTypes::COURSE,
+            'instance_id'     => $instanceId = isset($options['instance_id']) ? $options['instance_id'] : 0,
+            'remote_id'       => isset($options['remote_id']) ? $options['remote_id'] : $db->fetchColumn('SELECT 1 + MAX(remote_id) FROM gc_lo') ?: 1,
+            'title'           => isset($options['title']) ? $options['title'] : 'Example course',
+            'description'     => isset($options['description']) ? $options['description'] : '…',
+            'private'         => isset($options['private']) ? $options['private'] : 0,
+            'published'       => isset($options['published']) ? $options['published'] : 1,
+            'language'        => isset($options['language']) ? $options['language'] : 'en',
+            'tags'            => isset($options['tags']) ? $options['tags'] : '',
+            'locale'          => isset($locale) ? $locale : null,
+            'event'           => isset($options['event']) ? (is_scalar($options['event']) ? $options['event'] : json_encode($options['event'])) : '',
+            'event_start'     => isset($start) ? $start : 0,
+            'marketplace'     => isset($options['marketplace']) ? $options['marketplace'] : 0,
+            'origin_id'       => isset($options['origin_id']) ? $options['origin_id'] : 0,
+            'image'           => isset($options['image']) ? $options['image'] : '',
             'enrolment_count' => isset($options['enrolment_count']) ? $options['enrolment_count'] : 0,
-            'data'        => isset($options['data']) ? $options['data'] : '',
-            'timestamp'   => isset($options['timestamp']) ? $options['timestamp'] : time(),
-            'created'     => isset($options['created']) ? $options['created'] : time(),
-            'updated'     => isset($options['updated']) ? $options['updated'] : time(),
-            'sharing'     => isset($options['sharing']) ? $options['sharing'] : 0,
+            'data'            => isset($options['data']) ? $options['data'] : '',
+            'timestamp'       => isset($options['timestamp']) ? $options['timestamp'] : time(),
+            'created'         => isset($options['created']) ? $options['created'] : time(),
+            'updated'         => isset($options['updated']) ? $options['updated'] : time(),
+            'sharing'         => isset($options['sharing']) ? $options['sharing'] : 0,
         ]);
 
         $courseId = $db->lastInsertId('gc_lo');
@@ -122,23 +122,21 @@ trait LoMockTrait
         return $id ? $id : $db->lastInsertId('gc_tag');
     }
 
-    protected function createEvent(Connection $db, int $sourceId, array $event)
+    protected function createEvent(Connection $db, int $loId, array $event)
     {
-        $location = empty($event['location']) || is_numeric($event['location'])
-            ? []
-            : [
-                'loc_country'                 => $event['location']['country'],
-                'loc_administrative_area'     => $event['location']['administrative_area'],
-                'loc_sub_administrative_area' => $event['location']['sub_administrative_area'],
-                'loc_locality'                => $event['location']['locality'],
-                'loc_dependent_locality'      => $event['location']['dependent_locality'],
-                'loc_thoroughfare'            => $event['location']['thoroughfare'],
-                'loc_premise'                 => $event['location']['premise'],
-                'loc_sub_premise'             => $event['location']['sub_premise'],
-                'loc_organisation_name'       => $event['location']['organisation_name'],
-                'loc_name_line'               => $event['location']['name_line'],
-                'loc_postal_code'             => $event['location']['postal_code'],
-            ];
+        $location = empty($event['location']) || is_numeric($event['location']) ? [] : [
+            'loc_country'                 => $event['location']['country'],
+            'loc_administrative_area'     => $event['location']['administrative_area'],
+            'loc_sub_administrative_area' => $event['location']['sub_administrative_area'],
+            'loc_locality'                => $event['location']['locality'],
+            'loc_dependent_locality'      => $event['location']['dependent_locality'],
+            'loc_thoroughfare'            => $event['location']['thoroughfare'],
+            'loc_premise'                 => $event['location']['premise'],
+            'loc_sub_premise'             => $event['location']['sub_premise'],
+            'loc_organisation_name'       => $event['location']['organisation_name'],
+            'loc_name_line'               => $event['location']['name_line'],
+            'loc_postal_code'             => $event['location']['postal_code'],
+        ];
 
         $db->insert('gc_event', [
                 'start'    => $event['start'],
@@ -153,7 +151,7 @@ trait LoMockTrait
 
         if ($eventId = $db->lastInsertId('gc_event')) {
             $db->insert('gc_ro', [
-                'source_id' => $sourceId,
+                'source_id' => $loId,
                 'target_id' => $eventId,
                 'type'      => EdgeTypes::HAS_EVENT_EDGE,
                 'weight'    => 0,

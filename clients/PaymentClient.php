@@ -61,16 +61,12 @@ class PaymentClient
     public function create(stdClass $product, int $qty, string $paymentMethod, array $paymentOptions = [], string $authorization, array $metadata = [])
     {
         try {
-            $res = $this->client->post(
-                "{$this->paymentUrl}/cart/process",
-                [
-                    'headers' => ['Authorization' => $authorization, 'Content-Type' => 'application/json'],
-                    'json'    => $this->buildCartOptions($product, $qty, $paymentMethod, $paymentOptions, $metadata),
-                ]
-            );
+            $res = $this->client->post("{$this->paymentUrl}/cart/process", [
+                'headers' => ['Authorization' => $authorization, 'Content-Type' => 'application/json'],
+                'json'    => $this->buildCartOptions($product, $qty, $paymentMethod, $paymentOptions, $metadata),
+            ]);
 
             $transactionJson = $res->getBody()->getContents();
-
             if (!$transaction = json_decode($transactionJson)) {
                 return false;
             }

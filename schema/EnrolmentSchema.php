@@ -64,6 +64,13 @@ class EnrolmentSchema
             $revision->addIndex(['lo_id']);
         }
 
+        if (!$schema->hasTable('gc_enrolment_transaction')) {
+            $map = $schema->createTable('gc_enrolment_transaction');
+            $map->addColumn('enrolment_id', Type::INTEGER, ['unsigned' => true]);
+            $map->addColumn('transaction_id', Type::INTEGER, ['unsigned' => true]);
+            $map->addUniqueIndex(['enrolment_id', 'transaction_id']);
+        }
+
         static::update01($schema);
     }
 
