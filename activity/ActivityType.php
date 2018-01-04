@@ -26,6 +26,7 @@ class ActivityType
     const TYPE_CREDIT                = 'credit';
     const TYPE_ENROLMENT_MANUAL      = 'enrolment_manual';
     const TYPE_CONTRACT              = 'contract';
+    const TYPE_VOTE                  = 'vote';
 
     public static function all()
     {
