@@ -443,6 +443,13 @@ class Schema
                     EnrolmentStatuses::PERCENTAGE  => ['type' => self::T_INT],
                 ],
             ],
+            'certificate'    => [
+                'properties' => [
+                    'url'  => ['type' => self::T_TEXT],
+                    'name' => ['type' => self::T_KEYWORD],
+                    'size' => ['type' => self::T_TEXT],
+                ],
+            ],
             'metadata'       => [
                 'properties' => [
                     'account_id'          => ['type' => self::T_INT],
