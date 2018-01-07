@@ -31,11 +31,6 @@ trait EsEnrolmentMockTrait
             'account'     => $options['account'] ?? null,
             'progress'    => $options['progress'] ?? [],
             'is_assigned' => $options['is_assigned'] ?? 0,
-            'certificate' => [
-                'url'  => $options['certificate']['url'] ?? null,
-                'name' => $options['certificate']['name'] ?? null,
-                'size' => $options['certificate']['size'] ?? null,
-            ],
             'metadata'    => [
                 'account_id'          => $options['account_id'] ?? 0,
                 'course_enrolment_id' => $options['metadata']['course_enrolment_id'] ?? 0,
