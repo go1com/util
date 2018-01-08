@@ -25,7 +25,7 @@ class ActivityRepository
         $this->go1 = $db;
     }
 
-    public function getByUserId(int $portalId, int $accountId, int $offset, int $limit, string $sort = FieldSort::ASC, BuilderInterface $filter = null): array
+    public function getByUserId(int $portalId, int $accountId, int $offset, int $limit, FieldSort $sort = null, BuilderInterface $filter = null): array
     {
         $userQuery = new BoolQuery();
         $userQuery->add(new TermQuery('actor_id', $accountId), BoolQuery::SHOULD);
@@ -35,12 +35,12 @@ class ActivityRepository
         $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
         $query->add($userQuery, BoolQuery::MUST);
         $filter && $query->add($filter, BoolQuery::MUST);
-
+        $sort = $sort ?? new FieldSort('created', FieldSort::DESC);
         $search = new Search();
         $search
             ->setFrom($offset)
             ->setSize($limit)
-            ->addSort(new FieldSort('created', $sort))
+            ->addSort($sort)
             ->addQuery($query);
 
         return $this->client->search([
@@ -51,17 +51,17 @@ class ActivityRepository
         ]);
     }
 
-    public function getByPortal(int $portalId, int $offset, int $limit, string $sort = FieldSort::ASC, BuilderInterface $filter = null): array
+    public function getByPortal(int $portalId, int $offset, int $limit, FieldSort $sort = null, BuilderInterface $filter = null): array
     {
         $query = new BoolQuery();
         $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
         $filter && $query->add($filter, BoolQuery::MUST);
-
+        $sort = $sort ?? new FieldSort('created', FieldSort::DESC);
         $search = new Search();
         $search
             ->setFrom($offset)
             ->setSize($limit)
-            ->addSort(new FieldSort('created', $sort))
+            ->addSort($sort)
             ->addQuery($query);
 
         return $this->client->search([
@@ -72,18 +72,18 @@ class ActivityRepository
         ]);
     }
 
-    public function getByLoId(int $portalId, int $loId, int $offset, int $limit, string $sort = FieldSort::ASC, BuilderInterface $filter = null): array
+    public function getByLoId(int $portalId, int $loId, int $offset, int $limit, FieldSort $sort = null, BuilderInterface $filter = null): array
     {
         $query = new BoolQuery();
         $query->add(new TermQuery('tags', "lo:$loId"), BoolQuery::MUST);
         $query->add(new TermQuery('instance_id', $portalId), BoolQuery::MUST);
         $filter && $query->add($filter, BoolQuery::MUST);
-
+        $sort = $sort ?? new FieldSort('created', FieldSort::DESC);
         $search = new Search();
         $search
             ->setFrom($offset)
             ->setSize($limit)
-            ->addSort(new FieldSort('created', $sort))
+            ->addSort($sort)
             ->addQuery($query);
 
         return $this->client->search([
@@ -94,7 +94,7 @@ class ActivityRepository
         ]);
     }
 
-    public function getPortalActive(string $from,string $to, BuilderInterface $filter = null): array
+    public function getPortalActive(string $from, string $to, BuilderInterface $filter = null): array
     {
         $query = new BoolQuery();
         $query->add(new RangeQuery('created', [
