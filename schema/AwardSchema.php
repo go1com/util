@@ -4,6 +4,7 @@ namespace go1\util\schema;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use go1\util\award\AwardItemTypes;
 use go1\util\award\AwardStatuses;
 
 class AwardSchema
@@ -55,7 +56,7 @@ class AwardSchema
             $item->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $item->addColumn('parent_award_item_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $item->addColumn('award_revision_id', Type::INTEGER, ['unsigned' => true]);
-            $item->addColumn('type', Type::STRING, ['description' => 'Item types: lo, li, award']);
+            $item->addColumn('type', Type::STRING, ['description' => 'Item types: lo, li, award', 'default' => AwardItemTypes::LO]);
             $item->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.']);
             $item->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
             $item->addColumn('weight', Type::INTEGER, ['unsigned' => true]);
@@ -173,37 +174,11 @@ class AwardSchema
     private static function update(Schema $schema)
     {
         $awardItem = $schema->getTable('award_item');
-        if (!$awardItem->hasColumn('type')) {
-            $awardItem->addColumn('type', Type::STRING, ['default' => 'lo']);
-            $awardItem->addIndex(['type']);
-        }
-
-        if (!$awardItem->hasColumn('parent_award_item_id')) {
-            $awardItem->addColumn('parent_award_item_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
-            $awardItem->addIndex(['parent_award_item_id']);
-        }
-
-        $awardAchievement = $schema->getTable('award_achievement');
-        if (!$awardAchievement->hasColumn('quantity')) {
-            $awardAchievement->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of award item current quantity']);
-            $awardAchievement->addIndex(['quantity']);
-        }
-        if (!$awardAchievement->hasColumn('expire')) {
-            $awardAchievement->addColumn('expire', Type::INTEGER, ['notnull' => false, 'unsigned' => true, 'description' => 'Award item expire time']);
-            $awardAchievement->addIndex(['expire']);
-        }
-
-        $awardManualItem = $schema->getTable('award_item_manual');
-        if (!$awardManualItem->hasColumn('pass')) {
-            $awardManualItem->addColumn('pass', Type::BOOLEAN, ['default' => false]);
-        }
-
-        $hasIndexPass = false;
-        foreach ($awardManualItem->getIndexes() as $index) {
-            $hasIndexPass = in_array('pass', $index->getColumns());
-        }
-        if (!$hasIndexPass) {
-            $awardManualItem->addIndex(['pass']);
+        if ($awardItem->hasColumn('type')) {
+            $type = $awardItem->getColumn('type');
+            if (AwardItemTypes::LO != $type->getDefault()) {
+                $type->setDefault(AwardItemTypes::LO);
+            }
         }
     }
 }
