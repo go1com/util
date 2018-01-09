@@ -24,7 +24,7 @@ class AccessChecker
 
     public function isContentAdministrator(Request $req, $instance)
     {
-        return $this->isPortalAdmin($req, $instance, Roles::ADMIN_CONTENT);
+        return !$this->isPortalAdmin($req, $instance) ? $this->isPortalAdmin($req, $instance, Roles::ADMIN_CONTENT) : true;
     }
 
     /**
