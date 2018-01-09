@@ -7,7 +7,7 @@ use go1\util\DB;
 
 class TaskHelper
 {
-    public static function addTask(Connection $db, string $name, int $instanceId, int $userId, int $status, array $data)
+    public static function addTask(Connection $db, string $table, int $instanceId, int $userId, int $status, array $data)
     {
         $task = [
             'instance_id' => $instanceId,
@@ -16,11 +16,11 @@ class TaskHelper
             'data'        => $encoded = json_encode($data),
             'updated'     => time(),
             'status'      => $status,
-            'checksum'    => md5($encoded)
+            'checksum'    => md5($encoded),
         ];
-        $db->insert($name, $task);
+        $db->insert($table, $task);
 
-        return $db->lastInsertId($name);
+        return $db->lastInsertId($table);
     }
 
     public static function updateTaskStatus(Connection $db, int $id, string $status, string $name)
@@ -36,7 +36,7 @@ class TaskHelper
     public static function loadTask(Connection $db, int $id, string $name)
     {
         $row = $db->executeQuery("SELECT * FROM {$name} WHERE id = ?", [$id])
-            ->fetch(DB::OBJ);
+                  ->fetch(DB::OBJ);
 
         if (!$row) {
             return null;
@@ -51,7 +51,7 @@ class TaskHelper
     {
         $sql = "SELECT * FROM {$name} WHERE status = ? ORDER BY id ASC";
         $row = $db->executeQuery($sql, [$status])
-            ->fetch(DB::OBJ);
+                  ->fetch(DB::OBJ);
 
         if (!$row) {
             return null;
@@ -62,7 +62,7 @@ class TaskHelper
         return Task::create($row);
     }
 
-    public static function addTaskItem(Connection $db, string $name, int $taskId, int $status, array $data)
+    public static function addTaskItem(Connection $db, string $table, int $taskId, int $status, array $data)
     {
         $item = [
             'task_id' => $taskId,
@@ -70,13 +70,12 @@ class TaskHelper
             'data'    => json_encode($data),
             'status'  => $status,
         ];
-        $db->insert($name, $item);
+        $db->insert($table, $item);
     }
 
     public static function loadTaskItem(Connection $db, int $id, string $name)
     {
-        $row = $db->executeQuery("SELECT * FROM {$name} WHERE id = ?", [$id])
-            ->fetch(DB::OBJ);
+        $row = $db->executeQuery("SELECT * FROM {$name} WHERE id = ?", [$id])->fetch(DB::OBJ);
 
         if (!$row) {
             return null;
@@ -91,7 +90,7 @@ class TaskHelper
     {
         $sql = "SELECT * FROM {$name} WHERE task_id = ? AND status = ? ORDER BY id ASC";
         $row = $db->executeQuery($sql, [$taskId, $status])
-            ->fetch(DB::OBJ);
+                  ->fetch(DB::OBJ);
 
         if (!$row) {
             return null;
