@@ -23,6 +23,8 @@ class PortalHelper
 
     const LANGUAGE                             = 'language';
     const LANGUAGE_DEFAULT                     = 'en';
+    const LOCALE                               = 'locale';
+    const LOCALE_DEFAULT                       = 'AU';
     const FEATURE_CREDIT                       = 'credit';
     const FEATURE_CREDIT_DEFAULT               = true;
     const FEATURE_SEND_WELCOME_EMAIL           = 'send_welcome_email';
@@ -164,6 +166,13 @@ class PortalHelper
     {
         self::parseConfig($portal);
 
-        return $portal->data->{self::LANGUAGE} ?? self::LANGUAGE_DEFAULT;
+        return $portal->configuration->{self::LANGUAGE} ?? self::LANGUAGE_DEFAULT;
+    }
+
+    public static function locale(stdClass $portal)
+    {
+        self::parseConfig($portal);
+
+        return $portal->configuration->{self::LOCALE} ?? self::LOCALE_DEFAULT;
     }
 }
