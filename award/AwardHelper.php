@@ -13,15 +13,13 @@ use stdClass;
 
 class AwardHelper
 {
-    public static function getQuantityType($award)
+    public static function getQuantityType($quantity)
     {
-        $quantity = $award->quantity ?? $award;
-
         if (is_null($quantity)) {
             return AwardQuantityTypes::COMPLETE_ANY;
         }
 
-        if (!is_scalar($award)) {
+        if (!is_scalar($quantity)) {
             throw new Exception('Invalid award quantity type.');
         }
 
