@@ -29,8 +29,8 @@ class Enrolment
         $enrolment->loId = $row->lo_id;
         $enrolment->instanceId = $row->instance_id;
         $enrolment->takenInstanceId = $row->taken_instance_id;
-        $enrolment->startDate = $row->start_date;
-        $enrolment->endDate = $row->end_date;
+        $enrolment->startDate = $row->start_date ?? null;
+        $enrolment->endDate = $row->end_date ?? null;
         $enrolment->status = $row->status;
         $enrolment->result = $row->result;
         $enrolment->pass = $row->pass;
