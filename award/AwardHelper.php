@@ -3,6 +3,7 @@
 namespace go1\util\award;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 use go1\util\DB;
 use go1\util\lo\LoHelper;
 use go1\util\Text;
@@ -12,6 +13,30 @@ use stdClass;
 
 class AwardHelper
 {
+    public static function getQuantityType($award)
+    {
+        $quantity = $award->quantity ?? $award;
+
+        if (is_null($quantity)) {
+            return AwardQuantityTypes::COMPLETE_ANY;
+        }
+
+        if (!is_scalar($award)) {
+            throw new Exception('Invalid award quantity type.');
+        }
+
+        $quantity = (float) $quantity;
+        if (0.0 === $quantity) {
+            return AwardQuantityTypes::TRACK_ONGOING;
+        }
+
+        if ($quantity > 0) {
+            return AwardQuantityTypes::REACH_TARGET;
+        }
+
+        throw new Exception('Invalid award quantity type.');
+    }
+
     public static function format(stdClass &$award, HTMLPurifier $html = null)
     {
         $award->id          = intval($award->id);

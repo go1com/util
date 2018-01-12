@@ -4,8 +4,10 @@ namespace go1\util\tests;
 
 use go1\util\award\AwardHelper;
 use go1\util\award\AwardItemTypes;
+use go1\util\award\AwardQuantityTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\Text;
+use stdClass;
 
 class AwardHelperTest extends UtilTestCase
 {
@@ -114,5 +116,42 @@ class AwardHelperTest extends UtilTestCase
 
         $this->assertInternalType('object', $awardManualItem->data);
         $this->assertEquals(json_decode(json_encode($data)), $awardManualItem->data);
+    }
+
+    public function dataGetQuantityType()
+    {
+        return [
+            [null, AwardQuantityTypes::COMPLETE_ANY],
+            [0, AwardQuantityTypes::TRACK_ONGOING],
+            ['0', AwardQuantityTypes::TRACK_ONGOING],
+            [0.0, AwardQuantityTypes::TRACK_ONGOING],
+            ['0.0', AwardQuantityTypes::TRACK_ONGOING],
+            [1, AwardQuantityTypes::REACH_TARGET],
+            ['1', AwardQuantityTypes::REACH_TARGET],
+            [0.5, AwardQuantityTypes::REACH_TARGET],
+            ['0.5', AwardQuantityTypes::REACH_TARGET],
+        ];
+    }
+
+    /** @dataProvider dataGetQuantityType */
+    public function testGetQuantityType($award, $expectedType)
+    {
+        $this->assertEquals($expectedType, AwardHelper::getQuantityType($award));
+    }
+
+    public function dataGetQuantityTypeError()
+    {
+        return [
+            [new stdClass()],
+            [-1],
+            ['-1'],
+        ];
+    }
+
+    /** @dataProvider dataGetQuantityTypeError */
+    public function testGetQuantityTypeError($award)
+    {
+        $this->expectException('Exception');
+        AwardHelper::getQuantityType($award);
     }
 }
