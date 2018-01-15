@@ -13,7 +13,6 @@ class UserSchema
             $user = $schema->createTable('gc_user');
             $user->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $user->addColumn('uuid', 'string');
-            $user->addColumn('name', 'string', ['notnull' => false]);
             $user->addColumn('instance', 'string');
             $user->addColumn('profile_id', 'integer', ['notnull' => false]);
             $user->addColumn('mail', 'string');
@@ -29,7 +28,6 @@ class UserSchema
             $user->addColumn('timestamp', 'integer');
 
             $user->setPrimaryKey(['id']);
-            $user->addIndex(['name']);
             $user->addIndex(['uuid']);
             $user->addIndex(['mail']);
             $user->addIndex(['created']);
