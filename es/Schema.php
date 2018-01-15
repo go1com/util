@@ -955,12 +955,7 @@ class Schema
             'accessor_id'        => ['type' => self::T_INT],
             'parent_assessor_id' => ['type' => self::T_INT],
             'account'            => [
-                'properties' => [
-                    'id'         => ['type' => self::T_INT],
-                    'first_name' => ['type' => self::T_TEXT],
-                    'last_name'  => ['type' => self::T_TEXT],
-                    'avatar'     => ['type' => self::T_TEXT],
-                ],
+                'properties' => self::ACCOUNT_MAPPING['properties'],
             ],
             # Real properties for reporting
             'role'               => ['type' => self::T_INT],
@@ -968,6 +963,11 @@ class Schema
             'upcoming'           => ['type' => self::T_INT],
             'overdue'            => ['type' => self::T_INT],
             'has_child'          => ['type' => self::T_INT],
+            'metadata'           => [
+                'properties' => [
+                    'account_id' => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
