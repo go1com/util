@@ -614,21 +614,22 @@ class Schema
 
     const PAYMENT_TRANSACTION_MAPPING = [
         'properties' => [
-            'id'             => ['type' => self::T_KEYWORD],
-            'instance_id'    => ['type' => self::T_INT],
-            'local_id'       => ['type' => self::T_INT],
-            'email'          => ['type' => self::T_KEYWORD],
-            'status'         => ['type' => self::T_SHORT],
-            'amount'         => ['type' => self::T_DOUBLE],
-            'currency'       => ['type' => self::T_KEYWORD],
-            'created'        => ['type' => self::T_DATE],
-            'updated'        => ['type' => self::T_DATE],
-            'payment_method' => ['type' => self::T_KEYWORD],
-            'user_id'        => ['type' => self::T_INT],
-            'user'           => [
+            'id'               => ['type' => self::T_KEYWORD],
+            'instance_id'      => ['type' => self::T_INT],
+            'local_id'         => ['type' => self::T_INT],
+            'email'            => ['type' => self::T_KEYWORD],
+            'status'           => ['type' => self::T_SHORT],
+            'amount'           => ['type' => self::T_DOUBLE],
+            'currency'         => ['type' => self::T_KEYWORD],
+            'created'          => ['type' => self::T_DATE],
+            'updated'          => ['type' => self::T_DATE],
+            'payment_method'   => ['type' => self::T_KEYWORD],
+            'premium_purchase' => ['type' => self::T_INT],
+            'user_id'          => ['type' => self::T_INT],
+            'user'             => [
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'items'          => [
+            'items'            => [
                 'type'       => self::T_NESTED,
                 'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties'],
             ],
