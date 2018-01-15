@@ -11,6 +11,7 @@ use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
 use go1\util\plan\PlanTypes;
+use go1\util\plan\PlanHelper;
 use go1\util\queue\Queue;
 use go1\util\schema\mock\EnrolmentMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
@@ -369,8 +370,10 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertTrue(EnrolmentHelper::dueDate($this->db, $enrolmentId)->getTimestamp() > 0);
 
         # Enrolment has multiple plans
-        $planId = $this->createPlan($this->db, ['due_date' => '4 days', 'type' => PlanTypes::SUGGESTED]);
+        $planId = $this->createPlan($this->db, ['due_date' => '5 days', 'type' => PlanTypes::SUGGESTED]);
+        $plan = PlanHelper::load($this->db, $planId);
         $this->link($this->db, EdgeTypes::HAS_PLAN, $enrolmentId, $planId);
         $this->assertTrue(EnrolmentHelper::dueDate($this->db, $enrolmentId)->getTimestamp() > 0);
+        $this->assertEquals(EnrolmentHelper::dueDate($this->db, $enrolmentId), DateTime::create($plan->due_date));
     }
 }

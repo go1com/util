@@ -11,6 +11,7 @@ use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
 use go1\util\plan\PlanHelper;
+use go1\util\plan\PlanTypes;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\queue\Queue;
@@ -327,8 +328,21 @@ class EnrolmentHelper
     public static function dueDate(Connection $db, int $enrolmentId): ?DefaultDateTime
     {
         $edges = EdgeHelper::edgesFromSources($db, [$enrolmentId], [EdgeTypes::HAS_PLAN]);
-        if ($edges && ($edge = array_pop($edges)) && ($plan = PlanHelper::load($db, $edge->target_id))) {
-            return $plan->due_date ? DateTime::create($plan->due_date) : null;
+        if ($edges) {
+            $dueDate = null;
+            foreach ($edges as $edge) {
+                if ($edge && ($plan = PlanHelper::load($db, $edge->target_id))) {
+                    if ($plan->due_date && (PlanTypes::SUGGESTED == $plan->type)) {
+                        return DateTime::create($plan->due_date);
+                    }
+
+                    if ($plan->due_date) {
+                        $dueDate = DateTime::create($plan->due_date);
+                    }
+                }
+            }
+
+            return $dueDate;
         }
 
         return null;
