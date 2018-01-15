@@ -956,9 +956,9 @@ class Schema
             'parent_assessor_id' => ['type' => self::T_INT],
             'account'            => [
                 'properties' => [
-                    'id'         => ['type' => self::T_INT],
-                    'first_name' => ['type' => self::T_TEXT],
-                    'last_name'  => ['type' => self::T_TEXT],
+                    'id'         => ['type' => self::T_KEYWORD],
+                    'first_name' => ['type' => self::T_KEYWORD],
+                    'last_name'  => ['type' => self::T_KEYWORD],
                     'avatar'     => ['type' => self::T_TEXT],
                 ],
             ],
