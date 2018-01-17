@@ -5,10 +5,13 @@ namespace go1\util\award;
 use Doctrine\DBAL\Connection;
 use Exception;
 use go1\util\DB;
+use go1\util\edge\EdgeHelper;
+use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoHelper;
 use go1\util\Text;
 use go1\util\text\Xss;
 use HTMLPurifier;
+use PDO;
 use stdClass;
 
 class AwardHelper
@@ -227,5 +230,12 @@ class AwardHelper
     public static function revisionId2id(Connection $db, int $awardRevisionId)
     {
         return $db->fetchColumn('SELECT id FROM award_award WHERE revision_id = ?', [$awardRevisionId]);
+    }
+
+    public static function assessorIds(Connection $db, int $loId): array
+    {
+        return EdgeHelper
+            ::select('target_id')
+            ->get($db, [$loId], [], [EdgeTypes::AWARD_ASSESSOR], PDO::FETCH_COLUMN);
     }
 }
