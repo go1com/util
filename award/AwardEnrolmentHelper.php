@@ -19,7 +19,7 @@ class AwardEnrolmentHelper
 
     public static function loadMultiple(Connection $db, array $ids): array
     {
-        return $db->executeQuery('SELECT * FROM award_enrolment WHERE id in (?)', $ids, [Connection::PARAM_INT_ARRAY])
+        return $db->executeQuery('SELECT * FROM award_enrolment WHERE id IN (?)', [$ids], [Connection::PARAM_INT_ARRAY])
             ->fetchAll(DB::OBJ);
     }
 
