@@ -155,6 +155,7 @@ class Service
 
         if ($public) {
             $suffix = 'production' === $env ? '' : "-{$env}";
+
             return "https://api{$suffix}.go1.co";
         }
 

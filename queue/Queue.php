@@ -197,4 +197,5 @@ class Queue
     const DO_AWARD_CALCULATE                   = 'do.award.calculate'; # {task: AWARD_TASK, body: array TASK_BODY}
     const DO_AWARD_PLAN_CREATE                 = 'do.award.plan.create'; # Plan Object
     const DO_INDEX                             = 'do.index'; # {index: STRING, type: string, operation: enum(index,create,update,delete,bulk), body: OBJECT, routing: STRING, parent: STRING}
+    const DO_MYTEAM                            = 'do.my-team'; # { action: STRING, body: OBJECT }
 }
