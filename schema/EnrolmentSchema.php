@@ -55,6 +55,7 @@ class EnrolmentSchema
             $revision->addColumn('pass', 'smallint');
             $revision->addColumn('data', 'blob', ['notnull' => false]);
             $revision->addColumn('note', 'text');
+            $revision->addColumn('parent_enrolment_id', 'integer', ['unsigned' => true, 'notnull' => false]);
 
             $revision->setPrimaryKey(['id']);
             $revision->addIndex(['profile_id']);
@@ -62,6 +63,7 @@ class EnrolmentSchema
             $revision->addIndex(['taken_instance_id']);
             $revision->addIndex(['status']);
             $revision->addIndex(['lo_id']);
+            $revision->addIndex(['parent_enrolment_id']);
         }
 
         if (!$schema->hasTable('gc_enrolment_transaction')) {
