@@ -43,7 +43,7 @@ trait EnrolmentMockTrait
             $db->update(
                 'gc_lo',
                 [
-                    'enrolment_count' => (int) $lo->enrolment_count + 1
+                    'enrolment_count' => (int)$lo->enrolment_count + 1
                 ],
                 [
                     'id' => $loId
@@ -57,20 +57,21 @@ trait EnrolmentMockTrait
         $profileId = isset($options['profile_id']) ? $options['profile_id'] : 0;
 
         $db->insert('gc_enrolment_revision', [
-            'id'                => $options['id'] ?? null,
-            'profile_id'        => $profileId,
-            'lo_id'             => isset($options['lo_id']) ? $options['lo_id'] : 0,
-            'instance_id'       => isset($options['instance_id']) ? $options['instance_id'] : 0,
-            'taken_instance_id' => isset($options['taken_instance_id']) ? $options['taken_instance_id'] : 0,
-            'start_date'        => isset($options['start_date']) ? $options['start_date'] : (new DateTime)->format('Y-m-d h:i:s'),
-            'end_date'          => isset($options['end_date']) ? $options['end_date'] : null,
-            'status'            => isset($options['status']) ? $options['status'] : EnrolmentStatuses::IN_PROGRESS,
-            'result'            => isset($options['result']) ? $options['result'] : 0,
-            'pass'              => isset($options['pass']) ? $options['pass'] : 0,
-            'parent_lo_id'      => isset($options['parent_lo_id']) ? $options['parent_lo_id'] : 0,
-            'enrolment_id'      => isset($options['enrolment_id']) ? $options['enrolment_id'] : 0,
-            'note'              => isset($options['note']) ? $options['note'] : '',
-            'data'              => isset($options['data']) ? $options['data'] : '',
+            'id'                  => $options['id'] ?? null,
+            'profile_id'          => $profileId,
+            'lo_id'               => isset($options['lo_id']) ? $options['lo_id'] : 0,
+            'instance_id'         => isset($options['instance_id']) ? $options['instance_id'] : 0,
+            'taken_instance_id'   => isset($options['taken_instance_id']) ? $options['taken_instance_id'] : 0,
+            'start_date'          => isset($options['start_date']) ? $options['start_date'] : (new DateTime)->format('Y-m-d h:i:s'),
+            'end_date'            => isset($options['end_date']) ? $options['end_date'] : null,
+            'status'              => isset($options['status']) ? $options['status'] : EnrolmentStatuses::IN_PROGRESS,
+            'result'              => isset($options['result']) ? $options['result'] : 0,
+            'pass'                => isset($options['pass']) ? $options['pass'] : 0,
+            'parent_lo_id'        => isset($options['parent_lo_id']) ? $options['parent_lo_id'] : 0,
+            'enrolment_id'        => isset($options['enrolment_id']) ? $options['enrolment_id'] : 0,
+            'note'                => isset($options['note']) ? $options['note'] : '',
+            'data'                => isset($options['data']) ? $options['data'] : '',
+            'parent_enrolment_id' => isset($options['parent_enrolment_id']) ? $options['parent_enrolment_id'] : 0,
         ]);
 
         $id = $options['id'] ?? $db->lastInsertId('gc_enrolment_revision');
