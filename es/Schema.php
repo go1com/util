@@ -956,6 +956,7 @@ class Schema
             'account'            => [
                 'properties' => [
                     'id'         => ['type' => self::T_KEYWORD],
+                    'mail'       => ['type' => self::T_KEYWORD],
                     'first_name' => ['type' => self::T_KEYWORD],
                     'last_name'  => ['type' => self::T_KEYWORD],
                     'avatar'     => ['type' => self::T_TEXT],
