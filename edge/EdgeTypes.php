@@ -67,7 +67,7 @@ class EdgeTypes
     # ---------------------
     const HAS_LP_ITEM                 = 1;  # T: ?                    | S: Learning object (LP only)
     const HAS_PRODUCT                 = 2;  # T: ?                    | S: Learning object
-    const HAS_EVENT                   = 3;  # T: gc_event.id          | S: Learning object (course, module, li type event)
+    const HAS_EVENT                   = 3;  # T: Simple event         | S: Learning object (course, module, li type event)
     const HAS_TAG                     = 4;  # T: Tag                  | S: Learning object
     const HAS_LI                      = 5;  # T: ?                    | S: Learning object (module only, course if li type event)
     const HAS_WORKSHOP                = 6;  # T: ?                    | S: ?
@@ -96,6 +96,8 @@ class EdgeTypes
     const HAS_LO_LOCATION             = 41; # T: gc_location.id       | S: gc_lo.id
     const HAS_LO_CUSTOMISATION        = 42; # T: gc_instance.id       | S: gc_lo.id              | data: { KEY: VALUE }
     const HAS_AWARD_LOCATION          = 43; # T: gc_location.id       | S: award_award.id
+    const HAS_SUGGESTED_COMPLETION    = 44; # T: 0                    | S: gc_ro.id              | data: { KEY: VALUE }
+    const AWARD_ASSESSOR              = 45; # T: Account              | S: award.id
 
     # LO & enrolment scheduling
     # ---------------------
@@ -123,38 +125,39 @@ class EdgeTypes
 
     # User relationships
     # ---------------------
-    const HAS_ROLE                   = 500; # T: Role               | S: User
-    const HAS_ACCOUNT                = 501; # T: User               | S: User
-    const HAS_TUTOR_EDGE             = 502; # T: User (Tutor)       | S: gc_ro id - the record has source_id is course, target_id is (Module)
-    const HAS_AUTHOR_EDGE            = 503; # T: User               | S: Learning object
-    const HAS_MANAGER                = 504; # T: User Id of manager | S: gc_user.id Account Id of student
-    const HAS_EMAIL                  = 505; # T: gc_user_mail id    | S: gc_user id
-    const HAS_TUTOR_ENROLMENT_EDGE   = 506; # T: gc_enrolment id    | S: gc_user id
-    const HAS_SHARE_WITH             = 507; # T: Role ID            | S: Learning object
-    const HAS_FOLLOWING              = 508; # T: gc_user.id         | S: gc_user.id
-    const HAS_PORTAL_EDGE            = 509; # T: gc_instance.id     | S: gc_user.id
-    const HAS_ACCOUNT_VIRTUAL        = 510; # T: User               | S: Account
-    const HAS_SHARE_USER_NOTE        = 600; # T: gc_note.id         | S: gc_user.id
-    const HAS_SHARE_WITH_LO_USER     = 601; # T: gc_lo.id           | S: gc_user.id
-    const HAS_MENTION                = 602; # T: gc_lo.id           | S: gc_user.id
-    const HAS_SHARE_WITH_LO_PORTAL   = 603; # T: gc_instance.id     | S: Learning object
-    const HAS_SHARE_GROUP_NOTE       = 604; # T: gc_social_group.id | S: gc_note.id
-    const HAS_SHARE_PORTAL_NOTE      = 605; # T: gc_note.id         | S: gc_instance.id
-    const HAS_NOTE                   = 606; # T: gc_note.id         | S: gc_user.id
-    const HAS_MANUAL_PAYMENT         = 607; # T: submitted times    | S: lo.id | W: gc_user.id - we use weight to store user.id to avoid the table constrain, target_id to store the number of submitted times
-    const HAS_MANUAL_PAYMENT_ACCEPT  = 608; # T: submitted times    | S: lo.id | W: gc_user.id
-    const HAS_MANUAL_PAYMENT_REJECT  = 609; # T: submitted times    | S: lo.id | W: gc_user.id
-    const HAS_REQUEST_GROUP          = 610; # T: submitted times    | S: group.id | W: gc_user.id - we use weight to store user.id to avoid the table constrain, target_id to store the number of submitted times
-    const HAS_REQUEST_GROUP_ACCEPT   = 611; # T: submitted times    | S: group.id | W: gc_user.id
-    const HAS_REQUEST_GROUP_REJECT   = 612; # T: submitted times    | S: group.id | W: gc_user.id
-    const HAS_REQUEST_GROUP_BLOCK    = 613; # T: submitted times    | S: group.id | W: gc_user.id
-    const HAS_ASSIGN                 = 701; # T: enrolment.id       | S: gc_user.id
-    const HAS_LO_ASSIGNMENT          = 702; # T: suggested LO       | S: gc_user.id | Weight: Suggesting user.
-    const HAS_LO_ASSIGNMENT_ACCEPTED = 703; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is accepted.
-    const HAS_LO_ASSIGNMENT_REJECTED = 704; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is rejected.
-    const HAS_LO_ASSIGNMENT_DUE_DATE = 705; # T: self.SOURCE        | S: suggestion ID | W: Timestamp  | N: See GO1P-8097
-    const CREDIT_TRANSFER            = 800; # T: Timestamp          | S: credit.id | D: old owner, new owner, actor
-    const HAS_PLAN                   = 900; # T: gc_plan.id         | S: enrolment.id
+    const HAS_ROLE                       = 500; # T: Role               | S: User
+    const HAS_ACCOUNT                    = 501; # T: User               | S: User
+    const HAS_TUTOR_EDGE                 = 502; # T: User (Tutor)       | S: gc_ro id - the record has source_id is course, target_id is (Module)
+    const HAS_AUTHOR_EDGE                = 503; # T: User               | S: Learning object
+    const HAS_MANAGER                    = 504; # T: User Id of manager | S: gc_user.id Account Id of student
+    const HAS_EMAIL                      = 505; # T: gc_user_mail id    | S: gc_user id
+    const HAS_TUTOR_ENROLMENT_EDGE       = 506; # T: gc_enrolment id    | S: gc_user id
+    const HAS_SHARE_WITH                 = 507; # T: Role ID            | S: Learning object
+    const HAS_FOLLOWING                  = 508; # T: gc_user.id         | S: gc_user.id
+    const HAS_PORTAL_EDGE                = 509; # T: gc_instance.id     | S: gc_user.id
+    const HAS_ACCOUNT_VIRTUAL            = 510; # T: User               | S: Account
+    const HAS_SHARE_USER_NOTE            = 600; # T: gc_note.id         | S: gc_user.id
+    const HAS_SHARE_WITH_LO_USER         = 601; # T: gc_lo.id           | S: gc_user.id
+    const HAS_MENTION                    = 602; # T: gc_lo.id           | S: gc_user.id
+    const HAS_SHARE_WITH_LO_PORTAL       = 603; # T: gc_instance.id     | S: Learning object
+    const HAS_SHARE_GROUP_NOTE           = 604; # T: gc_social_group.id | S: gc_note.id
+    const HAS_SHARE_PORTAL_NOTE          = 605; # T: gc_note.id         | S: gc_instance.id
+    const HAS_NOTE                       = 606; # T: gc_note.id         | S: gc_user.id
+    const HAS_MANUAL_PAYMENT             = 607; # T: submitted times    | S: lo.id | W: gc_user.id - we use weight to store user.id to avoid the table constrain, target_id to store the number of submitted times
+    const HAS_MANUAL_PAYMENT_ACCEPT      = 608; # T: submitted times    | S: lo.id | W: gc_user.id
+    const HAS_MANUAL_PAYMENT_REJECT      = 609; # T: submitted times    | S: lo.id | W: gc_user.id
+    const HAS_REQUEST_GROUP              = 610; # T: submitted times    | S: group.id | W: gc_user.id - we use weight to store user.id to avoid the table constrain, target_id to store the number of submitted times
+    const HAS_REQUEST_GROUP_ACCEPT       = 611; # T: submitted times    | S: group.id | W: gc_user.id
+    const HAS_REQUEST_GROUP_REJECT       = 612; # T: submitted times    | S: group.id | W: gc_user.id
+    const HAS_REQUEST_GROUP_BLOCK        = 613; # T: submitted times    | S: group.id | W: gc_user.id
+    const HAS_ASSIGN                     = 701; # T: enrolment.id       | S: gc_user.id
+    const HAS_LO_ASSIGNMENT              = 702; # T: suggested LO       | S: gc_user.id | Weight: Suggesting user.
+    const HAS_LO_ASSIGNMENT_ACCEPTED     = 703; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is accepted.
+    const HAS_LO_ASSIGNMENT_REJECTED     = 704; # record.HAS_LO_SUGGESTION will be changed to this when suggestion is rejected.
+    const HAS_LO_ASSIGNMENT_DUE_DATE     = 705; # T: self.SOURCE        | S: suggestion ID | W: Timestamp  | N: See GO1P-8097
+    const CREDIT_TRANSFER                = 800; # T: Timestamp          | S: credit.id | D: old owner, new owner, actor
+    const HAS_PLAN                       = 900; # T: gc_plan.id         | S: enrolment.id
+    const HAS_AWARD_TUTOR_ENROLMENT_EDGE = 511; # T: award_enrolment.id | S: gc_user.id
 
     # Group relationships
     const HAS_GROUP_SYSTEM          = 1000; # T: Group | S: Portal

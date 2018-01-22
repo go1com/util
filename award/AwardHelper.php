@@ -3,15 +3,41 @@
 namespace go1\util\award;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 use go1\util\DB;
+use go1\util\edge\EdgeHelper;
+use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoHelper;
 use go1\util\Text;
 use go1\util\text\Xss;
 use HTMLPurifier;
+use PDO;
 use stdClass;
 
 class AwardHelper
 {
+    public static function getQuantityType($quantity)
+    {
+        if (is_null($quantity)) {
+            return AwardQuantityTypes::COMPLETE_ANY;
+        }
+
+        if (!is_scalar($quantity)) {
+            throw new Exception('Invalid award quantity type.');
+        }
+
+        $quantity = (float) $quantity;
+        if (0.0 === $quantity) {
+            return AwardQuantityTypes::TRACK_ONGOING;
+        }
+
+        if ($quantity > 0) {
+            return AwardQuantityTypes::REACH_TARGET;
+        }
+
+        throw new Exception('Invalid award quantity type.');
+    }
+
     public static function format(stdClass &$award, HTMLPurifier $html = null)
     {
         $award->id          = intval($award->id);
@@ -35,36 +61,60 @@ class AwardHelper
         $award->created   = intval($award->created);
     }
 
-    public static function load(Connection $db, int $awardId, $statuses = [AwardStatuses::PUBLISHED, AwardStatuses::UNPUBLISHED])
+    public static function load(Connection $db, int $awardId, array $statuses = [])
     {
         $awards = static::loadMultiple($db, [$awardId], $statuses);
 
         return $awards ? $awards[0] : null;
     }
 
-    public static function loadMultiple(Connection $db, array $awardIds, $statuses = [AwardStatuses::PUBLISHED, AwardStatuses::UNPUBLISHED])
+    public static function loadMultiple(Connection $db, array $awardIds, array $statuses = [])
     {
-        $awards = $db
-            ->executeQuery('SELECT * FROM award_award WHERE id IN (?) AND published IN (?)', [$awardIds, $statuses], [DB::INTEGERS, DB::INTEGERS])
-            ->fetchAll(DB::OBJ);
+        $q = $db->createQueryBuilder();
+        $q
+            ->select('*')
+            ->from('award_award')
+            ->where($q->expr()->in('id', ':ids'))
+            ->setParameter('ids', $awardIds, DB::INTEGERS);
+        $statuses && $q
+            ->andWhere($q->expr()->in('published', ':published'))
+            ->setParameter('published', $statuses, DB::INTEGERS);
+        $q = $q->execute();
 
-        if ($awards) {
-            foreach ($awards as &$award) {
-                static::format($award);
-            }
+        while ($award = $q->fetch(DB::OBJ)) {
+            self::format($award);
+            $awards[] = $award;
         }
 
-        return $awards;
+        return $awards ?? [];
     }
 
-    public static function loadByRevision(Connection $db, int $revisionId)
+    public static function loadByRevision(Connection $db, int $revisionId, array $statuses = [])
     {
-        $award = $db
-            ->executeQuery('SELECT * FROM award_award WHERE revision_id = ?', [$revisionId])
-            ->fetch(DB::OBJ);
-        $award && static::format($award);
+        $awards = self::loadMultipleByRevision($db, [$revisionId], $statuses);
 
-        return $award;
+        return $awards ? $awards[0] : null;
+    }
+
+    public static function loadMultipleByRevision(Connection $db, array $revisionIds, array $statuses = [])
+    {
+        $q = $db->createQueryBuilder();
+        $q
+            ->select('*')
+            ->from('award_award')
+            ->where($q->expr()->in('revision_id', ':revisionIds'))
+            ->setParameter('revisionIds', $revisionIds, DB::INTEGERS);
+        $statuses && $q
+            ->andWhere($q->expr()->in('published', ':published'))
+            ->setParameter('published', $statuses, DB::INTEGERS);
+        $q = $q->execute();
+
+        while ($award = $q->fetch(DB::OBJ)) {
+            self::format($award);
+            $awards[] = $award;
+        }
+
+        return $awards ?? [];
     }
 
     public static function loadItems(Connection $db, array $awardItemIds)
@@ -103,6 +153,7 @@ class AwardHelper
                 $manualItem->categories = Text::parseInlineTags($manualItem->categories);
             }
 
+            $manualItem->pass = !empty($manualItem->pass);
             $manualItems[] = $manualItem;
         }
 
@@ -168,7 +219,23 @@ class AwardHelper
 
     public static function countEnrolment(Connection $db, int $awardId)
     {
-        return $db
-            ->fetchColumn('SELECT COUNT(*) FROM award_enrolment WHERE award_id = ?', [$awardId]);
+        return $db->fetchColumn('SELECT COUNT(*) FROM award_enrolment WHERE award_id = ?', [$awardId]);
+    }
+
+    public static function id2revisionId(Connection $db, int $awardId)
+    {
+        return $db->fetchColumn('SELECT revision_id FROM award_award WHERE id = ?', [$awardId]);
+    }
+
+    public static function revisionId2id(Connection $db, int $awardRevisionId)
+    {
+        return $db->fetchColumn('SELECT id FROM award_award WHERE revision_id = ?', [$awardRevisionId]);
+    }
+
+    public static function assessorIds(Connection $db, int $loId): array
+    {
+        return EdgeHelper
+            ::select('target_id')
+            ->get($db, [$loId], [], [EdgeTypes::AWARD_ASSESSOR], PDO::FETCH_COLUMN);
     }
 }

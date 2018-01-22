@@ -8,12 +8,14 @@ use go1\util\portal\PortalChecker;
 use go1\util\schema\mock\GroupMockTrait;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\schema\mock\LoMockTrait;
+use go1\util\schema\mock\NoteMockTrait;
 
 class NoteHelperTest extends UtilTestCase
 {
     use InstanceMockTrait;
     use LoMockTrait;
     use GroupMockTrait;
+    use NoteMockTrait;
 
     public function loadPortalData()
     {
@@ -40,5 +42,22 @@ class NoteHelperTest extends UtilTestCase
             ->loadPortal($entityType, $entityId, new PortalChecker);
 
         $this->assertEquals($instanceId, $portal->id);
+    }
+
+    public function testLoadNoteComment()
+    {
+        $userId = $this->createUser($this->db, ['data' => ['avatar' => ['uri' => 'https://avatar.com/a.jpg']]]);
+        $id = $this->createNoteComment($this->db, [
+            'note_id' => 1000,
+            'user_id' => $userId,
+            'description' => 'note comment description'
+        ]);
+
+        $comment = NoteHelper::loadComment($this->db, $id, $this->db);
+        $this->assertEquals(1000, $comment->note_id);
+        $this->assertEquals('note comment description', $comment->description);
+        $this->assertEquals($userId, $comment->user->id);
+        $this->assertEquals("A T", $comment->user->name);
+        $this->assertEquals('https://avatar.com/a.jpg', $comment->user->avatar);
     }
 }

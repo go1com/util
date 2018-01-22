@@ -6,9 +6,6 @@ use DateTime as DefaultDateTime;
 use DateTimeZone;
 use InvalidArgumentException;
 
-/**
- * DateTime Helper class
- */
 class DateTime
 {
     const DEFAULT_HUMAN_FORMAT = 'Y-m-d H:i:s';
@@ -31,41 +28,36 @@ class DateTime
 
     /**
      * Returns date formatted according to the specified format and timezone
-     * @param string $time  A date/time string. Valid formats could be:
-     * - 'now'
-     * - '10 September 2000'
-     * - '2016-12-30T10:01:33+0700'
-     * - '1483067019' (Unix Timestamp)
-     * @param string $format Format accepted by date(). [optional]
+     *
+     * @param string $time     A date/time string. Valid formats could be:
+     *                         - 'now'
+     *                         - '10 September 2000'
+     *                         - '2016-12-30T10:01:33+0700'
+     *                         - '1483067019' (Unix Timestamp)
+     * @param string $format   Format accepted by date(). [optional]
      * @param string $timezone String representing the desired time zone. [optional]
      * @return string
      */
-    public static function formatDate($time, $format = DATE_ISO8601, $timezone = 'UTC') {
+    public static function formatDate($time, $format = DATE_ISO8601, $timezone = 'UTC')
+    {
         return static::create($time, $timezone)->format($format);
     }
 
     /**
      * Return comparision result of 2 datetime object
+     *
      * @param $date1
      * @param $date2
      * @return integer
-     * - 1  if Greater than
-     * - 0  if Equal
-     * - -1 if Less than
+     *      * 1  if Greater than
+     *      * 0  if Equal
+     *      * -1 if Less than
      */
     public static function compare($date1, $date2): int
     {
         $d1 = static::create($date1);
         $d2 = static::create($date2);
 
-        if ($d1 > $d2) {
-            return static::DATETIME_GREATER;
-        }
-
-        if ($d1 < $d2) {
-            return static::DATETIME_LESS;
-        }
-
-        return static::DATETIME_EQUAL;
+        return ($d1 > $d2) ? static::DATETIME_GREATER : (($d1 < $d2) ? static::DATETIME_LESS : static::DATETIME_EQUAL);
     }
 }

@@ -39,5 +39,15 @@ class MailSchema
             $log->addIndex(['subject']);
             $log->addIndex(['timestamp']);
         }
+
+        if (!$schema->hasTable('mail_department')) {
+            $department = $schema->createTable('mail_department');
+            $department->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $department->addColumn('application', 'string');
+            $department->addColumn('department', 'string');
+            $department->addColumn('recipient', 'string');
+            $department->setPrimaryKey(['id']);
+            $department->addUniqueIndex(['application', 'department'], 'uniq_application_department');
+        }
     }
 }

@@ -19,21 +19,22 @@
     "go1/kv": "^0.2",
     "graphaware/neo4j-php-client": "^4.6",
     "guzzlehttp/guzzle": "^6.0",
+    "jsq/amazon-es-php": "^0.2.0",
     "ktamas77/firebase-php": "^2.2",
     "monolog/monolog": "^1.19.0",
+    "ongr/elasticsearch-dsl": "^5.0",
     "php-amqplib/php-amqplib": "^2.6",
     "pimple/pimple": "^v3.0.0",
     "psr/log": "~1.0",
+    "ralouphie/mimey": "^1.0",
     "ramsey/uuid": "^3.4",
-    "symfony/http-foundation": "^3.2",
-    "symfony/var-dumper": "^3.0",
-    "ongr/elasticsearch-dsl": "^5.0",
-    "jsq/amazon-es-php": "^0.2.0",
-    "ralouphie/mimey": "^1.0"
+    "symfony/http-foundation": "^3.4 | ^4.0",
+    "symfony/var-dumper": "^3.4 | ^4.0",
+    "symfony/property-access": "^4.0"
   },
   "require-dev": {
     "behat/transliterator": "^1.2",
-    "go1/neo4j-builder": "dev-master",
-    "ezyang/htmlpurifier": "^4.9"
+    "ezyang/htmlpurifier": "^4.9",
+    "go1/neo4j-builder": "dev-master"
   }
 }

@@ -5,6 +5,7 @@ namespace go1\util\schema\mock;
 use Doctrine\DBAL\Connection;
 use go1\util\group\GroupItemStatus;
 use go1\util\group\GroupStatus;
+use go1\util\note\NoteCommentStatus;
 
 trait NoteMockTrait
 {
@@ -24,5 +25,19 @@ trait NoteMockTrait
         ]);
 
         return $db->lastInsertId('gc_note');
+    }
+
+    protected function createNoteComment(Connection $db, array $options)
+    {
+        $db->insert('note_comment', [
+            'note_id'     => !empty($options['note_id']) ? $options['note_id'] : 1,
+            'user_id'     => !empty($options['user_id']) ? $options['user_id'] : 1,
+            'status'      => !empty($options['status']) ? $options['status'] : NoteCommentStatus::ENABLED,
+            'created'     => !empty($options['created']) ? $options['created'] : time(),
+            'updated'     => !empty($options['updated']) ? $options['updated'] : time(),
+            'description' => !empty($options['description']) ? $options['description'] : null,
+        ]);
+
+        return $db->lastInsertId('note_comment');
     }
 }

@@ -35,6 +35,7 @@ trait AssignmentMockTrait
             'assignment_id' => isset($options['assignment_id']) ? $options['assignment_id'] : 1,
             'revision_id'   => isset($options['revision_id']) ? $options['revision_id'] : 1,
             'profile_id'    => isset($options['profile_id']) ? $options['profile_id'] : 1,
+            'enrolment_id'   => isset($options['enrolment_id']) ? $options['enrolment_id'] : 1,
             'status'        => isset($options['status']) ? $options['status'] : 1,
             'created'       => isset($options['created']) ? $options['created'] : time(),
             'updated'       => isset($options['updated']) ? $options['updated'] : time(),

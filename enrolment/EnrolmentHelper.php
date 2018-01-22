@@ -10,12 +10,15 @@ use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\plan\PlanHelper;
+use go1\util\plan\PlanTypes;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\queue\Queue;
 use go1\util\user\UserHelper;
 use LengthException;
 use PDO;
+use DateTime as DefaultDateTime;
 use stdClass;
 
 /**
@@ -239,6 +242,11 @@ class EnrolmentHelper
                 $progress[$row->status] = $row->totalEnrolment;
             }
         }
+
+        $numCompleted = $progress[EnrolmentStatuses::COMPLETED] ?? 0;
+        $progress[EnrolmentStatuses::PERCENTAGE] = ($progress['total'] > 0) ? ($numCompleted / $progress['total']) : 0;
+        $progress[EnrolmentStatuses::PERCENTAGE] = round($progress[EnrolmentStatuses::PERCENTAGE] * 100);
+
         return $progress;
     }
 
@@ -315,5 +323,28 @@ class EnrolmentHelper
             ->setParameter('taken_instance_id', $takenInstanceId);
 
         return $q->execute()->fetchColumn();
+    }
+
+    public static function dueDate(Connection $db, int $enrolmentId): ?DefaultDateTime
+    {
+        $edges = EdgeHelper::edgesFromSources($db, [$enrolmentId], [EdgeTypes::HAS_PLAN]);
+        if ($edges) {
+            $dueDate = null;
+            foreach ($edges as $edge) {
+                if ($edge && ($plan = PlanHelper::load($db, $edge->target_id))) {
+                    if ($plan->due_date && (PlanTypes::SUGGESTED == $plan->type)) {
+                        return DateTime::create($plan->due_date);
+                    }
+
+                    if ($plan->due_date) {
+                        $dueDate = DateTime::create($plan->due_date);
+                    }
+                }
+            }
+
+            return $dueDate;
+        }
+
+        return null;
     }
 }

@@ -39,6 +39,7 @@ class QuizSchema
         $tbl->addColumn('taken', 'boolean', ['default' => 0, 'comment' => 'Boolean indicating whether the user can taken a quiz.']);
         $tbl->addColumn('is_redo_correct', 'boolean', ['default' => 1, 'comment' => 'Boolean indicating whether user has to redo correct answers.']);
         $tbl->addColumn('editor', 'integer', ['unsigned' => true, 'notnull' => true, 'comment' => 'Person who created this quiz']);
+        $tbl->addColumn('li_id', 'integer', ['notnull' => false, 'default' => null, 'comment' => 'Learning item id']);
         $tbl->addColumn('data', 'text', ['notnull' => false, 'default' => null, 'comment' => 'Json encoded extra data.']);
         $tbl->setPrimaryKey(['quiz_id']);
         $tbl->addUniqueIndex(['quiz_rid'], 'unq_quiz_quiz_rid');
@@ -184,8 +185,12 @@ class QuizSchema
         $tbl->addColumn('person_id', 'integer', ['unsigned' => true, 'notnull' => true, 'autoincrement' => true, 'comment' => 'Internal primary identifier for person.']);
         $tbl->addColumn('external_source', 'string', ['length' => 255, 'notnull' => true, 'default' => '', 'comment' => 'The external source.']);
         $tbl->addColumn('external_identifier', 'string', ['length' => 255, 'notnull' => true, 'default' => '', 'comment' => 'The external identifier.']);
+        $tbl->addColumn('secondary_identifier', 'string', ['length' => 255, 'notnull' => false, 'default' => null, 'comment' => 'Secondary identifier.']);
+        $tbl->addColumn('mail', 'string', ['length' => 255, 'notnull' => false, 'default' => null, 'comment' => 'Email']);
         $tbl->addColumn('created', 'bigint', ['notnull' => true, 'default' => 0, 'comment' => 'The unix timestamp when this person was added.']);
+        $tbl->addColumn('custom', 'text', ['notnull' => false, 'default' => null, 'comment' => 'Json encoded data.']);
         $tbl->setPrimaryKey(['person_id']);
+        $tbl->addIndex(['external_source', 'external_identifier'], 'idx_person_external_source_external_identifier');
 
         // question table
         $tbl = $schema->createTable('question');

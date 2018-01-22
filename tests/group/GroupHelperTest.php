@@ -456,7 +456,19 @@ class GroupHelperTest extends UtilTestCase
         $this->assertFalse(GroupHelper::isPortalSystemGroup('Foo'));
     }
 
+    public function testIsPassiveContentSharing()
+    {
+        $originalInstanceId = $this->createInstance($this->db, ['title' => $portalName = 'origin.go1.com']);
+        $loId = $this->createCourse($this->db, ['title' => 'Sharing Course', 'instance_id' => $originalInstanceId]);
 
+        $groupId = $this->createGroup($this->db, []);
+        $sharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}"]);
+        $marketplaceSharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}:marketplace"]);
+
+        $this->assertFalse(GroupHelper::isPassiveContentSharing(GroupHelper::load($this->db, $groupId)));
+        $this->assertFalse(GroupHelper::isPassiveContentSharing(GroupHelper::load($this->db, $sharingGroupId)));
+        $this->assertTrue(GroupHelper::isPassiveContentSharing(GroupHelper::load($this->db, $marketplaceSharingGroupId)));
+    }
 
     public function dataTestContentSharingTypes()
     {
@@ -468,7 +480,8 @@ class GroupHelperTest extends UtilTestCase
 
     /**
      * @dataProvider dataTestContentSharingTypes
-     */public function testIsMemberOfContentSharingGroup($addToMyPortalContent)
+     */
+    public function testIsMemberOfContentSharingGroup($addToMyPortalContent)
     {
         $originalInstanceId = $this->createInstance($this->db, ['title' => $portalName = 'origin.go1.com']);
         $loId = $this->createCourse($this->db, ['title' => 'Sharing Course', 'instance_id' => $originalInstanceId]);
@@ -489,5 +502,29 @@ class GroupHelperTest extends UtilTestCase
         $this->assertTrue(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceXId, $addToMyPortalContent));
         $this->assertFalse(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceYId));
         $this->assertFalse(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceZId));
+    }
+
+    public function testIsMemberOfContentSharingGroupWhenBothExisted()
+    {
+        $originalInstanceId = $this->createInstance($this->db, ['title' => $portalName = 'origin.go1.com']);
+        $loId = $this->createCourse($this->db, ['title' => 'Sharing Course', 'instance_id' => $originalInstanceId]);
+        $instanceXId = $this->createInstance($this->db, ['title' => $portalName = 'portalX.go1.com']);
+        $instanceYId = $this->createInstance($this->db, ['title' => $portalName = 'portalY.go1.com']);
+        $instanceZId = $this->createInstance($this->db, ['title' => $portalName = 'portalZ.go1.com']);
+
+        $sharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}"]);
+        $marketplaceSharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}:marketplace"]);
+
+        $this->repository->createItem($sharingGroupId, GroupItemTypes::PORTAL, $instanceXId, GroupItemStatus::ACTIVE);
+        $this->repository->createItem($marketplaceSharingGroupId, GroupItemTypes::PORTAL, $instanceXId, GroupItemStatus::BLOCKED);
+        $this->assertTrue(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceXId));
+
+        $this->repository->createItem($sharingGroupId, GroupItemTypes::PORTAL, $instanceYId, GroupItemStatus::BLOCKED);
+        $this->repository->createItem($marketplaceSharingGroupId, GroupItemTypes::PORTAL, $instanceYId, GroupItemStatus::ACTIVE);
+        $this->assertTrue(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceYId));
+
+        $this->repository->createItem($sharingGroupId, GroupItemTypes::PORTAL, $instanceZId, GroupItemStatus::ACTIVE);
+        $this->repository->createItem($marketplaceSharingGroupId, GroupItemTypes::PORTAL, $instanceZId, GroupItemStatus::ACTIVE);
+        $this->assertTrue(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceZId));
     }
 }

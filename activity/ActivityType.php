@@ -24,6 +24,9 @@ class ActivityType
     const TYPE_ECK_METADATA          = 'eck_metadata';
     const TYPE_ECK_ENTITY            = 'eck_entity';
     const TYPE_CREDIT                = 'credit';
+    const TYPE_ENROLMENT_MANUAL      = 'enrolment_manual';
+    const TYPE_CONTRACT              = 'contract';
+    const TYPE_VOTE                  = 'vote';
 
     public static function all()
     {

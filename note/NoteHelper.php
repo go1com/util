@@ -7,6 +7,7 @@ use go1\util\DB;
 use go1\util\group\GroupHelper;
 use go1\util\lo\LoHelper;
 use go1\util\portal\PortalChecker;
+use go1\util\user\UserHelper;
 
 class NoteHelper
 {
@@ -53,9 +54,30 @@ class NoteHelper
             default:
                 $portalId = $entityId;
                 break;
-
         }
 
         return $portalChecker->load($this->go1, $portalId);
+    }
+
+    public static function loadComment(Connection $db, int $id, Connection $go1 = null)
+    {
+        $sql = 'SELECT * FROM note_comment WHERE id = ?';
+
+        $comment = $db->executeQuery($sql, [$id])->fetch(DB::OBJ);
+
+        if ($go1) {
+            $user = UserHelper::load($go1, $comment->user_id);
+            if ($user) {
+                $format = UserHelper::format($user);
+                unset($comment->user_id);
+                $comment->user = (object) [
+                    'id'     => $format->id,
+                    'name'   => $format->name,
+                    'avatar' => $format->avatar,
+                ];
+            }
+        }
+
+        return $comment;
     }
 }

@@ -27,7 +27,7 @@ trait InstanceMockTrait
 
     public function createInstancePrivateKey(Connection $db, array $options)
     {
-        return $this->createInstancePublicKey($db, $options, 'user.1');
+        return $this->createInstancePublicKey($db, $options + ['uuid' => uniqid("PRIVATE_KEY_")], 'user.1');
     }
 
     public function createInstancePublicKey(Connection $db, array $options, $magic = 'user.0')

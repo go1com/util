@@ -26,4 +26,14 @@ class LoClient
 
         return false;
     }
+
+    public function eventAvailableSeat(int $eventId)
+    {
+        $res = $this->client->get("{$this->loUrl}/event/{$eventId}/available-seat", ['http_errors' => false]);
+        if (200 != $res->getStatusCode()) {
+            return false;
+        }
+
+        return json_decode($res->getBody())->count;
+    }
 }

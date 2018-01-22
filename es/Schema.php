@@ -63,6 +63,7 @@ class Schema
     const O_AWARD_ENROLMENT     = 'award_enrolment';
     const O_AWARD_ACHIEVEMENT   = 'award_achievement';
     const O_SUGGESTION_CATEGORY = 'suggestion_category'; # Suggestion for award manual item's category
+    const O_MYTEAM_PROGRESS     = 'myteam_progress';
     const O_CONTRACT            = 'contract';
     const O_METRIC              = 'metric';
 
@@ -108,6 +109,7 @@ class Schema
         self::O_AWARD_ACHIEVEMENT   => self::AWARD_ACHIEVEMENT_MAPPING,
         self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
         self::O_SUGGESTION_CATEGORY => self::SUGGESTION_CATEGORY_MAPPING,
+        self::O_MYTEAM_PROGRESS     => self::MY_TEAM_MAPPING,
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
         self::O_METRIC              => self::METRIC_MAPPING,
         self::O_ACTIVITY            => self::ACTIVITY_MAPPING,
@@ -312,13 +314,7 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'group'          => [
-                'type'       => self::T_NESTED,
-                'properties' => [
-                    'type'     => ['type' => self::T_KEYWORD],
-                    'group_id' => ['type' => self::T_INT],
-                ],
-            ],
+            'group_ids'      => ['type' => self::T_INT],
             'data'           => [
                 'properties' => [
                     'allow_resubmit' => ['type' => self::T_INT],
@@ -351,6 +347,7 @@ class Schema
                     'instance_id'         => ['type' => self::T_INT],
                     'updated_at'          => ['type' => self::T_INT],
                     'shared'              => ['type' => self::T_SHORT],
+                    'shared_passive'      => ['type' => self::T_SHORT],
                     'customized'          => ['type' => self::T_SHORT],
                 ],
             ],
@@ -393,39 +390,41 @@ class Schema
         '_parent'           => ['type' => self::O_LO],
         '_routing'          => ['required' => true],
         'properties'        => [
-            'id'          => ['type' => self::T_KEYWORD],
+            'id'             => ['type' => self::T_KEYWORD],
             // Type of enrolment: enrolment, manual-record, plan-assigned.
-            'type'        => ['type' => self::T_KEYWORD],
-            'profile_id'  => ['type' => self::T_INT],
-            'lo_id'       => ['type' => self::T_INT],
-            'parent_id'   => ['type' => self::T_INT],
-            'status'      => ['type' => self::T_SHORT],
-            'quantity'    => ['type' => self::T_DOUBLE],
-            'result'      => ['type' => self::T_INT],
-            'pass'        => ['type' => self::T_INT],
-            'assessors'   => ['type' => self::T_INT],
-            'start_date'  => ['type' => self::T_DATE],
-            'end_date'    => ['type' => self::T_DATE],
-            'due_date'    => ['type' => self::T_DATE],
+            'type'           => ['type' => self::T_KEYWORD],
+            'profile_id'     => ['type' => self::T_INT],
+            'lo_id'          => ['type' => self::T_INT],
+            'parent_id'      => ['type' => self::T_INT],
+            'status'         => ['type' => self::T_SHORT],
+            'quantity'       => ['type' => self::T_DOUBLE],
+            'result'         => ['type' => self::T_INT],
+            'pass'           => ['type' => self::T_INT],
+            'assessors'      => ['type' => self::T_INT],
+            'start_date'     => ['type' => self::T_DATE],
+            'end_date'       => ['type' => self::T_DATE],
+            'due_date'       => ['type' => self::T_DATE],
+            'submitted_date' => ['type' => self::T_DATE],
+            'marked_date'    => ['type' => self::T_DATE],
             // For award enrolment only
-            'expire_date' => ['type' => self::T_DATE],
-            'changed'     => ['type' => self::T_DATE],
-            'created'     => ['type' => self::T_DATE],
+            'expire_date'    => ['type' => self::T_DATE],
+            'changed'        => ['type' => self::T_DATE],
+            'created'        => ['type' => self::T_DATE],
             // Duration between end date and start date (hours).
             // @todo Support quiz and interactive.
-            'duration'    => ['type' => self::T_INT],
-            'is_assigned' => ['type' => self::T_SHORT],
-            'lo'          => [
+            'duration'       => ['type' => self::T_INT],
+            'is_assigned'    => ['type' => self::T_SHORT],
+            'lo'             => [
                 'properties' => self::LO_MAPPING['properties'],
             ],
-            'parent_lo'   => [
+            'parent_lo'      => [
                 'properties' => [
                     'id'    => ['type' => self::T_KEYWORD],
                     'type'  => ['type' => self::T_KEYWORD],
                     'title' => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
             ],
-            'assessor'    => [
+            'assessor'       => [
                 'properties' => [
                     'id'         => ['type' => self::T_KEYWORD],
                     'mail'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
@@ -434,18 +433,26 @@ class Schema
                     'last_name'  => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
             ],
-            'account'     => [
+            'account'        => [
                 'properties' => self::ACCOUNT_MAPPING['properties'],
             ],
-            'progress'    => [
+            'progress'       => [
                 'properties' => [
                     EnrolmentStatuses::NOT_STARTED => ['type' => self::T_INT],
                     EnrolmentStatuses::IN_PROGRESS => ['type' => self::T_INT],
                     EnrolmentStatuses::COMPLETED   => ['type' => self::T_INT],
                     EnrolmentStatuses::EXPIRED     => ['type' => self::T_INT],
+                    EnrolmentStatuses::PERCENTAGE  => ['type' => self::T_INT],
                 ],
             ],
-            'metadata'    => [
+            'certificate'    => [
+                'properties' => [
+                    'url'  => ['type' => self::T_TEXT],
+                    'name' => ['type' => self::T_KEYWORD],
+                    'size' => ['type' => self::T_TEXT],
+                ],
+            ],
+            'metadata'       => [
                 'properties' => [
                     'account_id'          => ['type' => self::T_INT],
                     'course_enrolment_id' => ['type' => self::T_INT],
@@ -607,21 +614,22 @@ class Schema
 
     const PAYMENT_TRANSACTION_MAPPING = [
         'properties' => [
-            'id'             => ['type' => self::T_KEYWORD],
-            'instance_id'    => ['type' => self::T_INT],
-            'local_id'       => ['type' => self::T_INT],
-            'email'          => ['type' => self::T_KEYWORD],
-            'status'         => ['type' => self::T_SHORT],
-            'amount'         => ['type' => self::T_DOUBLE],
-            'currency'       => ['type' => self::T_KEYWORD],
-            'created'        => ['type' => self::T_DATE],
-            'updated'        => ['type' => self::T_DATE],
-            'payment_method' => ['type' => self::T_KEYWORD],
-            'user_id'        => ['type' => self::T_INT],
-            'user'           => [
+            'id'               => ['type' => self::T_KEYWORD],
+            'instance_id'      => ['type' => self::T_INT],
+            'local_id'         => ['type' => self::T_INT],
+            'email'            => ['type' => self::T_KEYWORD],
+            'status'           => ['type' => self::T_SHORT],
+            'amount'           => ['type' => self::T_DOUBLE],
+            'currency'         => ['type' => self::T_KEYWORD],
+            'created'          => ['type' => self::T_DATE],
+            'updated'          => ['type' => self::T_DATE],
+            'payment_method'   => ['type' => self::T_KEYWORD],
+            'premium_purchase' => ['type' => self::T_INT],
+            'user_id'          => ['type' => self::T_INT],
+            'user'             => [
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'items'          => [
+            'items'            => [
                 'type'       => self::T_NESTED,
                 'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties'],
             ],
@@ -863,6 +871,7 @@ class Schema
             'completion_date' => ['type' => self::T_DATE],
             'certificate'     => ['type' => self::T_OBJECT],
             'verified'        => ['type' => self::T_INT],
+            'pass'            => ['type' => self::T_INT],
             'weight'          => ['type' => self::T_INT],
             'categories'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
         ],
@@ -939,6 +948,29 @@ class Schema
         ],
     ];
 
+    const MY_TEAM_MAPPING = [
+        'properties' => [
+            # Data for filters.
+            'portal_id'          => ['type' => self::T_INT],
+            'accessor_id'        => ['type' => self::T_INT],
+            'parent_assessor_id' => ['type' => self::T_INT],
+            'account'            => [
+                'properties' => [
+                    'id'         => ['type' => self::T_KEYWORD],
+                    'first_name' => ['type' => self::T_KEYWORD],
+                    'last_name'  => ['type' => self::T_KEYWORD],
+                    'avatar'     => ['type' => self::T_TEXT],
+                ],
+            ],
+            # Real properties for reporting
+            'role'               => ['type' => self::T_INT],
+            'enrolment'          => ['type' => self::T_INT],
+            'upcoming'           => ['type' => self::T_INT],
+            'overdue'            => ['type' => self::T_INT],
+            'has_child'          => ['type' => self::T_INT],
+        ],
+    ];
+
     const CONTRACT_MAPPING = [
         'properties' => [
             'id'              => ['type' => self::T_KEYWORD],
@@ -974,19 +1006,19 @@ class Schema
 
     const METRIC_MAPPING = [
         'properties' => [
-            'id'              => ['type' => self::T_KEYWORD],
-            'title'           => ['type' => self::T_KEYWORD],
-            'user'            => [
-                'properties'  => self::USER_MAPPING['properties'],
+            'id'           => ['type' => self::T_KEYWORD],
+            'title'        => ['type' => self::T_KEYWORD],
+            'user'         => [
+                'properties' => self::USER_MAPPING['properties'],
             ],
-            'type'            => ['type' => self::T_KEYWORD],
-            'metric_value'    => ['type' => self::T_DOUBLE],
-            'status'          => ['type' => self::T_SHORT],
-            'start_date'      => ['type' => self::T_DATE],
-            'description'     => ['type' => self::T_TEXT],
-            'created'         => ['type' => self::T_DATE],
-            'updated'         => ['type' => self::T_DATE],
-            'metadata' => [
+            'type'         => ['type' => self::T_KEYWORD],
+            'metric_value' => ['type' => self::T_DOUBLE],
+            'status'       => ['type' => self::T_SHORT],
+            'start_date'   => ['type' => self::T_DATE],
+            'description'  => ['type' => self::T_TEXT],
+            'created'      => ['type' => self::T_DATE],
+            'updated'      => ['type' => self::T_DATE],
+            'metadata'     => [
                 'properties' => [
                     'user_id' => ['type' => self::T_INT],
                 ],

@@ -168,7 +168,7 @@ class UserHelper
 
     public static function format(stdClass $user)
     {
-        $data = is_scalar($user->data) ? json_decode($user->data, true) : $user->data;
+        $data = isset($user->data) ? (is_scalar($user->data) ? json_decode($user->data, true) : $user->data) : null;
 
         return (object) [
             'id'         => (int) $user->id,
@@ -178,14 +178,14 @@ class UserHelper
             'profile_id' => (int) $user->profile_id,
             'first_name' => $user->first_name,
             'last_name'  => $user->last_name,
-            'roles'      => isset($data['roles']) ? $data['roles'] : null,
-            'avatar'     => isset($data['avatar']['uri']) ? $data['avatar']['uri'] : null,
+            'roles'      => $user->roles ?? ($data['roles'] ?? null),
+            'avatar'     => $user->avatar ?? ($data['avatar']['uri'] ?? null),
             'created'    => (int) $user->created,
             'login'      => (int) $user->login,
             'status'     => (bool) $user->status,
-            'data'       => (object) (is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0]) : $data),
+            'data'       => (object) (is_array($data) ? array_diff_key($data, ['avatar' => 0, 'roles' => 0, 'phone' => 0]) : $data),
             'timestamp'  => intval($user->timestamp),
-            'phone'      => isset($data['phone']) ? $data['phone'] : null,
+            'phone'      => $data['phone'] ?? null,
             'root'       => null,
         ];
     }

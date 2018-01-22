@@ -1,15 +1,15 @@
 <?php
+
 namespace go1\util\metric;
 
 use InvalidArgumentException;
 
 class MetricStatuses
 {
-    const ACTIVE      = 1;
-    const INACTIVE    = 0;
-
-    const S_ACTIVE      = 'Active';
-    const S_INACTIVE    = 'Inactive';
+    const ACTIVE     = 1;
+    const INACTIVE   = 0;
+    const S_ACTIVE   = 'Active';
+    const S_INACTIVE = 'Inactive';
 
     public static function all()
     {

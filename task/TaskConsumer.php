@@ -54,7 +54,6 @@ class TaskConsumer implements ConsumerInterface
                 case $this->taskItemName:
                     $this->processTaskItem($taskId);
                     break;
-
             }
         }
 
@@ -86,7 +85,8 @@ class TaskConsumer implements ConsumerInterface
         return $this->taskItem;
     }
 
-    protected function processTask(int $taskId = 0, string $type = ''){
+    protected function processTask(int $taskId = 0, string $type = '')
+    {
         $task = $this->getTask($taskId);
         if ($task && ($task->getDataType() == $type)) {
             $task->status = Task::STATUS_PROCESSING;

@@ -89,7 +89,6 @@ class LoSchema
             $event->addColumn('end', 'string', ['notnull' => false]);
             $event->addColumn('timezone', 'string', ['length' => 3]);
             $event->addColumn('seats', 'integer', ['notnull' => false]);
-            $event->addColumn('available_seats', 'integer', ['notnull' => false]);
             $event->addColumn('loc_country', 'string', ['notnull' => false]);
             $event->addColumn('loc_administrative_area', 'string', ['notnull' => false]);
             $event->addColumn('loc_sub_administrative_area', 'string', ['notnull' => false]);

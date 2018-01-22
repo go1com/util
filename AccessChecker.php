@@ -22,12 +22,17 @@ class AccessChecker
     const ACCESS_ROOT          = 300;
     const ACCESS_OWNER         = 400;
 
+    public function isContentAdministrator(Request $req, $instance)
+    {
+        return !$this->isPortalAdmin($req, $instance) ? $this->isPortalAdmin($req, $instance, Roles::ADMIN_CONTENT) : true;
+    }
+
     /**
      * @param Request $req
      * @param string  $instance
      * @return null|bool|stdClass
      */
-    public function isPortalAdmin(Request $req, $instance)
+    public function isPortalAdmin(Request $req, $instance, $role = Roles::ADMIN)
     {
         if (!$user = $this->validUser($req)) {
             return null;
@@ -40,7 +45,7 @@ class AccessChecker
         $accounts = isset($user->accounts) ? $user->accounts : [];
         foreach ($accounts as &$account) {
             if ($instance === $account->instance) {
-                if (!empty($account->roles) && in_array(Roles::ADMIN, $account->roles)) {
+                if (!empty($account->roles) && in_array($role, $account->roles)) {
                     return $account;
                 }
             }

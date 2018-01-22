@@ -9,7 +9,7 @@ use Silex\ControllerCollection;
 
 class Service
 {
-    const VERSION = 'v17.12.2.0';
+    const VERSION = 'v18.1.1.0';
 
     public static function cacheOptions($root)
     {
@@ -140,5 +140,25 @@ class Service
                 }
             }
         }
+    }
+
+    /**
+     * @param      $env
+     * @param bool $public
+     * @return string
+     */
+    public static function gatewayUrl($env, $public = false)
+    {
+        if (!empty($url = getenv('GATEWAY_URL'))) {
+            return $url;
+        }
+
+        if ($public) {
+            $suffix = 'production' === $env ? '' : "-{$env}";
+
+            return "https://api{$suffix}.go1.co";
+        }
+
+        return self::url('gateway', $env);
     }
 }

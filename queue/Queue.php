@@ -151,6 +151,9 @@ class Queue
     const METRIC_DELETE              = 'metric.delete';
     const PAYMENT_STRIPE_AUTHORIZE   = 'payment.stripe.authorize';
     const PAYMENT_STRIPE_DEAUTHORIZE = 'payment.stripe.deauthorize';
+    const NOTE_COMMENT_CREATE        = 'note_comment.create';
+    const NOTE_COMMENT_UPDATE        = 'note_comment.update';
+    const NOTE_COMMENT_DELETE        = 'note_comment.delete';
 
     # routingKey that tell some service to do something.
     #
@@ -179,6 +182,7 @@ class Queue
     const DO_ENROLMENT_DELETE                  = 'do.enrolment.delete'; # { KEY_N: MIXED|NULL }
     const DO_ENROLMENT_PLAN_CREATE             = 'do.enrolment.plan.create'; # Plan Object
     const DO_EXIM_IMPORT_ENROLLMENT            = 'do.exim.import-enrolment'; # {user_id, lo_id, instance_id, notify, manager_id}
+    const DO_EXIM_IMPORT_AWARD_ENROLLMENT      = 'do.exim.import-award-enrolment'; # {award_id, instance_id, user_ids}
     const DO_EXIM_IMPORT_USER                  = 'do.exim.import-user'; # {$instance, $mail, $first, $last, $status, $manager}
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
@@ -193,4 +197,5 @@ class Queue
     const DO_AWARD_CALCULATE                   = 'do.award.calculate'; # {task: AWARD_TASK, body: array TASK_BODY}
     const DO_AWARD_PLAN_CREATE                 = 'do.award.plan.create'; # Plan Object
     const DO_INDEX                             = 'do.index'; # {index: STRING, type: string, operation: enum(index,create,update,delete,bulk), body: OBJECT, routing: STRING, parent: STRING}
+    const DO_MYTEAM                            = 'do.my-team'; # { action: STRING, body: OBJECT }
 }

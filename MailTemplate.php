@@ -10,62 +10,69 @@ class MailTemplate
     const USER_WELCOME_REGISTER = [
         'key'    => 'user.welcome.register',
         'tokens' => [
-            '!user_name'      => 'Machine name of user name, this maybe the email address.',
-            '@user_name'      => 'User name.',
-            '!site_name'      => 'Human name of the portal.',
-            '!portal_url'     => 'The portal URL.',
-            '!primary_domain' => 'Primary domain of portal.',
+            '!user_name'       => 'Machine name of user name, this maybe the email address.', //deprecated
+            '@user_name'       => 'User name.', //deprecated
+            '!user_first_name' => 'User first name',
+            '!site_name'       => 'Human name of the portal.', //deprecated
+            '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'The portal URL.',
+            '!primary_domain'  => 'Primary domain of portal.',
         ],
     ];
 
     const USER_WELCOME_INVITED = [
         'key'    => 'user.welcome.invite',
         'tokens' => [
-            '@user_name'      => 'Name of invited user.',
-            '!user_name'      => 'Name of invitee user.',
-            '!host_email'     => 'Email of host user.',
-            '!onetime_url'    => 'Onetime login link.',
-            '!site_name'      => 'Human name of the portal.',
-            '!portal_url'     => 'The portal URL.',
-            '!primary_domain' => 'Primary domain of portal.',
+            '@user_name'       => 'Name of invited user.', //deprecated
+            '!user_name'       => 'Name of invitee user.', //deprecated
+            '!user_first_name' => 'User first name.',
+            '!user_mail'       => 'User mail.',
+            '!host_email'      => 'Email of host user.',
+            '!onetime_url'     => 'Onetime login link.',
+            '!site_name'       => 'Human name of the portal.', //deprecated
+            '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'The portal URL.',
+            '!primary_domain'  => 'Primary domain of portal.',
         ],
     ];
 
     const USER_WELCOME_CREATED = [
         'key'    => 'user.welcome.create',
         'tokens' => [
-            '!user_name'      => 'Machine name of user name, this maybe the email address.',
-            '@user_name'      => 'User name.',
-            '!onetime_url'    => 'Onetime login link.',
-            '!site_name'      => 'Human name of the portal.',
-            '!portal_url'     => 'The portal URL.',
-            '!primary_domain' => 'Primary domain of portal.',
+            '!user_name'       => 'Machine name of user name, this maybe the email address.', //deprecated
+            '@user_name'       => 'User name.', //deprecated
+            '!user_first_name' => 'User first name.',
+            '!user_mail'       => 'User mail.',
+            '!onetime_url'     => 'Onetime login link.',
+            '!site_name'       => 'Human name of the portal.', //deprecated
+            '!portal_name'     => 'Portal name',
+            '!portal_url'      => 'The portal URL.',
+            '!primary_domain'  => 'Primary domain of portal.',
         ],
     ];
 
     const USER_PASSWORD_FORGET = [
         'key'    => 'user.password.forget',
         'tokens' => [
-            '!user_name'      => 'User name',
-            '!user_mail'      => 'User mail',
-            '!site_name'      => 'Human name of the portal',
-            '!primary_domain' => 'Primary domain of portal',
-            '!onetime_url'    => 'Onetime login link',
-            '!portal_name'    => 'Portal name',
-            '!portal_image'   => 'Portal logo',
-            '!portal_url'     => 'Portal URL',
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!primary_domain'  => 'Primary domain of portal',
+            '!onetime_url'     => 'Onetime login link',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal logo',
+            '!portal_url'      => 'Portal URL',
         ],
     ];
 
     const USER_PASSWORD_CHANGED = [
         'key'    => 'user.password.changed',
         'tokens' => [
-            '!first_name'    => 'User first name',
-            '!user_mail'     => 'User mail.',
-            '!forget_pw_url' => 'Link to forget password page.',
-            '!portal_name'   => 'Portal name.',
-            '!portal_image'  => 'Portal logo.',
-            '!portal_url'    => 'Portal URL.',
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail.',
+            '!forget_pw_url'   => 'Link to forget password page.',
+            '!portal_name'     => 'Portal name.',
+            '!portal_image'    => 'Portal logo.',
+            '!portal_url'      => 'Portal URL.',
         ],
     ];
 
@@ -77,14 +84,14 @@ class MailTemplate
     const USER_LOGIN_FAILED = [
         'key'    => 'user.login.failed',
         'tokens' => [
-            '!user_name'      => 'Name of user',
-            '!user_mail'      => 'User mail',
-            '!site_name'      => 'Human name of the portal',
-            '!primary_domain' => 'Primary domain of portal',
-            '!onetime_url'    => 'Onetime login link',
-            '!portal_name'    => 'Portal name',
-            '!portal_image'   => 'Portal logo',
-            '!portal_url'     => 'Portal URL',
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail',
+            '!site_name'       => 'Human name of the portal',
+            '!primary_domain'  => 'Primary domain of portal',
+            '!onetime_url'     => 'Onetime login link',
+            '!portal_name'     => 'Portal name',
+            '!portal_image'    => 'Portal logo',
+            '!portal_url'      => 'Portal URL',
         ],
     ];
 
@@ -119,6 +126,7 @@ class MailTemplate
         'tokens' => [
             '!learner_name' => 'Learn name',
             '!course_name'  => 'Course name',
+            '!course_url'   => 'Course URL',
             '!portal_name'  => 'Portal name',
             '!portal_image' => 'Portal image',
             '!learner_mail' => 'Learner mail',
@@ -141,6 +149,7 @@ class MailTemplate
         'tokens' => [
             '!learner_name' => 'Learn name',
             '!course_name'  => 'Course name',
+            '!course_url'   => 'Course URL',
             '!portal_name'  => 'Portal name',
             '!portal_image' => 'Portal image',
             '!learner_mail' => 'Learner mail',
@@ -192,12 +201,13 @@ class MailTemplate
     const AUTHOR_ENROLMENT_COURSE = [
         'key'    => 'author.enrol.course',
         'tokens' => [
-            '!author_first_name'  => 'Author first name',
-            '!author_mail'        => 'Author mail',
-            '!learner_first_name' => 'Learner first name',
-            '!course_name'        => 'Course name',
-            '!portal_name'        => 'Portal name',
-            '!portal_image'       => 'Portal image',
+            '!author_first_name' => 'Author first name',
+            '!author_mail'       => 'Author mail',
+            '!learner_name'      => 'Learner name',
+            '!learner_mail'      => 'Learner mail',
+            '!course_name'       => 'Course name',
+            '!portal_name'       => 'Portal name',
+            '!portal_image'      => 'Portal image',
         ],
     ];
 
@@ -290,6 +300,7 @@ class MailTemplate
             '!recipient_name'       => 'Recipient full name',
             '!recipient_first_name' => 'Recipient first name',
             '!group_name'           => 'Group name',
+            '!group_url'            => 'Group URL',
             '!portal_name'          => 'Portal name',
             '!portal_image'         => 'Portal image',
             '!portal_url'           => 'The portal URL',
@@ -302,6 +313,7 @@ class MailTemplate
             '!recipient_name'       => 'Recipient full name',
             '!recipient_first_name' => 'Recipient first name',
             '!group_name'           => 'Group name',
+            '!group_url'            => 'Group URL',
             '!portal_name'          => 'Portal name',
             '!portal_image'         => 'Portal image',
             '!portal_url'           => 'The portal URL',
@@ -324,11 +336,11 @@ class MailTemplate
     const ONBOARD_WELCOME = [
         'key'    => 'onboard.welcome',
         'tokens' => [
-            '!first_name'     => 'First name',
-            '!user_name'      => 'User mail',
-            '!site_name'      => 'Human name of the portal.',
-            '!portal_url'     => 'The portal URL.',
-            '!primary_domain' => 'Primary domain of portal.',
+            '!user_first_name' => 'First name',
+            '!user_name'       => 'User mail',
+            '!site_name'       => 'Human name of the portal.',
+            '!portal_url'      => 'The portal URL.',
+            '!primary_domain'  => 'Primary domain of portal.',
         ],
     ];
 

@@ -143,6 +143,10 @@ class PortalChecker
                 $domain = PortalHelper::WEBSITE_STAGING_INSTANCE . '/p';
                 break;
 
+            case 'qa':
+                $domain = PortalHelper::WEBSITE_QA_INSTANCE . '/p';
+                break;
+
             case 'dev':
                 $domain = PortalHelper::WEBSITE_DEV_INSTANCE . '/p';
                 break;
@@ -164,5 +168,42 @@ class PortalChecker
         }
 
         return false;
+    }
+
+    public static function allowDiscussion($portal): bool
+    {
+        PortalHelper::parseConfig($portal);
+        if (!empty($portal->configuration)) {
+            return boolval($portal->configuration->discussion ?? false)
+                ?: boolval($portal->configuration->discussionEnabled ?? false);
+        }
+
+        return true;
+    }
+
+    public static function allowUserInvite($portal): bool
+    {
+        PortalHelper::parseConfig($portal);
+        return boolval($portal->configuration->user_invite ?? true);
+    }
+
+    public static function allowPublicProfile($portal): bool
+    {
+        PortalHelper::parseConfig($portal);
+        return boolval($portal->configuration->public_profiles ?? false);
+    }
+
+    public static function allowUserPayment($portal): bool
+    {
+        PortalHelper::parseConfig($portal);
+        return boolval($portal->configuration->user_payment ?? true);
+    }
+
+    public static function allowMarketplace($portal): bool
+    {
+        PortalHelper::parseConfig($portal);
+        return (!empty($portal->features))
+            ? boolval($portal->features->marketplace ?? true)
+            : true;
     }
 }

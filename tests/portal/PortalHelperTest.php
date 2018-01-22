@@ -3,6 +3,7 @@
 namespace go1\util\tests\portal;
 
 use go1\clients\UserClient;
+use go1\util\model\Portal;
 use go1\util\portal\PortalHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\tests\UtilTestCase;
@@ -66,7 +67,7 @@ class PortalHelperTest extends UtilTestCase
                 ->method('findAdministrators')
                 ->willReturnCallback(function () use ($adminIds) {
                     foreach ($adminIds as $adminId) {
-                        yield (object)['id' => $adminId];
+                        yield (object) ['id' => $adminId];
                     }
                 });
 
@@ -94,5 +95,30 @@ class PortalHelperTest extends UtilTestCase
         $this->assertEquals(2, count($admins));
         $this->assertEquals($admin1Id, $admins[0]->id);
         $this->assertEquals($admin2Id, $admins[1]->id);
+    }
+
+    public function testLanguage()
+    {
+        $portalEnglish = (object) ['data' => (object) ['configuration' => (object) [PortalHelper::LANGUAGE => PortalHelper::LANGUAGE_DEFAULT]]];
+        $this->assertEquals(PortalHelper::LANGUAGE_DEFAULT, PortalHelper::language($portalEnglish));
+
+        $portalCatalan = (object) ['data' => (object) ['configuration' => (object) [PortalHelper::LANGUAGE => 'ca']]];
+        $this->assertEquals('ca', PortalHelper::language($portalCatalan));
+    }
+
+    public function testTimeZone()
+    {
+        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com', 'data' => ['configuration' => ['timezone' => "Australia/Canberra"]]]);
+
+        $portal = PortalHelper::load($this->db, $instanceId);
+        $this->assertEquals("Australia/Canberra", PortalHelper::timezone($portal));
+    }
+
+    public function testLocale()
+    {
+        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com', 'data' => ['configuration' => ['locale' => "AU"]]]);
+
+        $portal = PortalHelper::load($this->db, $instanceId);
+        $this->assertEquals("AU", PortalHelper::locale($portal));
     }
 }

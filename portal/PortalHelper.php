@@ -18,8 +18,13 @@ class PortalHelper
     const WEBSITE_DOMAIN           = 'www.go1.com';
     const WEBSITE_PUBLIC_INSTANCE  = 'public.mygo1.com';
     const WEBSITE_STAGING_INSTANCE = 'staging.mygo1.com';
+    const WEBSITE_QA_INSTANCE      = 'qa.mygo1.com';
     const WEBSITE_DEV_INSTANCE     = 'dev.mygo1.com';
 
+    const LANGUAGE                             = 'language';
+    const LANGUAGE_DEFAULT                     = 'en';
+    const LOCALE                               = 'locale';
+    const LOCALE_DEFAULT                       = 'AU';
     const FEATURE_CREDIT                       = 'credit';
     const FEATURE_CREDIT_DEFAULT               = true;
     const FEATURE_SEND_WELCOME_EMAIL           = 'send_welcome_email';
@@ -80,6 +85,16 @@ class PortalHelper
                 }
             }
         }
+
+        if (!isset($portal->features)) {
+            if (!empty($portal->data)) {
+                $portal->data = is_scalar($portal->data) ? json_decode($portal->data) : $portal->data;
+                if (!empty($portal->data->features)) {
+                    $portal->features = $portal->data->features;
+                    unset($portal->data->features);
+                }
+            }
+        }
     }
 
     public static function loadFromLoId(Connection $db, int $loId)
@@ -111,10 +126,7 @@ class PortalHelper
     {
         self::parseConfig($portal);
 
-        $logo = $portal->data->files->logo
-            ?? ($portal->data->configuration->logo
-                ?? ($portal->data->logo ?? ''));
-
+        $logo = $portal->data->files->logo ?? ($portal->data->configuration->logo ?? ($portal->data->logo ?? ''));
         if (!$logo) {
             return $logo;
         }
@@ -136,12 +148,11 @@ class PortalHelper
 
     public static function portalAdminIds(UserClient $userClient, string $portalName): array
     {
-        $adminIds = [];
         foreach ($userClient->findAdministrators($portalName, true) as $admin) {
             $adminIds[] = $admin->id;
         }
 
-        return $adminIds;
+        return $adminIds ?? [];
     }
 
     public static function portalAdmins(Connection $db, UserClient $userClient, string $portalName): array
@@ -149,5 +160,19 @@ class PortalHelper
         $adminIds = self::portalAdminIds($userClient, $portalName);
 
         return !$adminIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $adminIds));
+    }
+
+    public static function language(stdClass $portal)
+    {
+        self::parseConfig($portal);
+
+        return $portal->configuration->{self::LANGUAGE} ?? self::LANGUAGE_DEFAULT;
+    }
+
+    public static function locale(stdClass $portal)
+    {
+        self::parseConfig($portal);
+
+        return $portal->configuration->{self::LOCALE} ?? self::LOCALE_DEFAULT;
     }
 }

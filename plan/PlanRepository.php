@@ -26,6 +26,7 @@ class PlanRepository
             $plan = $schema->createTable('gc_plan');
             $plan->addOption('description', 'GO1P-10732: Store learn-planning object.');
             $plan->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $plan->addColumn('type', Type::SMALLINT, ['default' => PlanTypes::ASSIGN]);
             $plan->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $plan->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $plan->addColumn('instance_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
@@ -36,6 +37,7 @@ class PlanRepository
             $plan->addColumn('due_date', Type::DATETIME, ['notnull' => false]);
             $plan->addColumn('data', 'blob', ['notnull' => false]);
             $plan->setPrimaryKey(['id']);
+            $plan->addIndex(['type']);
             $plan->addIndex(['user_id']);
             $plan->addIndex(['assigner_id']);
             $plan->addIndex(['instance_id']);
@@ -48,6 +50,7 @@ class PlanRepository
         if (!$schema->hasTable('gc_plan_revision')) {
             $planRevision = $schema->createTable('gc_plan_revision');
             $planRevision->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $planRevision->addColumn('type', Type::SMALLINT);
             $planRevision->addColumn('plan_id', Type::INTEGER, ['unsigned' => true]);
             $planRevision->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $planRevision->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
@@ -59,6 +62,7 @@ class PlanRepository
             $planRevision->addColumn('due_date', Type::DATETIME, ['notnull' => false]);
             $planRevision->addColumn('data', Type::BLOB, ['notnull' => false]);
             $planRevision->setPrimaryKey(['id']);
+            $planRevision->addIndex(['type']);
             $planRevision->addIndex(['plan_id']);
             $planRevision->addIndex(['user_id']);
             $planRevision->addIndex(['assigner_id']);
@@ -67,23 +71,6 @@ class PlanRepository
             $planRevision->addIndex(['status']);
             $planRevision->addIndex(['created_date']);
             $planRevision->addIndex(['due_date']);
-        }
-
-        self::update01($schema);
-    }
-
-    private static function update01(Schema $schema)
-    {
-        $plan = $schema->getTable('gc_plan');
-        if (!$plan->hasColumn('type')) {
-            $plan->addColumn('type', Type::SMALLINT, ['default' => PlanTypes::ASSIGN]);
-            $plan->addIndex(['type']);
-        }
-
-        $planRevision = $schema->getTable('gc_plan_revision');
-        if (!$planRevision->hasColumn('type')) {
-            $planRevision->addColumn('type', Type::SMALLINT, ['default' => PlanTypes::ASSIGN]);
-            $planRevision->addIndex(['type']);
         }
     }
 
@@ -275,5 +262,27 @@ class PlanRepository
         });
 
         return true;
+    }
+
+    public function loadSuggestedPlan(string $entityType, int $entityId, int $userId): ?Plan
+    {
+        $q = $this->db->createQueryBuilder();
+        $plan = $q
+            ->select('*')
+            ->from('gc_plan')
+            ->where('type = :type')
+            ->andWhere('entity_type = :entityType')
+            ->andWhere('entity_id = :entityId')
+            ->andWhere('user_id = :userId')
+            ->setParameters([
+                ':type'       => PlanTypes::SUGGESTED,
+                ':entityType' => $entityType,
+                ':entityId'   => $entityId,
+                ':userId'     => $userId,
+            ])
+            ->execute()
+            ->fetch(DB::OBJ);
+
+        return $plan ? Plan::create($plan) : null;
     }
 }

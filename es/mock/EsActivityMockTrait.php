@@ -34,6 +34,7 @@ trait EsActivityMockTrait
                 'actor'  => $options['context']['actor'] ?? null,
                 'user'   => $options['context']['user'] ?? null,
                 'entity' => $options['context']['entity'] ?? null,
+                'diff'   => $options['context']['diff'] ?? [],
             ],
         ];
 

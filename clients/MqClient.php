@@ -13,6 +13,7 @@ use Pimple\Container;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MqClient
 {
@@ -26,6 +27,7 @@ class MqClient
     private $accessChecker;
     private $container;
     private $request;
+    private $propertyAccessor;
 
     const CONTEXT_ACTOR_ID    = 'actor_id';
     const CONTEXT_TIMESTAMP   = 'timestamp';
@@ -39,8 +41,8 @@ class MqClient
         $user,
         $pass,
         LoggerInterface $logger = null,
-        AccessChecker $accessChecker,
-        Container $container,
+        AccessChecker $accessChecker = null,
+        Container $container = null,
         Request $request = null
     )
     {
@@ -52,6 +54,7 @@ class MqClient
         $this->accessChecker = $accessChecker;
         $this->container = $container;
         $this->request = $request;
+        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
     private function channel()
@@ -81,7 +84,7 @@ class MqClient
             return $this->request;
         }
 
-        return $this->container->offsetExists('request_stack')
+        return ($this->container && $this->container->offsetExists('request_stack'))
             ? $this->container['request_stack']->getCurrentRequest()
             : null;
     }
@@ -115,6 +118,11 @@ class MqClient
 
     private function processMessage($body, string $routingKey)
     {
+        # Quiz does not have `id` property.
+        if (Queue::QUIZ_USER_ANSWER_UPDATE == $routingKey) {
+            return null;
+        }
+
         $explode = explode('.', $routingKey);
         $isLazy = isset($explode[0]) && ('do' == $explode[0]); # Lazy = do.SERVICE.#
 
@@ -129,7 +137,8 @@ class MqClient
                 ||
                 (
                     is_object($body)
-                    && (!(property_exists($body, 'id') && $body->id) || !(property_exists($body, 'original') && $body->original))
+                    && (!(property_exists($body, 'id') && $this->propertyAccessor->getValue($body,'id'))
+                        || !(property_exists($body, 'original') && $this->propertyAccessor->getValue($body,'original')))
                 )
             ) {
                 throw new Exception("Missing entity ID or original data.");
