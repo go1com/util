@@ -964,9 +964,9 @@ class Schema
             ],
             # Real properties for reporting
             'role'               => ['type' => self::T_INT],
-            'enrolment'          => ['type' => self::T_INT],
-            'upcoming'           => ['type' => self::T_INT],
-            'overdue'            => ['type' => self::T_INT],
+            'count_enrolment'    => ['type' => self::T_INT],
+            'count_upcoming'     => ['type' => self::T_INT],
+            'count_overdue'      => ['type' => self::T_INT],
             'has_child'          => ['type' => self::T_INT],
         ],
     ];
