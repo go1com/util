@@ -951,7 +951,6 @@ class Schema
     const MY_TEAM_MAPPING = [
         'properties' => [
             # Data for filters.
-            'portal_id'          => ['type' => self::T_INT],
             'accessor_id'        => ['type' => self::T_INT],
             'parent_assessor_id' => ['type' => self::T_INT],
             'account'            => [
