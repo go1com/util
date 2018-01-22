@@ -71,7 +71,7 @@ trait EnrolmentMockTrait
             'enrolment_id'        => isset($options['enrolment_id']) ? $options['enrolment_id'] : 0,
             'note'                => isset($options['note']) ? $options['note'] : '',
             'data'                => isset($options['data']) ? $options['data'] : '',
-            'parent_enrolment_id' => isset($options['parent_enrolment_id']) ? $options['parent_enrolment_id'] : 0,
+            'parent_enrolment_id' => $options['parent_enrolment_id'] ?? null,
         ]);
 
         $id = $options['id'] ?? $db->lastInsertId('gc_enrolment_revision');
