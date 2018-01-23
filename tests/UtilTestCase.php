@@ -38,6 +38,7 @@ abstract class UtilTestCase extends TestCase
     {
         $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
         $this->installGo1Schema($this->db, false);
+        Service::elasticSearchIndex();
 
         DB::install($this->db, [
             function (Schema $schema) {

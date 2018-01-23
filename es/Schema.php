@@ -9,12 +9,14 @@ use go1\util\enrolment\EnrolmentStatuses;
  */
 class Schema
 {
-    const INDEX             = ES_INDEX;
-    const ALL_INDEX         = ES_INDEX . '*';
-    const MARKETPLACE_INDEX = ES_INDEX . '_marketplace';
-    const LOG_INDEX         = ES_INDEX . '_log';
-    const ACTIVITY_INDEX    = ES_INDEX . '_activity';
-    const PORTALS_INDEX     = ES_INDEX . '_portal*';
+    const INDEX              = ES_INDEX;
+    const ALL_INDEX          = ES_INDEX.'*';
+    const MARKETPLACE_INDEX  = ES_INDEX.'_marketplace';
+    const LOG_INDEX          = ES_INDEX.'_log';
+    const ACTIVITY_INDEX     = ES_INDEX.'_activity';
+    const PORTALS_INDEX      = ES_INDEX.'_portal*';
+    const GO1_MY_TEAM_INDEX  = ES_INDEX.'_my_team';
+    const GO1_ACTIVITY_INDEX = ES_INDEX.'_activity';
 
     const TEMP             = -32;
     const MAX_INPUT_LENGTH = 50;
@@ -109,10 +111,22 @@ class Schema
         self::O_AWARD_ACHIEVEMENT   => self::AWARD_ACHIEVEMENT_MAPPING,
         self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
         self::O_SUGGESTION_CATEGORY => self::SUGGESTION_CATEGORY_MAPPING,
-        self::O_MYTEAM_PROGRESS     => self::MY_TEAM_MAPPING,
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
         self::O_METRIC              => self::METRIC_MAPPING,
-        self::O_ACTIVITY            => self::ACTIVITY_MAPPING,
+    ];
+
+    const MY_TEAM_INDEX_MAPPING = [
+        self::O_MYTEAM_PROGRESS => self::MY_TEAM_MAPPING,
+    ];
+
+    const ACTIVITY_INDEX_MAPPING = [
+        self::O_ACTIVITY => self::ACTIVITY_MAPPING,
+    ];
+
+    const GO1_INDICES = [
+        self::INDEX              => self::MAPPING,
+        self::GO1_ACTIVITY_INDEX => self::ACTIVITY_INDEX_MAPPING,
+        self::GO1_MY_TEAM_INDEX  => self::MY_TEAM_INDEX_MAPPING,
     ];
 
     const ANALYZED = [

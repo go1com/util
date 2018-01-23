@@ -34,10 +34,19 @@ trait EsInstallTrait
             ]);
         }
 
-        if (!$client->indices()->exists(['index' => Schema::ACTIVITY_INDEX])) {
+        if (!$client->indices()->exists(['index' => Schema::GO1_ACTIVITY_INDEX])) {
             $client->indices()->create([
-                'index' => Schema::ACTIVITY_INDEX,
+                'index' => Schema::GO1_ACTIVITY_INDEX,
                 'body'  => Schema::BODY + $settings,
+            ]);
+        }
+
+        if (!$client->indices()->exists(['index' => Schema::GO1_MY_TEAM_INDEX])) {
+            $client->indices()->create([
+                'index' => Schema::GO1_MY_TEAM_INDEX,
+                'body'  => [
+                    'mappings' => Schema::MY_TEAM_INDEX_MAPPING,
+                ] + $settings,
             ]);
         }
     }
@@ -46,13 +55,13 @@ trait EsInstallTrait
     {
         if (!$client->indices()->exists($params = ['index' => $portalIndex = Schema::portalIndex($portalId)])) {
             $params['body']['actions'][]['add'] = [
-                'index'   => Schema::INDEX,
+                'indices' => [Schema::INDEX, Schema::GO1_MY_TEAM_INDEX, Schema::GO1_ACTIVITY_INDEX],
                 'alias'   => $portalIndex,
                 'routing' => $portalId,
                 'filter'  => [
                     'term' => [
-                        'metadata.instance_id' => $portalId
-                    ]
+                        'metadata.instance_id' => $portalId,
+                    ],
                 ],
             ];
             $client->indices()->updateAliases($params);
