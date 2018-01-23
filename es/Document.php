@@ -16,9 +16,9 @@ class Document implements JsonSerializable
     public static function create(stdClass $input)
     {
         $document = new static();
-        $document->type = $input->type ?? null;
-        $document->id = $input->id ?? null;
-        $document->portalId = $input->portalId ?? null;
+        $document->type = $input->type;
+        $document->id = $input->id;
+        $document->portalId = $input->portalId;
         $document->parentId = $input->parentId ?? null;
         $document->body = $input->body ?? null;
 

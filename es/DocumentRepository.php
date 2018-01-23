@@ -10,10 +10,10 @@ class DocumentRepository
     private $client;
     private $options;
 
-    public function __construct(Client $client, array $options = [])
+    public function __construct(Client $client, array $requestOptions = [])
     {
         $this->client = $client;
-        $this->options = $options;
+        $this->options = $requestOptions;
     }
 
     private function indexName(string $documentType)

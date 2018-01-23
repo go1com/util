@@ -7,6 +7,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
 use go1\util\DB;
+use go1\util\es\IndexHelper;
 use go1\util\plan\PlanRepository;
 use go1\util\schema\AssignmentSchema;
 use go1\util\schema\AwardSchema;
@@ -38,7 +39,7 @@ abstract class UtilTestCase extends TestCase
     {
         $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
         $this->installGo1Schema($this->db, false);
-        Service::elasticSearchIndex();
+        IndexHelper::initConfig();
 
         DB::install($this->db, [
             function (Schema $schema) {
