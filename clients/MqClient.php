@@ -36,10 +36,7 @@ class MqClient
     const CONTEXT_INTERNAL    = 'internal';
 
     public function __construct(
-        $host,
-        $port,
-        $user,
-        $pass,
+        $host, $port, $user, $pass,
         LoggerInterface $logger = null,
         AccessChecker $accessChecker = null,
         Container $container = null,
@@ -137,8 +134,8 @@ class MqClient
                 ||
                 (
                     is_object($body)
-                    && (!(property_exists($body, 'id') && $this->propertyAccessor->getValue($body,'id'))
-                        || !(property_exists($body, 'original') && $this->propertyAccessor->getValue($body,'original')))
+                    && (!(property_exists($body, 'id') && $this->propertyAccessor->getValue($body, 'id'))
+                        || !(property_exists($body, 'original') && $this->propertyAccessor->getValue($body, 'original')))
                 )
             ) {
                 throw new Exception("Missing entity ID or original data.");
