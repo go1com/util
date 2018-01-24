@@ -995,6 +995,7 @@ class Schema
             'count_enrolment'    => ['type' => self::T_INT],
             'count_upcoming'     => ['type' => self::T_INT],
             'count_overdue'      => ['type' => self::T_INT],
+            'count_mark'         => ['type' => self::T_INT],
             'has_child'          => ['type' => self::T_INT],
         ],
     ];
