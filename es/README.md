@@ -22,7 +22,6 @@ At the moment, we put all of document types into go1 index. we need to split int
 ###### 2. Create Fake portal index with elastic search alias
 
 ``` json
-
 POST /_aliases
 {
     "actions" : [
@@ -42,7 +41,6 @@ POST /_aliases
 We can query data of particular portal via fake alias 
 
 ``` json
-
 GET /go1_portal_4/myteam_progress/_search
 ```
  

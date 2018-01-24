@@ -22,7 +22,7 @@ class DocumentRepositoryTest extends UtilTestCase
             ->expects($this->once())
             ->method('index')
             ->willReturnCallback(function($params) {
-                $this->assertEquals(Schema::GO1_MY_TEAM_INDEX, $params['index']);
+                $this->assertEquals(Schema::I_MY_TEAM, $params['index']);
                 $this->assertEquals(1, $params['id']);
                 $this->assertEquals(Schema::O_MYTEAM_PROGRESS, $params['type']);
                 $this->assertEquals(5, $params['routing']);
@@ -52,7 +52,7 @@ class DocumentRepositoryTest extends UtilTestCase
             ->expects($this->once())
             ->method('delete')
             ->willReturnCallback(function($params) {
-                $this->assertEquals(Schema::GO1_MY_TEAM_INDEX, $params['index']);
+                $this->assertEquals(Schema::I_MY_TEAM, $params['index']);
                 $this->assertEquals(1, $params['id']);
                 $this->assertEquals(Schema::O_MYTEAM_PROGRESS, $params['type']);
                 $this->assertEquals(5, $params['routing']);
@@ -82,7 +82,7 @@ class DocumentRepositoryTest extends UtilTestCase
             ->expects($this->once())
             ->method('get')
             ->willReturnCallback(function($params) {
-                $this->assertEquals(Schema::GO1_MY_TEAM_INDEX, $params['index']);
+                $this->assertEquals(Schema::I_MY_TEAM, $params['index']);
                 $this->assertEquals(1, $params['id']);
                 $this->assertEquals(Schema::O_MYTEAM_PROGRESS, $params['type']);
                 $this->assertEquals(10, $params['routing']);

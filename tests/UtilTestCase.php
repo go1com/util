@@ -39,7 +39,7 @@ abstract class UtilTestCase extends TestCase
     {
         $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
         $this->installGo1Schema($this->db, false);
-        IndexHelper::initConfig();
+        IndexHelper::indexName();
 
         DB::install($this->db, [
             function (Schema $schema) {

@@ -21,15 +21,12 @@ class Schema
     const ACTIVITY_INDEX     = ES_INDEX.'_activity';
     /** @deprecated*/
     const PORTALS_INDEX      = ES_INDEX.'_portal*';
-    /** @deprecated*/
-    const GO1_MY_TEAM_INDEX  = ES_INDEX.'_my_team';
-    /** @deprecated*/
-    const GO1_ACTIVITY_INDEX = ES_INDEX.'_activity';
 
     const I_GO1         = ES_INDEX;
     const I_ACTIVITY    = ES_INDEX.'_activity';
-    const I_MY_TEAM     = ES_INDEX.'_my_team';
+    const I_ALL         = ES_INDEX.'*';
     const I_LOG         = ES_INDEX.'_log';
+    const I_MY_TEAM     = ES_INDEX.'_my_team';
     const I_MARKETPLACE = ES_INDEX.'_marketplace';
 
     const TEMP             = -32;
@@ -90,7 +87,7 @@ class Schema
     const A_SIMPLE = 'simple';
 
     const SCHEMA = [
-        'index' => self::INDEX,
+        'index' => self::I_GO1,
         'body'  => self::BODY,
     ];
 
@@ -137,7 +134,7 @@ class Schema
         self::O_ACTIVITY => self::M_ACTIVITY,
     ];
 
-    const GO1_INDICES = [
+    const I_INDICES = [
         self::I_GO1      => self::I_GO1_MAPPING,
         self::I_ACTIVITY => self::I_ACTIVITY_MAPPING,
         self::I_MY_TEAM  => self::I_MY_TEAM_MAPPING,

@@ -18,7 +18,7 @@ class DocumentRepository
 
     private function indexName(string $documentType)
     {
-        foreach (Schema::GO1_INDICES as $indexName => $types) {
+        foreach (Schema::I_INDICES as $indexName => $types) {
             if (isset($types[$documentType])) {
                 return $indexName;
             }
