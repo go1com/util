@@ -164,11 +164,11 @@ class GroupHelperTest extends UtilTestCase
 
         $accessChecker = new AccessChecker();
         $req = new Request();
-        $req->request->replace(['jwt.payload' => $this->getJwt(null, null, null, Roles::ACCOUNTS_ROLES)], null, null, false);
+        $req->attributes->replace(['jwt.payload' => $this->getJwt(null, null, null, Roles::ACCOUNTS_ROLES)], null, null, false);
         $this->assertTrue(GroupHelper::groupAccess($groupUserId, $userId, $accessChecker, $req));
 
         $instance = 'site.mygo1.com';
-        $req->request->replace(['jwt.payload' => $this->getJwt(null, null, $instance, [Roles::ADMIN]), null, null, false]);
+        $req->attributes->replace(['jwt.payload' => $this->getJwt(null, null, $instance, [Roles::ADMIN]), null, null, false]);
         $this->assertTrue(GroupHelper::groupAccess($groupUserId, $userId, $accessChecker, $req, $instance));
     }
 
@@ -259,8 +259,8 @@ class GroupHelperTest extends UtilTestCase
 
     public function testGroupTypePermission()
     {
-        $req = new Request();
-        $req->query->set('jwt.payload', $this->getAdminPayload('az.mygo1.com'));
+        $req = new Request;
+        $req->attributes->set('jwt.payload', $this->getAdminPayload('az.mygo1.com'));
 
         $groupMarketId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_PACKAGE]);
         $groupMarket = GroupHelper::load($this->db, $groupMarketId);
