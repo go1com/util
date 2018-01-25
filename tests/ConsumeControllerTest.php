@@ -110,22 +110,24 @@ class ConsumeControllerTest extends UtilTestCase
 
     public function test500()
     {
+        global $consumeCount;
+
         $fooConsumer = $this->consumerClass();
         $barConsumer = $this->consumerClass();
         $excConsumer = $this->consumerClass(true, (new Exception('foo')));
         $errConsumer = $this->consumerClass(true, (new Error('foo')));
-        $consume = new ConsumeController([$fooConsumer, $barConsumer, $excConsumer, $errConsumer], $this->c['logger'], $this->c['access_checker']);
+        $consume = new ConsumeController(
+            [$fooConsumer, $barConsumer, $excConsumer, $errConsumer],
+            $this->c['logger'],
+            $this->c['access_checker']
+        );
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
-        $req->request->replace([
-            'routingKey' => self::ROUTING_KEY,
-            'body'       => ['foo' => 'bar'],
-        ]);
-        $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
+        $req->request->replace(['routingKey' => self::ROUTING_KEY, 'body' => ['foo' => 'bar']]);
+        $req->attributes->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $res = $consume->post($req);
 
         $this->assertEquals(500, $res->getStatusCode());
-        global $consumeCount;
         $this->assertCount(1, $consumeCount);
         $this->assertArrayHasKey(self::ROUTING_KEY, $consumeCount);
         $this->assertEquals(2, $consumeCount[self::ROUTING_KEY]);
@@ -138,11 +140,7 @@ class ConsumeControllerTest extends UtilTestCase
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->attributes->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
-        $req->request->replace([
-            'routingKey' => self::ROUTING_KEY,
-            'body'       => ['foo' => 'bar'],
-        ]);
-
+        $req->request->replace(['routingKey' => self::ROUTING_KEY, 'body' => ['foo' => 'bar']]);
         $res = $consume->post($req);
 
         $this->assertEquals(204, $res->getStatusCode());
