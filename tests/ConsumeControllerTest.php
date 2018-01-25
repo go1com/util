@@ -2,15 +2,15 @@
 
 namespace go1\util\tests;
 
+use Error;
+use Exception;
 use go1\util\consume\ConsumeController;
 use go1\util\contract\ConsumerInterface;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Text;
 use go1\util\user\UserHelper;
-use Exception;
-use Symfony\Component\HttpFoundation\Request;
 use stdClass;
-use Error;
+use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 class ConsumeControllerTest extends UtilTestCase
@@ -76,9 +76,9 @@ class ConsumeControllerTest extends UtilTestCase
     public function data204()
     {
         return [
-            [(object)['foo' => 'bar'], null],
+            [(object) ['foo' => 'bar'], null],
             [['foo' => 'bar'], null],
-            [(object)['foo' => 'bar'], (object)['foo' => 'bar']],
+            [(object) ['foo' => 'bar'], (object) ['foo' => 'bar']],
             [['foo' => 'bar'], ['foo' => 'bar']],
             [['foo' => 'bar'], []],
         ];
@@ -87,6 +87,8 @@ class ConsumeControllerTest extends UtilTestCase
     /** @dataProvider data204 */
     public function test204($body, $context)
     {
+        global $consumeCount;
+
         $fooConsumer = $this->consumerClass();
         $barConsumer = $this->consumerClass();
         $consume = new ConsumeController([$fooConsumer, $barConsumer], $this->c['logger'], $this->c['access_checker']);
@@ -97,11 +99,10 @@ class ConsumeControllerTest extends UtilTestCase
             'body'       => $body,
             'context'    => $context,
         ]);
-        $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
+        $req->attributes->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $res = $consume->post($req);
 
         $this->assertEquals(204, $res->getStatusCode());
-        global $consumeCount;
         $this->assertCount(1, $consumeCount);
         $this->assertArrayHasKey(self::ROUTING_KEY, $consumeCount);
         $this->assertEquals(2, $consumeCount[self::ROUTING_KEY]);
@@ -136,11 +137,12 @@ class ConsumeControllerTest extends UtilTestCase
         $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
+        $req->attributes->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
         $req->request->replace([
             'routingKey' => self::ROUTING_KEY,
             'body'       => ['foo' => 'bar'],
         ]);
-        $req->request->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
+
         $res = $consume->post($req);
 
         $this->assertEquals(204, $res->getStatusCode());

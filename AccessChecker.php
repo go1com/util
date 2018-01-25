@@ -92,7 +92,7 @@ class AccessChecker
 
     public function validUser(Request $req, $instance = null, Connection $db = null)
     {
-        $payload = $req->get('jwt.payload');
+        $payload = $req->attributes->get('jwt.payload');
         if ($payload && !empty($payload->object->type) && ('user' === $payload->object->type)) {
             $user = &$payload->object->content;
             $user = !empty($user->mail) ? $user : null;
@@ -205,7 +205,7 @@ class AccessChecker
 
     public function isMasquerading(Request $req)
     {
-        $payload = $req->get('jwt.payload');
+        $payload = $req->attributes->get('jwt.payload');
 
         return ($payload && !empty($payload->object->content->masquerading)) ? true : false;
     }
