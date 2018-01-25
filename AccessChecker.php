@@ -3,6 +3,7 @@
 namespace go1\util;
 
 use Doctrine\DBAL\Connection;
+use go1\util\award\AwardHelper;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
@@ -242,5 +243,43 @@ class AccessChecker
         }
 
         return EdgeHelper::hasLink($db, EdgeTypes::COURSE_ASSESSOR, $courseId, $assessorId);
+    }
+
+    public function isAwardAssessor(
+        Connection $go1Db,
+        Connection $awardDb,
+        int $awardId,
+        int $assessorId,
+        bool $checkParent = true,
+        Request $req = null
+    ): bool
+    {
+        if ($req && $this->isAccountsAdmin($req)) {
+            return true;
+        }
+
+        $award = AwardHelper::load($awardDb, $awardId);
+        if ($req && $award) {
+            $instance = PortalHelper::load($go1Db, $award->instance_id);
+            if ($instance && $this->isPortalAdmin($req, $instance->title)) {
+                return true;
+            }
+        }
+
+        if (EdgeHelper::hasLink($go1Db, EdgeTypes::AWARD_ASSESSOR, $awardId, $assessorId)) {
+            return true;
+        }
+
+        if ($checkParent) {
+            $currentChildAwardId = $awardId;
+            while ($awardParentId = AwardHelper::awardParentId($awardDb, $currentChildAwardId)) {
+                if (EdgeHelper::hasLink($go1Db, EdgeTypes::AWARD_ASSESSOR, $awardParentId, $assessorId)) {
+                    return true;
+                }
+                $currentChildAwardId = $awardParentId;
+            }
+        }
+
+        return false;
     }
 }
