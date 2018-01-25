@@ -259,8 +259,8 @@ class GroupHelperTest extends UtilTestCase
 
     public function testGroupTypePermission()
     {
-        $req = new Request();
-        $req->query->set('jwt.payload', $this->getAdminPayload('az.mygo1.com'));
+        $req = new Request;
+        $req->attributes->set('jwt.payload', $this->getAdminPayload('az.mygo1.com'));
 
         $groupMarketId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_PACKAGE]);
         $groupMarket = GroupHelper::load($this->db, $groupMarketId);
