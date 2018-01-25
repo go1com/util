@@ -164,11 +164,11 @@ class GroupHelperTest extends UtilTestCase
 
         $accessChecker = new AccessChecker();
         $req = new Request();
-        $req->request->replace(['jwt.payload' => $this->getJwt(null, null, null, Roles::ACCOUNTS_ROLES)], null, null, false);
+        $req->attributes->replace(['jwt.payload' => $this->getJwt(null, null, null, Roles::ACCOUNTS_ROLES)], null, null, false);
         $this->assertTrue(GroupHelper::groupAccess($groupUserId, $userId, $accessChecker, $req));
 
         $instance = 'site.mygo1.com';
-        $req->request->replace(['jwt.payload' => $this->getJwt(null, null, $instance, [Roles::ADMIN]), null, null, false]);
+        $req->attributes->replace(['jwt.payload' => $this->getJwt(null, null, $instance, [Roles::ADMIN]), null, null, false]);
         $this->assertTrue(GroupHelper::groupAccess($groupUserId, $userId, $accessChecker, $req, $instance));
     }
 
