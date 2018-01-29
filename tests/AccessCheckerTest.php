@@ -3,13 +3,16 @@
 namespace go1\util\tests;
 
 use go1\util\AccessChecker;
+use go1\util\award\AwardItemTypes;
 use go1\util\edge\EdgeTypes;
+use go1\util\schema\mock\AwardMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use Symfony\Component\HttpFoundation\Request;
 
 class AccessCheckerTest extends UtilTestCase
 {
     use UserMockTrait;
+    use AwardMockTrait;
 
     public function testVirtualAccount()
     {
@@ -48,4 +51,29 @@ class AccessCheckerTest extends UtilTestCase
         $this->assertFalse((new AccessChecker)->isStudentManager($this->db, $req, $studentMail, $instanceName, EdgeTypes::HAS_MANAGER));
     }
 
+    public function testIsAwardAssessor()
+    {
+        $portalName = 'foo.bar';
+        $awardLevel1Id = $this->createAward($this->db, ['instance' => $portalName, 'revision_id' => $awardLevel1RevId = 1]);
+        $awardLevel2Id = $this->createAward($this->db, ['instance' => $portalName, 'revision_id' => $awardLevel2RevId = 2]);
+        $awardLevel3Id = $this->createAward($this->db, ['instance' => $portalName, 'revision_id' => $awardLevel3RevId = 3]);
+
+        $this->createAwardItem($this->db, $awardLevel1RevId, AwardItemTypes::AWARD, $awardLevel2Id);
+        $this->createAwardItem($this->db, $awardLevel2RevId, AwardItemTypes::AWARD, $awardLevel3Id);
+
+        $assessorLevel1Id = $this->createUser($this->db, ['mail' => 'assessorl1@mail.com', 'instance' => $portalName]);
+        $assessorLevel2Id = $this->createUser($this->db, ['mail' => 'assessorl2@mail.com', 'instance' => $portalName]);
+        $assessorLevel3Id = $this->createUser($this->db, ['mail' => 'assessorl3@mail.com', 'instance' => $portalName]);
+
+        $this->link($this->db, EdgeTypes::AWARD_ASSESSOR, $awardLevel1Id, $assessorLevel1Id);
+        $this->link($this->db, EdgeTypes::AWARD_ASSESSOR, $awardLevel2Id, $assessorLevel2Id);
+        $this->link($this->db, EdgeTypes::AWARD_ASSESSOR, $awardLevel3Id, $assessorLevel3Id);
+
+        $checker = new AccessChecker();
+        $this->assertTrue($checker->isAwardAssessor($this->db, $this->db, $awardLevel1Id, $assessorLevel1Id));
+        $this->assertTrue($checker->isAwardAssessor($this->db, $this->db, $awardLevel2Id, $assessorLevel2Id));
+        $this->assertTrue($checker->isAwardAssessor($this->db, $this->db, $awardLevel3Id, $assessorLevel2Id));
+        $this->assertTrue($checker->isAwardAssessor($this->db, $this->db, $awardLevel3Id, $assessorLevel2Id));
+        $this->assertFalse($checker->isAwardAssessor($this->db, $this->db, $awardLevel3Id, $assessorLevel2Id, false));
+    }
 }

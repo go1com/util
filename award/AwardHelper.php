@@ -238,4 +238,11 @@ class AwardHelper
             ::select('target_id')
             ->get($db, [$loId], [], [EdgeTypes::AWARD_ASSESSOR], PDO::FETCH_COLUMN);
     }
+
+    public static function awardParentId(Connection $db, int $awardId)
+    {
+        $revisionId = $db->fetchColumn('SELECT award_revision_id FROM award_item WHERE type = ? AND entity_id =?', [ AwardItemTypes::AWARD, $awardId ]);
+
+        return $revisionId ? self::revisionId2id($db, $revisionId) : false;
+    }
 }
