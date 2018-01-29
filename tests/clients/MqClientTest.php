@@ -9,12 +9,12 @@ use go1\util\tests\UtilTestCase;
 use go1\util\UtilServiceProvider;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Wire\AMQPTable;
 use Pimple\Container;
 use ReflectionClass;
-use Symfony\Component\HttpFoundation\Request;
 use ReflectionObject;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use PhpAmqpLib\Wire\AMQPTable;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MqClientTest extends UtilTestCase
@@ -25,12 +25,12 @@ class MqClientTest extends UtilTestCase
     {
         return [
             [(object) ['foo' => 'bar'], 'user.update', 'Missing entity ID or original data.'],
-            [(object) ['id' => 1, 'original'=> ['id']], 'user.update', ''],
+            [(object) ['id' => 1, 'original' => ['id']], 'user.update', ''],
             [(object) ['id' => null], 'user.update', 'Missing entity ID or original data.'],
             [(object) ['original' => null], 'user.update', 'Missing entity ID or original data.'],
             [(object) [], 'user.update', 'Missing entity ID or original data.'],
             [['foo' => 'bar'], 'user.update', 'Missing entity ID or original data.'],
-            [['id' => 1, 'original'=> ['id']], 'user.update', ''],
+            [['id' => 1, 'original' => ['id']], 'user.update', ''],
             [['id' => null], 'user.update', 'Missing entity ID or original data.'],
             [['original' => null], 'user.update', 'Missing entity ID or original data.'],
             [[], 'user.update', 'Missing entity ID or original data.'],
@@ -87,7 +87,6 @@ class MqClientTest extends UtilTestCase
                     $this->assertEquals('events', $exchange);
                     $this->assertEquals('X-foo', $context['request_id']);
                     $this->assertEquals(999, $context['actor_id']);
-
                 });
 
             $rMqClient = new ReflectionObject($mqClient);
@@ -100,13 +99,13 @@ class MqClientTest extends UtilTestCase
 
         $req = Request::create("/");
         $req->headers->add(['X-Request-Id' => 'X-foo']);
-        $req->request->set('jwt.payload', $this->getPayload(['id' => 999]));
+        $req->attributes->set('jwt.payload', $this->getPayload(['id' => 999]));
 
         $requestStack = new RequestStack();
         $requestStack->push($req);
         $container->offsetSet('request_stack', $requestStack);
 
-        /* @var $mqClient MqClient*/
+        /* @var $mqClient MqClient */
         $mqClient = $container['go1.client.mq'];
         $mqClient->publish(['foo' => 'bar'], 'foo.bar');
     }
