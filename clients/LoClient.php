@@ -39,7 +39,7 @@ class LoClient
 
     public function shareLo(int $instanceId, int $loId)
     {
-        $url = "{$this->loUrl}/lo/{$loId}/share/instance/{$instanceId}?jwt=" . UserHelper::ROOT_JWT;
+        $url = "{$this->loUrl}/lo/{$loId}/share/{$instanceId}?jwt=" . UserHelper::ROOT_JWT;
         $this->client->post($url);
     }
 }
