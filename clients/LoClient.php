@@ -36,4 +36,10 @@ class LoClient
 
         return json_decode($res->getBody())->count;
     }
+
+    public function shareLo(int $instanceId, int $loId)
+    {
+        $url = "{$this->loUrl}/lo/{$loId}/share/instance/{$instanceId}?jwt=" . UserHelper::ROOT_JWT;
+        $this->client->post($url);
+    }
 }
