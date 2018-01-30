@@ -67,7 +67,7 @@ class Schema
     const O_CONTRACT            = 'contract';
     const O_METRIC              = 'metric';
 
-    // enrolment only belong to lo. account_enrolment is enrolment, but belong to account.
+    // enrolment only belongs to LO. account_enrolment is enrolment, but belong to account.
     // This is used to get users that is not enrolled to a course.
     const O_ACCOUNT_ENROLMENT = 'account_enrolment';
 
@@ -529,8 +529,7 @@ class Schema
         '_parent'    => ['type' => self::O_ACCOUNT],
         '_routing'   => ['required' => true],
         'properties' => [
-            // Enrolment id.
-            'id'       => ['type' => self::T_KEYWORD],
+            'id'       => ['type' => self::T_KEYWORD], # Enrolment ID
             'lo_id'    => ['type' => self::T_INT],
             'metadata' => [
                 'properties' => [
