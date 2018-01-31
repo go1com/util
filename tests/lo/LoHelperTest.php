@@ -3,7 +3,6 @@
 namespace go1\util\tests\lo;
 
 use DateTime;
-use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
@@ -431,5 +430,22 @@ class LoHelperTest extends UtilTestCase
         list($type, $value) = LoHelper::getSuggestedCompletion($this->db, $courseId);
         $this->assertEquals($type, LoSuggestedCompletionTypes::E_DURATION);
         $this->assertEquals($value, '3 days');
+    }
+
+    public function testLoadTree()
+    {
+        $courseId = $this->createCourse($this->db);
+        $moduleId = $this->createModule($this->db);
+        $videoId = $this->createVideo($this->db);
+        $eventId = $this->createLO($this->db, ['type' => LiTypes::EVENT]);
+
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $courseId, $moduleId);
+        $this->link($this->db, EdgeTypes::HAS_LI, $courseId, $eventId);
+        $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $videoId);
+
+        $course = LoHelper::load($this->db, $courseId, null, true);
+        $this->assertEquals($eventId, $course->items[0]->id);
+        $this->assertEquals($moduleId, $course->items[1]->id);
+        $this->assertEquals($videoId, $course->items[1]->items[0]->id);
     }
 }

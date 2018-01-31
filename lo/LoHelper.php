@@ -39,20 +39,21 @@ class LoHelper
         'expiration' => ['type' => 'string', 'default' => '+ 1 year'],
     ];
 
-    public static function load(Connection $db, int $id, int $instanceId = null)
+    public static function load(Connection $db, int $id, int $instanceId = null, bool $expensiveTree = false)
     {
-        return ($learningObjects = static::loadMultiple($db, [$id], $instanceId))
-            ? $learningObjects[0]
-            : false;
+        return ($learningObjects = static::loadMultiple($db, [$id], $instanceId, $expensiveTree)) ? $learningObjects[0] : false;
     }
 
     /**
+     * Load multiple learning objects.
+     *
      * @param Connection $db
      * @param  []int     $ids
      * @param   int      $instanceId
-     * @return []stdClass
+     * @param bool       $expensiveTree
+     * @return array
      */
-    public static function loadMultiple(Connection $db, array $ids, int $instanceId = null): array
+    public static function loadMultiple(Connection $db, array $ids, int $instanceId = null, bool $expensiveTree = false): array
     {
         $ids = array_map('intval', $ids);
         $learningObjects = !$ids ? [] : $db
@@ -85,16 +86,66 @@ class LoHelper
             $loIds[] = $lo->id;
         }
 
-        if ($instanceId && $loIds) {
-            # Load custom tags.
-            $q = 'SELECT lo_id, tag FROM gc_lo_tag WHERE status = 1 AND instance_id = ? AND lo_id IN (?)';
-            $q = $db->executeQuery($q, [$instanceId, $loIds], [DB::INTEGER, DB::INTEGERS]);
-            while ($row = $q->fetch(DB::OBJ)) {
-                foreach ($learningObjects as &$lo) {
-                    if ($lo->id == $row->lo_id) {
-                        $lo->custom_tags[] = $row->tag;
+        if ($loIds) {
+            if ($instanceId) {
+                # Load custom tags.
+                $q = 'SELECT lo_id, tag FROM gc_lo_tag WHERE status = 1 AND instance_id = ? AND lo_id IN (?)';
+                $q = $db->executeQuery($q, [$instanceId, $loIds], [DB::INTEGER, DB::INTEGERS]);
+                while ($row = $q->fetch(DB::OBJ)) {
+                    foreach ($learningObjects as &$lo) {
+                        if ($lo->id == $row->lo_id) {
+                            $lo->custom_tags[] = $row->tag;
+                        }
                     }
                 }
+            }
+
+            if ($expensiveTree) {
+                $load = function (array &$nodes, array &$nodeIds, array $edgeTypes) use (&$db, $instanceId) {
+                    $itemIds = [];
+                    $q = 'SELECT source_id, target_id FROM gc_ro WHERE source_id IN (?) AND type IN (?)';
+                    $q = $db->executeQuery($q, [$nodeIds, $edgeTypes], [DB::INTEGERS, DB::INTEGERS]);
+
+                    while ($edge = $q->fetch(DB::OBJ)) {
+                        foreach ($nodes as &$node) {
+                            if ($node->id == $edge->source_id) {
+                                $itemIds[] = (int) $edge->target_id;
+                                $node->items[] = (object) ['id' => (int) $edge->target_id];
+                            }
+                        }
+                    }
+
+                    if ($itemIds && $items = self::loadMultiple($db, $itemIds, $instanceId, true)) {
+                        foreach ($items as &$item) {
+                            foreach ($nodes as &$node) {
+                                if (!empty($node->items)) {
+                                    foreach ($node->items as &$_) {
+                                        if ($_->id == $item->id) {
+                                            $_ = $item;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                $courses = $courseIds = $modules = $moduleIds = [];
+
+                foreach ($learningObjects as &$lo) {
+                    if (LoTypes::COURSE == $lo->type) {
+                        $courses[] = &$lo;
+                        $courseIds[] = (int) $lo->id;
+                    }
+
+                    if (LoTypes::MODULE == $lo->type) {
+                        $modules[] = &$lo;
+                        $moduleIds[] = (int) $lo->id;
+                    }
+                }
+
+                $courseIds && $load($courses, $courseIds, [EdgeTypes::HAS_ELECTIVE_LO, EdgeTypes::HAS_MODULE, EdgeTypes::HAS_EVENT_EDGE, EdgeTypes::HAS_ELECTIVE_LI, EdgeTypes::HAS_LI]);
+                $moduleIds && $load($modules, $moduleIds, [EdgeTypes::HAS_ELECTIVE_LI, EdgeTypes::HAS_LI]);
             }
         }
 
