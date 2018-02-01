@@ -124,6 +124,10 @@ class MqClient
         $isLazy = isset($explode[0]) && ('do' == $explode[0]); # Lazy = do.SERVICE.#
 
         if (strpos($routingKey, '.update') && !$isLazy) {
+            if ('_post' === substr($routingKey, -5)) {
+                return null;
+            }
+
             if (
                 (
                     is_array($body)
