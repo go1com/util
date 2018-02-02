@@ -706,6 +706,17 @@ class MailTemplate
         ],
     ];
 
+    const PAYMENT_STRIPE_AUTHORIZE = [
+        'key'    => 'payment.stripe.authorize',
+        'tokens' => [
+            '!manager_name' => 'Manager name',
+            '!portal_name'  => 'Portal name',
+            '!portal_image' => 'Portal logo',
+            '!portal_url'   => 'Portal URL',
+            '!manager_mail' => 'Manager mail',
+        ],
+    ];
+
     const PAYMENT_STRIPE_DEAUTHORIZE = [
         'key'    => 'payment.stripe.deauthorize',
         'tokens' => [
