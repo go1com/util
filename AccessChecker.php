@@ -271,12 +271,14 @@ class AccessChecker
         }
 
         if ($checkParent) {
-            $currentChildAwardId = $awardId;
-            while ($awardParentId = AwardHelper::awardParentId($awardDb, $currentChildAwardId)) {
-                if (EdgeHelper::hasLink($go1Db, EdgeTypes::AWARD_ASSESSOR, $awardParentId, $assessorId)) {
-                    return true;
+            $currentChildAwardIds = [$awardId];
+            while ($awardParentIds = AwardHelper::awardParentIds($awardDb, $currentChildAwardIds)) {
+                foreach ($awardParentIds as $awardParentId) {
+                    if (EdgeHelper::hasLink($go1Db, EdgeTypes::AWARD_ASSESSOR, $awardParentId, $assessorId)) {
+                        return true;
+                    }
                 }
-                $currentChildAwardId = $awardParentId;
+                $currentChildAwardIds = $awardParentIds;
             }
         }
 

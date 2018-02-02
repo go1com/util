@@ -227,7 +227,7 @@ class AwardHelper
         return $db->fetchColumn('SELECT revision_id FROM award_award WHERE id = ?', [$awardId]);
     }
 
-    public static function revisionId2id(Connection $db, int $awardRevisionId)
+    public static function revisionId2Id(Connection $db, int $awardRevisionId)
     {
         return $db->fetchColumn('SELECT id FROM award_award WHERE revision_id = ?', [$awardRevisionId]);
     }
@@ -239,10 +239,16 @@ class AwardHelper
             ->get($db, [$loId], [], [EdgeTypes::AWARD_ASSESSOR], PDO::FETCH_COLUMN);
     }
 
-    public static function awardParentId(Connection $db, int $awardId)
+    public static function awardParentIds(Connection $db, array $awardIds)
     {
-        $revisionId = $db->fetchColumn('SELECT award_revision_id FROM award_item WHERE type = ? AND entity_id =?', [ AwardItemTypes::AWARD, $awardId ]);
+        $revisionIds = $db->executeQuery('SELECT award_revision_id FROM award_item WHERE type = ? AND entity_id IN (?)', [AwardItemTypes::AWARD, $awardIds], [DB::STRING, DB::INTEGERS])->fetchAll(DB::COL);
+        $awardIds = [];
+        foreach ($revisionIds as $revisionId) {
+            if ($awardId = self::revisionId2Id($db, $revisionId)) {
+                $awardIds[] = $awardId;
+            }
+        }
 
-        return $revisionId ? self::revisionId2id($db, $revisionId) : false;
+        return $awardIds;
     }
 }
