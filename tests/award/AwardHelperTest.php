@@ -38,6 +38,6 @@ class AwardHelperTest extends UtilTestCase
 
         $this->createAwardItem($this->db, $award->revision_id, AwardItemTypes::AWARD, $childAwardId);
 
-        $this->assertEquals($awardId, AwardHelper::awardParentId($this->db, $childAwardId));
+        $this->assertEquals([$awardId], AwardHelper::awardParentIds($this->db, [$childAwardId]));
     }
 }
