@@ -959,6 +959,7 @@ class Schema
                     'first_name' => ['type' => self::T_KEYWORD],
                     'last_name'  => ['type' => self::T_KEYWORD],
                     'avatar'     => ['type' => self::T_TEXT],
+                    'status'     => ['type' => self::T_SHORT],
                 ],
             ],
             # Real properties for reporting
