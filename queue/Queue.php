@@ -201,6 +201,6 @@ class Queue
 
     public static function postEvent(string $event): string
     {
-        return "{$event}_post";
+        return "post_{$event}";
     }
 }
