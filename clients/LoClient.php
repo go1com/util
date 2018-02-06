@@ -27,14 +27,21 @@ class LoClient
         return false;
     }
 
-    public function eventAvailableSeat(int $eventId)
+    public function eventCapability(int $eventId): array
     {
         $res = $this->client->get("{$this->loUrl}/event/{$eventId}/available-seat", ['http_errors' => false]);
         if (200 != $res->getStatusCode()) {
-            return false;
+            return [];
         }
 
-        return json_decode($res->getBody())->count;
+        return json_decode($res->getBody(), true);
+    }
+
+    public function eventAvailableSeat(int $eventId)
+    {
+        $capability = $this->eventCapability($eventId);
+
+        return $capability['count'] ?? false;
     }
 
     public function shareLo(int $instanceId, int $loId)
