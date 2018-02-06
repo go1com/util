@@ -86,7 +86,7 @@ class EdgeTypes
     const HAS_ARCHIVED_ENQUIRY        = 20; # T: NULL                 | S: Deleted gc_ro type HAS_ENQUIRY's id - just for handling duplicated archived enquiries
     const HAS_EXCLUDED_TAG            = 31; # T: Tag                  | S: Learning object
     const COURSE_ASSESSOR             = 32; # T: gc_user.id           | S: Learning object
-    const HAS_EVENT_EDGE              = 34; # T: gc_event.id          | S: gc_lo.id
+    const HAS_EVENT_EDGE              = 34; # T: gc_event.id          | S: gc_lo.id (lo.course | lo.module | li.event)
     const HAS_GROUP_EDGE              = 35; # T: gc_social_group.id   | S: gc_user.id
     const AWARD_HAS_ITEM              = 36; # T: LO                   | S: award.                | data: { qty: INTEGER }
     const HAS_CREDIT_REQUEST          = 37; # T: User (learner)       | S: LO                    | Weight: Manager ID — who will review.
