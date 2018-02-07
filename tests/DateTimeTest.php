@@ -29,4 +29,11 @@ class DateTimeTest extends TestCase
 
         $this->assertEquals(DateTime::DATETIME_LESS, DateTime::compare('now', '+1 week'));
     }
+
+    public function testResetTime()
+    {
+        $date1 = DateTime::create('2016-12-30T10:01:33+0000', 'UTC', true);
+        $date2 = DateTime::create('2016-12-30T00:00:00+0000', 'UTC', false);
+        $this->assertEquals($date1, $date2);
+    }
 }
