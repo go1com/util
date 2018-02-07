@@ -13,7 +13,7 @@ class DateTime
     const DATETIME_EQUAL       = 0;
     const DATETIME_LESS        = -1;
 
-    public static function create($time, $timezone = 'UTC'): DefaultDateTime
+    public static function create($time, $timezone = 'UTC', $reset = false): DefaultDateTime
     {
         if (!$time) {
             throw new InvalidArgumentException('Specific date/time string can not empty');
@@ -22,6 +22,7 @@ class DateTime
         $datetime = new DefaultDateTime;
         $datetime->setTimezone(new DateTimeZone($timezone));
         $datetime->setTimestamp((is_numeric($time) ? $time : strtotime($time)));
+        $reset && $datetime->setTime(0, 0);
 
         return $datetime;
     }
