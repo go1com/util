@@ -7,7 +7,7 @@ use go1\util\portal\PortalHelper;
 
 trait InstanceMockTrait
 {
-    protected function createInstance(Connection $db, array $options)
+    public function createInstance(Connection $db, array $options)
     {
         $data = isset($options['data']) ? $options['data'] : '[]';
 
