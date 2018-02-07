@@ -404,6 +404,13 @@ class LoHelper
         return $ids;
     }
 
+    public static function moduleIds(Connection $db, int $loId): array
+    {
+        return EdgeHelper
+            ::select('target_id')
+            ->get($db, [$loId], [], [EdgeTypes::HAS_MODULE], PDO::FETCH_COLUMN);
+    }
+
     public static function isBelongToGroup(Connection $db, int $loId, int $instanceId): bool
     {
         $sql = 'SELECT 1 FROM gc_lo_group WHERE lo_id = ? AND instance_id = ?';
