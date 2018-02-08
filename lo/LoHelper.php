@@ -408,7 +408,7 @@ class LoHelper
     {
         return EdgeHelper
             ::select('target_id')
-            ->get($db, [$loId], [], [EdgeTypes::HAS_MODULE], PDO::FETCH_COLUMN);
+            ->get($db, [$loId], [], [EdgeTypes::HAS_MODULE, EdgeTypes::HAS_ELECTIVE_LO], PDO::FETCH_COLUMN);
     }
 
     public static function isBelongToGroup(Connection $db, int $loId, int $instanceId): bool
