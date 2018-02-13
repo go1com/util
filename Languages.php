@@ -106,7 +106,7 @@ class Languages
     ];
 
     const LOCALE_TO_LANGUAGE = [
-        'en-au' => 'en-AU',
+        'en-au' => 'en_AU',
         'en-us' => 'en',
         'pt-pt' => 'pt-PT',
         'vi'    => 'vi',
