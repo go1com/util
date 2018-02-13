@@ -107,7 +107,7 @@ class DB
             }
         );
 
-        return new JsonResponse([], 200);
+        return new JsonResponse([], 204);
     }
 
     public static function &cache($name, $defaultValue = null, $reset = false)
