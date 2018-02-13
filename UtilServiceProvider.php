@@ -28,9 +28,12 @@ use go1\clients\UserClient;
 use go1\neo4j_builder\Neo4jBuilder;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
+use go1\util\toggle\FeatureToggleClient;
 use GraphAware\Neo4j\Client\ClientBuilder;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Qandidate\Toggle\ToggleCollection\PredisCollection;
+use Qandidate\Toggle\ToggleManager;
 use Vectorface\Whip\Whip;
 
 class UtilServiceProvider implements ServiceProviderInterface
@@ -190,6 +193,21 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.go1s3'] = function (Container $c) {
             return new Go1S3Client($c['client'], $c['s3_url']);
+        };
+
+        if ($c->offsetExists('toggleOptions')) {
+            $c['toggle.manager.collection'] = function (Container $c) {
+                $o = $c['toggleOptions'];
+                return new PredisCollection($o['namespace'], $c['cache.predis']);
+            };
+        }
+
+        $c['toggle.manager'] = function (Container $c) {
+            return new ToggleManager($c['toggle.manager.collection']);
+        };
+
+        $c['toggle.manager.client'] = function (Container $c) {
+            return new FeatureToggleClient($c['toggle.manager']);
         };
     }
 }

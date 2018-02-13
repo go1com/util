@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
 use go1\util\Error;
 use go1\util\model\User;
+use go1\util\user\Roles;
 use go1\util\user\UserHelper;
 use InvalidArgumentException;
 
@@ -19,12 +20,12 @@ trait UserMockTrait
 
     public function createAccountsAdminRole($db, array $options = [])
     {
-        return $this->createRole($db, $options + ['name' => 'Admin on #Accounts']);
+        return $this->createRole($db, $options + ['name' => Roles::ROOT]);
     }
 
     public function createPortalAdminRole($db, array $options = [])
     {
-        return $this->createRole($db, $options + ['name' => 'administrator']);
+        return $this->createRole($db, $options + ['name' => Roles::ADMIN]);
     }
 
     protected function createRole(Connection $db, array $options)
@@ -40,7 +41,7 @@ trait UserMockTrait
         return $db->lastInsertId('gc_role');
     }
 
-    protected function createUser(Connection $db, array $options = []): int
+    public function createUser(Connection $db, array $options = []): int
     {
         static $profileId = 15;
 
@@ -69,7 +70,7 @@ trait UserMockTrait
     }
 
     # NOTE: This is not yet stable, JWT is large, not good for production usage.
-    protected function jwtForUser(Connection $db, int $userId, string $instance = null): string
+    public function jwtForUser(Connection $db, int $userId, string $instance = null): string
     {
         $user = UserHelper::load($db, $userId);
         $user = $user ? User::create($user, $db, true, $instance) : null;
@@ -241,7 +242,7 @@ trait UserMockTrait
         );
     }
 
-    protected function link(Connection $db, $type, $sourceId, $targetId, $weight = 0, $data = null): int
+    public function link(Connection $db, $type, $sourceId, $targetId, $weight = 0, $data = null): int
     {
         $db->insert('gc_ro', [
             'type'      => $type,

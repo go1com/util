@@ -122,7 +122,7 @@ trait LoMockTrait
         return $id ? $id : $db->lastInsertId('gc_tag');
     }
 
-    protected function createEvent(Connection $db, int $loId, array $event)
+    public function createEvent(Connection $db, int $loId, array $event)
     {
         $location = empty($event['location']) || is_numeric($event['location']) ? [] : [
             'loc_country'                 => $event['location']['country'],

@@ -98,6 +98,7 @@ class AccountsClient
             'domain'        => 'gc_domain',
             'relationship'  => 'gc_ro',
         ];
+
         if (getenv('MONOLITH') && ($type == 'simple') && isset($bundles[$bundle])) {
             return (int) $this->go1->fetchColumn("SELECT MAX(id) FROM $bundles[$bundle]") + 1;
         }
