@@ -48,7 +48,7 @@ class EnrolmentSchema
             $revision->addColumn('lo_id', 'integer', ['unsigned' => true]);
             $revision->addColumn('instance_id', 'integer', ['unsigned' => true]);
             $revision->addColumn('taken_instance_id', 'integer', ['unsigned' => true]);
-            $revision->addColumn('start_date', 'datetime');
+            $revision->addColumn('start_date', 'datetime', ['notnull' => false]);
             $revision->addColumn('end_date', 'datetime', ['notnull' => false]);
             $revision->addColumn('status', 'string');
             $revision->addColumn('result', 'float', ['notnull' => false]);
