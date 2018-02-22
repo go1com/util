@@ -160,6 +160,7 @@ class LoHelper
         $put = function (stdClass &$node, array $event) use (&$put) {
             if ($node->id == $event['loId']) {
                 $node->event = (object) [
+                    'id'       => $event['id'],
                     'start'    => $event['start'],
                     'end'      => $event['end'],
                     'timezone' => $event['timezone'],
