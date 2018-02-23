@@ -98,6 +98,7 @@ class MqClient
         if ($service = getenv('SERVICE_80_NAME')) {
             $context['app'] = $service;
         }
+        $context[static::CONTEXT_TIMESTAMP] = $context[static::CONTEXT_TIMESTAMP] ?? time();
 
         if (!$exchange) {
             $body = json_encode(['routingKey' => $routingKey, 'body' => $body]);
