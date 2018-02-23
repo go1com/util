@@ -4,6 +4,8 @@ namespace go1\util\consume;
 
 use Error as SystemError;
 use Exception;
+use go1\app\domain\TerminateAwareJsonResponse;
+use go1\clients\MqClient;
 use go1\util\AccessChecker;
 use go1\util\consume\exception\NotifyException;
 use go1\util\contract\ConsumerInterface;
@@ -18,12 +20,19 @@ class ConsumeController
     private $consumers;
     private $logger;
     private $accessChecker;
+    private $logWasteTime;
 
-    public function __construct(array $consumers, LoggerInterface $logger, AccessChecker $accessChecker)
+    public function __construct(
+        array $consumers,
+        LoggerInterface $logger,
+        AccessChecker $accessChecker,
+        bool $logWasteTime = false
+    )
     {
         $this->consumers = $consumers;
         $this->logger = $logger;
         $this->accessChecker = $accessChecker;
+        $this->logWasteTime = $logWasteTime;
     }
 
     public function post(Request $req)
@@ -64,6 +73,16 @@ class ConsumeController
             return new JsonResponse(null, 500);
         }
 
-        return new JsonResponse(null, 204);
+        return !$this->logWasteTime
+            ? new JsonResponse(null, 204)
+            : new TerminateAwareJsonResponse(null, 204, [
+                function () use ($routingKey, $body, $context) {
+                    $messageReleaseTime = $context->{MqClient::CONTEXT_TIMESTAMP} ?? null;
+                    if ($messageReleaseTime) {
+                        $wasteTime = time() - $messageReleaseTime;
+                        $this->logger->error(sprintf('consume.waste-time.%s: %d %s', $routingKey, $wasteTime, json_encode($body)));
+                    }
+                },
+            ]);
     }
 }

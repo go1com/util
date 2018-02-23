@@ -33,6 +33,7 @@ abstract class UtilTestCase extends TestCase
     protected $db;
     protected $queue;
     protected $taskService;
+    protected $log;
 
     public function setUp()
     {
@@ -65,6 +66,13 @@ abstract class UtilTestCase extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['error'])
             ->getMockForAbstractClass();
+
+        $logger
+            ->expects($this->any())
+            ->method('error')
+            ->willReturnCallback(function($message) {
+                $this->log['error'][] = $message;
+            });
 
         return (new Container(['accounts_name' => 'accounts.test']))
             ->register(new UtilServiceProvider, [

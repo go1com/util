@@ -4,6 +4,7 @@ namespace go1\util\tests;
 
 use Error;
 use Exception;
+use go1\clients\MqClient;
 use go1\util\consume\ConsumeController;
 use go1\util\contract\ConsumerInterface;
 use go1\util\schema\mock\UserMockTrait;
@@ -146,5 +147,26 @@ class ConsumeControllerTest extends UtilTestCase
         $this->assertEquals(204, $res->getStatusCode());
         global $consumeCount;
         $this->assertNull($consumeCount);
+    }
+
+    public function testLogWasteTime()
+    {
+        $fooConsumer = $this->consumerClass(false);
+        $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker'], true);
+
+        $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
+        $req->attributes->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
+        $req->request->replace([
+            'routingKey' => self::ROUTING_KEY,
+            'body'       => ['foo' => 'bar'],
+            'context'    => [MqClient::CONTEXT_TIMESTAMP => 1],
+        ]);
+        $res = $consume->post($req);
+        foreach ($res->terminateCallbacks() as $callback) {
+            call_user_func($callback);
+        }
+        $this->assertEquals(204, $res->getStatusCode());
+        $wasteTime = time() - 1;
+        $this->assertContains("consume.waste-time." . self::ROUTING_KEY . ": $wasteTime", $this->log['error'][0]);
     }
 }
