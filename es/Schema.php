@@ -215,7 +215,7 @@ class Schema
             'roles'        => ['type' => self::T_KEYWORD],
             'groups'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'timestamp'    => ['type' => self::T_DATE],
-            'managers'     => ['type' => self::T_INT],
+            'managers'     => ['type' => self::T_INT], # Use user.id of manager
             'metadata'     => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
