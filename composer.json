@@ -14,6 +14,7 @@
     "doctrine/cache": "^v1.6.0",
     "doctrine/dbal": "^2.5.4",
     "firebase/php-jwt": "^3.0",
+    "go1/app": "dev-master",
     "go1/edge": "^0.3",
     "go1/flood": "^0.6",
     "go1/kv": "^0.2",
