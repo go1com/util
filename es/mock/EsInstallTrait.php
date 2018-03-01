@@ -3,6 +3,7 @@
 namespace go1\util\es\mock;
 
 use Elasticsearch\Client;
+use go1\util\es\IndexHelper;
 use go1\util\es\Schema;
 
 trait EsInstallTrait
@@ -16,43 +17,54 @@ trait EsInstallTrait
             ]
         ];
 
-        if ($client->indices()->exists(['index' => Schema::INDEX])) {
-            $client->indices()->delete(['index' => Schema::ALL_INDEX]);
+        if ($client->indices()->exists(['index' => Schema::I_GO1])) {
+            $client->indices()->delete(['index' => Schema::I_ALL]);
         }
 
-        if (!$client->indices()->exists(['index' => Schema::INDEX])) {
+        if (!$client->indices()->exists(['index' => Schema::I_GO1])) {
             $client->indices()->create([
-                'index' => Schema::INDEX,
+                'index' => Schema::I_GO1,
                 'body'  => Schema::BODY + $settings,
             ]);
         }
 
-        if (!$client->indices()->exists(['index' => Schema::MARKETPLACE_INDEX])) {
+        if (!$client->indices()->exists(['index' => Schema::I_MARKETPLACE])) {
             $client->indices()->create([
-                'index' => Schema::MARKETPLACE_INDEX,
+                'index' => Schema::I_MARKETPLACE,
                 'body'  => Schema::BODY + $settings,
             ]);
         }
 
-        if (!$client->indices()->exists(['index' => Schema::ACTIVITY_INDEX])) {
+        if (!$client->indices()->exists(['index' => Schema::I_ACTIVITY])) {
             $client->indices()->create([
-                'index' => Schema::ACTIVITY_INDEX,
-                'body'  => Schema::BODY + $settings,
+                'index' => Schema::I_ACTIVITY,
+                'body'  => [
+                        'mappings' => Schema::I_ACTIVITY_MAPPING,
+                ] + $settings,
+            ]);
+        }
+
+        if (!$client->indices()->exists(['index' => Schema::I_MY_TEAM])) {
+            $client->indices()->create([
+                'index' => Schema::I_MY_TEAM,
+                'body'  => [
+                    'mappings' => Schema::I_MY_TEAM_MAPPING,
+                ] + $settings,
             ]);
         }
     }
 
     public function installPortalIndex(Client $client, int $portalId)
     {
-        if (!$client->indices()->exists($params = ['index' => $portalIndex = Schema::portalIndex($portalId)])) {
+        if (!$client->indices()->exists($params = ['index' => $portalIndex = IndexHelper::portalIndex($portalId)])) {
             $params['body']['actions'][]['add'] = [
-                'index'   => Schema::INDEX,
+                'indices' => [Schema::I_GO1, Schema::I_MY_TEAM, Schema::I_ACTIVITY],
                 'alias'   => $portalIndex,
                 'routing' => $portalId,
                 'filter'  => [
                     'term' => [
-                        'metadata.instance_id' => $portalId
-                    ]
+                        'metadata.instance_id' => $portalId,
+                    ],
                 ],
             ];
             $client->indices()->updateAliases($params);

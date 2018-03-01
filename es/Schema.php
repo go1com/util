@@ -9,12 +9,25 @@ use go1\util\enrolment\EnrolmentStatuses;
  */
 class Schema
 {
-    const INDEX             = ES_INDEX;
-    const ALL_INDEX         = ES_INDEX . '*';
-    const MARKETPLACE_INDEX = ES_INDEX . '_marketplace';
-    const LOG_INDEX         = ES_INDEX . '_log';
-    const ACTIVITY_INDEX    = ES_INDEX . '_activity';
-    const PORTALS_INDEX     = ES_INDEX . '_portal*';
+    /** @deprecated*/
+    const INDEX              = ES_INDEX;
+    /** @deprecated*/
+    const ALL_INDEX          = ES_INDEX.'*';
+    /** @deprecated*/
+    const MARKETPLACE_INDEX  = ES_INDEX.'_marketplace';
+    /** @deprecated*/
+    const LOG_INDEX          = ES_INDEX.'_log';
+    /** @deprecated*/
+    const ACTIVITY_INDEX     = ES_INDEX.'_activity';
+    /** @deprecated*/
+    const PORTALS_INDEX      = ES_INDEX.'_portal*';
+
+    const I_GO1         = ES_INDEX;
+    const I_ACTIVITY    = ES_INDEX.'_activity';
+    const I_ALL         = ES_INDEX.'*';
+    const I_LOG         = ES_INDEX.'_log';
+    const I_MY_TEAM     = ES_INDEX.'_my_team';
+    const I_MARKETPLACE = ES_INDEX.'_marketplace';
 
     const TEMP             = -32;
     const MAX_INPUT_LENGTH = 50;
@@ -74,45 +87,57 @@ class Schema
     const A_SIMPLE = 'simple';
 
     const SCHEMA = [
-        'index' => self::INDEX,
+        'index' => self::I_GO1,
         'body'  => self::BODY,
     ];
 
     const BODY = [
-        'mappings' => self::MAPPING,
+        'mappings' => self::I_GO1_MAPPING,
     ];
 
-    const MAPPING = [
-        self::O_EDGE                => self::EDGE_MAPPING,
-        self::O_PORTAL              => self::PORTAL_MAPPING,
-        self::O_CONFIG              => self::CONFIGURATION_MAPPING,
-        self::O_USER                => self::USER_MAPPING,
-        self::O_ACCOUNT             => self::ACCOUNT_MAPPING,
-        self::O_LO                  => self::LO_MAPPING,
-        self::O_PLAN                => self::PLAN_MAPPING,
-        self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
-        self::O_ENROLMENT_REVISION  => self::ENROLMENT_MAPPING_REVISION,
-        self::O_SUBMISSION          => self::SUBMISSION_MAPPING,
-        self::O_SUBMISSION_REVISION => self::SUBMISSION_REVISION_MAPPING,
-        self::O_GROUP               => self::GROUP_MAPPING,
-        self::O_MAIL                => self::MAIL_MAPPING,
-        self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
-        self::O_CREDIT              => self::CREDIT_MAPPING,
-        self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
-        self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
-        self::O_COUPON              => self::COUPON_MAPPING,
-        self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
-        self::O_EVENT               => self::EVENT_MAPPING,
-        self::O_AWARD               => self::AWARD_MAPPING,
-        self::O_AWARD_ITEM          => self::AWARD_ITEM_MAPPING,
-        self::O_AWARD_ITEM_MANUAL   => self::AWARD_ITEM_MANUAL_MAPPING,
-        self::O_AWARD_ACHIEVEMENT   => self::AWARD_ACHIEVEMENT_MAPPING,
-        self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
-        self::O_SUGGESTION_CATEGORY => self::SUGGESTION_CATEGORY_MAPPING,
-        self::O_MYTEAM_PROGRESS     => self::MY_TEAM_MAPPING,
-        self::O_CONTRACT            => self::CONTRACT_MAPPING,
-        self::O_METRIC              => self::METRIC_MAPPING,
-        self::O_ACTIVITY            => self::ACTIVITY_MAPPING,
+    const I_GO1_MAPPING = [
+        self::O_EDGE                => self::M_EDGE,
+        self::O_PORTAL              => self::M_PORTAL,
+        self::O_CONFIG              => self::M_CONFIGURATION,
+        self::O_USER                => self::M_USER,
+        self::O_ACCOUNT             => self::M_ACCOUNT,
+        self::O_LO                  => self::M_LO,
+        self::O_PLAN                => self::M_PLAN,
+        self::O_ENROLMENT           => self::M_ENROLMENT,
+        self::O_ENROLMENT_REVISION  => self::M_ENROLMENT_REVISION,
+        self::O_SUBMISSION          => self::M_SUBMISSION,
+        self::O_SUBMISSION_REVISION => self::M_SUBMISSION_REVISION,
+        self::O_GROUP               => self::M_GROUP,
+        self::O_MAIL                => self::M_MAIL,
+        self::O_PAYMENT_TRANSACTION => self::M_PAYMENT_TRANSACTION,
+        self::O_CREDIT              => self::M_CREDIT,
+        self::O_QUIZ_USER_ANSWER    => self::M_QUIZ_USER_ANSWER,
+        self::O_ECK_METADATA        => self::M_ECK_METADATA,
+        self::O_COUPON              => self::M_COUPON,
+        self::O_LO_GROUP            => self::M_LO_GROUP,
+        self::O_EVENT               => self::M_EVENT,
+        self::O_AWARD               => self::M_AWARD,
+        self::O_AWARD_ITEM          => self::M_AWARD_ITEM,
+        self::O_AWARD_ITEM_MANUAL   => self::M_AWARD_ITEM_MANUAL,
+        self::O_AWARD_ACHIEVEMENT   => self::M_AWARD_ACHIEVEMENT,
+        self::O_ACCOUNT_ENROLMENT   => self::M_ACCOUNT_ENROLMENT,
+        self::O_SUGGESTION_CATEGORY => self::M_SUGGESTION_CATEGORY,
+        self::O_CONTRACT            => self::M_CONTRACT,
+        self::O_METRIC              => self::M_METRIC,
+    ];
+
+    const I_MY_TEAM_MAPPING = [
+        self::O_MYTEAM_PROGRESS => self::M_MY_TEAM,
+    ];
+
+    const I_ACTIVITY_MAPPING = [
+        self::O_ACTIVITY => self::M_ACTIVITY,
+    ];
+
+    const I_INDICES = [
+        self::I_GO1      => self::I_GO1_MAPPING,
+        self::I_ACTIVITY => self::I_ACTIVITY_MAPPING,
+        self::I_MY_TEAM  => self::I_MY_TEAM_MAPPING,
     ];
 
     const ANALYZED = [
@@ -123,7 +148,7 @@ class Schema
         ],
     ];
 
-    const EDGE_MAPPING = [
+    const M_EDGE = [
         'properties' => [
             'id'        => ['type' => self::T_KEYWORD],
             'type_id'   => ['type' => self::T_INT],
@@ -134,7 +159,7 @@ class Schema
         ],
     ];
 
-    const PORTAL_MAPPING = [
+    const M_PORTAL = [
         '_parent'    => ['type' => self::O_USER],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -166,7 +191,7 @@ class Schema
         ],
     ];
 
-    const CONFIGURATION_MAPPING = [
+    const M_CONFIGURATION = [
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -178,7 +203,7 @@ class Schema
         ],
     ];
 
-    const USER_MAPPING = [
+    const M_USER = [
         'properties' => [
             'id'           => ['type' => self::T_KEYWORD],
             'profile_id'   => ['type' => self::T_INT],
@@ -197,7 +222,7 @@ class Schema
         ],
     ];
 
-    const ACCOUNT_MAPPING = [
+    const M_ACCOUNT = [
         '_routing'          => ['required' => true],
         'properties'        => [
             'id'           => ['type' => self::T_KEYWORD],
@@ -263,7 +288,7 @@ class Schema
         ],
     ];
 
-    const LO_MAPPING = [
+    const M_LO = [
         '_routing'   => ['required' => true],
         'properties' => [
             'id'             => ['type' => self::T_KEYWORD],
@@ -312,7 +337,7 @@ class Schema
             'items_count'    => ['type' => self::T_INT], # Only count first child level
             'authors'        => [
                 'type'       => self::T_NESTED,
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => self::M_USER['properties'],
             ],
             'group_ids'      => ['type' => self::T_INT],
             'data'           => [
@@ -354,7 +379,7 @@ class Schema
         ],
     ];
 
-    const LO_GROUP_MAPPING = [
+    const M_LO_GROUP = [
         '_parent'    => ['type' => self::O_LO],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -363,7 +388,7 @@ class Schema
         ],
     ];
 
-    const PLAN_MAPPING = [
+    const M_PLAN = [
         'properties' => [
             'id'          => ['type' => self::T_KEYWORD],
             'user_id'     => ['type' => self::T_INT],
@@ -386,7 +411,7 @@ class Schema
     /**
      * @TODO Make sure the revisions are indexed on content re-indexing.
      */
-    const ENROLMENT_MAPPING = [
+    const M_ENROLMENT = [
         '_parent'           => ['type' => self::O_LO],
         '_routing'          => ['required' => true],
         'properties'        => [
@@ -415,7 +440,7 @@ class Schema
             'duration'       => ['type' => self::T_INT],
             'is_assigned'    => ['type' => self::T_SHORT],
             'lo'             => [
-                'properties' => self::LO_MAPPING['properties'],
+                'properties' => self::M_LO['properties'],
             ],
             'parent_lo'      => [
                 'properties' => [
@@ -434,7 +459,7 @@ class Schema
                 ],
             ],
             'account'        => [
-                'properties' => self::ACCOUNT_MAPPING['properties'],
+                'properties' => self::M_ACCOUNT['properties'],
             ],
             'progress'       => [
                 'properties' => [
@@ -505,7 +530,7 @@ class Schema
         ],
     ];
 
-    const ENROLMENT_MAPPING_REVISION = [
+    const M_ENROLMENT_REVISION = [
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_ENROLMENT],
         'properties' => [
@@ -525,7 +550,7 @@ class Schema
         ],
     ];
 
-    const ACCOUNT_ENROLMENT_MAPPING = [
+    const M_ACCOUNT_ENROLMENT = [
         '_parent'    => ['type' => self::O_ACCOUNT],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -540,7 +565,7 @@ class Schema
         ],
     ];
 
-    const SUBMISSION_MAPPING = [
+    const M_SUBMISSION = [
         '_parent'    => ['type' => self::O_ENROLMENT],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -555,7 +580,7 @@ class Schema
         ],
     ];
 
-    const SUBMISSION_REVISION_MAPPING = [
+    const M_SUBMISSION_REVISION = [
         '_parent'    => ['type' => self::O_SUBMISSION],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -571,7 +596,7 @@ class Schema
         ],
     ];
 
-    const GROUP_MAPPING = [
+    const M_GROUP = [
         '_routing'   => ['required' => true],
         'properties' => [
             'id'          => ['type' => self::T_KEYWORD],
@@ -592,7 +617,7 @@ class Schema
         ],
     ];
 
-    const MAIL_MAPPING = [
+    const M_MAIL = [
         '_parent'    => ['type' => self::O_PORTAL],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -611,7 +636,7 @@ class Schema
         ],
     ];
 
-    const PAYMENT_TRANSACTION_MAPPING = [
+    const M_PAYMENT_TRANSACTION = [
         'properties' => [
             'id'               => ['type' => self::T_KEYWORD],
             'instance_id'      => ['type' => self::T_INT],
@@ -626,7 +651,7 @@ class Schema
             'premium_purchase' => ['type' => self::T_INT],
             'user_id'          => ['type' => self::T_INT],
             'user'             => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => self::M_USER['properties'],
             ],
             'items'            => [
                 'type'       => self::T_NESTED,
@@ -647,7 +672,7 @@ class Schema
         ],
     ];
 
-    const QUIZ_USER_ANSWER_MAPPING = [
+    const M_QUIZ_USER_ANSWER = [
         'properties' => [
             'id'            => ['type' => self::T_KEYWORD],
             'question_type' => ['type' => self::T_KEYWORD],
@@ -662,13 +687,13 @@ class Schema
             'question'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'counter'       => ['type' => self::T_INT],
             'user'          => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => self::M_USER['properties'],
             ],
             'li'            => [
-                'properties' => self::LO_MAPPING['properties'],
+                'properties' => self::M_LO['properties'],
             ],
             'course'        => [
-                'properties' => self::LO_MAPPING['properties'],
+                'properties' => self::M_LO['properties'],
             ],
             'metadata'      => [
                 'properties' => [
@@ -680,7 +705,7 @@ class Schema
         ],
     ];
 
-    const ECK_METADATA_MAPPING = [
+    const M_ECK_METADATA = [
         '_routing'   => ['required' => true],
         'properties' => [
             'instance'    => ['type' => self::T_KEYWORD],
@@ -710,7 +735,7 @@ class Schema
         ],
     ];
 
-    const COUPON_MAPPING = [
+    const M_COUPON = [
         '_routing'   => ['required' => true],
         'properties' => [
             'id'           => ['type' => self::T_KEYWORD],
@@ -736,7 +761,7 @@ class Schema
             ],
             'items'        => [
                 'type'       => self::T_NESTED,
-                'properties' => self::LO_MAPPING['properties'],
+                'properties' => self::M_LO['properties'],
             ],
             'metadata'     => [
                 'properties' => [
@@ -747,15 +772,15 @@ class Schema
         ],
     ];
 
-    const CREDIT_MAPPING = [
+    const M_CREDIT = [
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_PAYMENT_TRANSACTION],
         'properties' => [
             'user'      => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => self::M_USER['properties'],
             ],
             'lo'        => [
-                'properties' => self::LO_MAPPING['properties'],
+                'properties' => self::M_LO['properties'],
             ],
             'portal_id' => ['type' => self::T_INT],
             'total'     => ['type' => self::T_INT],
@@ -794,12 +819,12 @@ class Schema
         'postal_code'             => ['type' => self::T_KEYWORD],
     ];
 
-    const EVENT_MAPPING = [
+    const M_EVENT = [
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_LO],
         'properties' => self::EVENT_PROPERTIES + [
                 'parent'   => [
-                    'properties' => self::LO_MAPPING['properties'],
+                    'properties' => self::M_LO['properties'],
                 ],
                 'metadata' => [
                     'properties' => [
@@ -810,7 +835,7 @@ class Schema
             ],
     ];
 
-    const AWARD_MAPPING = [
+    const M_AWARD = [
         '_routing'   => ['required' => true],
         'properties' => [
             'id'          => ['type' => self::T_KEYWORD],
@@ -838,7 +863,7 @@ class Schema
         ],
     ];
 
-    const AWARD_ITEM_MAPPING = [
+    const M_AWARD_ITEM = [
         '_parent'    => ['type' => self::O_AWARD],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -857,7 +882,7 @@ class Schema
         ],
     ];
 
-    const AWARD_ITEM_MANUAL_MAPPING = [
+    const M_AWARD_ITEM_MANUAL = [
         '_parent'    => ['type' => self::O_AWARD],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -876,7 +901,7 @@ class Schema
         ],
     ];
 
-    const AWARD_ACHIEVEMENT_MAPPING = [
+    const M_AWARD_ACHIEVEMENT = [
         '_parent'    => ['type' => self::O_AWARD_ENROLMENT],
         '_routing'   => ['required' => true],
         'properties' => [
@@ -887,7 +912,7 @@ class Schema
         ],
     ];
 
-    const ACTIVITY_MAPPING = [
+    const M_ACTIVITY = [
         '_routing'   => ['required' => true],
         'properties' => [
             'id'          => ['type' => self::T_KEYWORD],
@@ -929,7 +954,7 @@ class Schema
         ],
     ];
 
-    const SUGGESTION_CATEGORY_MAPPING = [
+    const M_SUGGESTION_CATEGORY = [
         '_routing'   => ['required' => true],
         'properties' => [
             'category' => [
@@ -947,7 +972,7 @@ class Schema
         ],
     ];
 
-    const MY_TEAM_MAPPING = [
+    const M_MY_TEAM = [
         'properties' => [
             # Data for filters.
             'accessor_id'        => ['type' => self::T_INT],
@@ -972,7 +997,7 @@ class Schema
         ],
     ];
 
-    const CONTRACT_MAPPING = [
+    const M_CONTRACT = [
         'properties' => [
             'id'              => ['type' => self::T_KEYWORD],
             'name'            => ['type' => self::T_KEYWORD],
@@ -983,7 +1008,7 @@ class Schema
             'user_id'         => ['type' => self::T_INT],
             'staff_id'        => ['type' => self::T_INT],
             'staff'           => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => self::M_USER['properties'],
             ],
             'number_users'    => ['type' => self::T_INT],
             'price'           => ['type' => self::T_DOUBLE],
@@ -1005,12 +1030,12 @@ class Schema
         ],
     ];
 
-    const METRIC_MAPPING = [
+    const M_METRIC = [
         'properties' => [
             'id'           => ['type' => self::T_KEYWORD],
             'title'        => ['type' => self::T_KEYWORD],
             'user'         => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => self::M_USER['properties'],
             ],
             'type'         => ['type' => self::T_KEYWORD],
             'metric_value' => ['type' => self::T_DOUBLE],
@@ -1027,6 +1052,9 @@ class Schema
         ],
     ];
 
+    /**
+     * @deprecated
+     */
     public static function portalIndex(int $portalId)
     {
         return static::INDEX . '_portal_' . $portalId;
