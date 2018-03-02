@@ -4,6 +4,7 @@ namespace go1\util\portal;
 
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
+use go1\util\user\Roles;
 
 class PortalChecker
 {
@@ -205,5 +206,13 @@ class PortalChecker
         return (!empty($portal->features))
             ? boolval($portal->features->marketplace ?? true)
             : true;
+    }
+
+    public static function allowNotifyRemindMajorEventByRole($portal, string $role = Roles::STUDENT): bool
+    {
+        PortalHelper::parseConfig($portal);
+
+        $config = (array) $portal->configuration->{PortalHelper::FEATURE_NOTIFY_REMIND_MAJOR_EVENT} ?? [];
+        return boolval($config[$role] ?? false);
     }
 }
