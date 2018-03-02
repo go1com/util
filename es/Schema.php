@@ -63,6 +63,7 @@ class Schema
     const O_AWARD_ENROLMENT     = 'award_enrolment';
     const O_AWARD_ACHIEVEMENT   = 'award_achievement';
     const O_SUGGESTION_CATEGORY = 'suggestion_category'; # Suggestion for award manual item's category
+    const O_SUGGESTION_TAG      = 'suggestion_tag'; # Suggestion for ES LO's tag
     const O_MYTEAM_PROGRESS     = 'myteam_progress';
     const O_CONTRACT            = 'contract';
     const O_METRIC              = 'metric';
@@ -109,6 +110,7 @@ class Schema
         self::O_AWARD_ACHIEVEMENT   => self::AWARD_ACHIEVEMENT_MAPPING,
         self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
         self::O_SUGGESTION_CATEGORY => self::SUGGESTION_CATEGORY_MAPPING,
+        self::O_SUGGESTION_TAG      => self::SUGGESTION_TAG_MAPPING,
         self::O_MYTEAM_PROGRESS     => self::MY_TEAM_MAPPING,
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
         self::O_METRIC              => self::METRIC_MAPPING,
@@ -215,7 +217,7 @@ class Schema
             'roles'        => ['type' => self::T_KEYWORD],
             'groups'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'timestamp'    => ['type' => self::T_DATE],
-            'managers'     => ['type' => self::T_INT],
+            'managers'     => ['type' => self::T_INT], # Use user.id of manager
             'metadata'     => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
@@ -933,6 +935,24 @@ class Schema
         '_routing'   => ['required' => true],
         'properties' => [
             'category' => [
+                'type'                         => self::T_COMPLETION,
+                'analyzer'                     => self::A_SIMPLE,
+                'preserve_separators'          => true,
+                'preserve_position_increments' => true,
+                'max_input_length'             => self::MAX_INPUT_LENGTH,
+            ],
+            'metadata' => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                ],
+            ],
+        ],
+    ];
+
+    const SUGGESTION_TAG_MAPPING = [
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'tag' => [
                 'type'                         => self::T_COMPLETION,
                 'analyzer'                     => self::A_SIMPLE,
                 'preserve_separators'          => true,

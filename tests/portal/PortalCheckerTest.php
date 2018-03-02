@@ -6,6 +6,7 @@ use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\schema\mock\InstanceMockTrait;
 use go1\util\tests\UtilTestCase;
+use go1\util\user\Roles;
 
 class PortalCheckerTest extends UtilTestCase
 {
@@ -214,5 +215,50 @@ class PortalCheckerTest extends UtilTestCase
         $id = $this->createInstance($this->db, []);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowMarketplace($portal));
+    }
+
+
+    public function notifyRemindConfig()
+    {
+        return [
+            [
+                [Roles::STUDENT => 1, Roles::ASSESSOR => 1, Roles::MANAGER => 1],
+                [Roles::STUDENT => true, Roles::ASSESSOR => true, Roles::MANAGER => true, Roles::ADMIN => false]
+            ],
+            [
+                [Roles::STUDENT => 0, Roles::ASSESSOR => 0, Roles::MANAGER => 0],
+                [Roles::STUDENT => false, Roles::ASSESSOR => false, Roles::MANAGER => false]
+            ],
+            [
+                [],
+                [Roles::STUDENT => false, Roles::ASSESSOR => false, Roles::MANAGER => false]
+            ],
+            [
+                [Roles::STUDENT => 1],
+                [Roles::STUDENT => true, Roles::ASSESSOR => false, Roles::MANAGER => false]
+            ],
+            [
+                [Roles::ASSESSOR => 1],
+                [Roles::STUDENT => false, Roles::ASSESSOR => true, Roles::MANAGER => false]
+            ],
+            [
+                [Roles::MANAGER => 1],
+                [Roles::STUDENT => false, Roles::ASSESSOR => false, Roles::MANAGER => true]
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider notifyRemindConfig
+     */
+    public function testAllowNotifyRemindMajorEventByRole($data, $expected)
+    {
+        $id = $this->createInstance($this->db, [
+            'data' => ['configuration' => [PortalHelper::FEATURE_NOTIFY_REMIND_MAJOR_EVENT => $data]],
+        ]);
+        $portal = PortalHelper::load($this->db, $id);
+        foreach ($expected as $role => $assert) {
+            $this->assertEquals($assert, PortalChecker::allowNotifyRemindMajorEventByRole($portal, $role));
+        }
     }
 }

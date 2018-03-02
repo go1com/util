@@ -108,6 +108,25 @@ trait EsLoMockTrait
             'refresh' => true
         ]);
 
+        foreach ($lo['tags'] as $tag) {
+            $client->update([
+                'index'   => $options['index'] ?? Schema::INDEX,
+                'routing' => $options['routing'] ?? Schema::INDEX,
+                'type'    => Schema::O_SUGGESTION_TAG,
+                'id'      => md5($tag),
+                'body'    => [
+                    'script' => ['inline' => 'ctx._source.weight += 1'],
+                    'upsert' => [
+                        'tag' => [
+                            'input'  => $tag,
+                            'weight' => 1,
+                        ],
+                    ],
+                ],
+                'refresh' => true,
+            ]);
+        }
+
         return $lo['id'];
     }
 }

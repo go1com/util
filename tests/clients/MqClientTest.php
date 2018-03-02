@@ -73,10 +73,11 @@ class MqClientTest extends UtilTestCase
                 ->setMethods(['basic_publish'])
                 ->getMock();
 
+            $timestamp = time();
             $channel
                 ->expects($this->any())
                 ->method('basic_publish')
-                ->willReturnCallback(function (AMQPMessage $message, string $exchange, string $routingKey) {
+                ->willReturnCallback(function (AMQPMessage $message, string $exchange, string $routingKey) use ($timestamp) {
                     $properties = $message->get_properties();
 
                     /* @var $_AMQPTable AMQPTable */
@@ -87,6 +88,7 @@ class MqClientTest extends UtilTestCase
                     $this->assertEquals('events', $exchange);
                     $this->assertEquals('X-foo', $context['request_id']);
                     $this->assertEquals(999, $context['actor_id']);
+                    $this->assertEquals($timestamp, $context[MqClient::CONTEXT_TIMESTAMP]);
                 });
 
             $rMqClient = new ReflectionObject($mqClient);
