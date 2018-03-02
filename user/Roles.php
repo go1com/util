@@ -16,8 +16,9 @@ class Roles
     const TAM           = 'training account manager';
     const ANONYMOUS     = 'anonymous';
 
-    const ACCOUNTS_ROLES = [self::ROOT, self::DEVELOPER, self::AUTHENTICATED, self::TAM];
-    const PORTAL_ROLES   = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::ADMIN_CONTENT, self::STUDENT, self::TUTOR, self::MANAGER];
+    const ACCOUNTS_ROLES     = [self::ROOT, self::DEVELOPER, self::AUTHENTICATED, self::TAM];
+    const PORTAL_ROLES       = [self::ANONYMOUS, self::AUTHENTICATED, self::ADMIN, self::ADMIN_CONTENT, self::STUDENT, self::TUTOR, self::MANAGER];
+    const PORTAL_ADMIN_ROLES = [self::ADMIN, self::ADMIN_CONTENT, self::MANAGER]; # Roles can access portal admin area.
 
     const NAMES = [
         self::ADMIN    => 'Administrator',
