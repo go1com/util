@@ -34,6 +34,7 @@ class PortalHelper
     const FEATURE_CREDIT_REQUEST_DEFAULT       = false;
     const FEATURE_NOTIFY_NEW_ENROLMENT         = 'notify_on_enrolment_create';
     const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
+    const FEATURE_NOTIFY_REMIND_MAJOR_EVENT    = 'notify_remind_major_event';
     const TIMEZONE_DEFAULT                     = "Australia/Brisbane";
 
     public static function load(Connection $db, $nameOrId, $columns = '*')
