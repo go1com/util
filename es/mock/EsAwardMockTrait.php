@@ -26,7 +26,7 @@ trait EsAwardMockTrait
             'expire'      => $options['expire'] ?? null,
             'created'     => DateTime::formatDate($options['created'] ?? time()),
             'items_count' => $options['items_count'] ?? 0,
-            'tags'        => $options['tags'] ?? [],
+            'tags'        => (array) ($options['tags'] ?? []),
             'locale'      => $options['locale'] ?? '',
             'metadata'    => [
                 'instance_id' => $options['instance_id'] ?? 0,

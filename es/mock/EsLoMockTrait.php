@@ -58,7 +58,7 @@ trait EsLoMockTrait
             'locale'         => $options['locale'] ?? 0,
             'title'          => $options['title'] ?? 'Foo course',
             'description'    => $options['description'] ?? '',
-            'tags'           => $options['tags'] ?? [],
+            'tags'           => (array) ($options['tags'] ?? []),
             'image'          => $options['image'] ?? '',
             'items_count'    => $options['items_count'] ?? 0,
             'pricing'        => [
