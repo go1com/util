@@ -109,6 +109,10 @@ trait EsLoMockTrait
         ]);
 
         foreach ($lo['tags'] as $tag) {
+            if (!$tag) {
+                continue;
+            }
+
             $client->update([
                 'index'   => $options['index'] ?? Schema::INDEX,
                 'routing' => $options['routing'] ?? Schema::INDEX,
@@ -120,6 +124,9 @@ trait EsLoMockTrait
                         'tag' => [
                             'input'  => $tag,
                             'weight' => 1,
+                        ],
+                        'metadata' => [
+                            'instance_id' => $options['instance_id'] ?? 0,
                         ],
                     ],
                 ],

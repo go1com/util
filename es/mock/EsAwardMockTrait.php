@@ -75,6 +75,10 @@ trait EsAwardMockTrait
         ]);
 
         foreach ($awardItemManual['categories'] as $category) {
+            if (!$category) {
+                continue;
+            }
+
             $client->update([
                 'index'   => $options['index'] ?? Schema::INDEX,
                 'routing' => $options['routing'] ?? Schema::INDEX,
@@ -88,6 +92,9 @@ trait EsAwardMockTrait
                         'category' => [
                             'input'  => $category,
                             'weight' => 1,
+                        ],
+                        'metadata' => [
+                            'instance_id' => $options['instance_id'] ?? 0,
                         ],
                     ],
                 ],
