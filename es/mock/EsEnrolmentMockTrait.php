@@ -31,6 +31,7 @@ trait EsEnrolmentMockTrait
             'account'     => $options['account'] ?? null,
             'progress'    => $options['progress'] ?? [],
             'is_assigned' => $options['is_assigned'] ?? 0,
+            'quantity'    => $options['quantity'] ?? 0,
             'certificate' => [
                 'url'  => $options['certificate']['url'] ?? null,
                 'name' => $options['certificate']['name'] ?? null,
