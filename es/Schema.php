@@ -220,6 +220,7 @@ class Schema
             'managers'     => ['type' => self::T_INT], # Use user.id of manager
             'metadata'     => [
                 'properties' => [
+                    'user_id'     => ['type' => self::T_INT],
                     'instance_id' => ['type' => self::T_INT],
                     'updated_at'  => ['type' => self::T_INT],
                 ],
@@ -952,7 +953,7 @@ class Schema
     const SUGGESTION_TAG_MAPPING = [
         '_routing'   => ['required' => true],
         'properties' => [
-            'tag' => [
+            'tag'      => [
                 'type'                         => self::T_COMPLETION,
                 'analyzer'                     => self::A_SIMPLE,
                 'preserve_separators'          => true,
