@@ -971,9 +971,8 @@ class Schema
     const MY_TEAM_MAPPING = [
         'properties' => [
             # Data for filters.
-            'accessor_id'        => ['type' => self::T_INT],
-            'parent_assessor_id' => ['type' => self::T_INT],
-            'account'            => [
+            'accessor_id'         => ['type' => self::T_INT],
+            'account'             => [
                 'properties' => [
                     'id'         => ['type' => self::T_KEYWORD],
                     'mail'       => ['type' => self::T_KEYWORD],
@@ -984,12 +983,13 @@ class Schema
                 ],
             ],
             # Real properties for reporting
-            'role'               => ['type' => self::T_INT],
-            'count_enrolment'    => ['type' => self::T_INT],
-            'count_upcoming'     => ['type' => self::T_INT],
-            'count_overdue'      => ['type' => self::T_INT],
-            'count_mark'         => ['type' => self::T_INT],
-            'has_child'          => ['type' => self::T_INT],
+            'role'                => ['type' => self::T_INT],
+            'count_enrolment'     => ['type' => self::T_INT],
+            'count_upcoming'      => ['type' => self::T_INT],
+            'count_overdue'       => ['type' => self::T_INT],
+            'count_mark'          => ['type' => self::T_INT],
+            'has_child'           => ['type' => self::T_INT],
+            'has_myteam_progress' => ['type' => self::T_INT],
         ],
     ];
 
