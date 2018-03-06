@@ -748,6 +748,18 @@ class MailTemplate
         ],
     ];
 
+    const LEARNER_SCHEDULED_DUE_DATE_PRIOR = [
+        'key'    => 'learner.scheduled-due-date.prior',
+        'tokens' => [
+            '!time_remaining'        => 'Time remaining',
+            '!learning_object_title' => 'Learning object title',
+            '!learner_first_name'    => 'Learner first name',
+            '!assigner_full_name'    => 'Assigner full name',
+            '!scheduled_due_data'    => 'Scheduled due date',
+            '!action_url'            => 'Action url',
+        ],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
