@@ -113,13 +113,20 @@ trait EsLoMockTrait
                 continue;
             }
 
+            $esLoId = (LoTypes::AWARD == $lo['type']) ? sprintf('%s:%s', LoTypes::AWARD, $loId) : $loId;
             $client->update([
                 'index'   => $options['index'] ?? Schema::INDEX,
                 'routing' => $options['routing'] ?? Schema::INDEX,
                 'type'    => Schema::O_SUGGESTION_TAG,
-                'id'      => md5($tag),
+                'id'      => md5($tag . $lo['instance_id']),
                 'body'    => [
-                    'script' => ['inline' => 'ctx._source.weight += 1'],
+                    'script' => [
+                        'inline' => implode(';', [
+                            'ctx._source.metadata.lo_ids.add(params.esLoId)',
+                            'ctx._source.tag.weight = ctx._source.metadata.lo_ids.length'
+                        ]),
+                        'params' => ['esLoId' => $esLoId]
+                    ],
                     'upsert' => [
                         'tag' => [
                             'input'  => $tag,
@@ -127,6 +134,7 @@ trait EsLoMockTrait
                         ],
                         'metadata' => [
                             'instance_id' => $options['instance_id'] ?? 0,
+                            'lo_ids'      => (array) $esLoId,
                         ],
                     ],
                 ],
