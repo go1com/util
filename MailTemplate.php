@@ -176,12 +176,15 @@ class MailTemplate
     const LEARNER_ASSIGN_COURSE = [
         'key'    => 'learner.assign.course',
         'tokens' => [
-            '!learner_first_name' => 'Learner first name',
-            '!learner_mail'       => 'Learner mail',
-            '!course_name'        => 'Course name',
-            '!course_url'         => 'Course URL',
-            '!portal_name'        => 'Portal name',
-            '!portal_image'       => 'Portal image',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!course_name'         => 'Course name',
+            '!course_url'          => 'Course URL',
+            '!assigner_first_name' => 'Assigner first name',
+            '!assigner_full_name'  => 'Assigner full name',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
         ],
     ];
 
@@ -502,13 +505,15 @@ class MailTemplate
     const AWARD_ASSIGN = [
         'key'    => 'award.assign',
         'tokens' => [
-            '!learner_first_name' => 'Learner first name',
-            '!learner_mail'       => 'Learner mail',
-            '!award_name'         => 'Award name',
-            '!award_url'          => 'Award URL',
-            '!award_expiry'       => 'Award expiry date',
-            '!portal_name'        => 'Portal name',
-            '!portal_image'       => 'Portal logo',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!award_name'          => 'Award name',
+            '!award_url'           => 'Award URL',
+            '!assigner_first_name' => 'Assigner first name',
+            '!assigner_full_name'  => 'Assigner full name',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal logo',
         ],
     ];
 
