@@ -96,7 +96,7 @@ trait EsLoMockTrait
                 'rank'    => $options['vote']['rank'] ?? null,
                 'like'    => $options['vote']['like'] ?? null,
                 'dislike' => $options['vote']['dislike'] ?? null,
-            ]
+            ],
         ];
 
         $client->create([
@@ -105,7 +105,7 @@ trait EsLoMockTrait
             'type'    => Schema::O_LO,
             'id'      => $options['_id'] ?? $lo['id'],
             'body'    => $lo,
-            'refresh' => true
+            'refresh' => true,
         ]);
 
         foreach ($lo['tags'] as $tag) {
@@ -123,12 +123,12 @@ trait EsLoMockTrait
                     'script' => [
                         'inline' => implode(';', [
                             'ctx._source.metadata.lo_ids.add(params.esLoId)',
-                            'ctx._source.tag.weight = ctx._source.metadata.lo_ids.length'
+                            'ctx._source.tag.weight = ctx._source.metadata.lo_ids.length',
                         ]),
-                        'params' => ['esLoId' => $esLoId]
+                        'params' => ['esLoId' => $esLoId],
                     ],
                     'upsert' => [
-                        'tag' => [
+                        'tag'      => [
                             'input'  => $tag,
                             'weight' => 1,
                         ],
