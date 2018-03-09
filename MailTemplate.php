@@ -755,8 +755,11 @@ class MailTemplate
             '!learning_object_title' => 'Learning object title',
             '!learner_first_name'    => 'Learner first name',
             '!assigner_full_name'    => 'Assigner full name',
-            '!scheduled_due_data'    => 'Scheduled due date',
+            '!scheduled_due_date'    => 'Scheduled due date',
+            '!learner_mail'          => 'Learner mail',
             '!action_url'            => 'Action url',
+            '!portal_name'           => 'Portal name',
+            '!portal_image'          => 'Portal image',
         ],
     ];
 
