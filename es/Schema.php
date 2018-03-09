@@ -329,10 +329,11 @@ class Schema
             'locations'      => [
                 'type'       => self::T_NESTED,
                 'properties' => [
-                    'id'           => ['type' => self::T_KEYWORD],
-                    'country'      => ['type' => self::T_KEYWORD],
-                    'locality'     => ['type' => self::T_KEYWORD],
-                    'thoroughfare' => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'id'                  => ['type' => self::T_KEYWORD],
+                    'country'             => ['type' => self::T_KEYWORD],
+                    'administrative_area' => ['type' => self::T_KEYWORD],
+                    'locality'            => ['type' => self::T_KEYWORD],
+                    'thoroughfare'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
             ],
             'vote'           => [
