@@ -35,9 +35,7 @@ class UserHelper
             $params[] = $instance;
         }
 
-        return $db
-            ->executeQuery($sql, $params)
-            ->fetch(DB::OBJ);
+        return $db->executeQuery($sql, $params)->fetch(DB::OBJ);
     }
 
     public static function loadByEmail(Connection $db, string $instance, string $mail)
@@ -47,11 +45,14 @@ class UserHelper
             ->fetch(DB::OBJ);
     }
 
-    public static function loadMultiple(Connection $db, array $ids)
+    public static function queryMultiple(Connection $db, array $ids)
     {
-        $sql = 'SELECT * FROM gc_user WHERE id IN (?)';
+        return $db->executeQuery('SELECT * FROM gc_user WHERE id IN (?)', [$ids], [Connection::PARAM_INT_ARRAY]);
+    }
 
-        return $db->executeQuery($sql, [$ids], [Connection::PARAM_INT_ARRAY])->fetchAll(DB::OBJ);
+    public static function loadMultiple(Connection $db, array $ids): array
+    {
+        return self::queryMultiple($db, $ids)->fetchAll(DB::OBJ);
     }
 
     public static function loadByProfileId(Connection $db, int $profileId, string $instanceName)
