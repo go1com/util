@@ -176,6 +176,8 @@ class MailTemplate
     const LEARNER_ASSIGN_COURSE = [
         'key'    => 'learner.assign.course',
         'tokens' => [
+            '!entity_type'         => '`course` or `resource`',
+            '!entity_type_human'   => '`course` or `learning resource`',
             '!learner_first_name'  => 'Learner first name',
             '!learner_mail'        => 'Learner mail',
             '!course_name'         => 'Course name',
