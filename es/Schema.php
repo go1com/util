@@ -403,6 +403,7 @@ class Schema
             'lo_id'          => ['type' => self::T_INT],
             'parent_id'      => ['type' => self::T_INT],
             'status'         => ['type' => self::T_SHORT],
+            'last_status'    => ['type' => self::T_SHORT],
             'quantity'       => ['type' => self::T_DOUBLE],
             'result'         => ['type' => self::T_INT],
             'pass'           => ['type' => self::T_INT],
