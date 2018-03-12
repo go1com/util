@@ -20,6 +20,7 @@ trait EsEnrolmentMockTrait
             'lo_id'       => $options['lo_id'] ?? 0,
             'parent_id'   => $options['parent_id'] ?? 0,
             'status'      => $options['status'] ?? 0,
+            'last_status' => $options['last_status'] ?? $options['status'] ?? 0,
             'result'      => $options['result'] ?? 0,
             'pass'        => $options['pass'] ?? 0,
             'assessors'   => $options['assessors'] ?? [],
