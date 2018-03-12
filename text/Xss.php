@@ -6,35 +6,35 @@ class Xss
 {
     protected static $htmlTags = ['a', 'em', 'strong', 'cite', 'blockquote', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd'];
 
-    public static function filter($string, array $html_tags = NULL) {
-        if (is_null($html_tags)) {
-            $html_tags = static::$htmlTags;
+    public static function filter($string, array $htmlTags = null)
+    {
+        if (is_null($htmlTags)) {
+            $htmlTags = static::$htmlTags;
         }
+
         // Only operate on valid UTF-8 strings. This is necessary to prevent cross
         // site scripting issues on Internet Explorer 6.
         if (!Unicode::validateUtf8($string)) {
             return '';
         }
+
         // Remove NULL characters (ignored by some browsers).
         $string = str_replace(chr(0), '', $string);
         // Remove Netscape 4 JS entities.
         $string = preg_replace('%&\s*\{[^}]*(\}\s*;?|$)%', '', $string);
-
-        // Defuse all HTML entities.
-        $string = str_replace('&', '&amp;', $string);
+        $string = str_replace('&', '&amp;', $string); # Defuse all HTML entities.
         // Change back only well-formed entities in our whitelist:
         // Decimal numeric entities.
         $string = preg_replace('/&amp;#([0-9]+;)/', '&#\1', $string);
-        // Hexadecimal numeric entities.
-        $string = preg_replace('/&amp;#[Xx]0*((?:[0-9A-Fa-f]{2})+;)/', '&#x\1', $string);
-        // Named entities.
-        $string = preg_replace('/&amp;([A-Za-z][A-Za-z0-9]*;)/', '&\1', $string);
-        $html_tags = array_flip($html_tags);
+        $string = preg_replace('/&amp;#[Xx]0*((?:[0-9A-Fa-f]{2})+;)/', '&#x\1', $string); # Hexadecimal numeric entities.
+        $string = preg_replace('/&amp;([A-Za-z][A-Za-z0-9]*;)/', '&\1', $string); # Named entities.
+        $htmlTags = array_flip($htmlTags);
         // Late static binding does not work inside anonymous functions.
         $class = get_called_class();
-        $splitter = function($matches) use ($html_tags, $class) {
-            return $class::split($matches[1], $html_tags, $class);
+        $splitter = function ($matches) use ($htmlTags, $class) {
+            return $class::split($matches[1], $htmlTags, $class);
         };
+
         // Strip any tags that are not in the whitelist.
         return preg_replace_callback('%
       (
@@ -48,23 +48,25 @@ class Xss
       )%x', $splitter, $string);
     }
 
-    protected static function split($string, $html_tags, $class) {
+    protected static function split($string, $html_tags, $class)
+    {
         if (substr($string, 0, 1) != '<') {
             // We matched a lone ">" character.
             return '&gt;';
         }
-        elseif (strlen($string) == 1) {
-            // We matched a lone "<" character.
-            return '&lt;';
+
+        if (strlen($string) == 1) {
+            return '&lt;'; # We matched a lone "<" character.
         }
 
         if (!preg_match('%^<\s*(/\s*)?([a-zA-Z0-9\-]+)\s*([^>]*)>?|(<!--.*?-->)$%', $string, $matches)) {
             // Seriously malformed.
             return '';
         }
+
         $slash = trim($matches[1]);
         $elem = &$matches[2];
-        $attrlist = &$matches[3];
+        $attrList = &$matches[3];
         $comment = &$matches[4];
 
         if ($comment) {
@@ -85,38 +87,39 @@ class Xss
         }
 
         // Is there a closing XHTML slash at the end of the attributes?
-        $attrlist = preg_replace('%(\s?)/\s*$%', '\1', $attrlist, -1, $count);
+        $attrList = preg_replace('%(\s?)/\s*$%', '\1', $attrList, -1, $count);
         $xhtml_slash = $count ? ' /' : '';
 
         // Clean up attributes.
-        $attr2 = implode(' ', $class::attributes($attrlist));
+        $attr2 = implode(' ', $class::attributes($attrList));
         $attr2 = preg_replace('/[<>]/', '', $attr2);
         $attr2 = strlen($attr2) ? ' ' . $attr2 : '';
 
         return "<$elem$attr2$xhtml_slash>";
     }
 
-    protected static function needsRemoval($html_tags, $elem) {
+    protected static function needsRemoval($html_tags, $elem)
+    {
         return !isset($html_tags[strtolower($elem)]);
     }
 
-    protected static function attributes($attributes) {
-        $attributes_array = array();
+    protected static function attributes($attributes)
+    {
+        $attributesArray = [];
         $mode = 0;
-        $attribute_name = '';
-        $skip = FALSE;
-        $skip_protocol_filtering = FALSE;
+        $attributeName = '';
+        $skip = false;
+        $skipProtocolFiltering = false;
 
         while (strlen($attributes) != 0) {
-            // Was the last operation successful?
-            $working = 0;
+            $working = 0; # Was the last operation successful?
 
             switch ($mode) {
                 case 0:
                     // Attribute name, href for instance.
                     if (preg_match('/^([-a-zA-Z][-a-zA-Z0-9]*)/', $attributes, $match)) {
-                        $attribute_name = strtolower($match[1]);
-                        $skip = ($attribute_name == 'style' || substr($attribute_name, 0, 2) == 'on');
+                        $attributeName = strtolower($match[1]);
+                        $skip = ($attributeName == 'style' || substr($attributeName, 0, 2) == 'on');
 
                         // Values for attributes of type URI should be filtered for
                         // potentially malicious protocols (for example, an href-attribute
@@ -126,12 +129,12 @@ class Xss
                         // such attributes.
                         // @see \Drupal\Component\Utility\UrlHelper::filterBadProtocol()
                         // @see http://www.w3.org/TR/html4/index/attributes.html
-                        $skip_protocol_filtering = substr($attribute_name, 0, 5) === 'data-' || in_array($attribute_name, array(
+                        $skipProtocolFiltering = substr($attributeName, 0, 5) === 'data-' || in_array($attributeName, [
                                 'title',
                                 'alt',
                                 'rel',
                                 'property',
-                            ));
+                            ]);
 
                         $working = $mode = 1;
                         $attributes = preg_replace('/^[-a-zA-Z][-a-zA-Z0-9]*/', '', $attributes);
@@ -151,7 +154,7 @@ class Xss
                         $working = 1;
                         $mode = 0;
                         if (!$skip) {
-                            $attributes_array[] = $attribute_name;
+                            $attributesArray[] = $attributeName;
                         }
                         $attributes = preg_replace('/^\s+/', '', $attributes);
                     }
@@ -160,10 +163,10 @@ class Xss
                 case 2:
                     // Attribute value, a URL after href= for instance.
                     if (preg_match('/^"([^"]*)"(\s+|$)/', $attributes, $match)) {
-                        $thisval = $skip_protocol_filtering ? $match[1] : UrlHelper::filterBadProtocol($match[1]);
+                        $thisval = $skipProtocolFiltering ? $match[1] : UrlHelper::filterBadProtocol($match[1]);
 
                         if (!$skip) {
-                            $attributes_array[] = "$attribute_name=\"$thisval\"";
+                            $attributesArray[] = "$attributeName=\"$thisval\"";
                         }
                         $working = 1;
                         $mode = 0;
@@ -172,10 +175,10 @@ class Xss
                     }
 
                     if (preg_match("/^'([^']*)'(\s+|$)/", $attributes, $match)) {
-                        $thisval = $skip_protocol_filtering ? $match[1] : UrlHelper::filterBadProtocol($match[1]);
+                        $thisval = $skipProtocolFiltering ? $match[1] : UrlHelper::filterBadProtocol($match[1]);
 
                         if (!$skip) {
-                            $attributes_array[] = "$attribute_name='$thisval'";
+                            $attributesArray[] = "$attributeName='$thisval'";
                         }
                         $working = 1;
                         $mode = 0;
@@ -184,10 +187,10 @@ class Xss
                     }
 
                     if (preg_match("%^([^\s\"']+)(\s+|$)%", $attributes, $match)) {
-                        $thisval = $skip_protocol_filtering ? $match[1] : UrlHelper::filterBadProtocol($match[1]);
+                        $thisval = $skipProtocolFiltering ? $match[1] : UrlHelper::filterBadProtocol($match[1]);
 
                         if (!$skip) {
-                            $attributes_array[] = "$attribute_name=\"$thisval\"";
+                            $attributesArray[] = "$attributeName=\"$thisval\"";
                         }
                         $working = 1;
                         $mode = 0;
@@ -215,8 +218,9 @@ class Xss
 
         // The attribute list ends with a valueless attribute like "selected".
         if ($mode == 1 && !$skip) {
-            $attributes_array[] = $attribute_name;
+            $attributesArray[] = $attributeName;
         }
-        return $attributes_array;
+
+        return $attributesArray;
     }
 }
