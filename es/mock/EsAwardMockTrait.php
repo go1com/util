@@ -104,4 +104,29 @@ trait EsAwardMockTrait
 
         return $awardItemManual['id'];
     }
+
+    public function createEsAwardEnrolmentRevision(Client $client, $options)
+    {
+        static $autoId;
+
+        $enrolmentRevision = [
+            'id'          => $options['id'] ?? ++$autoId,
+            'start_date'  => DateTime::formatDate($options['start_date'] ?? time()),
+            'end_date'    => isset($options['end_date']) ? DateTime::formatDate($options['end_date']) : null,
+            'status'      => $options['status'] ?? 0,
+            'result'      => $options['result'] ?? 0,
+            'pass'        => $options['pass'] ?? 0,
+            'note'        => $options['note'] ?? '',
+        ];
+
+        return $client->create([
+            'index'   => $options['index'] ?? Schema::INDEX,
+            'routing' => $options['routing'] ?? Schema::INDEX,
+            'type'    => Schema::O_ENROLMENT_REVISION,
+            'id'      => $enrolmentRevision['id'],
+            'parent'  => $options['parent'] ?? 0,
+            'body'    => $enrolmentRevision,
+            'refresh' => true,
+        ]);
+    }
 }
