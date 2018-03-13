@@ -408,6 +408,7 @@ class Schema
             'result'         => ['type' => self::T_INT],
             'pass'           => ['type' => self::T_INT],
             'assessors'      => ['type' => self::T_INT],
+            'assigned_date'  => ['type' => self::T_DATE],
             'start_date'     => ['type' => self::T_DATE],
             'end_date'       => ['type' => self::T_DATE],
             'due_date'       => ['type' => self::T_DATE],
