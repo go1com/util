@@ -24,6 +24,7 @@ trait EsEnrolmentMockTrait
             'result'      => $options['result'] ?? 0,
             'pass'        => $options['pass'] ?? 0,
             'assessors'   => $options['assessors'] ?? [],
+            'assigned_date' => isset($options['assigned_date']) ? DateTime::formatDate($options['assigned_date']) : null,
             'start_date'  => DateTime::formatDate($options['start_date'] ?? time()),
             'end_date'    => isset($options['end_date']) ? DateTime::formatDate($options['end_date']) : null,
             'due_date'    => isset($options['due_date']) ? DateTime::formatDate($options['due_date']) : null,
