@@ -10,6 +10,14 @@ namespace go1\util\edge;
  */
 class EdgeTypes
 {
+    # @deprecated
+    # ---------------------
+    # These types for old LO sharing logic, we will soon drop these types.
+    const HAS_SHARE_WITH           = 507; # T: Role ID            | S: Learning object
+    const HAS_SHARE_USER_NOTE      = 600; # T: gc_note.id         | S: gc_user.id
+    const HAS_SHARE_WITH_LO_USER   = 601; # T: gc_lo.id           | S: gc_user.id
+    const HAS_SHARE_WITH_LO_PORTAL = 603; # T: gc_instance.id     | S: Learning object
+
     const LearningObjectTree = [
         'all'              => [self::HAS_LP_ITEM, self::HAS_MODULE, self::HAS_ELECTIVE_LO, self::HAS_LI, self::HAS_ELECTIVE_LI],
         'learning_pathway' => [self::HAS_LP_ITEM],
@@ -132,14 +140,10 @@ class EdgeTypes
     const HAS_MANAGER                    = 504; # T: User Id of manager | S: gc_user.id Account Id of student
     const HAS_EMAIL                      = 505; # T: gc_user_mail id    | S: gc_user id
     const HAS_TUTOR_ENROLMENT_EDGE       = 506; # T: gc_enrolment id    | S: gc_user id
-    const HAS_SHARE_WITH                 = 507; # T: Role ID            | S: Learning object
     const HAS_FOLLOWING                  = 508; # T: gc_user.id         | S: gc_user.id
     const HAS_PORTAL_EDGE                = 509; # T: gc_instance.id     | S: gc_user.id
     const HAS_ACCOUNT_VIRTUAL            = 510; # T: User               | S: Account
-    const HAS_SHARE_USER_NOTE            = 600; # T: gc_note.id         | S: gc_user.id
-    const HAS_SHARE_WITH_LO_USER         = 601; # T: gc_lo.id           | S: gc_user.id
     const HAS_MENTION                    = 602; # T: gc_lo.id           | S: gc_user.id
-    const HAS_SHARE_WITH_LO_PORTAL       = 603; # T: gc_instance.id     | S: Learning object
     const HAS_SHARE_GROUP_NOTE           = 604; # T: gc_social_group.id | S: gc_note.id
     const HAS_SHARE_PORTAL_NOTE          = 605; # T: gc_note.id         | S: gc_instance.id
     const HAS_NOTE                       = 606; # T: gc_note.id         | S: gc_user.id
