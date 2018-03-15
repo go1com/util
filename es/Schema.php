@@ -330,8 +330,8 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => [
                     'id'                  => ['type' => self::T_KEYWORD],
-                    'country'             => ['type' => self::T_KEYWORD],
-                    'administrative_area' => ['type' => self::T_KEYWORD],
+                    'country'             => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'administrative_area' => ['type' => self::T_KEYWORD] + self::ANALYZED,
                     'locality'            => ['type' => self::T_KEYWORD],
                     'thoroughfare'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
