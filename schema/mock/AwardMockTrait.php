@@ -128,4 +128,27 @@ trait AwardMockTrait
 
         return $db->lastInsertId('award_enrolment');
     }
+
+    protected function createAwardEnrolmentRevision(Connection $db, $awardEnrolmentId, array $options)
+    {
+        $data = isset($options['data'])
+            ? (is_scalar($options['data']) ? json_decode($options['data'], true) : $options['data'])
+            : [];
+        $data = json_encode($data);
+
+        $db->insert('award_enrolment_revision', [
+            'award_enrolment_id' => $awardEnrolmentId,
+            'award_id'           => $options['award_id'],
+            'user_id'            => $options['user_id'],
+            'expire'             => isset($options['expire']) ? DateTime::create($options['expire'])->getTimestamp() : null,
+            'start_date'         => isset($options['start_date']) ? DateTime::create($options['start_date'])->getTimestamp() : null,
+            'end_date'           => isset($options['end_date']) ? DateTime::create($options['end_date'])->getTimestamp() : null,
+            'status'             => $options['status'] ?? AwardEnrolmentStatuses::IN_PROGRESS,
+            'quantity'           => $options['quantity'] ?? 0,
+            'data'               => $data,
+            'created'            => isset($options['created']) ? DateTime::create($options['created'])->getTimestamp() : time(),
+        ]);
+
+        return $db->lastInsertId('award_enrolment_revision');
+    }
 }

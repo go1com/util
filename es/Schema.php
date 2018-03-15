@@ -23,18 +23,19 @@ class Schema
     const DO_UPDATE = 'update';
     const DO_DELETE = 'delete';
 
-    const T_BOOL       = 'boolean'; # Don't use this, because query_string will match true always, use T_INT instead.
-    const T_SHORT      = 'short';
-    const T_INT        = 'integer';
-    const T_FLOAT      = 'float';
-    const T_DOUBLE     = 'double'; # Use double if you want to use aggregation feature.
-    const T_TEXT       = 'text';
-    const T_KEYWORD    = 'keyword';
-    const T_DATE       = 'date';
-    const T_ARRAY      = 'array';
-    const T_COMPLETION = 'completion';
-    const T_OBJECT     = 'object';
-    const T_NESTED     = 'nested';
+    const T_BOOL                = 'boolean'; # Don't use this, because query_string will match true always, use T_INT instead.
+    const T_SHORT               = 'short';
+    const T_INT                 = 'integer';
+    const T_FLOAT               = 'float';
+    const T_DOUBLE              = 'double'; # Use double if you want to use aggregation feature.
+    const T_TEXT                = 'text';
+    const T_KEYWORD             = 'keyword';
+    const T_DATE                = 'date';
+    const T_ARRAY               = 'array';
+    const T_COMPLETION          = 'completion';
+    const T_COMPLETION_CATEGORY = 'CATEGORY'; # must be in upper-case
+    const T_OBJECT              = 'object';
+    const T_NESTED              = 'nested';
 
     const O_EDGE                = 'edge';
     const O_PORTAL              = 'portal';
@@ -72,7 +73,8 @@ class Schema
     // This is used to get users that is not enrolled to a course.
     const O_ACCOUNT_ENROLMENT = 'account_enrolment';
 
-    const A_SIMPLE = 'simple';
+    const A_SIMPLE     = 'simple';
+    const A_WHITESPACE = 'whitespace';
 
     const SCHEMA = [
         'index' => self::INDEX,
@@ -401,10 +403,12 @@ class Schema
             'lo_id'          => ['type' => self::T_INT],
             'parent_id'      => ['type' => self::T_INT],
             'status'         => ['type' => self::T_SHORT],
+            'last_status'    => ['type' => self::T_SHORT],
             'quantity'       => ['type' => self::T_DOUBLE],
             'result'         => ['type' => self::T_INT],
             'pass'           => ['type' => self::T_INT],
             'assessors'      => ['type' => self::T_INT],
+            'assigned_date'  => ['type' => self::T_DATE],
             'start_date'     => ['type' => self::T_DATE],
             'end_date'       => ['type' => self::T_DATE],
             'due_date'       => ['type' => self::T_DATE],
@@ -956,10 +960,18 @@ class Schema
         'properties' => [
             'tag'      => [
                 'type'                         => self::T_COMPLETION,
-                'analyzer'                     => self::A_SIMPLE,
+                'analyzer'                     => self::A_WHITESPACE,
                 'preserve_separators'          => true,
                 'preserve_position_increments' => true,
                 'max_input_length'             => self::MAX_INPUT_LENGTH,
+                'contexts'                     => [
+                    [
+                        // since suggestion query only supports context
+                        // we also need to index instance_id here
+                        'name' => 'instance_id',
+                        'type' => self::T_COMPLETION_CATEGORY,
+                    ],
+                ],
             ],
             'metadata' => [
                 'properties' => [
