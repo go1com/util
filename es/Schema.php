@@ -187,7 +187,7 @@ class Schema
             'id'           => ['type' => self::T_KEYWORD],
             'profile_id'   => ['type' => self::T_INT],
             'mail'         => ['type' => self::T_KEYWORD],
-            'name'         => ['type' => self::T_KEYWORD],
+            'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'first_name'   => ['type' => self::T_KEYWORD],
             'last_name'    => ['type' => self::T_KEYWORD],
             'created'      => ['type' => self::T_DATE],
