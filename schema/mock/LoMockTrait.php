@@ -127,15 +127,15 @@ trait LoMockTrait
         $location = empty($event['location']) || is_numeric($event['location']) ? [] : [
             'loc_country'                 => $event['location']['country'],
             'loc_administrative_area'     => $event['location']['administrative_area'],
-            'loc_sub_administrative_area' => $event['location']['sub_administrative_area'],
-            'loc_locality'                => $event['location']['locality'],
-            'loc_dependent_locality'      => $event['location']['dependent_locality'],
+            'loc_sub_administrative_area' => $event['location']['sub_administrative_area'] ?? null,
+            'loc_locality'                => $event['location']['locality'] ?? null,
+            'loc_dependent_locality'      => $event['location']['dependent_locality'] ?? null,
             'loc_thoroughfare'            => $event['location']['thoroughfare'],
-            'loc_premise'                 => $event['location']['premise'],
-            'loc_sub_premise'             => $event['location']['sub_premise'],
-            'loc_organisation_name'       => $event['location']['organisation_name'],
-            'loc_name_line'               => $event['location']['name_line'],
-            'loc_postal_code'             => $event['location']['postal_code'],
+            'loc_premise'                 => $event['location']['premise'] ?? null,
+            'loc_sub_premise'             => $event['location']['sub_premise'] ?? null,
+            'loc_organisation_name'       => $event['location']['organisation_name'] ?? null,
+            'loc_name_line'               => $event['location']['name_line'] ?? null,
+            'loc_postal_code'             => $event['location']['postal_code'] ?? null,
         ];
 
         $db->insert('gc_event', [
@@ -157,10 +157,15 @@ trait LoMockTrait
                 'weight'    => 0,
             ]);
 
-            if (isset($event['location']) && is_numeric($event['location'])) {
+            if (isset($event['location'])) {
+                $event['location']['title'] = $event['location']['title'] ?? '';
+                $event['location']['created'] = $event['location']['created'] ?? time();
+                $event['location']['updated'] = $event['location']['updated'] ?? time();
+
+                $db->insert('gc_location', $event['location']);
                 $db->insert('gc_ro', [
                     'source_id' => $eventId,
-                    'target_id' => $event['location'],
+                    'target_id' => $db->lastInsertId('gc_location'),
                     'type'      => EdgeTypes::HAS_LOCATION,
                     'weight'    => 0,
                 ]);
