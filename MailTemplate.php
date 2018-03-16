@@ -775,7 +775,9 @@ class MailTemplate
         'tokens' => [
             '!event_name'         => 'Event name',
             '!event_start_date'   => 'Event start date',
+            '!event_start_time'   => 'Event start time',
             '!event_end_date'     => 'Event end date',
+            '!event_end_time'     => 'Event end time',
             '!event_address'      => 'Event address',
             '!learner_first_name' => 'Learner first name',
             '!course_name'        => 'Course name',
@@ -792,7 +794,9 @@ class MailTemplate
         'tokens' => [
             '!event_name'         => 'Event name',
             '!event_start_date'   => 'Event start date',
+            '!event_start_time'   => 'Event start time',
             '!event_end_date'     => 'Event end date',
+            '!event_end_time'     => 'Event end time',
             '!event_address'      => 'Event address',
             '!learner_first_name' => 'Learner first name',
             '!course_name'        => 'Course name',
