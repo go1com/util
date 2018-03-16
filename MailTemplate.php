@@ -787,6 +787,23 @@ class MailTemplate
         ],
     ];
 
+    const LEANER_REMIND_EVENT_UPCOMING = [
+        'key'    => 'learner.remind.event-upcoming',
+        'tokens' => [
+            '!event_name'         => 'Event name',
+            '!event_start_date'   => 'Event start date',
+            '!event_end_date'     => 'Event end date',
+            '!event_address'      => 'Event address',
+            '!learner_first_name' => 'Learner first name',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!learner_mail'       => 'Learner mail',
+            '!view_detail_url'    => 'View detail url',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+        ],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
