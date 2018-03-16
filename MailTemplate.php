@@ -176,12 +176,17 @@ class MailTemplate
     const LEARNER_ASSIGN_COURSE = [
         'key'    => 'learner.assign.course',
         'tokens' => [
-            '!learner_first_name' => 'Learner first name',
-            '!learner_mail'       => 'Learner mail',
-            '!course_name'        => 'Course name',
-            '!course_url'         => 'Course URL',
-            '!portal_name'        => 'Portal name',
-            '!portal_image'       => 'Portal image',
+            '!entity_type'         => '`course` or `resource`',
+            '!entity_type_human'   => '`course` or `learning resource`',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!course_name'         => 'Course name',
+            '!course_url'          => 'Course URL',
+            '!assigner_first_name' => 'Assigner first name',
+            '!assigner_full_name'  => 'Assigner full name',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
         ],
     ];
 
@@ -502,13 +507,15 @@ class MailTemplate
     const AWARD_ASSIGN = [
         'key'    => 'award.assign',
         'tokens' => [
-            '!learner_first_name' => 'Learner first name',
-            '!learner_mail'       => 'Learner mail',
-            '!award_name'         => 'Award name',
-            '!award_url'          => 'Award URL',
-            '!award_expiry'       => 'Award expiry date',
-            '!portal_name'        => 'Portal name',
-            '!portal_image'       => 'Portal logo',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!award_name'          => 'Award name',
+            '!award_url'           => 'Award URL',
+            '!assigner_first_name' => 'Assigner first name',
+            '!assigner_full_name'  => 'Assigner full name',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal logo',
         ],
     ];
 
@@ -760,6 +767,23 @@ class MailTemplate
             '!action_url'            => 'Action url',
             '!portal_name'           => 'Portal name',
             '!portal_image'          => 'Portal image',
+        ],
+    ];
+
+    const LEANER_REMIND_EVENT_ON_START_DATE = [
+        'key'    => 'learner.remind.event-on-start-date',
+        'tokens' => [
+            '!event_name'         => 'Event name',
+            '!event_start_date'   => 'Event start date',
+            '!event_end_date'     => 'Event end date',
+            '!event_address'      => 'Event address',
+            '!learner_first_name' => 'Learner first name',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!learner_mail'       => 'Learner mail',
+            '!view_detail_url'    => 'View detail url',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
         ],
     ];
 

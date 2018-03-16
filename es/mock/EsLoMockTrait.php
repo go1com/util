@@ -128,9 +128,10 @@ trait EsLoMockTrait
                         'params' => ['esLoId' => $esLoId],
                     ],
                     'upsert' => [
-                        'tag'      => [
-                            'input'  => $tag,
-                            'weight' => 1,
+                        'tag' => [
+                            'input'    => $tag,
+                            'weight'   => 1,
+                            'contexts' => ['instance_id' => $lo['instance_id']],
                         ],
                         'metadata' => [
                             'instance_id' => $options['instance_id'] ?? 0,
