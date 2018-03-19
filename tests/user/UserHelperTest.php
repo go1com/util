@@ -43,11 +43,15 @@ class UserHelperTest extends UtilTestCase
 
     public function testLoadByMail()
     {
-        $id = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com']);
+        $id = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com', 'profile_id' => 10]);
 
         $this->assertEquals(false, UserHelper::loadByEmail($this->db, 'qa.mygo1.com', 'invalid@email.com'));
         $this->assertEquals(false, UserHelper::loadByEmail($this->db, 'invalid.mygo1.com', 'foo@bar.baz'));
         $this->assertEquals($id, UserHelper::loadByEmail($this->db, 'qa.mygo1.com', 'foo@bar.baz')->id);
+
+        $user = (array) UserHelper::loadByEmail($this->db, 'qa.mygo1.com', 'foo@bar.baz', 'profile_id');
+        $this->assertCount(1, $user);
+        $this->assertEquals(10, $user['profile_id']);
     }
 
     public function testInstanceIds()
