@@ -93,18 +93,25 @@ class LoHelperTest extends UtilTestCase
         $this->assertFalse(LoHelper::hasActiveMembership($this->db, $loId, 40));
     }
 
-    public function testDescriptionPurifierConfig()
+    public function dataDescriptionPurifierConfig()
+    {
+        return [
+            ['Plain text',  'Plain text'],
+            ['foo <span style="color:#0000aa;">data</span>',  'foo <span style="color:#0000aa;">data</span>'],
+            ['<a href="test.html" target="_blank">Invalid link</a>',  '<a href="test.html" target="_blank" rel="noreferrer noopener">Invalid link</a>'],
+            ['<iframe width="560" height="315" src="https://www.youtube.com/embed/xxx" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>', '<iframe width="560" height="315" src="https://www.youtube.com/embed/xxx" frameborder="0" allowfullscreen=""></iframe>'],
+            ['<iframe src="https://player.vimeo.com/video/xxx" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>', '<iframe src="https://player.vimeo.com/video/xxx" width="640" height="360" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>'],
+            ['<iframe src="https://fast.wistia.net/embed/iframe/xxx?seo=false&videoFoam=true" title="Wistia video player" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen mozallowfullscreen webkitallowfullscreen oallowfullscreen msallowfullscreen width="100%" height="100%"></iframe>', '<iframe src="https://fast.wistia.net/embed/iframe/xxx?seo=false&amp;videoFoam=true" title="Wistia video player" frameborder="0" class="wistia_embed" allowfullscreen="" mozallowfullscreen="" webkitallowfullscreen="" width="100%" height="100%"></iframe>'],
+            ['<iframe src="https://www.w3schools.com"></iframe>', '<iframe></iframe>'],
+        ];
+    }
+
+    /** @dataProvider dataDescriptionPurifierConfig */
+    public function testDescriptionPurifierConfig(string $input, string $expect)
     {
         $html = new HTMLPurifier();
-        $data = [
-            'Plain text'                                           => 'Plain text',
-            'foo <span style="color:#0000aa;">data</span>'         => 'foo <span style="color:#0000aa;">data</span>',
-            '<a href="test.html" target="_blank">Invalid link</a>' => '<a href="test.html" target="_blank" rel="noreferrer noopener">Invalid link</a>',
-        ];
-        foreach ($data as $input => $expect) {
-            $result = $html->purify(trim($input), LoHelper::descriptionPurifierConfig());
-            $this->assertEquals($expect, $result);
-        }
+        $result = $html->purify(trim($input), LoHelper::descriptionPurifierConfig());
+        $this->assertEquals($expect, $result);
     }
 
     public function testLoadEvent()
