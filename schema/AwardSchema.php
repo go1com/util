@@ -60,6 +60,7 @@ class AwardSchema
             $item->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.']);
             $item->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
             $item->addColumn('weight', Type::INTEGER, ['unsigned' => true]);
+            $item->addColumn('mandatory', Type::BOOLEAN, ['default' => false]);
             $item->setPrimaryKey(['id']);
             $item->addIndex(['parent_award_item_id']);
             $item->addIndex(['award_revision_id']);
