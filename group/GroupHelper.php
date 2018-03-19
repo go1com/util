@@ -48,6 +48,7 @@ class GroupHelper
     public static function loadItemByGroupAndEntity(Connection $db, int $groupId, string $entityType, int $entityId)
     {
         $sql = 'SELECT * FROM social_group_item WHERE group_id = ? AND entity_type = ? AND entity_id = ?';
+
         return $db->executeQuery($sql, [$groupId, $entityType, $entityId], [DB::INTEGER, DB::STRING, DB::INTEGER])->fetch(DB::OBJ);
     }
 
@@ -206,7 +207,7 @@ class GroupHelper
     )
     {
         $validEntity = false;
-        $id = $entityId;
+        $id = abs($entityId);
 
         switch ($entityType) {
             case GroupItemTypes::PORTAL:
@@ -217,13 +218,13 @@ class GroupHelper
             case GroupItemTypes::USER:
                 $target = (array) UserHelper::load($go1, $entityId);
                 if (!empty($target) && $instance) {
-                    $id = static::getAccountId($go1, $target, $instance);
+                    $entityId = static::getAccountId($go1, $target, $instance);
                     $validEntity = true;
                 }
                 break;
 
             case GroupItemTypes::LO:
-                $lo = LoHelper::load($go1, $entityId);
+                $lo = LoHelper::load($go1, $id);
                 $validEntity = is_object($lo);
                 break;
 
@@ -231,11 +232,10 @@ class GroupHelper
                 if ($dbNote) {
                     $note = NoteHelper::loadByUUID($dbNote, $entityId);
                     if (is_object($note)) {
-                        $id = $note->id;
+                        $entityId = $note->id;
                         $validEntity = true;
                     }
                 }
-
                 break;
 
             case GroupItemTypes::GROUP:
@@ -243,7 +243,6 @@ class GroupHelper
                     $group = GroupHelper::load($dbSocial, $entityId);
                     $validEntity = is_object($group);
                 }
-
                 break;
 
             case GroupItemTypes::AWARD:
@@ -251,11 +250,10 @@ class GroupHelper
                     $group = AwardHelper::load($dbAward, $entityId);
                     $validEntity = is_object($group);
                 }
-
                 break;
         }
 
-        return $validEntity ? $id : 0;
+        return $validEntity ? $entityId : 0;
     }
 
     public static function isContent(stdClass $group)
@@ -383,29 +381,31 @@ class GroupHelper
     public static function findGroupIdsByItem(Connection $db, string $entityType, int $entityId, int $offset = 0, int $limit = 50): array
     {
         $q = $db->createQueryBuilder();
+
         return $q->select('group_id')
-            ->from('social_group_item', 'item')
-            ->where('entity_type = ?')
-            ->andWhere('entity_id = ?')
-            ->andWhere('status = ?')
-            ->setParameters([$entityType, $entityId, GroupItemStatus::ACTIVE], [DB::STRING, DB::INTEGER, DB::INTEGER])
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
-            ->execute()
-            ->fetchAll(DB::COL);
+                 ->from('social_group_item', 'item')
+                 ->where('entity_type = ?')
+                 ->andWhere('entity_id = ?')
+                 ->andWhere('status = ?')
+                 ->setParameters([$entityType, $entityId, GroupItemStatus::ACTIVE], [DB::STRING, DB::INTEGER, DB::INTEGER])
+                 ->setFirstResult($offset)
+                 ->setMaxResults($limit)
+                 ->execute()
+                 ->fetchAll(DB::COL);
     }
 
     public static function countGroupByItem(Connection $db, string $entityType, int $entityId): int
     {
         $q = $db->createQueryBuilder();
+
         return $q->select('count(group_id)')
-            ->from('social_group_item', 'item')
-            ->where('entity_type = ?')
-            ->andWhere('entity_id = ?')
-            ->andWhere('status = ?')
-            ->setParameters([$entityType, $entityId, GroupItemStatus::ACTIVE], [DB::STRING, DB::INTEGER, DB::INTEGER])
-            ->execute()
-            ->fetchColumn();
+                 ->from('social_group_item', 'item')
+                 ->where('entity_type = ?')
+                 ->andWhere('entity_id = ?')
+                 ->andWhere('status = ?')
+                 ->setParameters([$entityType, $entityId, GroupItemStatus::ACTIVE], [DB::STRING, DB::INTEGER, DB::INTEGER])
+                 ->execute()
+                 ->fetchColumn();
     }
 
     public static function isPortalSystemGroup(string $title)
@@ -418,10 +418,11 @@ class GroupHelper
         return false;
     }
 
-    public static function isMemberOfContentSharingGroup(Connection $db, int $loId, int $instanceId, bool $marketplace = null) :bool
+    public static function isMemberOfContentSharingGroup(Connection $db, int $loId, int $instanceId, bool $marketplace = null): bool
     {
         if (!is_null($marketplace)) {
             $hostGroup = self::hostContentSharingGroup($db, GroupItemTypes::LO, $loId, $marketplace);
+
             return $hostGroup && self::isItemOf($db, GroupItemTypes::PORTAL, $instanceId, $hostGroup->id);
         }
 
