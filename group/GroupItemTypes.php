@@ -15,22 +15,14 @@ class GroupItemTypes
 
     public static function items(string $type): array
     {
-
         switch ($type) {
             case GroupTypes::CONTENT:
-                $types = [self::LO];
-                break;
+                return [self::LO];
 
             case GroupTypes::CONTENT_PACKAGE:
-                $types = [self::GROUP, self::PORTAL];
-                break;
-
-            case '_none';
-            default:
-                $types = [self::USER, self::NOTE, self::LO];
-                break;
+                return [self::GROUP, self::PORTAL];
         }
 
-        return $types;
+        return [self::USER, self::NOTE, self::LO];
     }
 }
