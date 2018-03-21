@@ -803,7 +803,7 @@ class MailTemplate
         ],
     ];
 
-    const LEANER_REMIND_EVENT_ON_START_DATE = [
+    const LEARNER_REMIND_EVENT_ON_START_DATE = [
         'key'    => 'learner.remind.event-on-start-date',
         'tokens' => [
             '!event_name'         => 'Event name',
@@ -822,7 +822,7 @@ class MailTemplate
         ],
     ];
 
-    const LEANER_REMIND_EVENT_UPCOMING = [
+    const LEARNER_REMIND_EVENT_UPCOMING = [
         'key'    => 'learner.remind.event-upcoming',
         'tokens' => [
             '!event_name'         => 'Event name',
@@ -841,7 +841,7 @@ class MailTemplate
         ],
     ];
 
-    const LEANER_REMIND_EXPIRY_DATE_REACHED = [
+    const LEARNER_REMIND_EXPIRY_DATE_REACHED = [
         'key'    => 'learner.remind.expiry-date-reached',
         'tokens' => [
             '!award_title'        => 'Award title',
@@ -852,6 +852,16 @@ class MailTemplate
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
             '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
+    const ENROLMENT_REPORT = [
+        'key'    => 'enrolment.report',
+        'tokens' => [
+            '!recipient_mail' => 'Recipient mail',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal image',
+            '!portal_url'     => 'Portal URL',
         ],
     ];
 

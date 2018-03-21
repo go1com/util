@@ -334,7 +334,7 @@ class Schema
                     'id'                  => ['type' => self::T_KEYWORD],
                     'country'             => ['type' => self::T_KEYWORD] + self::ANALYZED,
                     'administrative_area' => ['type' => self::T_KEYWORD] + self::ANALYZED,
-                    'locality'            => ['type' => self::T_KEYWORD],
+                    'locality'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
                     'thoroughfare'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
             ],
