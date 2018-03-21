@@ -29,11 +29,11 @@ class SchedulerClientTest extends UtilTestCase
                 function (string $uri, array $options)  {
                     $this->assertEquals($uri, "$this->schedulerUrl/job/$this->jobName?jwt=" . UserHelper::ROOT_JWT);
                     $this->assertEquals('* * * * *', $options['json']['cron_expression']);
-                    $this->assertEquals('http', $options['json']['actions']['type']);
-                    $this->assertEquals($this->fooConsumeUrl, $options['json']['actions']['data']['url']);
-                    $this->assertEquals('POST', $options['json']['actions']['data']['method']);
-                    $this->assertEquals(['foo' => 'bar'], $options['json']['actions']['data']['body']);
-                    $this->assertEquals(['token' => 'foo'], $options['json']['actions']['data']['headers']);
+                    $this->assertEquals('http', $options['json']['actions'][0]['type']);
+                    $this->assertEquals($this->fooConsumeUrl, $options['json']['actions'][0]['data']['url']);
+                    $this->assertEquals('POST', $options['json']['actions'][0]['data']['method']);
+                    $this->assertEquals(['foo' => 'bar'], $options['json']['actions'][0]['data']['body']);
+                    $this->assertEquals(['token' => 'foo'], $options['json']['actions'][0]['data']['headers']);
                 }
             );
 
