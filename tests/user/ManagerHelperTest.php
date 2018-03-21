@@ -33,7 +33,7 @@ class ManagerHelperTest extends UtilTestCase
     public function testIsManagerUser()
     {
         // Setup data
-        $this->createInstance($this->db, ['title' => 'az.mygo1.com']);
+        $this->createPortal($this->db, ['title' => 'az.mygo1.com']);
         $managerRoleId = $this->createRole($this->db, ['instance' => 'az.mygo1.com', 'name' => Roles::MANAGER]);
         $managerAccountId = $this->createUser($this->db, ['instance' => 'az.mygo1.com', 'mail' => 'manager@qa.mygo1.com']);
         EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ROLE, $managerAccountId, $managerRoleId);

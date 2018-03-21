@@ -132,7 +132,7 @@ trait OneMockTrait
 
     public function installAccounts(Connection $db)
     {
-        $this->createInstance($db, ['title' => $this->accountsName]);
+        $this->createPortal($db, ['title' => $this->accountsName]);
         $this->accountsRoleAdminId = $this->createRole($db, ['instance' => $this->accountsName, 'name' => Roles::ROOT]);
     }
 
@@ -142,7 +142,7 @@ trait OneMockTrait
             return null;
         }
 
-        $this->instanceId = $this->createInstance($db, [
+        $this->instanceId = $this->createPortal($db, [
             'title'   => $this->instanceName,
             'version' => $this->instanceVersion,
             'data'    => [
@@ -151,8 +151,8 @@ trait OneMockTrait
             ],
         ]);
 
-        $this->instancePublicKey = $this->createInstancePublicKey($db, ['instance' => $this->instanceName]);
-        $this->instancePrivateKey = $this->createInstancePrivateKey($db, ['instance' => $this->instanceName]);
+        $this->instancePublicKey = $this->createPortalPublicKey($db, ['instance' => $this->instanceName]);
+        $this->instancePrivateKey = $this->createPortalPrivateKey($db, ['instance' => $this->instanceName]);
 
         $this->installPortalUsers($db);
         $this->installCourses($db);

@@ -7,7 +7,15 @@ use go1\util\portal\PortalHelper;
 
 trait PortalMockTrait
 {
+    /**
+     * @deprecated
+     */
     public function createInstance(Connection $db, array $options)
+    {
+        return $this->createPortal($db, $options);
+    }
+
+    public function createPortal(Connection $db, array $options)
     {
         $data = isset($options['data']) ? $options['data'] : '[]';
 
@@ -25,12 +33,28 @@ trait PortalMockTrait
         return $db->lastInsertId('gc_instance');
     }
 
+    /**
+     * @deprecated
+     */
     public function createInstancePrivateKey(Connection $db, array $options)
     {
-        return $this->createInstancePublicKey($db, $options + ['uuid' => uniqid("PRIVATE_KEY_")], 'user.1');
+        return $this->createPortalPrivateKey($db, $options);
     }
 
+    public function createPortalPrivateKey(Connection $db, array $options)
+    {
+        return $this->createPortalPublicKey($db, $options + ['uuid' => uniqid("PRIVATE_KEY_")], 'user.1');
+    }
+
+    /**
+     * @deprecated
+     */
     public function createInstancePublicKey(Connection $db, array $options, $magic = 'user.0')
+    {
+        return $this->createPortalPublicKey($db, $options, $magic);
+    }
+
+    public function createPortalPublicKey(Connection $db, array $options, $magic = 'user.0')
     {
         static $profileId = 25;
 
@@ -53,7 +77,15 @@ trait PortalMockTrait
         return $uuid;
     }
 
+    /**
+     * @deprecated
+     */
     public function createInstanceConfig(Connection $db, array $options)
+    {
+        return $this->createPortalConfig($db, $options);
+    }
+
+    public function createPortalConfig(Connection $db, array $options)
     {
         $db->insert('portal_conf', [
             'instance'  => $instance = isset($options['instance']) ? $options['instance'] : 'az.mygo1.com',

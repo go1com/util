@@ -18,7 +18,7 @@ class LoCheckerTest extends UtilTestCase
 
     public function testIsCourseAuthorTest()
     {
-        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com']);
+        $instanceId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
         $userId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com']);
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId]);
         $moduleId = $this->createModule($this->db, ['instance_id' => $instanceId]);

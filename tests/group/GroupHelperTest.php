@@ -107,7 +107,7 @@ class GroupHelperTest extends UtilTestCase
     public function testCanAccess()
     {
         $c = $this->getContainer();
-        $portalId = $this->createInstance($this->db, ['title' => $portalName = 'foo.com']);
+        $portalId = $this->createPortal($this->db, ['title' => $portalName = 'foo.com']);
         $fooUserId = $this->createUser($this->db, ['id' => 31, 'instance' => $c['accounts_name']]);
         $barUserId = $this->createUser($this->db, [
             'id'       => 33,
@@ -129,7 +129,7 @@ class GroupHelperTest extends UtilTestCase
     public function testCantAccess()
     {
         $c = $this->getContainer();
-        $portalId = $this->createInstance($this->db, ['title' => $portalName = 'foo.com']);
+        $portalId = $this->createPortal($this->db, ['title' => $portalName = 'foo.com']);
         $fooUserId = $this->createUser($this->db, [
             'id'       => 33,
             'mail'     => $fooMail = 'foo@foo.com',
@@ -182,7 +182,7 @@ class GroupHelperTest extends UtilTestCase
 
     public function testGetEntityIdPortal()
     {
-        $instanceId = $this->createInstance($this->db, []);
+        $instanceId = $this->createPortal($this->db, []);
         $entityId = GroupHelper::getEntityId(GroupItemTypes::PORTAL, $instanceId, null, $this->db);
 
         $this->assertEquals($instanceId, $entityId);
@@ -381,7 +381,7 @@ class GroupHelperTest extends UtilTestCase
         $user2Id = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'mail' => 'user-groups-testing-2@foo.com']);
         $user3Id = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'mail' => 'user-groups-testing-3@foo.com']);
 
-        $portalId = $this->createInstance($this->db, ['title' => $portalName = 'foo.com']);
+        $portalId = $this->createPortal($this->db, ['title' => $portalName = 'foo.com']);
 
         $account1Id = $this->createUser($this->db, ['instance' => $portalName, 'mail' => 'user-groups-testing-1@foo.com']);
         $account2Id = $this->createUser($this->db, ['instance' => $portalName, 'mail' => 'user-groups-testing-2@foo.com']);
@@ -458,7 +458,7 @@ class GroupHelperTest extends UtilTestCase
 
     public function testIsPassiveContentSharing()
     {
-        $originalInstanceId = $this->createInstance($this->db, ['title' => $portalName = 'origin.go1.com']);
+        $originalInstanceId = $this->createPortal($this->db, ['title' => $portalName = 'origin.go1.com']);
         $loId = $this->createCourse($this->db, ['title' => 'Sharing Course', 'instance_id' => $originalInstanceId]);
 
         $groupId = $this->createGroup($this->db, []);
@@ -483,11 +483,11 @@ class GroupHelperTest extends UtilTestCase
      */
     public function testIsMemberOfContentSharingGroup($addToMyPortalContent)
     {
-        $originalInstanceId = $this->createInstance($this->db, ['title' => $portalName = 'origin.go1.com']);
+        $originalInstanceId = $this->createPortal($this->db, ['title' => $portalName = 'origin.go1.com']);
         $loId = $this->createCourse($this->db, ['title' => 'Sharing Course', 'instance_id' => $originalInstanceId]);
-        $instanceXId = $this->createInstance($this->db, ['title' => $portalName = 'portalX.go1.com']);
-        $instanceYId = $this->createInstance($this->db, ['title' => $portalName = 'portalY.go1.com']);
-        $instanceZId = $this->createInstance($this->db, ['title' => $portalName = 'portalZ.go1.com']);
+        $instanceXId = $this->createPortal($this->db, ['title' => $portalName = 'portalX.go1.com']);
+        $instanceYId = $this->createPortal($this->db, ['title' => $portalName = 'portalY.go1.com']);
+        $instanceZId = $this->createPortal($this->db, ['title' => $portalName = 'portalZ.go1.com']);
 
         if ($addToMyPortalContent) {
             $sharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}:marketplace"]);
@@ -506,11 +506,11 @@ class GroupHelperTest extends UtilTestCase
 
     public function testIsMemberOfContentSharingGroupWhenBothExisted()
     {
-        $originalInstanceId = $this->createInstance($this->db, ['title' => $portalName = 'origin.go1.com']);
+        $originalInstanceId = $this->createPortal($this->db, ['title' => $portalName = 'origin.go1.com']);
         $loId = $this->createCourse($this->db, ['title' => 'Sharing Course', 'instance_id' => $originalInstanceId]);
-        $instanceXId = $this->createInstance($this->db, ['title' => $portalName = 'portalX.go1.com']);
-        $instanceYId = $this->createInstance($this->db, ['title' => $portalName = 'portalY.go1.com']);
-        $instanceZId = $this->createInstance($this->db, ['title' => $portalName = 'portalZ.go1.com']);
+        $instanceXId = $this->createPortal($this->db, ['title' => $portalName = 'portalX.go1.com']);
+        $instanceYId = $this->createPortal($this->db, ['title' => $portalName = 'portalY.go1.com']);
+        $instanceZId = $this->createPortal($this->db, ['title' => $portalName = 'portalZ.go1.com']);
 
         $sharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}"]);
         $marketplaceSharingGroupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => "go1:lo:{$loId}:marketplace"]);

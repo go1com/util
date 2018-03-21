@@ -14,7 +14,7 @@ class PortalHelperTest extends UtilTestCase
 
     public function testHelper()
     {
-        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com']);
+        $instanceId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId]);
 
         // Test ::load()
@@ -27,7 +27,7 @@ class PortalHelperTest extends UtilTestCase
 
     public function testUpdate()
     {
-        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com', 'version' => 'v2.11.0']);
+        $instanceId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com', 'version' => 'v2.11.0']);
         PortalHelper::updateVersion($this->db, $this->queue, PortalHelper::STABLE_VERSION, $instanceId);
         $version = PortalHelper::load($this->db, $instanceId)->version;
         $this->assertEquals(PortalHelper::STABLE_VERSION, $version);
@@ -35,7 +35,7 @@ class PortalHelperTest extends UtilTestCase
 
     public function testLoadFromLoId()
     {
-        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com', 'version' => 'v2.11.0']);
+        $instanceId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com', 'version' => 'v2.11.0']);
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId]);
 
         $mockDb = $this->getMockBuilder(Connection::class)

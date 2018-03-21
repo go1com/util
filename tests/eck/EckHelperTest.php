@@ -13,7 +13,7 @@ class EckHelperTest extends UtilTestCase
 
     public function testLoadEntity()
     {
-        $instanceId = $this->createInstance($this->db, []);
+        $instanceId = $this->createPortal($this->db, []);
 
         $this->createField($this->db, ['field' => 'field_first_name', 'instance' => $instanceId, 'entity' => 'user']);
         $this->createField($this->db, ['field' => 'field_last_name', 'instance' => $instanceId, 'entity' => 'user']);

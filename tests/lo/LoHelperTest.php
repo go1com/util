@@ -48,8 +48,8 @@ class LoHelperTest extends UtilTestCase
         $this->assessor2Id = $this->createUser($this->db, ['mail' => 'assessor2@mail.com']);
         $this->assessor3Id = $this->createUser($this->db, ['mail' => 'assessor3@mail.com']);
 
-        $this->course1Id = $this->createCourse($this->db, ['instance_id' => $this->createInstance($this->db, [])]);
-        $this->course2Id = $this->createCourse($this->db, ['instance_id' => $this->createInstance($this->db, [])]);
+        $this->course1Id = $this->createCourse($this->db, ['instance_id' => $this->createPortal($this->db, [])]);
+        $this->course2Id = $this->createCourse($this->db, ['instance_id' => $this->createPortal($this->db, [])]);
 
         $this->module1Id = $this->createModule($this->db);
         $this->module2Id = $this->createModule($this->db);
@@ -374,7 +374,7 @@ class LoHelperTest extends UtilTestCase
 
     public function testIsSingleLi()
     {
-        $videoId = $this->createVideo($this->db, ['instance_id' => $this->createInstance($this->db, []), 'data' => [LoHelper::SINGLE_LI => true]]);
+        $videoId = $this->createVideo($this->db, ['instance_id' => $this->createPortal($this->db, []), 'data' => [LoHelper::SINGLE_LI => true]]);
         $video = LoHelper::load($this->db, $videoId);
         $this->assertTrue(LoHelper::isSingleLi($video));
         $this->assertFalse(LoHelper::isSingleLi(LoHelper::load($this->db, $this->course1Id)));

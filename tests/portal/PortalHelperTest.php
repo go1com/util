@@ -16,17 +16,17 @@ class PortalHelperTest extends UtilTestCase
 
     public function testLogo()
     {
-        $instanceId = $this->createInstance($this->db, ['data' => ['files' => ['logo' => 'http://www.go1.com/logo.png']]]);
+        $instanceId = $this->createPortal($this->db, ['data' => ['files' => ['logo' => 'http://www.go1.com/logo.png']]]);
         $portal = PortalHelper::load($this->db, $instanceId);
         $logo = PortalHelper::logo($portal);
         $this->assertEquals('http://www.go1.com/logo.png', $logo);
 
-        $instanceId = $this->createInstance($this->db, ['data' => ['files' => ['logo' => '//www.go1.com/logo.png']]]);
+        $instanceId = $this->createPortal($this->db, ['data' => ['files' => ['logo' => '//www.go1.com/logo.png']]]);
         $portal = PortalHelper::load($this->db, $instanceId);
         $logo = PortalHelper::logo($portal);
         $this->assertEquals('https://www.go1.com/logo.png', $logo);
 
-        $instanceId = $this->createInstance($this->db, []);
+        $instanceId = $this->createPortal($this->db, []);
         $portal = PortalHelper::load($this->db, $instanceId);
         $logo = PortalHelper::logo($portal);
         $this->assertEmpty($logo);
@@ -108,7 +108,7 @@ class PortalHelperTest extends UtilTestCase
 
     public function testTimeZone()
     {
-        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com', 'data' => ['configuration' => ['timezone' => "Australia/Canberra"]]]);
+        $instanceId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com', 'data' => ['configuration' => ['timezone' => "Australia/Canberra"]]]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         $this->assertEquals("Australia/Canberra", PortalHelper::timezone($portal));
@@ -116,7 +116,7 @@ class PortalHelperTest extends UtilTestCase
 
     public function testLocale()
     {
-        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com', 'data' => ['configuration' => ['locale' => "AU"]]]);
+        $instanceId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com', 'data' => ['configuration' => ['locale' => "AU"]]]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         $this->assertEquals("AU", PortalHelper::locale($portal));

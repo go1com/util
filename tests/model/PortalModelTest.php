@@ -38,7 +38,7 @@ class PortalModelTest extends UtilTestCase
             'created'    => time(),
         ];
 
-        $id = $this->createInstance($this->db, $data);
+        $id = $this->createPortal($this->db, $data);
 
         $this->db->insert('gc_domain', ['title' => 'domain.go1.com']);
         $domainId = $this->db->lastInsertId('gc_instance');

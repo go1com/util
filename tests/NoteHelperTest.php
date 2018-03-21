@@ -21,7 +21,7 @@ class NoteHelperTest extends UtilTestCase
     {
         parent::setUp();
 
-        $instanceId = $this->createInstance($this->db, []);
+        $instanceId = $this->createPortal($this->db, []);
         $loId = $this->createLO($this->db, ['instance_id' => $instanceId]);
         $groupId = $this->createGroup($this->db, ['instance_id' => $instanceId]);
 

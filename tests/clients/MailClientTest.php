@@ -27,7 +27,7 @@ class MailClientTest extends UtilTestCase
 
     public function testSmtpInstance()
     {
-        $instanceId = $this->createInstance($this->db, [
+        $instanceId = $this->createPortal($this->db, [
             'title' => $instance = 'foo.bar',
             'data'  => [
                 'configuration' => [PortalHelper::FEATURE_CUSTOM_SMTP => true],
@@ -60,7 +60,7 @@ class MailClientTest extends UtilTestCase
 
     public function testNoSmtpInstance()
     {
-        $instanceId = $this->createInstance($this->db, ['title' => $instance = 'foo.bar']);
+        $instanceId = $this->createPortal($this->db, ['title' => $instance = 'foo.bar']);
 
         /** @var MailClient $mailclient */
         $mailClient = $this->c['go1.client.mail'];
