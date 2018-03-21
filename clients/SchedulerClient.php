@@ -32,13 +32,15 @@ class SchedulerClient
                 'json' => [
                     'cron_expression' => $expression,
                     'actions'         => [
-                        'type' => 'http',
-                        'data' => array_filter([
-                            'url'     => $actionReq->getUri(),
-                            'method'  => $actionReq->getMethod(),
-                            'headers' => $headers ?: null,
-                            'body'    => $actionReq->request->all() ?: null,
-                        ]),
+                        [
+                            'type' => 'http',
+                            'data' => array_filter([
+                                'url'     => $actionReq->getUri(),
+                                'method'  => $actionReq->getMethod(),
+                                'headers' => $headers ?: null,
+                                'body'    => $actionReq->request->all() ?: null,
+                            ]),
+                        ]
                     ],
                 ]
             ]);
