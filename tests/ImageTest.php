@@ -4,12 +4,12 @@ namespace go1\util\schema\tests;
 
 use go1\util\Image;
 use go1\util\portal\PortalHelper;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\tests\UtilTestCase;
 
 class ImageTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
 
     public function dataScale()
     {

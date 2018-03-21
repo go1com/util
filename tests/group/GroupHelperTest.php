@@ -15,7 +15,7 @@ use go1\util\group\GroupStatus;
 use go1\util\group\GroupTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\schema\mock\GroupMockTrait;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\NoteMockTrait;
 use go1\util\schema\mock\UserMockTrait;
@@ -27,7 +27,7 @@ class GroupHelperTest extends UtilTestCase
 {
     use GroupMockTrait;
     use UserMockTrait;
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use LoMockTrait;
     use NoteMockTrait;
     use AwardMockTrait;

@@ -9,7 +9,7 @@ use go1\util\lo\LoHelper;
 use go1\util\lo\LoStatuses;
 use go1\util\lo\LoSuggestedCompletionTypes;
 use go1\util\schema\mock\EnrolmentMockTrait;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\tests\UtilTestCase;
@@ -19,7 +19,7 @@ class LoHelperTest extends UtilTestCase
 {
     use UserMockTrait;
     use LoMockTrait;
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use EnrolmentMockTrait;
 
     private $author1Id;

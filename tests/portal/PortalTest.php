@@ -4,12 +4,12 @@ namespace go1\util\tests;
 
 use Doctrine\DBAL\Connection;
 use go1\util\portal\PortalHelper;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 
 class PortalHelperTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use LoMockTrait;
 
     public function testHelper()

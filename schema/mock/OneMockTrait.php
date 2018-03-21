@@ -34,7 +34,7 @@ use go1\util\user\Roles;
 trait OneMockTrait
 {
     use InstallTrait;
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use UserMockTrait;
     use LoMockTrait;
     use EnrolmentMockTrait;

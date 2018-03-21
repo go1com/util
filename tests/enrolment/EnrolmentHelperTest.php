@@ -14,7 +14,7 @@ use go1\util\plan\PlanTypes;
 use go1\util\plan\PlanHelper;
 use go1\util\queue\Queue;
 use go1\util\schema\mock\EnrolmentMockTrait;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\PlanMockTrait;
 use go1\util\schema\mock\UserMockTrait;
@@ -25,7 +25,7 @@ class EnrolmentHelperTest extends UtilTestCase
     use UserMockTrait;
     use EnrolmentMockTrait;
     use PlanMockTrait;
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use LoMockTrait;
 
     protected $instanceId;

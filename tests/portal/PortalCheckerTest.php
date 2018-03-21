@@ -4,13 +4,13 @@ namespace go1\util\tests\portal;
 
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\tests\UtilTestCase;
 use go1\util\user\Roles;
 
 class PortalCheckerTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
 
     public function testAllowPublicGroupFalse()
     {

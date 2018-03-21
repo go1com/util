@@ -3,7 +3,7 @@
 namespace go1\util\tests;
 
 use go1\util\edge\EdgeTypes;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Text;
 use go1\util\user\Roles;
@@ -12,7 +12,7 @@ use go1\util\user\UserHelper;
 class UserHelperTest extends UtilTestCase
 {
     use UserMockTrait;
-    use InstanceMockTrait;
+    use PortalMockTrait;
 
     public function testLoad()
     {

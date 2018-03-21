@@ -5,12 +5,12 @@ namespace go1\util\tests\portal;
 use go1\clients\UserClient;
 use go1\util\model\Portal;
 use go1\util\portal\PortalHelper;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\tests\UtilTestCase;
 
 class PortalHelperTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
 
     private $portalName = 'foo.com';
 

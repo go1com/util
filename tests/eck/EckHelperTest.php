@@ -4,12 +4,12 @@ namespace go1\util\tests;
 
 use go1\util\eck\EckHelper;
 use go1\util\eck\mock\EckMockTrait;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 
 class EckHelperTest extends UtilTestCase
 {
     use EckMockTrait;
-    use InstanceMockTrait;
+    use PortalMockTrait;
 
     public function testLoadEntity()
     {

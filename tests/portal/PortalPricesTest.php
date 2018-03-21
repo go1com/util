@@ -4,12 +4,12 @@ namespace go1\util\tests\portal;
 
 use go1\util\portal\PortalHelper;
 use go1\util\portal\PortalPricing;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\tests\UtilTestCase;
 
 class PortalPricingTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
 
     public function testPricePlatformFree()
     {

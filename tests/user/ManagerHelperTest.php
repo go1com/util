@@ -4,14 +4,14 @@ namespace go1\util\tests;
 
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\user\ManagerHelper;
 use go1\util\user\Roles;
 
 class ManagerHelperTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use UserMockTrait;
 
     public function testIsManagerOfUser()
