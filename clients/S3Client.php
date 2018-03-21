@@ -45,9 +45,9 @@ class S3Client
     /**
      * @param string $url
      * @param string $scheme "https"
-     * @param string $host "s3-ap-southeast-2.amazonaws.com"
-     * @param string $path "/dev.mygo1.com/public.mygo1.com/notify/1%401.1/1502157877/event-1502157677.ics"
-     * @param string $query "x-amz-acl=public-read&x-amz-meta-id=1&x-amz-meta-mail=1%401.1&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%2F20170808%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20170808T020118Z&X-Amz-SignedHeaders=host&X-Amz-Expires=120&X-Amz-Signature=
+     * @param string $host   "s3-ap-southeast-2.amazonaws.com"
+     * @param string $path   "/dev.mygo1.com/public.mygo1.com/notify/1%401.1/1502157877/event-1502157677.ics"
+     * @param string $query  "x-amz-acl=public-read&x-amz-meta-id=1&x-amz-meta-mail=1%401.1&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=%2F20170808%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20170808T020118Z&X-Amz-SignedHeaders=host&X-Amz-Expires=120&X-Amz-Signature=
      * @param bool   $remove
      * @return string
      */

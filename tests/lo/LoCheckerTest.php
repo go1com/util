@@ -5,20 +5,20 @@ namespace go1\util\tests\lo;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoChecker;
 use go1\util\lo\LoHelper;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\tests\UtilTestCase;
 
 class LoCheckerTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use LoMockTrait;
     use UserMockTrait;
 
     public function testIsCourseAuthorTest()
     {
-        $instanceId = $this->createInstance($this->db, ['title' => 'qa.mygo1.com']);
+        $instanceId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
         $userId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com']);
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId]);
         $moduleId = $this->createModule($this->db, ['instance_id' => $instanceId]);

@@ -14,7 +14,7 @@ use go1\util\plan\PlanTypes;
 use go1\util\plan\PlanHelper;
 use go1\util\queue\Queue;
 use go1\util\schema\mock\EnrolmentMockTrait;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\PlanMockTrait;
 use go1\util\schema\mock\UserMockTrait;
@@ -25,7 +25,7 @@ class EnrolmentHelperTest extends UtilTestCase
     use UserMockTrait;
     use EnrolmentMockTrait;
     use PlanMockTrait;
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use LoMockTrait;
 
     protected $instanceId;
@@ -41,9 +41,9 @@ class EnrolmentHelperTest extends UtilTestCase
         parent::setUp();
 
         // Create instance
-        $this->instanceId = $this->createInstance($this->db, ['title' => $this->instanceName]);
-        $this->instancePublicKey = $this->createInstancePublicKey($this->db, ['instance' => $this->instanceName]);
-        $this->instancePrivateKey = $this->createInstancePrivateKey($this->db, ['instance' => $this->instanceName]);
+        $this->instanceId = $this->createPortal($this->db, ['title' => $this->instanceName]);
+        $this->instancePublicKey = $this->createPortalPublicKey($this->db, ['instance' => $this->instanceName]);
+        $this->instancePrivateKey = $this->createPortalPrivateKey($this->db, ['instance' => $this->instanceName]);
         $this->userId = $this->createUser($this->db, ['instance' => $this->instanceName]);
         $this->jwt = $this->getJwt();
 
@@ -267,7 +267,7 @@ class EnrolmentHelperTest extends UtilTestCase
 
     public function testCreateWithMarketplaceLO()
     {
-        $instanceId = $this->createInstance($this->db, []);
+        $instanceId = $this->createPortal($this->db, []);
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId, 'marketplace' => 1]);
         $lo = LoHelper::load($this->db, $courseId);
         $status = EnrolmentStatuses::NOT_STARTED;
@@ -283,7 +283,7 @@ class EnrolmentHelperTest extends UtilTestCase
 
     public function testLoadRevision()
     {
-        $instanceId = $this->createInstance($this->db, []);
+        $instanceId = $this->createPortal($this->db, []);
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId]);
         $status = EnrolmentStatuses::NOT_STARTED;
         $date = DateTime::formatDate('now');

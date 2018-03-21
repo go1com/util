@@ -4,12 +4,12 @@ namespace go1\util\tests\portal;
 
 use go1\util\portal\PortalHelper;
 use go1\util\portal\PortalPricing;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\tests\UtilTestCase;
 
 class PortalPricingTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
 
     public function testPricePlatformFree()
     {
@@ -18,7 +18,7 @@ class PortalPricingTest extends UtilTestCase
                 'license' => 5
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -34,7 +34,7 @@ class PortalPricingTest extends UtilTestCase
                 'license' => 10
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -51,7 +51,7 @@ class PortalPricingTest extends UtilTestCase
                 'regional'  => 'EU'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -68,7 +68,7 @@ class PortalPricingTest extends UtilTestCase
                 'regional'  => 'UK'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -86,7 +86,7 @@ class PortalPricingTest extends UtilTestCase
                 'product'   => 'premium'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -104,7 +104,7 @@ class PortalPricingTest extends UtilTestCase
                 'product'   => 'premium'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -122,7 +122,7 @@ class PortalPricingTest extends UtilTestCase
                 'product'   => 'premium'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -140,7 +140,7 @@ class PortalPricingTest extends UtilTestCase
                 'product'   => 'premium'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -158,7 +158,7 @@ class PortalPricingTest extends UtilTestCase
                 'product'   => 'premium'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -176,7 +176,7 @@ class PortalPricingTest extends UtilTestCase
                 'product'   => 'premium'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -194,7 +194,7 @@ class PortalPricingTest extends UtilTestCase
                 'product'   => 'premium'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         $userLimitationNumber = PortalPricing::getUserLimitationNumber($portal);
@@ -207,7 +207,7 @@ class PortalPricingTest extends UtilTestCase
         $data = [
             'foo' => 'bar'
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         $userLimitationNumber = PortalPricing::getUserLimitationNumber($portal);
@@ -226,7 +226,7 @@ class PortalPricingTest extends UtilTestCase
                 'currency'  => 'USD'
             ]
         ];
-        $instanceId = $this->createInstance($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
@@ -240,7 +240,7 @@ class PortalPricingTest extends UtilTestCase
     public function testCountPortalUsers()
     {
         $instance = 'portal.mygo1.com';
-        $this->createInstance($this->db, ['title' => $instance]);
+        $this->createPortal($this->db, ['title' => $instance]);
 
         $this->createUser($this->db, ['mail' => 'user.0@instance.com', 'instance' => $instance]);
         $this->createUser($this->db, ['mail' => 'user.1@instance.com', 'instance' => $instance]);
@@ -258,7 +258,7 @@ class PortalPricingTest extends UtilTestCase
     public function testCountPortalActiveUsers()
     {
         $instance = 'portal.mygo1.com';
-        $this->createInstance($this->db, ['title' => $instance]);
+        $this->createPortal($this->db, ['title' => $instance]);
 
         $this->createUser($this->db, ['mail' => 'user.0@instance.com', 'instance' => $instance]);
         $this->createUser($this->db, ['mail' => 'user.1@instance.com', 'instance' => $instance]);

@@ -4,12 +4,12 @@ namespace go1\util\schema\tests;
 
 use go1\util\Image;
 use go1\util\portal\PortalHelper;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\tests\UtilTestCase;
 
 class ImageTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
 
     public function dataScale()
     {
@@ -25,7 +25,7 @@ class ImageTest extends UtilTestCase
      */
     public function testScale($expected, $width, $height)
     {
-        $instanceId = $this->createInstance($this->db, ['data' => ['files' => ['logo' => 'http://www.go1.com/logo.png']]]);
+        $instanceId = $this->createPortal($this->db, ['data' => ['files' => ['logo' => 'http://www.go1.com/logo.png']]]);
         $portal = PortalHelper::load($this->db, $instanceId);
         $logo = PortalHelper::logo($portal);
 
