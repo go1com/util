@@ -859,6 +859,7 @@ class MailTemplate
         'key'    => 'enrolment.report',
         'tokens' => [
             '!recipient_mail' => 'Recipient mail',
+            '!company_name'   => 'Company name',
             '!portal_name'    => 'Portal name',
             '!portal_image'   => 'Portal image',
             '!portal_url'     => 'Portal URL',
