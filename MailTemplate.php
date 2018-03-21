@@ -855,6 +855,16 @@ class MailTemplate
         ],
     ];
 
+    const ENROLMENT_REPORT = [
+        'key'    => 'enrolment.report',
+        'tokens' => [
+            '!recipient_mail' => 'Recipient mail',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal image',
+            '!portal_url'     => 'Portal URL',
+        ],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
