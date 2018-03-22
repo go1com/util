@@ -322,10 +322,11 @@ class Schema
             'group_ids'      => ['type' => self::T_INT],
             'data'           => [
                 'properties' => [
-                    'allow_resubmit' => ['type' => self::T_INT],
-                    'label'          => ['type' => self::T_KEYWORD],
-                    'pass_rate'      => ['type' => self::T_FLOAT],
-                    'url'            => ['type' => self::T_TEXT],
+                    'allow_resubmit'  => ['type' => self::T_INT],
+                    'allow_enrolment' => ['type' => self::T_KEYWORD],
+                    'label'           => ['type' => self::T_KEYWORD],
+                    'pass_rate'       => ['type' => self::T_FLOAT],
+                    'url'             => ['type' => self::T_TEXT],
                 ],
             ],
             'locations'      => [
