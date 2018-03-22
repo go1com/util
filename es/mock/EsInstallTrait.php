@@ -7,38 +7,23 @@ use go1\util\es\Schema;
 
 trait EsInstallTrait
 {
-    public function installEs(Client $client)
+    public function installEs(Client $client, array $indices = [])
     {
         $settings = [
             'settings' => [
                 'number_of_shards'   => 1,
                 'number_of_replicas' => 0,
-            ]
+                'refresh_interval'   => -1,
+            ],
         ];
 
-        if ($client->indices()->exists(['index' => Schema::INDEX])) {
-            $client->indices()->delete(['index' => Schema::ALL_INDEX]);
-        }
-
-        if (!$client->indices()->exists(['index' => Schema::INDEX])) {
-            $client->indices()->create([
-                'index' => Schema::INDEX,
-                'body'  => Schema::BODY + $settings,
-            ]);
-        }
-
-        if (!$client->indices()->exists(['index' => Schema::MARKETPLACE_INDEX])) {
-            $client->indices()->create([
-                'index' => Schema::MARKETPLACE_INDEX,
-                'body'  => Schema::BODY + $settings,
-            ]);
-        }
-
-        if (!$client->indices()->exists(['index' => Schema::ACTIVITY_INDEX])) {
-            $client->indices()->create([
-                'index' => Schema::ACTIVITY_INDEX,
-                'body'  => Schema::BODY + $settings,
-            ]);
+        foreach ($indices as $index) {
+            if (!$client->indices()->exists(['index' => $index])) {
+                $client->indices()->create([
+                    'index' => $index,
+                    'body'  => Schema::BODY + $settings,
+                ]);
+            }
         }
     }
 
