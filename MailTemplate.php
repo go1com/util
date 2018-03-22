@@ -819,6 +819,7 @@ class MailTemplate
             '!view_detail_url'    => 'View detail url',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
         ],
     ];
 
@@ -838,6 +839,7 @@ class MailTemplate
             '!view_detail_url'    => 'View detail url',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
         ],
     ];
 
