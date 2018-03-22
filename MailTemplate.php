@@ -841,8 +841,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_REMIND_EXPIRY_DATE_REACHED = [
-        'key'    => 'learner.remind.expiry-date-reached',
+    const LEARNER_REMIND_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'learner.remind.award-expiry-date-reached',
         'tokens' => [
             '!award_title'        => 'Award title',
             '!expiry_date'        => 'Expiry date',
