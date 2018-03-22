@@ -64,6 +64,7 @@ trait EsUserMockTrait
             'access'       => DateTime::formatDate($options['access'] ?? time()),
             'status'       => $options['status'] ?? 1,
             'allow_public' => $options['allow_public'] ?? 0,
+            'profile_id'   => $options['profile_id'] ?? 0,
             'roles'        => $options['roles'] ?? null,
             'avatar'       => $options['avatar'] ?? null,
             'fields'       => $options['fields'] ?? null,
@@ -80,7 +81,7 @@ trait EsUserMockTrait
 
         $client->create([
             'index'   => $options['index'] ?? Schema::INDEX,
-            'routing' => $options['routing'] ?? Schema::INDEX,
+            'routing' => $options['routing'] ?? $options['instance_id'] ?? Schema::INDEX,
             'type'    => $type,
             'id'      => $account['id'],
             'body'    => $account,
