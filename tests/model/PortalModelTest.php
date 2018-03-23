@@ -6,13 +6,13 @@ use go1\util\edge\EdgeTypes;
 use go1\util\model\Portal;
 use go1\util\portal\PortalHelper;
 use go1\util\portal\PortalPricing;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\tests\UtilTestCase;
 
 class PortalModelTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use UserMockTrait;
 
     public function test()
@@ -38,7 +38,7 @@ class PortalModelTest extends UtilTestCase
             'created'    => time(),
         ];
 
-        $id = $this->createInstance($this->db, $data);
+        $id = $this->createPortal($this->db, $data);
 
         $this->db->insert('gc_domain', ['title' => 'domain.go1.com']);
         $domainId = $this->db->lastInsertId('gc_instance');

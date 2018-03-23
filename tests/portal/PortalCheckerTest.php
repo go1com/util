@@ -4,17 +4,17 @@ namespace go1\util\tests\portal;
 
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\tests\UtilTestCase;
 use go1\util\user\Roles;
 
 class PortalCheckerTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
 
     public function testAllowPublicGroupFalse()
     {
-        $instanceId = $this->createInstance($this->db, [
+        $instanceId = $this->createPortal($this->db, [
             'title' => 'qa.mygo1.com',
             'data'  => json_encode([
                 'configuration' => ['public_group' => 0],
@@ -31,7 +31,7 @@ class PortalCheckerTest extends UtilTestCase
 
     public function testAllowPublicGroupTrue()
     {
-        $instanceId = $this->createInstance($this->db, [
+        $instanceId = $this->createPortal($this->db, [
             'title' => 'qa.mygo1.com',
             'data'  => json_encode([
                 'configuration' => ['public_group' => 1],
@@ -47,7 +47,7 @@ class PortalCheckerTest extends UtilTestCase
 
     public function testAllowPublicGroupTrueWithoutFieldPublicGroup()
     {
-        $instanceId = $this->createInstance($this->db, [
+        $instanceId = $this->createPortal($this->db, [
             'title' => 'qa.mygo1.com',
         ]);
 
@@ -60,7 +60,7 @@ class PortalCheckerTest extends UtilTestCase
 
     public function testAllowPublicGroupEnableTrue()
     {
-        $instanceId = $this->createInstance($this->db, [
+        $instanceId = $this->createPortal($this->db, [
             'title' => 'qa.mygo1.com',
             'data'  => json_encode([
                 'configuration' => ['publicGroupsEnabled' => 1],
@@ -76,7 +76,7 @@ class PortalCheckerTest extends UtilTestCase
 
     public function testAllowPublicGroupEnableFalse()
     {
-        $instanceId = $this->createInstance($this->db, [
+        $instanceId = $this->createPortal($this->db, [
             'title' => 'qa.mygo1.com',
             'data'  => json_encode([
                 'configuration' => ['publicGroupsEnabled' => 0],
@@ -110,7 +110,7 @@ class PortalCheckerTest extends UtilTestCase
     public function testBuildLink(string $env, string $instance, string $uri, string $prefix, string $expecting)
     {
         putenv("ENV=$env");
-        $instanceId = $this->createInstance($this->db, ['title' => $instance]);
+        $instanceId = $this->createPortal($this->db, ['title' => $instance]);
         $portal = PortalHelper::load($this->db, $instanceId);
 
         $this->assertEquals($expecting, (new PortalChecker)->buildLink($portal, $uri, $prefix));
@@ -118,101 +118,101 @@ class PortalCheckerTest extends UtilTestCase
 
     public function testAllowDiscussion()
     {
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => ['discussion' => 0]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertFalse(PortalChecker::allowDiscussion($portal));
 
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => ['discussion' => 1]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowDiscussion($portal));
 
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => ['discussionEnabled' => 0]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertFalse(PortalChecker::allowDiscussion($portal));
 
-        $id = $this->createInstance($this->db, []);
+        $id = $this->createPortal($this->db, []);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowDiscussion($portal));
     }
 
     public function testAllowUserInvite()
     {
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => ['user_invite' => 0]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertFalse(PortalChecker::allowUserInvite($portal));
 
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => ['user_invite' => 1]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowUserInvite($portal));
 
-        $id = $this->createInstance($this->db, []);
+        $id = $this->createPortal($this->db, []);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowUserInvite($portal));
     }
 
     public function testAllowPublicProfile()
     {
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => ['public_profiles' => 0]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertFalse(PortalChecker::allowPublicProfile($portal));
 
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => ['public_profiles' => 1]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowPublicProfile($portal));
 
-        $id = $this->createInstance($this->db, []);
+        $id = $this->createPortal($this->db, []);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertFalse(PortalChecker::allowPublicProfile($portal));
     }
 
     public function testAllowUserPayment()
     {
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => ['user_payment' => 0]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertFalse(PortalChecker::allowUserPayment($portal));
 
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => ['user_payment' => 1]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowUserPayment($portal));
 
-        $id = $this->createInstance($this->db, []);
+        $id = $this->createPortal($this->db, []);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowUserPayment($portal));
     }
 
     public function testAllowMarketplace()
     {
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['features' => ['marketplace' => 0]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertFalse(PortalChecker::allowMarketplace($portal));
 
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['features' => ['marketplace' => 1]],
         ]);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowMarketplace($portal));
 
-        $id = $this->createInstance($this->db, []);
+        $id = $this->createPortal($this->db, []);
         $portal = PortalHelper::load($this->db, $id);
         $this->assertTrue(PortalChecker::allowMarketplace($portal));
     }
@@ -253,7 +253,7 @@ class PortalCheckerTest extends UtilTestCase
      */
     public function testAllowNotifyRemindMajorEventByRole($data, $expected)
     {
-        $id = $this->createInstance($this->db, [
+        $id = $this->createPortal($this->db, [
             'data' => ['configuration' => [PortalHelper::FEATURE_NOTIFY_REMIND_MAJOR_EVENT => $data]],
         ]);
         $portal = PortalHelper::load($this->db, $id);

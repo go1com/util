@@ -755,8 +755,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_SCHEDULED_DUE_DATE_PRIOR = [
-        'key'    => 'learner.scheduled-due-date.prior',
+    const LEARNER_REMIND_DUE_DATE_REACHED = [
+        'key'    => 'learner.remind.due-date-reached',
         'tokens' => [
             '!time_remaining'        => 'Time remaining',
             '!learning_object_title' => 'Learning object title',
@@ -767,10 +767,43 @@ class MailTemplate
             '!action_url'            => 'Action url',
             '!portal_name'           => 'Portal name',
             '!portal_image'          => 'Portal image',
+            '!portal_url'            => 'Portal URL',
         ],
     ];
 
-    const LEANER_REMIND_EVENT_ON_START_DATE = [
+    const LEARNER_REMIND_75_PERCENT_SCHEDULED_DURATION_PASSED = [
+        'key'    => 'learner.remind.75percent-scheduled-duration-passed',
+        'tokens' => [
+            '!time_remaining'        => 'Time remaining',
+            '!learning_object_title' => 'Learning object title',
+            '!learner_first_name'    => 'Learner first name',
+            '!assigner_full_name'    => 'Assigner full name',
+            '!scheduled_due_date'    => 'Scheduled due date',
+            '!learner_mail'          => 'Learner mail',
+            '!action_url'            => 'Action url',
+            '!portal_name'           => 'Portal name',
+            '!portal_image'          => 'Portal image',
+            '!portal_url'            => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_REMIND_DUE_DATE_2_DAYS_OVERDUE = [
+        'key'    => 'learner.remind.due-date-2-days-overdue',
+        'tokens' => [
+            '!time_remaining'        => 'Time remaining',
+            '!learning_object_title' => 'Learning object title',
+            '!learner_first_name'    => 'Learner first name',
+            '!assigner_full_name'    => 'Assigner full name',
+            '!scheduled_due_date'    => 'Scheduled due date',
+            '!learner_mail'          => 'Learner mail',
+            '!action_url'            => 'Action url',
+            '!portal_name'           => 'Portal name',
+            '!portal_image'          => 'Portal image',
+            '!portal_url'            => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_REMIND_EVENT_ON_START_DATE = [
         'key'    => 'learner.remind.event-on-start-date',
         'tokens' => [
             '!event_name'         => 'Event name',
@@ -786,10 +819,11 @@ class MailTemplate
             '!view_detail_url'    => 'View detail url',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
         ],
     ];
 
-    const LEANER_REMIND_EVENT_UPCOMING = [
+    const LEARNER_REMIND_EVENT_UPCOMING = [
         'key'    => 'learner.remind.event-upcoming',
         'tokens' => [
             '!event_name'         => 'Event name',
@@ -805,6 +839,32 @@ class MailTemplate
             '!view_detail_url'    => 'View detail url',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_REMIND_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'learner.remind.award-expiry-date-reached',
+        'tokens' => [
+            '!award_title'        => 'Award title',
+            '!expiry_date'        => 'Expiry date',
+            '!award_url'          => 'Award URL',
+            '!learner_mail'       => 'Learner mail',
+            '!learner_first_name' => 'Learner first name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
+    const ENROLMENT_REPORT = [
+        'key'    => 'enrolment.report',
+        'tokens' => [
+            '!recipient_mail' => 'Recipient mail',
+            '!company_name'   => 'Company name',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal image',
+            '!portal_url'     => 'Portal URL',
         ],
     ];
 

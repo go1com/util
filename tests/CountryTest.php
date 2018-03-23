@@ -13,4 +13,11 @@ class CountryTest extends TestCase
         $this->assertEquals('Australia', Country::getName('AU'));
         $this->assertEquals('Vietnam', Country::getName('VN'));
     }
+
+    public function testGetStateName()
+    {
+        $this->assertEquals('Queensland', Country::getStateName('AU', 'QLD'));
+        $this->assertEquals('Tennessee', Country::getStateName('US', 'TN'));
+        $this->assertEmpty(Country::getStateName('VN', ''));
+    }
 }

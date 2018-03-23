@@ -52,7 +52,8 @@ class AwardTestData
                 $option['entity_id'],
                 $option['quantity'] ?? null,
                 $option['parent_award_item_id'] ?? null,
-                $option['weight'] ?? null
+                $option['weight'] ?? null,
+                $option['mandatory'] ?? false
             );
         }
         $this->awardItems = isset($awardItemIds) ? AwardHelper::loadItems($this->dbAward, $awardItemIds) : [];
@@ -70,7 +71,8 @@ class AwardTestData
             $option['entity_id'],
             $option['quantity'] ?? null,
             $option['parent_award_item_id'] ?? null,
-            $option['weight'] ?? null
+            $option['weight'] ?? null,
+            $option['mandatory'] ?? false
         );
         $this->awardItems[] = AwardHelper::loadItem($this->dbAward, $awardItemId);
 

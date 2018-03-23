@@ -6,13 +6,13 @@ use Doctrine\DBAL\Connection;
 use go1\util\note\NoteHelper;
 use go1\util\portal\PortalChecker;
 use go1\util\schema\mock\GroupMockTrait;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\NoteMockTrait;
 
 class NoteHelperTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use LoMockTrait;
     use GroupMockTrait;
     use NoteMockTrait;
@@ -21,7 +21,7 @@ class NoteHelperTest extends UtilTestCase
     {
         parent::setUp();
 
-        $instanceId = $this->createInstance($this->db, []);
+        $instanceId = $this->createPortal($this->db, []);
         $loId = $this->createLO($this->db, ['instance_id' => $instanceId]);
         $groupId = $this->createGroup($this->db, ['instance_id' => $instanceId]);
 

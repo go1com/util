@@ -4,14 +4,14 @@ namespace go1\util\tests;
 
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
-use go1\util\schema\mock\InstanceMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\user\ManagerHelper;
 use go1\util\user\Roles;
 
 class ManagerHelperTest extends UtilTestCase
 {
-    use InstanceMockTrait;
+    use PortalMockTrait;
     use UserMockTrait;
 
     public function testIsManagerOfUser()
@@ -33,7 +33,7 @@ class ManagerHelperTest extends UtilTestCase
     public function testIsManagerUser()
     {
         // Setup data
-        $this->createInstance($this->db, ['title' => 'az.mygo1.com']);
+        $this->createPortal($this->db, ['title' => 'az.mygo1.com']);
         $managerRoleId = $this->createRole($this->db, ['instance' => 'az.mygo1.com', 'name' => Roles::MANAGER]);
         $managerAccountId = $this->createUser($this->db, ['instance' => 'az.mygo1.com', 'mail' => 'manager@qa.mygo1.com']);
         EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ROLE, $managerAccountId, $managerRoleId);

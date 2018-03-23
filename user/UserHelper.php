@@ -38,10 +38,10 @@ class UserHelper
         return $db->executeQuery($sql, $params)->fetch(DB::OBJ);
     }
 
-    public static function loadByEmail(Connection $db, string $instance, string $mail)
+    public static function loadByEmail(Connection $db, string $instance, string $mail, $columns = '*')
     {
         return $db
-            ->executeQuery('SELECT * FROM gc_user WHERE instance = ? AND mail = ?', [$instance, $mail])
+            ->executeQuery("SELECT $columns FROM gc_user WHERE instance = ? AND mail = ?", [$instance, $mail])
             ->fetch(DB::OBJ);
     }
 

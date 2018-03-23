@@ -23,6 +23,7 @@ use go1\clients\QueueClient;
 use go1\clients\RealtimeClient;
 use go1\clients\RulesClient;
 use go1\clients\S3Client as Go1S3Client;
+use go1\clients\SchedulerClient;
 use go1\clients\SmsClient;
 use go1\clients\UserClient;
 use go1\neo4j_builder\Neo4jBuilder;
@@ -193,6 +194,10 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.go1s3'] = function (Container $c) {
             return new Go1S3Client($c['client'], $c['s3_url']);
+        };
+
+        $c['go1.client.scheduler'] = function (Container $c) {
+            return new SchedulerClient($c['client'], $c['logger'], $c['scheduler_url']);
         };
 
         if ($c->offsetExists('toggleOptions')) {
