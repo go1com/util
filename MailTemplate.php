@@ -857,6 +857,20 @@ class MailTemplate
         ],
     ];
 
+    const LEARNER_REMIND_AWARD_EXPIRY_2DAYS_OVERDUE = [
+        'key'    => 'learner.remind.award-expiry-2days-overdue',
+        'tokens' => [
+            '!award_title'        => 'Award title',
+            '!expiry_date'        => 'Expiry date',
+            '!award_url'          => 'Award URL',
+            '!learner_mail'       => 'Learner mail',
+            '!learner_first_name' => 'Learner first name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
     const ENROLMENT_REPORT = [
         'key'    => 'enrolment.report',
         'tokens' => [
