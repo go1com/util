@@ -68,7 +68,7 @@ class MailClient
             'body'        => $body,
             'html'        => $html,
             'context'     => $context,
-            'attachments' => $attachments, # array of ['name' => $name, 'url' => $url]
+            'attachments' => $attachments, # array of ['name' => STRING, 'url' => STRING]
             'options'     => $options,
         ];
 
