@@ -803,7 +803,7 @@ class MailTemplate
         ],
     ];
 
-    const LEANER_REMIND_EVENT_ON_START_DATE = [
+    const LEARNER_REMIND_EVENT_ON_START_DATE = [
         'key'    => 'learner.remind.event-on-start-date',
         'tokens' => [
             '!event_name'         => 'Event name',
@@ -819,10 +819,11 @@ class MailTemplate
             '!view_detail_url'    => 'View detail url',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
         ],
     ];
 
-    const LEANER_REMIND_EVENT_UPCOMING = [
+    const LEARNER_REMIND_EVENT_UPCOMING = [
         'key'    => 'learner.remind.event-upcoming',
         'tokens' => [
             '!event_name'         => 'Event name',
@@ -838,11 +839,12 @@ class MailTemplate
             '!view_detail_url'    => 'View detail url',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
         ],
     ];
 
-    const LEANER_REMIND_EXPIRY_DATE_REACHED = [
-        'key'    => 'learner.remind.expiry-date-reached',
+    const LEARNER_REMIND_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'learner.remind.award-expiry-date-reached',
         'tokens' => [
             '!award_title'        => 'Award title',
             '!expiry_date'        => 'Expiry date',
@@ -852,6 +854,31 @@ class MailTemplate
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
             '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_REMIND_AWARD_EXPIRY_2DAYS_OVERDUE = [
+        'key'    => 'learner.remind.award-expiry-2days-overdue',
+        'tokens' => [
+            '!award_title'        => 'Award title',
+            '!expiry_date'        => 'Expiry date',
+            '!award_url'          => 'Award URL',
+            '!learner_mail'       => 'Learner mail',
+            '!learner_first_name' => 'Learner first name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
+    const ENROLMENT_REPORT = [
+        'key'    => 'enrolment.report',
+        'tokens' => [
+            '!recipient_mail' => 'Recipient mail',
+            '!company_name'   => 'Company name',
+            '!portal_name'    => 'Portal name',
+            '!portal_image'   => 'Portal image',
+            '!portal_url'     => 'Portal URL',
         ],
     ];
 
