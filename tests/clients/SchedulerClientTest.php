@@ -46,7 +46,7 @@ class SchedulerClientTest extends UtilTestCase
 
         $c = $this->getContainer();
         $scheduler = new SchedulerClient($client, $c['logger'], 'http://dev.scheduler.go1.co');
-        $scheduler->createJob('foo', '* * * * *', $req);
+        $scheduler->saveJob('foo', '* * * * *', $req);
     }
 
     public function testDeleteJob()
