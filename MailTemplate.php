@@ -871,6 +871,21 @@ class MailTemplate
         ],
     ];
 
+    const LEARNER_REMIND_AWARD_75_PERCENT_COMPLETED_DURATION_PASSED = [
+        'key'    => 'learner.remind.award-75percent-completed-duration-passed',
+        'tokens' => [
+            '!award_title'        => 'Award title',
+            '!expiry_date'        => 'Expiry date',
+            '!award_url'          => 'Award URL',
+            '!learner_mail'       => 'Learner mail',
+            '!learner_first_name' => 'Learner first name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+            '!time_remaining'     => 'Time remaining',
+        ],
+    ];
+
     const ENROLMENT_REPORT = [
         'key'    => 'enrolment.report',
         'tokens' => [
