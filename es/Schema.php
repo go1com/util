@@ -307,7 +307,7 @@ class Schema
             ],
             'duration'        => ['type' => self::T_INT], # Duration in minute
             'assessors'       => ['type' => self::T_INT],
-            'allow_enrolment' => ['type' => self::T_KEYWORD],
+            'allow_enrolment' => ['type' => self::T_INT],
             'totalEnrolment'  => ['type' => self::T_INT],
             'created'         => ['type' => self::T_DATE],
             'updated'         => ['type' => self::T_DATE],
