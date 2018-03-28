@@ -410,6 +410,8 @@ class Schema
             'result'         => ['type' => self::T_INT],
             'pass'           => ['type' => self::T_INT],
             'assessors'      => ['type' => self::T_INT],
+            // It's used to calculate scheduled duration: scheduled_duration = due_date - assigned_date;
+            // To get it: assigned_date = plan.created;
             'assigned_date'  => ['type' => self::T_DATE],
             'start_date'     => ['type' => self::T_DATE],
             'end_date'       => ['type' => self::T_DATE],
@@ -418,6 +420,9 @@ class Schema
             'marked_date'    => ['type' => self::T_DATE],
             // For award enrolment only
             'expire_date'    => ['type' => self::T_DATE],
+            // It's used to calculate award completed duration: award_completed_duration = expire_date - begin_expire;
+            // To get it: begin_expire = fixed expiry date ? start_date : end_date;
+            'begin_expire'   => ['type' => self::T_DATE],
             'changed'        => ['type' => self::T_DATE],
             'created'        => ['type' => self::T_DATE],
             // Duration between end date and start date (hours).
