@@ -21,10 +21,11 @@ class Roles
     const PORTAL_ADMIN_ROLES = [self::ADMIN, self::ADMIN_CONTENT, self::MANAGER]; # Roles can access portal admin area.
 
     const NAMES = [
-        self::ADMIN    => 'Administrator',
-        self::STUDENT  => 'Learner',
-        self::ASSESSOR => 'Assessor',
-        self::MANAGER  => 'Manager',
+        self::ADMIN         => 'Administrator',
+        self::STUDENT       => 'Learner',
+        self::ASSESSOR      => 'Assessor',
+        self::MANAGER       => 'Manager',
+        self::ADMIN_CONTENT => 'Content administrator',
     ];
 
     public static function getRoleByName(string $roleName)
