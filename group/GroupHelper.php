@@ -207,7 +207,7 @@ class GroupHelper
     )
     {
         $validEntity = false;
-        $id = abs($entityId);
+        $id = $entityId;
 
         switch ($entityType) {
             case GroupItemTypes::PORTAL:

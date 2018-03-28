@@ -20,11 +20,12 @@ class S3Client
         $this->s3Url = $s3Url;
     }
 
-    public function uploadFile(string $instance, string $fileUrl, string $fileName, string $appName, bool $remove = false)
+    public function uploadFile(string $instance, string $localPath, string $fileName, string $appName, bool $removeLocalFileOnComplete = false)
     {
         if ($content = $this->sign($instance, $fileName, $appName)) {
-            return $this->upload($fileUrl, $content->scheme, $content->host, $content->path, $content->query, $remove);
+            return $this->upload($localPath, $content->scheme, $content->host, $content->path, $content->query, $removeLocalFileOnComplete);
         }
+
         throw new Exception('Can not upload file');
     }
 
@@ -43,7 +44,7 @@ class S3Client
     }
 
     /**
-     * @param string $url
+     * @param string $localPath
      * @param string $scheme "https"
      * @param string $host   "s3-ap-southeast-2.amazonaws.com"
      * @param string $path   "/dev.mygo1.com/public.mygo1.com/notify/1%401.1/1502157877/event-1502157677.ics"
@@ -51,14 +52,11 @@ class S3Client
      * @param bool   $remove
      * @return string
      */
-    public function upload(string $url, string $scheme, string $host, string $path, string $query, bool $remove = false)
+    public function upload(string $localPath, string $scheme, string $host, string $path, string $query, bool $remove = false)
     {
-        $path = $scheme . '://' . $host . $path;
-        $this->client->put($path . '?' . $query, [
-                'headers' => ['content-length' => filesize($url)],
-                'body'    => fopen($url, 'r+')]
-        );
-        $remove && @unlink($url);
+        $path = $scheme . '://' . trim($host, '/') . $path;
+        $this->client->put($path . '?' . $query, ['headers' => ['content-length' => filesize($localPath)], 'body' => fopen($localPath, 'r+')]);
+        $remove && @unlink($localPath);
 
         return $path;
     }

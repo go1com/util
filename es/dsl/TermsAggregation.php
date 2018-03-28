@@ -1,4 +1,5 @@
 <?php
+
 namespace go1\util\es\dsl;
 
 use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation as ONGRTermsAggregation;

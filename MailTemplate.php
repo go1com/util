@@ -819,6 +819,7 @@ class MailTemplate
             '!view_detail_url'    => 'View detail url',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
         ],
     ];
 
@@ -838,11 +839,12 @@ class MailTemplate
             '!view_detail_url'    => 'View detail url',
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
         ],
     ];
 
-    const LEARNER_REMIND_EXPIRY_DATE_REACHED = [
-        'key'    => 'learner.remind.expiry-date-reached',
+    const LEARNER_REMIND_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'learner.remind.award-expiry-date-reached',
         'tokens' => [
             '!award_title'        => 'Award title',
             '!expiry_date'        => 'Expiry date',
@@ -852,6 +854,35 @@ class MailTemplate
             '!portal_name'        => 'Portal name',
             '!portal_image'       => 'Portal image',
             '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_REMIND_AWARD_EXPIRY_2DAYS_OVERDUE = [
+        'key'    => 'learner.remind.award-expiry-2days-overdue',
+        'tokens' => [
+            '!award_title'        => 'Award title',
+            '!expiry_date'        => 'Expiry date',
+            '!award_url'          => 'Award URL',
+            '!learner_mail'       => 'Learner mail',
+            '!learner_first_name' => 'Learner first name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_REMIND_AWARD_75_PERCENT_COMPLETED_DURATION_PASSED = [
+        'key'    => 'learner.remind.award-75percent-completed-duration-passed',
+        'tokens' => [
+            '!award_title'        => 'Award title',
+            '!expiry_date'        => 'Expiry date',
+            '!award_url'          => 'Award URL',
+            '!learner_mail'       => 'Learner mail',
+            '!learner_first_name' => 'Learner first name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+            '!time_remaining'     => 'Time remaining',
         ],
     ];
 

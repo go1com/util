@@ -21,14 +21,14 @@ class SchedulerClient
         $this->schedulerUrl = $schedulerUrl;
     }
 
-    public function createJob($nameOrId, $expression, Request $actionReq, $retry = false)
+    public function saveJob($jobNameOrId, $expression, Request $actionReq, $retry = false)
     {
         try {
             $headers = [];
             foreach ($actionReq->headers->keys() as $key) {
                 $headers[$key] = $actionReq->headers->get($key);
             }
-            $this->client->put("$this->schedulerUrl/job/$nameOrId?jwt=" . UserHelper::ROOT_JWT, [
+            $this->client->put("$this->schedulerUrl/job/$jobNameOrId?jwt=" . UserHelper::ROOT_JWT, [
                 'json' => [
                     'cron_expression' => $expression,
                     'actions'         => [
@@ -46,22 +46,22 @@ class SchedulerClient
             ]);
         } catch (RequestException $e) {
             if ($retry) {
-                return $this->createJob($nameOrId, $expression, $actionReq);
+                return $this->saveJob($jobNameOrId, $expression, $actionReq);
             }
 
-            $this->logger->error("Failed to put scheduler job $nameOrId. Reason: " . $e->getMessage());
+            $this->logger->error("Failed to put scheduler job $jobNameOrId. Reason: " . $e->getMessage());
         }
     }
 
-    public function deleteJob($nameOrId, $retry = false)
+    public function deleteJob($jobNameOrId, $retry = false)
     {
         try {
-            $this->client->delete("$this->schedulerUrl/job/$nameOrId?jwt=".UserHelper::ROOT_JWT);
+            $this->client->delete("$this->schedulerUrl/job/$jobNameOrId?jwt=".UserHelper::ROOT_JWT);
         } catch (RequestException $e) {
             if ($retry) {
-                return $this->deleteJob($nameOrId);
+                return $this->deleteJob($jobNameOrId);
             }
-            $this->logger->error("Failed to delete scheduler job $nameOrId. Reason: ".$e->getMessage());
+            $this->logger->error("Failed to delete scheduler job $jobNameOrId. Reason: ".$e->getMessage());
         }
     }
 }
