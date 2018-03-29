@@ -118,12 +118,12 @@ class PortalPricing
             : $userLicenses * static::USER_LICENSES_MULTIPLY_RATE + $systemUsersNumber;
     }
 
-    public static function countPortalUsers(Connection $db, $instance)
+    public static function countPortalUsers(Connection $db, $portalName): int
     {
-        $count = $db->executeQuery('SELECT COUNT(*) FROM gc_user WHERE instance = ?', [$instance])->fetchColumn();
+        $count = 'SELECT COUNT(*) FROM gc_user WHERE instance = ?';
+        $count = $db->fetchColumn($count, [$portalName]);
 
-        // System default user: user.0, user.1
-        return ($count > 2) ? $count - 2 : 0;
+        return ($count > 2) ? $count - 2 : 0; # System default user: user.0, user.1
     }
 
     /**
