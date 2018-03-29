@@ -91,9 +91,9 @@ class MqClient
         $this->channel()->close();
     }
 
-    public function publish($body, string $routingKey, array $context = [])
+    public function publish(array $body, string $routingKey, array $context = [], $exchange = 'events')
     {
-        $this->queue($body, $routingKey, $context, 'events');
+        $this->queue($body, $routingKey, $context, $exchange);
     }
 
     private function currentRequest()
