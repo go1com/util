@@ -13,7 +13,7 @@ class EdgeHelper
 {
     private $select;
 
-    public static function load(Connection $db, int $id): Edge
+    public static function load(Connection $db, int $id): ?Edge
     {
         $row = 'SELECT * FROM gc_ro WHERE id = ?';
         $row = $db->executeQuery($row, [$id])->fetch(DB::OBJ);
