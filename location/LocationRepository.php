@@ -31,16 +31,16 @@ class LocationRepository
             ->executeQuery('SELECT * FROM gc_location WHERE id IN (?)', [$ids], [DB::INTEGERS])
             ->fetchAll(DB::OBJ);
 
-        return array_map(function($_) {
-                return Location::create($_);
-            }, $locations);
+        return array_map(function ($_) {
+            return Location::create($_);
+        }, $locations);
     }
 
     public function create(Location &$location): int
     {
         $this->db->insert('gc_location', $location->jsonSerialize());
         $location->id = $this->db->lastInsertId('gc_location');
-        $this->queue->publish($location, Queue::LOCATION_CREATE);
+        $this->queue->publish($location->jsonSerialize(), Queue::LOCATION_CREATE);
 
         return $location->id;
     }
