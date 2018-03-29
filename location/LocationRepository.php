@@ -20,9 +20,7 @@ class LocationRepository
 
     public function load(int $id)
     {
-        return ($location = $this->loadMultiple([$id]))
-            ? $location[0]
-            : null;
+        return ($location = $this->loadMultiple([$id])) ? $location[0] : null;
     }
 
     public function loadMultiple(array $ids)
@@ -53,7 +51,7 @@ class LocationRepository
 
         $this->db->update('gc_location', $location->jsonSerialize(), ['id' => $location->id]);
         $location->original = $original;
-        $this->queue->publish($location, Queue::LOCATION_UPDATE);
+        $this->queue->publish($location->jsonSerialize(), Queue::LOCATION_UPDATE);
 
         return true;
     }
