@@ -39,7 +39,7 @@ class PortalPricingTest extends UtilTestCase
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
 
-        $this->assertEquals(600, $price);
+        $this->assertEquals(0, $price);
         $this->assertEquals('AUD', $currency);
     }
 
@@ -56,8 +56,8 @@ class PortalPricingTest extends UtilTestCase
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
 
-        $this->assertEquals(540, $price);
-        $this->assertEquals('EUR', $currency);
+        $this->assertEquals(0, $price);
+        $this->assertEquals('AUD', $currency);
     }
 
     public function testPricePlatform10LicenseUK()
@@ -73,8 +73,8 @@ class PortalPricingTest extends UtilTestCase
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
 
-        $this->assertEquals(480, $price);
-        $this->assertEquals('GBP', $currency);
+        $this->assertEquals(0, $price);
+        $this->assertEquals('AUD', $currency);
     }
 
     public function testPricePremium10LicenseAUUS()
@@ -91,7 +91,7 @@ class PortalPricingTest extends UtilTestCase
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
 
-        $this->assertEquals(1080, $price);
+        $this->assertEquals(300, $price);
         $this->assertEquals('AUD', $currency);
     }
 
@@ -109,7 +109,7 @@ class PortalPricingTest extends UtilTestCase
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
 
-        $this->assertEquals(840, $price);
+        $this->assertEquals(240, $price);
         $this->assertEquals('EUR', $currency);
     }
 
@@ -127,7 +127,7 @@ class PortalPricingTest extends UtilTestCase
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
 
-        $this->assertEquals(720, $price);
+        $this->assertEquals(216, $price);
         $this->assertEquals('GBP', $currency);
     }
 
@@ -163,7 +163,7 @@ class PortalPricingTest extends UtilTestCase
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
 
-        $this->assertEquals(2160, $price);
+        $this->assertEquals(2520, $price);
         $this->assertEquals('EUR', $currency);
     }
 
@@ -181,7 +181,7 @@ class PortalPricingTest extends UtilTestCase
         $portal = PortalHelper::load($this->db, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
 
-        $this->assertEquals(1800, $price);
+        $this->assertEquals(2160, $price);
         $this->assertEquals('GBP', $currency);
     }
 

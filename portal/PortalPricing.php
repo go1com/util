@@ -16,30 +16,30 @@ class PortalPricing
     const REGIONAL_OTHER              = 'OTHER';
     const PLATFORM_FREE_LICENSE       = 5;
     const PLATFORM_UNLIMITED_LICENSE  = -1;
-    const PLATFORM_H5                 = [ // > 5 licenses
-                                          'AU'    => ['currency' => 'AUD', 'price' => 5],
-                                          'EU'    => ['currency' => 'EUR', 'price' => 4.5],
-                                          'UK'    => ['currency' => 'GBP', 'price' => 4],
-                                          'US'    => ['currency' => 'USD', 'price' => 5],
-                                          'MY'    => ['currency' => 'MYR', 'price' => 20],
-                                          'OTHER' => ['currency' => 'USD', 'price' => 5],
-    ];
+//    const PLATFORM_H5                 = [ // > 5 licenses
+//                                          'AU'    => ['currency' => 'AUD', 'price' => 5],
+//                                          'EU'    => ['currency' => 'EUR', 'price' => 4.5],
+//                                          'UK'    => ['currency' => 'GBP', 'price' => 4],
+//                                          'US'    => ['currency' => 'USD', 'price' => 5],
+//                                          'MY'    => ['currency' => 'MYR', 'price' => 20],
+//                                          'OTHER' => ['currency' => 'USD', 'price' => 5],
+//    ];
 
     const PREMIUM_LICENSE = 20;
     const PREMIUM_LE20    = [// <= 20 licenses
-                             'AU'    => ['currency' => 'AUD', 'price' => 9],
-                             'EU'    => ['currency' => 'EUR', 'price' => 7],
-                             'UK'    => ['currency' => 'GBP', 'price' => 6],
-                             'US'    => ['currency' => 'USD', 'price' => 9],
-                             'MY'    => ['currency' => 'MYR', 'price' => 36],
-                             'OTHER' => ['currency' => 'USD', 'price' => 9],
+                             'AU'    => ['currency' => 'AUD', 'price' => 25],
+                             'EU'    => ['currency' => 'EUR', 'price' => 20],
+                             'UK'    => ['currency' => 'GBP', 'price' => 18],
+                             'US'    => ['currency' => 'USD', 'price' => 25],
+                             'MY'    => ['currency' => 'MYR', 'price' => 97],
+                             'OTHER' => ['currency' => 'USD', 'price' => 25],
     ];
     const PREMIUM_H20     = [// > 20 licenses
                              'AU'    => ['currency' => 'AUD', 'price' => 8],
-                             'EU'    => ['currency' => 'EUR', 'price' => 6],
-                             'UK'    => ['currency' => 'GBP', 'price' => 5],
+                             'EU'    => ['currency' => 'EUR', 'price' => 7],
+                             'UK'    => ['currency' => 'GBP', 'price' => 6],
                              'US'    => ['currency' => 'USD', 'price' => 8],
-                             'MY'    => ['currency' => 'MYR', 'price' => 32],
+                             'MY'    => ['currency' => 'MYR', 'price' => 31],
                              'OTHER' => ['currency' => 'USD', 'price' => 8],
     ];
 
@@ -144,20 +144,22 @@ class PortalPricing
         $regional = static::getRegional($portal);
         $product = static::getProduct($portal);
 
-        $basePrice = [];
-        if (($product == static::PRODUCT_PLATFORM) && ($license > static::PLATFORM_FREE_LICENSE)) {
-            $basePrice = static::PLATFORM_H5[$regional];
+        // https://go1web.atlassian.net/wiki/spaces/GO1/pages/304939296/Pricing+for+Web+Design+Team
+        if ($product == static::PRODUCT_PLATFORM) {
+            return [0, 'AUD'];
         }
         else if ($product == static::PRODUCT_PREMIUM) {
             if ($license <= static::PREMIUM_LICENSE) {
                 $basePrice = static::PREMIUM_LE20[$regional];
+                return [$basePrice['price'] * 12, $basePrice['currency']];
             }
             else {
                 $basePrice = static::PREMIUM_H20[$regional];
+                return [$basePrice['price'] * $license * 12, $basePrice['currency']];
             }
         }
 
-        return !empty($basePrice) ? [$basePrice['price'] * $license * 12, $basePrice['currency']] : [0, 'AUD'];
+        return [0, 'AUD'];
     }
 
     public static function calculateTrialStatus(stdClass $portal)
