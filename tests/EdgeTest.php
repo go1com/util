@@ -49,8 +49,8 @@ class EdgeTest extends UtilTestCase
         $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_REJECTED, EdgeHelper::load($this->db, $id)->type);
         $msg = &$this->queueMessages[Queue::RO_UPDATE][0];
 
-        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST, $msg->original->type);
-        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_REJECTED, $msg->type);
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST, $msg['original']['type']);
+        $this->assertEquals(EdgeTypes::HAS_CREDIT_REQUEST_REJECTED, $msg['type']);
     }
 
     public function testChangeTypeData()
