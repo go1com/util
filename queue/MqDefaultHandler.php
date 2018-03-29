@@ -8,17 +8,14 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MqDefaultHandler implements QueueMiddlewareInterface
 {
     private $channel;
-    private $propertyAccessor;
 
     public function __construct(AMQPChannel $channel)
     {
         $this->channel = $channel;
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
     public function handle(
