@@ -4,16 +4,14 @@ namespace go1\clients;
 
 use Exception;
 use go1\util\AccessChecker;
-use go1\util\queue\Queue;
+use go1\util\queue\MqDefaultHandler;
+use go1\util\queue\QueueMiddlewareInterface;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Wire\AMQPTable;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MqClient
 {
@@ -27,13 +25,15 @@ class MqClient
     private $accessChecker;
     private $container;
     private $request;
-    private $propertyAccessor;
 
     const CONTEXT_ACTOR_ID    = 'actor_id';
     const CONTEXT_TIMESTAMP   = 'timestamp';
     const CONTEXT_DESCRIPTION = 'description';
     const CONTEXT_REQUEST_ID  = 'request_id';
     const CONTEXT_INTERNAL    = 'internal';
+
+    /** @var []QueueMiddlewareInterface */
+    private $middlewares = [];
 
     public function __construct(
         $host, $port, $user, $pass,
@@ -51,7 +51,28 @@ class MqClient
         $this->accessChecker = $accessChecker;
         $this->container = $container;
         $this->request = $request;
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+    }
+
+    public function addMiddleware(QueueMiddlewareInterface $handler, string $name = null)
+    {
+        if ($name) {
+            $this->middlewares[$name] = $handler;
+        }
+        else {
+            $this->middlewares[] = $handler;
+        }
+    }
+
+    /**
+     * @return []QueueMiddlewareInterface
+     */
+    public function middlewares(): array
+    {
+        if (!isset($this->middlewares['default'])) {
+            $this->addMiddleware(new MqDefaultHandler($this->channel()), 'default');
+        }
+
+        return $this->middlewares;
     }
 
     private function channel()
@@ -86,66 +107,19 @@ class MqClient
             : null;
     }
 
-    public function queue($body, string $routingKey, array $context = [], $exchange = '')
+    public function queue(array $body, string $routingKey, array $context = [], $exchange = '')
     {
-        $body = is_scalar($body) ? json_decode($body) : $body;
-        $this->processMessage($body, $routingKey);
+        $req = $this->currentRequest();
+        $req && self::parseRequestContext($req, $context, $this->accessChecker);
 
-        if ($request = $this->currentRequest()) {
-            self::parseRequestContext($request, $context, $this->accessChecker);
+        /** @var QueueMiddlewareInterface $middleware */
+        foreach ($this->middlewares() as $middleware) {
+            if (!$middleware->handle($exchange, $routingKey, $body, $context, $req)) {
+                break;
+            }
         }
-
-        if ($service = getenv('SERVICE_80_NAME')) {
-            $context['app'] = $service;
-        }
-        $context[static::CONTEXT_TIMESTAMP] = $context[static::CONTEXT_TIMESTAMP] ?? time();
-
-        if (!$exchange) {
-            $body = json_encode(['routingKey' => $routingKey, 'body' => $body]);
-            $routingKey = Queue::WORKER_QUEUE_NAME;
-        }
-
-        $this->channel()->basic_publish(
-            new AMQPMessage($body = is_scalar($body) ? $body : json_encode($body), ['content_type' => 'application/json', 'application_headers' => new AMQPTable($context)]),
-            $exchange,
-            $routingKey
-        );
 
         $this->logger->debug($body, ['exchange' => $exchange, 'routingKey' => $routingKey, 'context' => $context]);
-    }
-
-    private function processMessage($body, string $routingKey)
-    {
-        # Quiz does not have `id` property.
-        if (Queue::QUIZ_USER_ANSWER_UPDATE == $routingKey) {
-            return null;
-        }
-
-        $explode = explode('.', $routingKey);
-        $isLazy = isset($explode[0]) && ('do' == $explode[0]); # Lazy = do.SERVICE.#
-
-        if (strpos($routingKey, '.update') && !$isLazy) {
-            if ('post_' === substr($routingKey, 0, 5)) {
-                return null;
-            }
-
-            if (
-                (
-                    is_array($body)
-                    && !(2 === count(array_filter($body, function ($value, $key) {
-                            return (in_array($key, ['id', 'original']) && $value);
-                        }, ARRAY_FILTER_USE_BOTH)))
-                )
-                ||
-                (
-                    is_object($body)
-                    && (!(property_exists($body, 'id') && $this->propertyAccessor->getValue($body, 'id'))
-                        || !(property_exists($body, 'original') && $this->propertyAccessor->getValue($body, 'original')))
-                )
-            ) {
-                throw new Exception("Missing entity ID or original data.");
-            }
-        }
     }
 
     public function subscribe($bindingKey = '#', callable $callback)
