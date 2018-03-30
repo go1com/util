@@ -323,6 +323,7 @@ class Schema
             'data'           => [
                 'properties' => [
                     'allow_resubmit' => ['type' => self::T_INT],
+                    'tax_display'    => ['type' => self::T_INT],
                     'label'          => ['type' => self::T_KEYWORD],
                     'pass_rate'      => ['type' => self::T_FLOAT],
                     'url'            => ['type' => self::T_TEXT],

@@ -31,6 +31,7 @@ class LoHelper
     const SUGGESTED_COMPLETION_UNIT  = 'suggested_completion_unit';
     const PASS_RATE                  = 'pass_rate';
     const SINGLE_LI                  = 'single_li';
+    const TAX_DISPLAY                = 'tax_display';
 
     // GO1P-5665: Expiration for award.
     const AWARD      = 'award';
