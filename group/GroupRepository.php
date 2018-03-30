@@ -68,7 +68,7 @@ class GroupRepository
     {
         if ($item = GroupHelper::loadItem($this->db, $itemId)) {
             $this->db->delete('social_group_item', ['id' => $itemId]);
-            $this->queue->publish($item, Queue::GROUP_ITEM_DELETE);
+            $this->queue->publish((array) $item, Queue::GROUP_ITEM_DELETE);
         }
     }
 }
