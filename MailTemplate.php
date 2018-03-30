@@ -884,6 +884,21 @@ class MailTemplate
         ],
     ];
 
+    const ASSESSOR_REMIND_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'assessor.remind.award-expiry-date-reached',
+        'tokens' => [
+            '!assessor_first_name' => 'Assessor first name',
+            '!learner_full_name'   => 'Learner full name',
+            '!award_title'         => 'Award title',
+            '!award_url'           => 'Award URL',
+            '!expiry_date'         => 'Expiry date',
+            '!assessor_mail'       => 'Assessor mail',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+            '!portal_url'          => 'Portal URL',
+        ],
+    ];
+
     const ENROLMENT_REPORT = [
         'key'    => 'enrolment.report',
         'tokens' => [
