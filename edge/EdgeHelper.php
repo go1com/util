@@ -75,6 +75,14 @@ class EdgeHelper
         return $db->fetchColumn('SELECT id FROM gc_ro WHERE type = ? AND source_id = ? AND target_id = ?', [$type, $sourceId, $targetId]);
     }
 
+    public static function remove(Connection $db, MqCLient $queue, Edge $edge)
+    {
+        DB::transactional($db, function () use ($db, $queue, $edge) {
+            $db->executeQuery('DELETE FROM gc_ro WHERE id = ?', [$edge->id]);
+            $queue->publish($edge->jsonSerialize(), Queue::RO_DELETE);
+        });
+    }
+
     public static function unlink(Connection $db, MqClient $queue, $type, $sourceId = null, $targetId = null, $weight = null)
     {
         if (!$sourceId && !$targetId) {
@@ -92,7 +100,6 @@ class EdgeHelper
         $weight && $q->andWhere('weight = :weight')->setParameter(':weight', $weight);
 
         $q = $q->execute();
-
         while ($row = $q->fetch(DB::OBJ)) {
             $edge = Edge::create($row);
             $db->executeQuery('DELETE FROM gc_ro WHERE id = ?', [$edge->id]);

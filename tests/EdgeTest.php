@@ -2,9 +2,11 @@
 
 namespace go1\util\tests;
 
+use BadFunctionCallException;
 use go1\clients\MqClient;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
+use go1\util\model\Edge;
 use go1\util\queue\Queue;
 use PDO;
 use ReflectionClass;
@@ -91,9 +93,22 @@ class EdgeTest extends UtilTestCase
         $this->assertEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 5));
     }
 
+    public function testRemove()
+    {
+        $id = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_CREDIT_REQUEST, $sourceId = 1, $targetId = 2);
+
+        # Before removing
+        $edge = EdgeHelper::load($this->db, $id);
+        $this->assertTrue($edge instanceof Edge);
+
+        # After removing
+        EdgeHelper::remove($this->db, $this->mqClient, $edge);
+        $this->assertFalse(EdgeHelper::load($this->db, $id) instanceof Edge);
+    }
+
     public function testUnlinkBadCall()
     {
-        $this->expectException(\BadFunctionCallException::class);
+        $this->expectException(BadFunctionCallException::class);
         EdgeHelper::unlink($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT);
     }
 

@@ -60,8 +60,8 @@ class ConsumeController
                     }
                     catch (Exception $e) {
                         $errors[] = $e->getMessage();
-                        
-                        if (class_exists(TestCase::class, false)) {
+
+                        if (defined('APP_ROOT') && class_exists(TestCase::class, false)) {
                             throw $e;
                         }
                     }
