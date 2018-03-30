@@ -60,7 +60,7 @@ class LoSchema
             $price->addColumn('currency', 'string', ['length' => 4]);
             $price->addColumn('tax', 'float');
             $price->addColumn('tax_included', 'smallint', ['default' => 1]);
-            $price->addColumn('tax_display', 'smallint', ['default' => 0]);
+            $price->addColumn('tax_display', 'smallint', ['notnull' => false, 'default' => 1]);
             $price->addColumn('recurring', Type::BLOB, ['notnull' => false]);
             $price->setPrimaryKey(['id']);
             $price->addIndex(['price']);
