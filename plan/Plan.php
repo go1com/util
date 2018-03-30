@@ -13,7 +13,7 @@ class Plan implements JsonSerializable
     /** @deprecated */
     const TYPE_AWARD = 'award';
     /** @deprecated */
-    const TYPE_LO    = 'lo';
+    const TYPE_LO = 'lo';
 
     /** @var integer */
     public $id;
