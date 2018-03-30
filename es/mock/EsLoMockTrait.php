@@ -66,6 +66,7 @@ trait EsLoMockTrait
                 'price'        => $options['price'] ?? 0.00,
                 'tax'          => $options['tax'] ?? 0.00,
                 'tax_included' => $options['tax_included'] ?? 1,
+                'tax_display'  => $options['tax_display'] ?? 0,
             ],
             'duration'       => $options['duration'] ?? 0,
             'assessors'      => $options['assessors'] ?? [],

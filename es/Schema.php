@@ -295,6 +295,7 @@ class Schema
                     'price'        => ['type' => self::T_DOUBLE],
                     'tax'          => ['type' => self::T_DOUBLE],
                     'tax_included' => ['type' => self::T_INT],
+                    'tax_display'  => ['type' => self::T_INT],
                     'total'        => ['type' => self::T_DOUBLE],
                     'recurring'    => [
                         'properties' => [
