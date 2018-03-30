@@ -86,6 +86,7 @@ trait EsLoMockTrait
             ],
             'data'           => [
                 'allow_resubmit' => $options['data']['allow_resubmit'] ?? null,
+                'tax_display'    => $options['data']['tax_display'] ?? null,
                 'label'          => $options['data']['label'] ?? null,
                 'pass_rate'      => $options['data']['pass_rate'] ?? null,
                 'url'            => $options['data']['url'] ?? null,
