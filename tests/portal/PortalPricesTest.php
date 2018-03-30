@@ -11,7 +11,28 @@ class PortalPricingTest extends UtilTestCase
 {
     use PortalMockTrait;
 
-    public function testPricePlatformFree()
+    private $formula = [
+        [
+            'op'               => '<=',
+            'license_limit'    => 10,
+            'license_multiple' => false,
+            'price'            => [
+                'AU' => ['currency' => 'AUD', 'price' => 20],
+                'EU' => ['currency' => 'EUR', 'price' => 18],
+            ]
+        ],
+        [
+            'op'               => '>',
+            'license_limit'    => 10,
+            'license_multiple' => true,
+            'price'            => [
+                'AU' => ['currency' => 'AUD', 'price' => 15],
+                'EU' => ['currency' => 'EUR', 'price' => 13],
+            ]
+        ]
+    ];
+
+    public function testPricePlatform()
     {
         $data = [
             'user_plan' => [
@@ -27,57 +48,7 @@ class PortalPricingTest extends UtilTestCase
         $this->assertEquals('AUD', $currency);
     }
 
-    public function testPricePlatform10LicenseAUUS()
-    {
-        $data = [
-            'user_plan' => [
-                'license' => 10
-            ]
-        ];
-        $instanceId = $this->createPortal($this->db, ['data' => $data]);
-
-        $portal = PortalHelper::load($this->db, $instanceId);
-        list($price, $currency) = PortalPricing::getPrice($portal);
-
-        $this->assertEquals(600, $price);
-        $this->assertEquals('AUD', $currency);
-    }
-
-    public function testPricePlatform10LicenseEU()
-    {
-        $data = [
-            'user_plan' => [
-                'license'   => 10,
-                'regional'  => 'EU'
-            ]
-        ];
-        $instanceId = $this->createPortal($this->db, ['data' => $data]);
-
-        $portal = PortalHelper::load($this->db, $instanceId);
-        list($price, $currency) = PortalPricing::getPrice($portal);
-
-        $this->assertEquals(540, $price);
-        $this->assertEquals('EUR', $currency);
-    }
-
-    public function testPricePlatform10LicenseUK()
-    {
-        $data = [
-            'user_plan' => [
-                'license'   => 10,
-                'regional'  => 'UK'
-            ]
-        ];
-        $instanceId = $this->createPortal($this->db, ['data' => $data]);
-
-        $portal = PortalHelper::load($this->db, $instanceId);
-        list($price, $currency) = PortalPricing::getPrice($portal);
-
-        $this->assertEquals(480, $price);
-        $this->assertEquals('GBP', $currency);
-    }
-
-    public function testPricePremium10LicenseAUUS()
+    public function testPricePremium10LicenseAU()
     {
         $data = [
             'user_plan' => [
@@ -89,9 +60,9 @@ class PortalPricingTest extends UtilTestCase
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
-        list($price, $currency) = PortalPricing::getPrice($portal);
+        list($price, $currency) = PortalPricing::getPrice($portal, true, $this->formula);
 
-        $this->assertEquals(1080, $price);
+        $this->assertEquals(20, $price);
         $this->assertEquals('AUD', $currency);
     }
 
@@ -107,31 +78,13 @@ class PortalPricingTest extends UtilTestCase
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
-        list($price, $currency) = PortalPricing::getPrice($portal);
+        list($price, $currency) = PortalPricing::getPrice($portal, true, $this->formula);
 
-        $this->assertEquals(840, $price);
+        $this->assertEquals(18, $price);
         $this->assertEquals('EUR', $currency);
     }
 
-    public function testPricePremium10LicenseUK()
-    {
-        $data = [
-            'user_plan' => [
-                'license'   => 10,
-                'regional'  => 'UK',
-                'product'   => 'premium'
-            ]
-        ];
-        $instanceId = $this->createPortal($this->db, ['data' => $data]);
-
-        $portal = PortalHelper::load($this->db, $instanceId);
-        list($price, $currency) = PortalPricing::getPrice($portal);
-
-        $this->assertEquals(720, $price);
-        $this->assertEquals('GBP', $currency);
-    }
-
-    public function testPricePremium30LicenseAUUS()
+    public function testPricePremium30LicenseAU()
     {
         $data = [
             'user_plan' => [
@@ -143,9 +96,9 @@ class PortalPricingTest extends UtilTestCase
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
-        list($price, $currency) = PortalPricing::getPrice($portal);
+        list($price, $currency) = PortalPricing::getPrice($portal, true, $this->formula);
 
-        $this->assertEquals(2880, $price);
+        $this->assertEquals(450, $price);
         $this->assertEquals('AUD', $currency);
     }
 
@@ -161,28 +114,10 @@ class PortalPricingTest extends UtilTestCase
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
         $portal = PortalHelper::load($this->db, $instanceId);
-        list($price, $currency) = PortalPricing::getPrice($portal);
+        list($price, $currency) = PortalPricing::getPrice($portal, true, $this->formula);
 
-        $this->assertEquals(2160, $price);
+        $this->assertEquals(390, $price);
         $this->assertEquals('EUR', $currency);
-    }
-
-    public function testPricePremium30LicenseUK()
-    {
-        $data = [
-            'user_plan' => [
-                'license'   => 30,
-                'regional'  => 'UK',
-                'product'   => 'premium'
-            ]
-        ];
-        $instanceId = $this->createPortal($this->db, ['data' => $data]);
-
-        $portal = PortalHelper::load($this->db, $instanceId);
-        list($price, $currency) = PortalPricing::getPrice($portal);
-
-        $this->assertEquals(1800, $price);
-        $this->assertEquals('GBP', $currency);
     }
 
     public function testGetUserLimitationNumber()
