@@ -25,9 +25,9 @@ class UserHelper
     const QUIZ_ADMIN_USER_ID           = -200;
     const QUIZ_ADMIN_PROFILE_ID        = -200;
 
-    public static function load(Connection $db, int $id, string $instance = null)
+    public static function load(Connection $db, int $id, string $instance = null, $columns = '*')
     {
-        $sql = 'SELECT * FROM gc_user WHERE id = ?';
+        $sql = "SELECT $columns FROM gc_user WHERE id = ?";
         $params = [$id];
 
         if ($instance) {
@@ -55,9 +55,9 @@ class UserHelper
         return self::queryMultiple($db, $ids)->fetchAll(DB::OBJ);
     }
 
-    public static function loadByProfileId(Connection $db, int $profileId, string $instanceName)
+    public static function loadByProfileId(Connection $db, int $profileId, string $instanceName, $columns = '*')
     {
-        $sql = 'SELECT * FROM gc_user WHERE profile_id = ? AND instance = ?';
+        $sql = "SELECT $columns FROM gc_user WHERE profile_id = ? AND instance = ?";
 
         return $db->executeQuery($sql, [$profileId, $instanceName])->fetch(DB::OBJ);
     }
