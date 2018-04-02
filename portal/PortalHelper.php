@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
 use go1\clients\UserClient;
 use go1\util\DB;
+use go1\util\edge\EdgeTypes;
 use go1\util\queue\Queue;
 use go1\util\user\UserHelper;
 use stdClass;
@@ -37,16 +38,29 @@ class PortalHelper
     const FEATURE_NOTIFY_REMIND_MAJOR_EVENT    = 'notify_remind_major_event';
     const TIMEZONE_DEFAULT                     = "Australia/Brisbane";
 
-    public static function load(Connection $db, $nameOrId, $columns = '*')
+    public static function load(Connection $go1, $nameOrId, $columns = '*', bool $aliasSupport = false): ?stdClass
     {
         $column = is_numeric($nameOrId) ? 'id' : 'title';
         $portal = "SELECT {$columns} FROM gc_instance WHERE $column = ?";
-        $portal = $db->executeQuery($portal, [$nameOrId])->fetch(DB::OBJ);
-        if ($portal && isset($portal->data)) {
-            $portal->data = json_decode($portal->data);
+        $portal = $go1->executeQuery($portal, [$nameOrId])->fetch(DB::OBJ);
+        if ($portal) {
+            $portal->data = isset($portal->data) ? (object) json_decode($portal->data) : new stdClass();
+
+            return $portal;
         }
 
-        return $portal;
+        if ($aliasSupport && !is_numeric($nameOrId)) {
+            $domainId = 'SELECT id FROM gc_domain WHERE title = ?';
+            $domainId = $go1->fetchColumn($domainId, [$nameOrId]);
+            if ($domainId) {
+                $portalName = 'SELECT source_id FROM gc_ro WHERE type = ? AND target_id = ?';
+                $portalName = $go1->fetchColumn($portalName, [EdgeTypes::HAS_DOMAIN, $domainId]);
+
+                return $portalName ? self::load($go1, $portalName) : null;
+            }
+        }
+
+        return null;
     }
 
     public static function updateVersion(Connection $db, MqClient $queue, string $version, $portalId)

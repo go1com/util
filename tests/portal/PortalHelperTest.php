@@ -58,10 +58,12 @@ class PortalHelperTest extends UtilTestCase
 
         $app = $this->getContainer();
         $app->extend('go1.client.user', function () use ($adminIds) {
-            $userClient = $this->getMockBuilder(UserClient::class)
+            $userClient = $this
+                ->getMockBuilder(UserClient::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['findAdministrators'])
                 ->getMock();
+
             $userClient
                 ->expects($this->any())
                 ->method('findAdministrators')

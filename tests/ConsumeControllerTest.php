@@ -28,28 +28,29 @@ class ConsumeControllerTest extends UtilTestCase
         unset($GLOBALS['consumeCount']);
     }
 
-    private function consumerClass(bool $isAware = true, Throwable $exception = null)
+    private function consumerClass(bool $aware = true, Throwable $exception = null)
     {
-        return new class($isAware, $exception) implements ConsumerInterface
+        return new class($aware, $exception) implements ConsumerInterface
         {
-            private $isAware;
+            private $aware;
             private $exception;
 
             public function __construct($isAware, $exception)
             {
-                $this->isAware = $isAware;
+                $this->aware = $isAware;
                 $this->exception = $exception;
             }
 
             public function aware(string $event): bool
             {
-                return $this->isAware;
+                return $this->aware;
             }
 
             public function consume(string $routingKey, stdClass $body, stdClass $context = null): bool
             {
+                global $consumeCount;
+
                 if (!$this->exception) {
-                    global $consumeCount;
                     $consumeCount[$routingKey] = isset($consumeCount[$routingKey]) ? ++$consumeCount[$routingKey] : 1;
 
                     return true;

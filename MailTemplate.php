@@ -182,7 +182,6 @@ class MailTemplate
             '!learner_mail'        => 'Learner mail',
             '!course_name'         => 'Course name',
             '!course_url'          => 'Course URL',
-            '!assigner_first_name' => 'Assigner first name',
             '!assigner_full_name'  => 'Assigner full name',
             '!scheduled_due_date'  => 'Scheduled due date',
             '!portal_name'         => 'Portal name',
@@ -511,7 +510,6 @@ class MailTemplate
             '!learner_mail'        => 'Learner mail',
             '!award_name'          => 'Award name',
             '!award_url'           => 'Award URL',
-            '!assigner_first_name' => 'Assigner first name',
             '!assigner_full_name'  => 'Assigner full name',
             '!scheduled_due_date'  => 'Scheduled due date',
             '!portal_name'         => 'Portal name',
@@ -883,6 +881,21 @@ class MailTemplate
             '!portal_image'       => 'Portal image',
             '!portal_url'         => 'Portal URL',
             '!time_remaining'     => 'Time remaining',
+        ],
+    ];
+
+    const ASSESSOR_REMIND_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'assessor.remind.award-expiry-date-reached',
+        'tokens' => [
+            '!assessor_first_name' => 'Assessor first name',
+            '!learner_full_name'   => 'Learner full name',
+            '!award_title'         => 'Award title',
+            '!award_url'           => 'Award URL',
+            '!expiry_date'         => 'Expiry date',
+            '!assessor_mail'       => 'Assessor mail',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+            '!portal_url'          => 'Portal URL',
         ],
     ];
 

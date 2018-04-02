@@ -26,6 +26,8 @@ class Location implements JsonSerializable
     public $authorId;
     public $created;
     public $updated;
+
+    /** @var Location */
     public $original;
 
     public static function create(stdClass $input): Location
@@ -77,7 +79,7 @@ class Location implements JsonSerializable
         ];
 
         if ($this->original) {
-            $array['original'] = $this->original;
+            $array['original'] = $this->original->jsonSerialize();
         }
 
         return $array;

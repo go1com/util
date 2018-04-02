@@ -29,6 +29,7 @@ trait EsEnrolmentMockTrait
             'end_date'      => isset($options['end_date']) ? DateTime::formatDate($options['end_date']) : null,
             'due_date'      => isset($options['due_date']) ? DateTime::formatDate($options['due_date']) : null,
             'expire_date'   => isset($options['expire_date']) ? DateTime::formatDate($options['expire_date']) : null,
+            'begin_expire'  => isset($options['begin_expire']) ? DateTime::formatDate($options['begin_expire']) : null,
             'changed'       => DateTime::formatDate($options['changed'] ?? time()),
             'lo'            => $options['lo'] ?? null,
             'account'       => $options['account'] ?? null,

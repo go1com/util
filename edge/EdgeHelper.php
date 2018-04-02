@@ -6,21 +6,19 @@ use BadFunctionCallException;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
 use go1\util\DB;
+use go1\util\model\Edge;
 use go1\util\queue\Queue;
 
 class EdgeHelper
 {
     private $select;
 
-    public static function load(Connection $db, int $id)
+    public static function load(Connection $db, int $id): ?Edge
     {
-        $edge = 'SELECT * FROM gc_ro WHERE id = ?';
-        $edge = $db->executeQuery($edge, [$id])->fetch(DB::OBJ);
-        if ($edge) {
-            $edge->data = json_decode($edge->data) ?: (object) [];
-        }
+        $row = 'SELECT * FROM gc_ro WHERE id = ?';
+        $row = $db->executeQuery($row, [$id])->fetch(DB::OBJ);
 
-        return $edge;
+        return $row ? Edge::create($row) : null;
     }
 
     public static function changeType(Connection $db, MqClient $queue, int $id, int $newType, $log = null)
@@ -44,7 +42,7 @@ class EdgeHelper
                 ['id' => $id]
             );
 
-            $queue->publish($edge, Queue::RO_UPDATE);
+            $queue->publish($edge->jsonSerialize(), Queue::RO_UPDATE);
         }
     }
 
@@ -77,6 +75,14 @@ class EdgeHelper
         return $db->fetchColumn('SELECT id FROM gc_ro WHERE type = ? AND source_id = ? AND target_id = ?', [$type, $sourceId, $targetId]);
     }
 
+    public static function remove(Connection $db, MqCLient $queue, Edge $edge)
+    {
+        DB::transactional($db, function () use ($db, $queue, $edge) {
+            $db->executeQuery('DELETE FROM gc_ro WHERE id = ?', [$edge->id]);
+            $queue->publish($edge->jsonSerialize(), Queue::RO_DELETE);
+        });
+    }
+
     public static function unlink(Connection $db, MqClient $queue, $type, $sourceId = null, $targetId = null, $weight = null)
     {
         if (!$sourceId && !$targetId) {
@@ -94,10 +100,10 @@ class EdgeHelper
         $weight && $q->andWhere('weight = :weight')->setParameter(':weight', $weight);
 
         $q = $q->execute();
-
         while ($row = $q->fetch(DB::OBJ)) {
-            $db->executeQuery('DELETE FROM gc_ro WHERE id = ?', [$row->id]);
-            $queue->publish($row, Queue::RO_DELETE);
+            $edge = Edge::create($row);
+            $db->executeQuery('DELETE FROM gc_ro WHERE id = ?', [$edge->id]);
+            $queue->publish($edge->jsonSerialize(), Queue::RO_DELETE);
         }
     }
 

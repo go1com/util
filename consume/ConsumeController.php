@@ -10,6 +10,7 @@ use go1\util\AccessChecker;
 use go1\util\consume\exception\NotifyException;
 use go1\util\contract\ConsumerInterface;
 use go1\util\Error;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,6 +60,10 @@ class ConsumeController
                     }
                     catch (Exception $e) {
                         $errors[] = $e->getMessage();
+
+                        if (defined('APP_ROOT') && class_exists(TestCase::class, false)) {
+                            throw $e;
+                        }
                     }
                     catch (SystemError $e) {
                         $errors[] = $e->getMessage();

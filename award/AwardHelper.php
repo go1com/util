@@ -40,25 +40,25 @@ class AwardHelper
 
     public static function format(stdClass &$award, HTMLPurifier $html = null)
     {
-        $award->id          = intval($award->id);
+        $award->id = intval($award->id);
         $award->revision_id = intval($award->revision_id);
         $award->instance_id = intval($award->instance_id);
-        $award->user_id     = intval($award->user_id);
-        $award->title       = trim(Xss::filter($award->title));
+        $award->user_id = intval($award->user_id);
+        $award->title = trim(Xss::filter($award->title));
         $award->description = $html
             ? $html->purify(trim($award->description), LoHelper::descriptionPurifierConfig())
             : $award->description;
-        $award->tags        = Text::parseInlineTags((string) $award->tags);
-        $award->locale      = Text::parseInlineTags((string) $award->locale);
+        $award->tags = Text::parseInlineTags((string) $award->tags);
+        $award->locale = Text::parseInlineTags((string) $award->locale);
 
-        $data             = is_scalar($award->data) ? json_decode($award->data, true) : $award->data;
-        $award->data      = (object) (is_array($data)
+        $data = is_scalar($award->data) ? json_decode($award->data, true) : $award->data;
+        $award->data = (object) (is_array($data)
             ? array_diff_key($data, array_flip(['avatar', 'roles']))
             : $data);
         $award->published = intval($award->published);
-        $award->quantity  = isset($award->quantity) ? (float) $award->quantity : null;
-        $award->expire    = ctype_digit($award->expire) ? (int) $award->expire : $award->expire;
-        $award->created   = intval($award->created);
+        $award->quantity = isset($award->quantity) ? (float) $award->quantity : null;
+        $award->expire = ctype_digit($award->expire) ? (int) $award->expire : $award->expire;
+        $award->created = intval($award->created);
     }
 
     public static function load(Connection $db, int $awardId, array $statuses = [])

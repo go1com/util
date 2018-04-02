@@ -118,21 +118,18 @@ class PortalPricing
             : $userLicenses * static::USER_LICENSES_MULTIPLY_RATE + $systemUsersNumber;
     }
 
-    public static function countPortalUsers(Connection $db, $instance)
+    public static function countPortalUsers(Connection $db, $portalName): int
     {
-        $count = $db->executeQuery('SELECT COUNT(*) FROM gc_user WHERE instance = ?', [$instance])->fetchColumn();
+        $count = 'SELECT COUNT(*) FROM gc_user WHERE instance = ?';
+        $count = $db->fetchColumn($count, [$portalName]);
 
-        // System default user: user.0, user.1
-        return ($count > 2) ? $count - 2 : 0;
+        return ($count > 2) ? $count - 2 : 0; # System default user: user.0, user.1
     }
 
     /**
-     * https://go1web.atlassian.net/wiki/display/GO1/GO1+2017+Pricing
-     *
-     * @param stdClass $portal
-     * @return array
+     * see @PortalPricingTest::formula
      */
-    public static function getPrice(stdClass $portal, $reCalculate = false): array
+    public static function getPrice(stdClass $portal, $reCalculate = false, array $formula = []): array
     {
         $currency = static::getCurrency($portal);
         $price = self::getPortalPrice($portal);
@@ -144,20 +141,23 @@ class PortalPricing
         $regional = static::getRegional($portal);
         $product = static::getProduct($portal);
 
-        $basePrice = [];
-        if (($product == static::PRODUCT_PLATFORM) && ($license > static::PLATFORM_FREE_LICENSE)) {
-            $basePrice = static::PLATFORM_H5[$regional];
+        if ($product == static::PRODUCT_PLATFORM || empty($formula)) {
+            return [0, 'AUD'];
         }
-        else if ($product == static::PRODUCT_PREMIUM) {
-            if ($license <= static::PREMIUM_LICENSE) {
-                $basePrice = static::PREMIUM_LE20[$regional];
-            }
-            else {
-                $basePrice = static::PREMIUM_H20[$regional];
+
+        foreach ($formula as $item) {
+            $op = $item['op'];
+            $limit = $item['license_limit'];
+
+            if (eval("return $license $op $limit;")) {
+                $data = $item['price'][$regional];
+                $price = ($item['license_multiple'] ? $license : 1) * $data['price'];
+
+                return [$price, $data['currency']];
             }
         }
 
-        return !empty($basePrice) ? [$basePrice['price'] * $license * 12, $basePrice['currency']] : [0, 'AUD'];
+        return [0, 'AUD'];
     }
 
     public static function calculateTrialStatus(stdClass $portal)

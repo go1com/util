@@ -18,11 +18,9 @@ class LocationRepository
         $this->queue = $queue;
     }
 
-    public function load(int $id)
+    public function load(int $id): ?Location
     {
-        return ($location = $this->loadMultiple([$id]))
-            ? $location[0]
-            : null;
+        return ($location = $this->loadMultiple([$id])) ? $location[0] : null;
     }
 
     public function loadMultiple(array $ids)
@@ -40,7 +38,7 @@ class LocationRepository
     {
         $this->db->insert('gc_location', $location->jsonSerialize());
         $location->id = $this->db->lastInsertId('gc_location');
-        $this->queue->publish($location, Queue::LOCATION_CREATE);
+        $this->queue->publish($location->jsonSerialize(), Queue::LOCATION_CREATE);
 
         return $location->id;
     }
@@ -53,7 +51,7 @@ class LocationRepository
 
         $this->db->update('gc_location', $location->jsonSerialize(), ['id' => $location->id]);
         $location->original = $original;
-        $this->queue->publish($location, Queue::LOCATION_UPDATE);
+        $this->queue->publish($location->jsonSerialize(), Queue::LOCATION_UPDATE);
 
         return true;
     }
@@ -66,7 +64,7 @@ class LocationRepository
 
         DB::transactional($this->db, function (Connection $db) use (&$location) {
             $db->delete('gc_location', ['id' => $location->id]);
-            $this->queue->publish($location, Queue::LOCATION_DELETE);
+            $this->queue->publish($location->jsonSerialize(), Queue::LOCATION_DELETE);
         });
 
         return true;
