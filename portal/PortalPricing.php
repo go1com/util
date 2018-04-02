@@ -160,9 +160,9 @@ class PortalPricing
         return [0, 'AUD'];
     }
 
-    public static function calculateTrialStatus(stdClass $portal)
+    public static function calculateTrialStatus(stdClass $portal, array $portalPrice = [])
     {
-        list($price,) = self::getPrice($portal, true);
+        list($price,) = self::getPrice($portal, true, $portalPrice);
 
         return ($price > 0) ? self::PLAN_STATUS_TRIAL : self::PLAN_STATUS_FREE;
     }
