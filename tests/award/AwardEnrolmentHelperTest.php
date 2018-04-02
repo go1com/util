@@ -55,4 +55,14 @@ class AwardEnrolmentHelperTest extends UtilTestCase
         $this->assertEquals(2, count($enrolments));
         $this->assertEquals([$enrolmentId1, $enrolmentId2], [$enrolments[0]->id, $enrolments[1]->id]);
     }
+
+    public function testFind()
+    {
+        $userId = $instanceId = 1;
+        $awardId = $this->createAward($this->db);
+        $enrolmentId = $this->createAwardEnrolment($this->db, ['award_id' => $awardId, 'user_id' => $userId, 'instance_id' => $instanceId]);
+
+        $this->assertEquals($enrolmentId, AwardEnrolmentHelper::find($this->db, $awardId, $userId, $instanceId)->id);
+        $this->assertFalse(AwardEnrolmentHelper::find($this->db, $awardId, $userId, 99));
+    }
 }

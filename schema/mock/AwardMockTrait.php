@@ -15,6 +15,7 @@ trait AwardMockTrait
         $data = !$data ? json_encode(null) : (is_scalar($data) ? $data : json_encode($data));
 
         $db->insert('award_award', [
+            'id'          => $options['id'] ?? null,
             'revision_id' => $revisionId = isset($options['revision_id']) ? $options['revision_id'] : null,
             'instance_id' => isset($options['instance_id']) ? $options['instance_id'] : 0,
             'user_id'     => isset($options['user_id']) ? $options['user_id'] : 0,
@@ -93,6 +94,7 @@ trait AwardMockTrait
         $options['data'] = json_encode($options['data']);
 
         $db->insert('award_item_manual', [
+            'id'              => $options['id'] ?? null,
             'award_id'        => $options['award_id'],
             'title'           => $options['title'] ?? null,
             'type'            => $options['type'] ?? null,
@@ -121,6 +123,7 @@ trait AwardMockTrait
         $data = json_encode($data);
 
         $db->insert('award_enrolment', [
+            'id'          => $options['id'] ?? null,
             'award_id'    => $options['award_id'],
             'user_id'     => $options['user_id'],
             'instance_id' => $options['instance_id'],
@@ -158,5 +161,23 @@ trait AwardMockTrait
         ]);
 
         return $db->lastInsertId('award_enrolment_revision');
+    }
+
+    protected function createAwardItemEnrolment(Connection $db, array $options)
+    {
+        $db->insert('award_item_enrolment', [
+            'id'          => $options['id'] ?? null,
+            'award_id'    => $options['award_id'],
+            'user_id'     => $options['user_id'],
+            'instance_id' => $options['instance_id'],
+            'entity_id'   => $options['entity_id'],
+            'type'        => $options['type'],
+            'status'      => $options['status'] ?? AwardEnrolmentStatuses::S_IN_PROGRESS,
+            'pass'        => $options['pass'] ?? 0,
+            'quantity'    => $options['quantity'] ?? 0,
+            'remote_id'   => $options['remote_id'] ?? 0,
+        ]);
+
+        return $db->lastInsertId('award_item_enrolment');
     }
 }
