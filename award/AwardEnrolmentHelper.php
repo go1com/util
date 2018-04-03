@@ -31,4 +31,22 @@ class AwardEnrolmentHelper
         $awardEnrolments = static::loadMultiple($db, [$id]);
         return $awardEnrolments ? $awardEnrolments[0] : false;
     }
+
+    public static function find(Connection $db, int $awardId, int $userId, int $portalId)
+    {
+        return $db
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('award_enrolment')
+            ->where('award_id = :awardId')
+            ->andWhere('user_id = :userId')
+            ->andWhere('instance_id = :instanceId')
+            ->setParameters([
+                'awardId'    => $awardId,
+                'userId'     => $userId,
+                'instanceId' => $portalId,
+            ])
+            ->execute()
+            ->fetch(DB::OBJ);
+    }
 }

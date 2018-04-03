@@ -169,6 +169,25 @@ class AwardSchema
             $enrolmentRevision->addIndex(['created']);
         }
 
+        if (!$schema->hasTable('award_item_enrolment')) {
+            $itemEnrolment = $schema->createTable('award_item_enrolment');
+            $itemEnrolment->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $itemEnrolment->addColumn('award_id', Type::INTEGER, ['unsigned' => true]);
+            $itemEnrolment->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $itemEnrolment->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
+            $itemEnrolment->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $itemEnrolment->addColumn('type', Type::STRING);
+            $itemEnrolment->addColumn('status', Type::STRING);
+            $itemEnrolment->addColumn('pass', Type::SMALLINT);
+            $itemEnrolment->addColumn('quantity', Type::FLOAT, ['default' => 0.0]);
+            $itemEnrolment->addColumn('remote_id', Type::INTEGER, ['unsigned' => true]);
+            $itemEnrolment->setPrimaryKey(['id']);
+            $itemEnrolment->addIndex(['award_id']);
+            $itemEnrolment->addIndex(['user_id']);
+            $itemEnrolment->addIndex(['instance_id']);
+            $itemEnrolment->addIndex(['entity_id']);
+        }
+
         self::update($schema);
     }
 
