@@ -100,4 +100,23 @@ class Text
             ['+' => '-', '/' => '_', '=' => '']
         );
     }
+
+    /**
+     * Follow uuid v4 generation standard but remove dash and encode in base 32
+     * Guarantee 128 bits of entropy but use ~ 20% less space compare to base 16
+     *
+     * @see https://stackoverflow.com/a/15875555
+     * @see https://connect2id.com/blog/how-to-generate-human-friendly-identifiers
+     */
+    public static function uniqueId(): string
+    {
+        $rand = random_bytes(16);
+        $rand[6] = chr(ord($rand[6]) & 0x0f | 0x40);
+        $rand[8] = chr(ord($rand[8]) & 0x3f | 0x80);
+        $rand = str_split(bin2hex($rand), 4);
+
+        return vsprintf('%s%s%s%s%s', array_map(function ($hex) {
+            return base_convert($hex, 16, 32);
+        }, [$rand[0] . $rand[1], $rand[2], $rand[3], $rand[4], $rand[5] . $rand[6] . $rand[7]]));
+    }
 }
