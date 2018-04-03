@@ -3,7 +3,7 @@
 namespace go1\clients;
 
 use Doctrine\DBAL\Connection;
-use go1\clients\portal\config\MailTemplate as Template;
+use go1\util\notify\MailTemplate as Template;
 use go1\util\MailTemplate;
 use go1\util\portal\PortalChecker;
 use go1\util\queue\Queue;
@@ -85,7 +85,7 @@ class MailClient
             return $portalClient->mailTemplate($instance, $mailKey);
         }
         catch (InvalidArgumentException $e) {
-            return new Template($defaultSubject, $defaultBody, $defaultHtml);
+            return new Template($mailKey, $defaultSubject, $defaultBody, $defaultHtml);
         }
     }
 }

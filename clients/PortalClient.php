@@ -75,6 +75,6 @@ class PortalClient
             throw new InvalidArgumentException('Template not found.');
         }
 
-        return new MailTemplate($template->subject, $template->body, isset($template->html) ? $template->html : null);
+        return new MailTemplate($mailKey, $template->subject, $template->body, isset($template->html) ? $template->html : null);
     }
 }
