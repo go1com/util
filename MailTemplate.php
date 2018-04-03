@@ -841,6 +841,27 @@ class MailTemplate
         ],
     ];
 
+    const ASSESSOR_REMIND_EVENT_ON_START_DATE = [
+        'key'    => 'assessor.remind.event-on-start-date',
+        'tokens' => [
+            '!event_name'          => 'Event name',
+            '!event_start_date'    => 'Event start date',
+            '!event_start_time'    => 'Event start time',
+            '!event_end_date'      => 'Event end date',
+            '!event_end_time'      => 'Event end time',
+            '!event_address'       => 'Event address',
+            '!number_of_attendees' => 'Number of attendees',
+            '!assessor_first_name' => 'Assessor first name',
+            '!course_name'         => 'Course name',
+            '!course_url'          => 'Course URL',
+            '!assessor_mail'       => 'Assessor mail',
+            '!view_attendees_url'  => 'View attendees url',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+            '!portal_url'          => 'Portal URL',
+        ],
+    ];
+
     const LEARNER_REMIND_AWARD_EXPIRY_DATE_REACHED = [
         'key'    => 'learner.remind.award-expiry-date-reached',
         'tokens' => [
