@@ -931,7 +931,7 @@ class MailTemplate
     ];
 
     const ASSESSOR_REMIND_DUE_DATE_REACHED = [
-        'key'    => 'assessor.remind.due-date-2-days-overdue',
+        'key'    => 'assessor.remind.due-date-reached',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!assessor_first_name'   => 'Assessor first name',
