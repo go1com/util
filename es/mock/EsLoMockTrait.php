@@ -4,6 +4,7 @@ namespace go1\util\es\mock;
 
 use Elasticsearch\Client;
 use go1\util\DateTime;
+use go1\util\enrolment\EnrolmentAllowTypes;
 use go1\util\es\Schema;
 use go1\util\lo\LoTypes;
 
@@ -44,39 +45,39 @@ trait EsLoMockTrait
         }
 
         $lo = [
-            'id'             => $loId,
-            'type'           => $options['type'] ?? LoTypes::COURSE,
-            'origin_id'      => $options['origin_id'] ?? 0,
-            'status'         => $options['status'] ?? 0,
-            'private'        => $options['private'] ?? 0,
-            'published'      => $options['published'] ?? 1,
-            'marketplace'    => $options['marketplace'] ?? 0,
-            'sharing'        => $options['sharing'] ?? 0,
-            'language'       => $options['language'] ?? 'en',
-            'instance_id'    => $options['instance_id'] ?? 0,
-            'portal_name'    => $options['portal_name'] ?? 'az.mygo1.com',
-            'locale'         => $options['locale'] ?? 0,
-            'title'          => $options['title'] ?? 'Foo course',
-            'description'    => $options['description'] ?? '',
-            'tags'           => (array) ($options['tags'] ?? []),
-            'image'          => $options['image'] ?? '',
-            'items_count'    => $options['items_count'] ?? 0,
-            'pricing'        => [
+            'id'              => $loId,
+            'type'            => $options['type'] ?? LoTypes::COURSE,
+            'origin_id'       => $options['origin_id'] ?? 0,
+            'status'          => $options['status'] ?? 0,
+            'private'         => $options['private'] ?? 0,
+            'published'       => $options['published'] ?? 1,
+            'marketplace'     => $options['marketplace'] ?? 0,
+            'sharing'         => $options['sharing'] ?? 0,
+            'language'        => $options['language'] ?? 'en',
+            'instance_id'     => $options['instance_id'] ?? 0,
+            'portal_name'     => $options['portal_name'] ?? 'az.mygo1.com',
+            'locale'          => $options['locale'] ?? 0,
+            'title'           => $options['title'] ?? 'Foo course',
+            'description'     => $options['description'] ?? '',
+            'tags'            => (array) ($options['tags'] ?? []),
+            'image'           => $options['image'] ?? '',
+            'items_count'     => $options['items_count'] ?? 0,
+            'pricing'         => [
                 'currency'     => $options['currency'] ?? 'USD',
                 'price'        => $options['price'] ?? 0.00,
                 'tax'          => $options['tax'] ?? 0.00,
                 'tax_included' => $options['tax_included'] ?? 1,
                 'tax_display'  => $options['tax_display'] ?? 1,
             ],
-            'duration'       => $options['duration'] ?? 0,
-            'assessors'      => $options['assessors'] ?? [],
-            'created'        => DateTime::formatDate($options['created'] ?? time()),
-            'updated'        => DateTime::formatDate($options['updated'] ?? time()),
-            'authors'        => $options['authors'] ?? [],
-            'group_ids'      => $options['group_ids'] ?? [],
-            'locations'      => $options['locations'] ?? [],
-            'event'          => $event,
-            'metadata'       => [
+            'duration'        => $options['duration'] ?? 0,
+            'assessors'       => $options['assessors'] ?? [],
+            'created'         => DateTime::formatDate($options['created'] ?? time()),
+            'updated'         => DateTime::formatDate($options['updated'] ?? time()),
+            'authors'         => $options['authors'] ?? [],
+            'group_ids'       => $options['group_ids'] ?? [],
+            'locations'       => $options['locations'] ?? [],
+            'event'           => $event,
+            'metadata'        => [
                 'parents_authors_ids' => $options['metadata']['parents_authors_ids'] ?? null,
                 'parents_id'          => $options['metadata']['parents_id'] ?? null,
                 'instance_id'         => intval($options['routing'] ?? $options['instance_id'] ?? 0),
@@ -85,14 +86,15 @@ trait EsLoMockTrait
                 'shared'              => $options['metadata']['shared'] ?? 0,
                 'shared_passive'      => $options['metadata']['shared_passive'] ?? null,
             ],
-            'data'           => [
+            'data'            => [
                 'allow_resubmit' => $options['data']['allow_resubmit'] ?? null,
                 'label'          => $options['data']['label'] ?? null,
                 'pass_rate'      => $options['data']['pass_rate'] ?? null,
                 'url'            => $options['data']['url'] ?? null,
             ],
-            'totalEnrolment' => $options['totalEnrolment'] ?? 0,
-            'vote'           => [
+            'totalEnrolment'  => $options['totalEnrolment'] ?? 0,
+            'allow_enrolment' => $options['allow_enrolment'] ?? EnrolmentAllowTypes::I_DEFAULT,
+            'vote'            => [
                 'percent' => $options['vote']['percent'] ?? null,
                 'rank'    => $options['vote']['rank'] ?? null,
                 'like'    => $options['vote']['like'] ?? null,
@@ -129,7 +131,7 @@ trait EsLoMockTrait
                         'params' => ['esLoId' => $esLoId],
                     ],
                     'upsert' => [
-                        'tag' => [
+                        'tag'      => [
                             'input'    => $tag,
                             'weight'   => 1,
                             'contexts' => ['instance_id' => $lo['instance_id']],
