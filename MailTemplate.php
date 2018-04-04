@@ -1017,6 +1017,52 @@ class MailTemplate
         ],
     ];
 
+    const LEARNER_AWARD_ITEM_MANUAL_IS_ADDED = [
+        'key'    => 'learner.award.item-manual.is-added',
+        'tokens' => [
+            '!submitter_full_name' => 'Submitter full name',
+            '!learner_first_name'  => 'Learner first name',
+            '!award_title'         => 'Award title',
+            '!award_url'           => 'Award URL',
+            '!award_item_title'    => 'Award item title',
+            '!submitter_mail'      => 'Submitter mail',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+            '!portal_url'          => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_AWARD_ITEM_MANUAL_IS_MODIFIED = [
+        'key'    => 'learner.award.item-manual.is-modified',
+        'tokens' => [
+            '!submitter_full_name' => 'Submitter full name',
+            '!learner_first_name'  => 'Learner first name',
+            '!award_title'         => 'Award title',
+            '!award_url'           => 'Award URL',
+            '!award_item_title'    => 'Award item title',
+            '!submitter_mail'      => 'Submitter mail',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+            '!portal_url'          => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_AWARD_ITEM_MANUAL_IS_PASSED = [
+        'key'    => 'learner.award.item-manual.is-passed',
+        'tokens' => [
+            '!submitter_full_name' => 'Submitter full name',
+            '!learner_first_name'  => 'Learner first name',
+            '!award_title'         => 'Award title',
+            '!award_url'           => 'Award URL',
+            '!award_item_title'    => 'Award item title',
+            '!submitter_mail'      => 'Submitter mail',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+            '!portal_url'          => 'Portal URL',
+        ],
+    ];
+
+
     const ENROLMENT_REPORT = [
         'key'    => 'enrolment.report',
         'tokens' => [
