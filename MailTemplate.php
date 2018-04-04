@@ -1022,6 +1022,7 @@ class MailTemplate
         'tokens' => [
             '!submitter_full_name' => 'Submitter full name',
             '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
             '!award_title'         => 'Award title',
             '!award_url'           => 'Award URL',
             '!award_item_title'    => 'Award item title',
@@ -1037,6 +1038,7 @@ class MailTemplate
         'tokens' => [
             '!submitter_full_name' => 'Submitter full name',
             '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
             '!award_title'         => 'Award title',
             '!award_url'           => 'Award URL',
             '!award_item_title'    => 'Award item title',
@@ -1052,6 +1054,7 @@ class MailTemplate
         'tokens' => [
             '!submitter_full_name' => 'Submitter full name',
             '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
             '!award_title'         => 'Award title',
             '!award_url'           => 'Award URL',
             '!award_item_title'    => 'Award item title',
