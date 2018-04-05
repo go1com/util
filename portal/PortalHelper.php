@@ -151,7 +151,9 @@ class PortalHelper
 
     public static function roles(Connection $db, string $portalName)
     {
-        return $db->executeQuery('SELECT id, name FROM gc_role WHERE instance = ?', [$portalName])->fetchAll(DB::PAIR);
+        $roles = $db->executeQuery('SELECT id, name FROM gc_role WHERE instance = ?', [$portalName])->fetchAll(DB::OBJ);
+
+        return array_combine(array_column($roles, 'id'), array_column($roles, 'name'));
     }
 
     public static function timezone(stdClass $portal)

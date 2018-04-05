@@ -14,7 +14,6 @@ class DB
     const OBJ      = PDO::FETCH_OBJ;
     const ARR      = PDO::FETCH_ASSOC;
     const COL      = PDO::FETCH_COLUMN;
-    const PAIR     = PDO::FETCH_KEY_PAIR;
     const INTEGER  = PDO::PARAM_INT;
     const INTEGERS = Connection::PARAM_INT_ARRAY;
     const STRING   = PDO::PARAM_STR;
