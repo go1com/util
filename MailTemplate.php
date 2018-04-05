@@ -1065,6 +1065,39 @@ class MailTemplate
         ],
     ];
 
+    const ASSESSOR_AWARD_ITEM_MANUAL_IS_ADDED = [
+        'key'    => 'assessor.award.item-manual.is-added',
+        'tokens' => [
+            '!assessor_first_name' => 'Assessor first name',
+            '!assessor_mail'       => 'Assessor mail',
+            '!learner_full_name'   => 'Learner full name',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!award_title'         => 'Award title',
+            '!award_item_title'    => 'Award item title',
+            '!award_enrolment_url' => 'Award enrolment URL',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+            '!portal_url'          => 'Portal URL',
+        ],
+    ];
+
+    const ASSESSOR_AWARD_ITEM_MANUAL_IS_MODIFIED = [
+        'key'    => 'assessor.award.item-manual.is-modified',
+        'tokens' => [
+            '!assessor_first_name' => 'Assessor first name',
+            '!assessor_mail'       => 'Assessor mail',
+            '!learner_full_name'   => 'Learner full name',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!award_title'         => 'Award title',
+            '!award_item_title'    => 'Award item title',
+            '!award_enrolment_url' => 'Award enrolment URL',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+            '!portal_url'          => 'Portal URL',
+        ],
+    ];
 
     const ENROLMENT_REPORT = [
         'key'    => 'enrolment.report',
