@@ -153,7 +153,7 @@ class PortalHelper
     {
         $roles = $db->executeQuery('SELECT id, name FROM gc_role WHERE instance = ?', [$portalName])->fetchAll(DB::OBJ);
 
-        return array_combine(array_column($roles, 'mail'), array_column($roles, 'id'));
+        return array_combine(array_column($roles, 'id'), array_column($roles, 'name'));
     }
 
     public static function timezone(stdClass $portal)
