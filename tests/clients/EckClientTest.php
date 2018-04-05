@@ -3,11 +3,6 @@
 namespace go1\util\schema\tests;
 
 use go1\clients\EckClient;
-use go1\clients\MailClient;
-use go1\clients\portal\config\MailTemplate;
-use go1\util\portal\PortalHelper;
-use go1\util\queue\Queue;
-use go1\util\schema\mock\PortalMockTrait;
 use go1\util\tests\UtilTestCase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
