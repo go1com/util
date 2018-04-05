@@ -78,7 +78,7 @@ class AwardSchema
             $itemManual->addColumn('description', Type::STRING, ['notnull' => false]);
             $itemManual->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $itemManual->addColumn('assigner_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
-            $itemManual->addColumn('entity_id', Type::INTEGER, ['description' => 'Learning object ID.', 'notnull' => false]); // deprecated
+            $itemManual->addColumn('entity_id', Type::INTEGER, ['notnull' => false, 'description' => 'Learning object ID.']); // deprecated
             $itemManual->addColumn('verified', Type::BOOLEAN);
             $itemManual->addColumn('verifier_id', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $itemManual->addColumn('quantity', Type::FLOAT, ['notnull' => false, 'description' => 'Number of item quantity.']);
