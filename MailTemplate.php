@@ -1101,6 +1101,52 @@ class MailTemplate
         ],
     ];
 
+    const MANAGER_REMIND_75_PERCENT_SCHEDULED_DURATION_PASSED = [
+        'key'    => 'assessor.remind.75percent-scheduled-duration-passed',
+        'tokens' => [
+            '!learning_object_title' => 'Learning object title',
+            '!manager_first_name'    => 'Manager first name',
+            '!learner_full_name'     => 'Learner full name',
+            '!scheduled_due_date'    => 'Scheduled due date',
+            '!time_remaining'        => 'Time remaining',
+            '!manager_email'         => 'Manager email',
+            '!action_url'            => 'Action URL',
+            '!portal_name'           => 'Portal name',
+            '!portal_image'          => 'Portal image',
+            '!portal_url'            => 'Portal URL',
+        ],
+    ];
+
+    const MANAGER_REMIND_DUE_DATE_2_DAYS_OVERDUE = [
+        'key'    => 'assessor.remind.due-date-2-days-overdue',
+        'tokens' => [
+            '!learning_object_title' => 'Learning object title',
+            '!assessor_first_name'   => 'Manager first name',
+            '!learner_full_name'     => 'Learner full name',
+            '!scheduled_due_date'    => 'Scheduled due date',
+            '!manager_email'         => 'Manager email',
+            '!action_url'            => 'Action URL',
+            '!portal_name'           => 'Portal name',
+            '!portal_image'          => 'Portal image',
+            '!portal_url'            => 'Portal URL',
+        ],
+    ];
+
+    const MANAGER_REMIND_DUE_DATE_REACHED = [
+        'key'    => 'assessor.remind.due-date-reached',
+        'tokens' => [
+            '!learning_object_title' => 'Learning object title',
+            '!manager_first_name'    => 'Manager first name',
+            '!learner_full_name'     => 'Learner full name',
+            '!scheduled_due_date'    => 'Scheduled due date',
+            '!manager_email'         => 'Manager email',
+            '!action_url'            => 'Action URL',
+            '!portal_name'           => 'Portal name',
+            '!portal_image'          => 'Portal image',
+            '!portal_url'            => 'Portal URL',
+        ],
+    ];
+
     const ENROLMENT_REPORT = [
         'key'    => 'enrolment.report',
         'tokens' => [
