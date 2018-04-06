@@ -1153,7 +1153,7 @@ class MailTemplate
     ];
 
     const MANAGER_REMIND_75_PERCENT_SCHEDULED_DURATION_PASSED = [
-        'key'    => 'assessor.remind.75percent-scheduled-duration-passed',
+        'key'    => 'manager.remind.75percent-scheduled-duration-passed',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!manager_first_name'    => 'Manager first name',
@@ -1169,7 +1169,7 @@ class MailTemplate
     ];
 
     const MANAGER_REMIND_DUE_DATE_2_DAYS_OVERDUE = [
-        'key'    => 'assessor.remind.due-date-2-days-overdue',
+        'key'    => 'manager.remind.due-date-2-days-overdue',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!assessor_first_name'   => 'Manager first name',
@@ -1184,7 +1184,7 @@ class MailTemplate
     ];
 
     const MANAGER_REMIND_DUE_DATE_REACHED = [
-        'key'    => 'assessor.remind.due-date-reached',
+        'key'    => 'manager.remind.due-date-reached',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!manager_first_name'    => 'Manager first name',
