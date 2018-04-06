@@ -57,6 +57,7 @@ class Schema
     const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
     const O_LO_GROUP            = 'lo_group';
+    const O_LO_TAG              = 'lo_tag';
     const O_EVENT               = 'event';
     const O_AWARD               = 'award';
     const O_AWARD_ITEM          = 'award_item';
@@ -92,6 +93,8 @@ class Schema
         self::O_USER                => self::USER_MAPPING,
         self::O_ACCOUNT             => self::ACCOUNT_MAPPING,
         self::O_LO                  => self::LO_MAPPING,
+        self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
+        self::O_LO_TAG              => self::LO_TAG_MAPPING,
         self::O_PLAN                => self::PLAN_MAPPING,
         self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
         self::O_ENROLMENT_REVISION  => self::ENROLMENT_MAPPING_REVISION,
@@ -104,7 +107,6 @@ class Schema
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
         self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
         self::O_COUPON              => self::COUPON_MAPPING,
-        self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
         self::O_AWARD               => self::AWARD_MAPPING,
         self::O_AWARD_ITEM          => self::AWARD_ITEM_MAPPING,
@@ -370,6 +372,14 @@ class Schema
         'properties' => [
             'lo_id'       => ['type' => self::T_INT],
             'instance_id' => ['type' => self::T_INT],
+        ],
+    ];
+
+    const LO_TAG_MAPPING = [
+        'properties' => [
+            'instance_id' => ['type' => self::T_INT],
+            'title'       => ['type' => self::T_KEYWORD],
+            'type'        => ['type' => self::T_KEYWORD],
         ],
     ];
 

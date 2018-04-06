@@ -926,6 +926,57 @@ class MailTemplate
         ],
     ];
 
+    const MANAGER_REMIND_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'manager.remind.award-expiry-date-reached',
+        'tokens' => [
+            '!award_title'        => 'Award title',
+            '!award_url'          => 'Award URL',
+            '!expiry_date'        => 'Expiry date',
+            '!learner_mail'       => 'Learner mail',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_full_name'  => 'Learner full name',
+            '!manager_mail'       => 'Manager mail',
+            '!manager_first_name' => 'Manager first name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
+    const MANAGER_REMIND_AWARD_EXPIRY_2DAYS_OVERDUE = [
+        'key'    => 'manager.remind.award-expiry-2days-overdue',
+        'tokens' => [
+            '!award_title'        => 'Award title',
+            '!award_url'          => 'Award URL',
+            '!expiry_date'        => 'Expiry date',
+            '!learner_mail'       => 'Learner mail',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_full_name'  => 'Learner full name',
+            '!manager_mail'       => 'Manager mail',
+            '!manager_first_name' => 'Manager first name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
+    const MANAGER_REMIND_AWARD_75_PERCENT_COMPLETED_DURATION_PASSED = [
+        'key'    => 'manager.remind.award-75percent-completed-duration-passed',
+        'tokens' => [
+            '!award_title'        => 'Award title',
+            '!award_url'          => 'Award URL',
+            '!expiry_date'        => 'Expiry date',
+            '!learner_mail'       => 'Learner mail',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_full_name'  => 'Learner full name',
+            '!manager_mail'       => 'Manager mail',
+            '!manager_first_name' => 'Manager first name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
     const ASSESSOR_REMIND_AWARD_EXPIRY_DATE_REACHED = [
         'key'    => 'assessor.remind.award-expiry-date-reached',
         'tokens' => [
@@ -1102,7 +1153,7 @@ class MailTemplate
     ];
 
     const MANAGER_REMIND_75_PERCENT_SCHEDULED_DURATION_PASSED = [
-        'key'    => 'assessor.remind.75percent-scheduled-duration-passed',
+        'key'    => 'manager.remind.75percent-scheduled-duration-passed',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!manager_first_name'    => 'Manager first name',
@@ -1118,7 +1169,7 @@ class MailTemplate
     ];
 
     const MANAGER_REMIND_DUE_DATE_2_DAYS_OVERDUE = [
-        'key'    => 'assessor.remind.due-date-2-days-overdue',
+        'key'    => 'manager.remind.due-date-2-days-overdue',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!assessor_first_name'   => 'Manager first name',
@@ -1133,7 +1184,7 @@ class MailTemplate
     ];
 
     const MANAGER_REMIND_DUE_DATE_REACHED = [
-        'key'    => 'assessor.remind.due-date-reached',
+        'key'    => 'manager.remind.due-date-reached',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!manager_first_name'    => 'Manager first name',
