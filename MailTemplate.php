@@ -753,8 +753,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_REMIND_DUE_DATE_REACHED = [
-        'key'    => 'learner.remind.due-date-reached',
+    const REMIND_LEARNER_DUE_DATE_REACHED = [
+        'key'    => 'remind.learner.due-date-reached',
         'tokens' => [
             '!time_remaining'        => 'Time remaining',
             '!learning_object_title' => 'Learning object title',
@@ -769,8 +769,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_REMIND_75_PERCENT_SCHEDULED_DURATION_PASSED = [
-        'key'    => 'learner.remind.75percent-scheduled-duration-passed',
+    const REMIND_LEARNER_75_PERCENT_SCHEDULED_DURATION_PASSED = [
+        'key'    => 'remind.learner.75percent-scheduled-duration-passed',
         'tokens' => [
             '!time_remaining'        => 'Time remaining',
             '!learning_object_title' => 'Learning object title',
@@ -785,8 +785,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_REMIND_DUE_DATE_2_DAYS_OVERDUE = [
-        'key'    => 'learner.remind.due-date-2-days-overdue',
+    const REMIND_LEARNER_DUE_DATE_2_DAYS_OVERDUE = [
+        'key'    => 'remind.learner.due-date-2-days-overdue',
         'tokens' => [
             '!time_remaining'        => 'Time remaining',
             '!learning_object_title' => 'Learning object title',
@@ -801,8 +801,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_REMIND_EVENT_ON_START_DATE = [
-        'key'    => 'learner.remind.event-on-start-date',
+    const REMIND_LEARNER_EVENT_ON_START_DATE = [
+        'key'    => 'remind.learner.event-on-start-date',
         'tokens' => [
             '!event_name'         => 'Event name',
             '!event_start_date'   => 'Event start date',
@@ -821,8 +821,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_REMIND_EVENT_UPCOMING = [
-        'key'    => 'learner.remind.event-upcoming',
+    const REMIND_LEARNER_EVENT_UPCOMING = [
+        'key'    => 'remind.learner.event-upcoming',
         'tokens' => [
             '!event_name'         => 'Event name',
             '!event_start_date'   => 'Event start date',
@@ -841,8 +841,8 @@ class MailTemplate
         ],
     ];
 
-    const ASSESSOR_REMIND_EVENT_ON_START_DATE = [
-        'key'    => 'assessor.remind.event-on-start-date',
+    const REMIND_ASSESSOR_EVENT_ON_START_DATE = [
+        'key'    => 'remind.assessor.event-on-start-date',
         'tokens' => [
             '!event_name'          => 'Event name',
             '!event_start_date'    => 'Event start date',
@@ -862,8 +862,8 @@ class MailTemplate
         ],
     ];
 
-    const ASSESSOR_REMIND_EVENT_UPCOMING = [
-        'key'    => 'assessor.remind.event-upcoming',
+    const REMIND_ASSESSOR_EVENT_UPCOMING = [
+        'key'    => 'remind.assessor.event-upcoming',
         'tokens' => [
             '!event_name'          => 'Event name',
             '!event_start_date'    => 'Event start date',
@@ -883,8 +883,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_REMIND_AWARD_EXPIRY_DATE_REACHED = [
-        'key'    => 'learner.remind.award-expiry-date-reached',
+    const REMIND_LEARNER_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'remind.learner.award-expiry-date-reached',
         'tokens' => [
             '!award_title'        => 'Award title',
             '!expiry_date'        => 'Expiry date',
@@ -897,8 +897,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_REMIND_AWARD_EXPIRY_2DAYS_OVERDUE = [
-        'key'    => 'learner.remind.award-expiry-2days-overdue',
+    const REMIND_LEARNER_AWARD_EXPIRY_2DAYS_OVERDUE = [
+        'key'    => 'remind.learner.award-expiry-2days-overdue',
         'tokens' => [
             '!award_title'        => 'Award title',
             '!expiry_date'        => 'Expiry date',
@@ -911,8 +911,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_REMIND_AWARD_75_PERCENT_COMPLETED_DURATION_PASSED = [
-        'key'    => 'learner.remind.award-75percent-completed-duration-passed',
+    const REMIND_LEARNER_AWARD_75_PERCENT_COMPLETED_DURATION_PASSED = [
+        'key'    => 'remind.learner.award-75percent-completed-duration-passed',
         'tokens' => [
             '!award_title'        => 'Award title',
             '!expiry_date'        => 'Expiry date',
@@ -926,8 +926,8 @@ class MailTemplate
         ],
     ];
 
-    const MANAGER_REMIND_AWARD_EXPIRY_DATE_REACHED = [
-        'key'    => 'manager.remind.award-expiry-date-reached',
+    const REMIND_MANAGER_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'remind.manager.award-expiry-date-reached',
         'tokens' => [
             '!award_title'        => 'Award title',
             '!award_url'          => 'Award URL',
@@ -943,8 +943,8 @@ class MailTemplate
         ],
     ];
 
-    const MANAGER_REMIND_AWARD_EXPIRY_2DAYS_OVERDUE = [
-        'key'    => 'manager.remind.award-expiry-2days-overdue',
+    const REMIND_MANAGER_AWARD_EXPIRY_2DAYS_OVERDUE = [
+        'key'    => 'remind.manager.award-expiry-2days-overdue',
         'tokens' => [
             '!award_title'        => 'Award title',
             '!award_url'          => 'Award URL',
@@ -960,8 +960,8 @@ class MailTemplate
         ],
     ];
 
-    const MANAGER_REMIND_AWARD_75_PERCENT_COMPLETED_DURATION_PASSED = [
-        'key'    => 'manager.remind.award-75percent-completed-duration-passed',
+    const REMIND_MANAGER_AWARD_75_PERCENT_COMPLETED_DURATION_PASSED = [
+        'key'    => 'remind.manager.award-75percent-completed-duration-passed',
         'tokens' => [
             '!award_title'        => 'Award title',
             '!award_url'          => 'Award URL',
@@ -977,8 +977,8 @@ class MailTemplate
         ],
     ];
 
-    const ASSESSOR_REMIND_AWARD_EXPIRY_DATE_REACHED = [
-        'key'    => 'assessor.remind.award-expiry-date-reached',
+    const REMIND_ASSESSOR_AWARD_EXPIRY_DATE_REACHED = [
+        'key'    => 'remind.assessor.award-expiry-date-reached',
         'tokens' => [
             '!assessor_first_name' => 'Assessor first name',
             '!learner_full_name'   => 'Learner full name',
@@ -992,8 +992,8 @@ class MailTemplate
         ],
     ];
 
-    const ASSESSOR_REMIND_75_PERCENT_SCHEDULED_DURATION_PASSED = [
-        'key'    => 'assessor.remind.75percent-scheduled-duration-passed',
+    const REMIND_ASSESSOR_75_PERCENT_SCHEDULED_DURATION_PASSED = [
+        'key'    => 'remind.assessor.75percent-scheduled-duration-passed',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!assessor_first_name'   => 'Assessor first name',
@@ -1008,8 +1008,8 @@ class MailTemplate
         ],
     ];
 
-    const ASSESSOR_REMIND_DUE_DATE_2_DAYS_OVERDUE = [
-        'key'    => 'assessor.remind.due-date-2-days-overdue',
+    const REMIND_ASSESSOR_DUE_DATE_2_DAYS_OVERDUE = [
+        'key'    => 'remind.assessor.due-date-2-days-overdue',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!assessor_first_name'   => 'Assessor first name',
@@ -1023,8 +1023,8 @@ class MailTemplate
         ],
     ];
 
-    const ASSESSOR_REMIND_DUE_DATE_REACHED = [
-        'key'    => 'assessor.remind.due-date-reached',
+    const REMIND_ASSESSOR_DUE_DATE_REACHED = [
+        'key'    => 'remind.assessor.due-date-reached',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!assessor_first_name'   => 'Assessor first name',
@@ -1038,8 +1038,8 @@ class MailTemplate
         ],
     ];
 
-    const ASSESSOR_REMIND_AWARD_EXPIRY_2DAYS_OVERDUE = [
-        'key'    => 'assessor.remind.award-expiry-2days-overdue',
+    const REMIND_ASSESSOR_AWARD_EXPIRY_2DAYS_OVERDUE = [
+        'key'    => 'remind.assessor.award-expiry-2days-overdue',
         'tokens' => [
             '!assessor_first_name' => 'Assessor first name',
             '!learner_full_name'   => 'Learner full name',
@@ -1053,8 +1053,8 @@ class MailTemplate
         ],
     ];
 
-    const ASSESSOR_REMIND_AWARD_75_PERCENT_COMPLETED_DURATION_PASSED = [
-        'key'    => 'assessor.remind.award-75percent-completed-duration-passed',
+    const REMIND_ASSESSOR_AWARD_75_PERCENT_COMPLETED_DURATION_PASSED = [
+        'key'    => 'remind.assessor.award-75percent-completed-duration-passed',
         'tokens' => [
             '!assessor_first_name' => 'Assessor first name',
             '!learner_full_name'   => 'Learner full name',
@@ -1157,8 +1157,8 @@ class MailTemplate
         ],
     ];
 
-    const MANAGER_REMIND_75_PERCENT_SCHEDULED_DURATION_PASSED = [
-        'key'    => 'manager.remind.75percent-scheduled-duration-passed',
+    const REMIND_MANAGER_75_PERCENT_SCHEDULED_DURATION_PASSED = [
+        'key'    => 'remind.manager.75percent-scheduled-duration-passed',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!manager_first_name'    => 'Manager first name',
@@ -1173,8 +1173,8 @@ class MailTemplate
         ],
     ];
 
-    const MANAGER_REMIND_DUE_DATE_2_DAYS_OVERDUE = [
-        'key'    => 'manager.remind.due-date-2-days-overdue',
+    const REMIND_MANAGER_DUE_DATE_2_DAYS_OVERDUE = [
+        'key'    => 'remind.manager.due-date-2-days-overdue',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!assessor_first_name'   => 'Manager first name',
@@ -1188,8 +1188,8 @@ class MailTemplate
         ],
     ];
 
-    const MANAGER_REMIND_DUE_DATE_REACHED = [
-        'key'    => 'manager.remind.due-date-reached',
+    const REMIND_MANAGER_DUE_DATE_REACHED = [
+        'key'    => 'remind.manager.due-date-reached',
         'tokens' => [
             '!learning_object_title' => 'Learning object title',
             '!manager_first_name'    => 'Manager first name',
