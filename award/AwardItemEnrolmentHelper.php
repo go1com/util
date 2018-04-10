@@ -26,4 +26,16 @@ class AwardItemEnrolmentHelper
             ->execute()
             ->fetchAll(DB::OBJ);
     }
+
+    public static function parent(Connection $db, $awardItemEnrolment)
+    {
+        $params = [
+            ':entity_id' => $awardItemEnrolment->award_id,
+            ':user_id'   => $awardItemEnrolment->user_id,
+        ];
+
+        return $db
+            ->executeQuery('SELECT * FROM award_item_enrolment WHERE entity_id = :entity_id AND user_id = :user_id', $params)
+            ->fetch(DB::OBJ);
+    }
 }
