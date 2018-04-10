@@ -377,7 +377,6 @@ class Schema
 
     const LO_TAG_MAPPING = [
         'properties' => [
-            'instance_id' => ['type' => self::T_INT],
             'title'       => ['type' => self::T_KEYWORD],
             'type'        => ['type' => self::T_KEYWORD],
             'metadata'    => [
