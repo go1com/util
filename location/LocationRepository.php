@@ -29,9 +29,9 @@ class LocationRepository
             ->executeQuery('SELECT * FROM gc_location WHERE id IN (?)', [$ids], [DB::INTEGERS])
             ->fetchAll(DB::OBJ);
 
-        return array_map(function($_) {
-                return Location::create($_);
-            }, $locations);
+        return array_map(function ($_) {
+            return Location::create($_);
+        }, $locations);
     }
 
     public function create(Location &$location): int

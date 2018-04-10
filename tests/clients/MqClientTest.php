@@ -11,53 +11,13 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 use Pimple\Container;
-use ReflectionClass;
 use ReflectionObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MqClientTest extends UtilTestCase
 {
     use UserMockTrait;
-
-    public function dataMessage()
-    {
-        return [
-            [(object) ['foo' => 'bar'], 'user.update', 'Missing entity ID or original data.'],
-            [(object) ['id' => 1, 'original' => ['id']], 'user.update', ''],
-            [(object) ['id' => null], 'user.update', 'Missing entity ID or original data.'],
-            [(object) ['original' => null], 'user.update', 'Missing entity ID or original data.'],
-            [(object) [], 'user.update', 'Missing entity ID or original data.'],
-            [['foo' => 'bar'], 'user.update', 'Missing entity ID or original data.'],
-            [['id' => 1, 'original' => ['id']], 'user.update', ''],
-            [['id' => null], 'user.update', 'Missing entity ID or original data.'],
-            [['original' => null], 'user.update', 'Missing entity ID or original data.'],
-            [[], 'user.update', 'Missing entity ID or original data.'],
-            [[], '', ''],
-            [[], 'do.enrolment.update', ''],
-        ];
-    }
-
-    /** @dataProvider dataMessage */
-    public function testProcessMessage($body, $routingKey, string $expectedString)
-    {
-        $queue = $this->getMockBuilder(MqClient::class)->disableOriginalConstructor()->getMock();
-        $class = new ReflectionClass(MqClient::class);
-
-        $rPropertyAccessor = $class->getProperty('propertyAccessor');
-        $rPropertyAccessor->setAccessible(true);
-        $rPropertyAccessor->setValue($queue, $propertyAccessor = PropertyAccess::createPropertyAccessor());
-
-        $method = $class->getMethod('processMessage');
-        $method->setAccessible(true);
-        if ($expectedString) {
-            $this->expectException(\Exception::class);
-            $this->expectExceptionMessage($expectedString);
-        }
-        $body = $method->invokeArgs($queue, [$body, $routingKey]);
-        !$expectedString && $this->assertEmpty($body);
-    }
 
     public function testInjectRequest()
     {
