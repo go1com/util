@@ -146,7 +146,7 @@ trait EsLoMockTrait
                 'refresh' => true,
             ]);
 
-            $client->create([
+            $client->index([
                 'index'   => $options['index'] ?? Schema::INDEX,
                 'routing' => $options['routing'] ?? Schema::INDEX,
                 'type'    => Schema::O_LO_TAG,
