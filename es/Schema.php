@@ -1001,7 +1001,6 @@ class Schema
             'metadata' => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
-                    'lo_ids'      => ['type' => self::T_KEYWORD],
                 ],
             ],
         ],
