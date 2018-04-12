@@ -71,6 +71,8 @@ class TaskHelper
             'status'  => $status,
         ];
         $db->insert($table, $item);
+
+        return $db->lastInsertId($table);
     }
 
     public static function loadTaskItem(Connection $db, int $id, string $name)
@@ -101,11 +103,11 @@ class TaskHelper
         return TaskItem::create($row);
     }
 
-    public static function checksum(Connection $db, string $name, $string): bool
+    public static function checksum(Connection $db, string $name, $string)
     {
         $string = is_string($string) ? $string : json_encode($string);
         $checksum = md5($string);
 
-        return $db->fetchColumn("SELECT 1 FROM {$name} WHERE checksum = ?", [$checksum]) ? true : false;
+        return $db->fetchColumn("SELECT id FROM {$name} WHERE checksum = ?", [$checksum]);
     }
 }
