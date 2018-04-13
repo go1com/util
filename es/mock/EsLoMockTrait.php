@@ -7,6 +7,7 @@ use go1\util\DateTime;
 use go1\util\enrolment\EnrolmentAllowTypes;
 use go1\util\es\Schema;
 use go1\util\lo\LoTypes;
+use go1\util\lo\TagTypes;
 
 trait EsLoMockTrait
 {
@@ -140,6 +141,21 @@ trait EsLoMockTrait
                             'instance_id' => $options['instance_id'] ?? 0,
                             'lo_ids'      => (array) $esLoId,
                         ],
+                    ],
+                ],
+                'refresh' => true,
+            ]);
+
+            $client->index([
+                'index'   => $options['index'] ?? Schema::INDEX,
+                'routing' => $options['routing'] ?? Schema::INDEX,
+                'type'    => Schema::O_LO_TAG,
+                'id'      => $tag . ":" . $lo['instance_id'],
+                'body'    => [
+                    'title'    => $tag,
+                    'type'     => $options['tag_type'] ?? TagTypes::LOCAL,
+                    'metadata' => [
+                        'instance_id' => $options['instance_id'] ?? 0,
                     ],
                 ],
                 'refresh' => true,
