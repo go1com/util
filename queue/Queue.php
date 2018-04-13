@@ -126,9 +126,9 @@ class Queue
     const AWARD_ENROLMENT_CREATE      = 'award.enrolment.create';
     const AWARD_ENROLMENT_UPDATE      = 'award.enrolment.update';
     const AWARD_ENROLMENT_DELETE      = 'award.enrolment.delete';
-    const AWARD_ITEM_ENROLMENT_CREATE = 'award-item.enrolment.create';
-    const AWARD_ITEM_ENROLMENT_UPDATE = 'award-item.enrolment.update';
-    const AWARD_ITEM_ENROLMENT_DELETE = 'award-item.enrolment.delete';
+    const AWARD_ITEM_ENROLMENT_CREATE = 'award.item.enrolment.create';
+    const AWARD_ITEM_ENROLMENT_UPDATE = 'award.item.enrolment.update';
+    const AWARD_ITEM_ENROLMENT_DELETE = 'award.item.enrolment.delete';
     const WORKER_QUEUE_NAME           = 'worker';
     const MAIL_LOG_CREATE             = 'mail-log.create';
     const NOTIFY_PORTAL_USER_PLAN     = 'notify.portal.user_plan_reached';
