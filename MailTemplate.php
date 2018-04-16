@@ -1214,6 +1214,19 @@ class MailTemplate
         ],
     ];
 
+    const LEARNER_ASSIGN_COURSE_THEMSELVES = [
+        'key'    => 'learner.assign.course.themselves',
+        'tokens' => [
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!course_name'         => 'Course name',
+            '!course_url'          => 'Course URL',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+        ],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
