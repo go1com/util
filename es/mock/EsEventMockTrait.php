@@ -38,7 +38,7 @@ trait EsEventMockTrait
         ];
 
         return $client->create([
-            'index'   => Schema::INDEX,
+            'index'   => $options['index'] ?? Schema::INDEX,
             'routing' => $options['routing'] ?? Schema::INDEX,
             'type'    => Schema::O_EVENT,
             'id'      => $options['id'] ?? ($autoId + 1),
