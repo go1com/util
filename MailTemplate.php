@@ -1217,6 +1217,7 @@ class MailTemplate
     const LEARNER_ASSIGN_COURSE_THEMSELVES = [
         'key'    => 'learner.assign.course.themselves',
         'tokens' => [
+            '!entity_type'         => 'Entity type',
             '!learner_first_name'  => 'Learner first name',
             '!learner_mail'        => 'Learner mail',
             '!course_name'         => 'Course name',
@@ -1224,6 +1225,19 @@ class MailTemplate
             '!scheduled_due_date'  => 'Scheduled due date',
             '!portal_name'         => 'Portal name',
             '!portal_image'        => 'Portal image',
+        ],
+    ];
+
+    const AWARD_ASSIGN_THEMSELVES = [
+        'key'    => 'award.assign.themselves',
+        'tokens' => [
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!award_name'          => 'Award name',
+            '!award_url'           => 'Award URL',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal logo',
         ],
     ];
 
