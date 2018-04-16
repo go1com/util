@@ -80,7 +80,7 @@ class UserHelper
     public function profileId2uuid(Client $client, $userUrl, $profileId)
     {
         $jwt = JWT::encode(['admin' => true], 'INTERNAL');
-        $url = rtrim($userUrl, '/') . "/account/-/{$profileId}?jwt=$jwt";
+        $url = rtrim($userUrl, '/') . "/account/masquerade/-/{$profileId}?jwt=$jwt";
         $res = $client->get($url, ['https_errors' => false]);
 
         return (200 == $res->getStatusCode())
