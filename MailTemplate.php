@@ -1122,6 +1122,7 @@ class MailTemplate
     const ASSESSOR_AWARD_ITEM_MANUAL_IS_ADDED = [
         'key'    => 'assessor.award.item-manual.is-added',
         'tokens' => [
+            '!editor_full_name'    => 'Editor full name',
             '!assessor_first_name' => 'Assessor first name',
             '!assessor_mail'       => 'Assessor mail',
             '!learner_full_name'   => 'Learner full name',
@@ -1141,6 +1142,7 @@ class MailTemplate
     const ASSESSOR_AWARD_ITEM_MANUAL_IS_MODIFIED = [
         'key'    => 'assessor.award.item-manual.is-modified',
         'tokens' => [
+            '!editor_full_name'    => 'Editor full name',
             '!assessor_first_name' => 'Assessor first name',
             '!assessor_mail'       => 'Assessor mail',
             '!learner_full_name'   => 'Learner full name',
