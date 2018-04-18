@@ -6,14 +6,16 @@ use InvalidArgumentException;
 
 class EnrolmentAllowTypes
 {
-    const DEFAULT = 'allow';
-    const ENQUIRY = 'enquiry';
-    const DISABLE = 'disable';
+    const DEFAULT      = 'allow';
+    const ENQUIRY      = 'enquiry';
+    const DISABLE      = 'disable';
+    const SUBSCRIPTION = 'subscription';
 
     // Numeric values for the types. Being used in ES.
-    const I_DISABLE = 0;
-    const I_ENQUIRY = 10;
-    const I_DEFAULT = 20;
+    const I_DISABLE      = 0;
+    const I_ENQUIRY      = 10;
+    const I_SUBSCRIPTION = 15;
+    const I_DEFAULT      = 20;
 
     public static function toNumeric(string $type): int
     {
@@ -26,6 +28,9 @@ class EnrolmentAllowTypes
 
             case self::DISABLE:
                 return self::I_DISABLE;
+
+            case self::SUBSCRIPTION:
+                return self::I_SUBSCRIPTION;
 
             default:
                 throw new InvalidArgumentException('Unknown enrolment allow type: ' . $type);
@@ -43,6 +48,9 @@ class EnrolmentAllowTypes
 
             case self::I_DISABLE:
                 return self::DISABLE;
+
+            case self::I_SUBSCRIPTION:
+                return self::SUBSCRIPTION;
 
             default:
                 throw new InvalidArgumentException('Unknown enrolment allow type: ' . $type);
