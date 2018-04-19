@@ -2,6 +2,7 @@
 
 namespace go1\util\tests;
 
+use go1\util\DateTime;
 use go1\util\plan\Plan;
 use go1\util\plan\PlanRepository;
 use go1\util\plan\PlanStatuses;
@@ -163,5 +164,42 @@ class PlanTest extends UtilTestCase
 
         $this->assertEquals($id, $plan->id);
         $this->assertCount(1, $repository->loadRevisions($id));
+    }
+
+    public function testPlanDuaDateWithoutMicrosecond()
+    {
+        $plan = Plan::create($raw = (object)[
+            'user_id'      => 123,
+            'assigner_id'  => 111,
+            'instance_id'  => 124,
+            'entity_type'  => 'lo',
+            'entity_id'    => 555,
+            'status'       => PlanStatuses::INTERESTING,
+            'created_date' => time(),
+            'due_date'     => 1234567890,
+            'data'         => [
+                'note' => 'Something cool! <script>alert(123);</script>',
+            ],
+        ]);
+        $this->assertEquals( DateTime::create(1234567890), $plan->due);
+    }
+
+    public function testPlanDuaDateWithMicrosecond()
+    {
+        $plan = Plan::create($raw = (object)[
+            'user_id'      => 123,
+            'assigner_id'  => 111,
+            'instance_id'  => 124,
+            'entity_type'  => 'lo',
+            'entity_id'    => 555,
+            'status'       => PlanStatuses::INTERESTING,
+            'created_date' => time(),
+            'due_date'     => 1234567890000,
+            'data'         => [
+                'note' => 'Something cool! <script>alert(123);</script>',
+            ],
+        ]);
+
+        $this->assertEquals( DateTime::create(1234567890), $plan->due);
     }
 }

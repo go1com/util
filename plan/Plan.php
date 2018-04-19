@@ -61,6 +61,15 @@ class Plan implements JsonSerializable
 
     public static function create(stdClass $input): Plan
     {
+        $dueDate = null;
+        if (isset($input->due_date)) {
+            $dueDate = $input->due_date
+                ? ((is_numeric($input->due_date)
+                    ? DateTime::create($input->due_date / ((strlen($input->due_date) == 13) ? 1000 : 1))
+                    : DateTime::create($input->due_date)))
+                : $input->due_date;
+        }
+
         $plan = new Plan;
         $plan->id = $input->id ?? null;
         $plan->type = $input->type ?? PlanTypes::ASSIGN;
@@ -71,11 +80,7 @@ class Plan implements JsonSerializable
         $plan->entityId = $input->entity_id ?? null;
         $plan->status = $input->status ?? null;
         $plan->created = DateTime::create($input->created_date ?? time());
-        $plan->due = isset($input->due_date) ? ($input->due_date ?
-            ((is_numeric($input->due_date)
-                ? DateTime::create($input->due_date / ((strlen($input->due_date) == 13) ? 1000 : 1))
-                : DateTime::create($input->due_date)))
-            : $input->due_date) : null;
+        $plan->due = $dueDate;
         $plan->data = isset($input->data) ? (!$input->data ? null : (is_scalar($input->data) ? json_decode($input->data) : $input->data)) : null;
         Text::purify(null, $plan->data);
 
