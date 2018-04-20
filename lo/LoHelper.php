@@ -479,15 +479,25 @@ class LoHelper
 
     public static function countChild(Connection $db, int $id): int
     {
-        $childrenId = LoHelper::childIds($db, $id, true);
-
-        if ($childrenId) {
-            $sql= 'SELECT count(*) AS li, sum(CASE WHEN type = \''.LiTypes::EVENT.'\' THEN 1 ELSE 0 END) AS event FROM gc_lo WHERE type IN (?) AND id IN (?)';
-            $result = $db->executeQuery($sql, [LiTypes::all(), $childrenId], [DB::STRINGS, DB::INTEGERS])->fetchAll()[0];
-
-            return $result['li'] - ($result['event'] > 0  ? ($result['event'] - 1) : 0);
+        if (!$childrenId = LoHelper::childIds($db, $id, true)) {
+            return 0;
         }
 
-        return 0;
+        if ($childrenId) {
+            $result = 0;
+            $sql = 'SELECT type, COUNT(*) as count FROM gc_lo WHERE type IN (?) AND id IN (?) GROUP BY type';
+            $rows = $db->executeQuery($sql, [LiTypes::all(), $childrenId], [DB::STRINGS, DB::INTEGERS])->fetchAll();
+
+            foreach ($rows as $row) {
+                if ($row['type'] == LiTypes::EVENT && $row['count'] > 0) {
+                    $result++;
+                }
+                else {
+                    $result += $row['count'];
+                }
+            }
+
+            return $result;
+        }
     }
 }
