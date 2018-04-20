@@ -469,7 +469,7 @@ class LoHelperTest extends UtilTestCase
         $this->hasChild($this->module2Id, $moduleIds);
     }
 
-    public function dataEvent()
+    public function dataLi()
     {
         return [
             [[
@@ -488,7 +488,7 @@ class LoHelperTest extends UtilTestCase
     }
 
     /**
-     * @dataProvider dataEvent
+     * @dataProvider dataLi
      */
     public function testCountChild($loTypes, $liNumber)
     {
