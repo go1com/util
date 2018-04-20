@@ -562,6 +562,7 @@ class Schema
         'properties' => [
             'id'       => ['type' => self::T_KEYWORD], # Enrolment ID
             'lo_id'    => ['type' => self::T_INT],
+            'type'     => ['type' => self::T_KEYWORD],
             'metadata' => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
