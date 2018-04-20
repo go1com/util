@@ -478,13 +478,8 @@ class LoHelper
     }
 
     /**
-     * Return count li in course if course have event,
-     * it will return count li without event and plus one.
+     * Return the number of LIs in a Course (if having LI.events in the course, they will be counted as one LI)
      *
-     * @param Connection $db
-     * @param int $id
-     *
-     * @return  integer
      */
     public static function countChild(Connection $db, int $id): int
     {
