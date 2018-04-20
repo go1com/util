@@ -37,6 +37,7 @@ class Queue
     const LO_CREATE                   = 'lo.create'; # Body: LO object, no lo.items should be expected.
     const LO_UPDATE                   = 'lo.update'; # Body: LO object with extra property: origin.
     const LO_DELETE                   = 'lo.delete'; # Body: LO object.
+    const LO_UPDATE_ASSESSORS         = 'lo.update.assessors';          # Body: {body: [create: INT[], update: INT[], delete: INT[]], id: INT}
     const USER_CREATE                 = 'user.create';
     const USER_UPDATE                 = 'user.update';
     const USER_DELETE                 = 'user.delete';
@@ -61,6 +62,7 @@ class Queue
     const ENROLMENT_CREATE            = 'enrolment.create';
     const ENROLMENT_UPDATE            = 'enrolment.update';
     const ENROLMENT_DELETE            = 'enrolment.delete';
+    const ENROLMENT_UPDATE_ASSESSORS  = 'enrolment.update.assessors';   # Body: {body: [create: INT[], update: INT[], delete: INT[]], id: INT}
     const MANUAL_RECORD_CREATE        = 'manual-record.create';
     const MANUAL_RECORD_UPDATE        = 'manual-record.update';
     const MANUAL_RECORD_DELETE        = 'manual-record.delete';
