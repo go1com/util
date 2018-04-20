@@ -477,6 +477,15 @@ class LoHelper
         return [];
     }
 
+    /**
+     * Return count li in course if course have event,
+     * it will return count li without event and plus one.
+     *
+     * @param Connection $db
+     * @param int $id
+     *
+     * @return  integer
+     */
     public static function countChild(Connection $db, int $id): int
     {
         if (!$childrenId = LoHelper::childIds($db, $id, true)) {
