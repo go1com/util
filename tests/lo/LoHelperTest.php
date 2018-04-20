@@ -490,14 +490,14 @@ class LoHelperTest extends UtilTestCase
     /**
      * @dataProvider dataLi
      */
-    public function testCountChild($loTypes, $liNumber)
+    public function testCountChild($liTypes, $liNumber)
     {
         $courseId = $this->createCourse($this->db);
         $moduleId = $this->createModule($this->db);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $courseId, $moduleId);
 
         $step = 1;
-        foreach ($loTypes as $type) {
+        foreach ($liTypes as $type) {
             $liId = $this->createLO($this->db, ['title' => 'ばか' . $type . $step, 'type' => $type]);
             $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $liId);
         }
