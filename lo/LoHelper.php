@@ -487,21 +487,19 @@ class LoHelper
             return 0;
         }
 
-        if ($childrenId) {
-            $result = 0;
-            $sql = 'SELECT type, COUNT(*) as count FROM gc_lo WHERE type IN (?) AND id IN (?) GROUP BY type';
-            $rows = $db->executeQuery($sql, [LiTypes::all(), $childrenId], [DB::STRINGS, DB::INTEGERS])->fetchAll();
+        $result = 0;
+        $sql = 'SELECT type, COUNT(*) as count FROM gc_lo WHERE type IN (?) AND id IN (?) GROUP BY type';
+        $rows = $db->executeQuery($sql, [LiTypes::all(), $childrenId], [DB::STRINGS, DB::INTEGERS])->fetchAll();
 
-            foreach ($rows as $row) {
-                if ($row['type'] == LiTypes::EVENT && $row['count'] > 0) {
-                    $result++;
-                }
-                else {
-                    $result += $row['count'];
-                }
+        foreach ($rows as $row) {
+            if ($row['type'] == LiTypes::EVENT && $row['count'] > 0) {
+                $result++;
             }
-
-            return $result;
+            else {
+                $result += $row['count'];
+            }
         }
+
+        return $result;
     }
 }

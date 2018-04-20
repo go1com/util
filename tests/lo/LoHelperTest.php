@@ -469,33 +469,40 @@ class LoHelperTest extends UtilTestCase
         $this->hasChild($this->module2Id, $moduleIds);
     }
 
-    public function testCountChildWithEvent()
+    public function dataEvent()
     {
-        $courseId = $this->createCourse($this->db);
-        $moduleId = $this->createModule($this->db);
-        $videoId = $this->createVideo($this->db);
-        $eventId1 = $this->createLO($this->db, ['type' => LiTypes::EVENT]);
-        $eventId2 = $this->createLO($this->db, ['type' => LiTypes::EVENT]);
-
-        $this->link($this->db, EdgeTypes::HAS_MODULE, $courseId, $moduleId);
-        $this->link($this->db, EdgeTypes::HAS_LI, $courseId, $eventId1);
-        $this->link($this->db, EdgeTypes::HAS_LI, $courseId, $eventId2);
-        $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $videoId);
-
-        $countChild = LoHelper::countChild($this->db, $courseId);
-        $this->assertEquals(2, $countChild);
+        return [
+            [[
+                 LiTypes::VIDEO
+             ], 1,
+            ],
+            [[
+                 LiTypes::VIDEO, LiTypes::EVENT
+             ], 2,
+            ],
+            [[
+                 LiTypes::VIDEO, LiTypes::EVENT, LiTypes::EVENT
+             ], 2,
+            ],
+        ];
     }
 
-    public function testCountChildWithOutEvent()
+    /**
+     * @dataProvider dataEvent
+     */
+    public function testCountChild($loTypes, $liNumber)
     {
         $courseId = $this->createCourse($this->db);
         $moduleId = $this->createModule($this->db);
-        $videoId = $this->createVideo($this->db);
-
         $this->link($this->db, EdgeTypes::HAS_MODULE, $courseId, $moduleId);
-        $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $videoId);
+
+        $step = 1;
+        foreach ($loTypes as $type) {
+            $liId = $this->createLO($this->db, ['title' => 'ばか' . $type . $step, 'type' => $type]);
+            $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $liId);
+        }
 
         $countChild = LoHelper::countChild($this->db, $courseId);
-        $this->assertEquals(1, $countChild);
+        $this->assertEquals($liNumber, $countChild);
     }
 }
