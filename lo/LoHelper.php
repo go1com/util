@@ -476,4 +476,18 @@ class LoHelper
 
         return [];
     }
+
+    public static function countChild(Connection $db, int $id): int
+    {
+        $childrenId = LoHelper::childIds($db, $id, true);
+
+        if ($childrenId) {
+            $li = $db->fetchColumn('SELECT count(*) FROM gc_lo WHERE type IN (?) AND id IN (?)', [LiTypes::all(), $childrenId], 0, [DB::STRINGS, DB::INTEGERS]);
+            $event = $db->fetchColumn('SELECT count(*) FROM gc_lo WHERE type = ? AND id IN (?)', [LiTypes::EVENT, $childrenId], 0, [DB::STRING, DB::INTEGERS]);
+
+            return $li - ($event ? ($event - 1) : 0);
+        }
+
+        return 0;
+    }
 }

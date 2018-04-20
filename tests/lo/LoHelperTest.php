@@ -468,4 +468,34 @@ class LoHelperTest extends UtilTestCase
         $this->assertEquals(1, count($moduleIds));
         $this->hasChild($this->module2Id, $moduleIds);
     }
+
+    public function testCountChildWithEvent()
+    {
+        $courseId = $this->createCourse($this->db);
+        $moduleId = $this->createModule($this->db);
+        $videoId = $this->createVideo($this->db);
+        $eventId1 = $this->createLO($this->db, ['type' => LiTypes::EVENT]);
+        $eventId2 = $this->createLO($this->db, ['type' => LiTypes::EVENT]);
+
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $courseId, $moduleId);
+        $this->link($this->db, EdgeTypes::HAS_LI, $courseId, $eventId1);
+        $this->link($this->db, EdgeTypes::HAS_LI, $courseId, $eventId2);
+        $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $videoId);
+
+        $countChild = LoHelper::countChild($this->db, $courseId);
+        $this->assertEquals(2, $countChild);
+    }
+
+    public function testCountChildWithOutEvent()
+    {
+        $courseId = $this->createCourse($this->db);
+        $moduleId = $this->createModule($this->db);
+        $videoId = $this->createVideo($this->db);
+
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $courseId, $moduleId);
+        $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $videoId);
+
+        $countChild = LoHelper::countChild($this->db, $courseId);
+        $this->assertEquals(1, $countChild);
+    }
 }
