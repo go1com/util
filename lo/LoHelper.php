@@ -485,7 +485,7 @@ class LoHelper
             $sql= 'SELECT count(*) AS li, sum(CASE WHEN type = \''.LiTypes::EVENT.'\' THEN 1 ELSE 0 END) AS event FROM gc_lo WHERE type IN (?) AND id IN (?)';
             $result = $db->executeQuery($sql, [LiTypes::all(), $childrenId], [DB::STRINGS, DB::INTEGERS])->fetchAll()[0];
 
-            return $result['li'] - ($result['event'] ? ($result['event'] - 1) : 0);
+            return $result['li'] - ($result['event'] > 0  ? ($result['event'] - 1) : 0);
         }
 
         return 0;
