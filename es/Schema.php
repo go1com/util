@@ -377,9 +377,9 @@ class Schema
 
     const LO_TAG_MAPPING = [
         'properties' => [
-            'title'       => ['type' => self::T_KEYWORD],
-            'type'        => ['type' => self::T_KEYWORD],
-            'metadata'    => [
+            'title'    => ['type' => self::T_KEYWORD],
+            'type'     => ['type' => self::T_KEYWORD],
+            'metadata' => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
                 ],
@@ -668,13 +668,16 @@ class Schema
 
     const PAYMENT_TRANSACTION_ITEM_MAPPING = [
         'properties' => [
-            'id'           => ['type' => self::T_KEYWORD],
-            'product_type' => ['type' => self::T_KEYWORD],
-            'product_id'   => ['type' => self::T_INT],
-            'qty'          => ['type' => self::T_INT],
-            'price'        => ['type' => self::T_DOUBLE],
-            'tax'          => ['type' => self::T_DOUBLE],
-            'tax_included' => ['type' => self::T_INT],
+            'id'                   => ['type' => self::T_KEYWORD],
+            'product_type'         => ['type' => self::T_KEYWORD],
+            'product_id'           => ['type' => self::T_INT],
+            'product_title'        => ['type' => self::T_KEYWORD],
+            'product_parent_id'    => ['type' => self::T_INT],
+            'product_parent_title' => ['type' => self::T_KEYWORD],
+            'qty'                  => ['type' => self::T_INT],
+            'price'                => ['type' => self::T_DOUBLE],
+            'tax'                  => ['type' => self::T_DOUBLE],
+            'tax_included'         => ['type' => self::T_INT],
         ],
     ];
 
