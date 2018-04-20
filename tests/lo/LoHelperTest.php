@@ -468,4 +468,42 @@ class LoHelperTest extends UtilTestCase
         $this->assertEquals(1, count($moduleIds));
         $this->hasChild($this->module2Id, $moduleIds);
     }
+
+    public function dataLi()
+    {
+        return [
+            [[
+                 LiTypes::VIDEO
+             ], 1,
+            ],
+            [[
+                 LiTypes::VIDEO, LiTypes::EVENT
+             ], 2,
+            ],
+            [[
+                 LiTypes::VIDEO, LiTypes::EVENT, LiTypes::EVENT
+             ], 2,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataLi
+     */
+    public function testCountChild($liTypes, $liNumber)
+    {
+        $courseId = $this->createCourse($this->db);
+        $moduleId = $this->createModule($this->db);
+        $this->link($this->db, EdgeTypes::HAS_MODULE, $courseId, $moduleId);
+
+        $step = 1;
+        foreach ($liTypes as $type) {
+            $liId = $this->createLO($this->db, ['title' => 'ばか' . $type . $step, 'type' => $type]);
+            $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $liId);
+            $step++;
+        }
+
+        $countChild = LoHelper::countChild($this->db, $courseId);
+        $this->assertEquals($liNumber, $countChild);
+    }
 }

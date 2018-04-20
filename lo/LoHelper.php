@@ -476,4 +476,30 @@ class LoHelper
 
         return [];
     }
+
+    /**
+     * Return the number of LIs in a Course (if having LI.events in the course, they will be counted as one LI)
+     *
+     */
+    public static function countChild(Connection $db, int $id): int
+    {
+        if (!$childrenId = LoHelper::childIds($db, $id, true)) {
+            return 0;
+        }
+
+        $result = 0;
+        $sql = 'SELECT type, COUNT(*) as count FROM gc_lo WHERE type IN (?) AND id IN (?) GROUP BY type';
+        $rows = $db->executeQuery($sql, [LiTypes::all(), $childrenId], [DB::STRINGS, DB::INTEGERS])->fetchAll();
+
+        foreach ($rows as $row) {
+            if ($row['type'] == LiTypes::EVENT && $row['count'] > 0) {
+                $result++;
+            }
+            else {
+                $result += $row['count'];
+            }
+        }
+
+        return $result;
+    }
 }
