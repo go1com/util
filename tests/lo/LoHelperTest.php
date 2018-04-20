@@ -500,6 +500,7 @@ class LoHelperTest extends UtilTestCase
         foreach ($liTypes as $type) {
             $liId = $this->createLO($this->db, ['title' => 'ばか' . $type . $step, 'type' => $type]);
             $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $liId);
+            $step++;
         }
 
         $countChild = LoHelper::countChild($this->db, $courseId);
