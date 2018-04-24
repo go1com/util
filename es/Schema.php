@@ -495,6 +495,11 @@ class Schema
                     'updated_at'          => ['type' => self::T_INT],
                 ],
             ],
+            'data'            => [
+                'properties' => [
+                    'custom_certificate'  => ['type' => self::T_TEXT],
+                ],
+            ],
         ],
         'dynamic_templates' => [
             [
