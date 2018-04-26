@@ -38,22 +38,4 @@ class LoClientTest extends UtilTestCase
         $this->assertEquals("DELETE", $message['method']);
         $this->assertEquals($c['lo_url'] . "/lo/10000/share/1000", $message['url']);
     }
-
-    public function testShareLoException()
-    {
-        $c = $this->getContainer();
-        $c->extend('go1.client.mq', function () {
-            return null;
-        });
-
-        /** @var LoClient $client */
-        $client = $c['go1.client.lo'];
-        try {
-            $client->share(1000, 10000);
-            $this->assertFalse(true);
-        }
-        catch (\Exception $e) {
-            $this->assertEquals("Missing queue configurations.", $e->getMessage());
-        }
-    }
 }

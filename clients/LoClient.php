@@ -12,7 +12,7 @@ class LoClient
     private $loUrl;
     private $queue;
 
-    public function __construct(Client $client, string $loUrl, MqClient $queue = null)
+    public function __construct(Client $client, string $loUrl, MqClient $queue)
     {
         $this->client = $client;
         $this->loUrl = $loUrl;

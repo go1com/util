@@ -159,8 +159,7 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.lo'] = function (Container $c) {
-            $queue = $c['go1.client.mq'] ?? null;
-            return new LoClient($c['client'], $c['lo_url'], $queue);
+            return new LoClient($c['client'], $c['lo_url'], $c['go1.client.mq']);
         };
 
         $c['go1.client.payment'] = function (Container $c) {
