@@ -18,7 +18,7 @@ class LoClientTest extends UtilTestCase
 
         /** @var LoClient $client */
         $client = $c['go1.client.lo'];
-        $client->shareLo(1000, 10000);
+        $client->share(1000, 10000);
 
         $message = $this->queueMessages[Queue::DO_CONSUMER_HTTP_REQUEST][0];
         $this->assertEquals("POST", $message['method']);
@@ -32,7 +32,7 @@ class LoClientTest extends UtilTestCase
 
         /** @var LoClient $client */
         $client = $c['go1.client.lo'];
-        $client->unShareLo(1000, 10000);
+        $client->unShare(1000, 10000);
 
         $message = $this->queueMessages[Queue::DO_CONSUMER_HTTP_REQUEST][0];
         $this->assertEquals("DELETE", $message['method']);
@@ -49,7 +49,7 @@ class LoClientTest extends UtilTestCase
         /** @var LoClient $client */
         $client = $c['go1.client.lo'];
         try {
-            $client->shareLo(1000, 10000);
+            $client->share(1000, 10000);
         }
         catch (\Exception $e) {
             $this->assertEquals("Missing queue configurations.", $e->getMessage());

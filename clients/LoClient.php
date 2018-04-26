@@ -47,7 +47,7 @@ class LoClient
         return $capability['count'] ?? false;
     }
 
-    public function shareLo(int $instanceId, int $loId)
+    public function share(int $instanceId, int $loId)
     {
         if (!($this->queue instanceof MqClient)) {
             throw new \Exception('Missing queue configurations.');
@@ -64,7 +64,7 @@ class LoClient
         );
     }
 
-    public function unShareLo(int $instanceId, int $loId)
+    public function unShare(int $instanceId, int $loId)
     {
         if (!($this->queue instanceof MqClient)) {
             throw new \Exception('Missing queue configurations.');
