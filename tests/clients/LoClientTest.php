@@ -50,6 +50,7 @@ class LoClientTest extends UtilTestCase
         $client = $c['go1.client.lo'];
         try {
             $client->share(1000, 10000);
+            $this->assertFalse(true);
         }
         catch (\Exception $e) {
             $this->assertEquals("Missing queue configurations.", $e->getMessage());
