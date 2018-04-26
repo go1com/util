@@ -476,8 +476,10 @@ class Schema
                     EnrolmentStatuses::PERCENTAGE  => ['type' => self::T_INT],
                 ],
             ],
-            'certificate'    => [
+            'certificates'    => [
+                'type' => self::T_NESTED,
                 'properties' => [
+                    'type' => ['type' => self::T_KEYWORD],
                     'url'  => ['type' => self::T_TEXT],
                     'name' => ['type' => self::T_KEYWORD],
                     'size' => ['type' => self::T_TEXT],
