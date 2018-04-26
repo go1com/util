@@ -2,6 +2,7 @@
 
 namespace go1\clients;
 
+use go1\util\queue\Queue;
 use go1\util\user\UserHelper;
 use GuzzleHttp\Client;
 
@@ -9,11 +10,13 @@ class LoClient
 {
     private $client;
     private $loUrl;
+    private $queue;
 
-    public function __construct(Client $client, string $loUrl)
+    public function __construct(Client $client, string $loUrl, MqClient $queue = null)
     {
         $this->client = $client;
         $this->loUrl = $loUrl;
+        $this->queue = $queue;
     }
 
     public function load($id)
@@ -46,7 +49,35 @@ class LoClient
 
     public function shareLo(int $instanceId, int $loId)
     {
-        $url = "{$this->loUrl}/lo/{$loId}/share/{$instanceId}?jwt=" . UserHelper::ROOT_JWT;
-        $this->client->post($url);
+        if (!($this->queue instanceof MqClient)) {
+            throw new \Exception('Missing queue configurations.');
+        }
+
+        $this->queue->publish(
+            [
+                'method'  => 'POST',
+                'url'     => "{$this->loUrl}/lo/{$loId}/share/{$instanceId}",
+                'query'   => '',
+                'headers' => ['Content-Type' => 'application/json'],
+            ],
+            Queue::DO_CONSUMER_HTTP_REQUEST
+        );
+    }
+
+    public function unShareLo(int $instanceId, int $loId)
+    {
+        if (!($this->queue instanceof MqClient)) {
+            throw new \Exception('Missing queue configurations.');
+        }
+
+        $this->queue->publish(
+            [
+                'method'  => 'DELETE',
+                'url'     => "{$this->loUrl}/lo/{$loId}/share/{$instanceId}",
+                'query'   => '',
+                'headers' => ['Content-Type' => 'application/json'],
+            ],
+            Queue::DO_CONSUMER_HTTP_REQUEST
+        );
     }
 }
