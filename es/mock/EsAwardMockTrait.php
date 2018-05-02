@@ -79,23 +79,20 @@ trait EsAwardMockTrait
                 continue;
             }
 
-            $client->update([
+            $portalId = $options['instance_id'] ?? 0;
+            $client->index([
                 'index'   => $options['index'] ?? Schema::INDEX,
                 'routing' => $options['routing'] ?? Schema::INDEX,
                 'type'    => Schema::O_SUGGESTION_CATEGORY,
-                'id'      => md5($category),
+                'id'      => md5("$category:$portalId"),
                 'body'    => [
-                    'script' => [
-                        'inline' => 'ctx._source.weight += 1',
+                    'category' => [
+                        'input'    => $category,
+                        'weight'   => 1,
+                        'contexts' => ['instance_id' => $portalId],
                     ],
-                    'upsert' => [
-                        'category' => [
-                            'input'  => $category,
-                            'weight' => 1,
-                        ],
-                        'metadata' => [
-                            'instance_id' => $options['instance_id'] ?? 0,
-                        ],
+                    'metadata' => [
+                        'instance_id' => $portalId,
                     ],
                 ],
                 'refresh' => true,

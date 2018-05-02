@@ -973,10 +973,14 @@ class Schema
         'properties' => [
             'category' => [
                 'type'                         => self::T_COMPLETION,
-                'analyzer'                     => self::A_SIMPLE,
+                'analyzer'                     => self::A_WHITESPACE,
                 'preserve_separators'          => true,
                 'preserve_position_increments' => true,
                 'max_input_length'             => self::MAX_INPUT_LENGTH,
+                'contexts'                     => [
+                    'name' => 'instance_id',
+                    'type' => self::T_COMPLETION_CATEGORY,
+                ]
             ],
             'metadata' => [
                 'properties' => [
