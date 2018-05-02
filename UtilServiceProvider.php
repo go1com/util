@@ -85,9 +85,11 @@ class UtilServiceProvider implements ServiceProviderInterface
                 $builder->setLogger($c['profiler.collectors.es']);
             }
 
-            return $builder
-                ->setHosts([parse_url($o['endpoint'])])
-                ->build();
+            $builder->setHosts([parse_url($o['endpoint'])]);
+            if (isset($c['go1.client.es.serializer'])) {
+                $builder->setSerializer($c['go1.client.es.serializer']);
+            }
+            return $builder->build();
         };
 
         $c['go1.client.s3'] = function (Container $c) {
