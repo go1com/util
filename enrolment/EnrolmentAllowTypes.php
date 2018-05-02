@@ -12,9 +12,10 @@ class EnrolmentAllowTypes
     const SUBSCRIPTION = 'subscription';
 
     // Numeric values for the types. Being used in ES.
+    // allow > enquiry > subscription > disable
     const I_DISABLE      = 0;
-    const I_ENQUIRY      = 10;
-    const I_SUBSCRIPTION = 15;
+    const I_ENQUIRY      = 10; // premium course also used the enquiry value
+    const I_SUBSCRIPTION = 5;
     const I_DEFAULT      = 20;
 
     public static function toNumeric(string $type): int
