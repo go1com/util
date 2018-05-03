@@ -2,6 +2,7 @@
 
 namespace go1\clients;
 
+use Exception;
 use go1\util\queue\Queue;
 use go1\util\user\UserHelper;
 use GuzzleHttp\Client;
@@ -47,16 +48,16 @@ class LoClient
         return $capability['count'] ?? false;
     }
 
-    public function share(int $instanceId, int $loId)
+    public function share(int $portalId, int $loId)
     {
         if (!($this->queue instanceof MqClient)) {
-            throw new \Exception('Missing queue configurations.');
+            throw new Exception('Missing queue configurations.');
         }
 
         $this->queue->publish(
             [
                 'method'  => 'POST',
-                'url'     => "{$this->loUrl}/lo/{$loId}/share/{$instanceId}",
+                'url'     => "{$this->loUrl}/lo/{$loId}/share/{$portalId}",
                 'query'   => '',
                 'headers' => ['Content-Type' => 'application/json'],
             ],
@@ -67,7 +68,7 @@ class LoClient
     public function unShare(int $instanceId, int $loId)
     {
         if (!($this->queue instanceof MqClient)) {
-            throw new \Exception('Missing queue configurations.');
+            throw new Exception('Missing queue configurations.');
         }
 
         $this->queue->publish(
