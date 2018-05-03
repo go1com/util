@@ -983,8 +983,10 @@ class Schema
                 'preserve_position_increments' => true,
                 'max_input_length'             => self::MAX_INPUT_LENGTH,
                 'contexts'                     => [
-                    'name' => 'instance_id',
-                    'type' => self::T_COMPLETION_CATEGORY,
+                    [
+                        'name' => 'instance_id',
+                        'type' => self::T_COMPLETION_CATEGORY,
+                    ],
                 ],
             ],
             'metadata' => [
