@@ -48,7 +48,7 @@ class LoClient
         return $capability['count'] ?? false;
     }
 
-    public function share(int $portalId, int $loId, string $method = 'POST')
+    public function share(int $portalId, int $loId, bool $negative = false)
     {
         if (!($this->queue instanceof MqClient)) {
             throw new Exception('Missing queue configurations.');
@@ -56,7 +56,7 @@ class LoClient
 
         $this->queue->publish(
             [
-                'method'  => $method,
+                'method'  => $negative ? 'DELETE' : 'POST',
                 'url'     => "{$this->loUrl}/lo/{$loId}/share/{$portalId}",
                 'query'   => '',
                 'headers' => [
