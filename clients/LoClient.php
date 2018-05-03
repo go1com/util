@@ -48,17 +48,7 @@ class LoClient
         return $capability['count'] ?? false;
     }
 
-    public function share(int $portalId, int $loId)
-    {
-        self::shareRequest($portalId, $loId);
-    }
-
-    public function unShare(int $portalId, int $loId)
-    {
-        self::shareRequest($portalId, $loId, 'DELETE');
-    }
-
-    public function shareRequest(int $portalId, int $loId, string $method = 'POST')
+    public function share(int $portalId, int $loId, string $method = 'POST')
     {
         if (!($this->queue instanceof MqClient)) {
             throw new Exception('Missing queue configurations.');
