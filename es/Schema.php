@@ -476,8 +476,8 @@ class Schema
                     EnrolmentStatuses::PERCENTAGE  => ['type' => self::T_INT],
                 ],
             ],
-            'certificates'    => [
-                'type' => self::T_NESTED,
+            'certificates'   => [
+                'type'       => self::T_NESTED,
                 'properties' => [
                     'type' => ['type' => self::T_KEYWORD],
                     'url'  => ['type' => self::T_TEXT],
@@ -542,15 +542,20 @@ class Schema
         '_routing'   => ['required' => true],
         '_parent'    => ['type' => self::O_ENROLMENT],
         'properties' => [
-            'id'         => ['type' => self::T_KEYWORD],
-            'start_date' => ['type' => self::T_DATE],
-            'end_date'   => ['type' => self::T_DATE],
-            'due_date'   => ['type' => self::T_DATE],
-            'status'     => ['type' => self::T_SHORT],
-            'result'     => ['type' => self::T_INT],
-            'pass'       => ['type' => self::T_INT],
-            'note'       => ['type' => self::T_TEXT],
-            'metadata'   => [
+            'id'                  => ['type' => self::T_KEYWORD],
+            'user_id'             => ['type' => self::T_INT],
+            'portal_id'           => ['type' => self::T_INT],
+            'lo_id'               => ['type' => self::T_INT],
+            'parent_lo_id'        => ['type' => self::T_INT],
+            'enrolment_id'        => ['type' => self::T_INT],
+            'parent_enrolment_id' => ['type' => self::T_INT],
+            'start_date'          => ['type' => self::T_DATE],
+            'end_date'            => ['type' => self::T_DATE],
+            'status'              => ['type' => self::T_SHORT],
+            'result'              => ['type' => self::T_INT],
+            'pass'                => ['type' => self::T_INT],
+            'note'                => ['type' => self::T_TEXT],
+            'metadata'            => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
                 ],
@@ -980,7 +985,7 @@ class Schema
                 'contexts'                     => [
                     'name' => 'instance_id',
                     'type' => self::T_COMPLETION_CATEGORY,
-                ]
+                ],
             ],
             'metadata' => [
                 'properties' => [
