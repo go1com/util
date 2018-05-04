@@ -35,6 +35,10 @@ class MqClient
     const CONTEXT_REQUEST_ID  = 'request_id';
     const CONTEXT_INTERNAL    = 'internal';
 
+    # For message splitting
+    const CONTEXT_PORTAL_NAME = 'portal-name';
+    const CONTEXT_ENTITY_TYPE = 'entity-type';
+
     public function __construct(
         $host, $port, $user, $pass,
         LoggerInterface $logger = null,
