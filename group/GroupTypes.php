@@ -10,12 +10,14 @@ class GroupTypes
     const CONTENT_SHARING  = 'content_sharing';  # contain portals that course author would like to share. This group is similar to `content_packing` but it only contains one course.
     const SYSTEM           = 'system';           # Portal group, created by onboard wizard or portal sharing process, contain any items shared to a portal
     const REPORT_ENROLMENT = 'report_enrolment'; # Date reporting: Enrolment.
+    const COLLECTION       = 'collection';       # Contains courses only.
 
     const ALL = [
         self::DEFAULT,
         self::CONTENT_PACKAGE, self::CONTENT_SHARING, self::CONTENT,
         self::SYSTEM,
         self::REPORT_ENROLMENT,
+        self::COLLECTION,
     ];
 
     public static function label(string $type): string
@@ -32,6 +34,9 @@ class GroupTypes
 
             case self::REPORT_ENROLMENT:
                 return 'Enrolment report';
+
+            case self::COLLECTION:
+                return 'Collection';
         }
 
         return '';
@@ -54,6 +59,9 @@ class GroupTypes
 
             case self::REPORT_ENROLMENT:
                 return $type;
+
+            case self::COLLECTION:
+                return 'GroupCollection';
         }
 
         return 'GroupDefault';
@@ -73,6 +81,10 @@ class GroupTypes
             case "Discussion":
             case "discussion":
                 return self::DEFAULT;
+
+            case "Collection":
+            case "collection":
+                return self::COLLECTION;
 
             default:
                 return '';

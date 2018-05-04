@@ -63,4 +63,37 @@ trait EsEnrolmentMockTrait
             'refresh' => true,
         ]);
     }
+
+    public function createEsRevisionEnrolment(Client $client, $options = [])
+    {
+        static $autoId;
+
+        $enrolmentRevision = [
+            'id'                  => $options['id'] ?? ++$autoId,
+            'user_id'             => $options['user_id'] ?? 0,
+            'portal_id'           => $options['portal_id'] ?? 0,
+            'lo_id'               => $options['lo_id'] ?? 0,
+            'parent_lo_id'        => $options['parent_lo_id'] ?? null,
+            'enrolment_id'        => $options['enrolment_id'] ?? 0,
+            'parent_enrolment_id' => $options['parent_enrolment_id'] ?? null,
+            'start_date'          => DateTime::formatDate($options['start_date'] ?? time()),
+            'end_date'            => isset($options['end_date']) ? DateTime::formatDate($options['end_date']) : null,
+            'status'              => $options['status'] ?? 0,
+            'result'              => $options['result'] ?? 0,
+            'pass'                => $options['pass'] ?? 0,
+            'metadata'            => [
+                'instance_id' => $options['instance_id'] ?? 0,
+            ],
+        ];
+
+        return $client->create([
+            'index'   => $options['index'] ?? Schema::INDEX,
+            'routing' => $options['routing'] ?? $options['instance_id'],
+            'type'    => Schema::O_ENROLMENT_REVISION,
+            'id'      => $enrolmentRevision['id'],
+            'parent'  => $options['parent'] ?? $enrolmentRevision['lo_id'],
+            'body'    => $enrolmentRevision,
+            'refresh' => true,
+        ]);
+    }
 }

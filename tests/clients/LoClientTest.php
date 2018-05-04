@@ -32,7 +32,7 @@ class LoClientTest extends UtilTestCase
 
         /** @var LoClient $client */
         $client = $c['go1.client.lo'];
-        $client->unShare(1000, 10000);
+        $client->share(1000, 10000, true);
 
         $message = $this->queueMessages[Queue::DO_CONSUMER_HTTP_REQUEST][0];
         $this->assertEquals("DELETE", $message['method']);

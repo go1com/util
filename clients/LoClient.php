@@ -48,7 +48,7 @@ class LoClient
         return $capability['count'] ?? false;
     }
 
-    public function share(int $portalId, int $loId)
+    public function share(int $portalId, int $loId, bool $negative = false)
     {
         if (!($this->queue instanceof MqClient)) {
             throw new Exception('Missing queue configurations.');
@@ -56,27 +56,13 @@ class LoClient
 
         $this->queue->publish(
             [
-                'method'  => 'POST',
+                'method'  => $negative ? 'DELETE' : 'POST',
                 'url'     => "{$this->loUrl}/lo/{$loId}/share/{$portalId}",
                 'query'   => '',
-                'headers' => ['Content-Type' => 'application/json'],
-            ],
-            Queue::DO_CONSUMER_HTTP_REQUEST
-        );
-    }
-
-    public function unShare(int $instanceId, int $loId)
-    {
-        if (!($this->queue instanceof MqClient)) {
-            throw new Exception('Missing queue configurations.');
-        }
-
-        $this->queue->publish(
-            [
-                'method'  => 'DELETE',
-                'url'     => "{$this->loUrl}/lo/{$loId}/share/{$instanceId}",
-                'query'   => '',
-                'headers' => ['Content-Type' => 'application/json'],
+                'headers' => [
+                    'Content-Type'  => 'application/json',
+                    'Authorization' => 'Bearer ' . UserHelper::ROOT_JWT
+                ]
             ],
             Queue::DO_CONSUMER_HTTP_REQUEST
         );
