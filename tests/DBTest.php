@@ -5,6 +5,8 @@ namespace go1\util\schema\tests;
 use go1\util\DB;
 use go1\util\tests\UtilTestCase;
 use go1\util\user\UserHelper;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\DriverManager;
 
 class DBTest extends UtilTestCase
 {
@@ -32,6 +34,31 @@ class DBTest extends UtilTestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $foo = DB::connectionOptions('foo', true);
         $this->assertEquals('slave.foo.com', $foo['host']);
+    }
+
+    public function testConnectionWithUrl()
+    {
+        putenv('_DOCKER_FOO_DB_URL=mysql://foo_username:foo_password@master.foo.com:3306/foo_db');
+        putenv('_DOCKER_FOO_DB_SLAVE_URL=mysql://foo_username:foo_password@slave.foo.com:3306/foo_db');
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $config = new Configuration();
+        $foo = DriverManager::getConnection(DB::connectionOptions('foo'), $config);
+
+        $this->assertEquals('pdo_mysql', $foo->getDriver()->getName());
+        $this->assertEquals('foo_db', $foo->getDatabase());
+        $this->assertEquals('master.foo.com', $foo->getHost());
+        $this->assertEquals('foo_username', $foo->getUsername());
+        $this->assertEquals('foo_password', $foo->getPassword());
+        $this->assertEquals(3306, $foo->getPort());
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $foo = DriverManager::getConnection(DB::connectionOptions('foo'), $config);
+        $this->assertEquals('slave.foo.com', $foo->getHost());
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $foo = DriverManager::getConnection(DB::connectionOptions('foo', true), $config);
+        $this->assertEquals('slave.foo.com', $foo->getHost());
     }
 
     public function testCacheSet()

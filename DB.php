@@ -41,6 +41,15 @@ class DB
             $dbName = in_array(getenv('_DOCKER_ENV'), ['staging', 'production']) ? 'gc_go1' : 'dev_go1';
         }
 
+        # Support connecting using a URL.
+        # DRIVER://USER_NAME:PASSWORD@HOST:PORT/DB_NAME
+        $dbUrl = (('GET' === $method) && !$forceMaster) || $forceSlave
+            ? getenv("{$prefix}_SLAVE_URL")
+            : getenv("{$prefix}_URL");
+        if ($dbUrl) {
+            return ['url' => $dbUrl];
+        }
+
         return [
             'driver'        => 'pdo_mysql',
             'dbname'        => getenv("{$prefix}_NAME") ?: $dbName,
