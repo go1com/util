@@ -81,6 +81,7 @@ trait EsEnrolmentMockTrait
             'status'              => $options['status'] ?? 0,
             'result'              => $options['result'] ?? 0,
             'pass'                => $options['pass'] ?? 0,
+            'progress'            => $options['progress'] ?? [],
             'metadata'            => [
                 'instance_id' => $options['instance_id'] ?? 0,
             ],
