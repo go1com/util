@@ -291,6 +291,7 @@ class Schema
             'tags'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'image'           => ['type' => self::T_TEXT],
             'quantity'        => ['type' => self::T_DOUBLE],
+            'collection_id'   => ['type' => self::T_INT],
             'pricing'         => [
                 'properties' => [
                     'currency'     => ['type' => self::T_KEYWORD],
