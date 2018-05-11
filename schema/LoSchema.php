@@ -56,7 +56,7 @@ class LoSchema
         if (!$schema->hasTable('gc_lo_pricing')) {
             $price = $schema->createTable('gc_lo_pricing');
             $price->addColumn('id', 'integer', ['unsigned' => true]);
-            $price->addColumn('price', 'float');
+            $price->addColumn('price', 'decimal', ['precision' => 10, 'scale' => 2]);
             $price->addColumn('currency', 'string', ['length' => 4]);
             $price->addColumn('tax', 'float');
             $price->addColumn('tax_included', 'smallint', ['default' => 1]);
