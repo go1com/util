@@ -189,6 +189,23 @@ class MailTemplate
         ],
     ];
 
+    const LEARNER_ASSIGN_COURSE_THROUGH_GROUP = [
+        'key'    => 'learner.assign.course.through.group',
+        'tokens' => [
+            '!entity_type'         => '`course` or `resource`',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!course_name'         => 'Course name',
+            '!course_url'          => 'Course URL',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_url'          => 'Portal url',
+            '!portal_image'        => 'Portal image',
+            '!group_title'         => 'Group title',
+            '!group_url'           => 'Group url',
+        ],
+    ];
+
     const LEARNER_ENROLMENT_EVENT = [
         'key'    => 'learner.enrol.event',
         'tokens' => [
