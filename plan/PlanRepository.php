@@ -213,7 +213,7 @@ class PlanRepository
         $this->queue->publish($plan, Queue::PLAN_DELETE);
     }
 
-    public function merge(Plan $plan, bool $notify = false, array $context = [])
+    public function merge(Plan $plan, bool $notify = false, array $queueContext = [])
     {
         $qb = $this->db->createQueryBuilder();
         $original = $qb
@@ -243,7 +243,7 @@ class PlanRepository
             $planId = $original->id;
         }
         else {
-            $planId = $this->create($plan, $notify, $context);
+            $planId = $this->create($plan, $notify, $queueContext);
         }
 
         return $planId;
