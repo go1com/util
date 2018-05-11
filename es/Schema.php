@@ -291,6 +291,7 @@ class Schema
             'tags'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'image'           => ['type' => self::T_TEXT],
             'quantity'        => ['type' => self::T_DOUBLE],
+            'collection_id'   => ['type' => self::T_INT],
             'pricing'         => [
                 'properties' => [
                     'currency'     => ['type' => self::T_KEYWORD],
@@ -555,6 +556,15 @@ class Schema
             'result'              => ['type' => self::T_INT],
             'pass'                => ['type' => self::T_INT],
             'note'                => ['type' => self::T_TEXT],
+            'progress'            => [
+                'properties' => [
+                    EnrolmentStatuses::NOT_STARTED => ['type' => self::T_INT],
+                    EnrolmentStatuses::IN_PROGRESS => ['type' => self::T_INT],
+                    EnrolmentStatuses::COMPLETED   => ['type' => self::T_INT],
+                    EnrolmentStatuses::EXPIRED     => ['type' => self::T_INT],
+                    EnrolmentStatuses::PERCENTAGE  => ['type' => self::T_INT],
+                ],
+            ],
             'metadata'            => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
