@@ -8,6 +8,7 @@ use stdClass;
 
 class CollectionItem implements JsonSerializable
 {
+    public $id;
     public $collectionId;
     public $loId;
     public $timestamp;
@@ -16,6 +17,7 @@ class CollectionItem implements JsonSerializable
     {
         Text::purify(null, $input);
         $item = new CollectionItem();
+        $item->id = $input->id ?? null;
         $item->collectionId = $input->collection_id ?? null;
         $item->loId = $input->lo_id ?? null;
         $item->timestamp = $input->timestamp ?? null;
@@ -26,6 +28,7 @@ class CollectionItem implements JsonSerializable
     public function jsonSerialize()
     {
         $array = [
+            'id'            => $this->id,
             'collection_id' => $this->collectionId,
             'lo_id'         => $this->loId,
             'timestamp'     => $this->timestamp,
