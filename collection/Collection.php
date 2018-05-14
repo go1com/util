@@ -10,6 +10,7 @@ class Collection implements JsonSerializable
 {
     public $id;
     public $type;
+    public $machineName;
     public $title;
     public $portalId;
     public $authorId;
@@ -25,6 +26,7 @@ class Collection implements JsonSerializable
         $collection = new Collection;
         $collection->id = $input->id ?? null;
         $collection->type = $input->type ?? null;
+        $collection->machineName = $input->machine_name ?? null;
         $collection->title = $input->title ?? null;
         $collection->portalId = $input->portal_id ?? null;
         $collection->authorId = $input->author_id ?? null;
@@ -38,14 +40,15 @@ class Collection implements JsonSerializable
     public function jsonSerialize()
     {
         $array = [
-            'id'        => $this->id,
-            'type'      => $this->type,
-            'title'     => $this->title,
-            'portal_id' => $this->portalId,
-            'author_id' => $this->authorId,
-            'data'      => json_encode($this->data),
-            'created'   => $this->created,
-            'updated'   => $this->updated,
+            'id'           => $this->id,
+            'type'         => $this->type,
+            'machine_name' => $this->machineName,
+            'title'        => $this->title,
+            'portal_id'    => $this->portalId,
+            'author_id'    => $this->authorId,
+            'data'         => json_encode($this->data),
+            'created'      => $this->created,
+            'updated'      => $this->updated,
         ];
         if ($this->original) {
             $array['original'] = $this->original->jsonSerialize();
