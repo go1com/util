@@ -5,6 +5,7 @@ namespace go1\util\portal;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
 use go1\clients\UserClient;
+use go1\util\collection\PortalCollectionConfiguration;
 use go1\util\DB;
 use go1\util\edge\EdgeTypes;
 use go1\util\queue\Queue;
@@ -37,6 +38,8 @@ class PortalHelper
     const FEATURE_NOTIFY_NEW_ENROLMENT_DEFAULT = true;
     const FEATURE_NOTIFY_REMIND_MAJOR_EVENT    = 'notify_remind_major_event';
     const TIMEZONE_DEFAULT                     = "Australia/Brisbane";
+    const COLLECTIONS                          = 'collections';
+    const COLLECTIONS_DEFAULT                  = [PortalCollectionConfiguration::FREE, PortalCollectionConfiguration::PAID, PortalCollectionConfiguration::SUBSCRIBE];
 
     public static function load(Connection $go1, $nameOrId, $columns = '*', bool $aliasSupport = false): ?stdClass
     {
@@ -191,5 +194,12 @@ class PortalHelper
         self::parseConfig($portal);
 
         return $portal->configuration->{self::LOCALE} ?? self::LOCALE_DEFAULT;
+    }
+
+    public static function collections(stdClass $portal): array
+    {
+        self::parseConfig($portal);
+
+        return $portal->configuration->{self::COLLECTIONS} ?? self::COLLECTIONS_DEFAULT;
     }
 }
