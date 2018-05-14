@@ -165,6 +165,7 @@ class Queue
     const GROUP_COLLECTION_DELETE      = 'group_collection.delete';
     const GROUP_COLLECTION_ITEM_CREATE = 'group_collection_item.create';
     const GROUP_COLLECTION_ITEM_UPDATE = 'group_collection_item.update';
+    const GROUP_COLLECTION_ITEM_DELETE = 'group_collection_item.delete';
 
 
     # routingKey that tell some service to do something.
