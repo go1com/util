@@ -3,6 +3,8 @@
 namespace go1\util\tests\portal;
 
 use go1\clients\UserClient;
+use go1\util\collection\PortalCollectionConfiguration;
+use go1\util\model\Portal;
 use go1\util\portal\PortalHelper;
 use go1\util\schema\mock\PortalMockTrait;
 use go1\util\tests\UtilTestCase;
@@ -121,5 +123,23 @@ class PortalHelperTest extends UtilTestCase
 
         $portal = PortalHelper::load($this->db, $instanceId);
         $this->assertEquals("AU", PortalHelper::locale($portal));
+    }
+
+    public function testCollections()
+    {
+        $portalId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $collections = PortalHelper::collections($portal);
+        $this->assertEquals(PortalHelper::COLLECTIONS_DEFAULT, $collections);
+
+        $portalId = $this->createPortal($this->db, ['title' => 'test.mygo1.com', 'data' => ['configuration' => ['collections' => [PortalCollectionConfiguration::SUBSCRIBE]]]]);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $collections = PortalHelper::collections($portal);
+        $this->assertEquals([PortalCollectionConfiguration::SUBSCRIBE], $collections);
+
+        $portalId = $this->createPortal($this->db, ['title' => 'test2.mygo1.com', 'data' => ['configuration' => ['collections' => []]]]);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $collections = PortalHelper::collections($portal);
+        $this->assertEquals([], $collections);
     }
 }
