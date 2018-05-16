@@ -44,6 +44,7 @@ class Schema
     const O_ACCOUNT             = 'account';
     const O_ACTIVITY            = 'activity';
     const O_LO                  = 'lo';
+    const O_LO_COLLECTION       = 'lo_collection';
     const O_PLAN                = 'plan';
     const O_ENROLMENT           = 'enrolment';
     const O_ENROLMENT_REVISION  = 'enrolment_revision';
@@ -119,6 +120,7 @@ class Schema
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
         self::O_METRIC              => self::METRIC_MAPPING,
         self::O_ACTIVITY            => self::ACTIVITY_MAPPING,
+        self::O_LO_COLLECTION       => self::LO_COLLECTION_MAPPING
     ];
 
     const ANALYZED = [
@@ -1110,6 +1112,15 @@ class Schema
                     'user_id' => ['type' => self::T_INT],
                 ],
             ],
+        ],
+    ];
+
+    const LO_COLLECTION_MAPPING = [
+        '_parent'           => ['type' => self::O_LO],
+        '_routing'          => ['required' => true],
+        'properties' => [
+            'lo_id'         => ['type' => self::T_INT],
+            'collection_id' => ['type' => self::T_INT],
         ],
     ];
 
