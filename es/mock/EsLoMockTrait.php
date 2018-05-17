@@ -78,6 +78,7 @@ trait EsLoMockTrait
             'group_ids'       => $options['group_ids'] ?? [],
             'locations'       => $options['locations'] ?? [],
             'event'           => $event,
+            'collection_id'   => $options['collection_id'] ?? [],
             'metadata'        => [
                 'parents_authors_ids' => $options['metadata']['parents_authors_ids'] ?? null,
                 'parents_id'          => $options['metadata']['parents_id'] ?? null,
@@ -86,6 +87,7 @@ trait EsLoMockTrait
                 'customized'          => $options['metadata']['customized'] ?? 0,
                 'shared'              => $options['metadata']['shared'] ?? 0,
                 'shared_passive'      => $options['metadata']['shared_passive'] ?? null,
+                'membership'          => $options['metadata']['membership'] ?? null,
             ],
             'data'            => [
                 'allow_resubmit' => $options['data']['allow_resubmit'] ?? null,
