@@ -198,6 +198,7 @@ class Queue
     const DO_EXIM_IMPORT_ENROLLMENT            = 'do.exim.import-enrolment'; # {user_id, lo_id, instance_id, notify, manager_id}
     const DO_EXIM_IMPORT_AWARD_ENROLLMENT      = 'do.exim.import-award-enrolment'; # {award_id, instance_id, user_ids}
     const DO_EXIM_IMPORT_USER                  = 'do.exim.import-user'; # {$instance, $mail, $first, $last, $status, $manager}
+    const DO_EXIM_PAGEUP_UPLOAD_COURSE         = 'do.exim.pageup.upload-couse'; # { $portal_id, $course_id }
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
     const DO_USER_CREATE_VIRTUAL_ACCOUNT       = 'do.user.virtual-account'; # { type: STRING, object: enrolment/??? object}
