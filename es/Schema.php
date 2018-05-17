@@ -360,6 +360,7 @@ class Schema
                     'parents_authors_ids' => ['type' => self::T_INT],
                     'parents_id'          => ['type' => self::T_INT],
                     'instance_id'         => ['type' => self::T_INT],
+                    'membership'          => ['type' => self::T_INT],
                     'updated_at'          => ['type' => self::T_INT],
                     'shared'              => ['type' => self::T_SHORT],
                     'shared_passive'      => ['type' => self::T_SHORT],
