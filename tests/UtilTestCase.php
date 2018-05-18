@@ -10,6 +10,7 @@ use go1\util\DB;
 use go1\util\plan\PlanRepository;
 use go1\util\schema\AssignmentSchema;
 use go1\util\schema\AwardSchema;
+use go1\util\schema\CollectionSchema;
 use go1\util\schema\CreditSchema;
 use go1\util\schema\EckSchema;
 use go1\util\schema\InstallTrait;
@@ -48,6 +49,7 @@ abstract class UtilTestCase extends TestCase
                 EckSchema::install($schema);
                 PlanRepository::install($schema);
                 QuizSchema::install($schema);
+                CollectionSchema::install($schema);
                 if ($this->taskService) {
                     TaskSchema::install($schema, $this->taskService);
                 }
