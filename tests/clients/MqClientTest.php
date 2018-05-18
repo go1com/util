@@ -2,6 +2,7 @@
 
 namespace go1\util\schema\tests;
 
+use Exception;
 use go1\clients\MqClient;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Service;
@@ -52,7 +53,7 @@ class MqClientTest extends UtilTestCase
         $method = $class->getMethod('processMessage');
         $method->setAccessible(true);
         if ($expectedString) {
-            $this->expectException(\Exception::class);
+            $this->expectException(Exception::class);
             $this->expectExceptionMessage($expectedString);
         }
         $body = $method->invokeArgs($queue, [$body, $routingKey]);
@@ -61,12 +62,10 @@ class MqClientTest extends UtilTestCase
 
     public function testInjectRequest()
     {
-        $container = (new Container(['accounts_name' => 'accounts.test']))
-            ->register(new UtilServiceProvider, [
-                'queueOptions' => Service::queueOptions(),
-            ]);
+        $c = (new Container(['accounts_name' => 'accounts.test']))
+            ->register(new UtilServiceProvider, ['queueOptions' => Service::queueOptions()]);
 
-        $container->extend('go1.client.mq', function (MqClient $mqClient) {
+        $c->extend('go1.client.mq', function (MqClient $queue) {
             $channel = $this
                 ->getMockBuilder(AMQPChannel::class)
                 ->disableOriginalConstructor()
@@ -80,9 +79,9 @@ class MqClientTest extends UtilTestCase
                 ->willReturnCallback(function (AMQPMessage $message, string $exchange, string $routingKey) use ($timestamp) {
                     $properties = $message->get_properties();
 
-                    /* @var $_AMQPTable AMQPTable */
-                    $_AMQPTable = $properties['application_headers'];
-                    $context = $_AMQPTable->getNativeData();
+                    /* @var $context AMQPTable */
+                    $context = $properties['application_headers'];
+                    $context = $context->getNativeData();
 
                     $this->assertEquals('foo.bar', $routingKey);
                     $this->assertEquals('events', $exchange);
@@ -91,12 +90,13 @@ class MqClientTest extends UtilTestCase
                     $this->assertEquals($timestamp, $context[MqClient::CONTEXT_TIMESTAMP]);
                 });
 
-            $rMqClient = new ReflectionObject($mqClient);
-            $rChannel = $rMqClient->getProperty('channel');
-            $rChannel->setAccessible(true);
-            $rChannel->setValue($mqClient, $channel);
+            $rQueue = new ReflectionObject($queue);
+            $rChannels = $rQueue->getProperty('channels');
+            $rChannels->setAccessible(true);
+            $channels['events']['topic'] = $channel;
+            $rChannels->setValue($queue, $channels);
 
-            return $mqClient;
+            return $queue;
         });
 
         $req = Request::create("/");
@@ -105,10 +105,10 @@ class MqClientTest extends UtilTestCase
 
         $requestStack = new RequestStack();
         $requestStack->push($req);
-        $container->offsetSet('request_stack', $requestStack);
+        $c->offsetSet('request_stack', $requestStack);
 
-        /* @var $mqClient MqClient */
-        $mqClient = $container['go1.client.mq'];
-        $mqClient->publish(['foo' => 'bar'], 'foo.bar');
+        /* @var $queue MqClient */
+        $queue = $c['go1.client.mq'];
+        $queue->publish(['foo' => 'bar'], 'foo.bar');
     }
 }
