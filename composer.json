@@ -38,7 +38,8 @@
     "ezyang/htmlpurifier": "^4.9",
     "go1/neo4j-builder": "dev-master",
     "predis/predis": "~0.8",
-    "qandidate/toggle": "^1.1"
+    "qandidate/toggle": "^1.1",
+    "phpunit/phpunit": "^7.0"
   },
   "suggest": {
     "predis/predis": "To use the PredisCollection to persist toggles in redis",

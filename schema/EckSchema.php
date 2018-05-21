@@ -37,6 +37,7 @@ class EckSchema
             $structure->addColumn('help', 'string', ['notnull' => false]);
             $structure->addColumn('type', 'string');
             $structure->addColumn('required', 'string');
+            $structure->addColumn('registration', 'boolean', ['default' => false]);
             $structure->addColumn('published', 'boolean', ['default' => true]);
             $structure->addColumn('weight', 'integer');
             $structure->addColumn('max_rows', 'string'); # TODO: should be integer.
