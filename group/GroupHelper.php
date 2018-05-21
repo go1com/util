@@ -184,7 +184,7 @@ class GroupHelper
         return $users[0]['root']['id'] ?? 0;
     }
 
-    public static function userGroups(Connection $go1, Connection $social, int $accountId, string $accountsName)
+    public static function userGroups(Connection $go1, Connection $social, int $portalId, int $accountId, string $accountsName)
     {
         $userId = UserHelper::userId($go1, $accountId, $accountsName);
         $memberGroupIds = $social
@@ -192,7 +192,7 @@ class GroupHelper
             ->fetchAll(PDO::FETCH_COLUMN);
 
         return $social
-            ->executeQuery('SELECT title FROM social_group WHERE user_id = ? OR id IN (?)', [$userId, $memberGroupIds], [PDO::PARAM_INT, Connection::PARAM_INT_ARRAY])
+            ->executeQuery('SELECT title FROM social_group WHERE instance_id = ? AND (user_id = ? OR id IN (?))', [$portalId, $userId, $memberGroupIds], [PDO::PARAM_INT, PDO::PARAM_INT, Connection::PARAM_INT_ARRAY])
             ->fetchAll(PDO::FETCH_COLUMN);
     }
 

@@ -397,14 +397,14 @@ class GroupHelperTest extends UtilTestCase
         $this->createGroupItem($this->db, ['group_id' => $group2Id, 'entity_id' => $account2Id]);
         $this->createGroupItem($this->db, ['group_id' => $group3Id, 'entity_id' => $account3Id]);
 
-        $groups = GroupHelper::userGroups($this->db, $this->db, $account1Id, $c['accounts_name']);
+        $groups = GroupHelper::userGroups($this->db, $this->db, $portalId, $account1Id, $c['accounts_name']);
         $this->assertEquals(['Group 1', 'Group 2'], $groups);
 
-        $groups = GroupHelper::userGroups($this->db, $this->db, $account2Id, $c['accounts_name']);
+        $groups = GroupHelper::userGroups($this->db, $this->db, $portalId, $account2Id, $c['accounts_name']);
         $this->assertEquals(['Group 2', 'Group 3'], $groups);
 
-        $groups = GroupHelper::userGroups($this->db, $this->db, $account3Id, $c['accounts_name']);
-        $this->assertEquals(['Group 4', 'Group 3'], $groups);
+        $groups = GroupHelper::userGroups($this->db, $this->db, $portalId, $account3Id, $c['accounts_name']);
+        $this->assertEquals(['Group 3', 'Group 4'], $groups);
     }
 
     public function testHostContentSharingGroup()
