@@ -534,6 +534,22 @@ class MailTemplate
         ],
     ];
 
+    const AWARD_ASSIGN_THROUGH_GROUP = [
+        'key'    => 'award.assign.through.group',
+        'tokens' => [
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!award_name'          => 'Award name',
+            '!award_url'           => 'Award URL',
+            '!assigner_full_name'  => 'Assigner full name',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal logo',
+            '!group_title'         => 'Group title',
+            '!group_url'           => 'Group url',
+        ],
+    ];
+
     const AWARD_ACHIEVE = [
         'key'    => 'award.achieve',
         'tokens' => [
