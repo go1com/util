@@ -189,11 +189,14 @@ class GroupHelper
         $userId = UserHelper::userId($go1, $accountId, $accountsName);
         $memberGroupIds = $social
             ->executeQuery('SELECT group_id FROM social_group_item WHERE entity_type = ? AND entity_id = ?', [GroupItemTypes::USER, $accountId])
-            ->fetchAll(PDO::FETCH_COLUMN);
+            ->fetchAll(DB::COL);
 
         return $social
-            ->executeQuery('SELECT title FROM social_group WHERE instance_id = ? AND (user_id = ? OR id IN (?))', [$portalId, $userId, $memberGroupIds], [PDO::PARAM_INT, PDO::PARAM_INT, Connection::PARAM_INT_ARRAY])
-            ->fetchAll(PDO::FETCH_COLUMN);
+            ->executeQuery(
+                'SELECT title FROM social_group WHERE instance_id = ? AND `type` = ? AND (user_id = ? OR id IN (?))',
+                [$portalId, GroupTypes::DEFAULT, $userId, $memberGroupIds],
+                [DB::INTEGER, DB::STRING, DB::INTEGER, DB::INTEGERS])
+            ->fetchAll(DB::COL);
     }
 
     public static function getEntityId(
