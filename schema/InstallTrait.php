@@ -11,7 +11,7 @@ use go1\util\plan\PlanRepository;
 
 trait InstallTrait
 {
-    public function installGo1Schema(Connection $db, $coreOnly = true)
+    public function installGo1Schema(Connection $db, $coreOnly = true, string $accountsName = null)
     {
         DB::install($db, [
             function (Schema $schema) {
@@ -64,5 +64,9 @@ trait InstallTrait
                 }
             },
         ]);
+
+        if ($accountsName) {
+            UserSchema::createViews($db, $accountsName);
+        }
     }
 }

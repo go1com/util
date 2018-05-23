@@ -17,8 +17,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MqClient
 {
-    /** @var AMQPChannel */
-    private $channel;
+    /** @var AMQPChannel[] */
+    private $channels;
     private $host;
     private $port;
     private $user;
@@ -58,15 +58,16 @@ class MqClient
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
-    private function channel()
+    public function channel($exchange = 'events', $type = 'topic'): AMQPChannel
     {
-        if (null === $this->channel) {
+        if (!isset($this->channels[$exchange][$type])) {
             $connection = new AMQPStreamConnection($this->host, $this->port, $this->user, $this->pass);
-            $this->channel = $connection->channel();
-            $this->channel->exchange_declare('events', 'topic', false, false, false);
+            $channel = $connection->channel();
+            $channel->exchange_declare($exchange, $type, false, false, false);
+            $this->channels[$exchange][$type] = $channel;
         }
 
-        return $this->channel;
+        return $this->channels[$exchange][$type];
     }
 
     public function close()
@@ -148,26 +149,6 @@ class MqClient
                 )
             ) {
                 throw new Exception("Missing entity ID or original data.");
-            }
-        }
-    }
-
-    public function subscribe($bindingKey = '#', callable $callback)
-    {
-        $channel = $this->channel();
-        $channel->exchange_declare($exchange = 'events', 'topic', false, false, false);
-        $queue = $channel->queue_declare('', false, false, true, false)[0];
-        $channel->queue_bind($queue, $exchange, $bindingKey);
-        $channel->basic_consume($queue, '', $noLocal = false, $noAck = false, $exclusive = false, $nowait = false, function ($msg) use ($channel, $callback) {
-            $callback($channel, $msg);
-        });
-
-        while (count($channel->callbacks)) {
-            try {
-                $channel->wait();
-            }
-            catch (Exception $e) {
-                $channel->close();
             }
         }
     }
