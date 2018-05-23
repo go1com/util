@@ -9,16 +9,18 @@ use go1\util\schema\ActivitySchema;
 use go1\util\schema\ContractSchema;
 use go1\util\schema\EnrolmentSchema;
 use go1\util\schema\InstallTrait;
+use go1\util\schema\mock\UserMockTrait;
 use PHPUnit\Framework\TestCase;
 
 class SchemaTest extends TestCase
 {
     use InstallTrait;
+    use UserMockTrait;
 
     public function test()
     {
         $db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
-        $this->installGo1Schema($db);
+        $this->installGo1Schema($db, true, $accountsName = 'accounts.qa');
 
         $expectingTables = [
             'gc_domain', 'gc_enrolment', 'gc_instance',
@@ -31,6 +33,12 @@ class SchemaTest extends TestCase
         foreach ($expectingTables as $table) {
             $this->assertTrue(in_array($table, $actualTables), "Table {$table} is created.");
         }
+
+        # Check DB user views.
+        $this->createUser($db, ['instance' => $accountsName]);
+        $this->createUser($db, ['instance' => 'qa.mygo1.com']);
+        $this->assertEquals(1, $db->fetchColumn('SELECT COUNT(*) FROM gc_users WHERE 1'));
+        $this->assertEquals(1, $db->fetchColumn('SELECT COUNT(*) FROM gc_accounts WHERE 1'));
     }
 
     public function testEnrolment()

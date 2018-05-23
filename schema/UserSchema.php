@@ -2,7 +2,9 @@
 
 namespace go1\util\schema;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\View;
 use go1\flood\Flood;
 
 class UserSchema
@@ -85,5 +87,12 @@ class UserSchema
                 Flood::migrate($schema, 'gc_flood');
             }
         }
+    }
+
+    public static function createViews(Connection $db, string $accountsName)
+    {
+        $manager = $db->getSchemaManager();
+        $manager->createView(new View('gc_users', "SELECT * FROM gc_user WHERE instance = '{$accountsName}'"));
+        $manager->createView(new View('gc_accounts', "SELECT * FROM gc_user WHERE instance <> '{$accountsName}'"));
     }
 }
