@@ -112,6 +112,8 @@ class Queue
     const NOTE_CREATE                  = 'note.create';
     const NOTE_UPDATE                  = 'note.update';
     const NOTE_DELETE                  = 'note.delete';
+    const NOTIFY_CONFIG_CREATE         = 'notify_config.create';
+    const NOTIFY_CONFIG_UPDATE         = 'notify_config.update';
     const REPORT_CREATE                = 'report.create';
     const REPORT_UPDATE                = 'report.update';
     const REPORT_DELETE                = 'report.delete';
