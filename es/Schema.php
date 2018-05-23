@@ -44,6 +44,7 @@ class Schema
     const O_ACCOUNT             = 'account';
     const O_ACTIVITY            = 'activity';
     const O_LO                  = 'lo';
+    const O_LO_COLLECTION       = 'lo_collection';
     const O_PLAN                = 'plan';
     const O_ENROLMENT           = 'enrolment';
     const O_ENROLMENT_REVISION  = 'enrolment_revision';
@@ -119,6 +120,7 @@ class Schema
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
         self::O_METRIC              => self::METRIC_MAPPING,
         self::O_ACTIVITY            => self::ACTIVITY_MAPPING,
+        self::O_LO_COLLECTION       => self::LO_COLLECTION_MAPPING
     ];
 
     const ANALYZED = [
@@ -291,6 +293,7 @@ class Schema
             'tags'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'image'           => ['type' => self::T_TEXT],
             'quantity'        => ['type' => self::T_DOUBLE],
+            'collection_id'   => ['type' => self::T_INT],
             'pricing'         => [
                 'properties' => [
                     'currency'     => ['type' => self::T_KEYWORD],
@@ -357,6 +360,7 @@ class Schema
                     'parents_authors_ids' => ['type' => self::T_INT],
                     'parents_id'          => ['type' => self::T_INT],
                     'instance_id'         => ['type' => self::T_INT],
+                    'membership'          => ['type' => self::T_INT],
                     'updated_at'          => ['type' => self::T_INT],
                     'shared'              => ['type' => self::T_SHORT],
                     'shared_passive'      => ['type' => self::T_SHORT],
@@ -555,6 +559,15 @@ class Schema
             'result'              => ['type' => self::T_INT],
             'pass'                => ['type' => self::T_INT],
             'note'                => ['type' => self::T_TEXT],
+            'progress'            => [
+                'properties' => [
+                    EnrolmentStatuses::NOT_STARTED => ['type' => self::T_INT],
+                    EnrolmentStatuses::IN_PROGRESS => ['type' => self::T_INT],
+                    EnrolmentStatuses::COMPLETED   => ['type' => self::T_INT],
+                    EnrolmentStatuses::EXPIRED     => ['type' => self::T_INT],
+                    EnrolmentStatuses::PERCENTAGE  => ['type' => self::T_INT],
+                ],
+            ],
             'metadata'            => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
@@ -679,9 +692,9 @@ class Schema
             'id'                   => ['type' => self::T_KEYWORD],
             'product_type'         => ['type' => self::T_KEYWORD],
             'product_id'           => ['type' => self::T_INT],
-            'product_title'        => ['type' => self::T_KEYWORD],
+            'product_title'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'product_parent_id'    => ['type' => self::T_INT],
-            'product_parent_title' => ['type' => self::T_KEYWORD],
+            'product_parent_title' => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'qty'                  => ['type' => self::T_INT],
             'price'                => ['type' => self::T_DOUBLE],
             'tax'                  => ['type' => self::T_DOUBLE],
@@ -1100,6 +1113,15 @@ class Schema
                     'user_id' => ['type' => self::T_INT],
                 ],
             ],
+        ],
+    ];
+
+    const LO_COLLECTION_MAPPING = [
+        '_parent'           => ['type' => self::O_LO],
+        '_routing'          => ['required' => true],
+        'properties' => [
+            'lo_id'         => ['type' => self::T_INT],
+            'collection_id' => ['type' => self::T_INT],
         ],
     ];
 

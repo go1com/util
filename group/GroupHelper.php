@@ -184,16 +184,19 @@ class GroupHelper
         return $users[0]['root']['id'] ?? 0;
     }
 
-    public static function userGroups(Connection $go1, Connection $social, int $accountId, string $accountsName)
+    public static function userGroups(Connection $go1, Connection $social, int $portalId, int $accountId, string $accountsName)
     {
         $userId = UserHelper::userId($go1, $accountId, $accountsName);
         $memberGroupIds = $social
             ->executeQuery('SELECT group_id FROM social_group_item WHERE entity_type = ? AND entity_id = ?', [GroupItemTypes::USER, $accountId])
-            ->fetchAll(PDO::FETCH_COLUMN);
+            ->fetchAll(DB::COL);
 
         return $social
-            ->executeQuery('SELECT title FROM social_group WHERE user_id = ? OR id IN (?)', [$userId, $memberGroupIds], [PDO::PARAM_INT, Connection::PARAM_INT_ARRAY])
-            ->fetchAll(PDO::FETCH_COLUMN);
+            ->executeQuery(
+                'SELECT title FROM social_group WHERE instance_id = ? AND `type` = ? AND (user_id = ? OR id IN (?))',
+                [$portalId, GroupTypes::DEFAULT, $userId, $memberGroupIds],
+                [DB::INTEGER, DB::STRING, DB::INTEGER, DB::INTEGERS])
+            ->fetchAll(DB::COL);
     }
 
     public static function getEntityId(
