@@ -12,6 +12,7 @@ class Collection implements JsonSerializable
     public $type;
     public $machineName;
     public $title;
+    public $status;
     public $portalId;
     public $authorId;
     public $data;
@@ -28,6 +29,7 @@ class Collection implements JsonSerializable
         $collection->type = $input->type ?? null;
         $collection->machineName = $input->machine_name ?? null;
         $collection->title = $input->title ?? null;
+        $collection->status = $input->status ?? CollectionStatus::ENABLED;
         $collection->portalId = $input->portal_id ?? null;
         $collection->authorId = $input->author_id ?? null;
         $collection->data = $input->data ?? null;
@@ -44,6 +46,7 @@ class Collection implements JsonSerializable
             'type'         => $this->type,
             'machine_name' => $this->machineName,
             'title'        => $this->title,
+            'status'       => $this->status,
             'portal_id'    => $this->portalId,
             'author_id'    => $this->authorId,
             'data'         => json_encode($this->data),

@@ -26,22 +26,6 @@ class PortalSchema
             $instance->addIndex(['created']);
         }
 
-        if ($schema->hasTable('gc_instance_revision')) {
-            $revision = $schema->createTable('gc_instance_revision');
-            $revision->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-            $revision->addColumn('instance_id', 'integer', ['unsigned' => true]);
-            $revision->addColumn('title', 'string');
-            $revision->addColumn('status', 'smallint');
-            $revision->addColumn('is_primary', 'smallint');
-            $revision->addColumn('version', 'string');
-            $revision->addColumn('data', 'blob');
-
-            $instance->setPrimaryKey(['id']);
-            $instance->addIndex(['title']);
-            $instance->addIndex(['status']);
-            $instance->addIndex(['is_primary']);
-        }
-
         if (!$schema->hasTable('gc_domain')) {
             $domain = $schema->createTable('gc_domain');
             $domain->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
@@ -62,6 +46,31 @@ class PortalSchema
             $conf->addIndex(['instance', 'namespace']);
             $conf->addIndex(['public']);
             $conf->addIndex(['timestamp']);
+        }
+
+        if (!$schema->hasTable('portal_data')) {
+            $data = $schema->createTable('portal_data');
+            $data->addColumn('id', 'integer', ['unsigned' => true]);
+            $data->addColumn('state', 'string');
+            $data->addColumn('type', 'string');
+            $data->addColumn('channel', 'string');
+            $data->addColumn('plan', 'string');
+            $data->addColumn('customer_id', 'string');
+            $data->addColumn('partner_id', 'string');
+            $data->addColumn('conversion_date', 'integer', ['unsigned' => true]);
+            $data->addColumn('go_live_date', 'integer', ['unsigned' => true]);
+            $data->addColumn('expiry_date', 'integer', ['unsigned' => true]);
+
+            $data->setPrimaryKey(['id']);
+            $data->addIndex(['state']);
+            $data->addIndex(['type']);
+            $data->addIndex(['channel']);
+            $data->addIndex(['plan']);
+            $data->addIndex(['customer_id']);
+            $data->addIndex(['partner_id']);
+            $data->addIndex(['conversion_date']);
+            $data->addIndex(['go_live_date']);
+            $data->addIndex(['expiry_date']);
         }
     }
 }
