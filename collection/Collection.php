@@ -32,7 +32,8 @@ class Collection implements JsonSerializable
         $collection->status = $input->status ?? CollectionStatus::ENABLED;
         $collection->portalId = $input->portal_id ?? null;
         $collection->authorId = $input->author_id ?? null;
-        $collection->data = $input->data ?? null;
+        $data = $input->data ?? null;
+        $collection->data = is_scalar($data) ? json_decode($data) : $data;
         $collection->created = $input->created ?? null;
         $collection->updated = $input->updated ?? null;
 
