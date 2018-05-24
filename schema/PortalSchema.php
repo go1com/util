@@ -26,6 +26,22 @@ class PortalSchema
             $instance->addIndex(['created']);
         }
 
+        if ($schema->hasTable('gc_instance_revision')) {
+            $revision = $schema->createTable('gc_instance_revision');
+            $revision->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $revision->addColumn('instance_id', 'integer', ['unsigned' => true]);
+            $revision->addColumn('title', 'string');
+            $revision->addColumn('status', 'smallint');
+            $revision->addColumn('is_primary', 'smallint');
+            $revision->addColumn('version', 'string');
+            $revision->addColumn('data', 'blob');
+
+            $instance->setPrimaryKey(['id']);
+            $instance->addIndex(['title']);
+            $instance->addIndex(['status']);
+            $instance->addIndex(['is_primary']);
+        }
+
         if (!$schema->hasTable('gc_domain')) {
             $domain = $schema->createTable('gc_domain');
             $domain->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
