@@ -6,7 +6,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 class PortalSchema
 {
-    public static function install(Schema $schema)
+    public static function install(Schema $schema, bool $installPortalConf = true)
     {
         if (!$schema->hasTable('gc_instance')) {
             $instance = $schema->createTable('gc_instance');
@@ -34,20 +34,6 @@ class PortalSchema
             $domain->addIndex(['title'], 'index_title');
         }
 
-        if (!$schema->hasTable('portal_conf')) {
-            $conf = $schema->createTable('portal_conf');
-            $conf->addColumn('instance', 'string');
-            $conf->addColumn('namespace', 'string');
-            $conf->addColumn('name', 'string');
-            $conf->addColumn('public', 'smallint');
-            $conf->addColumn('data', 'blob');
-            $conf->addColumn('timestamp', 'integer');
-            $conf->setPrimaryKey(['instance', 'namespace', 'name']);
-            $conf->addIndex(['instance', 'namespace']);
-            $conf->addIndex(['public']);
-            $conf->addIndex(['timestamp']);
-        }
-
         if (!$schema->hasTable('portal_data')) {
             $data = $schema->createTable('portal_data');
             $data->addColumn('id', 'integer', ['unsigned' => true]);
@@ -71,6 +57,25 @@ class PortalSchema
             $data->addIndex(['conversion_date']);
             $data->addIndex(['go_live_date']);
             $data->addIndex(['expiry_date']);
+        }
+
+        $installPortalConf && self::installPortalConf();
+    }
+
+    public static function installPortalConf(Schema $schema)
+    {
+        if (!$schema->hasTable('portal_conf')) {
+            $conf = $schema->createTable('portal_conf');
+            $conf->addColumn('instance', 'string');
+            $conf->addColumn('namespace', 'string');
+            $conf->addColumn('name', 'string');
+            $conf->addColumn('public', 'smallint');
+            $conf->addColumn('data', 'blob');
+            $conf->addColumn('timestamp', 'integer');
+            $conf->setPrimaryKey(['instance', 'namespace', 'name']);
+            $conf->addIndex(['instance', 'namespace']);
+            $conf->addIndex(['public']);
+            $conf->addIndex(['timestamp']);
         }
     }
 }
