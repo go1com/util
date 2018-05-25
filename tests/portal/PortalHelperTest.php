@@ -142,4 +142,12 @@ class PortalHelperTest extends UtilTestCase
         $collections = PortalHelper::collections($portal);
         $this->assertEquals([], $collections);
     }
+
+    public function testPortalData()
+    {
+        $portalId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
+        $this->createPortalData($this->db, ['id' => $portalId]);
+        $portalData = PortalHelper::loadPortalDataById($this->db, $portalId);
+        $this->assertEquals($portalId, $portalData->id);
+    }
 }

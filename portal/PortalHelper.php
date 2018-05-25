@@ -202,4 +202,9 @@ class PortalHelper
 
         return $portal->configuration->{self::COLLECTIONS} ?? self::COLLECTIONS_DEFAULT;
     }
+
+    public static function loadPortalDataById(Connection $db, int $portalId)
+    {
+        return $db->executeQuery('SELECT * FROM portal_data WHERE id = ?', [$portalId])->fetch(DB::OBJ);
+    }
 }
