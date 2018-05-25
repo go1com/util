@@ -59,7 +59,7 @@ class PortalSchema
             $data->addIndex(['expiry_date']);
         }
 
-        $installPortalConf && self::installPortalConf();
+        $installPortalConf && self::installPortalConf($schema);
     }
 
     public static function installPortalConf(Schema $schema)
