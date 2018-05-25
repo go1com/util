@@ -98,4 +98,22 @@ trait PortalMockTrait
 
         return true;
     }
+
+    public function createPortalData(Connection $db, array $options)
+    {
+        $db->insert('portal_data', [
+            'id'              => $options['id'] ?? null,
+            'state'           => $options['state'] ?? null,
+            'type'            => $options['type'] ?? null,
+            'channel'         => $options['channel'] ?? null,
+            'plan'            => $options['plan'] ?? null,
+            'customer_id'     => $options['customer_id'] ?? null,
+            'partner_id'      => $options['partner_id'] ?? null,
+            'conversion_date' => $options['conversion_date'] ?? null,
+            'go_live_date'    => $options['go_live_date'] ?? null,
+            'expiry_date'     => $options['expiry_date'] ?? null,
+        ]);
+
+        return $db->lastInsertId('portal_data');
+    }
 }
