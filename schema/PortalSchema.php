@@ -51,15 +51,15 @@ class PortalSchema
         if (!$schema->hasTable('portal_data')) {
             $data = $schema->createTable('portal_data');
             $data->addColumn('id', 'integer', ['unsigned' => true]);
-            $data->addColumn('state', 'string');
-            $data->addColumn('type', 'string');
-            $data->addColumn('channel', 'string');
-            $data->addColumn('plan', 'string');
-            $data->addColumn('customer_id', 'string');
-            $data->addColumn('partner_id', 'string');
-            $data->addColumn('conversion_date', 'integer', ['unsigned' => true]);
-            $data->addColumn('go_live_date', 'integer', ['unsigned' => true]);
-            $data->addColumn('expiry_date', 'integer', ['unsigned' => true]);
+            $data->addColumn('state', 'string', ['notnull' => false]);
+            $data->addColumn('type', 'string', ['notnull' => false]);
+            $data->addColumn('channel', 'string', ['notnull' => false]);
+            $data->addColumn('plan', 'string', ['notnull' => false]);
+            $data->addColumn('customer_id', 'string', ['notnull' => false]);
+            $data->addColumn('partner_id', 'string', ['notnull' => false]);
+            $data->addColumn('conversion_date', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $data->addColumn('go_live_date', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $data->addColumn('expiry_date', 'integer', ['unsigned' => true, 'notnull' => false]);
 
             $data->setPrimaryKey(['id']);
             $data->addIndex(['state']);
