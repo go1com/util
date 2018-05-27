@@ -58,11 +58,15 @@ class EnrolmentSchema
             $revision->addColumn('parent_enrolment_id', 'integer', ['unsigned' => true, 'notnull' => false]);
 
             $revision->setPrimaryKey(['id']);
+            $revision->addIndex(['enrolment_id']);
             $revision->addIndex(['profile_id']);
+            $revision->addIndex(['parent_lo_id']);
+            $revision->addIndex(['parent_id']);
+            $revision->addIndex(['lo_id']);
             $revision->addIndex(['instance_id']);
             $revision->addIndex(['taken_instance_id']);
             $revision->addIndex(['status']);
-            $revision->addIndex(['lo_id']);
+            $revision->addIndex(['pass']);
             $revision->addIndex(['parent_enrolment_id']);
         }
 
