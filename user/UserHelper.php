@@ -55,9 +55,27 @@ class UserHelper
         return self::queryMultiple($db, $ids)->fetchAll(DB::OBJ);
     }
 
+    /**
+     * @deprecated
+     * @see loadUserByProfileId() or loadAccountByProfileId()
+     */
     public static function loadByProfileId(Connection $db, int $profileId, string $instanceName, $columns = '*')
     {
         $sql = "SELECT $columns FROM gc_user WHERE profile_id = ? AND instance = ?";
+
+        return $db->executeQuery($sql, [$profileId, $instanceName])->fetch(DB::OBJ);
+    }
+
+    public static function loadUserByProfileId(Connection $db, int $profileId, $columns = '*')
+    {
+        $sql = "SELECT $columns FROM gc_users WHERE profile_id = ?";
+
+        return $db->executeQuery($sql, [$profileId])->fetch(DB::OBJ);
+    }
+
+    public static function loadAccountByProfileId(Connection $db, int $profileId, string $instanceName, $columns = '*')
+    {
+        $sql = "SELECT $columns FROM gc_accounts WHERE profile_id = ? AND instance = ?";
 
         return $db->executeQuery($sql, [$profileId, $instanceName])->fetch(DB::OBJ);
     }

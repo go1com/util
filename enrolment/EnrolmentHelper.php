@@ -296,7 +296,12 @@ class EnrolmentHelper
         if ($lo->marketplace) {
             if ($portal = PortalHelper::load($db, $lo->instance_id)) {
                 if ((new PortalChecker)->isVirtual($portal)) {
-                    $queue->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
+                    $user = UserHelper::loadUserByProfileId($db, $profileId);
+                    $account = UserHelper::loadByEmail($db, $portal->title, $user->mail);
+                    $ro = EdgeHelper::hasLink($db, EdgeTypes::HAS_ACCOUNT_VIRTUAL, $user->id, $account->id);
+                    if (!$ro) {
+                        $queue->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
+                    }
                 }
             }
         }
