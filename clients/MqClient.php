@@ -96,15 +96,7 @@ class MqClient
         $body = is_scalar($body) ? json_decode($body) : $body;
         $this->processMessage($body, $routingKey);
 
-        if ($request = $this->currentRequest()) {
-            self::parseRequestContext($request, $context, $this->accessChecker);
-        }
-
-        if ($service = getenv('SERVICE_80_NAME')) {
-            $context['app'] = $service;
-        }
-        $context[static::CONTEXT_TIMESTAMP] = $context[static::CONTEXT_TIMESTAMP] ?? time();
-
+        $this->defaultContext($body, $routingKey, $context);
         if (!$exchange) {
             $body = json_encode(['routingKey' => $routingKey, 'body' => $body]);
             $routingKey = Queue::WORKER_QUEUE_NAME;
@@ -165,6 +157,32 @@ class MqClient
         if (!isset($context[self::CONTEXT_ACTOR_ID]) && $accessChecker) {
             $user = $accessChecker->validUser($request);
             $user && $context[self::CONTEXT_ACTOR_ID] = $user->id;
+        }
+    }
+
+    private function defaultContext($body, string $routingKey, array &$context)
+    {
+        if ($request = $this->currentRequest()) {
+            self::parseRequestContext($request, $context, $this->accessChecker);
+        }
+
+        $context[static::CONTEXT_TIMESTAMP] = $context[static::CONTEXT_TIMESTAMP] ?? time();
+        if ($service = getenv('SERVICE_80_NAME')) {
+            $context['app'] = $service;
+        }
+
+        if (!isset($context[self::CONTEXT_PORTAL_NAME]) && !isset($context[self::CONTEXT_ENTITY_TYPE])) {
+            if (substr($routingKey, 0, 7) === 'portal.') {
+                $context[self::CONTEXT_PORTAL_NAME] = $body->title;
+                $context[self::CONTEXT_ENTITY_TYPE] = 'portal';
+            }
+            else {
+                $portalId = $body->taken_instance_id ?? $body->instance_id ?? $body->instance;
+                if ($portalId && ($entityTypes = explode(".", $routingKey))) {
+                    $context[self::CONTEXT_PORTAL_NAME] = $portalId;
+                    $context[self::CONTEXT_ENTITY_TYPE] = $entityTypes[0];
+                }
+            }
         }
     }
 }
