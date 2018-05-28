@@ -4,6 +4,7 @@ namespace go1\util\tests\enrolment;
 
 use go1\clients\MqClient;
 use go1\util\DateTime;
+use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
 use go1\util\enrolment\EnrolmentStatuses;
@@ -44,7 +45,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->instanceId = $this->createPortal($this->db, ['title' => $this->instanceName]);
         $this->instancePublicKey = $this->createPortalPublicKey($this->db, ['instance' => $this->instanceName]);
         $this->instancePrivateKey = $this->createPortalPrivateKey($this->db, ['instance' => $this->instanceName]);
-        $this->userId = $this->createUser($this->db, ['instance' => $this->instanceName]);
+        $this->userId = $this->createUser($this->db, ['instance' => $this->accountNames]);
         $this->jwt = $this->getJwt();
 
         $data = json_encode(['elective_number' => 1]);
@@ -267,17 +268,40 @@ class EnrolmentHelperTest extends UtilTestCase
 
     public function testCreateWithMarketplaceLO()
     {
+        $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => $this->accountNames, 'profile_id' => 10]);
         $instanceId = $this->createPortal($this->db, []);
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId, 'marketplace' => 1]);
         $lo = LoHelper::load($this->db, $courseId);
         $status = EnrolmentStatuses::NOT_STARTED;
         $date = DateTime::formatDate('now');
-        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date);
+        EnrolmentHelper::create($this->db, $this->queue, 1, 10, 0, $lo, 1000, $status, $date);
 
         $e = EnrolmentHelper::load($this->db, 1);
         $this->assertEquals($status, $e->status);
 
         $this->assertCount(1, $this->queueMessages[Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT]);
+        $this->assertCount(1, $this->queueMessages[Queue::ENROLMENT_CREATE]);
+    }
+
+    public function testCreateWithMarketplaceLOWithoutVirtualAccount()
+    {
+        $userId = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => $this->accountNames, 'profile_id' => 10]);
+        $instanceId = $this->createPortal($this->db, ['title' => 'virtual.mygo1.com']);
+        $accountId = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'virtual.mygo1.com']);
+        EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT_VIRTUAL, $userId, $accountId);
+        $this->queueMessages = [];
+
+        $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId, 'marketplace' => 1]);
+        $lo = LoHelper::load($this->db, $courseId);
+        $status = EnrolmentStatuses::NOT_STARTED;
+        $date = DateTime::formatDate('now');
+
+        $enrolmentId = 1;
+        EnrolmentHelper::create($this->db, $this->queue, $enrolmentId, 10, 0, $lo, 1000, $status, $date);
+        $e = EnrolmentHelper::load($this->db, $enrolmentId);
+        $this->assertEquals($status, $e->status);
+
+        $this->assertEmpty($this->queueMessages[Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT]);
         $this->assertCount(1, $this->queueMessages[Queue::ENROLMENT_CREATE]);
     }
 
