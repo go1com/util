@@ -35,11 +35,12 @@ abstract class UtilTestCase extends TestCase
     protected $queue;
     protected $taskService;
     protected $log;
+    protected $accountNames = 'accounts.test';
 
     public function setUp()
     {
         $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
-        $this->installGo1Schema($this->db, false);
+        $this->installGo1Schema($this->db, false, $this->accountNames);
 
         DB::install($this->db, [
             function (Schema $schema) {
@@ -76,7 +77,7 @@ abstract class UtilTestCase extends TestCase
                 $this->log['error'][] = $message;
             });
 
-        return (new Container(['accounts_name' => 'accounts.test']))
+        return (new Container(['accounts_name' => $this->accountNames]))
             ->register(new UtilServiceProvider, [
                     'logger'       => $logger,
                     'client'       => new Client,

@@ -254,7 +254,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $lo = LoHelper::load($this->db, $this->courseId);
         $status = EnrolmentStatuses::NOT_STARTED;
         $date = DateTime::formatDate('now');
-        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date, null, 0, 0, 0, [], null, true);
+        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date, null, 0, 0, 0, [], null, true, 'participant@go1.com');
 
         $e = EnrolmentHelper::load($this->db, 1);
         $this->assertEquals($status, $e->status);
@@ -265,19 +265,40 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->assertNull($message[0]['_context'][MqClient::CONTEXT_ACTOR_ID]);
     }
 
-    public function testCreateWithMarketplaceLO()
+    public function testCreateWithMarketplaceLOAndVirtualAccount()
     {
+        $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => $this->accountNames, 'profile_id' => 10]);
+
         $instanceId = $this->createPortal($this->db, []);
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId, 'marketplace' => 1]);
         $lo = LoHelper::load($this->db, $courseId);
         $status = EnrolmentStatuses::NOT_STARTED;
         $date = DateTime::formatDate('now');
-        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date);
+        EnrolmentHelper::create($this->db, $this->queue, 1, 10, 0, $lo, 1000, $status, $date, null, 0, 0, null, [], null, null, 'foo@bar.baz');
 
         $e = EnrolmentHelper::load($this->db, 1);
         $this->assertEquals($status, $e->status);
 
         $this->assertCount(1, $this->queueMessages[Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT]);
+        $this->assertCount(1, $this->queueMessages[Queue::ENROLMENT_CREATE]);
+    }
+
+    public function testCreateWithMarketplaceLOAndWithoutVirtualAccount()
+    {
+        $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => $this->accountNames, 'profile_id' => 10]);
+        $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'marketplace.go1.com', 'profile_id' => 10]);
+
+        $instanceId = $this->createPortal($this->db, ['title' => 'marketplace.go1.com']);
+        $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId, 'marketplace' => 1]);
+        $lo = LoHelper::load($this->db, $courseId);
+        $status = EnrolmentStatuses::NOT_STARTED;
+        $date = DateTime::formatDate('now');
+        EnrolmentHelper::create($this->db, $this->queue, 1, 10, 0, $lo, 1000, $status, $date, null, 0, 0, null, [], null, null, 'foo@bar.baz');
+
+        $e = EnrolmentHelper::load($this->db, 1);
+        $this->assertEquals($status, $e->status);
+
+        $this->assertEmpty($this->queueMessages[Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT]);
         $this->assertCount(1, $this->queueMessages[Queue::ENROLMENT_CREATE]);
     }
 

@@ -38,10 +38,28 @@ class UserHelper
         return $db->executeQuery($sql, $params)->fetch(DB::OBJ);
     }
 
+    /**
+     * @deprecated
+     * @see loadUserByEmail() or loadAccountByEmail()
+     */
     public static function loadByEmail(Connection $db, string $instance, string $mail, $columns = '*')
     {
         return $db
             ->executeQuery("SELECT $columns FROM gc_user WHERE instance = ? AND mail = ?", [$instance, $mail])
+            ->fetch(DB::OBJ);
+    }
+
+    public static function loadUserByEmail(Connection $db, string $mail, $columns = '*')
+    {
+        return $db
+            ->executeQuery("SELECT $columns FROM gc_users WHERE mail = ?", [$mail])
+            ->fetch(DB::OBJ);
+    }
+
+    public static function loadAccountByEmail(Connection $db, string $instance, string $mail, $columns = '*')
+    {
+        return $db
+            ->executeQuery("SELECT $columns FROM gc_accounts WHERE instance = ? AND mail = ?", [$instance, $mail])
             ->fetch(DB::OBJ);
     }
 

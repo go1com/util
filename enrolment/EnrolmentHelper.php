@@ -266,7 +266,8 @@ class EnrolmentHelper
         string $changed = null,
         array $data = [],
         $assignerId = null,
-        $notify = true
+        $notify = true,
+        string $mail = ''
     )
     {
         $date = DateTime::formatDate('now');
@@ -296,7 +297,12 @@ class EnrolmentHelper
         if ($lo->marketplace) {
             if ($portal = PortalHelper::load($db, $lo->instance_id)) {
                 if ((new PortalChecker)->isVirtual($portal)) {
-                    $queue->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
+                    $user = UserHelper::loadUserByEmail($db, $mail);
+                    $account = UserHelper::loadAccountByEmail($db, $portal->title, $mail);
+                    $createVirtual = (!$account) || ($account && !EdgeHelper::hasLink($db, EdgeTypes::HAS_ACCOUNT_VIRTUAL, $user->id, $account->id));
+                    if ($createVirtual) {
+                        $queue->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
+                    }
                 }
             }
         }

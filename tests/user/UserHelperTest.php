@@ -58,6 +58,30 @@ class UserHelperTest extends UtilTestCase
         $this->assertEquals(10, $user['profile_id']);
     }
 
+    public function testLoadUserByMail()
+    {
+        $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => $this->accountNames, 'profile_id' => 10]);
+
+        $this->assertEquals(false, UserHelper::loadAccountByEmail($this->db, 'qa.mygo1.com', 'invalid@email.com'));
+        $this->assertEquals(false, UserHelper::loadAccountByEmail($this->db, 'invalid.mygo1.com', 'foo@bar.baz'));
+
+        $user = (array) UserHelper::loadUserByEmail($this->db,  'foo@bar.baz', 'profile_id');
+        $this->assertCount(1, $user);
+        $this->assertEquals(10, $user['profile_id']);
+    }
+
+    public function testAccountByMail()
+    {
+        $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com', 'profile_id' => 10]);
+
+        $this->assertEquals(false, UserHelper::loadAccountByEmail($this->db, 'qa.mygo1.com', 'invalid@email.com'));
+        $this->assertEquals(false, UserHelper::loadAccountByEmail($this->db, 'invalid.mygo1.com', 'foo@bar.baz'));
+
+        $user = (array) UserHelper::loadAccountByEmail($this->db,  'qa.mygo1.com', 'foo@bar.baz', 'profile_id');
+        $this->assertCount(1, $user);
+        $this->assertEquals(10, $user['profile_id']);
+    }
+
     public function testLoadByProfileId()
     {
         $id = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com', 'profile_id' => 10]);
