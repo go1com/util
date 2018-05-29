@@ -4,6 +4,7 @@ namespace go1\util\tests\enrolment;
 
 use go1\clients\MqClient;
 use go1\util\DateTime;
+use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
 use go1\util\enrolment\EnrolmentStatuses;
@@ -285,8 +286,9 @@ class EnrolmentHelperTest extends UtilTestCase
 
     public function testCreateWithMarketplaceLOAndWithoutVirtualAccount()
     {
-        $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => $this->accountNames, 'profile_id' => 10]);
-        $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'marketplace.go1.com', 'profile_id' => 10]);
+        $userId = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => $this->accountNames, 'profile_id' => 10]);
+        $accountId = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'marketplace.go1.com', 'profile_id' => 10]);
+        EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT_VIRTUAL, $userId, $accountId);
 
         $instanceId = $this->createPortal($this->db, ['title' => 'marketplace.go1.com']);
         $courseId = $this->createCourse($this->db, ['instance_id' => $instanceId, 'marketplace' => 1]);
