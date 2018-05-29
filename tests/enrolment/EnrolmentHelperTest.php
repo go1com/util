@@ -300,7 +300,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $e = EnrolmentHelper::load($this->db, 1);
         $this->assertEquals($status, $e->status);
 
-        $this->assertEmpty($this->queueMessages[Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT]);
+        $this->assertTrue(empty($this->queueMessages[Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT]));
         $this->assertCount(1, $this->queueMessages[Queue::ENROLMENT_CREATE]);
     }
 
