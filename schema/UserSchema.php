@@ -72,16 +72,6 @@ class UserSchema
             $mail->addIndex(['title']);
         }
 
-        if (!$schema->hasTable('gc_user_filter')) {
-            $filter = $schema->createTable('gc_user_filter');
-            $filter->addColumn('id', 'integer');
-            $filter->addColumn('type', 'string');
-            $filter->addColumn('identifier', 'string');
-            $filter->addColumn('created', 'integer');
-            $filter->setPrimaryKey(['id']);
-            $filter->addIndex(['type', 'identifier']);
-        }
-
         if (!$schema->hasTable('gc_flood')) {
             if (class_exists(Flood::class)) {
                 Flood::migrate($schema, 'gc_flood');
