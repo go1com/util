@@ -30,14 +30,17 @@ class MqClient
     private $propertyAccessor;
 
     const CONTEXT_ACTOR_ID    = 'actor_id';
-    const CONTEXT_TIMESTAMP   = 'timestamp';
+    const CONTEXT_ACTION      = 'action';
     const CONTEXT_DESCRIPTION = 'description';
-    const CONTEXT_REQUEST_ID  = 'request_id';
+    /*** @deprecated */
+    const CONTEXT_PORTAL      = 'instance';
     const CONTEXT_INTERNAL    = 'internal';
+    const CONTEXT_REQUEST_ID  = 'request_id';
+    const CONTEXT_TIMESTAMP   = 'timestamp';
 
     # For message splitting
-    const CONTEXT_PORTAL_NAME = 'portal-name';
     const CONTEXT_ENTITY_TYPE = 'entity-type';
+    const CONTEXT_PORTAL_NAME = 'portal-name';
 
     public function __construct(
         $host, $port, $user, $pass,
