@@ -82,7 +82,25 @@ class UserSchema
     public static function createViews(Connection $db, string $accountsName)
     {
         $manager = $db->getSchemaManager();
-        $manager->createView(new View('gc_users', "SELECT * FROM gc_user WHERE instance = '{$accountsName}'"));
-        $manager->createView(new View('gc_accounts', "SELECT * FROM gc_user WHERE instance <> '{$accountsName}'"));
+        $nameViews = ['gc_users', 'gc_accounts'];
+        $listViews = array_keys($manager->listViews());
+        foreach($nameViews as $key => $name) {
+            if(!in_array($name, $listViews)) {
+                switch ($name) {
+                    case 'gc_users':
+                        $manager->createView(new View($name, "SELECT * FROM gc_user WHERE instance = '{$accountsName}'"));
+
+                        break;
+
+                    case 'gc_accounts':
+                        $manager->createView(new View($name, "SELECT * FROM gc_user WHERE instance <> '{$accountsName}'"));
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }
