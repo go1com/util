@@ -42,7 +42,7 @@ class PortalSchema
             $data->addColumn('channel', 'string', ['notnull' => false]);
             $data->addColumn('plan', 'string', ['notnull' => false]);
             $data->addColumn('customer_id', 'string', ['notnull' => false]);
-            $data->addColumn('customer_name', 'string', ['notnull' => false]);
+            $data->addColumn('salesforce_id', 'string', ['notnull' => false]);
             $data->addColumn('partner_id', 'string', ['notnull' => false]);
             $data->addColumn('conversion_date', 'integer', ['unsigned' => true, 'notnull' => false]);
             $data->addColumn('go_live_date', 'integer', ['unsigned' => true, 'notnull' => false]);
@@ -54,7 +54,7 @@ class PortalSchema
             $data->addIndex(['channel']);
             $data->addIndex(['plan']);
             $data->addIndex(['customer_id']);
-            $data->addIndex(['customer_name']);
+            $data->addIndex(['salesforce_id']);
             $data->addIndex(['partner_id']);
             $data->addIndex(['conversion_date']);
             $data->addIndex(['go_live_date']);
