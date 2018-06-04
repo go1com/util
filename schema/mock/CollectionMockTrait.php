@@ -3,6 +3,7 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\collection\CollectionStatus;
 use go1\util\collection\CollectionTypes;
 
 trait CollectionMockTrait
@@ -19,6 +20,7 @@ trait CollectionMockTrait
             'title'        => $options['title'] ?? 'Default Collection',
             'portal_id'    => $options['portal_id'] ?? null,
             'author_id'    => $options['author_id'] ?? 1,
+            'status'       => $options['status'] ?? CollectionStatus::ENABLED,
             'data'         => json_encode($data),
             'created'      => $options['created'] ?? time(),
             'updated'      => $options['created'] ?? time(),

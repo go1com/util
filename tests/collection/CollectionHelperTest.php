@@ -20,6 +20,7 @@ class CollectionHelperTest extends UtilTestCase
             'portal_id'    => 2,
             'author_id'    => 3,
             'data'         => [],
+            'status'       => 4,
             'created'      => time(),
             'updated'      => time(),
         ]);
@@ -29,5 +30,6 @@ class CollectionHelperTest extends UtilTestCase
         $this->assertEquals($data['portal_id'], $collection->portalId);
         $this->assertEquals($data['created'], $collection->created);
         $this->assertEquals($data['updated'], $collection->updated);
+        $this->assertEquals($data['status'], $collection->status);
     }
 }
