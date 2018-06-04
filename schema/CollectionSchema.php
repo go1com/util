@@ -20,6 +20,7 @@ class CollectionSchema
             $collection->addColumn('data', 'blob');
             $collection->addColumn('created', 'integer');
             $collection->addColumn('updated', 'integer');
+            $collection->addColumn('status', 'integer');
 
             $collection->setPrimaryKey(['id']);
             $collection->addUniqueIndex(['machine_name', 'portal_id']);
