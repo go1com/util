@@ -47,6 +47,7 @@ class PortalSchema
             $data->addColumn('conversion_date', 'integer', ['unsigned' => true, 'notnull' => false]);
             $data->addColumn('go_live_date', 'integer', ['unsigned' => true, 'notnull' => false]);
             $data->addColumn('expiry_date', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $data->addColumn('cancel_expiry_date', 'integer', ['unsigned' => true, 'notnull' => false]);
 
             $data->setPrimaryKey(['id']);
             $data->addIndex(['state']);
@@ -59,6 +60,7 @@ class PortalSchema
             $data->addIndex(['conversion_date']);
             $data->addIndex(['go_live_date']);
             $data->addIndex(['expiry_date']);
+            $data->addIndex(['cancel_expiry_date']);
         }
 
         $installPortalConf && self::installPortalConf($schema);

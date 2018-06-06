@@ -32,13 +32,13 @@ class ChannelType
                 return 'Distribution Partner';
 
             case self::SALES:
-                return 'Sales';
+                return 'SDR / Account Exec';
 
             case self::EXISTING_CUSTOMER:
                 return 'Existing Customer';
 
             case self::DIRECT:
-                return 'Direct';
+                return 'Direct or Inbound';
 
             case self::PLATFORM_PARTNER:
                 return 'Platform Partner';

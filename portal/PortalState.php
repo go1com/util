@@ -34,7 +34,7 @@ class PortalState
                 return 'Live';
 
             case self::EXPIRED:
-                return 'Expired';
+                return 'Expired Demo / Trial';
 
             case self::SUSPENDED:
                 return 'Suspended';
@@ -46,7 +46,7 @@ class PortalState
                 return 'Test';
 
             case self::TEMPLATE:
-                return 'Template';
+                return 'Sample & Template';
 
             case self::DEVELOPMENT:
                 return 'Development';
