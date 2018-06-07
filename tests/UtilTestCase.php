@@ -15,6 +15,7 @@ use go1\util\schema\CreditSchema;
 use go1\util\schema\EckSchema;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
+use go1\util\schema\PolicySchema;
 use go1\util\schema\QuizSchema;
 use go1\util\Service;
 use go1\util\task\TaskSchema;
@@ -50,6 +51,7 @@ abstract class UtilTestCase extends TestCase
                 PlanRepository::install($schema);
                 QuizSchema::install($schema);
                 CollectionSchema::install($schema);
+                PolicySchema::install($schema);
                 if ($this->taskService) {
                     TaskSchema::install($schema, $this->taskService);
                 }
