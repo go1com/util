@@ -58,6 +58,7 @@ class Schema
     const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
     const O_LO_GROUP            = 'lo_group';
+    const O_LO_POLICY           = 'lo_policy';
     const O_LO_TAG              = 'lo_tag';
     const O_EVENT               = 'event';
     const O_AWARD               = 'award';
@@ -96,6 +97,7 @@ class Schema
         self::O_LO                  => self::LO_MAPPING,
         self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
         self::O_LO_TAG              => self::LO_TAG_MAPPING,
+        self::O_LO_POLICY           => self::LO_POLICY_MAPPING,
         self::O_PLAN                => self::PLAN_MAPPING,
         self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
         self::O_ENROLMENT_REVISION  => self::ENROLMENT_MAPPING_REVISION,
@@ -388,6 +390,18 @@ class Schema
                     'instance_id' => ['type' => self::T_INT],
                 ],
             ],
+        ],
+    ];
+
+    const LO_POLICY_MAPPING = [
+        '_parent'    => ['type' => self::O_LO],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'          => ['type' => self::T_KEYWORD],
+            'realm'       => ['type' => self::T_SHORT],
+            'portal_id'   => ['type' => self::T_INT],
+            'entity_type' => ['type' => self::T_KEYWORD],
+            'entity_id'   => ['type' => self::T_INT],
         ],
     ];
 
