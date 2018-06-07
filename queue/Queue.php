@@ -172,6 +172,7 @@ class Queue
     const POLICY_ITEM_CREATE           = 'policy.item.create';
     const POLICY_ITEM_UPDATE           = 'policy.item.update';
     const POLICY_ITEM_DELETE           = 'policy.item.delete';
+    const PAGEUP_COURSE_UPLOAD         = 'pageup.course.upload';
 
     # routingKey that tell some service to do something.
     #
