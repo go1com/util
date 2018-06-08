@@ -5,9 +5,12 @@ namespace go1\util\es\mock;
 use Elasticsearch\Client;
 use go1\util\DateTime;
 use go1\util\enrolment\EnrolmentAllowTypes;
+use go1\util\EntityTypes;
 use go1\util\es\Schema;
 use go1\util\lo\LoTypes;
 use go1\util\lo\TagTypes;
+use go1\util\policy\Realm;
+use Ramsey\Uuid\Uuid;
 
 trait EsLoMockTrait
 {
@@ -165,5 +168,29 @@ trait EsLoMockTrait
         }
 
         return $lo['id'];
+    }
+
+    public function createEsLoPolicy(Client $client, $options = []): string
+    {
+        $options['id'] = $options['id'] ?? Uuid::uuid4()->toString();
+        $client->create([
+            'index'   => $options['index'],
+            'type'    => Schema::O_LO_POLICY,
+            'parent'  => $options['lo_id'],
+            'id'      => $options['id'],
+            'body'    => [
+                'id'          => $options['id'],
+                'realm'       => $options['realm'] ?? Realm::ACCESS,
+                'portal_id'   => $options['portal_id'] ?? 1,
+                'entity_type' => $options['entity_type'] ?? EntityTypes::USER,
+                'entity_id'   => $options['entity_id'] ?? 1,
+                'metadata'    => [
+                    'instance_id' => $options['portal_id'] ?? 1
+                ]
+            ],
+            'refresh' => true,
+        ]);
+
+        return $options['id'];
     }
 }
