@@ -402,6 +402,11 @@ class Schema
             'portal_id'   => ['type' => self::T_INT],
             'entity_type' => ['type' => self::T_KEYWORD],
             'entity_id'   => ['type' => self::T_INT],
+            'metadata' => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                ],
+            ],
         ],
     ];
 
