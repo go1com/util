@@ -15,7 +15,7 @@ trait TaskMockTrait
         $db->insert($options['name'], [
             'instance_id' => $options['instance_id'] ?? 1,
             'user_id'     => $options['user_id'] ?? 1,
-            'created'     => time(),
+            'created'     => isset($options['created']) ? $options['created'] : time(),
             'data'        => $encoded = json_encode($data),
             'updated'     => time(),
             'status'      => $options['status'] ?? Task::STATUS_PENDING,

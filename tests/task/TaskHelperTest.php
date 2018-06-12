@@ -66,12 +66,12 @@ class TaskHelperTest extends UtilTestCase
 
     public function testChecksumWithExpireDay()
     {
-        $taskId = $this->createTask($this->db, [
+        $this->createTask($this->db, [
             'name' => $this->taskName,
+            'created' => strtotime('-2 days', time()),
             'data' => $data = ['type' => 'task_type_other', 'lo_id' => 1000]
         ]);
 
-        $this->assertEquals($taskId, TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
-        $this->assertEquals(1, TaskHelper::checksum($this->db, $this->taskName, json_encode($data), 2));
+        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data), 1));
     }
 }
