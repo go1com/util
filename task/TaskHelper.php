@@ -103,11 +103,13 @@ class TaskHelper
         return TaskItem::create($row);
     }
 
-    public static function checksum(Connection $db, string $name, $string)
+    public static function checksum(Connection $db, string $objectName, $data, int $expireDayNumber = 1)
     {
-        $string = is_string($string) ? $string : json_encode($string);
-        $checksum = md5($string);
-
-        return $db->fetchColumn("SELECT id FROM {$name} WHERE checksum = ?", [$checksum]);
+        $data = is_string($data) ? $data : json_encode($data);
+        $checksum = md5($data);
+        $expireDayString = $expireDayNumber > 1 ? '-' . $expireDayNumber . 'days' : '-1 day';
+        return $db->fetchColumn("
+            SELECT id FROM {$objectName} WHERE checksum = ? AND created > ?",
+            [$checksum, strtotime($expireDayString, time())]);
     }
 }
