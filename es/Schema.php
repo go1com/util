@@ -368,6 +368,7 @@ class Schema
                     'shared'              => ['type' => self::T_SHORT],
                     'shared_passive'      => ['type' => self::T_SHORT],
                     'customized'          => ['type' => self::T_SHORT],
+                    'realm'               => ['type' => self::T_SHORT],
                 ],
             ],
         ],
