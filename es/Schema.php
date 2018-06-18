@@ -52,6 +52,7 @@ class Schema
     const O_SUBMISSION          = 'asm_submission';
     const O_SUBMISSION_REVISION = 'asm_submission_revision';
     const O_GROUP               = 'group';
+    const O_GROUP_ITEM          = 'group_item';
     const O_MAIL                = 'mail';
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
     const O_CREDIT              = 'credit';
@@ -105,6 +106,7 @@ class Schema
         self::O_SUBMISSION          => self::SUBMISSION_MAPPING,
         self::O_SUBMISSION_REVISION => self::SUBMISSION_REVISION_MAPPING,
         self::O_GROUP               => self::GROUP_MAPPING,
+        self::O_GROUP_ITEM          => self::GROUP_ITEM_MAPPING,
         self::O_MAIL                => self::MAIL_MAPPING,
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
         self::O_CREDIT              => self::CREDIT_MAPPING,
@@ -656,6 +658,23 @@ class Schema
             'visibility'  => ['type' => self::T_SHORT],
             'created'     => ['type' => self::T_DATE],
             'updated'     => ['type' => self::T_DATE],
+            'metadata'    => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
+                ],
+            ],
+        ],
+    ];
+
+    const GROUP_ITEM_MAPPING = [
+        '_routing'   => ['required' => true],
+        '_parent'    => ['type' => self::O_GROUP],
+        'properties' => [
+            'id'          => ['type' => self::T_KEYWORD],
+            'entity_type' => ['type' => self::T_KEYWORD],
+            'entity_id'   => ['type' => self::T_INT],
+            'status'      => ['type' => self::T_SHORT],
             'metadata'    => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
