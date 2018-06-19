@@ -193,4 +193,23 @@ trait EsLoMockTrait
 
         return $options['id'];
     }
+
+    public function createEsLoGroup(Client $client, $options = [])
+    {
+        $id = implode(':', [$options['instance_id'], $options['lo_id']]);
+        $client->create([
+            'index'   => $options['index'] ?? Schema::INDEX,
+            'routing' => $options['routing'] ?? $options['instance_id'],
+            'type'    => Schema::O_LO_GROUP,
+            'parent'  => $options['lo_id'],
+            'id'      => $id,
+            'body'    => [
+                'lo_id'       => $options['lo_id'],
+                'instance_id' => $options['instance_id'],
+            ],
+            'refresh' => true,
+        ]);
+
+        return $id;
+    }
 }
