@@ -124,6 +124,20 @@ trait LoMockTrait
 
     public function createEvent(Connection $db, int $loId, array $event)
     {
+        $location = empty($event['location']) || is_numeric($event['location']) ? [] : [
+            'loc_country'                 => $event['location']['country'],
+            'loc_administrative_area'     => $event['location']['administrative_area'],
+            'loc_sub_administrative_area' => $event['location']['sub_administrative_area'] ?? null,
+            'loc_locality'                => $event['location']['locality'] ?? null,
+            'loc_dependent_locality'      => $event['location']['dependent_locality'] ?? null,
+            'loc_thoroughfare'            => $event['location']['thoroughfare'],
+            'loc_premise'                 => $event['location']['premise'] ?? null,
+            'loc_sub_premise'             => $event['location']['sub_premise'] ?? null,
+            'loc_organisation_name'       => $event['location']['organisation_name'] ?? null,
+            'loc_name_line'               => $event['location']['name_line'] ?? null,
+            'loc_postal_code'             => $event['location']['postal_code'] ?? null,
+        ];
+
         $db->insert('gc_event', [
                 'start'    => $event['start'],
                 'end'      => isset($event['end']) ? $event['end'] : null,
@@ -132,7 +146,7 @@ trait LoMockTrait
                 'created'  => time(),
                 'updated'  => time(),
                 'data'     => isset($event['data']) ? (is_scalar($event['data']) ? $event['data'] : json_encode($event['data'])) : '',
-            ]
+            ] + $location
         );
 
         if ($eventId = $db->lastInsertId('gc_event')) {
