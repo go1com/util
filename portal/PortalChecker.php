@@ -69,12 +69,14 @@ class PortalChecker
 
     public function allowSendingWelcomeEmail($portal)
     {
-        PortalHelper::parseConfig($portal);
+        if ($this->isLegacy($portal)) {
+            PortalHelper::parseConfig($portal);
 
-        if (!empty($portal->configuration)) {
-            if (isset($portal->configuration->{PortalHelper::FEATURE_SEND_WELCOME_EMAIL})) {
-                if (!$portal->configuration->{PortalHelper::FEATURE_SEND_WELCOME_EMAIL}) {
-                    return false;
+            if (!empty($portal->configuration)) {
+                if (isset($portal->configuration->{PortalHelper::FEATURE_SEND_WELCOME_EMAIL})) {
+                    if (!$portal->configuration->{PortalHelper::FEATURE_SEND_WELCOME_EMAIL}) {
+                        return false;
+                    }
                 }
             }
         }
@@ -84,12 +86,14 @@ class PortalChecker
 
     public function allowNotifyEnrolment($portal)
     {
-        PortalHelper::parseConfig($portal);
+        if ($this->isLegacy($portal)) {
+            PortalHelper::parseConfig($portal);
 
-        if (!empty($portal->configuration)) {
-            if (isset($portal->configuration->{PortalHelper::FEATURE_NOTIFY_NEW_ENROLMENT})) {
-                if (!$portal->configuration->{PortalHelper::FEATURE_NOTIFY_NEW_ENROLMENT}) {
-                    return false;
+            if (!empty($portal->configuration)) {
+                if (isset($portal->configuration->{PortalHelper::FEATURE_NOTIFY_NEW_ENROLMENT})) {
+                    if (!$portal->configuration->{PortalHelper::FEATURE_NOTIFY_NEW_ENROLMENT}) {
+                        return false;
+                    }
                 }
             }
         }
