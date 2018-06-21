@@ -261,4 +261,71 @@ class PortalCheckerTest extends UtilTestCase
             $this->assertEquals($assert, PortalChecker::allowNotifyRemindMajorEventByRole($portal, $role));
         }
     }
+    
+    public function testAllowSendingWelcomeEmailWithPortalLegacy()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}', 'send_welcome_email' => 1],
+            ],
+            'title'   => 'daitest.mygo1.com',
+            'version' => 'v1.5.0',
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertTrue($portalChecker->isLegacy($portal));
+        $this->assertTrue($portalChecker->allowSendingWelcomeEmail($portal));
+    }
+
+    public function testAllowSendingWelcomeEmailWithDefaultConfig()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}'],
+            ],
+            'title'   => 'daitest.mygo1.com',
+            'version' => 'v1.5.0',
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertTrue($portalChecker->isLegacy($portal));
+        $this->assertTrue($portalChecker->allowSendingWelcomeEmail($portal));
+    }
+
+    public function testAllowSendingWelcomeEmailWithPortalLegacyButNotConfigSendMail()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}', 'send_welcome_email' => 0],
+            ],
+            'title'   => 'daitest.mygo1.com',
+            'version' => 'v1.5.0',
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertTrue($portalChecker->isLegacy($portal));
+        $this->assertFalse($portalChecker->allowSendingWelcomeEmail($portal));
+    }
+
+    public function testAllowSendingWelcomeEmailWithNewestVersionPortal()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}'],
+            ],
+            'title'   => 'daitest.mygo1.com'
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertFalse($portalChecker->isLegacy($portal));
+        $this->assertTrue($portalChecker->allowSendingWelcomeEmail($portal));
+    }
 }
