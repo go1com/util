@@ -328,4 +328,103 @@ class PortalCheckerTest extends UtilTestCase
         $this->assertFalse($portalChecker->isLegacy($portal));
         $this->assertTrue($portalChecker->allowSendingWelcomeEmail($portal));
     }
+
+    public function testAllowSendingWelcomeEmailWithConfigNewestVersionPortal()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}', 'send_welcome_email' => 0],
+            ],
+            'title'   => 'daitest.mygo1.com'
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertFalse($portalChecker->isLegacy($portal));
+        $this->assertTrue($portalChecker->allowSendingWelcomeEmail($portal));
+    }
+
+    public function testAllowNotifyEnrolmentWithLegacyPortal()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}', 'notify_on_enrolment_create' => 1],
+            ],
+            'title'   => 'daitest.mygo1.com',
+            'version' => 'v1.5.0',
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertTrue($portalChecker->isLegacy($portal));
+        $this->assertTrue($portalChecker->allowNotifyEnrolment($portal));
+    }
+
+    public function testNotAllowNotifyEnrolmentWithLegacyPortal()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}', 'notify_on_enrolment_create' => 0],
+            ],
+            'title'   => 'daitest.mygo1.com',
+            'version' => 'v1.5.0',
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertTrue($portalChecker->isLegacy($portal));
+        $this->assertFalse($portalChecker->allowNotifyEnrolment($portal));
+    }
+
+    public function testDefaultAllowNotifyEnrolmentWithLegacyPortal()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}'],
+            ],
+            'title'   => 'daitest.mygo1.com',
+            'version' => 'v1.5.0',
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertTrue($portalChecker->isLegacy($portal));
+        $this->assertTrue($portalChecker->allowNotifyEnrolment($portal));
+    }
+
+    public function testAllowNotifyEnrolmentWithNewestVersionPortal()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}'],
+            ],
+            'title'   => 'daitest.mygo1.com'
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertFalse($portalChecker->isLegacy($portal));
+        $this->assertTrue($portalChecker->allowNotifyEnrolment($portal));
+    }
+
+    public function testAllowNotifyEnrolmentWithConfigNewestVersionPortal()
+    {
+        $dataPortal = [
+            'data' => [
+                'files'         => ['logo' => 'http://portal.png'],
+                'configuration' => ['foo' => '{"foo":"bar"}', 'notify_on_enrolment_create' => 0],
+            ],
+            'title'   => 'daitest.mygo1.com'
+        ];
+        $portalId = $this->createPortal($this->db, $dataPortal);
+        $portal = PortalHelper::load($this->db, $portalId);
+        $portalChecker = new PortalChecker();
+        $this->assertFalse($portalChecker->isLegacy($portal));
+        $this->assertTrue($portalChecker->allowNotifyEnrolment($portal));
+    }
 }
