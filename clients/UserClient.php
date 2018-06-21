@@ -82,6 +82,7 @@ class UserClient
                 'portal'     => $instance,
                 'email'      => $mail,
                 'password'   => $pass ?: Uuid::uuid4()->toString(),
+                'random'     => !$pass,
                 'first_name' => $first,
                 'last_name'  => $last,
                 'data'       => $data,
