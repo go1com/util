@@ -26,10 +26,8 @@ trait EsGroupMockTrait
             'created'     => DateTime::formatDate($options['created'] ?? time()),
             'updated'     => DateTime::formatDate($options['updated'] ?? time()),
             'metadata'    => [
-                'properties' => [
-                    'instance_id' => $options['instance_id'] ?? 0,
-                    'updated_at'  => $options['updated_at'] ?? time(),
-                ],
+                'instance_id' => $options['instance_id'] ?? 0,
+                'updated_at'  => $options['updated_at'] ?? time(),
             ],
         ];
 
@@ -59,10 +57,8 @@ trait EsGroupMockTrait
                 'entity_id'   => $options['entity_id'] ?? 1,
                 'status'      => $options['status'] ?? GroupItemStatus::ACTIVE,
                 'metadata'    => [
-                    'properties' => [
-                        'instance_id' => $options['instance_id'] ?? 0,
-                        'updated_at'  => $options['updated_at'] ?? time(),
-                    ],
+                    'instance_id' => $options['instance_id'] ?? 0,
+                    'updated_at'  => $options['updated_at'] ?? time(),
                 ],
             ],
             'refresh' => true,
