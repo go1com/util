@@ -406,6 +406,9 @@ class Schema
             'portal_id'   => ['type' => self::T_INT],
             'entity_type' => ['type' => self::T_KEYWORD],
             'entity_id'   => ['type' => self::T_INT],
+            # Attach group member ids to support explore learning object when share lo to group
+            # Its value will be maintained by service #index-content-sharing
+            'member_ids'  => ['type' => self::T_INT],
             'metadata'    => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
