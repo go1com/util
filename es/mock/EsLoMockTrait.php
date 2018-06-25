@@ -184,6 +184,7 @@ trait EsLoMockTrait
                 'portal_id'   => $options['portal_id'] ?? 1,
                 'entity_type' => $options['entity_type'] ?? EntityTypes::USER,
                 'entity_id'   => $options['entity_id'] ?? 1,
+                'member_ids'  => $options['member_ids'] ?? [],
                 'metadata'    => [
                     'instance_id' => $options['portal_id'] ?? 1
                 ]
