@@ -28,4 +28,13 @@ class PolicyHelper
 
         return $realm ?: null;
     }
+
+    public static function loadItem(Connection $policyDB, string $id):? PolicyItem
+    {
+        $policyItem = $policyDB
+            ->executeQuery('SELECT * FROM policy_policy_item WHERE id = ?', [$id], [DB::STRING])
+            ->fetch(DB::OBJ);
+
+        return $policyItem ? PolicyItem::create($policyItem) : null;
+    }
 }
