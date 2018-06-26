@@ -10,7 +10,7 @@ use go1\util\es\Schema;
 use go1\util\lo\LoTypes;
 use go1\util\lo\TagTypes;
 use go1\util\policy\Realm;
-use Ramsey\Uuid\Uuid;
+use go1\util\Text;
 
 trait EsLoMockTrait
 {
@@ -172,7 +172,7 @@ trait EsLoMockTrait
 
     public function createEsLoPolicy(Client $client, $options = []): string
     {
-        $options['id'] = $options['id'] ?? Uuid::uuid4()->toString();
+        $options['id'] = $options['id'] ?? Text::uniqueId();
         $client->create([
             'index'   => $options['index'],
             'type'    => Schema::O_LO_POLICY,
