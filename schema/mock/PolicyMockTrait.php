@@ -5,14 +5,14 @@ namespace go1\util\schema\mock;
 use Doctrine\DBAL\Connection;
 use go1\util\EntityTypes;
 use go1\util\policy\Realm;
-use Ramsey\Uuid\Uuid;
+use go1\util\Text;
 
 trait PolicyMockTrait
 {
     protected function createItem(Connection $db, array $options): string
     {
         $db->insert('policy_policy_item', $record = [
-            'id'               => $options['id'] ?? Uuid::uuid4()->toString(),
+            'id'               => $options['id'] ?? Text::uniqueId(),
             'type'             => $options['type'] ?? Realm::VIEW,
             'portal_id'        => $options['portal_id'] ?? 1,
             'host_entity_type' => $options['host_entity_type'] ?? EntityTypes::LO,
