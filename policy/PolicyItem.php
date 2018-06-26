@@ -4,7 +4,6 @@ namespace go1\util\policy;
 
 use go1\util\Text;
 use JsonSerializable;
-use Ramsey\Uuid\Uuid;
 use stdClass;
 
 class PolicyItem implements JsonSerializable
@@ -25,7 +24,7 @@ class PolicyItem implements JsonSerializable
         Text::purify(null, $input);
 
         $item = new PolicyItem;
-        $item->id = $input->id ?? Uuid::uuid4()->toString();
+        $item->id = $input->id ?? Text::uniqueId();
         $item->type = $input->type ?? Realm::VIEW;
         $item->portalId = $input->portal_id ?? null;
         $item->hostEntityType = $input->host_entity_type ?? null;
