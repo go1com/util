@@ -22,6 +22,7 @@ trait CollectionMockTrait
             'author_id'    => $options['author_id'] ?? 1,
             'status'       => $options['status'] ?? CollectionStatus::ENABLED,
             'data'         => json_encode($data),
+            'timestamp'    => $options['timestamp'] ?? time(),
             'created'      => $options['created'] ?? time(),
             'updated'      => $options['created'] ?? time(),
         ]);
