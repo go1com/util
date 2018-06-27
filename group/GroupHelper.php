@@ -444,8 +444,8 @@ class GroupHelper
         return false;
     }
 
-    public static function isAuthor(stdClass $group, stdClass $user)
+    public static function isAuthor(stdClass $group, int $userId): bool
     {
-        return $group->user_id == $user->id;
+        return $group->user_id == $userId;
     }
 }

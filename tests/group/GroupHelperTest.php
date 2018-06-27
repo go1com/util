@@ -535,7 +535,6 @@ class GroupHelperTest extends UtilTestCase
         $user1Id = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'mail' => 'user-groups-testing-1@foo.com']);
         $group1Id = $this->createGroup($this->db, ['title' => 'Group 1', 'instance_id' => 1, 'user_id' => $user1Id]);
         $group = GroupHelper::load($this->db, $group1Id);
-        $user = UserHelper::load($this->db, $user1Id);
-        $this->assertTrue(GroupHelper::isAuthor($group, $user));
+        $this->assertTrue(GroupHelper::isAuthor($group, $user1Id));
     }
 }
