@@ -127,7 +127,9 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.graph'] = function (Container $c) {
-            $config = class_exists('Neo4jBuilder') ? ['client_class' => Neo4jBuilder::class] : [];
+            $config = class_exists('Neo4jBuilder')
+                ? ['client_class' => Neo4jBuilder::class, ClientBuilder::TIMEOUT_CONFIG_KEY => 30]
+                : [];
             $builder = ClientBuilder::create($config);
 
             $builder->addConnection('default', $c['graph_url']);
