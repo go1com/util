@@ -49,10 +49,11 @@ class Flag implements JsonSerializable
         $flag->id = $input->id ?? null;
         $flag->instanceId = $input->instance_id;
         $flag->userId = $input->user_id ?? 0;
-        $flag->entityType = $input->entityType;
-        $flag->entityId = $input->entityId;
+        $flag->entityType = $input->entity_type ?? null;
+        $flag->entityId = $input->entity_id ?? null;
+        $flag->flagId = $input->flag_id ?? null;
         $flag->description = isset($input->description) ? Xss::filter($input->description) : null;
-        $flag->reason = isset($input->reason) ? Xss::filter($input->reason) : null;
+        $flag->reason = $input->reason?? null;
         $flag->level = $input->level ?? 0;
         $flag->created = $input->created ?? time();
         $flag->updated = $input->updated ?? time();
@@ -60,17 +61,39 @@ class Flag implements JsonSerializable
         return $flag;
     }
 
+    public function diff(Flag $flag): array
+    {
+        $diff = [];
+
+        if ($flag->description != $this->description) {
+            $diff['description'] = $flag->description;
+        }
+
+        if ($flag->reason != $this->reason) {
+            $diff['reason'] = $flag->reason;
+        }
+
+        if ($flag->level != $this->level) {
+            $diff['level'] = $flag->level;
+        }
+
+        return $diff;
+    }
+
     public function jsonSerialize()
     {
         $array = [
-            'id'            => $this->id,
-            'instance_id'   => $this->instanceId,
-            'user_id'       => $this->userId,
+            'id'            => (int)$this->id,
+            'instance_id'   => (int)$this->instanceId,
+            'user_id'       => (int)$this->userId,
+            'entity_type'   => $this->entityType,
+            'entity_id'     => (int)$this->entityId,
+            'flag_id'       => (int)$this->flagId,
             'description'   => $this->description,
-            'reason'        => $this->reason,
-            'level'         => $this->level,
-            'created'       => $this->created,
-            'updated'       => $this->updated,
+            'reason'        => (int)$this->reason,
+            'level'         => (int)$this->level,
+            'created'       => (int)$this->created,
+            'updated'       => (int)$this->updated,
         ];
 
         if ($this->original) {

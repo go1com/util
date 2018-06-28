@@ -29,7 +29,7 @@ class FlagRepository
     public function browse(
         int $instanceId = null,
         string $entityType = 'lo',
-        int $entityId = 0,
+        int $entityId = null,
         int $userId = null,
         int $reason = null,
         int $level = null,
@@ -41,8 +41,9 @@ class FlagRepository
         $q = $this
             ->db
             ->createQueryBuilder()
-            ->select('DISTINCT flag.*')
+            ->select('DISTINCT flag.*, item.*')
             ->from('flag')
+            ->innerJoin('flag', 'flag_item', 'item', 'flag.flag_id = item.id')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
@@ -50,19 +51,22 @@ class FlagRepository
             $q->orderBy("flag.{$orderBy}", $direction);
         }
 
+        if ($entityType) {
+            $q
+                ->andWhere('item.entity_type = :entity_type')
+                ->setParameter(':entity_type', $entityType);
+        }
+
         if ($entityId) {
             $q
-                ->innerJoin('flag', 'flag_item', 'item', 'flag.flag_id = item.id')
                 ->andWhere('item.entity_id = :entity_id')
-                ->andWhere('item.entity_type = :entity_type')
-                ->setParameter(':entity_type', $entityType)
                 ->setParameter(':entity_id', $entityId);
         }
 
         if ($instanceId) {
             $q
                 ->andWhere('flag.instance_id = :instance_id')
-                ->setParameter(':user_id', $instanceId);
+                ->setParameter(':instance_id', $instanceId);
         }
 
         if ($userId) {
@@ -91,7 +95,7 @@ class FlagRepository
         return $rows ?? [];
     }
 
-    public function load($id)
+    public function load(int $id)
     {
         $flag = "SELECT * FROM flag WHERE id = ?";
         $flag = $this->db->executeQuery($flag, [$id])->fetch(DB::OBJ);
@@ -100,9 +104,22 @@ class FlagRepository
         return $flag;
     }
 
+    public function loadFlagItem(string $entityType, int $entityId)
+    {
+        $flagItem = "SELECT * FROM flag_item WHERE entity_type = ? AND entity_id = ?";
+        $flagItem = $this->db->executeQuery($flagItem, [$entityType, $entityId])->fetch(DB::OBJ);
+
+        return $flagItem;
+    }
+
     public function create(Flag &$flag): int
     {
+        $flag->flagId = $this->assignFlagToEntity($flag);
+
         $row = $flag->jsonSerialize();
+        unset($row['entity_type']);
+        unset($row['entity_id']);
+
         $this->db->insert('flag', $row);
         $flag->id = $this->db->lastInsertId('flag');
 
@@ -125,6 +142,11 @@ class FlagRepository
             if ($diff) {
                 $diff['updated'] = time();
                 $this->db->update('flag', $diff, ['id' => $flag->id]);
+
+                $flagItem = $this->loadFlagItem($flag->entityType, $flag->entityId);
+                if ($flag->level > $flagItem->level) {
+                    $this->db->update('flag_item', ['level' => $flag->level], ['id' => $flag->flagId]);
+                }
             }
 
             $flag->original = $original;
@@ -132,5 +154,26 @@ class FlagRepository
 
             return true;
         });
+    }
+
+    private function assignFlagToEntity(Flag $flag): int
+    {
+        $flagItem = $this->loadFlagItem($flag->entityType, $flag->entityId);
+        if ($flagItem) {
+            $flagId = $flagItem->id;
+
+            if ($flag->level > $flagItem->level) {
+                $this->db->update('flag_item', ['level' => $flag->level], ['id' => $flagId]);
+            }
+        } else {
+            $this->db->insert('flag_item', [
+                'entity_type' => $flag->entityType,
+                'entity_id'   => $flag->entityId,
+                'level'       => $flag->level
+            ]);
+            $flagId = $this->db->lastInsertId('flag');
+        }
+
+        return $flagId;
     }
 }
