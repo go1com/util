@@ -32,7 +32,7 @@ class FlagSchema
             $item->addColumn('entity_type', Type::STRING);
             $item->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
             $item->addColumn('level', Type::SMALLINT, ['unsigned' => true]);
-            $item->addUniqueIndex(['id', 'entity_type', 'entity_id']);
+            $item->setPrimaryKey(['id']);
             $item->addIndex(['entity_type', 'entity_id']);
         }
     }
