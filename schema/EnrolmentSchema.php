@@ -56,7 +56,7 @@ class EnrolmentSchema
             $revision->addColumn('data', 'blob', ['notnull' => false]);
             $revision->addColumn('note', 'text');
             $revision->addColumn('parent_enrolment_id', 'integer', ['unsigned' => true, 'notnull' => false]);
-            $revision->addColumn('timestamp', 'integer', ['unsigned' => true]);
+            $revision->addColumn('timestamp', 'integer', ['unsigned' => true, 'notnull' => false]);
 
             $revision->setPrimaryKey(['id']);
             $revision->addIndex(['enrolment_id']);
