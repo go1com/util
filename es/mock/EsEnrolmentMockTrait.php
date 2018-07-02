@@ -82,6 +82,7 @@ trait EsEnrolmentMockTrait
             'result'              => $options['result'] ?? 0,
             'pass'                => $options['pass'] ?? 0,
             'progress'            => $options['progress'] ?? [],
+            'timestamp'           => DateTime::formatDate($options['timestamp'] ?? time()),
             'metadata'            => [
                 'instance_id' => $options['instance_id'] ?? 0,
             ],
