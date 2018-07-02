@@ -585,6 +585,7 @@ class Schema
             'result'              => ['type' => self::T_INT],
             'pass'                => ['type' => self::T_INT],
             'note'                => ['type' => self::T_TEXT],
+            'timestamp'           => ['type' => self::T_DATE],
             'progress'            => [
                 'properties' => [
                     EnrolmentStatuses::NOT_STARTED => ['type' => self::T_INT],
