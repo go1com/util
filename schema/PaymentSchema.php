@@ -127,5 +127,21 @@ class PaymentSchema
             $customer->addIndex(['created']);
             $customer->addIndex(['updated']);
         }
+
+        if (!$schema->hasTable('payment_portal_customer')) {
+            $customer = $schema->createTable('payment_portal_customer');
+            $customer->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $customer->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
+            $customer->addColumn('payment_customer_id', Type::INTEGER);
+            $customer->addColumn('primary', 'smallint', ['default' => true]);
+            $customer->addColumn('created', Type::INTEGER);
+            $customer->addColumn('updated', Type::INTEGER);
+            $customer->setPrimaryKey(['id']);
+            $customer->addIndex(['portal_id']);
+            $customer->addIndex(['payment_customer_id']);
+            $customer->addIndex(['primary']);
+            $customer->addIndex(['created']);
+            $customer->addIndex(['updated']);
+        }
     }
 }
