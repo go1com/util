@@ -39,7 +39,7 @@ class PortalHelper
     const FEATURE_NOTIFY_REMIND_MAJOR_EVENT    = 'notify_remind_major_event';
     const TIMEZONE_DEFAULT                     = "Australia/Brisbane";
     const COLLECTIONS                          = 'collections';
-    const COLLECTIONS_DEFAULT                  = [PortalCollectionConfiguration::FREE, PortalCollectionConfiguration::PAID, PortalCollectionConfiguration::SUBSCRIBE, PortalCollectionConfiguration::CUSTOM_SHARE];
+    const COLLECTIONS_DEFAULT                  = [PortalCollectionConfiguration::FREE, PortalCollectionConfiguration::PAID, PortalCollectionConfiguration::SUBSCRIBE, PortalCollectionConfiguration::SHARE];
 
     public static function load(Connection $go1, $nameOrId, $columns = '*', bool $aliasSupport = false): ?stdClass
     {
