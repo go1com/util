@@ -57,6 +57,13 @@ class Queue
     const CUSTOMER_CREATE              = 'customer.create';
     const CUSTOMER_UPDATE              = 'customer.update';
     const CUSTOMER_DELETE              = 'customer.delete';
+    const CUSTOMER_VIEW_LIST           = 'customer.view.list';
+    const CUSTOMER_VIEW_DETAIL         = 'customer.view.detail';
+    const CUSTOMER_VIEW_PORTAL         = 'customer.view.portal';
+    const CUSTOMER_VIEW_CONTRACT       = 'customer.view.contract';
+    const CUSTOMER_VIEW_SUBSCRIPTION   = 'customer.view.subscription';
+    const CUSTOMER_CREATE_START        = 'customer.create.start';
+    const CUSTOMER_CREATE_END          = 'customer.create.end';
     const PLAN_CREATE                  = 'plan.create';
     const PLAN_UPDATE                  = 'plan.update';
     const PLAN_DELETE                  = 'plan.delete';
