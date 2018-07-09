@@ -8,6 +8,8 @@ use stdClass;
 
 class Collection implements JsonSerializable
 {
+    const DEFAULT_MACHINE_NAME = 'default';
+
     public $id;
     public $type;
     public $machineName;
