@@ -173,8 +173,8 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_ASSIGN_COURSE = [
-        'key'    => 'learner.assign.course',
+    const LEARNER_ASSIGN_COURSE_WITH_DUE_DATE = [
+        'key'    => 'learner.assign.course.with-due-date',
         'tokens' => [
             '!entity_type'         => '`course` or `resource`',
             '!entity_type_human'   => '`course` or `learning resource`',
@@ -183,6 +183,50 @@ class MailTemplate
             '!course_name'         => 'Course name',
             '!course_url'          => 'Course URL',
             '!assigner_full_name'  => 'Assigner full name',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+        ],
+    ];
+
+    const LEARNER_ASSIGN_COURSE_WITHOUT_DUE_DATE = [
+        'key'    => 'learner.assign.course.without-due-date',
+        'tokens' => [
+            '!entity_type'         => '`course` or `resource`',
+            '!entity_type_human'   => '`course` or `learning resource`',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!course_name'         => 'Course name',
+            '!course_url'          => 'Course URL',
+            '!assigner_full_name'  => 'Assigner full name',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+        ],
+    ];
+
+    const LEARNER_ASSIGN_COURSE_THEMSELVES_WITH_DUE_DATE = [
+        'key'    => 'learner.assign.course.themselves.with-due-date',
+        'tokens' => [
+            '!entity_type'         => 'Entity type',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!course_name'         => 'Course name',
+            '!course_url'          => 'Course URL',
+            '!scheduled_due_date'  => 'Scheduled due date',
+            '!portal_name'         => 'Portal name',
+            '!portal_image'        => 'Portal image',
+        ],
+    ];
+
+    const LEARNER_ASSIGN_COURSE_THEMSELVES_WITHOUT_DUE_DATE = [
+        'key'    => 'learner.assign.course.themselves.without-due-date',
+        'tokens' => [
+            '!entity_type'         => 'Entity type',
+            '!learner_first_name'  => 'Learner first name',
+            '!learner_mail'        => 'Learner mail',
+            '!course_name'         => 'Course name',
+            '!course_url'          => 'Course URL',
             '!scheduled_due_date'  => 'Scheduled due date',
             '!portal_name'         => 'Portal name',
             '!portal_image'        => 'Portal image',
@@ -1246,20 +1290,6 @@ class MailTemplate
             '!portal_name'    => 'Portal name',
             '!portal_image'   => 'Portal image',
             '!portal_url'     => 'Portal URL',
-        ],
-    ];
-
-    const LEARNER_ASSIGN_COURSE_THEMSELVES = [
-        'key'    => 'learner.assign.course.themselves',
-        'tokens' => [
-            '!entity_type'         => 'Entity type',
-            '!learner_first_name'  => 'Learner first name',
-            '!learner_mail'        => 'Learner mail',
-            '!course_name'         => 'Course name',
-            '!course_url'          => 'Course URL',
-            '!scheduled_due_date'  => 'Scheduled due date',
-            '!portal_name'         => 'Portal name',
-            '!portal_image'        => 'Portal image',
         ],
     ];
 
