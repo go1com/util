@@ -57,6 +57,13 @@ class Queue
     const CUSTOMER_CREATE              = 'customer.create';
     const CUSTOMER_UPDATE              = 'customer.update';
     const CUSTOMER_DELETE              = 'customer.delete';
+    const CUSTOMER_VIEW_LIST           = 'customer.view.list';
+    const CUSTOMER_VIEW_DETAIL         = 'customer.view.detail';
+    const CUSTOMER_VIEW_PORTAL         = 'customer.view.portal';
+    const CUSTOMER_VIEW_CONTRACT       = 'customer.view.contract';
+    const CUSTOMER_VIEW_SUBSCRIPTION   = 'customer.view.subscription';
+    const CUSTOMER_CREATE_START        = 'customer.create.start';
+    const CUSTOMER_CREATE_END          = 'customer.create.end';
     const PLAN_CREATE                  = 'plan.create';
     const PLAN_UPDATE                  = 'plan.update';
     const PLAN_DELETE                  = 'plan.delete';
@@ -173,6 +180,7 @@ class Queue
     const POLICY_ITEM_UPDATE           = 'policy.item.update';
     const POLICY_ITEM_DELETE           = 'policy.item.delete';
     const PAGEUP_COURSE_UPLOAD         = 'pageup.course.upload';
+    const EXIM_TASK_UPDATE             = 'exim.task.update';
 
     # routingKey that tell some service to do something.
     #
@@ -204,6 +212,7 @@ class Queue
     const DO_EXIM_IMPORT_ENROLLMENT            = 'do.exim.import-enrolment'; # {user_id, lo_id, instance_id, notify, manager_id}
     const DO_EXIM_IMPORT_AWARD_ENROLLMENT      = 'do.exim.import-award-enrolment'; # {award_id, instance_id, user_ids}
     const DO_EXIM_IMPORT_USER                  = 'do.exim.import-user'; # {$instance, $mail, $first, $last, $status, $manager}
+    const DO_EXIM_IMPORT                       = 'do.exim.import'; # { data: OBJECT[], taskId: INT }
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
     const DO_USER_CREATE_VIRTUAL_ACCOUNT       = 'do.user.virtual-account'; # { type: STRING, object: enrolment/??? object}

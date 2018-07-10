@@ -72,6 +72,7 @@ trait EnrolmentMockTrait
             'note'                => isset($options['note']) ? $options['note'] : '',
             'data'                => isset($options['data']) ? $options['data'] : '',
             'parent_enrolment_id' => $options['parent_enrolment_id'] ?? null,
+            'timestamp'           => isset($options['timestamp']) ? $options['timestamp'] : time()
         ]);
 
         $id = $options['id'] ?? $db->lastInsertId('gc_enrolment_revision');
