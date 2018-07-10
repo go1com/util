@@ -3,6 +3,7 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\edge\EdgeTypes;
 use go1\util\portal\PortalHelper;
 
 trait PortalMockTrait
@@ -115,5 +116,18 @@ trait PortalMockTrait
         ]);
 
         return $db->lastInsertId('portal_data');
+    }
+
+    public function createPortalDomain(Connection $go1, int $portalId, $domain): int
+    {
+        $go1->insert('gc_domain', ['title' => $domain]);
+        $go1->insert('gc_ro', [
+            'type'      => EdgeTypes::HAS_DOMAIN,
+            'source_id' => $portalId,
+            'target_id' => $domainId = $go1->lastInsertId('gc_domain'),
+            'weight'    => 0,
+        ]);
+
+        return $domainId;
     }
 }

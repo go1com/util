@@ -2,7 +2,6 @@
 
 namespace go1\util\tests\model;
 
-use go1\util\edge\EdgeTypes;
 use go1\util\model\Portal;
 use go1\util\portal\PortalHelper;
 use go1\util\portal\PortalPricing;
@@ -23,27 +22,23 @@ class PortalModelTest extends UtilTestCase
             'is_primary' => 1,
             'version'    => PortalHelper::STABLE_VERSION,
             'data'       => [
-                'user_plan' => [
-                    'license'   => 100,
-                    'trial'     => 1,
-                    'expire'    => time(),
-                    'product'   => PortalPricing::PRODUCT_PLATFORM,
-                    'regional'  => PortalPricing::REGIONAL_DEFAULT,
+                'user_plan'     => [
+                    'license'  => 100,
+                    'trial'    => 1,
+                    'expire'   => time(),
+                    'product'  => PortalPricing::PRODUCT_PLATFORM,
+                    'regional' => PortalPricing::REGIONAL_DEFAULT,
                 ],
                 'configuration' => [
-                    'site_name' => 'foo'
-                ]
+                    'site_name' => 'foo',
+                ],
             ],
             'timestamp'  => time(),
             'created'    => time(),
         ];
 
         $id = $this->createPortal($this->db, $data);
-
-        $this->db->insert('gc_domain', ['title' => 'domain.go1.com']);
-        $domainId = $this->db->lastInsertId('gc_instance');
-        $this->link($this->db, EdgeTypes::HAS_DOMAIN, $id, $domainId);
-
+        $this->createPortalDomain($this->db, $id, 'domain.go1.com');
         $portal = PortalHelper::load($this->db, $id);
         $model = Portal::create($portal, $this->db);
 
