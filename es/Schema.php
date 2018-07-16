@@ -401,15 +401,16 @@ class Schema
         '_parent'    => ['type' => self::O_LO],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'realm'       => ['type' => self::T_SHORT],
-            'portal_id'   => ['type' => self::T_INT],
-            'entity_type' => ['type' => self::T_KEYWORD],
-            'entity_id'   => ['type' => self::T_INT],
+            'id'                => ['type' => self::T_KEYWORD],
+            'realm'             => ['type' => self::T_SHORT],
+            'portal_id'         => ['type' => self::T_INT],
+            'entity_type'       => ['type' => self::T_KEYWORD],
+            'entity_id'         => ['type' => self::T_INT],
             # Attach group member ids to support explore learning object when share lo to group
             # Its value will be maintained by service #index-content-sharing
-            'member_ids'  => ['type' => self::T_INT],
-            'metadata'    => [
+            'member_ids'        => ['type' => self::T_INT],
+            'access_portal_ids' => ['type' => self::T_INT],
+            'metadata'          => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
                 ],
