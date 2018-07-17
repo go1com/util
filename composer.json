@@ -5,29 +5,33 @@
   "minimum-stability": "stable",
   "autoload":          {
     "psr-4": {
-      "go1\\util\\":    "./",
-      "go1\\clients\\": "./clients/"
+      "go1\\util\\": "./"
     }
   },
   "require":           {
     "php":                     "^7.1",
-    "guzzlehttp/guzzle":       "^6.0",
     "doctrine/dbal":           "^2.8.0",
-    "php-amqplib/php-amqplib": "^2.6",
+    "firebase/php-jwt":        "^3.0",
+    "go1/kv":                  "^0.2",
+    "go1/flood":               "^0.6",
+    "symfony/http-foundation": "^4.0 | ^3.4",
     "pimple/pimple":           "^v3.0.0",
     "psr/log":                 "~1.0",
-    "symfony/http-foundation": "^4.0 | ^3.4",
-    "symfony/property-access": "^4.0 | ^3.4",
-    "ramsey/uuid":             "^3.4",
-    "firebase/php-jwt":        "^3.0",
-    "go1/flood":               "^0.6",
-    "go1/kv":                  "^0.2",
-    "beberlei/assert":         "^3.0",
+
+
+
     "$comment":                {
-      "doctrine/cache":         "^v1.6.0",
-      "go1/edge":               "^0.3",
-      "jsq/amazon-es-php":      "^0.2.0",
-      "ongr/elasticsearch-dsl": "^5.0"
+      "php-amqplib/php-amqplib": "^2.6",
+      "symfony/property-access": "^4.0 | ^3.4",
+      "ramsey/uuid":             "^3.4",
+      "beberlei/assert":         "^3.0",
+      "doctrine/cache":          "^v1.6.0",
+      "go1/edge":                "^0.3",
+      "jsq/amazon-es-php":       "^0.2.0",
+      "ongr/elasticsearch-dsl":  "^5.0"
     }
+  },
+  "suggest":           {
+    "go1/app": "for DB::connectionOptions()"
   }
 }

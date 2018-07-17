@@ -10,14 +10,17 @@ use go1\util\edge\EdgeTypes;
 use go1\util\queue\Queue;
 use PDO;
 
+/**
+ * @deprecated This should be part of #user, other service use UserClient to manage role instead of this.
+ */
 class RoleHelper
 {
-    public static function grant(Connection $db, MqClient $mqClient, string $instance, int $userId, string $role)
+    public static function grant(Connection $go1, MqClient $queue, string $portalName, int $userId, string $role)
     {
-        $roleId = self::roleId($db, $mqClient, $instance, $role);
+        $roleId = self::roleId($go1, $queue, $portalName, $role);
         if ($roleId) {
             try {
-                EdgeHelper::link($db, $mqClient, EdgeTypes::HAS_ROLE, $userId, $roleId);
+                EdgeHelper::link($go1, $queue, EdgeTypes::HAS_ROLE, $userId, $roleId);
 
                 return $roleId;
             }
@@ -42,7 +45,7 @@ class RoleHelper
         return $roleId;
     }
 
-    public static function add(Connection $db, MqClient $mqClient, string $instance, string $role)
+    public static function add(Connection $db, MqClient $queue, string $instance, string $role)
     {
         $db->insert('gc_role', $message = [
             'instance'   => $instance,
@@ -52,15 +55,19 @@ class RoleHelper
             'permission' => json_encode(['access content', 'access entities']),
         ]);
 
-        $mqClient->publish($message, Queue::ROLE_CREATE);
+        $queue->publish($message, Queue::ROLE_CREATE);
 
         return $db->lastInsertId('gc_role');
     }
 
-    public static function roleIds(Connection $db, string $instance, array $roles): array
+    public static function roleIds(Connection $db, string $portalName, array $roles): array
     {
-        return $db->executeQuery('SELECT id FROM gc_role WHERE instance = ? AND name IN (?)',
-            [$instance, $roles], [PDO::PARAM_STR, Connection::PARAM_STR_ARRAY])
-                  ->fetchAll(PDO::FETCH_COLUMN);
+        return $db
+            ->executeQuery(
+                'SELECT id FROM gc_role WHERE instance = ? AND name IN (?)',
+                [$portalName, $roles],
+                [PDO::PARAM_STR, Connection::PARAM_STR_ARRAY]
+            )
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 }
