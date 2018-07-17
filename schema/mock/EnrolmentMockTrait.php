@@ -43,10 +43,10 @@ trait EnrolmentMockTrait
             $db->update(
                 'gc_lo',
                 [
-                    'enrolment_count' => (int)$lo->enrolment_count + 1
+                    'enrolment_count' => (int) $lo->enrolment_count + 1,
                 ],
                 [
-                    'id' => $loId
+                    'id' => $loId,
                 ]
             );
         }
@@ -72,11 +72,9 @@ trait EnrolmentMockTrait
             'note'                => isset($options['note']) ? $options['note'] : '',
             'data'                => isset($options['data']) ? $options['data'] : '',
             'parent_enrolment_id' => $options['parent_enrolment_id'] ?? null,
-            'timestamp'           => isset($options['timestamp']) ? $options['timestamp'] : time()
+            'timestamp'           => isset($options['timestamp']) ? $options['timestamp'] : time(),
         ]);
 
-        $id = $options['id'] ?? $db->lastInsertId('gc_enrolment_revision');
-
-        return $id;
+        return $id = $options['id'] ?? $db->lastInsertId('gc_enrolment_revision');
     }
 }

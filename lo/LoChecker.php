@@ -27,7 +27,7 @@ class LoChecker
     {
         $courseId = 'SELECT source_id FROM gc_ro WHERE type IN (?) AND target_id = ?';
         $courseId = $db->fetchColumn($courseId, [[EdgeTypes::HAS_MODULE, EdgeTypes::HAS_ELECTIVE_LO], $moduleId], 0, [DB::INTEGERS, DB::INTEGER]);
-        
+
         return $courseId ? $this->isAuthor($db, $courseId, $userId) : false;
     }
 
@@ -142,6 +142,7 @@ class LoChecker
 
             # Parent LO author CAN update
             $parentAuthorIds = LoHelper::parentsAuthorIds($db, $id);
+
             return in_array($user->id, $parentAuthorIds);
         }
 

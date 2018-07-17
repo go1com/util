@@ -8,11 +8,11 @@ use InvalidArgumentException;
 
 class DateTime
 {
-    const DEFAULT_HUMAN_FORMAT        = 'Y-m-d H:i:s';
-    const DATE_SHORT_MONTH_FORMAT     = 'd-M-Y';
-    const DATETIME_GREATER            = 1;
-    const DATETIME_EQUAL              = 0;
-    const DATETIME_LESS               = -1;
+    const DEFAULT_HUMAN_FORMAT    = 'Y-m-d H:i:s';
+    const DATE_SHORT_MONTH_FORMAT = 'd-M-Y';
+    const DATETIME_GREATER        = 1;
+    const DATETIME_EQUAL          = 0;
+    const DATETIME_LESS           = -1;
 
     public static function create($time, $timezone = 'UTC', $reset = false): DefaultDateTime
     {

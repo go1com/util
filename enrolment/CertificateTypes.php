@@ -1,4 +1,5 @@
 <?php
+
 namespace go1\util\enrolment;
 
 class CertificateTypes

@@ -6,17 +6,17 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
-use go1\util\CoreServiceProvider;
 use go1\util\DB;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Service;
+use go1\util\UtilCoreServiceProvider;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
+use Pimple\Container;
 use Psr\Log\LoggerInterface;
-use Slim\Container;
 
-class CoreUtilTestCase extends TestCase
+class UtilCoreTestCase extends TestCase
 {
     use InstallTrait;
     use UserMockTrait;
@@ -24,7 +24,6 @@ class CoreUtilTestCase extends TestCase
 
     /** @var  Connection */
     protected $db;
-    protected $queue;
     protected $log;
 
     public function setUp()
@@ -37,10 +36,6 @@ class CoreUtilTestCase extends TestCase
                 $this->setupDatabaseSchema($schema);
             },
         ]);
-
-        $c = $this->getContainer();
-        $this->mockMqClient($c);
-        $this->queue = $c['go1.client.mq'];
     }
 
     protected function setupDatabaseSchema(Schema $schema)
@@ -48,7 +43,7 @@ class CoreUtilTestCase extends TestCase
         # Extra database setup, test cases can safely override this.
     }
 
-    protected function getContainer()
+    protected function getContainer(): Container
     {
         $logger = $this
             ->getMockBuilder(LoggerInterface::class)
@@ -64,7 +59,7 @@ class CoreUtilTestCase extends TestCase
             });
 
         return (new Container(['accounts_name' => 'accounts.test']))
-            ->register(new CoreServiceProvider, [
+            ->register(new UtilCoreServiceProvider, [
                     'logger'       => $logger,
                     'client'       => new Client,
                     'cache'        => new ArrayCache,

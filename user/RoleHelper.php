@@ -42,7 +42,7 @@ class RoleHelper
         return $roleId;
     }
 
-    public static function add(Connection $db,  MqClient $mqClient, string $instance, string $role)
+    public static function add(Connection $db, MqClient $mqClient, string $instance, string $role)
     {
         $db->insert('gc_role', $message = [
             'instance'   => $instance,
@@ -61,6 +61,6 @@ class RoleHelper
     {
         return $db->executeQuery('SELECT id FROM gc_role WHERE instance = ? AND name IN (?)',
             [$instance, $roles], [PDO::PARAM_STR, Connection::PARAM_STR_ARRAY])
-            ->fetchAll(PDO::FETCH_COLUMN);
+                  ->fetchAll(PDO::FETCH_COLUMN);
     }
 }

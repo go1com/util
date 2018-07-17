@@ -6,14 +6,17 @@ class UrlHelper
 {
     protected static $allowedProtocols = ['http', 'https'];
 
-    public static function filterBadProtocol($string) {
+    public static function filterBadProtocol($string)
+    {
         // Get the plain text representation of the attribute value (i.e. its
         // meaning).
         $string = Html::decodeEntities($string);
+
         return Html::escape(static::stripDangerousProtocols($string));
     }
 
-    public static function stripDangerousProtocols($uri) {
+    public static function stripDangerousProtocols($uri)
+    {
         $allowed_protocols = array_flip(static::$allowedProtocols);
 
         // Iteratively remove any invalid protocol found.
@@ -35,7 +38,8 @@ class UrlHelper
                     $uri = substr($uri, $colonpos + 1);
                 }
             }
-        } while ($before != $uri);
+        }
+        while ($before != $uri);
 
         return $uri;
     }

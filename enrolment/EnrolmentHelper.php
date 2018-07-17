@@ -2,6 +2,7 @@
 
 namespace go1\util\enrolment;
 
+use DateTime as DefaultDateTime;
 use Doctrine\DBAL\Connection;
 use go1\clients\MqClient;
 use go1\util\DateTime;
@@ -18,7 +19,6 @@ use go1\util\queue\Queue;
 use go1\util\user\UserHelper;
 use LengthException;
 use PDO;
-use DateTime as DefaultDateTime;
 use stdClass;
 
 /**
@@ -194,7 +194,7 @@ class EnrolmentHelper
 
     public static function sequenceEnrolmentCompleted(Connection $db, int $loId, int $parentLoId, string $parentLoType = LoTypes::COURSE, int $profileId)
     {
-        $edgeType         = ($parentLoType == LoTypes::COURSE) ? EdgeTypes::LearningObjectTree['course'] : EdgeTypes::LearningObjectTree['module'];
+        $edgeType = ($parentLoType == LoTypes::COURSE) ? EdgeTypes::LearningObjectTree['course'] : EdgeTypes::LearningObjectTree['module'];
         $requiredEdgeType = ($parentLoType == LoTypes::COURSE) ? EdgeTypes::HAS_MODULE : EdgeTypes::HAS_LI;
 
         // Fetching all LOs stay beyond current LO

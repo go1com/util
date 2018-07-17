@@ -17,7 +17,6 @@ define('DEFAULT_USER_ID', 91);
 
 trait UserMockTrait
 {
-
     public function createAccountsAdminRole($db, array $options = [])
     {
         return $this->createRole($db, $options + ['name' => Roles::ROOT]);

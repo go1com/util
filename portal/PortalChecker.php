@@ -189,24 +189,28 @@ class PortalChecker
     public static function allowUserInvite($portal): bool
     {
         PortalHelper::parseConfig($portal);
+
         return boolval($portal->configuration->user_invite ?? true);
     }
 
     public static function allowPublicProfile($portal): bool
     {
         PortalHelper::parseConfig($portal);
+
         return boolval($portal->configuration->public_profiles ?? false);
     }
 
     public static function allowUserPayment($portal): bool
     {
         PortalHelper::parseConfig($portal);
+
         return boolval($portal->configuration->user_payment ?? true);
     }
 
     public static function allowMarketplace($portal): bool
     {
         PortalHelper::parseConfig($portal);
+
         return (!empty($portal->features))
             ? boolval($portal->features->marketplace ?? true)
             : true;
@@ -217,6 +221,7 @@ class PortalChecker
         PortalHelper::parseConfig($portal);
 
         $config = (array) $portal->configuration->{PortalHelper::FEATURE_NOTIFY_REMIND_MAJOR_EVENT} ?? [];
+
         return boolval($config[$role] ?? false);
     }
 }

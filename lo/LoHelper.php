@@ -16,13 +16,13 @@ class LoHelper
 {
     # configuration key for LO, which put under gc_lo.data
     # ---------------------
-    const DISCUSSION_ALLOW           = 'allow_discussion';
-    const ENROLMENT_ALLOW            = 'allow_enrolment';
+    const DISCUSSION_ALLOW = 'allow_discussion';
+    const ENROLMENT_ALLOW  = 'allow_enrolment';
     /** @deprecated */
-    const ENROLMENT_ALLOW_DEFAULT    = 'allow';
-    const ASSIGNMENT_ALLOW_RESUBMIT  = 'allow_resubmit';
+    const ENROLMENT_ALLOW_DEFAULT   = 'allow';
+    const ASSIGNMENT_ALLOW_RESUBMIT = 'allow_resubmit';
     /** @deprecated */
-    const ENROLMENT_ALLOW_DISABLE    = 'disable';
+    const ENROLMENT_ALLOW_DISABLE = 'disable';
     /** @deprecated */
     const ENROLMENT_ALLOW_ENQUIRY    = 'enquiry';
     const ENROLMENT_RE_ENROL         = 're_enrol';
