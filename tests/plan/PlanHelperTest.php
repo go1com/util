@@ -5,9 +5,9 @@ namespace go1\util\tests\plan;
 use go1\util\plan\PlanHelper;
 use go1\util\plan\PlanStatuses;
 use go1\util\schema\mock\PlanMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class PlanHelperTest extends UtilTestCase
+class PlanHelperTest extends UtilCoreTestCase
 {
     use PlanMockTrait;
 

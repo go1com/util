@@ -3,7 +3,6 @@
 namespace go1\util\tests;
 
 use BadFunctionCallException;
-use go1\clients\MqClient;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\model\Edge;
@@ -11,27 +10,23 @@ use go1\util\queue\Queue;
 use PDO;
 use ReflectionClass;
 
-class EdgeTest extends UtilTestCase
+class EdgeTest extends UtilCoreTestCase
 {
-    /** @var MqClient */
-    protected $mqClient;
     protected $edgeIds;
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->mqClient = $this->getMockBuilder(MqClient::class)->setMethods(['publish'])->disableOriginalConstructor()->getMock();
-
         // User has 3 accounts
-        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 2, $weight = 0);
-        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 3, $weight = 1);
-        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 4, $weight = 2);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 2, $weight = 0);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 3, $weight = 1);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 4, $weight = 2);
 
         // Course has 3 modules
-        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 2, $weight = 0);
-        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 3, $weight = 1);
-        $this->edgeIds[] = EdgeHelper::link($this->db, $this->mqClient, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 4, $weight = 2);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 2, $weight = 0);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 3, $weight = 1);
+        $this->edgeIds[] = EdgeHelper::link($this->db, $this->queue, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 4, $weight = 2);
     }
 
     public function testLoad()
@@ -102,19 +97,19 @@ class EdgeTest extends UtilTestCase
         $this->assertTrue($edge instanceof Edge);
 
         # After removing
-        EdgeHelper::remove($this->db, $this->mqClient, $edge);
+        EdgeHelper::remove($this->db, $this->queue, $edge);
         $this->assertFalse(EdgeHelper::load($this->db, $id) instanceof Edge);
     }
 
     public function testUnlinkBadCall()
     {
         $this->expectException(BadFunctionCallException::class);
-        EdgeHelper::unlink($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT);
+        EdgeHelper::unlink($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT);
     }
 
     public function testUnlinkBySource()
     {
-        EdgeHelper::unlink($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, $userId = 1);
+        EdgeHelper::unlink($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId = 1);
 
         // All accounts are removed
         $this->assertFalse(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId, $accountId = 2));
@@ -129,7 +124,7 @@ class EdgeTest extends UtilTestCase
 
     public function unlinkByTarget()
     {
-        EdgeHelper::unlink($this->db, $this->mqClient, EdgeTypes::HAS_ACCOUNT, null, $accountId = 2);
+        EdgeHelper::unlink($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, null, $accountId = 2);
 
         // Only one account is removed.
         $this->assertEquals(false, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 2));

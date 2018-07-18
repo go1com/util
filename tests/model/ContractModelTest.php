@@ -5,21 +5,21 @@ namespace go1\util\tests\model;
 use DateTime;
 use go1\util\contract\ContractHelper;
 use go1\util\schema\mock\ContractMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class ContractModelTest extends UtilTestCase
+class ContractModelTest extends UtilCoreTestCase
 {
     use ContractMockTrait;
 
     private function createStartDateContract(string $startDate, string $initialTerm)
     {
         return $this->createContract($this->db, [
-            'instance_id'       => 1000,
-            'user_id'           => 2000,
-            'number_users'      => 100,
-            'price'             => 1200,
-            'initial_term'      => $initialTerm,
-            'start_date'        => (new DateTime($startDate))->format('Y-m-d')
+            'instance_id'  => 1000,
+            'user_id'      => 2000,
+            'number_users' => 100,
+            'price'        => 1200,
+            'initial_term' => $initialTerm,
+            'start_date'   => (new DateTime($startDate))->format('Y-m-d'),
         ]);
     }
 

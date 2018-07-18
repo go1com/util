@@ -5,9 +5,9 @@ namespace go1\util\tests\portal;
 use go1\util\portal\PortalHelper;
 use go1\util\portal\PortalPricing;
 use go1\util\schema\mock\PortalMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class PortalPricingTest extends UtilTestCase
+class PortalPricingTest extends UtilCoreTestCase
 {
     use PortalMockTrait;
 
@@ -19,7 +19,7 @@ class PortalPricingTest extends UtilTestCase
             'price'            => [
                 'AU' => ['currency' => 'AUD', 'price' => 20],
                 'EU' => ['currency' => 'EUR', 'price' => 18],
-            ]
+            ],
         ],
         [
             'op'               => '>',
@@ -28,16 +28,16 @@ class PortalPricingTest extends UtilTestCase
             'price'            => [
                 'AU' => ['currency' => 'AUD', 'price' => 15],
                 'EU' => ['currency' => 'EUR', 'price' => 13],
-            ]
-        ]
+            ],
+        ],
     ];
 
     public function testPricePlatform()
     {
         $data = [
             'user_plan' => [
-                'license' => 5
-            ]
+                'license' => 5,
+            ],
         ];
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
@@ -52,10 +52,10 @@ class PortalPricingTest extends UtilTestCase
     {
         $data = [
             'user_plan' => [
-                'license'   => 10,
-                'regional'  => 'AU',
-                'product'   => 'premium'
-            ]
+                'license'  => 10,
+                'regional' => 'AU',
+                'product'  => 'premium',
+            ],
         ];
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
@@ -70,10 +70,10 @@ class PortalPricingTest extends UtilTestCase
     {
         $data = [
             'user_plan' => [
-                'license'   => 10,
-                'regional'  => 'EU',
-                'product'   => 'premium'
-            ]
+                'license'  => 10,
+                'regional' => 'EU',
+                'product'  => 'premium',
+            ],
         ];
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
@@ -88,10 +88,10 @@ class PortalPricingTest extends UtilTestCase
     {
         $data = [
             'user_plan' => [
-                'license'   => 30,
-                'regional'  => 'AU',
-                'product'   => 'premium'
-            ]
+                'license'  => 30,
+                'regional' => 'AU',
+                'product'  => 'premium',
+            ],
         ];
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
@@ -106,10 +106,10 @@ class PortalPricingTest extends UtilTestCase
     {
         $data = [
             'user_plan' => [
-                'license'   => 30,
-                'regional'  => 'EU',
-                'product'   => 'premium'
-            ]
+                'license'  => 30,
+                'regional' => 'EU',
+                'product'  => 'premium',
+            ],
         ];
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
@@ -124,10 +124,10 @@ class PortalPricingTest extends UtilTestCase
     {
         $data = [
             'user_plan' => [
-                'license'   => 30,
-                'regional'  => 'UK',
-                'product'   => 'premium'
-            ]
+                'license'  => 30,
+                'regional' => 'UK',
+                'product'  => 'premium',
+            ],
         ];
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
@@ -140,7 +140,7 @@ class PortalPricingTest extends UtilTestCase
     public function testGetUserLimitationNumberLegacy()
     {
         $data = [
-            'foo' => 'bar'
+            'foo' => 'bar',
         ];
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 
@@ -154,12 +154,12 @@ class PortalPricingTest extends UtilTestCase
     {
         $data = [
             'user_plan' => [
-                'license'   => 30,
-                'regional'  => 'UK',
-                'product'   => 'premium',
-                'price'     => 10000,
-                'currency'  => 'USD'
-            ]
+                'license'  => 30,
+                'regional' => 'UK',
+                'product'  => 'premium',
+                'price'    => 10000,
+                'currency' => 'USD',
+            ],
         ];
         $instanceId = $this->createPortal($this->db, ['data' => $data]);
 

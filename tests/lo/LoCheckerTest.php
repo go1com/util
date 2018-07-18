@@ -5,12 +5,12 @@ namespace go1\util\tests\lo;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoChecker;
 use go1\util\lo\LoHelper;
-use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class LoCheckerTest extends UtilTestCase
+class LoCheckerTest extends UtilCoreTestCase
 {
     use PortalMockTrait;
     use LoMockTrait;

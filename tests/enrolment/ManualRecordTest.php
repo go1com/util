@@ -3,17 +3,21 @@
 namespace go1\util\tests\enrolment;
 
 use Doctrine\DBAL\Schema\Schema;
+use go1\clients\MqClient;
 use go1\util\DB;
 use go1\util\enrolment\ManualRecord;
 use go1\util\enrolment\ManualRecordRepository;
 use go1\util\queue\Queue;
 use go1\util\schema\EnrolmentSchema;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class ManualRecordTest extends UtilTestCase
+class ManualRecordTest extends UtilCoreTestCase
 {
     /** @var  ManualRecordRepository */
     private $repository;
+
+    /** @var MqClient */
+    protected $queue;
 
     public function setUp()
     {
@@ -24,6 +28,20 @@ class ManualRecordTest extends UtilTestCase
                 EnrolmentSchema::installManualRecord($schema);
             },
         ]);
+
+        $this->queue = $this
+            ->getMockBuilder(MqClient::class)
+            ->setMethods(['publish'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this
+            ->queue
+            ->expects($this->any())
+            ->method('publish')
+            ->willReturnCallback(function ($payload, $subject) {
+                $this->queueMessages[$subject][] = $payload;
+            });
 
         $this->repository = new ManualRecordRepository($this->db, $this->queue);
     }

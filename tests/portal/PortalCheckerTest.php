@@ -5,10 +5,10 @@ namespace go1\util\tests\portal;
 use go1\util\portal\PortalChecker;
 use go1\util\portal\PortalHelper;
 use go1\util\schema\mock\PortalMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 use go1\util\user\Roles;
 
-class PortalCheckerTest extends UtilTestCase
+class PortalCheckerTest extends UtilCoreTestCase
 {
     use PortalMockTrait;
 
@@ -217,33 +217,32 @@ class PortalCheckerTest extends UtilTestCase
         $this->assertTrue(PortalChecker::allowMarketplace($portal));
     }
 
-
     public function notifyRemindConfig()
     {
         return [
             [
                 [Roles::STUDENT => 1, Roles::ASSESSOR => 1, Roles::MANAGER => 1],
-                [Roles::STUDENT => true, Roles::ASSESSOR => true, Roles::MANAGER => true, Roles::ADMIN => false]
+                [Roles::STUDENT => true, Roles::ASSESSOR => true, Roles::MANAGER => true, Roles::ADMIN => false],
             ],
             [
                 [Roles::STUDENT => 0, Roles::ASSESSOR => 0, Roles::MANAGER => 0],
-                [Roles::STUDENT => false, Roles::ASSESSOR => false, Roles::MANAGER => false]
+                [Roles::STUDENT => false, Roles::ASSESSOR => false, Roles::MANAGER => false],
             ],
             [
                 [],
-                [Roles::STUDENT => false, Roles::ASSESSOR => false, Roles::MANAGER => false]
+                [Roles::STUDENT => false, Roles::ASSESSOR => false, Roles::MANAGER => false],
             ],
             [
                 [Roles::STUDENT => 1],
-                [Roles::STUDENT => true, Roles::ASSESSOR => false, Roles::MANAGER => false]
+                [Roles::STUDENT => true, Roles::ASSESSOR => false, Roles::MANAGER => false],
             ],
             [
                 [Roles::ASSESSOR => 1],
-                [Roles::STUDENT => false, Roles::ASSESSOR => true, Roles::MANAGER => false]
+                [Roles::STUDENT => false, Roles::ASSESSOR => true, Roles::MANAGER => false],
             ],
             [
                 [Roles::MANAGER => 1],
-                [Roles::STUDENT => false, Roles::ASSESSOR => false, Roles::MANAGER => true]
+                [Roles::STUDENT => false, Roles::ASSESSOR => false, Roles::MANAGER => true],
             ],
         ];
     }
@@ -261,11 +260,11 @@ class PortalCheckerTest extends UtilTestCase
             $this->assertEquals($assert, PortalChecker::allowNotifyRemindMajorEventByRole($portal, $role));
         }
     }
-    
+
     public function testAllowSendingWelcomeEmailWithPortalLegacy()
     {
         $dataPortal = [
-            'data' => [
+            'data'    => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}', 'send_welcome_email' => 1],
             ],
@@ -282,7 +281,7 @@ class PortalCheckerTest extends UtilTestCase
     public function testAllowSendingWelcomeEmailWithDefaultConfig()
     {
         $dataPortal = [
-            'data' => [
+            'data'    => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}'],
             ],
@@ -299,7 +298,7 @@ class PortalCheckerTest extends UtilTestCase
     public function testAllowSendingWelcomeEmailWithPortalLegacyButNotConfigSendMail()
     {
         $dataPortal = [
-            'data' => [
+            'data'    => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}', 'send_welcome_email' => 0],
             ],
@@ -316,11 +315,11 @@ class PortalCheckerTest extends UtilTestCase
     public function testAllowSendingWelcomeEmailWithNewestVersionPortal()
     {
         $dataPortal = [
-            'data' => [
+            'data'  => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}'],
             ],
-            'title'   => 'daitest.mygo1.com'
+            'title' => 'daitest.mygo1.com',
         ];
         $portalId = $this->createPortal($this->db, $dataPortal);
         $portal = PortalHelper::load($this->db, $portalId);
@@ -332,11 +331,11 @@ class PortalCheckerTest extends UtilTestCase
     public function testAllowSendingWelcomeEmailWithConfigNewestVersionPortal()
     {
         $dataPortal = [
-            'data' => [
+            'data'  => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}', 'send_welcome_email' => 0],
             ],
-            'title'   => 'daitest.mygo1.com'
+            'title' => 'daitest.mygo1.com',
         ];
         $portalId = $this->createPortal($this->db, $dataPortal);
         $portal = PortalHelper::load($this->db, $portalId);
@@ -348,7 +347,7 @@ class PortalCheckerTest extends UtilTestCase
     public function testAllowNotifyEnrolmentWithLegacyPortal()
     {
         $dataPortal = [
-            'data' => [
+            'data'    => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}', 'notify_on_enrolment_create' => 1],
             ],
@@ -365,7 +364,7 @@ class PortalCheckerTest extends UtilTestCase
     public function testNotAllowNotifyEnrolmentWithLegacyPortal()
     {
         $dataPortal = [
-            'data' => [
+            'data'    => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}', 'notify_on_enrolment_create' => 0],
             ],
@@ -382,7 +381,7 @@ class PortalCheckerTest extends UtilTestCase
     public function testDefaultAllowNotifyEnrolmentWithLegacyPortal()
     {
         $dataPortal = [
-            'data' => [
+            'data'    => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}'],
             ],
@@ -399,11 +398,11 @@ class PortalCheckerTest extends UtilTestCase
     public function testAllowNotifyEnrolmentWithNewestVersionPortal()
     {
         $dataPortal = [
-            'data' => [
+            'data'  => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}'],
             ],
-            'title'   => 'daitest.mygo1.com'
+            'title' => 'daitest.mygo1.com',
         ];
         $portalId = $this->createPortal($this->db, $dataPortal);
         $portal = PortalHelper::load($this->db, $portalId);
@@ -415,11 +414,11 @@ class PortalCheckerTest extends UtilTestCase
     public function testAllowNotifyEnrolmentWithConfigNewestVersionPortal()
     {
         $dataPortal = [
-            'data' => [
+            'data'  => [
                 'files'         => ['logo' => 'http://portal.png'],
                 'configuration' => ['foo' => '{"foo":"bar"}', 'notify_on_enrolment_create' => 0],
             ],
-            'title'   => 'daitest.mygo1.com'
+            'title' => 'daitest.mygo1.com',
         ];
         $portalId = $this->createPortal($this->db, $dataPortal);
         $portal = PortalHelper::load($this->db, $portalId);

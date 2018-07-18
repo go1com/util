@@ -3,10 +3,10 @@
 namespace go1\util\schema\tests;
 
 use go1\util\DB;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 use go1\util\user\UserHelper;
 
-class DBTest extends UtilTestCase
+class DBTest extends UtilCoreTestCase
 {
     public function testConnectionOptions()
     {

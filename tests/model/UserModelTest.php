@@ -5,10 +5,10 @@ namespace go1\util\tests\model;
 use go1\util\edge\EdgeTypes;
 use go1\util\model\User;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 use go1\util\user\UserHelper;
 
-class UserModelTest extends UtilTestCase
+class UserModelTest extends UtilCoreTestCase
 {
     use UserMockTrait;
 

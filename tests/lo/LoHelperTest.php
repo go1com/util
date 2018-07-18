@@ -9,13 +9,13 @@ use go1\util\lo\LoHelper;
 use go1\util\lo\LoStatuses;
 use go1\util\lo\LoSuggestedCompletionTypes;
 use go1\util\schema\mock\EnrolmentMockTrait;
-use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 use HTMLPurifier;
 
-class LoHelperTest extends UtilTestCase
+class LoHelperTest extends UtilCoreTestCase
 {
     use UserMockTrait;
     use LoMockTrait;
@@ -96,9 +96,9 @@ class LoHelperTest extends UtilTestCase
     public function dataDescriptionPurifierConfig()
     {
         return [
-            ['Plain text',  'Plain text'],
-            ['foo <span style="color:#0000aa;">data</span>',  'foo <span style="color:#0000aa;">data</span>'],
-            ['<a href="test.html" target="_blank">Invalid link</a>',  '<a href="test.html" target="_blank" rel="noreferrer noopener">Invalid link</a>'],
+            ['Plain text', 'Plain text'],
+            ['foo <span style="color:#0000aa;">data</span>', 'foo <span style="color:#0000aa;">data</span>'],
+            ['<a href="test.html" target="_blank">Invalid link</a>', '<a href="test.html" target="_blank" rel="noreferrer noopener">Invalid link</a>'],
             ['<iframe width="560" height="315" src="https://www.youtube.com/embed/xxx" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>', '<iframe width="560" height="315" src="https://www.youtube.com/embed/xxx" frameborder="0" allowfullscreen=""></iframe>'],
             ['<iframe src="https://player.vimeo.com/video/xxx" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>', '<iframe src="https://player.vimeo.com/video/xxx" width="640" height="360" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>'],
             ['<iframe src="https://fast.wistia.net/embed/iframe/xxx?seo=false&videoFoam=true" title="Wistia video player" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen mozallowfullscreen webkitallowfullscreen oallowfullscreen msallowfullscreen width="100%" height="100%"></iframe>', '<iframe src="https://fast.wistia.net/embed/iframe/xxx?seo=false&amp;videoFoam=true" title="Wistia video player" frameborder="0" class="wistia_embed" allowfullscreen="" mozallowfullscreen="" webkitallowfullscreen="" width="100%" height="100%"></iframe>'],
@@ -473,15 +473,15 @@ class LoHelperTest extends UtilTestCase
     {
         return [
             [[
-                 LiTypes::VIDEO
+                 LiTypes::VIDEO,
              ], 1,
             ],
             [[
-                 LiTypes::VIDEO, LiTypes::EVENT
+                 LiTypes::VIDEO, LiTypes::EVENT,
              ], 2,
             ],
             [[
-                 LiTypes::VIDEO, LiTypes::EVENT, LiTypes::EVENT
+                 LiTypes::VIDEO, LiTypes::EVENT, LiTypes::EVENT,
              ], 2,
             ],
         ];

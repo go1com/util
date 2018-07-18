@@ -2,10 +2,10 @@
 
 namespace go1\util\tests\user;
 
-use go1\util\tests\UtilTestCase;
 use go1\util\user\Roles;
+use PHPUnit\Framework\TestCase;
 
-class RolesTest extends UtilTestCase
+class RolesTest extends TestCase
 {
     public function testRole()
     {

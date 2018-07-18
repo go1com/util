@@ -32,6 +32,6 @@
     }
   },
   "suggest":           {
-    "go1/app": "for DB::connectionOptions()"
+    "go1/app": "for go1\\util\\DB::connectionOptions()"
   }
 }

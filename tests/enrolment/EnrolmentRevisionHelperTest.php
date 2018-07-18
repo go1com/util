@@ -5,9 +5,9 @@ namespace go1\util\tests\enrolment;
 use go1\util\enrolment\EnrolmentRevisionHelper;
 use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\schema\mock\EnrolmentMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class EnrolmentRevisionHelperTest extends UtilTestCase
+class EnrolmentRevisionHelperTest extends UtilCoreTestCase
 {
     use EnrolmentMockTrait;
 

@@ -10,29 +10,29 @@ use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
-use go1\util\plan\PlanTypes;
 use go1\util\plan\PlanHelper;
+use go1\util\plan\PlanTypes;
 use go1\util\queue\Queue;
 use go1\util\schema\mock\EnrolmentMockTrait;
-use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\PlanMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class EnrolmentHelperTest extends UtilTestCase
+class EnrolmentHelperTest extends UtilCoreTestCase
 {
     use UserMockTrait;
     use EnrolmentMockTrait;
     use PlanMockTrait;
     use PortalMockTrait;
     use LoMockTrait;
-
-    protected $instanceId;
-    protected $instancePublicKey;
-    protected $instancePrivateKey;
-    protected $instanceName = 'az.mygo1.com';
-    protected $profileId = 11;
+    
+    protected $portalId;
+    protected $portalPublicKey;
+    protected $portalPrivateKey;
+    protected $portalName = 'az.mygo1.com';
+    protected $profileId  = 11;
     protected $userId, $jwt;
     protected $lpId, $courseId, $moduleId, $liVideoId, $liResourceId, $liInteractiveId, $electiveQuestionId, $electiveTextId, $electiveQuizId;
 
@@ -41,22 +41,22 @@ class EnrolmentHelperTest extends UtilTestCase
         parent::setUp();
 
         // Create instance
-        $this->instanceId = $this->createPortal($this->db, ['title' => $this->instanceName]);
-        $this->instancePublicKey = $this->createPortalPublicKey($this->db, ['instance' => $this->instanceName]);
-        $this->instancePrivateKey = $this->createPortalPrivateKey($this->db, ['instance' => $this->instanceName]);
-        $this->userId = $this->createUser($this->db, ['instance' => $this->instanceName]);
+        $this->portalId = $this->createPortal($this->db, ['title' => $this->portalName]);
+        $this->portalPublicKey = $this->createPortalPublicKey($this->db, ['instance' => $this->portalName]);
+        $this->portalPrivateKey = $this->createPortalPrivateKey($this->db, ['instance' => $this->portalName]);
+        $this->userId = $this->createUser($this->db, ['instance' => $this->portalName]);
         $this->jwt = $this->getJwt();
 
         $data = json_encode(['elective_number' => 1]);
-        $this->lpId = $this->createCourse($this->db, ['type' => 'learning_pathway', 'instance_id' => $this->instanceId]);
-        $this->courseId = $this->createCourse($this->db, ['type' => 'course', 'instance_id' => $this->instanceId]);
-        $this->moduleId = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId, 'data' => $data]);
-        $this->liVideoId = $this->createCourse($this->db, ['type' => 'video', 'instance_id' => $this->instanceId]);
-        $this->liResourceId = $this->createCourse($this->db, ['type' => 'iframe', 'instance_id' => $this->instanceId]);
-        $this->liInteractiveId = $this->createCourse($this->db, ['type' => 'interactive', 'instance_id' => $this->instanceId]);
-        $this->electiveQuestionId = $this->createCourse($this->db, ['type' => 'question', 'instance_id' => $this->instanceId]);
-        $this->electiveTextId = $this->createCourse($this->db, ['type' => 'text', 'instance_id' => $this->instanceId]);
-        $this->electiveQuizId = $this->createCourse($this->db, ['type' => 'quiz', 'instance_id' => $this->instanceId]);
+        $this->lpId = $this->createCourse($this->db, ['type' => 'learning_pathway', 'instance_id' => $this->portalId]);
+        $this->courseId = $this->createCourse($this->db, ['type' => 'course', 'instance_id' => $this->portalId]);
+        $this->moduleId = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->portalId, 'data' => $data]);
+        $this->liVideoId = $this->createCourse($this->db, ['type' => 'video', 'instance_id' => $this->portalId]);
+        $this->liResourceId = $this->createCourse($this->db, ['type' => 'iframe', 'instance_id' => $this->portalId]);
+        $this->liInteractiveId = $this->createCourse($this->db, ['type' => 'interactive', 'instance_id' => $this->portalId]);
+        $this->electiveQuestionId = $this->createCourse($this->db, ['type' => 'question', 'instance_id' => $this->portalId]);
+        $this->electiveTextId = $this->createCourse($this->db, ['type' => 'text', 'instance_id' => $this->portalId]);
+        $this->electiveQuizId = $this->createCourse($this->db, ['type' => 'quiz', 'instance_id' => $this->portalId]);
 
         // Linking
         $this->link($this->db, EdgeTypes::HAS_LP_ITEM, $this->lpId, $this->courseId, 0);
@@ -87,7 +87,7 @@ class EnrolmentHelperTest extends UtilTestCase
 
     public function testFindParentEnrolmentNoParentId()
     {
-        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId];
+        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->portalId];
         $enrolments = [
             'lp'       => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->lpId]),
             'course'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->courseId]),
@@ -122,7 +122,7 @@ class EnrolmentHelperTest extends UtilTestCase
 
     public function testFindParentEnrolmentWithParentId()
     {
-        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId];
+        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->portalId];
         $enrolments = [
             'lp'       => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->lpId]),
             'course'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->courseId, 'parent_lo_id' => $this->lpId]),
@@ -157,7 +157,7 @@ class EnrolmentHelperTest extends UtilTestCase
 
     public function testSequenceEnrolmentCompleted()
     {
-        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId];
+        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->portalId];
         $enrolments = [
             'lp'       => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->lpId]),
             'course'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->courseId, 'parent_lo_id' => $this->lpId]),
@@ -176,16 +176,15 @@ class EnrolmentHelperTest extends UtilTestCase
 
         $completion = EnrolmentHelper::sequenceEnrolmentCompleted($this->db, $this->liInteractiveId, $this->moduleId, LoTypes::MODULE, $this->profileId);
         $this->assertFalse($completion);
-
     }
 
     public function testChildrenProgressCount()
     {
         $this->courseId;
-        $module2 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
-        $module3 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
-        $module4 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
-        $module5 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
+        $module2 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->portalId]);
+        $module3 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->portalId]);
+        $module4 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->portalId]);
+        $module5 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->portalId]);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module2, 2);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module3, 3);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module4, 4);
@@ -194,7 +193,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $courseEnrolment = EnrolmentHelper::load($this->db, $courseEnrolmentId);
         $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment);
         $this->assertEquals(5, $progress['total']);
-        $basicModuleData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId, 'parent_lo_id' => $this->courseId];
+        $basicModuleData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->portalId, 'parent_lo_id' => $this->courseId];
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $this->moduleId]);
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module2]);
         $this->createEnrolment($this->db, $basicModuleData + ['lo_id' => $module3]);
@@ -212,18 +211,18 @@ class EnrolmentHelperTest extends UtilTestCase
 
     public function testLearningItemProgressCount()
     {
-        $course1 = $this->createCourse($this->db, ['instance_id' => $this->instanceId]);
-        $module2 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
-        $module3 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->instanceId]);
+        $course1 = $this->createCourse($this->db, ['instance_id' => $this->portalId]);
+        $module2 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->portalId]);
+        $module3 = $this->createCourse($this->db, ['type' => 'module', 'instance_id' => $this->portalId]);
         $learningItemIds = [
-            $this->createCourse($this->db, ['type' => LiTypes::DOCUMENT, 'instance_id' => $this->instanceId]),
-            $this->createCourse($this->db, ['type' => LiTypes::DOCUMENT, 'instance_id' => $this->instanceId]),
-            $this->createCourse($this->db, ['type' => LiTypes::DOCUMENT, 'instance_id' => $this->instanceId]),
-            $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->instanceId]),
-            $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->instanceId]),
-            $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->instanceId]),
+            $this->createCourse($this->db, ['type' => LiTypes::DOCUMENT, 'instance_id' => $this->portalId]),
+            $this->createCourse($this->db, ['type' => LiTypes::DOCUMENT, 'instance_id' => $this->portalId]),
+            $this->createCourse($this->db, ['type' => LiTypes::DOCUMENT, 'instance_id' => $this->portalId]),
+            $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->portalId]),
+            $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->portalId]),
+            $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->portalId]),
         ];
-        $courseEvent = $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->instanceId]);
+        $courseEvent = $this->createCourse($this->db, ['type' => LiTypes::EVENT, 'instance_id' => $this->portalId]);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $course1, $module2, 2);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $course1, $module3, 3);
         $this->link($this->db, EdgeTypes::HAS_LI, $course1, $courseEvent, 3);
@@ -234,7 +233,7 @@ class EnrolmentHelperTest extends UtilTestCase
         $courseEnrolment = EnrolmentHelper::load($this->db, $courseEnrolmentId);
         $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment, true, LiTypes::all());
         $this->assertEquals(7, $progress['total']);
-        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId, 'parent_lo_id' => $module2];
+        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->portalId, 'parent_lo_id' => $module2];
         $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $learningItemIds[0]]);
         $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $learningItemIds[5]]);
         $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $learningItemIds[3]]);
@@ -303,7 +302,7 @@ class EnrolmentHelperTest extends UtilTestCase
 
     public function testCountUserEnrolment()
     {
-        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->instanceId];
+        $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->portalId];
         $enrolments = [
             'lp'       => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->lpId]),
             'course'   => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->courseId, 'parent_lo_id' => $this->lpId]),
@@ -314,7 +313,7 @@ class EnrolmentHelperTest extends UtilTestCase
             'text'     => $this->createEnrolment($this->db, $basicLiData + ['lo_id' => $this->electiveTextId, 'parent_lo_id' => $this->moduleId]),
         ];
         $this->assertEquals(count($enrolments), EnrolmentHelper::countUserEnrolment($this->db, $this->profileId));
-        $this->assertEquals(count($enrolments), EnrolmentHelper::countUserEnrolment($this->db, $this->profileId, $this->instanceId));
+        $this->assertEquals(count($enrolments), EnrolmentHelper::countUserEnrolment($this->db, $this->profileId, $this->portalId));
         $this->assertEquals(0, EnrolmentHelper::countUserEnrolment($this->db, 20202));
     }
 

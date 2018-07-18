@@ -2,8 +2,8 @@
 
 namespace go1\util\tests;
 
-use PHPUnit\Framework\TestCase;
 use go1\util\Service;
+use PHPUnit\Framework\TestCase;
 
 class ServiceUrlTest extends TestCase
 {

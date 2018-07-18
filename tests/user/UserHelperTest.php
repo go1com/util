@@ -9,7 +9,7 @@ use go1\util\Text;
 use go1\util\user\Roles;
 use go1\util\user\UserHelper;
 
-class UserHelperTest extends UtilTestCase
+class UserHelperTest extends UtilCoreTestCase
 {
     use UserMockTrait;
     use PortalMockTrait;
@@ -99,7 +99,6 @@ class UserHelperTest extends UtilTestCase
         $this->assertEquals($userId, $user->id);
         $this->assertEquals($accountId, $user->accounts[0]->id);
     }
-
 
     public function dataIsStaff()
     {

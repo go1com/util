@@ -4,9 +4,9 @@ namespace go1\util\tests\lo;
 
 use go1\util\group\GroupItemStatus;
 use go1\util\lo\LoHelper;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class LoHelperPremiumTest extends UtilTestCase
+class LoHelperPremiumTest extends UtilCoreTestCase
 {
     public function testIsPremium()
     {

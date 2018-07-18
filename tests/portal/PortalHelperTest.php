@@ -4,12 +4,11 @@ namespace go1\util\tests\portal;
 
 use go1\clients\UserClient;
 use go1\util\collection\PortalCollectionConfiguration;
-use go1\util\model\Portal;
 use go1\util\portal\PortalHelper;
 use go1\util\schema\mock\PortalMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class PortalHelperTest extends UtilTestCase
+class PortalHelperTest extends UtilCoreTestCase
 {
     use PortalMockTrait;
 
@@ -17,18 +16,18 @@ class PortalHelperTest extends UtilTestCase
 
     public function testLogo()
     {
-        $instanceId = $this->createPortal($this->db, ['data' => ['files' => ['logo' => 'http://www.go1.com/logo.png']]]);
-        $portal = PortalHelper::load($this->db, $instanceId);
+        $portalId = $this->createPortal($this->db, ['data' => ['files' => ['logo' => 'http://www.go1.com/logo.png']]]);
+        $portal = PortalHelper::load($this->db, $portalId);
         $logo = PortalHelper::logo($portal);
         $this->assertEquals('http://www.go1.com/logo.png', $logo);
 
-        $instanceId = $this->createPortal($this->db, ['data' => ['files' => ['logo' => '//www.go1.com/logo.png']]]);
-        $portal = PortalHelper::load($this->db, $instanceId);
+        $portalId = $this->createPortal($this->db, ['data' => ['files' => ['logo' => '//www.go1.com/logo.png']]]);
+        $portal = PortalHelper::load($this->db, $portalId);
         $logo = PortalHelper::logo($portal);
         $this->assertEquals('https://www.go1.com/logo.png', $logo);
 
-        $instanceId = $this->createPortal($this->db, []);
-        $portal = PortalHelper::load($this->db, $instanceId);
+        $portalId = $this->createPortal($this->db, []);
+        $portal = PortalHelper::load($this->db, $portalId);
         $logo = PortalHelper::logo($portal);
         $this->assertEmpty($logo);
     }
@@ -43,22 +42,13 @@ class PortalHelperTest extends UtilTestCase
 
     public function testPortalAdminIds()
     {
-        $admin1Id = $this->createUser($this->db, [
-            'instance' => $this->portalName,
-            'mail'     => 'a1@mail.com',
-        ]);
-        $admin2Id = $this->createUser($this->db, [
-            'instance' => $this->portalName,
-            'mail'     => 'a2@mail.com',
-        ]);
-        $this->createUser($this->db, [
-            'instance' => $this->portalName,
-            'mail'     => 'a3@mail.com',
-        ]);
+        $admin1Id = $this->createUser($this->db, ['instance' => $this->portalName, 'mail' => 'a1@mail.com']);
+        $admin2Id = $this->createUser($this->db, ['instance' => $this->portalName, 'mail' => 'a2@mail.com']);
+        $this->createUser($this->db, ['instance' => $this->portalName, 'mail' => 'a3@mail.com']);
         $adminIds = [$admin1Id, $admin2Id];
 
         $app = $this->getContainer();
-        $app->extend('go1.client.user', function () use ($adminIds) {
+        $app['go1.client.user'] = function () use ($adminIds) {
             $userClient = $this
                 ->getMockBuilder(UserClient::class)
                 ->disableOriginalConstructor()
@@ -75,8 +65,9 @@ class PortalHelperTest extends UtilTestCase
                 });
 
             return $userClient;
-        });
+        };
 
+        /** @var UserClient $userClient */
         $userClient = $app['go1.client.user'];
         $admins = PortalHelper::portalAdminIds($userClient, $this->portalName);
         $this->assertEquals(2, count($admins));

@@ -8,24 +8,34 @@ use go1\clients\MqClient;
 use go1\util\consume\ConsumeController;
 use go1\util\contract\ConsumerInterface;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 use go1\util\Text;
 use go1\util\user\UserHelper;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
-class ConsumeControllerTest extends UtilTestCase
+class ConsumeControllerTest extends UtilCoreTestCase
 {
     use UserMockTrait;
 
     const ROUTING_KEY = 'routingKey';
-    private $c;
+
+    protected $container;
+    protected $log = [];
 
     public function setUp()
     {
         parent::setUp();
-        $this->c = $this->getContainer();
+
+        $this->container = $this->getContainer();
+        $this->log = [];
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
         unset($GLOBALS['consumeCount']);
     }
 
@@ -65,7 +75,7 @@ class ConsumeControllerTest extends UtilTestCase
     public function test403()
     {
         $fooConsumer = $this->consumerClass();
-        $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker']);
+        $consume = new ConsumeController([$fooConsumer], $this->container['logger'], $this->container['access_checker']);
 
         $req = Request::create('/consume', 'POST');
         $req->request->replace(['routingKey' => self::ROUTING_KEY, 'body' => ['foo' => 'bar']]);
@@ -94,7 +104,7 @@ class ConsumeControllerTest extends UtilTestCase
 
         $fooConsumer = $this->consumerClass();
         $barConsumer = $this->consumerClass();
-        $consume = new ConsumeController([$fooConsumer, $barConsumer], $this->c['logger'], $this->c['access_checker']);
+        $consume = new ConsumeController([$fooConsumer, $barConsumer], $this->container['logger'], $this->container['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->request->replace([
@@ -121,8 +131,8 @@ class ConsumeControllerTest extends UtilTestCase
         $errConsumer = $this->consumerClass(true, (new Error('foo')));
         $consume = new ConsumeController(
             [$fooConsumer, $barConsumer, $excConsumer, $errConsumer],
-            $this->c['logger'],
-            $this->c['access_checker']
+            $this->container['logger'],
+            $this->container['access_checker']
         );
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
@@ -139,7 +149,7 @@ class ConsumeControllerTest extends UtilTestCase
     public function test204Empty()
     {
         $fooConsumer = $this->consumerClass(false);
-        $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker']);
+        $consume = new ConsumeController([$fooConsumer], $this->container['logger'], $this->container['access_checker']);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->attributes->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));
@@ -151,10 +161,13 @@ class ConsumeControllerTest extends UtilTestCase
         $this->assertNull($consumeCount);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogWasteTime()
     {
         $fooConsumer = $this->consumerClass(false);
-        $consume = new ConsumeController([$fooConsumer], $this->c['logger'], $this->c['access_checker'], true);
+        $consume = new ConsumeController([$fooConsumer], $this->container['logger'], $this->container['access_checker'], true);
 
         $req = Request::create('/consume?jwt=' . UserHelper::ROOT_JWT, 'POST');
         $req->attributes->set('jwt.payload', Text::jwtContent(UserHelper::ROOT_JWT));

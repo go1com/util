@@ -5,6 +5,7 @@ namespace go1\util\tests;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
+use go1\clients\MqClient;
 use go1\util\DB;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
@@ -23,6 +24,10 @@ class UtilCoreTestCase extends TestCase
     protected $db;
     protected $log;
 
+    /** @var MqClient */
+    protected $queue;
+    protected $queueMessages = [];
+
     public function setUp()
     {
         $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
@@ -33,6 +38,24 @@ class UtilCoreTestCase extends TestCase
                 $this->setupDatabaseSchema($schema);
             },
         ]);
+
+        $this->queue = $this
+            ->getMockBuilder(MqClient::class)
+            ->setMethods(['publish'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this
+            ->queue
+            ->expects($this->any())
+            ->method('publish')
+            ->willReturnCallback(function ($payload, $subject, $context) {
+                if ($context && is_array($payload)) {
+                    $payload['_context'] = $context;
+                }
+
+                $this->queueMessages[$subject][] = $payload;
+            });
     }
 
     protected function setupDatabaseSchema(Schema $schema)
@@ -42,27 +65,30 @@ class UtilCoreTestCase extends TestCase
 
     protected function getContainer(): Container
     {
-        return (new Container(['accounts_name' => 'accounts.test']))
-            ->register(
-                new UtilCoreServiceProvider,
-                [
-                    'logger' => function () {
-                        $logger = $this
-                            ->getMockBuilder(LoggerInterface::class)
-                            ->disableOriginalConstructor()
-                            ->setMethods(['error'])
-                            ->getMockForAbstractClass();
+        static $container;
 
-                        $logger
-                            ->expects($this->any())
-                            ->method('error')
-                            ->willReturnCallback(function ($message) {
-                                $this->log['error'][] = $message;
-                            });
+        if (null === $container) {
+            $container = new Container(['accounts_name' => 'accounts.test']);
+            $container->register(new UtilCoreServiceProvider, [
+                'logger' => function () {
+                    $logger = $this
+                        ->getMockBuilder(LoggerInterface::class)
+                        ->disableOriginalConstructor()
+                        ->setMethods(['error'])
+                        ->getMockForAbstractClass();
 
-                        return $logger;
-                    },
-                ]
-            );
+                    $logger
+                        ->expects($this->any())
+                        ->method('error')
+                        ->willReturnCallback(function ($message) {
+                            $this->log['error'][] = $message;
+                        });
+
+                    return $logger;
+                },
+            ]);
+        }
+
+        return $container;
     }
 }

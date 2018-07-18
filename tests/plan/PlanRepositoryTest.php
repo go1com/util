@@ -2,15 +2,14 @@
 
 namespace go1\util\tests\plan;
 
+use go1\clients\MqClient;
 use go1\util\plan\Plan;
-use go1\util\plan\PlanHelper;
 use go1\util\plan\PlanRepository;
-use go1\util\plan\PlanStatuses;
 use go1\util\plan\PlanTypes;
 use go1\util\schema\mock\PlanMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class PlanRepositoryTest extends UtilTestCase
+class PlanRepositoryTest extends UtilCoreTestCase
 {
     use PlanMockTrait;
 
@@ -19,9 +18,19 @@ class PlanRepositoryTest extends UtilTestCase
     protected $userId     = 222;
     protected $repo;
 
+    /** @var MqClient */
+    protected $queue;
+
     public function setUp()
     {
         parent::setUp();
+
+        $this->queue = $this
+            ->getMockBuilder(MqClient::class)
+            ->setMethods(['publish'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->repo = new PlanRepository($this->db, $this->queue);
     }
 
