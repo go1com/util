@@ -779,6 +779,7 @@ class Schema
                     'user_id'   => ['type' => self::T_INT],
                 ],
             ],
+            'title'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
         ],
     ];
 
