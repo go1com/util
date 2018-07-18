@@ -34,6 +34,8 @@ class Queue
     const CONTRACT_CREATE              = 'contract.create';
     const CONTRACT_UPDATE              = 'contract.update';
     const CONTRACT_DELETE              = 'contract.delete';
+    const CONTRACT_VIEW_LIST           = 'contract.list.view';
+    const CONTRACT_VIEW_DETAIL         = 'contract.list.detail';
     const LO_CREATE                    = 'lo.create'; # Body: LO object, no lo.items should be expected.
     const LO_UPDATE                    = 'lo.update'; # Body: LO object with extra property: origin.
     const LO_DELETE                    = 'lo.delete'; # Body: LO object.
