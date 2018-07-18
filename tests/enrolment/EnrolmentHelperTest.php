@@ -27,7 +27,7 @@ class EnrolmentHelperTest extends UtilCoreTestCase
     use PlanMockTrait;
     use PortalMockTrait;
     use LoMockTrait;
-    
+
     protected $portalId;
     protected $portalPublicKey;
     protected $portalPrivateKey;
