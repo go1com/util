@@ -1,4 +1,4 @@
-Core utilities
+Core utilities [![Build Status](https://travis-ci.org/go1com/util_core.svg?branch=master)](https://travis-ci.org/go1com/util_core)
 ====
 
 The core including:

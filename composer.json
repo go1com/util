@@ -22,6 +22,7 @@
     "ezyang/htmlpurifier": "^4.9"
   },
   "suggest":           {
-    "go1/app": "for go1\\util\\DB::connectionOptions()"
+    "go1/app": "for go1\\util\\DB::connectionOptions()",
+    "ezyang/htmlpurifier": "for go1\\util\\Text"
   }
 }
