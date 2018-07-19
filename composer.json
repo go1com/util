@@ -23,6 +23,7 @@
   },
   "suggest":           {
     "go1/app": "for go1\\util\\DB::connectionOptions()",
+    "go1/util_core_clients": "If you would like making requests to core-services.",
     "ezyang/htmlpurifier": "for go1\\util\\Text"
   }
 }
