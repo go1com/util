@@ -301,9 +301,14 @@ class EnrolmentHelper
             }
         }
 
+        $rMqClient = new \ReflectionClass(MqClient::class);
+        $actorIdKey = $rMqClient->hasConstant('CONTEXT_ACTOR_ID')
+            ? $rMqClient->getConstant('CONTEXT_ACTOR_ID')
+            : 'actor_id';
+
         $queue->publish($enrolment, Queue::ENROLMENT_CREATE, [
-            'notify_email'           => $notify,
-            $queue::CONTEXT_ACTOR_ID => $assignerId,
+            'notify_email' => $notify,
+            $actorIdKey    => $assignerId,
         ]);
     }
 

@@ -2,7 +2,6 @@
 
 namespace go1\util\tests\enrolment;
 
-use go1\clients\MqClient;
 use go1\util\DateTime;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
@@ -261,7 +260,7 @@ class EnrolmentHelperTest extends UtilCoreTestCase
         $message = $this->queueMessages[Queue::ENROLMENT_CREATE];
         $this->assertCount(1, $message);
         $this->assertTrue($message[0]['_context']['notify_email']);
-        $this->assertNull($message[0]['_context'][MqClient::CONTEXT_ACTOR_ID]);
+        $this->assertNull($message[0]['_context']['actor_id']);
     }
 
     public function testCreateWithMarketplaceLO()

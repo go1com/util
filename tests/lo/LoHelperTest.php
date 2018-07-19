@@ -40,6 +40,7 @@ class LoHelperTest extends UtilCoreTestCase
     public function setUp()
     {
         parent::setUp();
+
         $this->author1Id = $this->createUser($this->db, ['mail' => 'a1@mail.com']);
         $this->author2Id = $this->createUser($this->db, ['mail' => 'a2@mail.com']);
         $this->author3Id = $this->createUser($this->db, ['mail' => 'a3@mail.com']);
@@ -109,7 +110,7 @@ class LoHelperTest extends UtilCoreTestCase
     /** @dataProvider dataDescriptionPurifierConfig */
     public function testDescriptionPurifierConfig(string $input, string $expect)
     {
-        $html = new HTMLPurifier();
+        $html = new HTMLPurifier;
         $result = $html->purify(trim($input), LoHelper::descriptionPurifierConfig());
         $this->assertEquals($expect, $result);
     }
