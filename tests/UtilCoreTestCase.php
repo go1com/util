@@ -49,13 +49,15 @@ class UtilCoreTestCase extends TestCase
             ->queue
             ->expects($this->any())
             ->method('publish')
-            ->willReturnCallback(function ($payload, $subject, $context) {
-                if ($context && is_array($payload)) {
-                    $payload['_context'] = $context;
-                }
+            ->willReturnCallback(
+                function ($payload, $subject, $context = null) {
+                    if ($context && is_array($payload)) {
+                        $payload['_context'] = $context;
+                    }
 
-                $this->queueMessages[$subject][] = $payload;
-            });
+                    $this->queueMessages[$subject][] = $payload;
+                }
+            );
     }
 
     protected function setupDatabaseSchema(Schema $schema)

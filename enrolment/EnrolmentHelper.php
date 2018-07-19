@@ -301,7 +301,10 @@ class EnrolmentHelper
             }
         }
 
-        $queue->publish($enrolment, Queue::ENROLMENT_CREATE, ['notify_email' => $notify, MqClient::CONTEXT_ACTOR_ID => $assignerId]);
+        $queue->publish($enrolment, Queue::ENROLMENT_CREATE, [
+            'notify_email'           => $notify,
+            $queue::CONTEXT_ACTOR_ID => $assignerId,
+        ]);
     }
 
     public static function hasEnrolment(Connection $db, int $loId, int $profileId, int $parentLoId = null)

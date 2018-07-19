@@ -57,10 +57,10 @@ trait InstallTrait
             },
             function (Schema $schema) use ($coreOnly) {
                 if (!$coreOnly) {
-                    SocialSchema::install($schema);
-                    NoteSchema::install($schema);
-                    VoteSchema::install($schema);
-                    ContractSchema::install($schema);
+                    class_exists(SocialSchema::class) && SocialSchema::install($schema);
+                    class_exists(NoteSchema::class) && NoteSchema::install($schema);
+                    class_exists(VoteSchema::class) && VoteSchema::install($schema);
+                    class_exists(ContractSchema::class) && ContractSchema::install($schema);
                 }
             },
         ]);
