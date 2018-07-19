@@ -1311,11 +1311,24 @@ class MailTemplate
         'tokens' => [
             '!learner_full_name' => 'Learner full name',
             '!learner_mail'      => 'Learner mail',
+            '!recipient_mail'    => 'Recipient mail',
             '!assignment_name'   => 'Assignment name',
             '!my_teaching_url'   => 'My teaching URL',
             '!portal_name'       => 'Portal name',
             '!portal_image'      => 'Portal image',
             '!portal_url'        => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_ASSIGNMENT_FEEDBACK = [
+        'key'    => 'learner.assignment.feedback',
+        'tokens' => [
+            '!assessor_full_name' => 'Assessor full name',
+            '!learner_mail'       => 'Learner mail',
+            '!assignment_name'    => 'Assignment name',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
         ],
     ];
 
