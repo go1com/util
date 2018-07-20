@@ -12,6 +12,7 @@ class CreditSchema
         $credit->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
         $credit->addColumn('owner_id', 'integer', ['unsigned' => true]);
         $credit->addColumn('portal_id', 'integer', ['unsigned' => true]);
+        $credit->addColumn('portal_active_id', 'integer', ['unsigned' => true, 'notnull' => false]);
         $credit->addColumn('product_type', 'string', ['default' => 'lo']);
         $credit->addColumn('product_id', 'integer', ['unsigned' => true]);
         $credit->addColumn('created', 'integer', ['unsigned' => true]);
