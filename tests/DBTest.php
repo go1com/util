@@ -10,11 +10,11 @@ class DBTest extends UtilTestCase
 {
     public function testConnectionOptions()
     {
-        putenv('_DOCKER_FOO_DB_NAME=foo_db');
-        putenv('_DOCKER_FOO_DB_USERNAME=foo_username');
-        putenv('_DOCKER_FOO_DB_PASSWORD=foo_password');
-        putenv('_DOCKER_FOO_DB_SLAVE=slave.foo.com');
-        putenv('_DOCKER_FOO_DB_HOST=foo.com');
+        putenv('FOO_DB_NAME=foo_db');
+        putenv('FOO_DB_USERNAME=foo_username');
+        putenv('FOO_DB_PASSWORD=foo_password');
+        putenv('FOO_DB_SLAVE=slave.foo.com');
+        putenv('FOO_DB_HOST=foo.com');
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $foo = DB::connectionOptions('foo');
@@ -155,8 +155,29 @@ class DBTest extends UtilTestCase
         $this->assertEquals('dev_password', $bar['password']);
         $this->assertEquals('dev.com', $bar['host']);
 
-        putenv('DEV_DB_SLAVE=slave.dev.com');
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        putenv('BAR_DB_SLAVE=slave.dev.com');
         $bar = DB::connectionOptions('bar');
         $this->assertEquals('slave.dev.com', $bar['host']);
+    }
+
+    public function testDefaultRDS()
+    {
+        $_ENV = [];
+        putenv('RDS_DB_USERNAME=dev_username');
+        putenv('RDS_DB_PASSWORD=dev_password');
+        putenv('RDS_DB_HOST=bar.com');
+        $bar = DB::connectionOptions('s_foo');
+        $this->assertEquals('pdo_mysql', $bar['driver']);
+        $this->assertEquals('s_foo_dev', $bar['dbname']);
+        $this->assertEquals('dev_username', $bar['user']);
+        $this->assertEquals('dev_password', $bar['password']);
+        $this->assertEquals('bar.com', $bar['host']);
+
+        putenv('_DOCKER_ENV=staging');
+        putenv('RDS_DB_SLAVE=slave.bar.com');
+        $bar = DB::connectionOptions('s_foo');
+        $this->assertEquals('slave.bar.com', $bar['host']);
+        $this->assertEquals('s_foo_prod', $bar['dbname']);
     }
 }
