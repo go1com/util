@@ -41,7 +41,7 @@ class UtilCoreTestCase extends TestCase
 
         $this->queue = $this
             ->getMockBuilder(MqClient::class)
-            ->setMethods(['publish'])
+            ->setMethods(['publish', 'queue'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -50,7 +50,7 @@ class UtilCoreTestCase extends TestCase
             ->expects($this->any())
             ->method('publish')
             ->willReturnCallback(
-                function ($payload, $subject, $context = null) {
+                $callback = function ($payload, $subject, $context = null) {
                     if ($context && is_array($payload)) {
                         $payload['_context'] = $context;
                     }
@@ -58,6 +58,12 @@ class UtilCoreTestCase extends TestCase
                     $this->queueMessages[$subject][] = $payload;
                 }
             );
+
+        $this
+            ->queue
+            ->expects($this->any())
+            ->method('queue')
+            ->willReturnCallback($callback);
     }
 
     protected function setupDatabaseSchema(Schema $schema)
@@ -89,8 +95,15 @@ class UtilCoreTestCase extends TestCase
                     return $logger;
                 },
             ]);
+
+            $this->setupContainer($container);
         }
 
         return $container;
+    }
+
+    public function setupContainer(Container &$c)
+    {
+        # Extra container setup, test cases can safely override this.
     }
 }
