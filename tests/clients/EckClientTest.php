@@ -1,6 +1,6 @@
 <?php
 
-namespace go1\util\schema\tests;
+namespace go1\util\tests\clients;
 
 use go1\clients\EckClient;
 use go1\util\tests\UtilTestCase;
@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Response;
 class EckClientTest extends UtilTestCase
 {
     private $instance = 'qa.mygo1.com';
-    private $eckUrl = 'http://eck.dev.go1.service';
+    private $eckUrl   = 'http://eck.dev.go1.service';
 
     private function mockClient()
     {
@@ -18,14 +18,14 @@ class EckClientTest extends UtilTestCase
             'instance'    => 'qeli.mygo1.com',
             'entity_type' => 'user',
             'fields'      => [
-                'field_area' => [
+                'field_area'     => [
                     'label'     => 'Specialist area',
                     'type'      => 'string',
                     'enum'      => [],
                     'mandatory' => 0,
                     'published' => 1,
                 ],
-                'field_phone' => [
+                'field_phone'    => [
                     'label'     => 'Phone',
                     'type'      => 'string',
                     'enum'      => [],
@@ -60,12 +60,12 @@ class EckClientTest extends UtilTestCase
     {
         $c = $this->getContainer();
 
-        $c['client']  = $this->mockClient();
+        $c['client'] = $this->mockClient();
         $c['eck_url'] = $this->eckUrl;
 
         /** @var EckClient $eckClient */
         $eckClient = $c['go1.client.eck'];
-        $fields    = $eckClient->fields($this->instance, 'user');
+        $fields = $eckClient->fields($this->instance, 'user');
 
         $fieldArea = $fields['field_area'];
         $this->assertEquals('Specialist area', $fieldArea['label']);

@@ -7,9 +7,9 @@ use go1\util\portal\PortalHelper;
 use go1\util\portal\PortalPricing;
 use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class PortalModelTest extends UtilTestCase
+class PortalModelTest extends UtilCoreTestCase
 {
     use PortalMockTrait;
     use UserMockTrait;

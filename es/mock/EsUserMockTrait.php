@@ -31,7 +31,7 @@ trait EsUserMockTrait
             'metadata'     => [
                 'instance_id' => $options['instance_id'] ?? 0,
                 'updated_at'  => $options['updated_at'] ?? time(),
-            ]
+            ],
         ];
 
         $type = $options['type'] ?? Schema::O_USER;

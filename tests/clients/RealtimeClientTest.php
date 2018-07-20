@@ -1,6 +1,6 @@
 <?php
 
-namespace go1\util\schema\tests;
+namespace go1\util\tests\clients;
 
 use go1\clients\MqClient;
 use go1\clients\RealtimeClient;

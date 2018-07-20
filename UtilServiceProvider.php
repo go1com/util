@@ -14,21 +14,14 @@ use go1\clients\EckClient;
 use go1\clients\EntityClient;
 use go1\clients\FirebaseClient;
 use go1\clients\GraphinClient;
-use go1\clients\LoClient;
-use go1\clients\MailClient;
-use go1\clients\MqClient;
 use go1\clients\PaymentClient;
-use go1\clients\PortalClient;
 use go1\clients\QueueClient;
 use go1\clients\RealtimeClient;
 use go1\clients\RulesClient;
 use go1\clients\S3Client as Go1S3Client;
 use go1\clients\SchedulerClient;
 use go1\clients\SmsClient;
-use go1\clients\UserClient;
 use go1\neo4j_builder\Neo4jBuilder;
-use go1\util\lo\LoChecker;
-use go1\util\portal\PortalChecker;
 use go1\util\toggle\FeatureToggleClient;
 use GraphAware\Neo4j\Client\ClientBuilder;
 use Pimple\Container;
@@ -41,27 +34,11 @@ class UtilServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $c)
     {
-        $c['html'] = function () {
-            return Text::defaultPurifier();
-        };
-
         if (class_exists(Whip::class)) {
             $c['whip'] = function () {
                 return new Whip(Whip::REMOTE_ADDR);
             };
         }
-
-        $c['access_checker'] = function () {
-            return new AccessChecker;
-        };
-
-        $c['portal_checker'] = function () {
-            return new PortalChecker;
-        };
-
-        $c['lo_checker'] = function () {
-            return new LoChecker;
-        };
 
         $c['go1.client.accounts'] = function (Container $c) {
             return new AccountsClient($c['dbs']['default'], $c['cache'], $c['accounts_name']);
@@ -89,6 +66,7 @@ class UtilServiceProvider implements ServiceProviderInterface
             if (isset($c['go1.client.es.serializer'])) {
                 $builder->setSerializer($c['go1.client.es.serializer']);
             }
+
             return $builder->build();
         };
 
@@ -108,18 +86,6 @@ class UtilServiceProvider implements ServiceProviderInterface
             }
 
             return new S3Client($args);
-        };
-
-        $c['go1.client.user'] = function (Container $c) {
-            return new UserClient($c['client'], $c['user_url'], $c['go1.client.mq']);
-        };
-
-        $c['go1.client.mail'] = function (Container $c) {
-            return new MailClient($c['go1.client.mq']);
-        };
-
-        $c['go1.client.portal'] = function (Container $c) {
-            return new PortalClient($c['client'], $c['portal_url'], $c['cache']);
         };
 
         $c['go1.client.graphin'] = function (Container $c) {
@@ -147,23 +113,6 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.currency'] = function (Container $c) {
             return new CurrencyClient($c['cache'], $c['client'], $c['currency_url']);
-        };
-
-        $c['go1.client.mq'] = function (Container $c) {
-            $logger = null;
-            $o = $c['queueOptions'];
-
-            if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
-                $logger = $c['profiler.collectors.mq'];
-            }
-
-            $currentRequest = $c->offsetExists('request_stack') ? $c['request_stack']->getCurrentRequest() : null;
-
-            return new MqClient($o['host'], $o['port'], $o['user'], $o['pass'], $logger, $c['access_checker'], $c, $currentRequest);
-        };
-
-        $c['go1.client.lo'] = function (Container $c) {
-            return new LoClient($c['client'], $c['lo_url'], $c['go1.client.mq']);
         };
 
         $c['go1.client.payment'] = function (Container $c) {
@@ -207,6 +156,7 @@ class UtilServiceProvider implements ServiceProviderInterface
         if ($c->offsetExists('toggleOptions')) {
             $c['toggle.manager.collection'] = function (Container $c) {
                 $o = $c['toggleOptions'];
+
                 return new PredisCollection($o['namespace'], $c['cache.predis']);
             };
         }

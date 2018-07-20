@@ -15,6 +15,7 @@ class File
     public static function fileMimeType(string $fileName)
     {
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+
         return (new MimeTypes())->getMimeType($ext);
     }
 }

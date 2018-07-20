@@ -15,6 +15,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated Move this to go1\app instead.
+ */
 class ConsumeController
 {
     /** @var ConsumerInterface[] */

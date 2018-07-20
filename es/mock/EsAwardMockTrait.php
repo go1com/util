@@ -107,13 +107,13 @@ trait EsAwardMockTrait
         static $autoId;
 
         $enrolmentRevision = [
-            'id'          => $options['id'] ?? ++$autoId,
-            'start_date'  => DateTime::formatDate($options['start_date'] ?? time()),
-            'end_date'    => isset($options['end_date']) ? DateTime::formatDate($options['end_date']) : null,
-            'status'      => $options['status'] ?? 0,
-            'result'      => $options['result'] ?? 0,
-            'pass'        => $options['pass'] ?? 0,
-            'note'        => $options['note'] ?? '',
+            'id'         => $options['id'] ?? ++$autoId,
+            'start_date' => DateTime::formatDate($options['start_date'] ?? time()),
+            'end_date'   => isset($options['end_date']) ? DateTime::formatDate($options['end_date']) : null,
+            'status'     => $options['status'] ?? 0,
+            'result'     => $options['result'] ?? 0,
+            'pass'       => $options['pass'] ?? 0,
+            'note'       => $options['note'] ?? '',
         ];
 
         return $client->create([
