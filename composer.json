@@ -1,0 +1,29 @@
+{
+  "name":              "go1/util_core",
+  "license":           "proprietary",
+  "prefer-stable":     true,
+  "minimum-stability": "stable",
+  "autoload":          {
+    "psr-4": {
+      "go1\\util\\": "./"
+    }
+  },
+  "require":           {
+    "php":                     "^7.1",
+    "doctrine/dbal":           "^2.8.0",
+    "firebase/php-jwt":        "^3.0",
+    "go1/kv":                  "^0.2",
+    "go1/flood":               "^0.6",
+    "symfony/http-foundation": "^4.0 | ^3.4",
+    "pimple/pimple":           "^v3.0.0",
+    "psr/log":                 "~1.0"
+  },
+  "require-dev":       {
+    "ezyang/htmlpurifier": "^4.9"
+  },
+  "suggest":           {
+    "go1/app": "for go1\\util\\DB::connectionOptions()",
+    "go1/util_core_clients": "If you would like making requests to core-services.",
+    "ezyang/htmlpurifier": "for go1\\util\\Text"
+  }
+}
