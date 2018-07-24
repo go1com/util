@@ -166,4 +166,6 @@ class EdgeTypes
     # Group relationships
     const HAS_GROUP_SYSTEM          = 1000; # T: Group | S: Portal
     const HAS_GROUP_CONTENT_SHARING = 1001; # T: Group | S: LO
+
+    const HAS_ORIGINAL_ENROLMENT    = 1002; # T: Original enrolment_id | S: Clone enrolment_id
 }
