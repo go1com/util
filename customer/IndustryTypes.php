@@ -6,33 +6,31 @@ use ReflectionClass;
 
 class IndustryTypes
 {
-    const GOVERNMENT              = 'government';
-    const EDUCATION               = 'education';
-    const HEALTH_SUPPORT_SERVICES = 'health_support_services';
-    const ENGINEERING             = 'engineering';
-    const BUILDING_SUPPLIES       = 'building_supplies';
+    const AEROSPACE                     = 'Aerospace';
+    const AGRICULTURE                   = 'Agriculture';
+    const CHEMICAL                      = 'Chemical';
+    const COMPUTER                      = 'Computer';
+    const CONSTRUCTION_INFRASTRUCTURE   = 'Construction and Infrastructure';
+    const REAL_ESTATE                   = 'Real Estate';
+    const PUBLIC_UTILITIES              = 'Public Utilities';
+    const DEFENSE                       = 'Defense';
+    const ENTERTAINMENT                 = 'Entertainment';
+    const ENERGY                        = 'Energy';
+    const EDUCATION                     = 'Education';
+    const BANKING_FINANCIAL_SERVICES    = 'Banking and Financial Services';
+    const HEALTHCARE                    = 'Healthcare';
+    const HOSPITALITY                   = 'Hospitality';
+    const INFORMATION                   = 'Information';
+    const MANUFACTURING                 = 'Manufacturing';
+    const MEDIA                         = 'Media';
+    const MINING                        = 'Mining';
+    const TELECOMMUNICATIONS            = 'Telecommunications';
+    const TRANSPORT                     = 'Transport';
 
-    const S_GOVERNMENT              = 'Government';
-    const S_EDUCATION               = 'Education';
-    const S_HEALTH_SUPPORT_SERVICES = 'Health Support Services';
-    const S_ENGINEERING             = 'Engineering';
-    const S_BUILDING_SUPPLIES       = 'Building Supplies';
-
-    public static function all()
+    public static function getArray()
     {
         $rClass = new ReflectionClass(self::class);
 
         return $rClass->getConstants();
-    }
-
-    public static function getArray()
-    {
-        return [
-            self::GOVERNMENT              => self::S_GOVERNMENT,
-            self::EDUCATION               => self::S_EDUCATION,
-            self::HEALTH_SUPPORT_SERVICES => self::S_HEALTH_SUPPORT_SERVICES,
-            self::ENGINEERING             => self::S_ENGINEERING,
-            self::BUILDING_SUPPLIES       => self::S_BUILDING_SUPPLIES,
-        ];
     }
 }
