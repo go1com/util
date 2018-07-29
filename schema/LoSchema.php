@@ -90,17 +90,6 @@ class LoSchema
             $event->addColumn('end', 'string', ['notnull' => false]);
             $event->addColumn('timezone', 'string', ['length' => 3]);
             $event->addColumn('seats', 'integer', ['notnull' => false]);
-            $event->addColumn('loc_country', 'string', ['notnull' => false]);
-            $event->addColumn('loc_administrative_area', 'string', ['notnull' => false]);
-            $event->addColumn('loc_sub_administrative_area', 'string', ['notnull' => false]);
-            $event->addColumn('loc_locality', 'string', ['notnull' => false]);
-            $event->addColumn('loc_dependent_locality', 'string', ['notnull' => false]);
-            $event->addColumn('loc_thoroughfare', 'string', ['notnull' => false]);
-            $event->addColumn('loc_premise', 'string', ['notnull' => false]);
-            $event->addColumn('loc_sub_premise', 'string', ['notnull' => false]);
-            $event->addColumn('loc_organisation_name', 'string', ['notnull' => false]);
-            $event->addColumn('loc_name_line', 'string', ['notnull' => false]);
-            $event->addColumn('loc_postal_code', 'integer', ['notnull' => false]);
             $event->addColumn('created', 'integer');
             $event->addColumn('updated', 'integer');
             $event->addColumn('data', 'blob');
@@ -108,17 +97,6 @@ class LoSchema
             $event->setPrimaryKey(['id']);
             $event->addIndex(['start']);
             $event->addIndex(['end']);
-            $event->addIndex(['loc_country']);
-            $event->addIndex(['loc_administrative_area']);
-            $event->addIndex(['loc_sub_administrative_area']);
-            $event->addIndex(['loc_locality']);
-            $event->addIndex(['loc_dependent_locality']);
-            $event->addIndex(['loc_thoroughfare']);
-            $event->addIndex(['loc_premise']);
-            $event->addIndex(['loc_sub_premise']);
-            $event->addIndex(['loc_organisation_name']);
-            $event->addIndex(['loc_name_line']);
-            $event->addIndex(['loc_postal_code']);
             $event->addIndex(['created']);
             $event->addIndex(['updated']);
         }
