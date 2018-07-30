@@ -1306,6 +1306,34 @@ class MailTemplate
         ],
     ];
 
+    const ASSESSOR_ASSIGNMENT_FEEDBACK = [
+        'key'    => 'assessor.assignment.feedback',
+        'tokens' => [
+            '!learner_full_name' => 'Learner full name',
+            '!learner_mail'      => 'Learner mail',
+            '!recipient_mail'    => 'Recipient mail',
+            '!assignment_name'   => 'Assignment name',
+            '!my_teaching_url'   => 'My teaching URL',
+            '!description'       => 'Feedback of an assignment',
+            '!portal_name'       => 'Portal name',
+            '!portal_image'      => 'Portal image',
+            '!portal_url'        => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_ASSIGNMENT_FEEDBACK = [
+        'key'    => 'learner.assignment.feedback',
+        'tokens' => [
+            '!assessor_full_name' => 'Assessor full name',
+            '!learner_mail'       => 'Learner mail',
+            '!assignment_name'    => 'Assignment name',
+            '!description'        => 'Feedback of an assignment',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
+        ],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
