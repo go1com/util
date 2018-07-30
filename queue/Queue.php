@@ -149,6 +149,7 @@ class Queue
     const CREDIT_CREATE                = 'credit.create';
     const CREDIT_UPDATE                = 'credit.update';
     const CREDIT_DELETE                = 'credit.delete';
+    const CREDIT_USAGE_CREATE          = 'credit_usage.create';
     const ROLE_CREATE                  = 'role.create';
     const ROLE_UPDATE                  = 'role.update';
     const ROLE_DELETE                  = 'role.delete';

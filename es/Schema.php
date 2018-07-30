@@ -684,6 +684,7 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties'],
             ],
+            'credit_usage_count' => ['type' => self::T_INT],
         ],
     ];
 
