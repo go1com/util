@@ -34,6 +34,11 @@ class Queue
     const CONTRACT_CREATE              = 'contract.create';
     const CONTRACT_UPDATE              = 'contract.update';
     const CONTRACT_DELETE              = 'contract.delete';
+    const CONTRACT_VIEW_LIST           = 'contract.view.list';
+    const CONTRACT_VIEW_DETAIL         = 'contract.view.detail';
+    const CONTRACT_VIEW_SUBSCRIPTION   = 'contract.view.subscription';
+    const CONTRACT_CREATE_START        = 'contract.create.start';
+    const CONTRACT_CREATE_END          = 'contract.create.end';
     const LO_CREATE                    = 'lo.create'; # Body: LO object, no lo.items should be expected.
     const LO_UPDATE                    = 'lo.update'; # Body: LO object with extra property: origin.
     const LO_DELETE                    = 'lo.delete'; # Body: LO object.
@@ -156,6 +161,7 @@ class Queue
     const CREDIT_CREATE                = 'credit.create';
     const CREDIT_UPDATE                = 'credit.update';
     const CREDIT_DELETE                = 'credit.delete';
+    const CREDIT_USAGE_CREATE          = 'credit_usage.create';
     const ROLE_CREATE                  = 'role.create';
     const ROLE_UPDATE                  = 'role.update';
     const ROLE_DELETE                  = 'role.delete';

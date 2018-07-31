@@ -5,7 +5,6 @@ namespace go1\util;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\TableExistsException;
 use Doctrine\DBAL\Schema\Comparator;
-use go1\app\App;
 use PDO;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -24,32 +23,40 @@ class DB
         if (function_exists('__db_connection_options')) {
             return __db_connection_options($name);
         }
-
-        $prefix = strtoupper(class_exists(App::class, false) ? "{$name}_DB" : "_DOCKER_{$name}_DB");
-        $prefix = getenv("{$prefix}_NAME") ? $prefix : strtoupper("_DOCKER_{$name}_DB");
+        $prefix = strtoupper("{$name}_DB");
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
-        $slave = getenv("{$prefix}_HOST");
+        $slave = self::getEnvByPriority(["{$prefix}_HOST", 'RDS_DB_HOST', 'DEV_DB_HOST']);
 
-        if ((('GET' === $method) && (getenv("{$prefix}_SLAVE"))) || $forceSlave) {
+        if (('GET' === $method) || $forceSlave) {
             if (!$forceMaster) {
-                $slave = getenv("{$prefix}_SLAVE");
+                $slave = self::getEnvByPriority(["{$prefix}_SLAVE", 'RDS_DB_SLAVE', 'DEV_DB_SLAVE']) ?: $slave;
             }
         }
 
-        $dbName = "{$name}_dev";
+        $isDevEnv = !in_array(self::getEnvByPriority(['_DOCKER_ENV', 'ENV']), ['staging', 'production']);
+        $dbName = $isDevEnv ? "{$name}_dev" : "{$name}_prod";
         if ('go1' === $name) {
-            $dbName = in_array(getenv('_DOCKER_ENV'), ['staging', 'production']) ? 'gc_go1' : 'dev_go1';
+            $dbName = $isDevEnv ? 'dev_go1' : 'gc_go1';
         }
 
         return [
             'driver'        => 'pdo_mysql',
             'dbname'        => getenv("{$prefix}_NAME") ?: $dbName,
-            'host'          => $slave ?: (getenv("{$prefix}_HOST") ?: (getenv('DEV_DB_SLAVE') ?: getenv('DEV_DB_HOST'))),
-            'user'          => getenv("{$prefix}_USERNAME") ?: getenv('DEV_DB_USERNAME'),
-            'password'      => getenv("{$prefix}_PASSWORD") ?: getenv('DEV_DB_PASSWORD'),
+            'host'          => $slave,
+            'user'          => self::getEnvByPriority(["{$prefix}_USERNAME", 'RDS_DB_USERNAME', 'DEV_DB_USERNAME']),
+            'password'      => self::getEnvByPriority(["{$prefix}_PASSWORD", 'RDS_DB_PASSWORD', 'DEV_DB_PASSWORD']),
             'port'          => getenv("{$prefix}_PORT") ?: '3306',
             'driverOptions' => [1002 => 'SET NAMES utf8'],
         ];
+    }
+
+    private static function getEnvByPriority(array $names)
+    {
+        foreach ($names as $name) {
+            if ($value = getenv($name)) {
+                return $value;
+            }
+        }
     }
 
     public static function transactional(Connection $db, callable $callback)

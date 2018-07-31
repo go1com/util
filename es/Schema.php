@@ -340,6 +340,7 @@ class Schema
                     'label'          => ['type' => self::T_KEYWORD],
                     'pass_rate'      => ['type' => self::T_FLOAT],
                     'url'            => ['type' => self::T_TEXT],
+                    'single_li'      => ['type' => self::T_SHORT]
                 ],
             ],
             'locations'       => [
@@ -732,6 +733,7 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties'],
             ],
+            'credit_usage_count' => ['type' => self::T_INT],
         ],
     ];
 
