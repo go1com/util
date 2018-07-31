@@ -181,6 +181,8 @@ class Queue
     const POLICY_ITEM_DELETE           = 'policy.item.delete';
     const PAGEUP_COURSE_UPLOAD         = 'pageup.course.upload';
     const EXIM_TASK_UPDATE             = 'exim.task.update';
+    const PURCHASE_REQUEST_CREATE      = 'purchase.request.create';
+    const PURCHASE_REQUEST_UPDATE      = 'purchase.request.accept';
 
     # routingKey that tell some service to do something.
     #
