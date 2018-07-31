@@ -97,6 +97,7 @@ trait EsLoMockTrait
                 'label'          => $options['data']['label'] ?? null,
                 'pass_rate'      => $options['data']['pass_rate'] ?? null,
                 'url'            => $options['data']['url'] ?? null,
+                'single_li'      => $options['data']['single_li'] ?? 0,
             ],
             'totalEnrolment'  => $options['totalEnrolment'] ?? 0,
             'allow_enrolment' => $options['allow_enrolment'] ?? EnrolmentAllowTypes::I_DEFAULT,
