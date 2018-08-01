@@ -9,6 +9,16 @@ class FlagSchema
 {
     public static function install(Schema $schema)
     {
+        if (!$schema->hasTable('flag_item')) {
+            $item = $schema->createTable('flag_item');
+            $item->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $item->addColumn('entity_type', Type::STRING);
+            $item->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
+            $item->addColumn('level', Type::SMALLINT, ['unsigned' => true]);
+            $item->setPrimaryKey(['id']);
+            $item->addIndex(['entity_type', 'entity_id']);
+        }
+
         if (!$schema->hasTable('flag')) {
             $flag = $schema->createTable('flag');
             $flag->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
@@ -24,16 +34,7 @@ class FlagSchema
             $flag->addIndex(['instance_id']);
             $flag->addIndex(['created']);
             $flag->addIndex(['updated']);
-        }
-
-        if (!$schema->hasTable('flag_item')) {
-            $item = $schema->createTable('flag_item');
-            $item->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
-            $item->addColumn('entity_type', Type::STRING);
-            $item->addColumn('entity_id', Type::INTEGER, ['unsigned' => true]);
-            $item->addColumn('level', Type::SMALLINT, ['unsigned' => true]);
-            $item->setPrimaryKey(['id']);
-            $item->addIndex(['entity_type', 'entity_id']);
+            $flag->addForeignKeyConstraint('flag_item', ['flag_id'], ['id'], [], 'fk_flag_flag_item');
         }
     }
 }

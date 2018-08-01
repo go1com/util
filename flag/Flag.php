@@ -2,7 +2,7 @@
 
 namespace go1\util\flag;
 
-use Assert\Assert;
+use go1\util\flag\FlagReason;
 use go1\util\text\Xss;
 use JsonSerializable;
 use stdClass;
@@ -16,13 +16,7 @@ class Flag implements JsonSerializable
     const LEVEL_HIGH     = 4;
     const LEVEL_CRITICAL = 5;
 
-    const REASON_LOADING       = 1;
-    const REASON_GRAMMAR       = 2;
-    const REASON_INACCURACY    = 3;
-    const REASON_INAPPROPRIATE = 4;
-
     const FLAG_LEVELS = [FLAG::LEVEL_NONE, FLAG::LEVEL_TRIVIAL, FLAG::LEVEL_LOW, FLAG::LEVEL_MEDIUM, FLAG::LEVEL_HIGH, FLAG::LEVEL_CRITICAL];
-    const FLAG_REASONS = [FLAG::REASON_LOADING, FLAG::REASON_GRAMMAR, FLAG::REASON_INACCURACY, FLAG::REASON_INAPPROPRIATE];
 
     public $id;
     public $instanceId;
