@@ -802,8 +802,8 @@ class Schema
             'status'         => ['type' => self::T_SHORT],
             'request_date'   => ['type' => self::T_TEXT],
             'response_date'  => ['type' => self::T_TEXT],
-            'accept_url'     => ['type' => self::T_TEXT],
-            'decline_url'    => ['type' => self::T_TEXT],
+            'approve_url'    => ['type' => self::T_TEXT],
+            'reject_url'     => ['type' => self::T_TEXT],
             'metadata'       => [
                 'properties' => [
                     'user_id'    => ['type' => self::T_INT],
