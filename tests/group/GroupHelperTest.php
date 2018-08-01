@@ -21,6 +21,7 @@ use go1\util\schema\mock\NoteMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\tests\UtilTestCase;
 use go1\util\user\Roles;
+use go1\util\user\UserHelper;
 use Symfony\Component\HttpFoundation\Request;
 
 class GroupHelperTest extends UtilTestCase
@@ -526,5 +527,14 @@ class GroupHelperTest extends UtilTestCase
         $this->repository->createItem($sharingGroupId, GroupItemTypes::PORTAL, $instanceZId, GroupItemStatus::ACTIVE);
         $this->repository->createItem($marketplaceSharingGroupId, GroupItemTypes::PORTAL, $instanceZId, GroupItemStatus::ACTIVE);
         $this->assertTrue(GroupHelper::isMemberOfContentSharingGroup($this->db, $loId, $instanceZId));
+    }
+
+    public function testIsAuthor()
+    {
+        $c = $this->getContainer();
+        $user1Id = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'mail' => 'user-groups-testing-1@foo.com']);
+        $group1Id = $this->createGroup($this->db, ['title' => 'Group 1', 'instance_id' => 1, 'user_id' => $user1Id]);
+        $group = GroupHelper::load($this->db, $group1Id);
+        $this->assertTrue(GroupHelper::isAuthor($group, $user1Id));
     }
 }

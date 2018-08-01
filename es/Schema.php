@@ -57,6 +57,7 @@ class Schema
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
     const O_CREDIT              = 'credit';
     const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
+    const O_PURCHASE_REQUEST    = 'purchase_request';
     const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
     const O_LO_GROUP            = 'lo_group';
@@ -111,6 +112,7 @@ class Schema
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
         self::O_CREDIT              => self::CREDIT_MAPPING,
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
+        self::O_PURCHASE_REQUEST    => self::PURCHASE_REQUEST_MAPPING,
         self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
         self::O_COUPON              => self::COUPON_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
@@ -338,6 +340,7 @@ class Schema
                     'label'          => ['type' => self::T_KEYWORD],
                     'pass_rate'      => ['type' => self::T_FLOAT],
                     'url'            => ['type' => self::T_TEXT],
+                    'single_li'      => ['type' => self::T_SHORT]
                 ],
             ],
             'locations'       => [
@@ -401,15 +404,16 @@ class Schema
         '_parent'    => ['type' => self::O_LO],
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'realm'       => ['type' => self::T_SHORT],
-            'portal_id'   => ['type' => self::T_INT],
-            'entity_type' => ['type' => self::T_KEYWORD],
-            'entity_id'   => ['type' => self::T_INT],
+            'id'                => ['type' => self::T_KEYWORD],
+            'realm'             => ['type' => self::T_SHORT],
+            'portal_id'         => ['type' => self::T_INT],
+            'entity_type'       => ['type' => self::T_KEYWORD],
+            'entity_id'         => ['type' => self::T_INT],
             # Attach group member ids to support explore learning object when share lo to group
             # Its value will be maintained by service #index-content-sharing
-            'member_ids'  => ['type' => self::T_INT],
-            'metadata'    => [
+            'member_ids'        => ['type' => self::T_INT],
+            'access_portal_ids' => ['type' => self::T_INT],
+            'metadata'          => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
                 ],
@@ -585,6 +589,7 @@ class Schema
             'result'              => ['type' => self::T_INT],
             'pass'                => ['type' => self::T_INT],
             'note'                => ['type' => self::T_TEXT],
+            'timestamp'           => ['type' => self::T_DATE],
             'progress'            => [
                 'properties' => [
                     EnrolmentStatuses::NOT_STARTED => ['type' => self::T_INT],
@@ -654,6 +659,7 @@ class Schema
         'properties' => [
             'id'          => ['type' => self::T_KEYWORD],
             'title'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'portal_name' => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'type'        => ['type' => self::T_KEYWORD],
             'description' => ['type' => self::T_TEXT],
             'image'       => ['type' => self::T_TEXT],
@@ -727,6 +733,7 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties'],
             ],
+            'credit_usage_count' => ['type' => self::T_INT],
         ],
     ];
 
@@ -776,8 +783,37 @@ class Schema
                     'user_id'   => ['type' => self::T_INT],
                 ],
             ],
+            'title'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
         ],
     ];
+
+    const PURCHASE_REQUEST_MAPPING = [
+        'properties' => [
+            'id'             => ['type' => self::T_KEYWORD],
+            'user'           => [
+                'properties' => self::USER_MAPPING['properties'],
+            ],
+            'manager'        => [
+                'properties' => self::USER_MAPPING['properties'],
+            ],
+            'lo'             => [
+                'properties' => self::LO_MAPPING['properties'],
+            ],
+            'status'         => ['type' => self::T_SHORT],
+            'request_date'   => ['type' => self::T_TEXT],
+            'response_date'  => ['type' => self::T_TEXT],
+            'approve_url'    => ['type' => self::T_TEXT],
+            'reject_url'     => ['type' => self::T_TEXT],
+            'metadata'       => [
+                'properties' => [
+                    'user_id'    => ['type' => self::T_INT],
+                    'manager_id' => ['type' => self::T_INT],
+                    'lo_id'      => ['type' => self::T_INT]
+                ],
+            ]
+        ],
+    ];
+    
 
     const ECK_METADATA_MAPPING = [
         '_routing'   => ['required' => true],

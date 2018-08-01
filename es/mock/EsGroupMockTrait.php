@@ -18,6 +18,7 @@ trait EsGroupMockTrait
         $group = [
             'id'          => $options['id'] ?? ++$autoId,
             'title'       => $options['title'] ?? 'Foo',
+            'portal_name' => $options['portal_name'] ?? 'Foo',
             'type'        => $options['type'] ?? GroupTypes::DEFAULT,
             'description' => $options['description'] ?? '',
             'image'       => $options['image'] ?? '',

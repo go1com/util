@@ -133,31 +133,8 @@ class PortalPricing
     {
         $currency = static::getCurrency($portal);
         $price = self::getPortalPrice($portal);
-        if ($price && !$reCalculate) {
-            return [$price, $currency];
-        }
 
-        $license = static::getLicenses($portal);
-        $regional = static::getRegional($portal);
-        $product = static::getProduct($portal);
-
-        if ($product == static::PRODUCT_PLATFORM || empty($formula)) {
-            return [0, 'AUD'];
-        }
-
-        foreach ($formula as $item) {
-            $op = $item['op'];
-            $limit = $item['license_limit'];
-
-            if (eval("return $license $op $limit;")) {
-                $data = $item['price'][$regional];
-                $price = ($item['license_multiple'] ? $license : 1) * $data['price'];
-
-                return [$price, $data['currency']];
-            }
-        }
-
-        return [0, 'AUD'];
+        return $price ? [$price, $currency] : [0, 'AUD'];
     }
 
     public static function calculateTrialStatus(stdClass $portal, array $portalPrice = [])

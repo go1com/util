@@ -173,36 +173,80 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_ASSIGN_COURSE = [
-        'key'    => 'learner.assign.course',
+    const LEARNER_ASSIGN_COURSE_WITH_DUE_DATE = [
+        'key'    => 'learner.assign.course.with-due-date',
         'tokens' => [
-            '!entity_type'         => '`course` or `resource`',
-            '!entity_type_human'   => '`course` or `learning resource`',
-            '!learner_first_name'  => 'Learner first name',
-            '!learner_mail'        => 'Learner mail',
-            '!course_name'         => 'Course name',
-            '!course_url'          => 'Course URL',
-            '!assigner_full_name'  => 'Assigner full name',
-            '!scheduled_due_date'  => 'Scheduled due date',
-            '!portal_name'         => 'Portal name',
-            '!portal_image'        => 'Portal image',
+            '!entity_type'        => '`course` or `resource`',
+            '!entity_type_human'  => '`course` or `learning resource`',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!assigner_full_name' => 'Assigner full name',
+            '!scheduled_due_date' => 'Scheduled due date',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+        ],
+    ];
+
+    const LEARNER_ASSIGN_COURSE_WITHOUT_DUE_DATE = [
+        'key'    => 'learner.assign.course.without-due-date',
+        'tokens' => [
+            '!entity_type'        => '`course` or `resource`',
+            '!entity_type_human'  => '`course` or `learning resource`',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!assigner_full_name' => 'Assigner full name',
+            '!scheduled_due_date' => 'Scheduled due date',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+        ],
+    ];
+
+    const LEARNER_ASSIGN_COURSE_THEMSELVES_WITH_DUE_DATE = [
+        'key'    => 'learner.assign.course.themselves.with-due-date',
+        'tokens' => [
+            '!entity_type'        => 'Entity type',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!scheduled_due_date' => 'Scheduled due date',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+        ],
+    ];
+
+    const LEARNER_ASSIGN_COURSE_THEMSELVES_WITHOUT_DUE_DATE = [
+        'key'    => 'learner.assign.course.themselves.without-due-date',
+        'tokens' => [
+            '!entity_type'        => 'Entity type',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!scheduled_due_date' => 'Scheduled due date',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
         ],
     ];
 
     const LEARNER_ASSIGN_COURSE_THROUGH_GROUP = [
         'key'    => 'learner.assign.course.through.group',
         'tokens' => [
-            '!entity_type'         => '`course` or `resource`',
-            '!learner_first_name'  => 'Learner first name',
-            '!learner_mail'        => 'Learner mail',
-            '!course_name'         => 'Course name',
-            '!course_url'          => 'Course URL',
-            '!scheduled_due_date'  => 'Scheduled due date',
-            '!portal_name'         => 'Portal name',
-            '!portal_url'          => 'Portal url',
-            '!portal_image'        => 'Portal image',
-            '!group_title'         => 'Group title',
-            '!group_url'           => 'Group url',
+            '!entity_type'        => '`course` or `resource`',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!course_name'        => 'Course name',
+            '!course_url'         => 'Course URL',
+            '!scheduled_due_date' => 'Scheduled due date',
+            '!portal_name'        => 'Portal name',
+            '!portal_url'         => 'Portal url',
+            '!portal_image'       => 'Portal image',
+            '!group_title'        => 'Group title',
+            '!group_url'          => 'Group url',
         ],
     ];
 
@@ -523,30 +567,30 @@ class MailTemplate
     const AWARD_ASSIGN = [
         'key'    => 'award.assign',
         'tokens' => [
-            '!learner_first_name'  => 'Learner first name',
-            '!learner_mail'        => 'Learner mail',
-            '!award_name'          => 'Award name',
-            '!award_url'           => 'Award URL',
-            '!assigner_full_name'  => 'Assigner full name',
-            '!scheduled_due_date'  => 'Scheduled due date',
-            '!portal_name'         => 'Portal name',
-            '!portal_image'        => 'Portal logo',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!award_name'         => 'Award name',
+            '!award_url'          => 'Award URL',
+            '!assigner_full_name' => 'Assigner full name',
+            '!scheduled_due_date' => 'Scheduled due date',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal logo',
         ],
     ];
 
     const AWARD_ASSIGN_THROUGH_GROUP = [
         'key'    => 'award.assign.through.group',
         'tokens' => [
-            '!learner_first_name'  => 'Learner first name',
-            '!learner_mail'        => 'Learner mail',
-            '!award_name'          => 'Award name',
-            '!award_url'           => 'Award URL',
-            '!assigner_full_name'  => 'Assigner full name',
-            '!scheduled_due_date'  => 'Scheduled due date',
-            '!portal_name'         => 'Portal name',
-            '!portal_image'        => 'Portal logo',
-            '!group_title'         => 'Group title',
-            '!group_url'           => 'Group url',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!award_name'         => 'Award name',
+            '!award_url'          => 'Award URL',
+            '!assigner_full_name' => 'Assigner full name',
+            '!scheduled_due_date' => 'Scheduled due date',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal logo',
+            '!group_title'        => 'Group title',
+            '!group_url'          => 'Group url',
         ],
     ];
 
@@ -1249,30 +1293,46 @@ class MailTemplate
         ],
     ];
 
-    const LEARNER_ASSIGN_COURSE_THEMSELVES = [
-        'key'    => 'learner.assign.course.themselves',
-        'tokens' => [
-            '!entity_type'         => 'Entity type',
-            '!learner_first_name'  => 'Learner first name',
-            '!learner_mail'        => 'Learner mail',
-            '!course_name'         => 'Course name',
-            '!course_url'          => 'Course URL',
-            '!scheduled_due_date'  => 'Scheduled due date',
-            '!portal_name'         => 'Portal name',
-            '!portal_image'        => 'Portal image',
-        ],
-    ];
-
     const AWARD_ASSIGN_THEMSELVES = [
         'key'    => 'award.assign.themselves',
         'tokens' => [
-            '!learner_first_name'  => 'Learner first name',
-            '!learner_mail'        => 'Learner mail',
-            '!award_name'          => 'Award name',
-            '!award_url'           => 'Award URL',
-            '!scheduled_due_date'  => 'Scheduled due date',
-            '!portal_name'         => 'Portal name',
-            '!portal_image'        => 'Portal logo',
+            '!learner_first_name' => 'Learner first name',
+            '!learner_mail'       => 'Learner mail',
+            '!award_name'         => 'Award name',
+            '!award_url'          => 'Award URL',
+            '!scheduled_due_date' => 'Scheduled due date',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal logo',
+        ],
+    ];
+
+    const ASSESSOR_ASSIGNMENT_FEEDBACK = [
+        'key'    => 'assessor.assignment.feedback',
+        'tokens' => [
+            '!learner_full_name' => 'Learner full name',
+            '!learner_mail'      => 'Learner mail',
+            '!recipient_mail'    => 'Recipient mail',
+            '!assignment_name'   => 'Assignment name',
+            '!assignment_url'    => 'Assignment URL',
+            '!my_teaching_url'   => 'My teaching URL',
+            '!description'       => 'Feedback of an assignment',
+            '!portal_name'       => 'Portal name',
+            '!portal_image'      => 'Portal image',
+            '!portal_url'        => 'Portal URL',
+        ],
+    ];
+
+    const LEARNER_ASSIGNMENT_FEEDBACK = [
+        'key'    => 'learner.assignment.feedback',
+        'tokens' => [
+            '!assessor_full_name' => 'Assessor full name',
+            '!learner_mail'       => 'Learner mail',
+            '!assignment_name'    => 'Assignment name',
+            '!assignment_url'     => 'Assignment URL',
+            '!description'        => 'Feedback of an assignment',
+            '!portal_name'        => 'Portal name',
+            '!portal_image'       => 'Portal image',
+            '!portal_url'         => 'Portal URL',
         ],
     ];
 

@@ -97,6 +97,7 @@ trait EsLoMockTrait
                 'label'          => $options['data']['label'] ?? null,
                 'pass_rate'      => $options['data']['pass_rate'] ?? null,
                 'url'            => $options['data']['url'] ?? null,
+                'single_li'      => $options['data']['single_li'] ?? 0,
             ],
             'totalEnrolment'  => $options['totalEnrolment'] ?? 0,
             'allow_enrolment' => $options['allow_enrolment'] ?? EnrolmentAllowTypes::I_DEFAULT,
@@ -178,14 +179,16 @@ trait EsLoMockTrait
             'type'    => Schema::O_LO_POLICY,
             'parent'  => $options['lo_id'],
             'id'      => $options['id'],
+            'routing' => $options['portal_id'],
             'body'    => [
-                'id'          => $options['id'],
-                'realm'       => $options['realm'] ?? Realm::ACCESS,
-                'portal_id'   => $options['portal_id'] ?? 1,
-                'entity_type' => $options['entity_type'] ?? EntityTypes::USER,
-                'entity_id'   => $options['entity_id'] ?? 1,
-                'member_ids'  => $options['member_ids'] ?? [],
-                'metadata'    => [
+                'id'                => $options['id'],
+                'realm'             => $options['realm'] ?? Realm::ACCESS,
+                'portal_id'         => $options['portal_id'] ?? 1,
+                'entity_type'       => $options['entity_type'] ?? EntityTypes::USER,
+                'entity_id'         => $options['entity_id'] ?? 1,
+                'member_ids'        => $options['member_ids'] ?? [],
+                'access_portal_ids' => $options['access_portal_ids'] ?? [],
+                'metadata'          => [
                     'instance_id' => $options['portal_id'] ?? 1
                 ]
             ],
