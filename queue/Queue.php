@@ -188,7 +188,8 @@ class Queue
     const PAGEUP_COURSE_UPLOAD         = 'pageup.course.upload';
     const EXIM_TASK_UPDATE             = 'exim.task.update';
     const PURCHASE_REQUEST_CREATE      = 'purchase.request.create';
-    const PURCHASE_REQUEST_UPDATE      = 'purchase.request.accept';
+    const PURCHASE_REQUEST_UPDATE      = 'purchase.request.update';
+    const PURCHASE_REQUEST_DELETE      = 'purchase.request.delete';
 
     # routingKey that tell some service to do something.
     #
