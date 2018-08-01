@@ -796,7 +796,7 @@ class Schema
             'manager'        => [
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'course'         => [
+            'lo'             => [
                 'properties' => self::LO_MAPPING['properties'],
             ],
             'status'         => ['type' => self::T_SHORT],
@@ -808,7 +808,7 @@ class Schema
                 'properties' => [
                     'user_id'    => ['type' => self::T_INT],
                     'manager_id' => ['type' => self::T_INT],
-                    'course_id'  => ['type' => self::T_INT]
+                    'lo_id'      => ['type' => self::T_INT]
                 ],
             ]
         ],
