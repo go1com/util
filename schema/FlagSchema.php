@@ -22,7 +22,6 @@ class FlagSchema
         if (!$schema->hasTable('flag')) {
             $flag = $schema->createTable('flag');
             $flag->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
-            $flag->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
             $flag->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $flag->addColumn('flag_id', Type::INTEGER, ['unsigned' => true]);
             $flag->addColumn('reason', Type::SMALLINT, ['unsigned' => true]);
@@ -31,7 +30,6 @@ class FlagSchema
             $flag->addColumn('created', Type::INTEGER);
             $flag->addColumn('updated', Type::INTEGER);
             $flag->setPrimaryKey(['id']);
-            $flag->addIndex(['instance_id']);
             $flag->addIndex(['created']);
             $flag->addIndex(['updated']);
             $flag->addForeignKeyConstraint('flag_item', ['flag_id'], ['id'], [], 'fk_flag_flag_item');

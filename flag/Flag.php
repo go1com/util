@@ -2,24 +2,13 @@
 
 namespace go1\util\flag;
 
-use go1\util\flag\FlagReason;
 use go1\util\text\Xss;
 use JsonSerializable;
 use stdClass;
 
 class Flag implements JsonSerializable
 {
-    const LEVEL_NONE     = 0;
-    const LEVEL_TRIVIAL  = 1;
-    const LEVEL_LOW      = 2;
-    const LEVEL_MEDIUM   = 3;
-    const LEVEL_HIGH     = 4;
-    const LEVEL_CRITICAL = 5;
-
-    const FLAG_LEVELS = [FLAG::LEVEL_NONE, FLAG::LEVEL_TRIVIAL, FLAG::LEVEL_LOW, FLAG::LEVEL_MEDIUM, FLAG::LEVEL_HIGH, FLAG::LEVEL_CRITICAL];
-
     public $id;
-    public $instanceId;
     public $userId;
     public $flagId;
     public $entityType;
@@ -41,7 +30,6 @@ class Flag implements JsonSerializable
     {
         $flag = new Flag;
         $flag->id = $input->id ?? null;
-        $flag->instanceId = $input->instance_id;
         $flag->userId = $input->user_id ?? 0;
         $flag->entityType = $input->entity_type ?? null;
         $flag->entityId = $input->entity_id ?? null;
@@ -78,7 +66,6 @@ class Flag implements JsonSerializable
     {
         $array = [
             'id'            => (int)$this->id,
-            'instance_id'   => (int)$this->instanceId,
             'user_id'       => (int)$this->userId,
             'entity_type'   => $this->entityType,
             'entity_id'     => (int)$this->entityId,

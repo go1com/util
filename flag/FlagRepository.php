@@ -27,7 +27,6 @@ class FlagRepository
     }
 
     public function browse(
-        int $instanceId = null,
         string $entityType = 'lo',
         int $entityId = null,
         int $userId = null,
@@ -61,12 +60,6 @@ class FlagRepository
             $q
                 ->andWhere('item.entity_id = :entity_id')
                 ->setParameter(':entity_id', $entityId);
-        }
-
-        if ($instanceId) {
-            $q
-                ->andWhere('flag.instance_id = :instance_id')
-                ->setParameter(':instance_id', $instanceId);
         }
 
         if ($userId) {
