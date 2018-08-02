@@ -107,9 +107,20 @@ class TaskHelper
     {
         $string = is_string($string) ? $string : json_encode($string);
         $checksum = md5($string);
-        $expireString = $expire > 1 ? '-' . $expire . 'days' : '-1 day';
-        return $db->fetchColumn("
-            SELECT id FROM {$name} WHERE checksum = ? AND created > ?",
-            [$checksum, strtotime($expireString, time())]);
+        if (TaskHelper::checkCompletedTask($db, $name, $checksum)) {
+            $expireString = $expire > 1 ? '-' . $expire . 'days' : '-1 day';
+
+            return $db->fetchColumn("
+                SELECT id FROM {$name} WHERE checksum = ? AND created > ?",
+                    [$checksum, strtotime($expireString, time())]);
+        }
+
+        return null;
+    }
+
+    private static function checkCompletedTask(Connection $db, string $name, $checksum) {
+
+        return (Task::STATUS_COMPLETED == $db->fetchColumn("
+            SELECT status FROM {$name} WHERE checksum = ?", [$checksum]));
     }
 }
