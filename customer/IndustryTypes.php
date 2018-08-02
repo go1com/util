@@ -24,6 +24,8 @@ class IndustryTypes
     const MANUFACTURING                 = 'Manufacturing';
     const MEDIA                         = 'Media';
     const MINING                        = 'Mining';
+    const PERSONAL_HOUSEHOLD_SERVICES   = 'Personal and Household Services';
+    const RETAIL                        = 'Retail';
     const TELECOMMUNICATIONS            = 'Telecommunications';
     const TRANSPORT                     = 'Transport';
 
