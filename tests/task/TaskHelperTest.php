@@ -60,7 +60,7 @@ class TaskHelperTest extends UtilTestCase
             'data' => $data = ['type' => 'task_type', 'lo_id' => 1000]
         ]);
 
-        $this->assertEquals(null, TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+        $this->assertFalse($taskId, TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, 'NEW_TASK'));
     }
 
