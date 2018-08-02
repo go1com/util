@@ -111,6 +111,9 @@ class Queue
     const ECK_METADATA_CREATE          = 'eck.metadata.create';
     const ECK_METADATA_UPDATE          = 'eck.metadata.update';
     const ECK_METADATA_DELETE          = 'eck.metadata.delete';
+    const FLAG_CREATE                  = 'flag.create';
+    const FLAG_UPDATE                  = 'flag.update';
+    const FLAG_DELETE                  = 'flag.delete';
     const GROUP_CREATE                 = 'group.create';
     const GROUP_UPDATE                 = 'group.update';
     const GROUP_DELETE                 = 'group.delete';
