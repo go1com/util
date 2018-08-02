@@ -5,9 +5,12 @@ namespace go1\util\es\mock;
 use Elasticsearch\Client;
 use go1\util\DateTime;
 use go1\util\enrolment\EnrolmentAllowTypes;
+use go1\util\EntityTypes;
 use go1\util\es\Schema;
 use go1\util\lo\LoTypes;
 use go1\util\lo\TagTypes;
+use go1\util\policy\Realm;
+use go1\util\Text;
 
 trait EsLoMockTrait
 {
@@ -94,6 +97,7 @@ trait EsLoMockTrait
                 'label'          => $options['data']['label'] ?? null,
                 'pass_rate'      => $options['data']['pass_rate'] ?? null,
                 'url'            => $options['data']['url'] ?? null,
+                'single_li'      => $options['data']['single_li'] ?? 0,
             ],
             'totalEnrolment'  => $options['totalEnrolment'] ?? 0,
             'allow_enrolment' => $options['allow_enrolment'] ?? EnrolmentAllowTypes::I_DEFAULT,
@@ -165,5 +169,51 @@ trait EsLoMockTrait
         }
 
         return $lo['id'];
+    }
+
+    public function createEsLoPolicy(Client $client, $options = []): string
+    {
+        $options['id'] = $options['id'] ?? Text::uniqueId();
+        $client->create([
+            'index'   => $options['index'],
+            'type'    => Schema::O_LO_POLICY,
+            'parent'  => $options['lo_id'],
+            'id'      => $options['id'],
+            'routing' => $options['portal_id'],
+            'body'    => [
+                'id'                => $options['id'],
+                'realm'             => $options['realm'] ?? Realm::ACCESS,
+                'portal_id'         => $options['portal_id'] ?? 1,
+                'entity_type'       => $options['entity_type'] ?? EntityTypes::USER,
+                'entity_id'         => $options['entity_id'] ?? 1,
+                'member_ids'        => $options['member_ids'] ?? [],
+                'access_portal_ids' => $options['access_portal_ids'] ?? [],
+                'metadata'          => [
+                    'instance_id' => $options['portal_id'] ?? 1
+                ]
+            ],
+            'refresh' => true,
+        ]);
+
+        return $options['id'];
+    }
+
+    public function createEsLoGroup(Client $client, $options = [])
+    {
+        $id = implode(':', [$options['instance_id'], $options['lo_id']]);
+        $client->create([
+            'index'   => $options['index'] ?? Schema::INDEX,
+            'routing' => $options['routing'] ?? $options['instance_id'],
+            'type'    => Schema::O_LO_GROUP,
+            'parent'  => $options['lo_id'],
+            'id'      => $id,
+            'body'    => [
+                'lo_id'       => $options['lo_id'],
+                'instance_id' => $options['instance_id'],
+            ],
+            'refresh' => true,
+        ]);
+
+        return $id;
     }
 }

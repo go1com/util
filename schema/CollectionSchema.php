@@ -18,8 +18,10 @@ class CollectionSchema
             $collection->addColumn('author_id', 'integer');
             $collection->addColumn('machine_name', 'string');
             $collection->addColumn('data', 'blob');
+            $collection->addColumn('timestamp', 'integer');
             $collection->addColumn('created', 'integer');
             $collection->addColumn('updated', 'integer');
+            $collection->addColumn('status', 'integer');
 
             $collection->setPrimaryKey(['id']);
             $collection->addUniqueIndex(['machine_name', 'portal_id']);
@@ -27,6 +29,7 @@ class CollectionSchema
             $collection->addIndex(['title']);
             $collection->addIndex(['portal_id']);
             $collection->addIndex(['author_id']);
+            $collection->addIndex(['timestamp']);
             $collection->addIndex(['created']);
             $collection->addIndex(['updated']);
         }

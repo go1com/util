@@ -42,10 +42,12 @@ class PortalSchema
             $data->addColumn('channel', 'string', ['notnull' => false]);
             $data->addColumn('plan', 'string', ['notnull' => false]);
             $data->addColumn('customer_id', 'string', ['notnull' => false]);
+            $data->addColumn('salesforce_id', 'string', ['notnull' => false]);
             $data->addColumn('partner_id', 'string', ['notnull' => false]);
             $data->addColumn('conversion_date', 'integer', ['unsigned' => true, 'notnull' => false]);
             $data->addColumn('go_live_date', 'integer', ['unsigned' => true, 'notnull' => false]);
             $data->addColumn('expiry_date', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $data->addColumn('cancel_expiry_date', 'integer', ['unsigned' => true, 'notnull' => false]);
 
             $data->setPrimaryKey(['id']);
             $data->addIndex(['state']);
@@ -53,10 +55,12 @@ class PortalSchema
             $data->addIndex(['channel']);
             $data->addIndex(['plan']);
             $data->addIndex(['customer_id']);
+            $data->addIndex(['salesforce_id']);
             $data->addIndex(['partner_id']);
             $data->addIndex(['conversion_date']);
             $data->addIndex(['go_live_date']);
             $data->addIndex(['expiry_date']);
+            $data->addIndex(['cancel_expiry_date']);
         }
 
         $installPortalConf && self::installPortalConf($schema);

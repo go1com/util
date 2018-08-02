@@ -8,6 +8,8 @@ use stdClass;
 
 class Collection implements JsonSerializable
 {
+    const DEFAULT_MACHINE_NAME = 'default';
+
     public $id;
     public $type;
     public $machineName;
@@ -16,6 +18,7 @@ class Collection implements JsonSerializable
     public $portalId;
     public $authorId;
     public $data;
+    public $timestamp;
     public $created;
     public $updated;
     /** @var Collection */
@@ -34,6 +37,7 @@ class Collection implements JsonSerializable
         $collection->authorId = $input->author_id ?? null;
         $data = $input->data ?? null;
         $collection->data = is_scalar($data) ? json_decode($data) : $data;
+        $collection->timestamp = $input->timestamp ?? null;
         $collection->created = $input->created ?? null;
         $collection->updated = $input->updated ?? null;
 
@@ -51,6 +55,7 @@ class Collection implements JsonSerializable
             'portal_id'    => $this->portalId,
             'author_id'    => $this->authorId,
             'data'         => json_encode($this->data),
+            'timestamp'    => $this->timestamp,
             'created'      => $this->created,
             'updated'      => $this->updated,
         ];

@@ -34,6 +34,11 @@ class Queue
     const CONTRACT_CREATE              = 'contract.create';
     const CONTRACT_UPDATE              = 'contract.update';
     const CONTRACT_DELETE              = 'contract.delete';
+    const CONTRACT_VIEW_LIST           = 'contract.view.list';
+    const CONTRACT_VIEW_DETAIL         = 'contract.view.detail';
+    const CONTRACT_VIEW_SUBSCRIPTION   = 'contract.view.subscription';
+    const CONTRACT_CREATE_START        = 'contract.create.start';
+    const CONTRACT_CREATE_END          = 'contract.create.end';
     const LO_CREATE                    = 'lo.create'; # Body: LO object, no lo.items should be expected.
     const LO_UPDATE                    = 'lo.update'; # Body: LO object with extra property: origin.
     const LO_DELETE                    = 'lo.delete'; # Body: LO object.
@@ -57,6 +62,13 @@ class Queue
     const CUSTOMER_CREATE              = 'customer.create';
     const CUSTOMER_UPDATE              = 'customer.update';
     const CUSTOMER_DELETE              = 'customer.delete';
+    const CUSTOMER_VIEW_LIST           = 'customer.view.list';
+    const CUSTOMER_VIEW_DETAIL         = 'customer.view.detail';
+    const CUSTOMER_VIEW_PORTAL         = 'customer.view.portal';
+    const CUSTOMER_VIEW_CONTRACT       = 'customer.view.contract';
+    const CUSTOMER_VIEW_SUBSCRIPTION   = 'customer.view.subscription';
+    const CUSTOMER_CREATE_START        = 'customer.create.start';
+    const CUSTOMER_CREATE_END          = 'customer.create.end';
     const PLAN_CREATE                  = 'plan.create';
     const PLAN_UPDATE                  = 'plan.update';
     const PLAN_DELETE                  = 'plan.delete';
@@ -99,6 +111,9 @@ class Queue
     const ECK_METADATA_CREATE          = 'eck.metadata.create';
     const ECK_METADATA_UPDATE          = 'eck.metadata.update';
     const ECK_METADATA_DELETE          = 'eck.metadata.delete';
+    const FLAG_CREATE                  = 'flag.create';
+    const FLAG_UPDATE                  = 'flag.update';
+    const FLAG_DELETE                  = 'flag.delete';
     const GROUP_CREATE                 = 'group.create';
     const GROUP_UPDATE                 = 'group.update';
     const GROUP_DELETE                 = 'group.delete';
@@ -149,6 +164,7 @@ class Queue
     const CREDIT_CREATE                = 'credit.create';
     const CREDIT_UPDATE                = 'credit.update';
     const CREDIT_DELETE                = 'credit.delete';
+    const CREDIT_USAGE_CREATE          = 'credit_usage.create';
     const ROLE_CREATE                  = 'role.create';
     const ROLE_UPDATE                  = 'role.update';
     const ROLE_DELETE                  = 'role.delete';
@@ -169,6 +185,14 @@ class Queue
     const GROUP_COLLECTION_ITEM_CREATE = 'group_collection_item.create';
     const GROUP_COLLECTION_ITEM_UPDATE = 'group_collection_item.update';
     const GROUP_COLLECTION_ITEM_DELETE = 'group_collection_item.delete';
+    const POLICY_ITEM_CREATE           = 'policy.item.create';
+    const POLICY_ITEM_UPDATE           = 'policy.item.update';
+    const POLICY_ITEM_DELETE           = 'policy.item.delete';
+    const PAGEUP_COURSE_UPLOAD         = 'pageup.course.upload';
+    const EXIM_TASK_UPDATE             = 'exim.task.update';
+    const PURCHASE_REQUEST_CREATE      = 'purchase.request.create';
+    const PURCHASE_REQUEST_UPDATE      = 'purchase.request.update';
+    const PURCHASE_REQUEST_DELETE      = 'purchase.request.delete';
 
     # routingKey that tell some service to do something.
     #
@@ -200,6 +224,7 @@ class Queue
     const DO_EXIM_IMPORT_ENROLLMENT            = 'do.exim.import-enrolment'; # {user_id, lo_id, instance_id, notify, manager_id}
     const DO_EXIM_IMPORT_AWARD_ENROLLMENT      = 'do.exim.import-award-enrolment'; # {award_id, instance_id, user_ids}
     const DO_EXIM_IMPORT_USER                  = 'do.exim.import-user'; # {$instance, $mail, $first, $last, $status, $manager}
+    const DO_EXIM_IMPORT                       = 'do.exim.import'; # { data: OBJECT[], taskId: INT }
     const DO_SMS_SEND                          = 'do.sms.send'; # { to: STRING, body: STRING }
     const DO_GRAPHIN_IMPORT                    = 'do.graphin.import'; # { type: STRING, id: INT }
     const DO_USER_CREATE_VIRTUAL_ACCOUNT       = 'do.user.virtual-account'; # { type: STRING, object: enrolment/??? object}

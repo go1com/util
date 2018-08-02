@@ -12,6 +12,7 @@ class Schema
     const INDEX             = ES_INDEX;
     const ALL_INDEX         = ES_INDEX . '*';
     const MARKETPLACE_INDEX = ES_INDEX . '_marketplace';
+    const GROUP_INDEX       = ES_INDEX . '_group';
     const LOG_INDEX         = ES_INDEX . '_log';
     const ACTIVITY_INDEX    = ES_INDEX . '_activity';
     const PORTALS_INDEX     = ES_INDEX . '_portal*';
@@ -51,13 +52,16 @@ class Schema
     const O_SUBMISSION          = 'asm_submission';
     const O_SUBMISSION_REVISION = 'asm_submission_revision';
     const O_GROUP               = 'group';
+    const O_GROUP_ITEM          = 'group_item';
     const O_MAIL                = 'mail';
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
     const O_CREDIT              = 'credit';
     const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
+    const O_PURCHASE_REQUEST    = 'purchase_request';
     const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
     const O_LO_GROUP            = 'lo_group';
+    const O_LO_POLICY           = 'lo_policy';
     const O_LO_TAG              = 'lo_tag';
     const O_EVENT               = 'event';
     const O_AWARD               = 'award';
@@ -96,16 +100,19 @@ class Schema
         self::O_LO                  => self::LO_MAPPING,
         self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
         self::O_LO_TAG              => self::LO_TAG_MAPPING,
+        self::O_LO_POLICY           => self::LO_POLICY_MAPPING,
         self::O_PLAN                => self::PLAN_MAPPING,
         self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
         self::O_ENROLMENT_REVISION  => self::ENROLMENT_MAPPING_REVISION,
         self::O_SUBMISSION          => self::SUBMISSION_MAPPING,
         self::O_SUBMISSION_REVISION => self::SUBMISSION_REVISION_MAPPING,
         self::O_GROUP               => self::GROUP_MAPPING,
+        self::O_GROUP_ITEM          => self::GROUP_ITEM_MAPPING,
         self::O_MAIL                => self::MAIL_MAPPING,
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
         self::O_CREDIT              => self::CREDIT_MAPPING,
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
+        self::O_PURCHASE_REQUEST    => self::PURCHASE_REQUEST_MAPPING,
         self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
         self::O_COUPON              => self::COUPON_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
@@ -120,7 +127,7 @@ class Schema
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
         self::O_METRIC              => self::METRIC_MAPPING,
         self::O_ACTIVITY            => self::ACTIVITY_MAPPING,
-        self::O_LO_COLLECTION       => self::LO_COLLECTION_MAPPING
+        self::O_LO_COLLECTION       => self::LO_COLLECTION_MAPPING,
     ];
 
     const ANALYZED = [
@@ -333,6 +340,7 @@ class Schema
                     'label'          => ['type' => self::T_KEYWORD],
                     'pass_rate'      => ['type' => self::T_FLOAT],
                     'url'            => ['type' => self::T_TEXT],
+                    'single_li'      => ['type' => self::T_SHORT]
                 ],
             ],
             'locations'       => [
@@ -365,6 +373,7 @@ class Schema
                     'shared'              => ['type' => self::T_SHORT],
                     'shared_passive'      => ['type' => self::T_SHORT],
                     'customized'          => ['type' => self::T_SHORT],
+                    'realm'               => ['type' => self::T_SHORT],
                 ],
             ],
         ],
@@ -384,6 +393,27 @@ class Schema
             'title'    => ['type' => self::T_KEYWORD],
             'type'     => ['type' => self::T_KEYWORD],
             'metadata' => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                ],
+            ],
+        ],
+    ];
+
+    const LO_POLICY_MAPPING = [
+        '_parent'    => ['type' => self::O_LO],
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'                => ['type' => self::T_KEYWORD],
+            'realm'             => ['type' => self::T_SHORT],
+            'portal_id'         => ['type' => self::T_INT],
+            'entity_type'       => ['type' => self::T_KEYWORD],
+            'entity_id'         => ['type' => self::T_INT],
+            # Attach group member ids to support explore learning object when share lo to group
+            # Its value will be maintained by service #index-content-sharing
+            'member_ids'        => ['type' => self::T_INT],
+            'access_portal_ids' => ['type' => self::T_INT],
+            'metadata'          => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
                 ],
@@ -559,6 +589,7 @@ class Schema
             'result'              => ['type' => self::T_INT],
             'pass'                => ['type' => self::T_INT],
             'note'                => ['type' => self::T_TEXT],
+            'timestamp'           => ['type' => self::T_DATE],
             'progress'            => [
                 'properties' => [
                     EnrolmentStatuses::NOT_STARTED => ['type' => self::T_INT],
@@ -628,6 +659,7 @@ class Schema
         'properties' => [
             'id'          => ['type' => self::T_KEYWORD],
             'title'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'portal_name' => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'type'        => ['type' => self::T_KEYWORD],
             'description' => ['type' => self::T_TEXT],
             'image'       => ['type' => self::T_TEXT],
@@ -635,6 +667,23 @@ class Schema
             'visibility'  => ['type' => self::T_SHORT],
             'created'     => ['type' => self::T_DATE],
             'updated'     => ['type' => self::T_DATE],
+            'metadata'    => [
+                'properties' => [
+                    'instance_id' => ['type' => self::T_INT],
+                    'updated_at'  => ['type' => self::T_INT],
+                ],
+            ],
+        ],
+    ];
+
+    const GROUP_ITEM_MAPPING = [
+        '_routing'   => ['required' => true],
+        '_parent'    => ['type' => self::O_GROUP],
+        'properties' => [
+            'id'          => ['type' => self::T_KEYWORD],
+            'entity_type' => ['type' => self::T_KEYWORD],
+            'entity_id'   => ['type' => self::T_INT],
+            'status'      => ['type' => self::T_SHORT],
             'metadata'    => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
@@ -684,6 +733,7 @@ class Schema
                 'type'       => self::T_NESTED,
                 'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties'],
             ],
+            'credit_usage_count' => ['type' => self::T_INT],
         ],
     ];
 
@@ -695,6 +745,7 @@ class Schema
             'product_title'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'product_parent_id'    => ['type' => self::T_INT],
             'product_parent_title' => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'product_coupon_code'  => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'qty'                  => ['type' => self::T_INT],
             'price'                => ['type' => self::T_DOUBLE],
             'tax'                  => ['type' => self::T_DOUBLE],
@@ -732,8 +783,37 @@ class Schema
                     'user_id'   => ['type' => self::T_INT],
                 ],
             ],
+            'title'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
         ],
     ];
+
+    const PURCHASE_REQUEST_MAPPING = [
+        'properties' => [
+            'id'             => ['type' => self::T_KEYWORD],
+            'user'           => [
+                'properties' => self::USER_MAPPING['properties'],
+            ],
+            'manager'        => [
+                'properties' => self::USER_MAPPING['properties'],
+            ],
+            'lo'             => [
+                'properties' => self::LO_MAPPING['properties'],
+            ],
+            'status'         => ['type' => self::T_SHORT],
+            'request_date'   => ['type' => self::T_TEXT],
+            'response_date'  => ['type' => self::T_TEXT],
+            'approve_url'    => ['type' => self::T_TEXT],
+            'reject_url'     => ['type' => self::T_TEXT],
+            'metadata'       => [
+                'properties' => [
+                    'user_id'    => ['type' => self::T_INT],
+                    'manager_id' => ['type' => self::T_INT],
+                    'lo_id'      => ['type' => self::T_INT]
+                ],
+            ]
+        ],
+    ];
+    
 
     const ECK_METADATA_MAPPING = [
         '_routing'   => ['required' => true],
@@ -1117,8 +1197,8 @@ class Schema
     ];
 
     const LO_COLLECTION_MAPPING = [
-        '_parent'           => ['type' => self::O_LO],
-        '_routing'          => ['required' => true],
+        '_parent'    => ['type' => self::O_LO],
+        '_routing'   => ['required' => true],
         'properties' => [
             'lo_id'         => ['type' => self::T_INT],
             'collection_id' => ['type' => self::T_INT],
