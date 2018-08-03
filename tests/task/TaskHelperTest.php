@@ -70,7 +70,6 @@ class TaskHelperTest extends UtilTestCase
         ]);
         TaskHelper::updateTaskStatus($this->db, $taskId, Task::STATUS_COMPLETED, $this->taskName);
         $this->assertEquals($taskId, TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
-        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, 'NEW_TASK'));
     }
 
     public function testChecksumWithExpireDay()
