@@ -12,7 +12,7 @@ class Enrolment implements JsonSerializable
     public $parentEnrolmentId;
     public $loId;
     public $instanceId;
-    public $takenInstanceId;
+    public $takenPortalId;
     public $startDate;
     public $endDate;
     public $dueDate;
@@ -43,7 +43,7 @@ class Enrolment implements JsonSerializable
         $enrolment->parentEnrolmentId = $row->parent_enrolment_id ?? 0;
         $enrolment->loId = $row->lo_id ?? null;
         $enrolment->instanceId = $row->instance_id ?? 0;
-        $enrolment->takenInstanceId = $row->taken_instance_id ?? null;;
+        $enrolment->takenPortalId = $row->taken_instance_id ?? null;;
         $enrolment->startDate = $row->start_date ?? null;
         $enrolment->endDate = $row->end_date ?? null;
         $enrolment->dueDate = $row->due_date ?? null;
@@ -68,7 +68,7 @@ class Enrolment implements JsonSerializable
             'parent_enrolment_id' => $this->parentEnrolmentId,
             'lo_id'               => $this->loId,
             'instance_id'         => $this->instanceId,
-            'taken_instance_id'   => $this->takenInstanceId,
+            'taken_instance_id'   => $this->takenPortalId,
             'start_date'          => $this->startDate,
             'end_date'            => $this->endDate,
             'status'              => $this->status,
