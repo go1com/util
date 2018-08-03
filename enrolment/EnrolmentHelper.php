@@ -10,6 +10,7 @@ use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\model\Enrolment;
 use go1\util\plan\PlanHelper;
 use go1\util\plan\PlanTypes;
 use go1\util\portal\PortalChecker;
@@ -346,5 +347,43 @@ class EnrolmentHelper
         }
 
         return null;
+    }
+
+    public static function loadUserEnrolment(Connection $db, int $portalId, int $profileId, int $loId, int $parentEnrolmentId = null):? Enrolment
+    {
+        $q = $db
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('gc_enrolment')
+            ->where('lo_id = :loId')->setParameter(':loId', $loId)
+            ->andWhere('profile_id = :profileId')->setParameter(':profileId', $profileId)
+            ->andWhere('taken_instance_id = :takenInstanceId')->setParameter(':takenInstanceId', $portalId);
+
+        !is_null($parentEnrolmentId) && $q
+            ->andWhere('parent_enrolment_id = :parentEnrolmentId')
+            ->setParameter(':parentEnrolmentId', $parentEnrolmentId);
+
+        $row = $q->execute()->fetch(DB::OBJ);
+        return $row ? Enrolment::create($row) : null;
+    }
+
+    public static function childIds(Connection $db, int $enrolmentId): array
+    {
+        return $db
+            ->createQueryBuilder()
+            ->select('id')
+            ->from('gc_enrolment')
+            ->where('parent_enrolment_id = :parentEnrolmentId')
+            ->setParameter(':parentEnrolmentId', $enrolmentId)
+            ->execute()
+            ->fetchAll(DB::COL);
+    }
+
+    public static function loadSingle(Connection $db, int $enrolmentId):? Enrolment
+    {
+        $row = 'SELECT * FROM gc_enrolment WHERE id = ?';
+        $row = $db->executeQuery($row, [$enrolmentId], [DB::INTEGER])->fetch(DB::OBJ);
+
+        return $row ? Enrolment::create($row) : null;
     }
 }

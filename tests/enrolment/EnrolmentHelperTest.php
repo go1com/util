@@ -10,13 +10,13 @@ use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
-use go1\util\plan\PlanTypes;
 use go1\util\plan\PlanHelper;
+use go1\util\plan\PlanTypes;
 use go1\util\queue\Queue;
 use go1\util\schema\mock\EnrolmentMockTrait;
-use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\PlanMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\tests\UtilTestCase;
 
@@ -375,5 +375,33 @@ class EnrolmentHelperTest extends UtilTestCase
         $this->link($this->db, EdgeTypes::HAS_PLAN, $enrolmentId, $planId);
         $this->assertTrue(EnrolmentHelper::dueDate($this->db, $enrolmentId)->getTimestamp() > 0);
         $this->assertEquals(EnrolmentHelper::dueDate($this->db, $enrolmentId), DateTime::create($plan->due_date));
+    }
+
+    public function testLoadUserEnrolment()
+    {
+        $enrolmentId = $this->createEnrolment($this->db, [
+            'lo_id'               => $loId = 2,
+            'profile_id'          => $profileId = 3,
+            'parent_enrolment_id' => $parentEnrolmentId = 5,
+            'taken_instance_id'   => $takenInstanceId = 5,
+        ]);
+
+        $enrolment = EnrolmentHelper::loadUserEnrolment($this->db, $takenInstanceId, $profileId, $loId, $parentEnrolmentId);
+        $this->assertEquals($enrolmentId, $enrolment->id);
+        $this->assertNull(EnrolmentHelper::loadUserEnrolment($this->db, 0, $profileId, $loId, $parentEnrolmentId));
+    }
+
+    public function testLoadSingleEnrolment()
+    {
+        $enrolmentId = $this->createEnrolment($this->db, [
+            'lo_id'               => $loId = 2,
+            'profile_id'          => $profileId = 3,
+            'parent_enrolment_id' => $parentEnrolmentId = 5,
+            'taken_instance_id'   => $takenInstanceId = 5,
+        ]);
+
+        $enrolment = EnrolmentHelper::loadSingle($this->db, $enrolmentId);
+        $this->assertEquals($enrolmentId, $enrolment->id);
+        $this->assertNull(EnrolmentHelper::loadSingle($this->db, 0));
     }
 }
