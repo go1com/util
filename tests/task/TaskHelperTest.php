@@ -53,25 +53,33 @@ class TaskHelperTest extends UtilTestCase
         $this->assertEquals(1000, $taskItem->data['lo_id']);
     }
 
-    public function testChecksum()
+    public function testChecksumWithTaskNotCompleted()
+    {
+        $this->createTask($this->db, [
+            'name' => $this->taskName,
+            'data' => $data = ['type' => 'task_type', 'lo_id' => 1000]
+        ]);
+        $this->assertTrue(null === TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+    }
+
+    public function testChecksumWithTaskCompleted()
     {
         $taskId = $this->createTask($this->db, [
             'name' => $this->taskName,
             'data' => $data = ['type' => 'task_type', 'lo_id' => 1000]
         ]);
-
+        TaskHelper::updateTaskStatus($this->db, $taskId, Task::STATUS_COMPLETED, $this->taskName);
         $this->assertEquals($taskId, TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
-        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, 'NEW_TASK'));
     }
 
     public function testChecksumWithExpireDay()
     {
-        $this->createTask($this->db, [
+        $taskId = $this->createTask($this->db, [
             'name'    => $this->taskName,
             'created' => strtotime('-2 days', time()),
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000]
         ]);
-
+        TaskHelper::updateTaskStatus($this->db, $taskId, Task::STATUS_COMPLETED, $this->taskName);
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data), 1));
     }
 }
