@@ -59,7 +59,7 @@ class TaskHelperTest extends UtilTestCase
             'name' => $this->taskName,
             'data' => $data = ['type' => 'task_type', 'lo_id' => 1000]
         ]);
-        $this->assertTrue(null === TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 
     public function testChecksumWithTaskCompleted()
@@ -69,17 +69,28 @@ class TaskHelperTest extends UtilTestCase
             'data' => $data = ['type' => 'task_type', 'lo_id' => 1000]
         ]);
         TaskHelper::updateTaskStatus($this->db, $taskId, Task::STATUS_COMPLETED, $this->taskName);
-        $this->assertEquals($taskId, TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+        $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 
-    public function testChecksumWithExpireDay()
+    public function testChecksumWithExpireDayTrue()
     {
         $taskId = $this->createTask($this->db, [
             'name'    => $this->taskName,
-            'created' => strtotime('-2 days', time()),
+            'created' => strtotime('2 days'),
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000]
         ]);
         TaskHelper::updateTaskStatus($this->db, $taskId, Task::STATUS_COMPLETED, $this->taskName);
-        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data), 1));
+        $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+    }
+
+    public function testChecksumWithExpireDayFalse()
+    {
+        $taskId = $this->createTask($this->db, [
+            'name'    => $this->taskName,
+            'created' => strtotime('-2 days'),
+            'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000]
+        ]);
+        TaskHelper::updateTaskStatus($this->db, $taskId, Task::STATUS_COMPLETED, $this->taskName);
+        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 }

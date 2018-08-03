@@ -107,15 +107,15 @@ class TaskHelper
     {
         $string = is_string($string) ? $string : json_encode($string);
         $checksum = md5($string);
-        if (Task::STATUS_COMPLETED == $db->fetchColumn("
-            SELECT status FROM {$name} WHERE checksum = ?", [$checksum])) {
-            $expireString = $expireDay > 1 ? '-' . $expireDay . 'days' : '-1 day';
+        $data = (list($status, $created) = $db->fetchArray("SELECT status, created FROM {$name} WHERE checksum = ?", [$checksum]));
+        if ($data) {
+            if (Task::STATUS_COMPLETED == $status) {
+                $expireString = $expireDay > 1 ? "-$expireDay days" : "-1 day";
 
-            return $db->fetchColumn("
-                SELECT id FROM {$name} WHERE checksum = ? AND created > ?",
-                [$checksum, strtotime($expireString)]);
+                return ($created > strtotime($expireString));
+            }
         }
 
-        return null;
+        return false;
     }
 }
