@@ -64,9 +64,9 @@ class TaskHelperTest extends UtilTestCase
 
     public function testChecksumWithTaskCompleted()
     {
-        $taskId = $this->createTask($this->db, [
-            'name' => $this->taskName,
-            'data' => $data = ['type' => 'task_type', 'lo_id' => 1000],
+        $this->createTask($this->db, [
+            'name'    => $this->taskName,
+            'data'    => $data = ['type' => 'task_type', 'lo_id' => 1000],
             'status'  => Task::STATUS_COMPLETED,
         ]);
         $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
@@ -96,12 +96,6 @@ class TaskHelperTest extends UtilTestCase
 
     public function testChecksumNoData()
     {
-        $this->createTask($this->db, [
-            'name'    => $this->taskName,
-            'created' => strtotime('-2 days'),
-            'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
-            'status'  => Task::STATUS_COMPLETED,
-        ]);
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, []));
     }
 }
