@@ -66,31 +66,42 @@ class TaskHelperTest extends UtilTestCase
     {
         $taskId = $this->createTask($this->db, [
             'name' => $this->taskName,
-            'data' => $data = ['type' => 'task_type', 'lo_id' => 1000]
+            'data' => $data = ['type' => 'task_type', 'lo_id' => 1000],
+            'status'  => Task::STATUS_COMPLETED,
         ]);
-        TaskHelper::updateTaskStatus($this->db, $taskId, Task::STATUS_COMPLETED, $this->taskName);
         $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 
-    public function testChecksumWithExpireDayTrue()
+    public function testChecksumWithNotExpireDay()
     {
-        $taskId = $this->createTask($this->db, [
+        $this->createTask($this->db, [
             'name'    => $this->taskName,
             'created' => strtotime('2 days'),
-            'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000]
+            'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
+            'status'  => Task::STATUS_COMPLETED,
         ]);
-        TaskHelper::updateTaskStatus($this->db, $taskId, Task::STATUS_COMPLETED, $this->taskName);
         $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 
     public function testChecksumWithExpireDayFalse()
     {
-        $taskId = $this->createTask($this->db, [
+        $this->createTask($this->db, [
             'name'    => $this->taskName,
             'created' => strtotime('-2 days'),
-            'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000]
+            'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
+            'status'  => Task::STATUS_COMPLETED,
         ]);
-        TaskHelper::updateTaskStatus($this->db, $taskId, Task::STATUS_COMPLETED, $this->taskName);
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+    }
+
+    public function testChecksumNoData()
+    {
+        $this->createTask($this->db, [
+            'name'    => $this->taskName,
+            'created' => strtotime('-2 days'),
+            'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
+            'status'  => Task::STATUS_COMPLETED,
+        ]);
+        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, []));
     }
 }
