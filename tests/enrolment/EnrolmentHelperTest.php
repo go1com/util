@@ -386,7 +386,7 @@ class EnrolmentHelperTest extends UtilTestCase
             'taken_instance_id'   => $takenPortalId = 5,
         ]);
 
-        $enrolment = EnrolmentHelper::loadUserEnrolment($this->db, $takenInstanceId, $profileId, $loId, $parentEnrolmentId);
+        $enrolment = EnrolmentHelper::loadUserEnrolment($this->db, $takenPortalId, $profileId, $loId, $parentEnrolmentId);
         $this->assertEquals($enrolmentId, $enrolment->id);
         $this->assertEquals($takenPortalId, $enrolment->takenPortalId);
         $this->assertNull(EnrolmentHelper::loadUserEnrolment($this->db, 0, $profileId, $loId, $parentEnrolmentId));
