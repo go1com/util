@@ -383,11 +383,12 @@ class EnrolmentHelperTest extends UtilTestCase
             'lo_id'               => $loId = 2,
             'profile_id'          => $profileId = 3,
             'parent_enrolment_id' => $parentEnrolmentId = 5,
-            'taken_instance_id'   => $takenInstanceId = 5,
+            'taken_instance_id'   => $takenPortalId = 5,
         ]);
 
         $enrolment = EnrolmentHelper::loadUserEnrolment($this->db, $takenInstanceId, $profileId, $loId, $parentEnrolmentId);
         $this->assertEquals($enrolmentId, $enrolment->id);
+        $this->assertEquals($takenPortalId, $enrolment->takenPortalId);
         $this->assertNull(EnrolmentHelper::loadUserEnrolment($this->db, 0, $profileId, $loId, $parentEnrolmentId));
     }
 
@@ -397,11 +398,12 @@ class EnrolmentHelperTest extends UtilTestCase
             'lo_id'               => $loId = 2,
             'profile_id'          => $profileId = 3,
             'parent_enrolment_id' => $parentEnrolmentId = 5,
-            'taken_instance_id'   => $takenInstanceId = 5,
+            'taken_instance_id'   => $takenPortalId = 5,
         ]);
 
         $enrolment = EnrolmentHelper::loadSingle($this->db, $enrolmentId);
         $this->assertEquals($enrolmentId, $enrolment->id);
+        $this->assertEquals($takenPortalId, $enrolment->takenPortalId);
         $this->assertNull(EnrolmentHelper::loadSingle($this->db, 0));
     }
 }
