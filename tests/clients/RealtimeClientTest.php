@@ -10,13 +10,10 @@ use HTMLPurifier;
 
 class RealtimeClientTest extends UtilTestCase
 {
-    private $c;
-
     public function test()
     {
-        $this->c = $this->getContainer();
-        $this->c->extend('go1.client.realtime', function () {
-
+        $c = $this->getContainer();
+        $c->extend('go1.client.realtime', function () use (&$c) {
             $mqClient = $this->getMockMqClient();
 
             $realtimeClient = $this
@@ -24,7 +21,7 @@ class RealtimeClientTest extends UtilTestCase
                 ->setConstructorArgs([
                     $mqClient,
                     new HTMLPurifier(),
-                    $this->c['realtime_url'],
+                    $c['realtime_url'],
                 ])
                 ->setMethods()
                 ->getMock();
@@ -32,8 +29,8 @@ class RealtimeClientTest extends UtilTestCase
             return $realtimeClient;
         });
 
-        /** @var RealtimeClient $realtimeClient */
-        $realtimeClient = $this->c['go1.client.realtime'];
+        /** @var RealtimeClient $client */
+        $client = $c['go1.client.realtime'];
         $data = [
             'message'     => 'message',
             'image'       => 'image',
@@ -41,7 +38,7 @@ class RealtimeClientTest extends UtilTestCase
             'from'        => 'from',
             'instance_id' => 1,
         ];
-        $realtimeClient->notify(1, $data);
+        $client->notify(1, $data);
 
         $this->assertCount(1, $this->queueMessages[Queue::DO_CONSUMER_HTTP_REQUEST]);
         $msg = json_decode($this->queueMessages[Queue::DO_CONSUMER_HTTP_REQUEST][0]['body']);

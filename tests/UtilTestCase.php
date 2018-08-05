@@ -13,6 +13,8 @@ use go1\util\schema\EckSchema;
 use go1\util\schema\PolicySchema;
 use go1\util\schema\QuizSchema;
 use go1\util\task\TaskSchema;
+use go1\util\UtilServiceProvider;
+use Pimple\Container;
 
 abstract class UtilTestCase extends UtilCoreClientsTestCase
 {
@@ -27,6 +29,13 @@ abstract class UtilTestCase extends UtilCoreClientsTestCase
         CollectionSchema::class,
         PolicySchema::class,
     ];
+
+    public function setupContainer(Container &$container)
+    {
+        parent::setupContainer($container);
+
+        $container->register(new UtilServiceProvider);
+    }
 
     protected function setupDatabaseSchema(Schema $schema)
     {

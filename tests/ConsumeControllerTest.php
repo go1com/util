@@ -150,6 +150,9 @@ class ConsumeControllerTest extends UtilTestCase
         $this->assertNull($consumeCount);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogWasteTime()
     {
         $fooConsumer = $this->consumerClass(false);
