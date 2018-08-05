@@ -9,7 +9,7 @@
     }
   },
   "require":           {
-    "php":                     "^7.1",
+    "php":                     "^7.2",
     "doctrine/dbal":           "^2.8.0",
     "firebase/php-jwt":        "^3.0",
     "go1/kv":                  "^0.2",
