@@ -429,13 +429,25 @@ class LoHelperTest extends UtilCoreTestCase
 
     public function testGetSuggestedCompletion()
     {
-        $courseId = 123;
-        $this->link($this->db, EdgeTypes::HAS_SUGGESTED_COMPLETION, $courseId, 0, 0, json_encode([
+        $this->link($this->db, EdgeTypes::HAS_SUGGESTED_COMPLETION, $this->course1Id, 0, 0, json_encode([
             'type'  => 2,
             'value' => '3 days',
         ]));
 
-        list($type, $value) = LoHelper::getSuggestedCompletion($this->db, $courseId);
+        list($type, $value) = LoHelper::getSuggestedCompletion($this->db, $this->course1Id);
+        $this->assertEquals($type, LoSuggestedCompletionTypes::E_DURATION);
+        $this->assertEquals($value, '3 days');
+    }
+
+    public function testGetSuggestedCompletionWithSingleLI()
+    {
+        $videoId = $this->createVideo($this->db, ['instance_id' => $this->createPortal($this->db, []), 'data' => [LoHelper::SINGLE_LI => true]]);
+        $targetId = $this->link($this->db, EdgeTypes::HAS_LI, $this->module1Id, $videoId);
+        $this->link($this->db, EdgeTypes::HAS_SUGGESTED_COMPLETION, $videoId, $targetId, 0, json_encode([
+            'type'  => 2,
+            'value' => '3 days',
+        ]));
+        list($type, $value) = LoHelper::getSuggestedCompletion($this->db, $videoId, $this->module1Id);
         $this->assertEquals($type, LoSuggestedCompletionTypes::E_DURATION);
         $this->assertEquals($value, '3 days');
     }

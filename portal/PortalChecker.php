@@ -137,8 +137,7 @@ class PortalChecker
                     if (stripos($domain, 'www.') === false) {
                         $domain = 'www.' . $domain;
                     }
-                }
-                else {
+                } else {
                     $domain = $this->getPrimaryDomain($portal);
                     $domain = $this->isVirtual($portal) ? "{$domain}/p" : "{$domain}/webapp";
                 }

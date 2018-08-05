@@ -11,6 +11,7 @@ use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\model\Enrolment;
 use go1\util\plan\PlanHelper;
 use go1\util\plan\PlanTypes;
 use go1\util\portal\PortalChecker;
@@ -19,6 +20,7 @@ use go1\util\queue\Queue;
 use go1\util\user\UserHelper;
 use LengthException;
 use PDO;
+use ReflectionClass;
 use stdClass;
 
 /**
@@ -141,8 +143,7 @@ class EnrolmentHelper
         if ($passAware) {
             $completion = 'SELECT COUNT(*) FROM gc_enrolment WHERE lo_id IN (?) AND status = ? AND pass = 1';
             $completion = $db->fetchColumn($completion, [$dependencyIds, EnrolmentStatuses::COMPLETED], 0, [DB::INTEGERS, DB::STRING]);
-        }
-        else {
+        } else {
             $completion = 'SELECT COUNT(*) FROM gc_enrolment WHERE lo_id IN (?) AND status = ?';
             $completion = $db->fetchColumn($completion, [$dependencyIds], 0, [DB::INTEGERS]);
         }
@@ -301,15 +302,9 @@ class EnrolmentHelper
             }
         }
 
-        $rMqClient = new \ReflectionClass(MqClient::class);
-        $actorIdKey = $rMqClient->hasConstant('CONTEXT_ACTOR_ID')
-            ? $rMqClient->getConstant('CONTEXT_ACTOR_ID')
-            : 'actor_id';
-
-        $queue->publish($enrolment, Queue::ENROLMENT_CREATE, [
-            'notify_email' => $notify,
-            $actorIdKey    => $assignerId,
-        ]);
+        $rMqClient = new ReflectionClass(MqClient::class);
+        $actorIdKey = $rMqClient->hasConstant('CONTEXT_ACTOR_ID') ? $rMqClient->getConstant('CONTEXT_ACTOR_ID') : 'actor_id';
+        $queue->publish($enrolment, Queue::ENROLMENT_CREATE, ['notify_email' => $notify, $actorIdKey => $assignerId]);
     }
 
     public static function hasEnrolment(Connection $db, int $loId, int $profileId, int $parentLoId = null)
@@ -354,5 +349,44 @@ class EnrolmentHelper
         }
 
         return null;
+    }
+
+    public static function loadUserEnrolment(Connection $db, int $portalId, int $profileId, int $loId, int $parentEnrolmentId = null): ?Enrolment
+    {
+        $q = $db
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('gc_enrolment')
+            ->where('lo_id = :loId')->setParameter(':loId', $loId)
+            ->andWhere('profile_id = :profileId')->setParameter(':profileId', $profileId)
+            ->andWhere('taken_instance_id = :takenInstanceId')->setParameter(':takenInstanceId', $portalId);
+
+        !is_null($parentEnrolmentId) && $q
+            ->andWhere('parent_enrolment_id = :parentEnrolmentId')
+            ->setParameter(':parentEnrolmentId', $parentEnrolmentId);
+
+        $row = $q->execute()->fetch(DB::OBJ);
+
+        return $row ? Enrolment::create($row) : null;
+    }
+
+    public static function childIds(Connection $db, int $enrolmentId): array
+    {
+        return $db
+            ->createQueryBuilder()
+            ->select('id')
+            ->from('gc_enrolment')
+            ->where('parent_enrolment_id = :parentEnrolmentId')
+            ->setParameter(':parentEnrolmentId', $enrolmentId)
+            ->execute()
+            ->fetchAll(DB::COL);
+    }
+
+    public static function loadSingle(Connection $db, int $enrolmentId): ?Enrolment
+    {
+        $row = 'SELECT * FROM gc_enrolment WHERE id = ?';
+        $row = $db->executeQuery($row, [$enrolmentId], [DB::INTEGER])->fetch(DB::OBJ);
+
+        return $row ? Enrolment::create($row) : null;
     }
 }

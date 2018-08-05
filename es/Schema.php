@@ -57,6 +57,7 @@ class Schema
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
     const O_CREDIT              = 'credit';
     const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
+    const O_PURCHASE_REQUEST    = 'purchase_request';
     const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
     const O_LO_GROUP            = 'lo_group';
@@ -111,6 +112,7 @@ class Schema
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
         self::O_CREDIT              => self::CREDIT_MAPPING,
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
+        self::O_PURCHASE_REQUEST    => self::PURCHASE_REQUEST_MAPPING,
         self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
         self::O_COUPON              => self::COUPON_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
@@ -338,6 +340,7 @@ class Schema
                     'label'          => ['type' => self::T_KEYWORD],
                     'pass_rate'      => ['type' => self::T_FLOAT],
                     'url'            => ['type' => self::T_TEXT],
+                    'single_li'      => ['type' => self::T_SHORT],
                 ],
             ],
             'locations'       => [
@@ -711,22 +714,22 @@ class Schema
 
     const PAYMENT_TRANSACTION_MAPPING = [
         'properties' => [
-            'id'               => ['type' => self::T_KEYWORD],
-            'instance_id'      => ['type' => self::T_INT],
-            'local_id'         => ['type' => self::T_INT],
-            'email'            => ['type' => self::T_KEYWORD],
-            'status'           => ['type' => self::T_SHORT],
-            'amount'           => ['type' => self::T_DOUBLE],
-            'currency'         => ['type' => self::T_KEYWORD],
-            'created'          => ['type' => self::T_DATE],
-            'updated'          => ['type' => self::T_DATE],
-            'payment_method'   => ['type' => self::T_KEYWORD],
-            'premium_purchase' => ['type' => self::T_INT],
-            'user_id'          => ['type' => self::T_INT],
-            'user'             => [
+            'id'                 => ['type' => self::T_KEYWORD],
+            'instance_id'        => ['type' => self::T_INT],
+            'local_id'           => ['type' => self::T_INT],
+            'email'              => ['type' => self::T_KEYWORD],
+            'status'             => ['type' => self::T_SHORT],
+            'amount'             => ['type' => self::T_DOUBLE],
+            'currency'           => ['type' => self::T_KEYWORD],
+            'created'            => ['type' => self::T_DATE],
+            'updated'            => ['type' => self::T_DATE],
+            'payment_method'     => ['type' => self::T_KEYWORD],
+            'premium_purchase'   => ['type' => self::T_INT],
+            'user_id'            => ['type' => self::T_INT],
+            'user'               => [
                 'properties' => self::USER_MAPPING['properties'],
             ],
-            'items'            => [
+            'items'              => [
                 'type'       => self::T_NESTED,
                 'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties'],
             ],
@@ -778,6 +781,34 @@ class Schema
                     'li_id'     => ['type' => self::T_INT],
                     'course_id' => ['type' => self::T_INT],
                     'user_id'   => ['type' => self::T_INT],
+                ],
+            ],
+            'title'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        ],
+    ];
+
+    const PURCHASE_REQUEST_MAPPING = [
+        'properties' => [
+            'id'            => ['type' => self::T_KEYWORD],
+            'user'          => [
+                'properties' => self::USER_MAPPING['properties'],
+            ],
+            'manager'       => [
+                'properties' => self::USER_MAPPING['properties'],
+            ],
+            'lo'            => [
+                'properties' => self::LO_MAPPING['properties'],
+            ],
+            'status'        => ['type' => self::T_SHORT],
+            'request_date'  => ['type' => self::T_TEXT],
+            'response_date' => ['type' => self::T_TEXT],
+            'approve_url'   => ['type' => self::T_TEXT],
+            'reject_url'    => ['type' => self::T_TEXT],
+            'metadata'      => [
+                'properties' => [
+                    'user_id'    => ['type' => self::T_INT],
+                    'manager_id' => ['type' => self::T_INT],
+                    'lo_id'      => ['type' => self::T_INT],
                 ],
             ],
         ],

@@ -52,8 +52,7 @@ class Text
                   ->verifyNow();
 
             return true;
-        }
-        catch (LazyAssertionException $e) {
+        } catch (LazyAssertionException $e) {
             return false;
         }
     }

@@ -53,5 +53,4 @@ class SchemaTest extends TestCase
         $manual = $schema->getTable('enrolment_manual');
         $this->assertEquals(true, $manual->hasColumn('id'));
     }
-
 }
