@@ -13,7 +13,9 @@ use go1\clients\PortalClient;
 use go1\clients\QueueClient;
 use go1\clients\RulesClient;
 use go1\clients\SmsClient;
+use go1\clients\UtilCoreClientServiceProvider;
 use go1\util\Service;
+use go1\util\UtilCoreServiceProvider;
 use go1\util\UtilServiceProvider;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
@@ -36,9 +38,10 @@ class ClientsTest extends TestCase
             ->getMockForAbstractClass();
 
         $services = ['queue', 'user', 'mail', 'portal', 'rules', 'currency', 'lo', 'sms', 'graphin', 'entity'];
-        $c = new Container;
-        $c
-            ->register(new UtilServiceProvider, [
+        $c = (new Container)
+            ->register(new UtilServiceProvider)
+            ->register(new UtilCoreServiceProvider)
+            ->register(new UtilCoreClientServiceProvider(), [
                     'logger'       => $logger,
                     'client'       => new Client,
                     'cache'        => new ArrayCache,
