@@ -14,6 +14,7 @@ class EnrolmentSchema
             $enrolment->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $enrolment->addColumn('profile_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('parent_lo_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0, 'comment' => '@deprecated: Wrong design, we can not find parent enrolment from this value. This will be soon dropped.']);
+            $enrolment->addColumn('parent_enrolment_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0]);
             $enrolment->addColumn('parent_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0, 'comment' => 'Parent enrolment ID.']);
             $enrolment->addColumn('lo_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('instance_id', 'integer', ['unsigned' => true]);
@@ -31,6 +32,7 @@ class EnrolmentSchema
             $enrolment->addUniqueIndex(['profile_id', 'parent_lo_id', 'lo_id', 'taken_instance_id']);
             $enrolment->addIndex(['profile_id']);
             $enrolment->addIndex(['instance_id']);
+            $enrolment->addIndex(['parent_enrolment_id']);
             $enrolment->addIndex(['taken_instance_id']);
             $enrolment->addIndex(['status']);
             $enrolment->addIndex(['timestamp']);

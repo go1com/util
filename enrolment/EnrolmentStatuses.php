@@ -41,7 +41,7 @@ class EnrolmentStatuses
     const I_EXPIRED     = 20;
     const I_COMPLETED   = 100;
 
-    const PERCENTAGE    = 'percentage';
+    const PERCENTAGE = 'percentage';
 
     /**
      * All available values that user can input.
@@ -113,8 +113,7 @@ class EnrolmentStatuses
             while ($dependencyModuleId = $query->fetchColumn()) {
                 if (!$enrolmentId = EnrolmentHelper::enrolmentId($db, $dependencyModuleId, $profileId)) {
                     return self::PENDING;
-                }
-                else {
+                } else {
                     $enrolment = EnrolmentHelper::load($db, $enrolmentId);
                     if (EnrolmentStatuses::COMPLETED != $enrolment->status) {
                         return self::PENDING;

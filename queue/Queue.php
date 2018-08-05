@@ -34,6 +34,11 @@ class Queue
     const CONTRACT_CREATE              = 'contract.create';
     const CONTRACT_UPDATE              = 'contract.update';
     const CONTRACT_DELETE              = 'contract.delete';
+    const CONTRACT_VIEW_LIST           = 'contract.view.list';
+    const CONTRACT_VIEW_DETAIL         = 'contract.view.detail';
+    const CONTRACT_VIEW_SUBSCRIPTION   = 'contract.view.subscription';
+    const CONTRACT_CREATE_START        = 'contract.create.start';
+    const CONTRACT_CREATE_END          = 'contract.create.end';
     const LO_CREATE                    = 'lo.create'; # Body: LO object, no lo.items should be expected.
     const LO_UPDATE                    = 'lo.update'; # Body: LO object with extra property: origin.
     const LO_DELETE                    = 'lo.delete'; # Body: LO object.
@@ -106,6 +111,9 @@ class Queue
     const ECK_METADATA_CREATE          = 'eck.metadata.create';
     const ECK_METADATA_UPDATE          = 'eck.metadata.update';
     const ECK_METADATA_DELETE          = 'eck.metadata.delete';
+    const FLAG_CREATE                  = 'flag.create';
+    const FLAG_UPDATE                  = 'flag.update';
+    const FLAG_DELETE                  = 'flag.delete';
     const GROUP_CREATE                 = 'group.create';
     const GROUP_UPDATE                 = 'group.update';
     const GROUP_DELETE                 = 'group.delete';
@@ -182,6 +190,9 @@ class Queue
     const POLICY_ITEM_DELETE           = 'policy.item.delete';
     const PAGEUP_COURSE_UPLOAD         = 'pageup.course.upload';
     const EXIM_TASK_UPDATE             = 'exim.task.update';
+    const PURCHASE_REQUEST_CREATE      = 'purchase.request.create';
+    const PURCHASE_REQUEST_UPDATE      = 'purchase.request.update';
+    const PURCHASE_REQUEST_DELETE      = 'purchase.request.delete';
 
     # routingKey that tell some service to do something.
     #

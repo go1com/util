@@ -17,6 +17,7 @@ trait EnrolmentMockTrait
             'id'                => $options['id'] ?? null,
             'profile_id'        => $profileId,
             'parent_lo_id'      => isset($options['parent_lo_id']) ? $options['parent_lo_id'] : 0,
+            'parent_enrolment_id' => isset($options['parent_enrolment_id']) ? $options['parent_enrolment_id'] : 0,
             'lo_id'             => isset($options['lo_id']) ? $options['lo_id'] : 0,
             'instance_id'       => isset($options['instance_id']) ? $options['instance_id'] : 0,
             'taken_instance_id' => isset($options['taken_instance_id']) ? $options['taken_instance_id'] : 0,

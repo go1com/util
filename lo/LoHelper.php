@@ -16,13 +16,13 @@ class LoHelper
 {
     # configuration key for LO, which put under gc_lo.data
     # ---------------------
-    const DISCUSSION_ALLOW = 'allow_discussion';
-    const ENROLMENT_ALLOW  = 'allow_enrolment';
+    const DISCUSSION_ALLOW           = 'allow_discussion';
+    const ENROLMENT_ALLOW            = 'allow_enrolment';
     /** @deprecated */
-    const ENROLMENT_ALLOW_DEFAULT   = 'allow';
-    const ASSIGNMENT_ALLOW_RESUBMIT = 'allow_resubmit';
+    const ENROLMENT_ALLOW_DEFAULT    = 'allow';
+    const ASSIGNMENT_ALLOW_RESUBMIT  = 'allow_resubmit';
     /** @deprecated */
-    const ENROLMENT_ALLOW_DISABLE = 'disable';
+    const ENROLMENT_ALLOW_DISABLE    = 'disable';
     /** @deprecated */
     const ENROLMENT_ALLOW_ENQUIRY    = 'enquiry';
     const ENROLMENT_RE_ENROL         = 're_enrol';
@@ -462,16 +462,20 @@ class LoHelper
         return !$authorIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $authorIds));
     }
 
-    public static function getSuggestedCompletion(Connection $db, int $loId): array
+    public static function getSuggestedCompletion(Connection $db, int $loId, int $parentId = 0): array
     {
-        $edges = EdgeHelper::edgesFromSource($db, $loId, [EdgeTypes::HAS_SUGGESTED_COMPLETION]);
-        if ($edge = reset($edges)) {
-            $data = (is_scalar($edge->data)) ? json_decode($edge->data, true) : [];
+        if ($lo = LoHelper::load($db, $loId)) {
+            $types = [EdgeTypes::HAS_SUGGESTED_COMPLETION];
+            $targetId = $parentId ? EdgeHelper::hasLink($db, EdgeTypes::HAS_LI, $parentId, $lo->id) : 0;
+            $edges = $targetId ? EdgeHelper::edges($db, [$lo->id], [$targetId], $types) : EdgeHelper::edgesFromSource($db, $lo->id, $types);
+            if ($edge = reset($edges)) {
+                $data = (is_scalar($edge->data)) ? json_decode($edge->data, true) : [];
 
-            return [
-                $data['type'],
-                $data['value'],
-            ];
+                return [
+                    $data['type'],
+                    $data['value'],
+                ];
+            }
         }
 
         return [];

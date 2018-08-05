@@ -2,7 +2,6 @@
 
 namespace go1\util\plan;
 
-
 use ReflectionClass;
 
 class PlanStatuses
@@ -14,7 +13,6 @@ class PlanStatuses
     const PENDING     = 0; # The object is not yet available.
     const LATE        = 4; # Learning was assigned & was not able to complete the plan ontime.
     const EXPIRED     = 5; # The object is expired.
-
 
     const S_INTERESTING = 'interesting';
     const S_SCHEDULED   = 'scheduled';
