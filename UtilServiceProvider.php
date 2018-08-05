@@ -14,20 +14,14 @@ use go1\clients\EckClient;
 use go1\clients\EntityClient;
 use go1\clients\FirebaseClient;
 use go1\clients\GraphinClient;
-use go1\clients\LoClient;
-use go1\clients\MailClient;
-use go1\clients\MqClient;
 use go1\clients\PaymentClient;
-use go1\clients\PortalClient;
 use go1\clients\QueueClient;
 use go1\clients\RealtimeClient;
 use go1\clients\RulesClient;
 use go1\clients\S3Client as Go1S3Client;
 use go1\clients\SchedulerClient;
 use go1\clients\SmsClient;
-use go1\clients\UserClient;
-use go1\util\lo\LoChecker;
-use go1\util\portal\PortalChecker;
+use go1\clients\UtilCoreClientServiceProvider;
 use go1\util\toggle\FeatureToggleClient;
 use GraphAware\Neo4j\Client\ClientBuilder;
 use Pimple\Container;
@@ -176,5 +170,13 @@ class UtilServiceProvider implements ServiceProviderInterface
         $c['toggle.manager.client'] = function (Container $c) {
             return new FeatureToggleClient($c['toggle.manager']);
         };
+
+        // Avoid legacy code to be broken.
+        // @TODO: Remove this legacy supporting code
+        if (-1 == version_compare(Service::VERSION, 'v18.8.5.0')) {
+            $c
+                ->register(new UtilCoreServiceProvider)
+                ->register(new UtilCoreClientServiceProvider);
+        }
     }
 }
