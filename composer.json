@@ -18,6 +18,8 @@
     "go1/edge": "^0.3",
     "go1/flood": "^0.6",
     "go1/kv": "^0.2",
+    "go1/util_core": "dev-master",
+    "go1/util_core_clients": "dev-master",
     "graphaware/neo4j-php-client": "^4.6",
     "guzzlehttp/guzzle": "^6.0",
     "jsq/amazon-es-php": "^0.2.0",
