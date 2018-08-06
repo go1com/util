@@ -3,6 +3,7 @@
 namespace go1\util\schema;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 class EckSchema
 {
@@ -101,6 +102,30 @@ class EckSchema
             $edge->addColumn('weight', 'integer');
             $edge->addUniqueIndex(['field_id', 'entity_id', 'value_id']);
             $edge->addIndex(['weight']);
+        }
+
+        if (!$schema->hasTable('eck_screen')) {
+            $screen = $schema->createTable('eck_screen');
+            $screen->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $screen->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
+            $screen->addColumn('name', Type::STRING, ['comment' => 'Machine name.']);
+            $screen->addColumn('description', Type::STRING, ['comment' => 'Human name.']);
+            $screen->setPrimaryKey(['id']);
+            $screen->addUniqueIndex(['portal_id', 'name'], 'unq_portal_id_name');
+            $screen->addIndex(['name'], 'idx_sequence_name');
+        }
+
+        if (!$schema->hasTable('eck_screen_field')) {
+            $screenField = $schema->createTable('eck_screen_field');
+            $screenField->addColumn('screen_id', Type::INTEGER, ['unsigned' => true]);
+            $screenField->addColumn('field_id', Type::INTEGER, ['unsigned' => true]);
+            $screenField->addColumn('weight', Type::INTEGER, ['unsigned' => true]);
+            $screenField->setPrimaryKey(['screen_id', 'field_id']);
+            $screenField->addForeignKeyConstraint('eck_screen', ['screen_id'], ['id']);
+            $screenField->addForeignKeyConstraint('eck_structure', ['field_id'], ['id']);
+            $screenField->addIndex(['screen_id'], 'idx_sequence_screen_id');
+            $screenField->addIndex(['field_id'], 'idx_sequence_field_id');
+            $screenField->addIndex(['weight'], 'idx_sequence_weight');
         }
     }
 }
