@@ -4,9 +4,11 @@ namespace go1\util\task;
 
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
+use go1\util\task\Task;
 
 class TaskHelper
 {
+
     public static function addTask(Connection $db, string $table, int $instanceId, int $userId, int $status, array $data)
     {
         $task = [
@@ -36,7 +38,7 @@ class TaskHelper
     public static function loadTask(Connection $db, int $id, string $name)
     {
         $row = $db->executeQuery("SELECT * FROM {$name} WHERE id = ?", [$id])
-                  ->fetch(DB::OBJ);
+            ->fetch(DB::OBJ);
 
         if (!$row) {
             return null;
@@ -51,7 +53,7 @@ class TaskHelper
     {
         $sql = "SELECT * FROM {$name} WHERE status = ? ORDER BY id ASC";
         $row = $db->executeQuery($sql, [$status])
-                  ->fetch(DB::OBJ);
+            ->fetch(DB::OBJ);
 
         if (!$row) {
             return null;
@@ -92,7 +94,7 @@ class TaskHelper
     {
         $sql = "SELECT * FROM {$name} WHERE task_id = ? AND status = ? ORDER BY id ASC";
         $row = $db->executeQuery($sql, [$taskId, $status])
-                  ->fetch(DB::OBJ);
+            ->fetch(DB::OBJ);
 
         if (!$row) {
             return null;
@@ -103,13 +105,19 @@ class TaskHelper
         return TaskItem::create($row);
     }
 
-    public static function checksum(Connection $db, string $name, $string, int $expire = 1)
+    public static function checksum(Connection $db, string $name, $string, int $expireDay = 1)
     {
         $string = is_string($string) ? $string : json_encode($string);
         $checksum = md5($string);
-        $expireString = $expire > 1 ? '-' . $expire . 'days' : '-1 day';
-        return $db->fetchColumn("
-            SELECT id FROM {$name} WHERE checksum = ? AND created > ?",
-            [$checksum, strtotime($expireString, time())]);
+        list($status, $created) = $db->fetchArray("SELECT status, created FROM {$name} WHERE checksum = ?", [$checksum]);
+        if ($status && $created) {
+            if (Task::STATUS_COMPLETED == $status) {
+                $expireString = $expireDay > 1 ? "-$expireDay days" : "-1 day";
+
+                return ($created > strtotime($expireString));
+            }
+        }
+
+        return false;
     }
 }
