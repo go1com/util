@@ -404,4 +404,19 @@ class EnrolmentHelperTest extends UtilCoreTestCase
         $this->assertEquals($takenPortalId, $enrolment->takenPortalId);
         $this->assertNull(EnrolmentHelper::loadSingle($this->db, 0));
     }
+
+    public function testParentEnrolment()
+    {
+        $data = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->portalId];
+        $courseEnrolmentId = $this->createEnrolment($this->db, $data + ['lo_id' => $this->courseId]);
+        $moduleEnrolmentId = $this->createEnrolment($this->db, $data + ['lo_id' => $this->moduleId, 'parent_lo_id' => $this->courseId, 'parent_enrolment_id' => $courseEnrolmentId]);
+        $videoEnrolmentId = $this->createEnrolment($this->db, $data + ['lo_id' => $this->liVideoId, 'parent_lo_id' => $this->moduleId, 'parent_enrolment_id' => $moduleEnrolmentId]);
+
+        $videoEnrolment = EnrolmentHelper::loadSingle($this->db, $videoEnrolmentId);
+        $moduleEnrolment = EnrolmentHelper::loadSingle($this->db, $moduleEnrolmentId);
+
+        $this->assertEquals($courseEnrolmentId, EnrolmentHelper::parentEnrolment($this->db, $videoEnrolment)->id);
+        $this->assertEquals($courseEnrolmentId, EnrolmentHelper::parentEnrolment($this->db, $moduleEnrolment)->id);
+        $this->assertEquals($moduleEnrolmentId, EnrolmentHelper::parentEnrolment($this->db, $videoEnrolment, LoTypes::MODULE)->id);
+    }
 }
