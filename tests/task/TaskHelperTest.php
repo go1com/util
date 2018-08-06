@@ -78,7 +78,7 @@ class TaskHelperTest extends UtilTestCase
             'name'    => $this->taskName,
             'created' => strtotime('2 days'),
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
-            'status'  => Task::STATUS_COMPLETED,
+            'status'  => Task::STATUS_FAILED,
         ]);
         $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
@@ -87,9 +87,9 @@ class TaskHelperTest extends UtilTestCase
     {
         $this->createTask($this->db, [
             'name'    => $this->taskName,
-            'created' => strtotime('-2 days'),
+            'created' => strtotime('-1 days'),
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
-            'status'  => Task::STATUS_COMPLETED,
+            'status'  => Task::STATUS_FAILED,
         ]);
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
