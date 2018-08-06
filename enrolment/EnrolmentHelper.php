@@ -231,17 +231,17 @@ class EnrolmentHelper
         return $completedRequiredLos >= count($requiredLoIds);
     }
 
-    public static function childrenProgressCount(Connection $db, stdClass $enrolment, $all = false, array $childTypes = [])
+    public static function childrenProgressCount(Connection $db, Enrolment $enrolment, $all = false, array $childTypes = [])
     {
-        $childIds = LoHelper::childIds($db, $enrolment->lo_id, $all);
-        $parentIds = array_merge($childIds, [$enrolment->lo_id]);
+        $childIds = LoHelper::childIds($db, $enrolment->loId, $all);
+        $parentIds = array_merge($childIds, [$enrolment->loId]);
         if ($childIds && $childTypes) {
             $childIds = $db->executeQuery('SELECT id FROM gc_lo WHERE type IN (?) AND id IN (?)', [$childTypes, $childIds], [DB::STRINGS, DB::INTEGERS])->fetchAll(DB::COL);
         }
         $progress = ['total' => count($childIds)];
         if ($childIds) {
             $q = 'SELECT status, count(id) as totalEnrolment FROM gc_enrolment WHERE lo_id IN (?) AND profile_id = ? AND parent_lo_id IN (?) GROUP BY status';
-            $q = $db->executeQuery($q, [$childIds, $enrolment->profile_id, $parentIds], [DB::INTEGERS, DB::INTEGER, DB::INTEGERS]);
+            $q = $db->executeQuery($q, [$childIds, $enrolment->profileId, $parentIds], [DB::INTEGERS, DB::INTEGER, DB::INTEGERS]);
             while ($row = $q->fetch(DB::OBJ)) {
                 $progress[$row->status] = $row->totalEnrolment;
             }

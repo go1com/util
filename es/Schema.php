@@ -448,48 +448,49 @@ class Schema
         '_parent'           => ['type' => self::O_LO],
         '_routing'          => ['required' => true],
         'properties'        => [
-            'id'             => ['type' => self::T_KEYWORD],
+            'id'                  => ['type' => self::T_KEYWORD],
+            'parent_enrolment_id' => ['type' => self::T_INT],
             // Type of enrolment: enrolment, manual-record, plan-assigned.
-            'type'           => ['type' => self::T_KEYWORD],
-            'profile_id'     => ['type' => self::T_INT],
-            'lo_id'          => ['type' => self::T_INT],
-            'parent_id'      => ['type' => self::T_INT],
-            'status'         => ['type' => self::T_SHORT],
-            'last_status'    => ['type' => self::T_SHORT],
-            'quantity'       => ['type' => self::T_DOUBLE],
-            'result'         => ['type' => self::T_INT],
-            'pass'           => ['type' => self::T_INT],
-            'assessors'      => ['type' => self::T_INT],
+            'type'                => ['type' => self::T_KEYWORD],
+            'profile_id'          => ['type' => self::T_INT],
+            'lo_id'               => ['type' => self::T_INT],
+            'parent_id'           => ['type' => self::T_INT],
+            'status'              => ['type' => self::T_SHORT],
+            'last_status'         => ['type' => self::T_SHORT],
+            'quantity'            => ['type' => self::T_DOUBLE],
+            'result'              => ['type' => self::T_INT],
+            'pass'                => ['type' => self::T_INT],
+            'assessors'           => ['type' => self::T_INT],
             // It's used to calculate scheduled duration: scheduled_duration = due_date - assigned_date;
             // To get it: assigned_date = plan.created;
-            'assigned_date'  => ['type' => self::T_DATE],
-            'start_date'     => ['type' => self::T_DATE],
-            'end_date'       => ['type' => self::T_DATE],
-            'due_date'       => ['type' => self::T_DATE],
-            'submitted_date' => ['type' => self::T_DATE],
-            'marked_date'    => ['type' => self::T_DATE],
+            'assigned_date'       => ['type' => self::T_DATE],
+            'start_date'          => ['type' => self::T_DATE],
+            'end_date'            => ['type' => self::T_DATE],
+            'due_date'            => ['type' => self::T_DATE],
+            'submitted_date'      => ['type' => self::T_DATE],
+            'marked_date'         => ['type' => self::T_DATE],
             // For award enrolment only
-            'expire_date'    => ['type' => self::T_DATE],
+            'expire_date'         => ['type' => self::T_DATE],
             // It's used to calculate award completed duration: award_completed_duration = expire_date - begin_expire;
             // To get it: begin_expire = fixed expiry date ? start_date : end_date;
-            'begin_expire'   => ['type' => self::T_DATE],
-            'changed'        => ['type' => self::T_DATE],
-            'created'        => ['type' => self::T_DATE],
+            'begin_expire'        => ['type' => self::T_DATE],
+            'changed'             => ['type' => self::T_DATE],
+            'created'             => ['type' => self::T_DATE],
             // Duration between end date and start date (hours).
             // @todo Support quiz and interactive.
-            'duration'       => ['type' => self::T_INT],
-            'is_assigned'    => ['type' => self::T_SHORT],
-            'lo'             => [
+            'duration'            => ['type' => self::T_INT],
+            'is_assigned'         => ['type' => self::T_SHORT],
+            'lo'                  => [
                 'properties' => self::LO_MAPPING['properties'],
             ],
-            'parent_lo'      => [
+            'parent_lo'           => [
                 'properties' => [
                     'id'    => ['type' => self::T_KEYWORD],
                     'type'  => ['type' => self::T_KEYWORD],
                     'title' => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
             ],
-            'assessor'       => [
+            'assessor'            => [
                 'properties' => [
                     'id'         => ['type' => self::T_KEYWORD],
                     'mail'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
@@ -498,10 +499,10 @@ class Schema
                     'last_name'  => ['type' => self::T_KEYWORD] + self::ANALYZED,
                 ],
             ],
-            'account'        => [
+            'account'             => [
                 'properties' => self::ACCOUNT_MAPPING['properties'],
             ],
-            'progress'       => [
+            'progress'            => [
                 'properties' => [
                     EnrolmentStatuses::NOT_STARTED => ['type' => self::T_INT],
                     EnrolmentStatuses::IN_PROGRESS => ['type' => self::T_INT],
@@ -510,7 +511,7 @@ class Schema
                     EnrolmentStatuses::PERCENTAGE  => ['type' => self::T_INT],
                 ],
             ],
-            'certificates'   => [
+            'certificates'        => [
                 'type'       => self::T_NESTED,
                 'properties' => [
                     'type' => ['type' => self::T_KEYWORD],
@@ -519,7 +520,7 @@ class Schema
                     'size' => ['type' => self::T_TEXT],
                 ],
             ],
-            'metadata'       => [
+            'metadata'            => [
                 'properties' => [
                     'account_id'          => ['type' => self::T_INT],
                     'course_enrolment_id' => ['type' => self::T_INT],
@@ -617,6 +618,7 @@ class Schema
             'metadata' => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
+                    'course_id'   => ['type' => self::T_INT],
                     'updated_at'  => ['type' => self::T_INT],
                 ],
             ],
