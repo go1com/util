@@ -110,14 +110,17 @@ class TaskHelper
         $string = is_string($string) ? $string : json_encode($string);
         $checksum = md5($string);
         list($status, $created) = $db->fetchArray("SELECT status, created FROM {$name} WHERE checksum = ?", [$checksum]);
+        $checksumFlag = false;
         if ($status && $created) {
             if (Task::STATUS_COMPLETED == $status) {
+                $checksumFlag = true;
+            } else {
                 $expireString = $expireDay > 1 ? "-$expireDay days" : "-1 day";
 
-                return ($created > strtotime($expireString));
+                $checksumFlag = ($created > strtotime($expireString));
             }
         }
 
-        return false;
+        return $checksumFlag;
     }
 }
