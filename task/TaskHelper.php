@@ -112,7 +112,7 @@ class TaskHelper
         list($status, $created) = $db->fetchArray("SELECT status, created FROM {$name} WHERE checksum = ?", [$checksum]);
         $checksumFlag = false;
         if ($status && $created) {
-            if (Task::STATUS_COMPLETED == $status) {
+            if (in_array($status, [Task::STATUS_FAILED, Task::STATUS_COMPLETED])) {
                 $checksumFlag = true;
             } else {
                 $expireString = $expireDay > 1 ? "-$expireDay days" : "-1 day";
