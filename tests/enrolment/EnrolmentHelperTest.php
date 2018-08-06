@@ -9,6 +9,7 @@ use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\model\Enrolment;
 use go1\util\plan\PlanHelper;
 use go1\util\plan\PlanTypes;
 use go1\util\queue\Queue;
@@ -189,7 +190,7 @@ class EnrolmentHelperTest extends UtilCoreTestCase
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module4, 4);
         $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $module5, 5);
         $courseEnrolmentId = $this->createEnrolment($this->db, ['profile_id' => $this->profileId, 'lo_id' => $this->courseId]);
-        $courseEnrolment = EnrolmentHelper::load($this->db, $courseEnrolmentId);
+        $courseEnrolment = EnrolmentHelper::loadSingle($this->db, $courseEnrolmentId);
         $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment);
         $this->assertEquals(5, $progress['total']);
         $basicModuleData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->portalId, 'parent_lo_id' => $this->courseId];
@@ -229,7 +230,7 @@ class EnrolmentHelperTest extends UtilCoreTestCase
             $this->link($this->db, EdgeTypes::HAS_LI, $module2, $learningItemId, $key);
         }
         $courseEnrolmentId = $this->createEnrolment($this->db, ['profile_id' => $this->profileId, 'lo_id' => $course1]);
-        $courseEnrolment = EnrolmentHelper::load($this->db, $courseEnrolmentId);
+        $courseEnrolment = EnrolmentHelper::loadSingle($this->db, $courseEnrolmentId);
         $progress = EnrolmentHelper::childrenProgressCount($this->db, $courseEnrolment, true, LiTypes::all());
         $this->assertEquals(7, $progress['total']);
         $basicLiData = ['profile_id' => $this->profileId, 'taken_instance_id' => $this->portalId, 'parent_lo_id' => $module2];
