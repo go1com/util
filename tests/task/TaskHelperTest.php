@@ -53,41 +53,11 @@ class TaskHelperTest extends UtilTestCase
         $this->assertEquals(1000, $taskItem->data['lo_id']);
     }
 
-    public function testChecksumWithTaskPending()
-    {
-        $this->createTask($this->db, [
-            'name' => $this->taskName,
-            'data' => $data = ['type' => 'task_type', 'lo_id' => 1000],
-            'status' => Task::STATUS_PENDING,
-        ]);
-        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
-    }
-
-    public function testChecksumWithTaskCompleted()
-    {
-        $this->createTask($this->db, [
-            'name'    => $this->taskName,
-            'data'    => $data = ['type' => 'task_type', 'lo_id' => 1000],
-            'status'  => Task::STATUS_COMPLETED,
-        ]);
-        $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
-    }
-
-    public function testChecksumWithTaskFailed()
-    {
-        $this->createTask($this->db, [
-            'name'    => $this->taskName,
-            'data'    => $data = ['type' => 'task_type', 'lo_id' => 1000],
-            'status'  => Task::STATUS_FAILED,
-        ]);
-        $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
-    }
-
     public function testChecksumTaskCompletedWithDateNotExpired()
     {
         $this->createTask($this->db, [
             'name'    => $this->taskName,
-            'created' => strtotime('2 days'),
+            'created' => strtotime('-2 days'),
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
             'status'  => Task::STATUS_COMPLETED,
         ]);
@@ -98,7 +68,7 @@ class TaskHelperTest extends UtilTestCase
     {
         $this->createTask($this->db, [
             'name'    => $this->taskName,
-            'created' => strtotime('2 days'),
+            'created' => strtotime('-2 days'),
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
             'status'  => Task::STATUS_FAILED,
         ]);
@@ -131,7 +101,7 @@ class TaskHelperTest extends UtilTestCase
     {
         $this->createTask($this->db, [
             'name'    => $this->taskName,
-            'created' => strtotime('-1 days'),
+            'created' => strtotime('-2 days'),
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
             'status'  => Task::STATUS_PENDING,
         ]);
