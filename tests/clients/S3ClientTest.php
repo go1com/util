@@ -75,6 +75,9 @@ class S3ClientTest extends UtilTestCase
         $this->assertEquals($this->content, $expectedMsg);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testUpload()
     {
         $this->c->extend('go1.client.go1s3', function () {
