@@ -32,8 +32,7 @@ class PaymentClient
                 ->getContents();
 
             return json_decode($connection)->id;
-        }
-        catch (RequestException $e) {
+        } catch (RequestException $e) {
             $this->logger->error("[#payment] Failed to fetch portal Stripe connection ID: " . $e->getMessage());
 
             return false;
@@ -50,8 +49,7 @@ class PaymentClient
                 ->getContents();
 
             return json_decode($connection);
-        }
-        catch (RequestException $e) {
+        } catch (RequestException $e) {
             $this->logger->error("[#payment] Failed to fetch portal Stripe connection: " . $e->getMessage());
 
             return false;
@@ -72,8 +70,7 @@ class PaymentClient
             }
 
             return $transaction;
-        }
-        catch (BadResponseException $e) {
+        } catch (BadResponseException $e) {
             $this->logger->error("[#payment] Failed to transaction: " . $e->getMessage());
 
             return false;
@@ -117,8 +114,7 @@ class PaymentClient
             $this->client->put("{$this->paymentUrl}/transaction/{$id}/complete");
 
             return true;
-        }
-        catch (BadResponseException $e) {
+        } catch (BadResponseException $e) {
             $response = $e->getResponse();
 
             $this->logger->error(sprintf('[#payment] Failed to update transaction #%d: %s .', $id, $response->getBody()->getContents()));

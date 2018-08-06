@@ -11,6 +11,9 @@ class PaymentClientTest extends UtilTestCase
 {
     private $paymentUrl = 'http://payment.dev.go1.service';
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testUpdateCODTransaction()
     {
         $c = $this->getContainer();
@@ -34,6 +37,9 @@ class PaymentClientTest extends UtilTestCase
         $paymentClient->updateCODTransaction(1000);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testCreate()
     {
         $c = $this->getContainer();
