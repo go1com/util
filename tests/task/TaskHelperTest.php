@@ -127,7 +127,7 @@ class TaskHelperTest extends UtilTestCase
         $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 
-    public function testChecksumWithDateExpired()
+    public function testChecksumTaskPendingWithDateExpired()
     {
         $this->createTask($this->db, [
             'name'    => $this->taskName,
@@ -138,13 +138,13 @@ class TaskHelperTest extends UtilTestCase
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 
-    public function testChecksumWithDateNotExpired()
+    public function testChecksumTaskPendingWithDateNotExpired()
     {
         $this->createTask($this->db, [
             'name'    => $this->taskName,
             'created' => strtotime('2 days'),
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
-            'status'  => Task::STATUS_PROCESSING,
+            'status'  => Task::STATUS_PENDING,
         ]);
         $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
