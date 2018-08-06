@@ -165,6 +165,9 @@ class EnrolmentHelper
         return !$assessorIds ? [] : UserHelper::loadMultiple($db, array_map('intval', $assessorIds));
     }
 
+    /**
+     * @deprecated
+     */
     public static function findParentEnrolment(Connection $db, stdClass $enrolment, $parentLoType = LoTypes::COURSE)
     {
         $loadLo = function ($loId) use ($db) {
@@ -388,5 +391,14 @@ class EnrolmentHelper
         $row = $db->executeQuery($row, [$enrolmentId], [DB::INTEGER])->fetch(DB::OBJ);
 
         return $row ? Enrolment::create($row) : null;
+    }
+
+    public static function parentEnrolment(Connection $db, Enrolment $enrolment, $parentLoType = LoTypes::COURSE):? Enrolment
+    {
+        if ($db->fetchColumn('SELECT 1 FROM gc_lo WHERE type = ? AND id = ?', [$parentLoType, $enrolment->loId])) {
+            return $enrolment;
+        }
+        $parentEnrolment = $enrolment->parentEnrolmentId ? EnrolmentHelper::loadSingle($db, $enrolment->parentEnrolmentId) : null;
+        return $parentEnrolment ? static::parentEnrolment($db, $parentEnrolment, $parentLoType) : null;
     }
 }

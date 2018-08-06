@@ -29,9 +29,10 @@ class EnrolmentSchema
             $enrolment->addColumn('data', 'blob', ['notnull' => false]);
 
             $enrolment->setPrimaryKey(['id']);
-            $enrolment->addUniqueIndex(['profile_id', 'parent_lo_id', 'lo_id', 'taken_instance_id']);
+            $enrolment->addUniqueIndex(['profile_id', 'parent_enrolment_id', 'lo_id', 'taken_instance_id']);
             $enrolment->addIndex(['profile_id']);
             $enrolment->addIndex(['instance_id']);
+            $enrolment->addIndex(['parent_lo_id']);
             $enrolment->addIndex(['parent_enrolment_id']);
             $enrolment->addIndex(['taken_instance_id']);
             $enrolment->addIndex(['status']);
