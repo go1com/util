@@ -11,6 +11,7 @@ class TaskHelperTest extends UtilTestCase
     protected $taskService = 'service';
     private $taskName = 'service_task';
     private $taskItemName = 'service_task_item';
+
     public function testLoadTaskByStatus()
     {
         $this->createTask($this->db, [
@@ -22,6 +23,7 @@ class TaskHelperTest extends UtilTestCase
         $this->assertEquals('task_type', $task->getDataType());
         $this->assertEquals(1000, $task->data['lo_id']);
     }
+
     public function testLoadTaskItemByStatus()
     {
         $taskId = $this->createTask($this->db, [
@@ -38,6 +40,7 @@ class TaskHelperTest extends UtilTestCase
         $this->assertEquals('task_item_type', $taskItem->getDataType());
         $this->assertEquals(1000, $taskItem->data['lo_id']);
     }
+
     public function testChecksumTaskCompletedWithDateNotExpired()
     {
         $this->createTask($this->db, [
@@ -48,6 +51,7 @@ class TaskHelperTest extends UtilTestCase
         ]);
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
+
     public function testChecksumTaskCompletedWithDateExpired()
     {
         $this->createTask($this->db, [
@@ -58,6 +62,7 @@ class TaskHelperTest extends UtilTestCase
         ]);
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
+
     public function testChecksumTaskFailedWithDateNotExpired()
     {
         $this->createTask($this->db, [
@@ -68,6 +73,7 @@ class TaskHelperTest extends UtilTestCase
         ]);
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
+
     public function testChecksumTaskFailedWithDateExpired()
     {
         $this->createTask($this->db, [
@@ -78,6 +84,7 @@ class TaskHelperTest extends UtilTestCase
         ]);
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
+
     public function testChecksumTaskPendingWithDateExpired()
     {
         $this->createTask($this->db, [
@@ -88,6 +95,7 @@ class TaskHelperTest extends UtilTestCase
         ]);
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
+
     public function testChecksumTaskPendingWithDateNotExpired()
     {
         $this->createTask($this->db, [
@@ -98,6 +106,7 @@ class TaskHelperTest extends UtilTestCase
         ]);
         $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
+
     public function testChecksumNoData()
     {
         $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, []));
