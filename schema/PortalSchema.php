@@ -48,6 +48,7 @@ class PortalSchema
             $data->addColumn('go_live_date', 'integer', ['unsigned' => true, 'notnull' => false]);
             $data->addColumn('expiry_date', 'integer', ['unsigned' => true, 'notnull' => false]);
             $data->addColumn('cancel_expiry_date', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $data->addColumn('partner_portal_id', 'integer', ['unsigned' => true, 'notnull' => false]);
 
             $data->setPrimaryKey(['id']);
             $data->addIndex(['state']);
