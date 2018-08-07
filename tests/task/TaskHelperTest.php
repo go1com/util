@@ -61,18 +61,7 @@ class TaskHelperTest extends UtilTestCase
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
             'status'  => Task::STATUS_COMPLETED,
         ]);
-        $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
-    }
-
-    public function testChecksumTaskCompletedWithDateExpired()
-    {
-        $this->createTask($this->db, [
-            'name'    => $this->taskName,
-            'created' => strtotime('-1 days'),
-            'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
-            'status'  => Task::STATUS_COMPLETED,
-        ]);
-        $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 
     public function testChecksumTaskFailedWithDateNotExpired()
@@ -83,7 +72,7 @@ class TaskHelperTest extends UtilTestCase
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
             'status'  => Task::STATUS_FAILED,
         ]);
-        $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 
     public function testChecksumTaskFailedWithDateExpired()
@@ -94,10 +83,19 @@ class TaskHelperTest extends UtilTestCase
             'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
             'status'  => Task::STATUS_FAILED,
         ]);
-        $this->assertTrue(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
     }
 
-
+    public function testChecksumTaskCompletedWithDateExpired()
+    {
+        $this->createTask($this->db, [
+            'name'    => $this->taskName,
+            'created' => strtotime('-1 days'),
+            'data'    => $data = ['type' => 'task_type_other', 'lo_id' => 1000],
+            'status'  => Task::STATUS_COMPLETED,
+        ]);
+        $this->assertFalse(TaskHelper::checksum($this->db, $this->taskName, json_encode($data)));
+    }
 
     public function testChecksumTaskPendingWithDateExpired()
     {

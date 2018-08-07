@@ -113,7 +113,7 @@ class TaskHelper
         $checksumFlag = false;
         if (isset($status) && isset($created)) {
             if (in_array($status, [Task::STATUS_FAILED, Task::STATUS_COMPLETED])) {
-                $checksumFlag = true;
+                $checksumFlag = false;
             } else {
                 $expireString = $expireDay > 1 ? "-$expireDay days" : "-1 day";
 
