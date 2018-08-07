@@ -62,6 +62,7 @@ class PortalSchema
             $data->addIndex(['go_live_date']);
             $data->addIndex(['expiry_date']);
             $data->addIndex(['cancel_expiry_date']);
+            $data->addIndex(['partner_portal_id']);
         }
 
         $installPortalConf && self::installPortalConf($schema);
