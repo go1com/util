@@ -253,10 +253,11 @@ class EnrolmentHelperTest extends UtilCoreTestCase
         $lo = LoHelper::load($this->db, $this->courseId);
         $status = EnrolmentStatuses::NOT_STARTED;
         $date = DateTime::formatDate('now');
-        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date, null, 0, 0, 0, [], null, true);
+        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, 10, $lo, 1000, $status, $date, null, 0, 0, 0, [], null, true);
 
-        $e = EnrolmentHelper::load($this->db, 1);
+        $e = EnrolmentHelper::loadSingle($this->db, 1);
         $this->assertEquals($status, $e->status);
+        $this->assertEquals(10, $e->parentEnrolmentId);
 
         $message = $this->queueMessages[Queue::ENROLMENT_CREATE];
         $this->assertCount(1, $message);
@@ -271,10 +272,11 @@ class EnrolmentHelperTest extends UtilCoreTestCase
         $lo = LoHelper::load($this->db, $courseId);
         $status = EnrolmentStatuses::NOT_STARTED;
         $date = DateTime::formatDate('now');
-        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, $lo, 1000, $status, $date);
+        EnrolmentHelper::create($this->db, $this->queue, 1, 1, 0, 10, $lo, 1000, $status, $date);
 
-        $e = EnrolmentHelper::load($this->db, 1);
+        $e = EnrolmentHelper::loadSingle($this->db, 1);
         $this->assertEquals($status, $e->status);
+        $this->assertEquals(10, $e->parentEnrolmentId);
 
         $this->assertCount(1, $this->queueMessages[Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT]);
         $this->assertCount(1, $this->queueMessages[Queue::ENROLMENT_CREATE]);
