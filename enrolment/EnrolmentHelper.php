@@ -260,6 +260,7 @@ class EnrolmentHelper
         int $id,
         int $profileId,
         int $parentLoId = 0,
+        int $parentEnrolmentId = 0,
         stdClass $lo,
         int $instanceId,
         string $status = EnrolmentStatuses::IN_PROGRESS,
@@ -279,20 +280,21 @@ class EnrolmentHelper
         }
 
         $enrolment = [
-            'id'                => $id,
-            'profile_id'        => $profileId,
-            'parent_lo_id'      => $parentLoId,
-            'lo_id'             => $lo->id,
-            'instance_id'       => 0,
-            'taken_instance_id' => $instanceId,
-            'status'            => $status,
-            'start_date'        => $startDate,
-            'end_date'          => $endDate,
-            'result'            => $result,
-            'pass'              => $pass,
-            'changed'           => $changed ?? $date,
-            'timestamp'         => time(),
-            'data'              => json_encode($data),
+            'id'                  => $id,
+            'profile_id'          => $profileId,
+            'parent_lo_id'        => $parentLoId,
+            'parent_enrolment_id' => $parentEnrolmentId,
+            'lo_id'               => $lo->id,
+            'instance_id'         => 0,
+            'taken_instance_id'   => $instanceId,
+            'status'              => $status,
+            'start_date'          => $startDate,
+            'end_date'            => $endDate,
+            'result'              => $result,
+            'pass'                => $pass,
+            'changed'             => $changed ?? $date,
+            'timestamp'           => time(),
+            'data'                => json_encode($data),
         ];
 
         $db->insert('gc_enrolment', $enrolment);
