@@ -1,10 +1,13 @@
 <?php
+
 namespace go1\util\tests\task;
+
 use go1\util\schema\mock\TaskMockTrait;
 use go1\util\task\Task;
 use go1\util\task\TaskHelper;
 use go1\util\task\TaskItem;
 use go1\util\tests\UtilTestCase;
+
 class TaskHelperTest extends UtilTestCase
 {
     use TaskMockTrait;
@@ -18,6 +21,7 @@ class TaskHelperTest extends UtilTestCase
             'name' => $this->taskName,
             'data' => ['type' => 'task_type', 'lo_id' => 1000]
         ]);
+
         $task = TaskHelper::loadTaskByStatus($this->db, Task::STATUS_PENDING, $this->taskName);
         $this->assertTrue($task instanceof Task);
         $this->assertEquals('task_type', $task->getDataType());
@@ -30,11 +34,13 @@ class TaskHelperTest extends UtilTestCase
             'name' => $this->taskName,
             'data' => ['type' => 'task_type', 'lo_id' => 1000]
         ]);
+
         $this->createTaskItem($this->db, [
             'name'    => $this->taskItemName,
             'task_id' => $taskId,
             'data'    => ['type' => 'task_item_type', 'lo_id' => 1000]
         ]);
+
         $taskItem = TaskHelper::loadTaskItemByStatus($this->db, $taskId, Task::STATUS_PENDING, $this->taskItemName);
         $this->assertTrue($taskItem instanceof TaskItem);
         $this->assertEquals('task_item_type', $taskItem->getDataType());
