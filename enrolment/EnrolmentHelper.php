@@ -254,45 +254,29 @@ class EnrolmentHelper
         return $progress;
     }
 
-    public static function create(
-        Connection $db,
-        MqClient $queue,
-        int $id,
-        int $profileId,
-        int $parentLoId = 0,
-        stdClass $lo,
-        int $instanceId,
-        string $status = EnrolmentStatuses::IN_PROGRESS,
-        string $startDate = null,
-        string $endDate = null,
-        int $result = 0,
-        int $pass = 0,
-        string $changed = null,
-        array $data = [],
-        $assignerId = null,
-        $notify = true
-    )
+    public static function create(Connection $db, MqClient $queue, Enrolment $enrolment, stdClass $lo, $assignerId = null, $notify = true)
     {
         $date = DateTime::formatDate('now');
-        if (!$startDate && ($status != EnrolmentStatuses::NOT_STARTED)) {
-            $startDate = $date;
+        if (!$enrolment->startDate && ($enrolment->status != EnrolmentStatuses::NOT_STARTED)) {
+            $enrolment->startDate = $date;
         }
 
         $enrolment = [
-            'id'                => $id,
-            'profile_id'        => $profileId,
-            'parent_lo_id'      => $parentLoId,
-            'lo_id'             => $lo->id,
-            'instance_id'       => 0,
-            'taken_instance_id' => $instanceId,
-            'status'            => $status,
-            'start_date'        => $startDate,
-            'end_date'          => $endDate,
-            'result'            => $result,
-            'pass'              => $pass,
-            'changed'           => $changed ?? $date,
-            'timestamp'         => time(),
-            'data'              => json_encode($data),
+            'id'                  => $enrolment->id,
+            'profile_id'          => $enrolment->profileId,
+            'parent_lo_id'        => $enrolment->parentLoId,
+            'parent_enrolment_id' => $enrolment->parentEnrolmentId,
+            'lo_id'               => $lo->id,
+            'instance_id'         => 0,
+            'taken_instance_id'   => $enrolment->takenPortalId,
+            'status'              => $enrolment->status,
+            'start_date'          => $enrolment->startDate,
+            'end_date'            => $enrolment->endDate,
+            'result'              => $enrolment->result,
+            'pass'                => $enrolment->pass,
+            'changed'             => $enrolment->changed ?? $date,
+            'timestamp'           => time(),
+            'data'                => json_encode($enrolment->data),
         ];
 
         $db->insert('gc_enrolment', $enrolment);
