@@ -8,6 +8,8 @@ use go1\util\schema\mock\UserMockTrait;
 use go1\util\Text;
 use go1\util\user\Roles;
 use go1\util\user\UserHelper;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
 
 class UserHelperTest extends UtilCoreTestCase
 {
@@ -119,5 +121,64 @@ class UserHelperTest extends UtilCoreTestCase
     public function testIsStaff(array $roles = null, $valid = false)
     {
         $this->assertEquals($valid, UserHelper::isStaff($roles));
+    }
+
+    public function dataUuid2jwt(){
+        return [
+            ['api-dev1.go1.co',"0000-abcd-1111-efgh-2222","akastsuki",['jwt' => 'okane-wo-arimasen']],
+            ['api-dev2.go1.co',"0000-abcd-1111-efgh-5555",null,['jwt' => 'no-pain-no-gain']],
+        ];
+    }
+
+    function fakeClient(&$urlResult, $body)
+    {
+        $client = $this->getMockBuilder(Client::class)
+                       ->setMethods(['get'])
+                       ->disableOriginalConstructor()
+                       ->getMock();
+
+        $client->expects($this->any())
+               ->method('get')
+               ->willReturnCallback(function ($url, $options) use (&$urlResult, $body) {
+                   $urlResult = $url;
+                   return new Response(200, ['Content-Type' => 'application/json'], json_encode($body));
+               });
+        return $client;
+    }
+
+    /** @dataProvider dataUuid2jwt */
+    public function testUuid2jwt($apiUrl, $uuid, $portalName, $body)
+    {
+        $urlResult = '';
+        $client = $this->fakeClient($urlResult, $body);
+        $rs = (new UserHelper())->uuid2jwt($client, $apiUrl, $uuid, $portalName);
+        $this->assertEquals($rs, $body['jwt']);
+        $this->assertEquals($urlResult, "{$apiUrl}/account/current/{$uuid}" . (!is_null($portalName) ? "/{$portalName}" : ''));
+    }
+
+    function fakeProfileId2uuid($uuid)
+    {
+        $userHelper = $this->getMockBuilder(UserHelper::class)
+                           ->setMethods(['profileId2uuid'])
+                           ->disableOriginalConstructor()
+                           ->getMock();
+
+        $userHelper->expects($this->any())
+                   ->method('profileId2uuid')
+                   ->willReturnCallback(function ($client, $userUrl, $profileId) use ($uuid) {
+                       return $uuid;
+                   });
+        return $userHelper;
+    }
+
+    /** @dataProvider dataUuid2jwt */
+    public function testProfileId2jwt($apiUrl, $uuid, $portalName, $body)
+    {
+        $urlResult = '';
+        $userHelper = $this->fakeProfileId2uuid($uuid);
+        $client = $this->fakeClient($urlResult, $body);
+        $rs =  $userHelper->profileId2jwt($client, $apiUrl, $uuid, $portalName);
+        $this->assertEquals($rs, $body['jwt']);
+        $this->assertEquals($urlResult, "{$apiUrl}/account/current/{$uuid}" . (!is_null($portalName) ? "/{$portalName}" : ''));
     }
 }
