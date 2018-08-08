@@ -792,6 +792,7 @@ class Schema
     const PURCHASE_REQUEST_MAPPING = [
         'properties' => [
             'id'            => ['type' => self::T_KEYWORD],
+            'portal_id'     => ['type' => self::T_INT],
             'user'          => [
                 'properties' => self::USER_MAPPING['properties'],
             ],
