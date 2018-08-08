@@ -16,7 +16,8 @@
     "go1/flood":               "^0.6",
     "symfony/http-foundation": "^4.0 | ^3.4",
     "pimple/pimple":           "^v3.0.0",
-    "psr/log":                 "~1.0"
+    "psr/log":                 "~1.0",
+    "guzzlehttp/guzzle": "^6.3"
   },
   "require-dev":       {
     "ezyang/htmlpurifier": "^4.9"

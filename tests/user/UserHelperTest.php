@@ -123,7 +123,7 @@ class UserHelperTest extends UtilCoreTestCase
         $this->assertEquals($valid, UserHelper::isStaff($roles));
     }
 
-    public function dataUuid2jwt(){
+    public function dataGetJwt(){
         return [
             ['api-dev1.go1.co',"0000-abcd-1111-efgh-2222","akastsuki",['jwt' => 'okane-wo-arimasen']],
             ['api-dev2.go1.co',"0000-abcd-1111-efgh-5555",null,['jwt' => 'no-pain-no-gain']],
@@ -146,7 +146,7 @@ class UserHelperTest extends UtilCoreTestCase
         return $client;
     }
 
-    /** @dataProvider dataUuid2jwt */
+    /** @dataProvider dataGetJwt */
     public function testUuid2jwt($apiUrl, $uuid, $portalName, $body)
     {
         $urlResult = '';
@@ -171,7 +171,7 @@ class UserHelperTest extends UtilCoreTestCase
         return $userHelper;
     }
 
-    /** @dataProvider dataUuid2jwt */
+    /** @dataProvider dataGetJwt */
     public function testProfileId2jwt($apiUrl, $uuid, $portalName, $body)
     {
         $urlResult = '';

@@ -2,3 +2,4 @@ config.php
 vendor/
 db.sqlite
 .idea/
+composer.lock
