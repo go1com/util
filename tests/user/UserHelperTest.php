@@ -2,6 +2,7 @@
 
 namespace go1\util\tests;
 
+use Firebase\JWT\JWT;
 use go1\util\edge\EdgeTypes;
 use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
@@ -123,14 +124,15 @@ class UserHelperTest extends UtilCoreTestCase
         $this->assertEquals($valid, UserHelper::isStaff($roles));
     }
 
-    public function dataGetJwt(){
+    public function dataGetJwt()
+    {
         return [
-            ['api-dev1.go1.co',"0000-abcd-1111-efgh-2222","akastsuki",['jwt' => 'okane-wo-arimasen']],
-            ['api-dev2.go1.co',"0000-abcd-1111-efgh-5555",null,['jwt' => 'no-pain-no-gain']],
+            ['api-dev1.go1.co', 12345, "0000-abcd-1111-efgh-2222", "akastsuki"],
+            ['api-dev2.go1.co', 67890, "0000-abcd-1111-efgh-5555", null],
         ];
     }
 
-    function fakeClient(&$urlResult, $body)
+    private function fakeClient(string &$urlResult, array $body)
     {
         $client = $this->getMockBuilder(Client::class)
                        ->setMethods(['get'])
@@ -147,16 +149,26 @@ class UserHelperTest extends UtilCoreTestCase
     }
 
     /** @dataProvider dataGetJwt */
-    public function testUuid2jwt($apiUrl, $uuid, $portalName, $body)
+    public function testUuid2jwt(string $apiUrl, int $profileId, string $uuid, string $portalName = null)
     {
         $urlResult = '';
-        $client = $this->fakeClient($urlResult, $body);
+
+        $userId = $this->createUser($this->db, [
+            'uuid'       => $uuid,
+            'mail'       => $email = 'dawn.do@test.com',
+            'instance'   => (is_null($portalName) ? 'kawaii.mygo1.co' : $portalName),
+            'profile_id' => $profileId,
+        ]);
+        $user = UserHelper::load($this->db, $userId);
+        $jwt = JWT::encode(json_decode(json_encode($user), true), 'GO1');
+        $client = $this->fakeClient($urlResult, ['jwt' => $jwt]);
+
         $rs = (new UserHelper())->uuid2jwt($client, $apiUrl, $uuid, $portalName);
-        $this->assertEquals($rs, $body['jwt']);
+        $this->assertEquals($rs, $jwt);
         $this->assertEquals($urlResult, "{$apiUrl}/account/current/{$uuid}" . (!is_null($portalName) ? "/{$portalName}" : ''));
     }
 
-    function fakeProfileId2uuid($uuid)
+    private function fakeProfileId2uuid(int $id)
     {
         $userHelper = $this->getMockBuilder(UserHelper::class)
                            ->setMethods(['profileId2uuid'])
@@ -165,20 +177,30 @@ class UserHelperTest extends UtilCoreTestCase
 
         $userHelper->expects($this->any())
                    ->method('profileId2uuid')
-                   ->willReturnCallback(function ($client, $userUrl, $profileId) use ($uuid) {
-                       return $uuid;
+                   ->willReturnCallback(function ($client, $userUrl, $profileId) use ($id) {
+                       return UserHelper::load($this->db, $id)->uuid;
                    });
         return $userHelper;
     }
 
     /** @dataProvider dataGetJwt */
-    public function testProfileId2jwt($apiUrl, $uuid, $portalName, $body)
+    public function testProfileId2jwt(string $apiUrl, int $profileId, string $uuid, string $portalName = null)
     {
         $urlResult = '';
-        $userHelper = $this->fakeProfileId2uuid($uuid);
-        $client = $this->fakeClient($urlResult, $body);
-        $rs =  $userHelper->profileId2jwt($client, $apiUrl, $uuid, $portalName);
-        $this->assertEquals($rs, $body['jwt']);
+
+        $userId = $this->createUser($this->db, [
+            'uuid'       => $uuid,
+            'mail'       => $email = 'dawn.do@test.com',
+            'instance'   => (is_null($portalName) ? 'kawaii.mygo1.co' : $portalName),
+            'profile_id' => $profileId,
+        ]);
+        $user = UserHelper::load($this->db, $userId);
+        $jwt = JWT::encode(json_decode(json_encode($user), true), 'GO1');
+        $client = $this->fakeClient($urlResult, ['jwt' => $jwt]);
+        $userHelper = $this->fakeProfileId2uuid($userId);
+
+        $rs = $userHelper->profileId2jwt($client, $apiUrl, $profileId, $portalName);
+        $this->assertEquals($rs, $jwt);
         $this->assertEquals($urlResult, "{$apiUrl}/account/current/{$uuid}" . (!is_null($portalName) ? "/{$portalName}" : ''));
     }
 }

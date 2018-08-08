@@ -62,9 +62,9 @@ class UserHelper
         return $db->executeQuery($sql, [$profileId, $instanceName])->fetch(DB::OBJ);
     }
 
-    public function uuid2jwt(Client $client, $userUrl, $uuid, $instanceName = null)
+    public function uuid2jwt(Client $client, string $userUrl, string $uuid, string $portalName = null)
     {
-        $url = rtrim($userUrl, '/') . "/account/current/{$uuid}" . (!is_null($instanceName) ? "/{$instanceName}" : '');
+        $url = rtrim($userUrl, '/') . "/account/current/{$uuid}" . (!is_null($portalName) ? "/{$portalName}" : '');
 
         $res = $client->get($url, ['http_errors' => false]);
         return (200 == $res->getStatusCode())
@@ -88,10 +88,10 @@ class UserHelper
             : false;
     }
 
-    public function profileId2jwt(Client $client, $userUrl, $profileId, $instanceName = null)
+    public function profileId2jwt(Client $client, string $userUrl, int $profileId, string $portalName = null)
     {
         return ($uuid = $this->profileId2uuid($client, $userUrl, $profileId))
-            ? $this->uuid2jwt($client, $userUrl, $uuid, $instanceName)
+            ? $this->uuid2jwt($client, $userUrl, $uuid, $portalName)
             : false;
     }
 
