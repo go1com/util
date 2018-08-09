@@ -127,12 +127,43 @@ class UserHelperTest extends UtilCoreTestCase
     public function dataGetJwt()
     {
         return [
-            ['api-dev1.go1.co', 12345, "0000-abcd-1111-efgh-2222", "akastsuki"],
+            ['api-dev1.go1.co', 12345, "0000-abcd-1111-efgh-2222", "akastsuki.mygo1.co"],
             ['api-dev2.go1.co', 67890, "0000-abcd-1111-efgh-5555", null],
         ];
     }
 
-    private function fakeClient(string &$urlResult, array $body)
+    private function createPayload(\stdClass $user)
+    {
+        $payload = (object) [
+            'id'         => $user->id,
+            'instance'   => 'accounts-dev.gocatalyze.com',
+            'profile_id' => $user->profile_id,
+            'mail'       => $user->mail,
+            'name'       => UserHelper::name($user, true),
+            'roles'      => [
+                "Admin on #Accounts",
+                "developer",
+            ],
+            'accounts'   => [
+                (object) [
+                    'id'         => 11111,
+                    'profile_id' => 22222,
+                    'instance'   => 'akastsuki.mygo1.co',
+                    'roles'      => ['Student', 'administrator'],
+                ],
+                (object) [
+                    'id'         => 33333,
+                    'profile_id' => 44444,
+                    'instance'   => 'best-friend.mygo1.co',
+                    'roles'      => ['Student', 'administrator'],
+                ],
+            ],
+        ];
+
+        return $payload;
+    }
+
+    private function fakeClient(string &$urlResult, string $portalName = null, \stdClass $payload)
     {
         $client = $this->getMockBuilder(Client::class)
                        ->setMethods(['get'])
@@ -141,9 +172,18 @@ class UserHelperTest extends UtilCoreTestCase
 
         $client->expects($this->any())
                ->method('get')
-               ->willReturnCallback(function ($url, $options) use (&$urlResult, $body) {
+               ->willReturnCallback(function ($url, $options) use (&$urlResult, $portalName, $payload) {
                    $urlResult = $url;
-                   return new Response(200, ['Content-Type' => 'application/json'], json_encode($body));
+                   if (!is_null($portalName)) {
+                       foreach ($payload->accounts as $account) {
+                           if ($portalName == $account->instance) {
+                               $payload->accounts = [$account];
+                               break;
+                           }
+                       }
+                   }
+
+                   return new Response(200, ['Content-Type' => 'application/json'], json_encode(['jwt' => UserHelper::encode($payload)]));
                });
         return $client;
     }
@@ -156,17 +196,28 @@ class UserHelperTest extends UtilCoreTestCase
         $userId = $this->createUser($this->db, [
             'uuid'       => $uuid,
             'mail'       => $email = 'dawn.do@test.com',
-            'instance'   => (is_null($portalName) ? 'kawaii.mygo1.co' : $portalName),
+            'instance'   => 'accounts-dev.gocatalyze.com',
             'profile_id' => $profileId,
         ]);
+
         $user = UserHelper::load($this->db, $userId);
-        $jwt = JWT::encode(json_decode(json_encode($user), true), 'GO1');
-        $client = $this->fakeClient($urlResult, ['jwt' => $jwt]);
+        $payload = $this->createPayload($user);
+        $jwt = UserHelper::encode($payload);
+        $client = $this->fakeClient($urlResult, $portalName, $this->createPayload($user));
 
         $rs = (new UserHelper())->uuid2jwt($client, $apiUrl, $uuid, $portalName);
-        $this->assertEquals($rs, $jwt);
+
+        if (is_null($portalName)) {
+            $this->assertEquals($rs, $jwt);
+        }
+        else {
+            $this->assertNotEquals($rs, $jwt);
+        }
+
         $this->assertEquals($urlResult, "{$apiUrl}/account/current/{$uuid}" . (!is_null($portalName) ? "/{$portalName}" : ''));
     }
+
+
 
     private function fakeProfileId2uuid(int $id)
     {
@@ -191,16 +242,25 @@ class UserHelperTest extends UtilCoreTestCase
         $userId = $this->createUser($this->db, [
             'uuid'       => $uuid,
             'mail'       => $email = 'dawn.do@test.com',
-            'instance'   => (is_null($portalName) ? 'kawaii.mygo1.co' : $portalName),
+            'instance'   => 'accounts-dev.gocatalyze.com',
             'profile_id' => $profileId,
         ]);
+
         $user = UserHelper::load($this->db, $userId);
-        $jwt = JWT::encode(json_decode(json_encode($user), true), 'GO1');
-        $client = $this->fakeClient($urlResult, ['jwt' => $jwt]);
+        $payload = $this->createPayload($user);
+        $jwt = UserHelper::encode($payload);
+        $client = $this->fakeClient($urlResult, $portalName, $this->createPayload($user));
         $userHelper = $this->fakeProfileId2uuid($userId);
 
         $rs = $userHelper->profileId2jwt($client, $apiUrl, $profileId, $portalName);
-        $this->assertEquals($rs, $jwt);
+
+        if (is_null($portalName)) {
+            $this->assertEquals($rs, $jwt);
+        }
+        else {
+            $this->assertNotEquals($rs, $jwt);
+        }
+
         $this->assertEquals($urlResult, "{$apiUrl}/account/current/{$uuid}" . (!is_null($portalName) ? "/{$portalName}" : ''));
     }
 }
