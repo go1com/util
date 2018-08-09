@@ -100,15 +100,15 @@ class EdgeHelper
         $weight && $q->andWhere('weight = :weight')->setParameter(':weight', $weight);
 
         $q = $q->execute();
-        $effectedRoIds = [];
+        $affectedRoIds = [];
         while ($row = $q->fetch(DB::OBJ)) {
             $edge = Edge::create($row);
-            $effectedRoIds []= $edge->id;
+            $affectedRoIds []= $edge->id;
             $db->executeQuery('DELETE FROM gc_ro WHERE id = ?', [$edge->id]);
             $queue->publish($edge->jsonSerialize(), Queue::RO_DELETE);
         }
 
-        return $effectedRoIds;
+        return $affectedRoIds;
     }
 
     public static function edgesFromSource(Connection $db, int $sourceId, array $types = [])
