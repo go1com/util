@@ -10,4 +10,5 @@ class PlanTypes
 
     const ENTITY_AWARD = 'award';
     const ENTITY_LO    = 'lo';
+    const ENTITY_RO    = 'ro';
 }
