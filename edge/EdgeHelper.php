@@ -83,7 +83,7 @@ class EdgeHelper
         });
     }
 
-    public static function unlink(Connection $db, MqClient $queue, $type, $sourceId = null, $targetId = null, $weight = null)
+    public static function unlink(Connection $db, MqClient $queue, $type, $sourceId = null, $targetId = null, $weight = null): array
     {
         if (!$sourceId && !$targetId) {
             throw new BadFunctionCallException('Require source or target.');
@@ -100,11 +100,15 @@ class EdgeHelper
         $weight && $q->andWhere('weight = :weight')->setParameter(':weight', $weight);
 
         $q = $q->execute();
+        $affectedRoIds = [];
         while ($row = $q->fetch(DB::OBJ)) {
             $edge = Edge::create($row);
+            $affectedRoIds []= $edge->id;
             $db->executeQuery('DELETE FROM gc_ro WHERE id = ?', [$edge->id]);
             $queue->publish($edge->jsonSerialize(), Queue::RO_DELETE);
         }
+
+        return $affectedRoIds;
     }
 
     public static function edgesFromSource(Connection $db, int $sourceId, array $types = [])
