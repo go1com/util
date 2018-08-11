@@ -615,6 +615,7 @@ class Schema
             'id'       => ['type' => self::T_KEYWORD], # Enrolment ID
             'lo_id'    => ['type' => self::T_INT],
             'type'     => ['type' => self::T_KEYWORD],
+            'status'   => ['type' => self::T_SHORT],
             'metadata' => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
