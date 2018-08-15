@@ -337,6 +337,7 @@ class Schema
             'data'            => [
                 'properties' => [
                     'allow_resubmit' => ['type' => self::T_INT],
+                    'allow_reenrol'  => ['type' => self::T_SHORT],
                     'label'          => ['type' => self::T_KEYWORD],
                     'pass_rate'      => ['type' => self::T_FLOAT],
                     'url'            => ['type' => self::T_TEXT],
@@ -615,6 +616,7 @@ class Schema
             'id'       => ['type' => self::T_KEYWORD], # Enrolment ID
             'lo_id'    => ['type' => self::T_INT],
             'type'     => ['type' => self::T_KEYWORD],
+            'status'   => ['type' => self::T_SHORT],
             'metadata' => [
                 'properties' => [
                     'instance_id' => ['type' => self::T_INT],
@@ -792,6 +794,7 @@ class Schema
     const PURCHASE_REQUEST_MAPPING = [
         'properties' => [
             'id'            => ['type' => self::T_KEYWORD],
+            'portal_id'     => ['type' => self::T_INT],
             'user'          => [
                 'properties' => self::USER_MAPPING['properties'],
             ],

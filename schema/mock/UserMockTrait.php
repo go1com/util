@@ -27,6 +27,11 @@ trait UserMockTrait
         return $this->createRole($db, $options + ['name' => Roles::ADMIN]);
     }
 
+    public function createPortalManagerRole($db, array $options = [])
+    {
+        return $this->createRole($db, $options + ['name' => Roles::MANAGER]);
+    }
+
     protected function createRole(Connection $db, array $options)
     {
         $db->insert('gc_role', [

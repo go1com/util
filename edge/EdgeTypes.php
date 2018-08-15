@@ -134,7 +134,7 @@ class EdgeTypes
     # User relationships
     # ---------------------
     const HAS_ROLE                       = 500; # T: Role               | S: User
-    const HAS_ACCOUNT                    = 501; # T: User               | S: User
+    const HAS_ACCOUNT                    = 501; # T: Account            | S: User
     const HAS_TUTOR_EDGE                 = 502; # T: User (Tutor)       | S: gc_ro id - the record has source_id is course, target_id is (Module)
     const HAS_AUTHOR_EDGE                = 503; # T: User               | S: Learning object
     const HAS_MANAGER                    = 504; # T: User Id of manager | S: gc_user.id Account Id of student

@@ -109,7 +109,13 @@ class EdgeTest extends UtilCoreTestCase
 
     public function testUnlinkBySource()
     {
-        EdgeHelper::unlink($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId = 1);
+        $affectedRecords = EdgeHelper::unlink($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, $userId = 1);
+        $this->assertEquals(3, count($affectedRecords));
+
+        // 3 first records are removed
+        $this->assertEquals(1, $affectedRecords[0]);
+        $this->assertEquals(2, $affectedRecords[1]);
+        $this->assertEquals(3, $affectedRecords[2]);
 
         // All accounts are removed
         $this->assertFalse(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId, $accountId = 2));
@@ -122,19 +128,25 @@ class EdgeTest extends UtilCoreTestCase
         $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 4));
     }
 
-    public function unlinkByTarget()
+    public function testUnlinkByTarget()
     {
-        EdgeHelper::unlink($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, null, $accountId = 2);
+        $affectedRecords = EdgeHelper::unlink($this->db, $this->queue, EdgeTypes::HAS_ACCOUNT, null, $accountId = 2);
+        $this->assertEquals(1, count($affectedRecords));
+
+        // First record is removed
+        $this->assertEquals(1, $affectedRecords[0]);
 
         // Only one account is removed.
-        $this->assertEquals(false, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 2));
-        $this->assertEquals(true, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 3));
-        $this->assertEquals(true, EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 4));
+        $this->assertEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId = 1, $accountId = 2));
 
         // Other relationships should not be removed by accident.
-        $this->assertFalse(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 2));
-        $this->assertFalse(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 3));
-        $this->assertFalse(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 4));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId, $accountId = 3));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_ACCOUNT, $userId, $accountId = 4));
+
+        // Other relationships should not be removed by accident.
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 2));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 3));
+        $this->assertNotEmpty(EdgeHelper::hasLink($this->db, EdgeTypes::HAS_MODULE, $courseId = 1, $moduleId = 4));
     }
 
     public function testEdgesFromSource()
