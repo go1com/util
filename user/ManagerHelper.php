@@ -31,13 +31,13 @@ class ManagerHelper
         return EdgeHelper::hasLink($go1, EdgeTypes::HAS_ROLE, $managerAccountId, $roleId);
     }
 
-    public static function userManagerIds(Connection $go1, int $userId): array
+    public static function userManagerIds(Connection $go1, int $accountId): array
     {
         $sql = 'SELECT ro.target_id FROM gc_ro ro ';
         $sql .= 'WHERE ro.source_id = ? AND ro.type = ?';
 
         return $go1
-            ->executeQuery($sql, [$userId, EdgeTypes::HAS_MANAGER])
+            ->executeQuery($sql, [$accountId, EdgeTypes::HAS_MANAGER])
             ->fetchAll(PDO::FETCH_COLUMN);
     }
 }
