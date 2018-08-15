@@ -62,16 +62,6 @@ class UserHelper
         return $db->executeQuery($sql, [$profileId, $instanceName])->fetch(DB::OBJ);
     }
 
-    public function uuid2jwt(Client $client, $userUrl, $uuid)
-    {
-        $url = rtrim($userUrl, '/') . "/account/current/{$uuid}";
-        $res = $client->get($url, ['http_errors' => false]);
-
-        return (200 == $res->getStatusCode())
-            ? json_decode($res->getBody()->getContents())->jwt
-            : false;
-    }
-
     public static function uuidByProfileId(Connection $db, string $accountsName, int $profileId)
     {
         return $db->fetchColumn('SELECT uuid FROM gc_user WHERE instance = ? AND profile_id = ?', [$accountsName, $profileId]);
@@ -85,13 +75,6 @@ class UserHelper
 
         return (200 == $res->getStatusCode())
             ? json_decode($res->getBody()->getContents())->uuid
-            : false;
-    }
-
-    public function profileId2jwt(Client $client, $userUrl, $profileId)
-    {
-        return ($uuid = $this->profileId2uuid($client, $userUrl, $profileId))
-            ? $this->uuid2jwt($client, $userUrl, $uuid)
             : false;
     }
 
