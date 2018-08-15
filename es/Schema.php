@@ -337,6 +337,7 @@ class Schema
             'data'            => [
                 'properties' => [
                     'allow_resubmit' => ['type' => self::T_INT],
+                    'allow_reenrol'  => ['type' => self::T_SHORT],
                     'label'          => ['type' => self::T_KEYWORD],
                     'pass_rate'      => ['type' => self::T_FLOAT],
                     'url'            => ['type' => self::T_TEXT],
