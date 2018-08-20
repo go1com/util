@@ -71,11 +71,11 @@ class UtilCoreTestCase extends TestCase
         # Extra database setup, test cases can safely override this.
     }
 
-    protected function getContainer(): Container
+    protected function getContainer(bool $rebuild = false): Container
     {
         static $container;
 
-        if (null === $container) {
+        if (null === $container || $rebuild) {
             $container = new Container(['accounts_name' => 'accounts.test']);
             $container->register(new UtilCoreServiceProvider, [
                 'logger' => function () {
