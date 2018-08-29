@@ -918,7 +918,7 @@ class Schema
         'start'                    => ['type' => self::T_DATE],
         'end'                      => ['type' => self::T_DATE],
         'timezone'                 => ['type' => self::T_KEYWORD],
-        'seats'                    => ['type' => self::T_INT],
+        'seats'                    => ['type' => self::T_INT], # Or attendee_limit
         'available_seats'          => ['type' => self::T_INT],
         'country'                  => ['type' => self::T_KEYWORD],
         'country_name'             => ['type' => self::T_KEYWORD] + self::ANALYZED,
@@ -933,6 +933,7 @@ class Schema
         'organisation_name'        => ['type' => self::T_KEYWORD],
         'name_line'                => ['type' => self::T_KEYWORD],
         'postal_code'              => ['type' => self::T_KEYWORD],
+        'instructor_ids'           => ['type' => self::T_INT],
     ];
 
     const EVENT_MAPPING = [
