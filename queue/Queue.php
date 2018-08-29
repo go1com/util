@@ -193,6 +193,12 @@ class Queue
     const PURCHASE_REQUEST_CREATE      = 'purchase.request.create';
     const PURCHASE_REQUEST_UPDATE      = 'purchase.request.update';
     const PURCHASE_REQUEST_DELETE      = 'purchase.request.delete';
+    const EVENT_SESSION_CREATE         = 'event.session.create';
+    const EVENT_SESSION_UPDATE         = 'event.session.update';
+    const EVENT_SESSION_DELETE         = 'event.session.delete';
+    const EVENT_LOCATION_CREATE        = 'event.location.create';
+    const EVENT_LOCATION_UPDATE        = 'event.location.update';
+    const EVENT_LOCATION_DELETE        = 'event.location.delete';
 
     # routingKey that tell some service to do something.
     #
