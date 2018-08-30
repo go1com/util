@@ -519,4 +519,12 @@ class LoHelperTest extends UtilCoreTestCase
         $countChild = LoHelper::countChild($this->db, $courseId);
         $this->assertEquals($liNumber, $countChild);
     }
+
+    public function testAllowReuseEnrolment()
+    {
+        $courseId = $this->createCourse($this->db, ['instance_id' => $this->createPortal($this->db, []), 'data' => [LoHelper::ALLOW_REUSE_ENROLMENT => true]]);
+        $course = LoHelper::load($this->db, $courseId);
+        $this->assertTrue(LoHelper::allowReuseEnrolment($course));
+        $this->assertFalse(LoHelper::allowReuseEnrolment(LoHelper::load($this->db, $this->course1Id)));
+    }
 }

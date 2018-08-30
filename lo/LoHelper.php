@@ -34,6 +34,7 @@ class LoHelper
     const SUGGESTED_COMPLETION_UNIT  = 'suggested_completion_unit';
     const PASS_RATE                  = 'pass_rate';
     const SINGLE_LI                  = 'single_li';
+    const ALLOW_REUSE_ENROLMENT      = 'allow_reuse_enrolment'; // Use existing enrollments for reused content
 
     // GO1P-5665: Expiration for award.
     const AWARD      = 'award';
@@ -505,5 +506,10 @@ class LoHelper
         }
 
         return $result;
+    }
+
+    public static function allowReuseEnrolment(stdClass $lo): bool
+    {
+        return boolval($lo->data->{self::ALLOW_REUSE_ENROLMENT} ?? false);
     }
 }
