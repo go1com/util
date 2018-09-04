@@ -107,7 +107,7 @@ class LoHelper
             if ($expensiveTree) {
                 $load = function (array &$nodes, array &$nodeIds, array $edgeTypes) use (&$db, $instanceId) {
                     $itemIds = [];
-                    $q = 'SELECT source_id, target_id FROM gc_ro WHERE source_id IN (?) AND type IN (?)';
+                    $q = 'SELECT source_id, target_id FROM gc_ro WHERE source_id IN (?) AND type IN (?) ORDER BY weight';
                     $q = $db->executeQuery($q, [$nodeIds, $edgeTypes], [DB::INTEGERS, DB::INTEGERS]);
 
                     while ($edge = $q->fetch(DB::OBJ)) {
