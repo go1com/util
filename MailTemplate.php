@@ -1338,6 +1338,17 @@ class MailTemplate
         ],
     ];
 
+    public const REPORT_USER_BULK_NOTIFICATION = [
+        'key'    => 'report.user.bulk-notification',
+        'tokens' => [
+            '!user_name'       => 'Machine name of user name, this maybe the email address.', //deprecated
+            '@user_name'       => 'User name.', //deprecated
+            '!site_name'       => 'Human name of the portal.', //deprecated
+            '!portal_name'     => 'Portal name',
+            '!primary_domain'  => 'Primary domain of portal.',
+        ],
+    ];
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
