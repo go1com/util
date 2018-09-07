@@ -37,6 +37,7 @@ class Schema
     const T_COMPLETION_CATEGORY = 'CATEGORY'; # must be in upper-case
     const T_OBJECT              = 'object';
     const T_NESTED              = 'nested';
+    const T_GEO_POINT           = 'geo_point';
 
     const O_EDGE                = 'edge';
     const O_PORTAL              = 'portal';
@@ -354,6 +355,7 @@ class Schema
                     'administrative_area_name' => ['type' => self::T_KEYWORD] + self::ANALYZED,
                     'locality'                 => ['type' => self::T_KEYWORD] + self::ANALYZED,
                     'thoroughfare'             => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'coordinate'               => ['type' => self::T_GEO_POINT],
                 ],
             ],
             'vote'            => [
