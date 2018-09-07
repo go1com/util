@@ -160,6 +160,7 @@ class LoSchema
             $location->addIndex(['author_id']);
         }
 
+        // This is for storing custom tag
         if (!$schema->hasTable('gc_lo_tag')) {
             $customTag = $schema->createTable('gc_lo_tag');
             $customTag->addColumn('instance_id', Type::INTEGER);
@@ -172,24 +173,20 @@ class LoSchema
             $customTag->addUniqueIndex(['instance_id', 'lo_id', 'tag']);
         }
 
-        # @TODO Remove children & lo_count columns.
+        // New storage for tag
         if (!$schema->hasTable('gc_tag')) {
             $tag = $schema->createTable('gc_tag');
             $tag->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $tag->addColumn('title', 'string');
+            $tag->addColumn('lo_id', 'integer', ['unsigned' => true]);
             $tag->addColumn('instance_id', 'integer', ['unsigned' => true]);
-            $tag->addColumn('parent_id', 'integer', ['unsigned' => true]);
-            $tag->addColumn('children', 'text', ['description' => 'Children IDs, separated by comma.', 'notnull' => false]);
-            $tag->addColumn('lo_count', 'integer', ['default' => 0, 'description' => '@TODO: We do not really need this.']);
-            $tag->addColumn('weight', 'integer', ['default' => 0]);
+            $tag->addColumn('type', 'smallint');
             $tag->addColumn('timestamp', 'integer', ['unsigned' => true]);
             $tag->setPrimaryKey(['id']);
-            $tag->addUniqueIndex(['instance_id', 'title']);
+            $tag->addIndex(['title']);
+            $tag->addIndex(['lo_id']);
             $tag->addIndex(['instance_id']);
-            $tag->addIndex(['parent_id']);
-            $tag->addIndex(['weight']);
             $tag->addIndex(['timestamp']);
-            $tag->addForeignKeyConstraint('gc_instance', ['instance_id'], ['id']);
         }
     }
 }
