@@ -85,6 +85,7 @@ trait EsEnrolmentMockTrait
             'timestamp'           => DateTime::formatDate($options['timestamp'] ?? time()),
             'metadata'            => [
                 'instance_id' => $options['instance_id'] ?? 0,
+                'updated_at'  => $options['updated_at'] ?? time(),
             ],
         ];
 
