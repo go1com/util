@@ -603,6 +603,7 @@ class Schema
             ],
             'metadata'            => [
                 'properties' => [
+                    'updated_at'  => ['type' => self::T_INT],
                     'instance_id' => ['type' => self::T_INT],
                 ],
             ],
