@@ -188,5 +188,21 @@ class LoSchema
             $tag->addIndex(['instance_id']);
             $tag->addIndex(['timestamp']);
         }
+
+        // New tags location
+        if (!$schema->hasTable('gc_tags')) {
+            $tags = $schema->createTable('gc_tags');
+            $tags->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $tags->addColumn('title', 'string');
+            $tags->addColumn('lo_id', 'integer', ['unsigned' => true]);
+            $tags->addColumn('instance_id', 'integer', ['unsigned' => true]);
+            $tags->addColumn('type', 'smallint');
+            $tags->addColumn('timestamp', 'integer', ['unsigned' => true]);
+            $tags->setPrimaryKey(['id']);
+            $tags->addIndex(['title']);
+            $tags->addIndex(['lo_id']);
+            $tags->addIndex(['instance_id']);
+            $tags->addIndex(['timestamp']);
+        }
     }
 }
