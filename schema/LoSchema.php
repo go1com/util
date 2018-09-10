@@ -160,6 +160,7 @@ class LoSchema
             $location->addIndex(['author_id']);
         }
 
+        // @deprecated store custom tag
         if (!$schema->hasTable('gc_lo_tag')) {
             $customTag = $schema->createTable('gc_lo_tag');
             $customTag->addColumn('instance_id', Type::INTEGER);
@@ -172,7 +173,7 @@ class LoSchema
             $customTag->addUniqueIndex(['instance_id', 'lo_id', 'tag']);
         }
 
-        # @TODO Remove children & lo_count columns.
+        // @deprecated
         if (!$schema->hasTable('gc_tag')) {
             $tag = $schema->createTable('gc_tag');
             $tag->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
@@ -190,6 +191,23 @@ class LoSchema
             $tag->addIndex(['weight']);
             $tag->addIndex(['timestamp']);
             $tag->addForeignKeyConstraint('gc_instance', ['instance_id'], ['id']);
+        }
+
+        // All LO tags will be stored in this table
+        if (!$schema->hasTable('gc_tags')) {
+            $tags = $schema->createTable('gc_tags');
+            $tags->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $tags->addColumn('title', 'string');
+            $tags->addColumn('lo_id', 'integer', ['unsigned' => true]);
+            $tags->addColumn('instance_id', 'integer', ['unsigned' => true]);
+            $tags->addColumn('type', 'smallint'); 
+            $tags->addColumn('timestamp', 'integer', ['unsigned' => true]);
+            $tags->setPrimaryKey(['id']);
+            $tags->addIndex(['title']);
+            $tags->addIndex(['lo_id']);
+            $tags->addIndex(['instance_id']);
+            $tags->addIndex(['type']);
+            $tags->addIndex(['timestamp']);
         }
     }
 }
