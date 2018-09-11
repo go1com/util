@@ -299,6 +299,7 @@ class Schema
             'title'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'description'     => ['type' => self::T_TEXT],
             'tags'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'custom_tags'     => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'image'           => ['type' => self::T_TEXT],
             'quantity'        => ['type' => self::T_DOUBLE],
             'collection_id'   => ['type' => self::T_INT],
