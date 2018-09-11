@@ -808,8 +808,8 @@ class Schema
                 'properties' => self::LO_MAPPING['properties'],
             ],
             'status'        => ['type' => self::T_SHORT],
-            'request_date'  => ['type' => self::T_TEXT],
-            'response_date' => ['type' => self::T_TEXT],
+            'request_date'  => ['type' => self::T_DATE],
+            'response_date' => ['type' => self::T_DATE],
             'approve_url'   => ['type' => self::T_TEXT],
             'reject_url'    => ['type' => self::T_TEXT],
             'metadata'      => [
