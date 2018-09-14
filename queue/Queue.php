@@ -46,6 +46,7 @@ class Queue
     const USER_CREATE                  = 'user.create';
     const USER_UPDATE                  = 'user.update';
     const USER_DELETE                  = 'user.delete';
+    const USER_BULK_NOTIFY             = 'user.bulk-notify';
     const USER_FORGET_PASSWORD         = 'user.forget-password';
     const USER_LOGIN_SUCCESS           = 'user.login-success';
     const USER_LOGIN_FAIL              = 'user.login-fail';

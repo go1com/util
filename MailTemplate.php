@@ -4,6 +4,7 @@ namespace go1\util;
 
 use InvalidArgumentException;
 use ReflectionClass;
+use go1\util\queue\Queue;
 
 class MailTemplate
 {
@@ -1336,6 +1337,17 @@ class MailTemplate
             '!portal_image'       => 'Portal image',
             '!portal_url'         => 'Portal URL',
         ],
+    ];
+
+    public const USER_BULK_NOTIFY = [
+        'key'    => Queue::USER_BULK_NOTIFY,
+        'tokens' => [
+            '@user_name'       => 'User name.', //deprecated
+            '!user_name'       => 'Machine name of user name, this maybe the email address.', //deprecated
+            '!site_name'       => 'Human name of the portal.', //deprecated
+            '!portal_url'      => 'Portal URL',
+            '!primary_domain'  => 'Primary domain of portal.',
+        ]
     ];
 
     public static function has(string $key): bool
