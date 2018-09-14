@@ -37,6 +37,7 @@ class Schema
     const T_COMPLETION_CATEGORY = 'CATEGORY'; # must be in upper-case
     const T_OBJECT              = 'object';
     const T_NESTED              = 'nested';
+    const T_GEO_POINT           = 'geo_point';
 
     const O_EDGE                = 'edge';
     const O_PORTAL              = 'portal';
@@ -298,6 +299,7 @@ class Schema
             'title'           => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'description'     => ['type' => self::T_TEXT],
             'tags'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
+            'custom_tags'     => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'image'           => ['type' => self::T_TEXT],
             'quantity'        => ['type' => self::T_DOUBLE],
             'collection_id'   => ['type' => self::T_INT],
@@ -354,6 +356,7 @@ class Schema
                     'administrative_area_name' => ['type' => self::T_KEYWORD] + self::ANALYZED,
                     'locality'                 => ['type' => self::T_KEYWORD] + self::ANALYZED,
                     'thoroughfare'             => ['type' => self::T_KEYWORD] + self::ANALYZED,
+                    'coordinate'               => ['type' => self::T_GEO_POINT],
                 ],
             ],
             'vote'            => [
@@ -603,6 +606,7 @@ class Schema
             ],
             'metadata'            => [
                 'properties' => [
+                    'updated_at'  => ['type' => self::T_INT],
                     'instance_id' => ['type' => self::T_INT],
                 ],
             ],
@@ -805,8 +809,8 @@ class Schema
                 'properties' => self::LO_MAPPING['properties'],
             ],
             'status'        => ['type' => self::T_SHORT],
-            'request_date'  => ['type' => self::T_TEXT],
-            'response_date' => ['type' => self::T_TEXT],
+            'request_date'  => ['type' => self::T_DATE],
+            'response_date' => ['type' => self::T_DATE],
             'approve_url'   => ['type' => self::T_TEXT],
             'reject_url'    => ['type' => self::T_TEXT],
             'metadata'      => [
