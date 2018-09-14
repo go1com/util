@@ -16,6 +16,7 @@ class Schema
     const LOG_INDEX         = ES_INDEX . '_log';
     const ACTIVITY_INDEX    = ES_INDEX . '_activity';
     const PORTALS_INDEX     = ES_INDEX . '_portal*';
+    const PAYMENT_INDEX     = ES_INDEX . '_payment';
 
     const TEMP             = -32;
     const MAX_INPUT_LENGTH = 50;
