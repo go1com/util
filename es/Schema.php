@@ -939,6 +939,7 @@ class Schema
         'name_line'                => ['type' => self::T_KEYWORD],
         'postal_code'              => ['type' => self::T_KEYWORD],
         'instructor_ids'           => ['type' => self::T_INT],
+        'coordinate'               => ['type' => self::T_GEO_POINT],
     ];
 
     const EVENT_MAPPING = [
