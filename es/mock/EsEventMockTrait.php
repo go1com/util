@@ -31,6 +31,7 @@ trait EsEventMockTrait
             'name_line'               => $options['name_line'] ?? '',
             'postal_code'             => $options['postal_code'] ?? '',
             'parent'                  => $options['parent'] ?? null,
+            'coordinate'              => $options['coordinate'] ?? '',
             'metadata'                => [
                 'instance_id' => $options['instance_id'] ?? 0,
                 'updated_at'  => $options['updated_at'] ?? time(),
