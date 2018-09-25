@@ -200,14 +200,14 @@ class LoSchema
             $tags->addColumn('title', 'string');
             $tags->addColumn('lo_id', 'integer', ['unsigned' => true]);
             $tags->addColumn('instance_id', 'integer', ['unsigned' => true]);
-            $tags->addColumn('type', 'smallint'); 
-            $tags->addColumn('timestamp', 'integer', ['unsigned' => true]);
+            $tags->addColumn('type', 'smallint');
+            $tags->addColumn('created', 'integer', ['unsigned' => true]);
             $tags->setPrimaryKey(['id']);
             $tags->addIndex(['title']);
             $tags->addIndex(['lo_id']);
             $tags->addIndex(['instance_id']);
             $tags->addIndex(['type']);
-            $tags->addIndex(['timestamp']);
+            $tags->addIndex(['created']);
         }
     }
 }
