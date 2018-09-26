@@ -209,5 +209,18 @@ class LoSchema
             $tags->addIndex(['type']);
             $tags->addIndex(['created']);
         }
+
+        if (!$schema->hasTable('gc_lo_attributes')) {
+            $table = $schema->createTable('gc_lo_attributes');
+            $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $table->addColumn('lo_id', 'integer', ['unsigned' => true]);
+            $table->addColumn('key', 'integer', ['unsigned' => true]);
+            $table->addColumn('value', 'string');
+            $table->addColumn('created', 'integer', ['unsigned' => true]);
+            $table->setPrimaryKey(['id']);
+            $table->addIndex(['lo_id']);
+            $table->addIndex(['key']);
+            $table->addIndex(['value']);
+        }
     }
 }
