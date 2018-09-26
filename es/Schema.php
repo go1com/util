@@ -938,6 +938,7 @@ class Schema
         'organisation_name'        => ['type' => self::T_KEYWORD],
         'name_line'                => ['type' => self::T_KEYWORD],
         'postal_code'              => ['type' => self::T_KEYWORD],
+        'location_name'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
         'instructor_ids'           => ['type' => self::T_INT],
         'coordinate'               => ['type' => self::T_GEO_POINT],
     ];
