@@ -214,13 +214,12 @@ class LoSchema
             $table = $schema->createTable('gc_lo_attributes');
             $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $table->addColumn('lo_id', 'integer', ['unsigned' => true]);
-            $table->addColumn('key', 'integer', ['unsigned' => true]);
+            $table->addColumn('key', 'integer', ['unsigned' => true]);  /** @see \go1\util\lo\LoAttributes */
             $table->addColumn('value', 'string');
             $table->addColumn('created', 'integer', ['unsigned' => true]);
             $table->setPrimaryKey(['id']);
             $table->addIndex(['lo_id']);
             $table->addIndex(['key']);
-            $table->addIndex(['value']);
         }
     }
 }
