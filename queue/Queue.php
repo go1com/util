@@ -201,6 +201,7 @@ class Queue
     const EVENT_LOCATION_UPDATE        = 'event.location.update';
     const EVENT_LOCATION_DELETE        = 'event.location.delete';
     const LI_VIDEO_PROCESS_S3          = 'li_video.process.s3';
+    const LO_UPDATE_ATTRIBUTES         = 'lo.update.attributes';
 
     # routingKey that tell some service to do something.
     #
