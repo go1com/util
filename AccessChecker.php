@@ -91,7 +91,7 @@ class AccessChecker
         return in_array(Roles::ROOT, isset($user->roles) ? $user->roles : []) ? $user : false;
     }
 
-    public function validUser(Request $req, $instance = null, Connection $db = null)
+    public function validAccount(Request $req, $portalName)
     {
         $payload = $req->attributes->get('jwt.payload');
         if ($payload && !empty($payload->object->type) && ('user' === $payload->object->type)) {
@@ -100,19 +100,39 @@ class AccessChecker
         }
 
         if (!empty($user)) {
-            if (!$instance || empty($user->instance) || ($user->instance == $instance)) {
+            $accounts = isset($user->accounts) ? $user->accounts : [];
+            foreach ($accounts as $account) {
+                if ($portalName == $account->instance) {
+                    return $account;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function validUser(Request $req, $portalName = null, Connection $db = null)
+    {
+        $payload = $req->attributes->get('jwt.payload');
+        if ($payload && !empty($payload->object->type) && ('user' === $payload->object->type)) {
+            $user = &$payload->object->content;
+            $user = !empty($user->mail) ? $user : null;
+        }
+
+        if (!empty($user)) {
+            if (!$portalName || empty($user->instance) || ($user->instance == $portalName)) {
                 return $user;
             }
 
             $accounts = isset($user->accounts) ? $user->accounts : [];
             foreach ($accounts as $account) {
-                if ($instance == $account->instance) {
+                if ($portalName == $account->instance) {
                     return $account;
                 }
             }
 
             if ($db) {
-                $account = UserHelper::loadByEmail($db, $instance, $user->mail);
+                $account = UserHelper::loadByEmail($db, $portalName, $user->mail);
                 if (is_object($account)) {
                     $hasLink = EdgeHelper::hasLink($db, EdgeTypes::HAS_ACCOUNT_VIRTUAL, $user->id, $account->id);
                     if ($hasLink) {
