@@ -74,10 +74,10 @@ trait UserMockTrait
     }
 
     # NOTE: This is not yet stable, JWT is large, not good for production usage.
-    public function jwtForUser(Connection $db, int $userId, string $instance = null): string
+    public function jwtForUser(Connection $db, int $userId, string $portalName = null): string
     {
         $user = UserHelper::load($db, $userId);
-        $user = $user ? User::create($user, $db, true, $instance) : null;
+        $user = $user ? User::create($user, $db, true, $portalName) : null;
         !$user && Error::throw(new InvalidArgumentException('User not found.'));
         $payload = [
             'iss'    => 'go1.user',
