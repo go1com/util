@@ -8,6 +8,7 @@ class QueueContext
         'user_create' => [
             self::ACTION_USER_CREATE_ADMIN_CREATE,
             self::ACTION_USER_CREATE_REGISTER,
+            self::ACTION_USER_CREATE_EMBED_REGISTER,
             self::ACTION_USER_CREATE_INVITE,
             self::ACTION_USER_CREATE_IMPORT,
         ],
@@ -15,6 +16,7 @@ class QueueContext
 
     const ACTION_USER_CREATE_ADMIN_CREATE     = 'action.user_create.admin_create';  // context.is_new is required
     const ACTION_USER_CREATE_REGISTER         = 'action.user_create.register';      // context.is_new is required
+    const ACTION_USER_CREATE_EMBED_REGISTER   = 'action.user_create.embed_register'; // context.is_new is required
     const ACTION_USER_CREATE_INVITE           = 'action.user_create.invite';        // context.is_new is required
     const ACTION_USER_CREATE_IMPORT           = 'action.user_create.import';        // context.is_new is required
 
