@@ -18,6 +18,11 @@ class Schema
     const PORTALS_INDEX     = ES_INDEX . '_portal*';
     const PAYMENT_INDEX     = ES_INDEX . '_payment';
 
+    # Indices for explore
+    const EXPLORE_INDEX             = ES_INDEX.'_explore';
+    const EXPLORE_GROUP_INDEX       = ES_INDEX.'_explore_group';
+    const EXPLORE_MARKETPLACE_INDEX = ES_INDEX.'_explore_marketplace';
+
     const TEMP             = -32;
     const MAX_INPUT_LENGTH = 50;
 
