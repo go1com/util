@@ -21,7 +21,7 @@ class EnrolmentEventsEmbedder
         $this->access = $access;
     }
 
-    public function embedded(stdClass $enrolment, Request $req): array
+    public function embedded(stdClass $enrolment, Request $req = null): array
     {
         $embedded = [];
 
@@ -40,7 +40,7 @@ class EnrolmentEventsEmbedder
             $embedded['lo'][$lo->id] = $lo;
         }
 
-        $user = $this->access->validUser($req, $portal ? $portal->title : null);
+        $user = $req ? $this->access->validUser($req, $portal ? $portal->title : null) : null;
         if ($user) {
             $embedded['jwt']['user'] = $user;
         }
