@@ -43,7 +43,7 @@ class LoUpdateEventEmbedder extends LoCreateEventEmbedder
 
     private function embedParentLo(array &$embedded, stdClass $lo)
     {
-        if (!in_array($lo->id, [LoTypes::AWARD, LoTypes::COURSE, LoTypes::MODULE])) {
+        if (in_array($lo->id, [LoTypes::AWARD, LoTypes::COURSE, LoTypes::MODULE])) {
             return null;
         }
 
