@@ -39,12 +39,12 @@ class User implements JsonSerializable
      * @param stdClass        $row
      * @param Connection|null $db
      * @param bool            $root
-     * @param string|null     $instance
+     * @param string|null     $portalName
      *   Only need this param if $root is true.
      *   When the param is provided, sub account will be filled.
      * @return User
      */
-    public static function create(stdClass $row, Connection $db = null, $root = true, string $instance = null)
+    public static function create(stdClass $row, Connection $db = null, $root = true, string $portalName = null)
     {
         $user = new User;
         $user->id = $row->id;
@@ -66,17 +66,21 @@ class User implements JsonSerializable
         if ($db) {
             // Fill the roles
             $roleIds = 'SELECT target_id FROM gc_ro WHERE type = ? AND source_id = ?';
-            $roleIds = $db->executeQuery($roleIds, [EdgeTypes::HAS_ROLE, $user->id])->fetchAll(PDO::FETCH_COLUMN);
-            $user->roles = $db->executeQuery('SELECT name FROM gc_role WHERE id IN (?)', [$roleIds], [DB::INTEGERS])->fetchAll(PDO::FETCH_COLUMN);
+            $roleIds = $db
+                ->executeQuery($roleIds, [EdgeTypes::HAS_ROLE, $user->id])
+                ->fetchAll(PDO::FETCH_COLUMN);
+            $user->roles = !$roleIds ? [] : $db
+                ->executeQuery('SELECT name FROM gc_role WHERE id IN (?)', [$roleIds], [DB::INTEGERS])
+                ->fetchAll(PDO::FETCH_COLUMN);
 
             // Fill accounts
-            if ($root && $instance) {
-                $accountIds = 'SELECT target_id FROM gc_ro WHERE type = ? AND source_id = ?';
-                $accountIds = $db->executeQuery($accountIds, [EdgeTypes::HAS_ACCOUNT, $user->id])->fetchAll(PDO::FETCH_COLUMN);
-                if ($accountIds) {
-                    $q = 'SELECT * FROM gc_user WHERE status = 1 AND id IN (?) AND instance = ?';
-                    $q = $db->executeQuery($q, [$accountIds, $instance], [DB::INTEGERS]);
-                    while ($account = $q->fetch(DB::OBJ)) {
+            if ($root && $portalName) {
+                $q = 'SELECT * FROM gc_user WHERE status = 1 AND mail = ? AND instance = ?';
+                $account = $db->executeQuery($q, [$user->mail, $portalName])->fetch(DB::OBJ);
+                if ($account) {
+                    $q = 'SELECT 1 FROM gc_ro WHERE type = ? AND source_id = ? AND target_id = ?';
+                    $has = $db->executeQuery($q, [EdgeTypes::HAS_ACCOUNT, $user->id, $account->id])->fetchColumn();
+                    if ($has) {
                         $user->accounts[] = static::create($account, $db, false);
                     }
                 }
