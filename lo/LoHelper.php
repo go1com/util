@@ -16,13 +16,13 @@ class LoHelper
 {
     # configuration key for LO, which put under gc_lo.data
     # ---------------------
-    const DISCUSSION_ALLOW           = 'allow_discussion';
-    const ENROLMENT_ALLOW            = 'allow_enrolment';
+    const DISCUSSION_ALLOW = 'allow_discussion';
+    const ENROLMENT_ALLOW  = 'allow_enrolment';
     /** @deprecated */
-    const ENROLMENT_ALLOW_DEFAULT    = 'allow';
-    const ASSIGNMENT_ALLOW_RESUBMIT  = 'allow_resubmit';
+    const ENROLMENT_ALLOW_DEFAULT   = 'allow';
+    const ASSIGNMENT_ALLOW_RESUBMIT = 'allow_resubmit';
     /** @deprecated */
-    const ENROLMENT_ALLOW_DISABLE    = 'disable';
+    const ENROLMENT_ALLOW_DISABLE = 'disable';
     /** @deprecated */
     const ENROLMENT_ALLOW_ENQUIRY    = 'enquiry';
     const ENROLMENT_RE_ENROL         = 're_enrol';
@@ -48,16 +48,7 @@ class LoHelper
         return ($learningObjects = static::loadMultiple($db, [$id], $instanceId, $expensiveTree)) ? $learningObjects[0] : false;
     }
 
-    /**
-     * Load multiple learning objects.
-     *
-     * @param Connection $db
-     * @param  []int     $ids
-     * @param   int      $instanceId
-     * @param bool       $expensiveTree
-     * @return array
-     */
-    public static function loadMultiple(Connection $db, array $ids, int $instanceId = null, bool $expensiveTree = false): array
+    public static function loadMultiple(Connection $db, array $ids, int $portalId = null, bool $expensiveTree = false): array
     {
         $ids = array_map('intval', $ids);
         $learningObjects = !$ids ? [] : $db
@@ -91,10 +82,10 @@ class LoHelper
         }
 
         if ($loIds) {
-            if ($instanceId) {
+            if ($portalId) {
                 # Load custom tags.
                 $q = 'SELECT lo_id, tag FROM gc_lo_tag WHERE status = 1 AND instance_id = ? AND lo_id IN (?)';
-                $q = $db->executeQuery($q, [$instanceId, $loIds], [DB::INTEGER, DB::INTEGERS]);
+                $q = $db->executeQuery($q, [$portalId, $loIds], [DB::INTEGER, DB::INTEGERS]);
                 while ($row = $q->fetch(DB::OBJ)) {
                     foreach ($learningObjects as &$lo) {
                         if ($lo->id == $row->lo_id) {
@@ -105,7 +96,7 @@ class LoHelper
             }
 
             if ($expensiveTree) {
-                $load = function (array &$nodes, array &$nodeIds, array $edgeTypes) use (&$db, $instanceId) {
+                $load = function (array &$nodes, array &$nodeIds, array $edgeTypes) use (&$db, $portalId) {
                     $itemIds = [];
                     $q = 'SELECT source_id, target_id FROM gc_ro WHERE source_id IN (?) AND type IN (?) ORDER BY weight';
                     $q = $db->executeQuery($q, [$nodeIds, $edgeTypes], [DB::INTEGERS, DB::INTEGERS]);
@@ -119,7 +110,7 @@ class LoHelper
                         }
                     }
 
-                    if ($itemIds && $items = self::loadMultiple($db, $itemIds, $instanceId, true)) {
+                    if ($itemIds && $items = self::loadMultiple($db, $itemIds, $portalId, true)) {
                         foreach ($items as &$item) {
                             foreach ($nodes as &$node) {
                                 if (!empty($node->items)) {
@@ -192,8 +183,7 @@ class LoHelper
                             'postal_code'             => $event['loc_postal_code'],
                         ],
                     ];
-                }
-                # Get location from gc_location table
+                } # Get location from gc_location table
                 else if (!empty($event['country'])) {
                     $node->event->locations = [
                         [
@@ -499,8 +489,7 @@ class LoHelper
         foreach ($rows as $row) {
             if ($row['type'] == LiTypes::EVENT && $row['count'] > 0) {
                 $result++;
-            }
-            else {
+            } else {
                 $result += $row['count'];
             }
         }
