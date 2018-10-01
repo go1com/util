@@ -29,7 +29,8 @@ class EnrolmentEventsEmbedder
         if ($portal) {
             $embedded['portal'][$portal->id] = $portal;
 
-            $account = UserHelper::loadByProfileId($this->go1, $enrolment->profile_id, $portal->title);
+            $user = UserHelper::loadUserByProfileId($this->go1, $enrolment->profile_id, 'mail');
+            $account = $user ? UserHelper::loadByEmail($this->go1, $portal->title, $user->mail) : null;
             if ($account) {
                 $embedded['account'][$account->id] = $account;
             }

@@ -32,7 +32,7 @@ class EnrolmentEventsEmbedderTest extends UtilCoreTestCase
 
         $c = $this->getContainer();
         $this->portalId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
-        $this->userId = $this->createUser($this->db, ['instance' => $c['accounts_name']]);
+        $this->userId = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'profile_id' => $this->profileId]);
         $this->accountId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com', 'profile_id' => $this->profileId]);
         $this->link($this->db, EdgeTypes::HAS_ACCOUNT, $this->userId, $this->accountId);
         $this->jwt = $this->jwtForUser($this->db, $this->userId, 'qa.mygo1.com');

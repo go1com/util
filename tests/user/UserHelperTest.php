@@ -71,6 +71,13 @@ class UserHelperTest extends UtilCoreTestCase
         $this->assertEquals('foo@bar.baz', $user['mail']);
     }
 
+    public function testLoadByProfileIdFromDBView()
+    {
+        $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'accounts.test', 'profile_id' => 101]);
+        $user = UserHelper::loadUserByProfileId($this->db, 101);
+        $this->assertEquals('foo@bar.baz', $user->mail);
+    }
+
     public function testInstanceIds()
     {
         $instance1Id = $this->createPortal($this->db, ['title' => $instance1Name = 'a1@mygo1.com']);

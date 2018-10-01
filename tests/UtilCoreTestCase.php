@@ -31,7 +31,7 @@ class UtilCoreTestCase extends TestCase
     public function setUp()
     {
         $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
-        $this->installGo1Schema($this->db, false);
+        $this->installGo1Schema($this->db, false, 'accounts.test');
 
         DB::install($this->db, [
             function (Schema $schema) {

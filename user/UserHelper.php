@@ -265,4 +265,13 @@ class UserHelper
 
         return null;
     }
+
+    public static function loadUserByProfileId(Connection $db, int $profileId, string $columns = '*'):? stdClass
+    {
+        $user = $db
+            ->executeQuery("SELECT $columns FROM gc_users WHERE profile_id = ?", [$profileId], [DB::INTEGER])
+            ->fetch(DB::OBJ);
+
+        return $user ?: null;
+    }
 }
