@@ -43,32 +43,15 @@ class LoUpdateEventEmbedder extends LoCreateEventEmbedder
 
     private function embedParentLo(array &$embedded, stdClass $lo)
     {
-        if (in_array($lo->id, [LoTypes::AWARD, LoTypes::COURSE, LoTypes::MODULE])) {
+        if (in_array($lo->type, [LoTypes::AWARD, LoTypes::COURSE, LoTypes::MODULE])) {
             return null;
         }
 
-        $hasLiEdges = EdgeHelper::edgesFromTarget($this->go1, $lo->id, [EdgeTypes::HAS_LI, EdgeTypes::HAS_ELECTIVE_LI]);
-        if ($hasLiEdges) {
-            foreach ($hasLiEdges as $hasLiEdge) {
-                $embedded['ro'][$hasLiEdge] = $hasLiEdge;
-                $moduleIds[] = (int) $hasLiEdge->source_id;
-            }
-        }
-
-        if (!empty($moduleIds)) {
-            $hasModuleEdges = EdgeHelper::edgesFromTargets($this->go1, $moduleIds, [EdgeTypes::HAS_MODULE]);
-            foreach ($hasModuleEdges as $hasModuleEdge) {
-                $embedded['ro'][$hasModuleEdge->id] = $hasModuleEdge;
-                $courseIds[] = (int) $hasModuleEdge;
-            }
-        }
-
-        if (!empty($courseIds)) {
-            $courses = LoHelper::loadMultiple($this->go1, $courseIds, $lo->instance_id);
-            if ($courses) {
-                foreach ($courses as $course) {
-                    $embedded['lo'][$course->id] = $course;
-                }
+        $parentLoIds = LoHelper::parentIds($this->go1, $lo->id);
+        $parentLos = LoHelper::loadMultiple($this->go1, $parentLoIds, $lo->instance_id);
+        if ($parentLos) {
+            foreach ($parentLos as $parentLo) {
+                $embedded['lo'][$parentLo->id] = $parentLo;
             }
         }
     }
