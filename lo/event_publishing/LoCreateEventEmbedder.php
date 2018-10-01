@@ -8,10 +8,10 @@ use go1\util\portal\PortalHelper;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 
-class LoEventEmbedder
+class LoCreateEventEmbedder
 {
-    private $go1;
-    private $access;
+    protected $go1;
+    protected $access;
 
     public function __construct(Connection $go1, AccessChecker $access)
     {
