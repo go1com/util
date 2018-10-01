@@ -55,11 +55,11 @@ class UserHelper
         return self::queryMultiple($db, $ids)->fetchAll(DB::OBJ);
     }
 
-    public static function loadByProfileId(Connection $db, int $profileId, string $instanceName, $columns = '*')
+    public static function loadByProfileId(Connection $db, int $profileId, string $portalName, $columns = '*')
     {
         $sql = "SELECT $columns FROM gc_user WHERE profile_id = ? AND instance = ?";
 
-        return $db->executeQuery($sql, [$profileId, $instanceName])->fetch(DB::OBJ);
+        return $db->executeQuery($sql, [$profileId, $portalName])->fetch(DB::OBJ);
     }
 
     public static function uuidByProfileId(Connection $db, string $accountsName, int $profileId)
@@ -89,8 +89,7 @@ class UserHelper
     {
         if ($account->instance != $accountsName) {
             $user = static::loadByEmail($db, $accountsName, $account->mail);
-        }
-        else {
+        } else {
             $user = $account;
         }
 
@@ -101,8 +100,7 @@ class UserHelper
     {
         if ($account->instance != $accountsName) {
             $user = static::loadByEmail($db, $accountsName, $account->mail);
-        }
-        else {
+        } else {
             $user = $account;
         }
 
@@ -195,8 +193,7 @@ class UserHelper
                             'profile_id' => (int) $user->profile_id,
                         ];
                     }
-                }
-                else {
+                } else {
                     if ($user->mail == $account->mail) {
                         $account->root = [
                             'id'         => (int) $user->id,
@@ -259,8 +256,7 @@ class UserHelper
         if ($account = self::load($db, $accountId)) {
             if ($account->instance == $accountsName) {
                 return $account->id;
-            }
-            else {
+            } else {
                 if ($user = self::loadByEmail($db, $accountsName, $account->mail)) {
                     return $user->id;
                 }
