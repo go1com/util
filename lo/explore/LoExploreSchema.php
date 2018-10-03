@@ -147,7 +147,7 @@ class LoExploreSchema
     const ACCOUNT_MAPPING = [
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'        => ['type' => Schema::T_INT],
+            'id'        => ['type' => Schema::T_KEYWORD],
             'groups'    => ['type' => Schema::T_INT],
             'enrolment' => [
                 'properties' => [
@@ -170,7 +170,7 @@ class LoExploreSchema
     const PORTAL_MAPPING = [
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'       => ['type' => Schema::T_INT],
+            'id'       => ['type' => Schema::T_KEYWORD],
             'groups'   => ['type' => Schema::T_INT],
             'metadata' => [
                 'properties' => [
