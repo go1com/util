@@ -90,12 +90,22 @@ trait UserMockTrait
     }
 
     /**
-     * @deprecated Use ::jwtForUser() instead.
+     * @deprecated
+     * @param string $mail
+     * @param string $accountName
+     * @param string $portalName
+     * @param array  $roles
+     * @param int    $accountProfileId
+     * @param int    $accountId
+     * @param int    $userProfileId
+     * @param int    $userId
+     * @param bool   $encode
+     * @return object|string
      */
     protected function getJwt(
         $mail = 'thehongtt@gmail.com',
         $accountName = 'accounts.gocatalyze.com',
-        $instanceName = 'az.mygo1.com',
+        $portalName = 'az.mygo1.com',
         $roles = ['authenticated'],
         $accountProfileId = DEFAULT_ACCOUNT_PROFILE_ID,
         $accountId = DEFAULT_ACCOUNT_ID,
@@ -107,7 +117,7 @@ trait UserMockTrait
         $payload = $this->getPayload([
             'id'              => $accountId,
             'accounts_name'   => $accountName,
-            'instance_name'   => $instanceName,
+            'instance_name'   => $portalName,
             'profile_id'      => $accountProfileId,
             'mail'            => $mail,
             'roles'           => $roles,

@@ -174,7 +174,7 @@ class AccessChecker
         return false;
     }
 
-    public function isStudentManager(Connection $db, Request $req, string $studentMail, string $instance)
+    public function isStudentManager(Connection $db, Request $req, string $studentMail, string $portalName)
     {
         if (!$user = $this->validUser($req)) {
             return false;
@@ -185,7 +185,7 @@ class AccessChecker
             . ' WHERE type = ?'
             . '   AND source_id = (SELECT id FROM gc_user WHERE instance = ? AND mail = ?)'
             . '   AND target_id = ?',
-            [EdgeTypes::HAS_MANAGER, $instance, $studentMail, $user->id],
+            [EdgeTypes::HAS_MANAGER, $portalName, $studentMail, $user->id],
             0,
             [PDO::PARAM_INT, PDO::PARAM_STR, PDO::PARAM_STR, PDO::PARAM_INT]
         ) ? true : false;
