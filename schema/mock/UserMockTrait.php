@@ -90,7 +90,17 @@ trait UserMockTrait
     }
 
     /**
-     * @deprecated Use ::jwtForUser() instead.
+     * @deprecated
+     * @param string $mail
+     * @param string $accountName
+     * @param string $portalName
+     * @param array  $roles
+     * @param int    $accountProfileId
+     * @param int    $accountId
+     * @param int    $userProfileId
+     * @param int    $userId
+     * @param bool   $encode
+     * @return object|string
      */
     protected function getJwt(
         $mail = 'thehongtt@gmail.com',
