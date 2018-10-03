@@ -2,6 +2,7 @@
 
 namespace go1\util\lo\explore;
 
+use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\es\Schema;
 
 class LoExploreSchema
@@ -14,6 +15,8 @@ class LoExploreSchema
         Schema::O_LO         => self::LO_MAPPING,
         Schema::O_ENROLMENT  => self::ENROLMENT_MAPPING,
         Schema::O_GROUP_ITEM => self::GROUP_ITEM_MAPPING,
+        Schema::O_ACCOUNT    => self::ACCOUNT_MAPPING,
+        Schema::O_PORTAL     => self::PORTAL_MAPPING,
     ];
 
     const LO_MAPPING = [
@@ -133,6 +136,43 @@ class LoExploreSchema
             'entity_id'   => ['type' => Schema::T_INT],
             'portal_id'   => ['type' => Schema::T_INT],
             'metadata'    => [
+                'properties' => [
+                    'portal_id'  => ['type' => Schema::T_INT],
+                    'updated_at' => ['type' => Schema::T_INT],
+                ],
+            ],
+        ],
+    ];
+
+    const ACCOUNT_MAPPING = [
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'        => ['type' => Schema::T_INT],
+            'groups'    => ['type' => Schema::T_INT],
+            'enrolment' => [
+                'properties' => [
+                    EnrolmentStatuses::NOT_STARTED => ['type' => Schema::T_INT],
+                    EnrolmentStatuses::IN_PROGRESS => ['type' => Schema::T_INT],
+                    EnrolmentStatuses::COMPLETED   => ['type' => Schema::T_INT],
+                    EnrolmentStatuses::EXPIRED     => ['type' => Schema::T_INT],
+                    'all'                          => ['type' => Schema::T_INT],
+                ],
+            ],
+            'metadata'  => [
+                'properties' => [
+                    'portal_id'  => ['type' => Schema::T_INT],
+                    'updated_at' => ['type' => Schema::T_INT],
+                ],
+            ],
+        ],
+    ];
+
+    const PORTAL_MAPPING = [
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'       => ['type' => Schema::T_INT],
+            'groups'   => ['type' => Schema::T_INT],
+            'metadata' => [
                 'properties' => [
                     'portal_id'  => ['type' => Schema::T_INT],
                     'updated_at' => ['type' => Schema::T_INT],
