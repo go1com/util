@@ -95,7 +95,7 @@ trait UserMockTrait
     protected function getJwt(
         $mail = 'thehongtt@gmail.com',
         $accountName = 'accounts.gocatalyze.com',
-        $instanceName = 'az.mygo1.com',
+        $portalName = 'az.mygo1.com',
         $roles = ['authenticated'],
         $accountProfileId = DEFAULT_ACCOUNT_PROFILE_ID,
         $accountId = DEFAULT_ACCOUNT_ID,
@@ -107,7 +107,7 @@ trait UserMockTrait
         $payload = $this->getPayload([
             'id'              => $accountId,
             'accounts_name'   => $accountName,
-            'instance_name'   => $instanceName,
+            'instance_name'   => $portalName,
             'profile_id'      => $accountProfileId,
             'mail'            => $mail,
             'roles'           => $roles,
