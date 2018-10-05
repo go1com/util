@@ -25,7 +25,7 @@ class AccountEventsEmbedder
 
         $portal = PortalHelper::load($this->go1, $account->instance);
         if ($portal) {
-            $embedded['portal'][$portal->id] = $portal;
+            $embedded['portal'] = $portal;
         }
 
         $user = $req ? $this->access->validUser($req, $portal ? $portal->title : null) : null;

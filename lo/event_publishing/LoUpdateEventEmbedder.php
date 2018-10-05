@@ -35,7 +35,7 @@ class LoUpdateEventEmbedder extends LoCreateEventEmbedder
             $users = UserHelper::loadMultiple($this->go1, $userIds);
             if ($users) {
                 foreach ($users as &$user) {
-                    $embedded['user'][$user->id] = $user;
+                    $embedded['authors'][] = $user;
                 }
             }
         }
@@ -51,7 +51,7 @@ class LoUpdateEventEmbedder extends LoCreateEventEmbedder
         $parentLos = LoHelper::loadMultiple($this->go1, $parentLoIds, $lo->instance_id);
         if ($parentLos) {
             foreach ($parentLos as $parentLo) {
-                $embedded['lo'][$parentLo->id] = $parentLo;
+                $embedded['parents'][] = $parentLo;
             }
         }
     }

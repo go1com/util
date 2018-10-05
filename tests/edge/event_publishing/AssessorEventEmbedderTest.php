@@ -6,14 +6,12 @@ use go1\util\edge\event_publishing\AssessorEventEmbedder;
 use go1\util\lo\LoTypes;
 use go1\util\schema\mock\LoMockTrait;
 use go1\util\schema\mock\PortalMockTrait;
-use go1\util\schema\mock\PolicyMockTrait;
 use go1\util\DB;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 
 class AssessorEventEmbedderTest extends UtilCoreTestCase
 {
-    use PolicyMockTrait;
     use PortalMockTrait;
     use LoMockTrait;
 
@@ -23,7 +21,6 @@ class AssessorEventEmbedderTest extends UtilCoreTestCase
         'type'        => LoTypes::COURSE,
         'instance_id' => 1,
     ];
-
 
     public function test()
     {
