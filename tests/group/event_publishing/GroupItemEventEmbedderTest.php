@@ -22,7 +22,6 @@ class GroupItemEventEmbedderTest extends UtilTestCase
         'instance_id' => 1,
     ];
 
-
     public function test()
     {
         $embedder = new GroupItemEventEmbedder($this->db, $this->db, $this->db);
@@ -32,13 +31,14 @@ class GroupItemEventEmbedderTest extends UtilTestCase
         $this->createGroupItem($this->db, ['group_id' => $id, 'entity_type' => GroupItemTypes::LO, 'entity_id' => $courseId]);
 
         $groupItem = $this->db
-            ->executeQuery('SELECT * FROM social_group_item WHERE id = ?', [$id], [DB::STRING])
+            ->executeQuery('SELECT * FROM social_group_item WHERE id = ?', [$id], [DB::INTEGER])
             ->fetch(DB::OBJ);
 
         $embedded = $embedder->embedded($groupItem);
 
         $this->assertArrayHasKey('entity', $embedded);
         $this->assertArrayHasKey('group', $embedded);
+        $this->assertArrayHasKey('portal', $embedded);
         $this->assertArraySubset($this->expectLo, (array)$embedded['entity']);
     }
 }
