@@ -11,10 +11,12 @@ use stdClass;
 class VoteEventEmbedder
 {
     protected $go1;
+    protected $vote;
 
-    public function __construct(Connection $go1)
+    public function __construct(Connection $go1, Connection $vote)
     {
         $this->go1 = $go1;
+        $this->vote = $vote;
     }
 
     public function embedded(stdClass $vote): array
@@ -26,7 +28,7 @@ class VoteEventEmbedder
 
             if ($lo) {
                 $embedded['lo'] = (array)$lo;
-                $voteInfo = VoteHelper::getEntityVote($this->go1, VoteTypes::ENTITY_TYPE_LO, (int)$lo->id, $vote->type);
+                $voteInfo = VoteHelper::getEntityVote($this->vote, VoteTypes::ENTITY_TYPE_LO, (int)$lo->id, $vote->type);
 
                 if ($voteInfo) {
                     $embedded['vote'] = [

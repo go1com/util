@@ -35,7 +35,7 @@ class VoteEventEmbedderTest extends UtilCoreTestCase
         parent::setUp();
 
         $this->installGo1Schema($this->db, $coreOnly = false);
-        $this->embedder = new VoteEventEmbedder($this->db);
+        $this->embedder = new VoteEventEmbedder($this->db, $this->db);
         $this->portalId = $this->createPortal($this->db, ['title' => 'ngoc.mygo1.com']);
         $this->courseId = $this->createCourse($this->db, ['instance_id' => $this->portalId]);
     }

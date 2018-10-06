@@ -29,6 +29,7 @@ class GroupItemEventEmbedder
         $embedded = [];
         $embedded['entity'] = $this->loadEntity($groupItem->entity_type, $groupItem->entity_id);
         $embedded['group'] = GroupHelper::load($this->social, $groupItem->group_id);
+        $embedded['portal'] = $embedded['group'] ? PortalHelper::load($this->go1, $embedded['group']->instance_id) : null;
 
         return $embedded;
     }
