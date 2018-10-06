@@ -50,7 +50,7 @@ class LoCreateEventEmbedderTest extends UtilCoreTestCase
         $req->attributes->set('jwt.payload', Text::jwtContent($this->jwt));
         $embedded = $embedder->embedded($event, $req);
 
-        $this->assertEquals('qa.mygo1.com', $embedded['portal'][$this->portalId]->title);
+        $this->assertEquals('qa.mygo1.com', $embedded['portal']->title);
         $this->assertEquals('A', $embedded['jwt']['user']->first_name);
         $this->assertEquals('T', $embedded['jwt']['user']->last_name);
     }

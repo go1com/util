@@ -4,6 +4,7 @@ namespace go1\util\tests\lo;
 
 use go1\util\lo\event_publishing\LoUpdateEventEmbedder;
 use go1\util\lo\LoHelper;
+use go1\util\lo\LoTypes;
 use go1\util\Text;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -20,7 +21,8 @@ class LoUpdateEventEmbedderTest extends LoCreateEventEmbedderTest
         $req->attributes->set('jwt.payload', Text::jwtContent($this->jwt));
         $embedded = $embedder->embedded($event, $req);
 
-        $this->assertEquals('qa.mygo1.com', $embedded['portal'][$this->portalId]->title);
-        $this->assertEquals('course', $embedded['lo'][$this->courseId]->type);
+        $this->assertEquals('qa.mygo1.com', $embedded['portal']->title);
+        $this->assertEquals(LoTypes::MODULE, $embedded['parents'][1]->type);
+        $this->assertEquals(LoTypes::COURSE, $embedded['parents'][0]->type);
     }
 }

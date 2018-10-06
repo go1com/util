@@ -27,18 +27,18 @@ class EnrolmentEventsEmbedder
 
         $portal = PortalHelper::load($this->go1, $enrolment->taken_instance_id);
         if ($portal) {
-            $embedded['portal'][$portal->id] = $portal;
+            $embedded['portal'] = $portal;
 
             $user = UserHelper::loadUserByProfileId($this->go1, $enrolment->profile_id, 'mail');
             $account = $user ? UserHelper::loadByEmail($this->go1, $portal->title, $user->mail) : null;
             if ($account) {
-                $embedded['account'][$account->id] = $account;
+                $embedded['account'] = $account;
             }
         }
 
         $lo = LoHelper::load($this->go1, $enrolment->lo_id);
         if ($lo) {
-            $embedded['lo'][$lo->id] = $lo;
+            $embedded['lo'] = $lo;
         }
 
         $user = $req ? $this->access->validUser($req, $portal ? $portal->title : null) : null;

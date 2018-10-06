@@ -46,7 +46,7 @@ class AccountEventsEmbedderTest extends UtilCoreTestCase
         $req->attributes->set('jwt.payload', Text::jwtContent($this->jwt));
         $embedded = $embedder->embed($account, $req);
 
-        $this->assertEquals('qa.mygo1.com', $embedded['portal'][$this->portalId]->title);
+        $this->assertEquals('qa.mygo1.com', $embedded['portal']->title);
         $this->assertEquals($this->profileId, $embedded['jwt']['user']->profile_id);
     }
 }

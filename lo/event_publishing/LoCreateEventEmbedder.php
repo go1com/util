@@ -25,7 +25,7 @@ class LoCreateEventEmbedder
 
         $portal = PortalHelper::load($this->go1, $lo->instance_id);
         if ($portal) {
-            $embedded['portal'][$portal->id] = $portal;
+            $embedded['portal'] = $portal;
         }
 
         $user = $this->access->validUser($req, $portal ? $portal->title : null);
