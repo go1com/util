@@ -55,7 +55,8 @@ class LoExploreSchema
             'totalEnrolment'  => ['type' => Schema::T_INT],
             'created'         => ['type' => Schema::T_DATE],
             'updated'         => ['type' => Schema::T_DATE],
-            'authors'         => ['type' => Schema::T_INT],
+            'author_ids'      => ['type' => Schema::T_INT],
+            'author_names'    => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
             'data'            => [
                 'properties' => [
                     'single_li' => ['type' => Schema::T_SHORT],
@@ -98,6 +99,16 @@ class LoExploreSchema
             'vote'            => [
                 'properties' => [
                     'rank' => ['type' => Schema::T_INT],
+                ],
+            ],
+            'policy'          => [
+                'type'       => Schema::T_NESTED,
+                'properties' => [
+                    'id'        => ['type' => Schema::T_KEYWORD],
+                    'realm'     => ['type' => Schema::T_SHORT],
+                    'portal_id' => ['type' => Schema::T_INT],
+                    'group_id'  => ['type' => Schema::T_INT],
+                    'user_id'   => ['type' => Schema::T_INT],
                 ],
             ],
             'metadata'        => [
