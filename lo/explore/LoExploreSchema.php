@@ -55,8 +55,16 @@ class LoExploreSchema
             'totalEnrolment'  => ['type' => Schema::T_INT],
             'created'         => ['type' => Schema::T_DATE],
             'updated'         => ['type' => Schema::T_DATE],
-            'author_ids'      => ['type' => Schema::T_INT],
-            'author_names'    => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
+            'authors'         => [
+                'type'       => Schema::T_NESTED,
+                'properties' => [
+                    'id'         => ['type' => Schema::T_KEYWORD],
+                    'name'       => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
+                    'first_name' => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
+                    'last_name'  => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
+                    'avatar'     => ['type' => Schema::T_TEXT],
+                ],
+            ],
             'data'            => [
                 'properties' => [
                     'single_li' => ['type' => Schema::T_SHORT],
