@@ -20,7 +20,7 @@ class AwardCreateEventEmbedder
         $this->access = $access;
     }
 
-    public function embedded(stdClass $award, Request $req): array
+    public function embedded(stdClass $award, Request $req = null): array
     {
         $embedded = [];
 
@@ -29,9 +29,11 @@ class AwardCreateEventEmbedder
             $embedded['portal'] = $portal;
         }
 
-        $user = $this->access->validUser($req, $portal ? $portal->title : null);
-        if ($user) {
-            $embedded['jwt']['user'] = $user;
+        if ($req) {
+            $user = $this->access->validUser($req, $portal ? $portal->title : null);
+            if ($user) {
+                $embedded['jwt']['user'] = $user;
+            }
         }
 
         $embedded['authors'][] = UserHelper::load($this->go1, $award->user_id);
