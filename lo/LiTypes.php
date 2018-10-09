@@ -21,6 +21,7 @@ class LiTypes
     const WORKSHOP    = 'workshop';
     const LTI         = 'lti';
     const EVENT       = 'event';
+    const INTEGRATION = 'integration';
     const COMPLEX     = ['assignment', 'h5p', 'interactive', 'quiz', 'lti', 'event'];
 
     const PRIVATE_PROPERTIES = [
