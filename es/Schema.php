@@ -946,6 +946,7 @@ class Schema
         'location_name'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
         'module_title'             => ['type' => self::T_KEYWORD] + self::ANALYZED,
         'instructor_ids'           => ['type' => self::T_INT],
+        'instructors'              => ['type' => self::T_ARRAY],
         'coordinate'               => ['type' => self::T_GEO_POINT],
     ];
 
