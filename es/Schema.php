@@ -924,6 +924,19 @@ class Schema
         ],
     ];
 
+    const INSTRUCTOR_PROPERTIES = [
+        'id'           => ['type' => self::T_KEYWORD],
+        'profile_id'     => ['type' => self::T_INT],
+        'instance'     => ['type' => self::T_KEYWORD],
+        'mail'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'first_name'   => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'last_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'status'       => ['type' => self::T_SHORT],
+        'avatar'       => ['type' => self::T_TEXT],
+        'roles'        => ['type' => self::T_KEYWORD]
+    ];
+
     const EVENT_PROPERTIES = [
         'id'                       => ['type' => self::T_KEYWORD],
         'lo_id'                    => ['type' => self::T_INT],
@@ -949,7 +962,10 @@ class Schema
         'location_name'            => ['type' => self::T_KEYWORD] + self::ANALYZED,
         'module_title'             => ['type' => self::T_KEYWORD] + self::ANALYZED,
         'instructor_ids'           => ['type' => self::T_INT],
-        'instructors'              => ['type' => self::T_ARRAY],
+        'instructors'              => [
+            'type'       => self::T_NESTED,
+            'properties' => self::INSTRUCTOR_PROPERTIES,
+        ],
         'coordinate'               => ['type' => self::T_GEO_POINT],
     ];
 
