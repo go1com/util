@@ -934,14 +934,7 @@ class Schema
         'last_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
         'status'       => ['type' => self::T_SHORT],
         'avatar'       => ['type' => self::T_TEXT],
-        'roles'        => ['type' => self::T_KEYWORD],
-        'metadata'     => [
-            'properties' => [
-                'user_id'     => ['type' => self::T_INT],
-                'instance_id' => ['type' => self::T_INT],
-                'updated_at'  => ['type' => self::T_INT],
-            ],
-        ],
+        'roles'        => ['type' => self::T_KEYWORD]
     ];
 
     const EVENT_PROPERTIES = [
