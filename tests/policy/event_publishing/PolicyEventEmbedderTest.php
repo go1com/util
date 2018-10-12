@@ -2,14 +2,14 @@
 
 namespace go1\util\tests\policy;
 
-use go1\util\policy\event_publishing\PolicyEventEmbedder;
-use go1\util\tests\UtilTestCase;
-use go1\util\schema\mock\LoMockTrait;
-use go1\util\schema\mock\PortalMockTrait;
-use go1\util\schema\mock\PolicyMockTrait;
-use go1\util\policy\Realm;
-use go1\util\EntityTypes;
 use go1\util\DB;
+use go1\util\EntityTypes;
+use go1\util\policy\event_publishing\PolicyEventEmbedder;
+use go1\util\policy\Realm;
+use go1\util\schema\mock\LoMockTrait;
+use go1\util\schema\mock\PolicyMockTrait;
+use go1\util\schema\mock\PortalMockTrait;
+use go1\util\tests\UtilTestCase;
 
 class PolicyEventEmbedderTest extends UtilTestCase
 {
@@ -25,9 +25,10 @@ class PolicyEventEmbedderTest extends UtilTestCase
 
     public function test()
     {
-        $embedder = new PolicyEventEmbedder($this->db);
+        $embedder = new PolicyEventEmbedder($this->db, $this->db);
         $portalId = $this->createPortal($this->db, ['title' => 'ngoc.mygo1.com']);
         $courseId = $this->createCourse($this->db, ['instance_id' => $portalId]);
+        $accountId = $this->createUser($this->db, ['instance' => 'ngoc.mygo1.com']);
         $id = $this->createItem(
             $this->db,
             [
@@ -36,7 +37,7 @@ class PolicyEventEmbedderTest extends UtilTestCase
                 'host_entity_type' => EntityTypes::LO,
                 'host_entity_id'   => $courseId,
                 'entity_type'      => EntityTypes::USER,
-                'entity_id'        => $accountId = 14,
+                'entity_id'        => $accountId,
             ]
         );
         $policyItem = $this->db
@@ -47,5 +48,6 @@ class PolicyEventEmbedderTest extends UtilTestCase
 
         $this->assertArrayHasKey('hostEntity', $embedded);
         $this->assertArraySubset($this->expectLo, (array)$embedded['hostEntity']);
+        $this->assertEquals($accountId, $embedded['entity']->id);
     }
 }
