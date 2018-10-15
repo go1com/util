@@ -41,6 +41,7 @@ class PortalSchema
             $data->addColumn('type', 'string', ['notnull' => false]);
             $data->addColumn('channel', 'string', ['notnull' => false]);
             $data->addColumn('plan', 'string', ['notnull' => false]);
+            $data->addColumn('industry', 'string', ['notnull' => false]);
             $data->addColumn('customer_id', 'string', ['notnull' => false]);
             $data->addColumn('salesforce_id', 'string', ['notnull' => false]);
             $data->addColumn('partner_id', 'string', ['notnull' => false]);
@@ -55,6 +56,7 @@ class PortalSchema
             $data->addIndex(['type']);
             $data->addIndex(['channel']);
             $data->addIndex(['plan']);
+            $data->addIndex(['industry']);
             $data->addIndex(['customer_id']);
             $data->addIndex(['salesforce_id']);
             $data->addIndex(['partner_id']);
@@ -82,6 +84,17 @@ class PortalSchema
             $conf->addIndex(['instance', 'namespace']);
             $conf->addIndex(['public']);
             $conf->addIndex(['timestamp']);
+        }
+    }
+
+    public static function update01(Schema $schema)
+    {
+        if ($schema->hasTable('portal_data')) {
+            $portalData = $schema->getTable('portal_data');
+            if (!$portalData->hasColumn('industry')) {
+                $portalData->addColumn('industry', 'string', ['notnull' => false]);
+                $portalData->addIndex(['industry']);
+            }
         }
     }
 }
