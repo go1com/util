@@ -68,6 +68,7 @@ class PortalSchema
         }
 
         $installPortalConf && self::installPortalConf($schema);
+        self::update01($schema);
     }
 
     public static function installPortalConf(Schema $schema)
