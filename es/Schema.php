@@ -925,16 +925,16 @@ class Schema
     ];
 
     const INSTRUCTOR_PROPERTIES = [
-        'id'           => ['type' => self::T_KEYWORD],
-        'profile_id'     => ['type' => self::T_INT],
-        'instance'     => ['type' => self::T_KEYWORD],
-        'mail'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-        'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-        'first_name'   => ['type' => self::T_KEYWORD] + self::ANALYZED,
-        'last_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
-        'status'       => ['type' => self::T_SHORT],
-        'avatar'       => ['type' => self::T_TEXT],
-        'roles'        => ['type' => self::T_KEYWORD]
+        'id'         => ['type' => self::T_KEYWORD],
+        'profile_id' => ['type' => self::T_INT],
+        'instance'   => ['type' => self::T_KEYWORD],
+        'mail'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'name'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'first_name' => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'last_name'  => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'status'     => ['type' => self::T_SHORT],
+        'avatar'     => ['type' => self::T_TEXT],
+        'roles'      => ['type' => self::T_KEYWORD],
     ];
 
     const EVENT_PROPERTIES = [
@@ -985,38 +985,41 @@ class Schema
             ],
     ];
 
+    const EVENT_ATTENDANCE_PROPERTIES = [
+        'id'           => ['type' => self::T_KEYWORD],
+        'user_id'      => ['type' => self::T_INT],
+        'lo_id'        => ['type' => self::T_INT],
+        'enrolment_id' => ['type' => self::T_INT],
+        'event_id'     => ['type' => self::T_INT],
+        'portal_id'    => ['type' => self::T_INT],
+        'profile_id'   => ['type' => self::T_INT],
+        'start_at'     => ['type' => self::T_DATE],
+        'end_at'       => ['type' => self::T_DATE],
+        'status'       => ['type' => self::T_SHORT],
+        'result'       => ['type' => self::T_INT],
+        'pass'         => ['type' => self::T_INT],
+        'timestamp'    => ['type' => self::T_DATE],
+        'progress'     => [
+            'properties' => [
+                AttendanceStatuses::ATTENDED     => ['type' => self::T_INT],
+                AttendanceStatuses::NOT_ATTENDED => ['type' => self::T_INT],
+                AttendanceStatuses::ATTENDING    => ['type' => self::T_INT],
+                AttendanceStatuses::PENDING      => ['type' => self::T_INT],
+            ],
+        ],
+    ];
+
     const EVENT_ATTENDANCE_MAPPING = [
         '_parent'    => ['type' => self::O_ENROLMENT],
         '_routing'   => ['required' => true],
-        'properties' => [
-            'id'           => ['type' => self::T_KEYWORD],
-            'user_id'      => ['type' => self::T_INT],
-            'lo_id'        => ['type' => self::T_INT],
-            'enrolment_id' => ['type' => self::T_INT],
-            'event_id'     => ['type' => self::T_INT],
-            'portal_id'    => ['type' => self::T_INT],
-            'profile_id'   => ['type' => self::T_INT],
-            'start_at'     => ['type' => self::T_DATE],
-            'end_at'       => ['type' => self::T_DATE],
-            'status'       => ['type' => self::T_SHORT],
-            'result'       => ['type' => self::T_INT],
-            'pass'         => ['type' => self::T_INT],
-            'timestamp'    => ['type' => self::T_DATE],
-            'progress'     => [
-                'properties' => [
-                    AttendanceStatuses::ATTENDED     => ['type' => self::T_INT],
-                    AttendanceStatuses::NOT_ATTENDED => ['type' => self::T_INT],
-                    AttendanceStatuses::ATTENDING    => ['type' => self::T_INT],
-                    AttendanceStatuses::PENDING      => ['type' => self::T_INT],
+        'properties' => self::EVENT_PROPERTIES + [
+                'metadata' => [
+                    'properties' => [
+                        'instance_id' => ['type' => self::T_INT],
+                        'updated_at'  => ['type' => self::T_INT],
+                    ],
                 ],
             ],
-            'metadata'     => [
-                'properties' => [
-                    'updated_at'  => ['type' => self::T_INT],
-                    'instance_id' => ['type' => self::T_INT],
-                ],
-            ],
-        ],
     ];
 
     const AWARD_MAPPING = [
