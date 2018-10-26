@@ -164,8 +164,8 @@ class PlanRepository
         ]);
 
         $plan->id = $this->db->lastInsertId('gc_plan');
-        $plan->notify = $notify;
-        $queueContext['notify'] = $notify;
+        $plan->notify = $notify ?: ($queueContext['notify'] ?? false);
+        $queueContext['notify'] = $plan->notify;
         $this->queue->publish($plan, Queue::PLAN_CREATE, $queueContext);
 
         return $plan->id;
