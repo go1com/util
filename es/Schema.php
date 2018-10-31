@@ -57,8 +57,6 @@ class Schema
     const O_PLAN                = 'plan';
     const O_ENROLMENT           = 'enrolment';
     const O_ENROLMENT_REVISION  = 'enrolment_revision';
-    const O_SUBMISSION          = 'asm_submission';
-    const O_SUBMISSION_REVISION = 'asm_submission_revision';
     const O_GROUP               = 'group';
     const O_GROUP_ITEM          = 'group_item';
     const O_MAIL                = 'mail';
@@ -113,8 +111,6 @@ class Schema
         self::O_PLAN                => self::PLAN_MAPPING,
         self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
         self::O_ENROLMENT_REVISION  => self::ENROLMENT_MAPPING_REVISION,
-        self::O_SUBMISSION          => self::SUBMISSION_MAPPING,
-        self::O_SUBMISSION_REVISION => self::SUBMISSION_REVISION_MAPPING,
         self::O_GROUP               => self::GROUP_MAPPING,
         self::O_GROUP_ITEM          => self::GROUP_ITEM_MAPPING,
         self::O_MAIL                => self::MAIL_MAPPING,
@@ -636,37 +632,6 @@ class Schema
                     'instance_id' => ['type' => self::T_INT],
                     'course_id'   => ['type' => self::T_INT],
                     'updated_at'  => ['type' => self::T_INT],
-                ],
-            ],
-        ],
-    ];
-
-    const SUBMISSION_MAPPING = [
-        '_parent'    => ['type' => self::O_ENROLMENT],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'revision_id' => ['type' => self::T_INT],
-            'profile_id'  => ['type' => self::T_INT],
-            'status'      => ['type' => self::T_SHORT],
-            'created'     => ['type' => self::T_DATE],
-            'updated'     => ['type' => self::T_DATE],
-            'published'   => ['type' => self::T_INT],
-            'assessors'   => ['type' => self::T_INT],
-        ],
-    ];
-
-    const SUBMISSION_REVISION_MAPPING = [
-        '_parent'    => ['type' => self::O_SUBMISSION],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'      => ['type' => self::T_KEYWORD],
-            'status'  => ['type' => self::T_SHORT],
-            'created' => ['type' => self::T_DATE],
-            'updated' => ['type' => self::T_DATE],
-            'data'    => [
-                'properties' => [
-                    'files' => ['type' => self::T_OBJECT],
                 ],
             ],
         ],
