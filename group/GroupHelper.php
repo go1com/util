@@ -196,7 +196,7 @@ class GroupHelper
             ->select('title')
             ->from('social_group')
             ->where('instance_id = :instance_id')->setParameter(':instance_id', $portalId)
-            ->andWhere('type = :type')->setParameter(':type', GroupTypes::DEFAULT)
+            ->andWhere('`type` = :type')->setParameter(':type', GroupTypes::DEFAULT)
             ->andWhere($q->expr()->orX(
                 $q->expr()->eq('user_id', $userId),
                 $q->expr()->in('id', $memberGroupIds)));
