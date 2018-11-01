@@ -20,14 +20,14 @@ class GroupHelper
     const G_TYPE_MARKETPLACE = 'marketplace';
     const G_TYPE_DEFAULT     = 'default';
 
-    public static function load(Connection $db, int $id)
+    public static function load(Connection $db, int $id, bool $countMember = true)
     {
-        $groups = self::loadMultiple($db, [$id]);
+        $groups = self::loadMultiple($db, [$id], $countMember);
 
         return $groups[0] ?? false;
     }
 
-    public static function loadMultiple(Connection $db, array $ids)
+    public static function loadMultiple(Connection $db, array $ids, bool $countMember = true)
     {
         $q = $db->executeQuery('SELECT * FROM social_group WHERE id IN (?) ORDER BY id DESC', [$ids], [Connection::PARAM_INT_ARRAY]);
         while ($group = $q->fetch(DB::OBJ)) {
@@ -35,7 +35,7 @@ class GroupHelper
             $groups[] = $group;
         }
 
-        !empty($groups) && self::countMembers($db, $groups);
+        !empty($groups) && $countMember && self::countMembers($db, $groups);
 
         return $groups ?? [];
     }
