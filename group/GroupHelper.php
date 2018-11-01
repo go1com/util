@@ -184,19 +184,28 @@ class GroupHelper
         return $users[0]['root']['id'] ?? 0;
     }
 
-    public static function userGroups(Connection $go1, Connection $social, int $portalId, int $accountId, string $accountsName)
+    public static function userGroups(Connection $go1, Connection $social, int $portalId, int $accountId, string $accountsName, $invisibility = null)
     {
         $userId = UserHelper::userId($go1, $accountId, $accountsName);
         $memberGroupIds = $social
-            ->executeQuery('SELECT group_id FROM social_group_item WHERE entity_type = ? AND entity_id = ?', [GroupItemTypes::USER, $accountId])
+            ->executeQuery('SELECT group_id FROM social_group_item WHERE entity_type = ? AND entity_id = ?', [GroupItemTypes::USER, $accountId], [DB::STRING, DB::INTEGER])
             ->fetchAll(DB::COL);
 
-        return $social
-            ->executeQuery(
-                'SELECT title FROM social_group WHERE instance_id = ? AND `type` = ? AND (user_id = ? OR id IN (?))',
-                [$portalId, GroupTypes::DEFAULT, $userId, $memberGroupIds],
-                [DB::INTEGER, DB::STRING, DB::INTEGER, DB::INTEGERS])
-            ->fetchAll(DB::COL);
+        $q = $go1->createQueryBuilder();
+        $q
+            ->select('title')
+            ->from('social_group')
+            ->where('instance_id = :instance_id')->setParameter(':instance_id', $portalId)
+            ->andWhere('type = :type')->setParameter(':type', GroupTypes::DEFAULT)
+            ->andWhere($q->expr()->orX(
+                $q->expr()->eq('user_id', $userId),
+                $q->expr()->in('id', $memberGroupIds)));
+
+        if (!is_null($invisibility)) {
+            $q->andWhere('visibility != :visibility')->setParameter(':visibility', $invisibility);
+        }
+
+        return $q->execute()->fetchAll(DB::COL);
     }
 
     public static function getEntityId(

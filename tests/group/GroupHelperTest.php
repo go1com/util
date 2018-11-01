@@ -408,6 +408,23 @@ class GroupHelperTest extends UtilTestCase
         $this->assertEquals(['Group 3', 'Group 4'], $groups);
     }
 
+    public function testGetUserGroupsWithInvisibilityParam()
+    {
+        $c = $this->getContainer();
+        $userId = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'mail' => 'user-groups-testing-1@foo.com']);
+        $portalId = $this->createPortal($this->db, ['title' => $portalName = 'foo.com']);
+        $accountId = $this->createUser($this->db, ['instance' => $portalName, 'mail' => 'user-groups-testing-1@foo.com']);
+
+        $group1Id = $this->createGroup($this->db, ['title' => 'Group 1', 'instance_id' => $portalId, 'user_id' => $userId]);
+        $group2Id = $this->createGroup($this->db, ['title' => 'Group 2', 'instance_id' => $portalId, 'user_id' => $userId, 'visibility' => GroupStatus::ARCHIVED]);
+
+        $this->createGroupItem($this->db, ['group_id' => $group1Id, 'entity_id' => $accountId]);
+        $this->createGroupItem($this->db, ['group_id' => $group2Id, 'entity_id' => $accountId]);
+
+        $groups = GroupHelper::userGroups($this->db, $this->db, $portalId, $accountId, $c['accounts_name'], GroupStatus::ARCHIVED);
+        $this->assertEquals(['Group 1'], $groups);
+    }
+
     public function testHostContentSharingGroup()
     {
         $groupId = $this->createGroup($this->db, ['type' => GroupTypes::CONTENT_SHARING, 'title' => 'go1:lo:345']);
