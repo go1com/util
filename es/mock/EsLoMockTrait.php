@@ -64,6 +64,7 @@ trait EsLoMockTrait
             'title'           => $options['title'] ?? 'Foo course',
             'description'     => $options['description'] ?? '',
             'tags'            => (array) ($options['tags'] ?? []),
+            'custom_tags'     => (array) ($options['custom_tags'] ?? []),
             'image'           => $options['image'] ?? '',
             'items_count'     => $options['items_count'] ?? 0,
             'pricing'         => [

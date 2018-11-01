@@ -554,4 +554,11 @@ class GroupHelperTest extends UtilTestCase
         $group = GroupHelper::load($this->db, $group1Id);
         $this->assertTrue(GroupHelper::isAuthor($group, $user1Id));
     }
+
+    public function testLoadWithoutCountMember()
+    {
+        $groupId = $this->createGroup($this->db, ['title' => 'Group 1', 'instance_id' => 1, 'user_id' => 1]);
+        $group = GroupHelper::load($this->db, $groupId, false);
+        $this->assertFalse(isset($group->member_count));
+    }
 }
