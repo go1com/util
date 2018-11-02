@@ -973,13 +973,19 @@ class Schema
                 AttendanceStatuses::PENDING      => ['type' => self::T_INT],
             ],
         ],
+        'account'             => [
+            'properties' => self::ACCOUNT_MAPPING['properties'],
+        ],
+        'event'            => [
+            'properties' => self::EVENT_PROPERTIES
+        ],
     ];
 
     const EVENT_ATTENDANCE_MAPPING = [
         '_parent'    => ['type' => self::O_ENROLMENT],
         '_routing'   => ['required' => true],
-        'properties' => self::EVENT_PROPERTIES + [
-                'metadata' => [
+        'properties' => self::EVENT_ATTENDANCE_PROPERTIES + [
+                'metadata'         => [
                     'properties' => [
                         'instance_id' => ['type' => self::T_INT],
                         'updated_at'  => ['type' => self::T_INT],
