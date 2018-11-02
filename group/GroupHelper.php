@@ -195,14 +195,19 @@ class GroupHelper
         $q
             ->select('title')
             ->from('social_group')
-            ->where('instance_id = :instance_id')->setParameter(':instance_id', $portalId)
-            ->andWhere('`type` = :type')->setParameter(':type', GroupTypes::DEFAULT)
+            ->where('instance_id = :instance_id')->setParameter(':instance_id', $portalId, DB::INTEGER)
+            ->andWhere('`type` = :type')->setParameter(':type', GroupTypes::DEFAULT, DB::STRING)
             ->andWhere($q->expr()->orX(
-                $q->expr()->eq('user_id', $userId),
-                $q->expr()->in('id', $memberGroupIds)));
+                $q->expr()->eq('user_id', ':user_id'),
+                $q->expr()->in('id', ':member_group_ids')
+            ))
+            ->setParameter(':user_id', $userId, DB::INTEGER)
+            ->setParameter(':member_group_ids', $memberGroupIds, DB::INTEGERS);
 
         if (!is_null($invisibility)) {
-            $q->andWhere('visibility != :visibility')->setParameter(':visibility', $invisibility);
+            $q
+                ->andWhere('visibility != :invisibility')
+                ->setParameter(':invisibility', $invisibility, DB::INTEGER);
         }
 
         return $q->execute()->fetchAll(DB::COL);
