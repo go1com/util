@@ -58,12 +58,12 @@ class PortalPricing
 
     public static function getLicenses(stdClass $portal)
     {
-        return !empty($portal->data->user_plan->license) ? $portal->data->user_plan->license : static::PLATFORM_UNLIMITED_LICENSE;
+        return $portal->data->user_plan->license ?? static::PLATFORM_UNLIMITED_LICENSE;
     }
 
     public static function getRegional(stdClass $portal)
     {
-        return !empty($portal->data->user_plan->regional) ? $portal->data->user_plan->regional : static::REGIONAL_DEFAULT;
+        return $portal->data->user_plan->regional ?? static::REGIONAL_DEFAULT;
     }
 
     public static function getProduct(stdClass $portal)
