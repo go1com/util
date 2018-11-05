@@ -951,6 +951,19 @@ class Schema
             ],
     ];
 
+    const USER_ENROLLED_PROPERTIES = [
+        'id'         => ['type' => self::T_KEYWORD],
+        'profile_id' => ['type' => self::T_INT],
+        'instance'   => ['type' => self::T_KEYWORD],
+        'mail'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'name'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'first_name' => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'last_name'  => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'status'     => ['type' => self::T_SHORT],
+        'avatar'     => ['type' => self::T_TEXT],
+        'roles'      => ['type' => self::T_KEYWORD],
+    ];
+
     const EVENT_ATTENDANCE_PROPERTIES = [
         'id'           => ['type' => self::T_KEYWORD],
         'user_id'      => ['type' => self::T_INT],
@@ -973,8 +986,8 @@ class Schema
                 AttendanceStatuses::PENDING      => ['type' => self::T_INT],
             ],
         ],
-        'account'             => [
-            'properties' => self::ACCOUNT_MAPPING['properties'],
+        'user'             => [
+            'properties' => self::USER_ENROLLED_PROPERTIES,
         ],
         'event'            => [
             'properties' => self::EVENT_PROPERTIES
