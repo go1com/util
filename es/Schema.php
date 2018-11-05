@@ -951,7 +951,7 @@ class Schema
             ],
     ];
 
-    const USER_ENROLLED_PROPERTIES = [
+    const ACCOUNT_LITE_PROPERTIES = [
         'id'         => ['type' => self::T_KEYWORD],
         'profile_id' => ['type' => self::T_INT],
         'instance'   => ['type' => self::T_KEYWORD],
@@ -986,8 +986,8 @@ class Schema
                 AttendanceStatuses::PENDING      => ['type' => self::T_INT],
             ],
         ],
-        'user'             => [
-            'properties' => self::USER_ENROLLED_PROPERTIES,
+        'account'             => [
+            'properties' => self::ACCOUNT_LITE_PROPERTIES,
         ],
         'event'            => [
             'properties' => self::EVENT_PROPERTIES
