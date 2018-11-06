@@ -191,7 +191,7 @@ class GroupHelper
             ->executeQuery('SELECT group_id FROM social_group_item WHERE entity_type = ? AND entity_id = ?', [GroupItemTypes::USER, $accountId], [DB::STRING, DB::INTEGER])
             ->fetchAll(DB::COL);
 
-        $q = $go1->createQueryBuilder();
+        $q = $social->createQueryBuilder();
         $q
             ->select('title')
             ->from('social_group')
