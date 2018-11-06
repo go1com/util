@@ -106,7 +106,10 @@ class LoExploreSchema
             ],
             'vote'            => [
                 'properties' => [
-                    'rank' => ['type' => Schema::T_INT],
+                    'percent' => ['type' => Schema::T_INT],
+                    'rank'    => ['type' => Schema::T_INT],
+                    'like'    => ['type' => Schema::T_INT],
+                    'dislike' => ['type' => Schema::T_INT],
                 ],
             ],
             'policy'          => [
