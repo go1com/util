@@ -9,8 +9,8 @@ class AttendanceStatuses
     const ATTENDING    = 'attending';
     const PENDING      = 'pending';
 
-    const NUM_PENDING           = 0;
-    const NUM_ATTENDING         = 1;
-    const NUM_ATTENDED          = 2;
-    const NUM_NOT_ATTENDED      = 3;
+    const I_PENDING           = 0;
+    const I_ATTENDING         = 1;
+    const I_ATTENDED          = 2;
+    const I_NOT_ATTENDED      = 3;
 }
