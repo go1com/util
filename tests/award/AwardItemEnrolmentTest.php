@@ -9,9 +9,9 @@ use go1\util\award\AwardItemTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class AwardItemEnrolmentTest extends UtilTestCase
+class AwardItemEnrolmentTest extends UtilCoreTestCase
 {
     use PortalMockTrait;
     use UserMockTrait;

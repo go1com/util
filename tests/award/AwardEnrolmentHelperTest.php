@@ -6,9 +6,9 @@ use go1\util\award\AwardEnrolmentHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class AwardEnrolmentHelperTest extends UtilTestCase
+class AwardEnrolmentHelperTest extends UtilCoreTestCase
 {
     use UserMockTrait;
     use AwardMockTrait;

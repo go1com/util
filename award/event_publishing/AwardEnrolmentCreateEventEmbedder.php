@@ -5,6 +5,7 @@ namespace go1\util\award\event_publishing;
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\award\AwardHelper;
+use go1\util\portal\PortalHelper;
 use go1\util\user\UserHelper;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,14 +32,15 @@ class AwardEnrolmentCreateEventEmbedder
             $embedded['award'] = $award;
         }
 
-        $portal = AwardHelper::load($this->go1, $awardEnrolment->instance_id);
-        if ($award) {
-            $embedded['portal'] = $award;
-        }
+        $portal = PortalHelper::load($this->go1, $awardEnrolment->instance_id);
+        if ($portal) {
+            $embedded['portal'] = $portal;
 
-        $account = UserHelper::load($this->go1, $awardEnrolment->user_id);
-        if ($award) {
-            $embedded['account'] = $account;
+            $user = UserHelper::load($this->go1, $awardEnrolment->user_id, null, 'mail');
+            $account = $user ? UserHelper::loadByEmail($this->go1, $portal->title, $user->mail) : null;
+            if ($account) {
+                $embedded['account'] = $account;
+            }
         }
 
         if ($req) {

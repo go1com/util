@@ -7,6 +7,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
 use go1\clients\MqClient;
 use go1\util\DB;
+use go1\util\schema\AwardSchema;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\UtilCoreServiceProvider;
@@ -27,6 +28,10 @@ class UtilCoreTestCase extends TestCase
     /** @var MqClient */
     protected $queue;
     protected $queueMessages = [];
+
+    protected $schemaClasses = [
+        AwardSchema::class,
+    ];
 
     public function setUp()
     {
@@ -68,7 +73,9 @@ class UtilCoreTestCase extends TestCase
 
     protected function setupDatabaseSchema(Schema $schema)
     {
-        # Extra database setup, test cases can safely override this.
+        foreach ($this->schemaClasses as $schemaClass) {
+            call_user_func([$schemaClass, 'install'], $schema);
+        }
     }
 
     protected function getContainer(bool $rebuild = false): Container

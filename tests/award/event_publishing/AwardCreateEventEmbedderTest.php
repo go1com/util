@@ -7,11 +7,11 @@ use go1\util\award\event_publishing\AwardCreateEventEmbedder;
 use go1\util\edge\EdgeTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\schema\mock\PortalMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 use go1\util\Text;
 use Symfony\Component\HttpFoundation\Request;
 
-class AwardCreateEventEmbedderTest extends UtilTestCase
+class AwardCreateEventEmbedderTest extends UtilCoreTestCase
 {
     use PortalMockTrait;
     use AwardMockTrait;

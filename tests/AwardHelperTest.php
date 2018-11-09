@@ -9,7 +9,7 @@ use go1\util\schema\mock\AwardMockTrait;
 use go1\util\Text;
 use stdClass;
 
-class AwardHelperTest extends UtilTestCase
+class AwardHelperTest extends UtilCoreTestCase
 {
     use AwardMockTrait;
 

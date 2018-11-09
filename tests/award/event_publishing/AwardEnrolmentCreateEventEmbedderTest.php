@@ -7,11 +7,11 @@ use go1\util\award\event_publishing\AwardEnrolmentCreateEventEmbedder;
 use go1\util\edge\EdgeTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\schema\mock\PortalMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 use go1\util\Text;
 use Symfony\Component\HttpFoundation\Request;
 
-class AwardEnrolmentCreateEventEmbedderTest extends UtilTestCase
+class AwardEnrolmentCreateEventEmbedderTest extends UtilCoreTestCase
 {
     use PortalMockTrait;
     use AwardMockTrait;
@@ -47,7 +47,9 @@ class AwardEnrolmentCreateEventEmbedderTest extends UtilTestCase
         $embedded = $embedder->embedded($awardEnrolment, $req);
 
         $this->assertEquals($this->portalId, $embedded['portal']->id);
+        $this->assertEquals('qa.mygo1.com', $embedded['portal']->title);
         $this->assertEquals($this->awardId, $embedded['award']->id);
-        $this->assertEquals($this->userId, $embedded['account']->id);
+        $this->assertEquals('Example award', $embedded['award']->title);
+        $this->assertEquals($this->accountId, $embedded['account']->id);
     }
 }

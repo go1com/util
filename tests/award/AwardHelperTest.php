@@ -8,9 +8,9 @@ use go1\util\award\AwardItemTypes;
 use go1\util\edge\EdgeTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\schema\mock\UserMockTrait;
-use go1\util\tests\UtilTestCase;
+use go1\util\tests\UtilCoreTestCase;
 
-class AwardHelperTest extends UtilTestCase
+class AwardHelperTest extends UtilCoreTestCase
 {
     use UserMockTrait;
     use AwardMockTrait;
