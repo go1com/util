@@ -1350,6 +1350,20 @@ class MailTemplate
         ]
     ];
 
+    public const CONTENT_IMPORT_COMPLETE = [
+        'key'    => Queue::CONTENT_IMPORT_COMPLETE,
+        'tokens' => [
+            '!user_first_name'   => 'User first name',
+            '!content_import_status' => 'Content job import status',
+            '!processed_count' => 'Total processed count, which is successCount + failedCount',
+            '!success_count' => 'Success Count',
+            '!failed_count' => 'Failed count',
+            '!portal' => "Portal name",
+            '!user_mail' => 'User email',
+        ]
+    ];
+
+
     public static function has(string $key): bool
     {
         $self = new ReflectionClass(__CLASS__);
