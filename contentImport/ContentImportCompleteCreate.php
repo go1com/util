@@ -5,7 +5,7 @@
 
 class ContentImportCompleteCreate
 {
-    const ROUTING_KEY = 'notify.content_import.complete';
+    public const ROUTING_KEY = 'notify.content_import.complete';
 
     public static function publish(stdClass $payload): stdClass
     {

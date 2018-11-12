@@ -2,6 +2,7 @@
 
 namespace go1\util;
 
+use go1\util\ContentImport\ContentImportCompleteCreate;
 use InvalidArgumentException;
 use ReflectionClass;
 use go1\util\queue\Queue;
@@ -1351,7 +1352,7 @@ class MailTemplate
     ];
 
     public const CONTENT_IMPORT_COMPLETE = [
-        'key'    => Queue::CONTENT_IMPORT_COMPLETE,
+        'key'    => ContentImportCompleteCreate::ROUTING_KEY,
         'tokens' => [
             '!user_first_name'   => 'User first name',
             '!content_import_status' => 'Content job import status',
