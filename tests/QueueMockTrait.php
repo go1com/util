@@ -16,7 +16,7 @@ trait QueueMockTrait
             $mqClient = $this
                 ->getMockBuilder(MqClient::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['publish', 'queue'])
+                ->setMethods(['publish', 'queue', 'publishEvent'])
                 ->getMock();
 
             $response = function ($body, string $routingKey, $context) use ($callback) {
