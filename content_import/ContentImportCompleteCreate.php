@@ -1,5 +1,5 @@
 <?php
- namespace go1\util\ContentImport;
+ namespace go1\util\content_import;
 
  use stdClass;
 

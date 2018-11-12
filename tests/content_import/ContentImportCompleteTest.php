@@ -1,10 +1,10 @@
 <?php
 
-namespace go1\util\tests\contentImport;
+namespace go1\util\tests\content_import_tests;
 
 use go1\util\tests\UtilCoreTestCase;
 use go1\util\schema\mock\PlanMockTrait;
-use go1\util\ContentImport\ContentImportCompleteCreate;
+use go1\util\content_import\ContentImportCompleteCreate;
 
 class ContentImportCompleteTest extends UtilCoreTestCase
 {

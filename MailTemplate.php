@@ -2,7 +2,7 @@
 
 namespace go1\util;
 
-use go1\util\ContentImport\ContentImportCompleteCreate;
+use go1\util\content_import\ContentImportCompleteCreate;
 use InvalidArgumentException;
 use ReflectionClass;
 use go1\util\queue\Queue;
