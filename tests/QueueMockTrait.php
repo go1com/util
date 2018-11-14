@@ -38,7 +38,8 @@ trait QueueMockTrait
                 ->method('queue')
                 ->willReturnCallback($response);
 
-            $responseEvent = function (EventInterface $event) {
+            $responseEvent = function (EventInterface $event) use ($callback) {
+                $callback && $callback($event);
                 $body = $event->getPayload();
                 is_array($body) && $body['_context'] = $event->getContext();
                 is_object($body) && $body->_context = (object) $event->getContext();
