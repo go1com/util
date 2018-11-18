@@ -7,17 +7,31 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use go1\clients\MqClient;
 use go1\util\DB;
+use go1\util\plan\event_publishing\PlanCreateEventEmbedder;
+use go1\util\plan\event_publishing\PlanDeleteEventEmbedder;
+use go1\util\plan\event_publishing\PlanUpdateEventEmbedder;
 use go1\util\queue\Queue;
 
 class PlanRepository
 {
     private $db;
     private $queue;
+    private $planCreateEventEmbedder;
+    private $planUpdateEventEmbedder;
+    private $planDeleteEventEmbedder;
 
-    public function __construct(Connection $db, MqClient $queue)
-    {
+    public function __construct(
+        Connection $db,
+        MqClient $queue,
+        PlanCreateEventEmbedder $planCreateEventEmbedder,
+        PlanUpdateEventEmbedder $planUpdateEventEmbedder,
+        PlanDeleteEventEmbedder $planDeleteEventEmbedder
+    ) {
         $this->db = $db;
         $this->queue = $queue;
+        $this->planCreateEventEmbedder = $planCreateEventEmbedder;
+        $this->planUpdateEventEmbedder = $planUpdateEventEmbedder;
+        $this->planDeleteEventEmbedder = $planDeleteEventEmbedder;
     }
 
     public static function install(Schema $schema)
@@ -166,7 +180,10 @@ class PlanRepository
         $plan->id = $this->db->lastInsertId('gc_plan');
         $plan->notify = $notify ?: ($queueContext['notify'] ?? false);
         $queueContext['notify'] = $plan->notify;
-        $this->queue->publish($plan, Queue::PLAN_CREATE, $queueContext);
+
+        $payload = $plan->jsonSerialize();
+        $payload['embedded'] = $this->planCreateEventEmbedder->embedded($plan);
+        $this->queue->publish($payload, Queue::PLAN_CREATE, $queueContext);
 
         return $plan->id;
     }
@@ -200,7 +217,10 @@ class PlanRepository
             $plan->id = $original->id;
             $plan->original = $original;
             $plan->notify = $notify;
-            $this->queue->publish($plan, Queue::PLAN_UPDATE);
+
+            $payload = $plan->jsonSerialize();
+            $payload['embedded'] = $this->planDeleteEventEmbedder->embedded($plan);
+            $this->queue->publish($payload, Queue::PLAN_UPDATE);
         });
     }
 
@@ -211,7 +231,10 @@ class PlanRepository
         }
 
         $this->db->delete('gc_plan', ['id' => $id]);
-        $this->queue->publish($plan, Queue::PLAN_DELETE);
+
+        $payload = $plan->jsonSerialize();
+        $payload['embedded'] = $this->planDeleteEventEmbedder->embedded($plan);
+        $this->queue->publish($payload, Queue::PLAN_DELETE);
     }
 
     public function merge(Plan $plan, bool $notify = false, array $queueContext = [])

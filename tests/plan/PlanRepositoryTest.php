@@ -3,6 +3,9 @@
 namespace go1\util\tests\plan;
 
 use go1\clients\MqClient;
+use go1\util\plan\event_publishing\PlanCreateEventEmbedder;
+use go1\util\plan\event_publishing\PlanDeleteEventEmbedder;
+use go1\util\plan\event_publishing\PlanUpdateEventEmbedder;
 use go1\util\plan\Plan;
 use go1\util\plan\PlanRepository;
 use go1\util\plan\PlanStatuses;
@@ -20,7 +23,7 @@ class PlanRepositoryTest extends UtilCoreTestCase
     protected $userId     = 222;
     protected $assignerId = 333;
     protected $portalId   = 444;
-    protected $repo;
+    protected $rPlan;
 
     /** @var MqClient */
     protected $queue;
@@ -29,16 +32,22 @@ class PlanRepositoryTest extends UtilCoreTestCase
     {
         parent::setUp();
 
-        $this->repo = new PlanRepository($this->db, $this->queue);
+        $this->rPlan = new PlanRepository(
+            $this->db,
+            $this->queue,
+            new PlanCreateEventEmbedder($this->db),
+            new PlanUpdateEventEmbedder($this->db),
+            new PlanDeleteEventEmbedder($this->db)
+        );
     }
 
     public function testLoadSuggestedPlan()
     {
-        $plan = $this->repo->loadSuggestedPlan($this->entityType, $this->entityId, $this->userId);
+        $plan = $this->rPlan->loadSuggestedPlan($this->entityType, $this->entityId, $this->userId);
         $this->assertNull($plan);
 
         $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'type' => PlanTypes::SUGGESTED]);
-        $plan = $this->repo->loadSuggestedPlan($this->entityType, $this->entityId, $this->userId);
+        $plan = $this->rPlan->loadSuggestedPlan($this->entityType, $this->entityId, $this->userId);
         $this->assertEquals($plan->entityType, $this->entityType);
         $this->assertTrue($plan instanceof Plan);
     }
@@ -66,8 +75,8 @@ class PlanRepositoryTest extends UtilCoreTestCase
             'type'        => PlanTypes::SUGGESTED,
             'status'      => PlanStatuses::ASSIGNED,
         ]);
-        $this->repo->create($plan, $notifyStatus, $dataContext);
-        $msg = $this->queueMessages[Queue::PLAN_CREATE][0];
+        $this->rPlan->create($plan, $notifyStatus, $dataContext);
+        $msg = (object) $this->queueMessages[Queue::PLAN_CREATE][0];
         $this->assertEquals($msg->notify, $expectedNotify);
     }
 }
