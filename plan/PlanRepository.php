@@ -282,7 +282,10 @@ class PlanRepository
         $this->db->transactional(function () use ($plan) {
             $this->db->delete('gc_plan', ['id' => $plan->id]);
             $this->createRevision($plan);
-            $this->queue->publish($plan, Queue::PLAN_DELETE);
+
+            $payload = $plan->jsonSerialize();
+            $payload['embedded'] = $this->planDeleteEventEmbedder->embedded($plan);
+            $this->queue->publish($payload, Queue::PLAN_DELETE);
         });
 
         return true;
