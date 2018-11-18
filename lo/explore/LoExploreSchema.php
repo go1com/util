@@ -173,6 +173,7 @@ class LoExploreSchema
             'groups'    => ['type' => Schema::T_INT],
             'enrolment' => [
                 'properties' => [
+                    'assigned'                   => ['type' => Schema::T_KEYWORD],
                     'not_started'                => ['type' => Schema::T_KEYWORD],
                     'in_progress'                => ['type' => Schema::T_KEYWORD],
                     'last_completed'             => ['type' => Schema::T_KEYWORD],
