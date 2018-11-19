@@ -52,7 +52,7 @@ class UtilServiceProvider implements ServiceProviderInterface
             $builder = EsClientBuilder::create();
 
             if ($o = $c['esOptions']) {
-                if ($o['credential']) {
+                if (!empty($o['credential'])) {
                     $provider = CredentialProvider::fromCredentials(new Credentials($o['key'], $o['secret']));
                     $builder->setHandler(new ElasticsearchPhpHandler($o['region'], $provider));
                 }
