@@ -13,46 +13,34 @@ class PortalType
     const COMPLISPACE          = 'complispace';
     const JSE_CUSTOMER         = 'jse_customer';
     const TOTARA_CUSTOMER      = 'totara_customer';
+    const PORTAL_LAUNCHER      = 'portal_launcher';
 
     public static function all()
     {
-        return [
-            self::CONTENT_PARTNER,
-            self::DISTRIBUTION_PARTNER,
-            self::INTERNAL,
-            self::CUSTOMER,
-            self::COMPLISPACE,
-            self::JSE_CUSTOMER,
-            self::TOTARA_CUSTOMER,
-        ];
+        static $types;
+
+        if (!isset($types)) {
+            $reflectedClass = new \ReflectionClass(__CLASS__);
+            $constants = $reflectedClass->getConstants();
+            $types = array_values($constants);
+        }
+
+        return $types;
     }
 
     public static function toString(string $type): string
     {
+        if (!in_array($type, self::all(), true)) {
+            throw new InvalidArgumentException('Unknown portal type: ' . $type);
+        }
+
+        //Special formatting
         switch ($type) {
-            case self::CONTENT_PARTNER:
-                return 'Content Partner';
-
-            case self::DISTRIBUTION_PARTNER:
-                return 'Distribution Partner';
-
-            case self::INTERNAL:
-                return 'Internal';
-
-            case self::CUSTOMER:
-                return 'Customer';
-
-            case self::COMPLISPACE:
-                return 'Complispace';
-
             case self::JSE_CUSTOMER:
                 return 'JSE Customer';
-
-            case self::TOTARA_CUSTOMER:
-                return 'Totara Customer';
-
-            default:
-                throw new InvalidArgumentException('Unknown portal type: ' . $type);
         }
+
+        //Default formatting
+        return implode(' ', array_map('ucwords', explode('_', $type)));
     }
 }
