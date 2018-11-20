@@ -102,6 +102,7 @@ class LoExploreSchema
                     'dependent_locality'       => ['type' => Schema::T_KEYWORD],
                     'thoroughfare'             => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
                     'instructor_ids'           => ['type' => Schema::T_INT],
+                    'coordinate'               => ['type' => Schema::T_GEO_POINT],
                 ],
             ],
             'vote'            => [
