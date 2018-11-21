@@ -54,13 +54,13 @@ trait OneMockTrait
     public $rootJwt;
 
     // The portal
-    public $instanceName          = 'qa.mygo1.com';
-    public $instanceVersion       = PortalHelper::STABLE_VERSION;
-    public $instanceId;
-    public $instancePublicKey;
-    public $instancePrivateKey;
-    public $instanceConfiguration = [];
-    public $instanceFeatures      = [
+    public $portalName          = 'qa.mygo1.com';
+    public $portalVersion       = PortalHelper::STABLE_VERSION;
+    public $portalId;
+    public $portalPublicKey;
+    public $portalPrivateKey;
+    public $portalConfiguration = [];
+    public $portalFeatures      = [
         'marketplace' => true,
         'user_invite' => true,
         'auth0'       => false,
@@ -144,15 +144,15 @@ trait OneMockTrait
 
         $this->portalId = $this->createPortal($db, [
             'title'   => $this->portalName,
-            'version' => $this->instanceVersion,
+            'version' => $this->portalVersion,
             'data'    => [
-                'features'      => $this->instanceFeatures,
-                'configuration' => $this->instanceConfiguration,
+                'features'      => $this->portalFeatures,
+                'configuration' => $this->portalConfiguration,
             ],
         ]);
 
-        $this->instancePublicKey = $this->createPortalPublicKey($db, ['instance' => $this->portalName]);
-        $this->instancePrivateKey = $this->createPortalPrivateKey($db, ['instance' => $this->portalName]);
+        $this->portalPublicKey = $this->createPortalPublicKey($db, ['instance' => $this->portalName]);
+        $this->portalPrivateKey = $this->createPortalPrivateKey($db, ['instance' => $this->portalName]);
 
         $this->installPortalUsers($db);
         $this->installCourses($db);
