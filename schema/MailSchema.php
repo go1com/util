@@ -53,7 +53,7 @@ class MailSchema
         // Schema v1.1, add smtp_id column
         if ($schema->hasTable('mail_log') && $log = $schema->getTable('mail_log')) {
             if (!$log->hasColumn('smtp_id')) {
-                $log->addColumn('smtp_id', 'string');
+                $log->addColumn('smtp_id', 'string', ['not_null' => false]);
                 $log->addIndex(['smtp_id']);
             }
         }
