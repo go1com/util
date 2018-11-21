@@ -203,6 +203,7 @@ class Queue
     const LI_VIDEO_PROCESS_S3          = 'li_video.process.s3';
     const LO_UPDATE_ATTRIBUTES         = 'lo.update.attributes';
     const CONTENT_IMPORT_PROCESS_IMPORT     = 'content_import.process.import';
+    const MARKETPLACE_SCHEDULED_PUBLISH     = 'marketplace.scheduled_publish';
 
     # routingKey that tell some service to do something.
     #

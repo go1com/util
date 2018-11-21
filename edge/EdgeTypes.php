@@ -121,6 +121,7 @@ class EdgeTypes
     const  PUBLISH_ENROLMENT_SELF_START_BASE_DONE = 30; # T: Timestamp     | S: Enrolment  | N: PUBLISH_ENROLMENT_SELF_START_BASE record will be coverted to this when it's processed.
     const  PUBLISH_MARKETPLACE_REQUEST_REJECTED   = 50; # T: User-Rejecter | S: LO         | Learning object
     const  PUBLISH_MARKETPLACE_REQUEST_APPROVED   = 51; # T: User-Acceptor | S: LO         | Learning object
+    const  PUBLISH_MARKETPLACE_SCHEDULED          = 52; # T: Timestamp     | S: LO         | Data contains whether publishing to marketplace, which groups to join to, and the flag which should be resolved
 
     # Award relationships
     # ---------------------
