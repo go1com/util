@@ -49,5 +49,13 @@ class MailSchema
             $department->setPrimaryKey(['id']);
             $department->addUniqueIndex(['application', 'department'], 'uniq_application_department');
         }
+
+        // Schema v1.1, add smtp_id column
+        if ($schema->hasTable('mail_log') && $log = $schema->getTable('mail_log')) {
+            if (!$log->hasColumn('smtp_id')) {
+                $log->addColumn('smtp_id', 'string');
+                $log->addIndex(['smtp_id']);
+            }
+        }
     }
 }
