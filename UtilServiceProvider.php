@@ -174,7 +174,7 @@ class UtilServiceProvider implements ServiceProviderInterface
         // Avoid legacy code to be broken.
         // @TODO: Remove this legacy supporting code
         $hack = -1 == version_compare(Service::VERSION, 'v18.8.5.0');
-        $hack = $hack  || getenv('MONOLITH');
+        $hack = $hack || getenv('MONOLITH');
         if ($hack) {
             $c
                 ->register(new UtilCoreServiceProvider)

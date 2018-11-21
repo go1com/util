@@ -68,8 +68,7 @@ class Coupon implements JsonSerializable
             if (is_numeric($coupon->expiration)) {
                 $coupon->expiration = new DateTime();
                 $coupon->expiration->setTimestamp($input->expiration);
-            }
-            elseif (is_string($coupon->expiration)) {
+            } elseif (is_string($coupon->expiration)) {
                 $coupon->expiration = new DateTime($coupon->expiration);
             }
         }
