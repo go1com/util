@@ -22,14 +22,14 @@ class AwardItemEnrolmentTest extends UtilCoreTestCase
         $loId = 1001;
         $userId = 1011;
 
-        $portalId =  $this->createPortal($this->db, ['title' => 'util.mygo1.com']);
-        $awardId = $this->createAward($this->db, ['instance_id' => $portalId]);
-        $childAwardId = $this->createAward($this->db, ['instance_id' => $portalId]);
-        $award = AwardHelper::load($this->db, $awardId);
-        $childAward = AwardHelper::load($this->db, $childAwardId);
+        $portalId =  $this->createPortal($this->go1, ['title' => 'util.mygo1.com']);
+        $awardId = $this->createAward($this->go1, ['instance_id' => $portalId]);
+        $childAwardId = $this->createAward($this->go1, ['instance_id' => $portalId]);
+        $award = AwardHelper::load($this->go1, $awardId);
+        $childAward = AwardHelper::load($this->go1, $childAwardId);
 
-        $this->createAwardItem($this->db, $childAward->revision_id, AwardItemTypes::LO, $loId);
-        $childItemEnrolId = $this->createAwardItemEnrolment($this->db, [
+        $this->createAwardItem($this->go1, $childAward->revision_id, AwardItemTypes::LO, $loId);
+        $childItemEnrolId = $this->createAwardItemEnrolment($this->go1, [
             'award_id'    => $childAwardId,
             'entity_id'   => $loId,
             'user_id'     => $userId,
@@ -37,8 +37,8 @@ class AwardItemEnrolmentTest extends UtilCoreTestCase
             'type'        => AwardItemTypes::AWARD,
         ]);
 
-        $this->createAwardItem($this->db, $award->revision_id, AwardItemTypes::AWARD, $childAwardId);
-        $parentItemEnrolmentId = $this->createAwardItemEnrolment($this->db, [
+        $this->createAwardItem($this->go1, $award->revision_id, AwardItemTypes::AWARD, $childAwardId);
+        $parentItemEnrolmentId = $this->createAwardItemEnrolment($this->go1, [
             'award_id'    => $awardId,
             'entity_id'   => $childAwardId,
             'user_id'     => $userId,
@@ -46,8 +46,8 @@ class AwardItemEnrolmentTest extends UtilCoreTestCase
             'type'        => AwardItemTypes::LO,
         ]);
 
-        $childAwardItem = AwardItemEnrolmentHelper::load($this->db, $childItemEnrolId);
-        $parent = AwardItemEnrolmentHelper::parent($this->db, $childAwardItem);
+        $childAwardItem = AwardItemEnrolmentHelper::load($this->go1, $childItemEnrolId);
+        $parent = AwardItemEnrolmentHelper::parent($this->go1, $childAwardItem);
 
         $this->assertEquals($parentItemEnrolmentId, $parent->id);
     }

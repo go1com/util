@@ -30,7 +30,7 @@ trait AwardMockTrait
             'expire'      => isset($options['expire']) ? $options['expire'] : null,
             'created'     => isset($options['created']) ? $options['created'] : time(),
         ]);
-        $awardId    = $db->lastInsertId('award_award');
+        $awardId = $db->lastInsertId('award_award');
         $revisionId = $this->createAwardRevision($db, $awardId, $revisionId);
 
         $db->update('award_award', ['revision_id' => $revisionId], ['id' => $awardId]);
@@ -53,14 +53,15 @@ trait AwardMockTrait
         return $db->lastInsertId('award_revision');
     }
 
-    protected function createAwardItem(Connection $db,
-                                       int $awardRevId,
-                                       string $type,
-                                       int $entityId,
-                                       float $quantity = null,
-                                       int $parentAwardItemId = null,
-                                       $weight = null,
-                                       $mandatory = false)
+    protected function createAwardItem(
+        Connection $db,
+        int $awardRevId,
+        string $type,
+        int $entityId,
+        float $quantity = null,
+        int $parentAwardItemId = null,
+        $weight = null,
+        $mandatory = false)
     {
         $db->insert('award_item', [
             'award_revision_id'    => $awardRevId,
@@ -109,7 +110,7 @@ trait AwardMockTrait
             'data'            => $options['data'],
             'published'       => $options['published'] ?? AwardStatuses::PUBLISHED,
             'weight'          => $options['weight'] ?? 0,
-            'pass'            => !empty($options['pass']) ? 1 : 0
+            'pass'            => !empty($options['pass']) ? 1 : 0,
         ]);
 
         return $db->lastInsertId('award_item_manual');

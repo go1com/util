@@ -17,27 +17,27 @@ class AwardHelperTest extends UtilCoreTestCase
 
     public function testGetAssessorIds()
     {
-        $awardId = $this->createAward($this->db);
-        $assessorId1 = $this->createUser($this->db, ['mail' => 'assessor1@gmail.com']);
-        $assessorId2 = $this->createUser($this->db, ['mail' => 'assessor2@gmail.com']);
-        $assessorId3 = $this->createUser($this->db, ['mail' => 'assessor3@gmail.com']);
+        $awardId = $this->createAward($this->go1);
+        $assessorId1 = $this->createUser($this->go1, ['mail' => 'assessor1@gmail.com']);
+        $assessorId2 = $this->createUser($this->go1, ['mail' => 'assessor2@gmail.com']);
+        $assessorId3 = $this->createUser($this->go1, ['mail' => 'assessor3@gmail.com']);
 
-        $this->link($this->db, EdgeTypes::AWARD_ASSESSOR, $awardId, $assessorId1);
-        $this->link($this->db, EdgeTypes::AWARD_ASSESSOR, $awardId, $assessorId2);
-        $this->link($this->db, EdgeTypes::AWARD_ASSESSOR, $awardId, $assessorId3);
+        $this->link($this->go1, EdgeTypes::AWARD_ASSESSOR, $awardId, $assessorId1);
+        $this->link($this->go1, EdgeTypes::AWARD_ASSESSOR, $awardId, $assessorId2);
+        $this->link($this->go1, EdgeTypes::AWARD_ASSESSOR, $awardId, $assessorId3);
 
-        $assessorIds = AwardHelper::assessorIds($this->db, $awardId);
+        $assessorIds = AwardHelper::assessorIds($this->go1, $awardId);
         $this->assertEquals([$assessorId1, $assessorId2, $assessorId3], $assessorIds);
     }
 
     public function testGetAwardParentId()
     {
-        $awardId = $this->createAward($this->db);
-        $childAwardId = $this->createAward($this->db);
-        $award = AwardHelper::load($this->db, $awardId);
+        $awardId = $this->createAward($this->go1);
+        $childAwardId = $this->createAward($this->go1);
+        $award = AwardHelper::load($this->go1, $awardId);
 
-        $this->createAwardItem($this->db, $award->revision_id, AwardItemTypes::AWARD, $childAwardId);
+        $this->createAwardItem($this->go1, $award->revision_id, AwardItemTypes::AWARD, $childAwardId);
 
-        $this->assertEquals([$awardId], AwardHelper::awardParentIds($this->db, [$childAwardId]));
+        $this->assertEquals([$awardId], AwardHelper::awardParentIds($this->go1, [$childAwardId]));
     }
 }

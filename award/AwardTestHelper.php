@@ -11,25 +11,25 @@ use go1\util\plan\PlanTypes;
 use go1\util\schema\mock\AwardMockTrait;
 use go1\util\user\UserHelper;
 
-class AwardTestData
+class AwardTestHelper
 {
     use AwardMockTrait;
 
-    private $awardDb;
-    public $award;
-    public $awardItems;
-    public $awardItemManuals;
-    public $awardAchievements;
-    public $awardEnrolments;
-    public $awardItemEnrolments;
-    public $plans;
+    private $db;
+    public  $award;
+    public  $awardItems;
+    public  $awardItemManuals;
+    public  $awardAchievements;
+    public  $awardEnrolments;
+    public  $awardItemEnrolments;
+    public  $plans;
 
-    public static function create(Connection $dbAward)
+    public static function create(Connection $db)
     {
-        $data = new self;
-        $data->awardDb = $dbAward;
+        $helper = new self;
+        $helper->db = $db;
 
-        return $data;
+        return $helper;
     }
 
     public function setAward(array $options = [])
@@ -37,8 +37,9 @@ class AwardTestData
         if (isset($options['items'])) {
             unset($options['items']);
         }
-        $awardId = $this->createAward($this->awardDb, $options);
-        $this->award = AwardHelper::load($this->awardDb, $awardId);
+
+        $awardId = $this->createAward($this->db, $options);
+        $this->award = AwardHelper::load($this->db, $awardId);
 
         return $this;
     }
@@ -49,7 +50,7 @@ class AwardTestData
 
         foreach ($options as $option) {
             $awardItemIds[] = $this->createAwardItem(
-                $this->awardDb,
+                $this->db,
                 $this->award->revision_id,
                 $option['type'],
                 $option['entity_id'],
@@ -59,7 +60,7 @@ class AwardTestData
                 $option['mandatory'] ?? false
             );
         }
-        $this->awardItems = isset($awardItemIds) ? AwardHelper::loadItems($this->awardDb, $awardItemIds) : [];
+        $this->awardItems = isset($awardItemIds) ? AwardHelper::loadItems($this->db, $awardItemIds) : [];
 
         return $this;
     }
@@ -68,7 +69,7 @@ class AwardTestData
     {
         $this->checkAward();
         $awardItemId = $this->createAwardItem(
-            $this->awardDb,
+            $this->db,
             $this->award->revision_id,
             $option['type'],
             $option['entity_id'],
@@ -77,7 +78,7 @@ class AwardTestData
             $option['weight'] ?? null,
             $option['mandatory'] ?? false
         );
-        $this->awardItems[] = AwardHelper::loadItem($this->awardDb, $awardItemId);
+        $this->awardItems[] = AwardHelper::loadItem($this->db, $awardItemId);
 
         return $this;
     }
@@ -88,9 +89,9 @@ class AwardTestData
 
         foreach ($options as $option) {
             $option['award_id'] = $this->award->id;
-            $awardItemManualIds[] = $this->createAwardItemManual($this->awardDb, $option);
+            $awardItemManualIds[] = $this->createAwardItemManual($this->db, $option);
         }
-        $this->awardItemManuals = isset($awardItemManualIds) ? AwardHelper::loadManualItems($this->awardDb, $awardItemManualIds) : [];
+        $this->awardItemManuals = isset($awardItemManualIds) ? AwardHelper::loadManualItems($this->db, $awardItemManualIds) : [];
 
         return $this;
     }
@@ -101,13 +102,13 @@ class AwardTestData
 
         foreach ($options as $option) {
             $achievementIds[] = $this->createAwardAchievement(
-                $this->awardDb,
+                $this->db,
                 $option['user_id'],
                 $option['award_item_id'],
                 $option['created'] ?? null
             );
         }
-        $this->awardAchievements = isset($achievementIds) ? AwardHelper::loadAchievements($this->awardDb, $achievementIds) : [];
+        $this->awardAchievements = isset($achievementIds) ? AwardHelper::loadAchievements($this->db, $achievementIds) : [];
 
         return $this;
     }
@@ -119,9 +120,9 @@ class AwardTestData
         foreach ($options as $option) {
             $option['award_id'] = $this->award->id;
             $option['instance_id'] = $options['instance_id'] ?? $this->award->instance_id;
-            $awardEnrolmentIds[] = $this->createAwardEnrolment($this->awardDb, $option);
+            $awardEnrolmentIds[] = $this->createAwardEnrolment($this->db, $option);
         }
-        $this->awardEnrolments = isset($awardEnrolmentIds) ? AwardHelper::loadEnrolments($this->awardDb, $awardEnrolmentIds) : [];
+        $this->awardEnrolments = isset($awardEnrolmentIds) ? AwardHelper::loadEnrolments($this->db, $awardEnrolmentIds) : [];
 
         return $this;
     }
@@ -160,15 +161,14 @@ class AwardTestData
                 $itemIsAward = (AwardItemTypes::AWARD == $awardItem->type);
 
                 if ($itemIsAward && is_null($awardItem->quantity)) {
-                    $childAward = AwardHelper::load($this->awardDb, $awardItem->entity_id);
+                    $childAward = AwardHelper::load($this->db, $awardItem->entity_id);
                     $quantity = $childAward->quantity ?? 0;
-                }
-                else {
+                } else {
                     $quantity = $awardItem->quantity ?? 0;
                 }
 
                 if ($itemIsAward) {
-                    $enrolment = AwardEnrolmentHelper::find($this->awardDb, $awardItem->entity_id, $awardEnrolment->user_id, $awardEnrolment->instance_id);
+                    $enrolment = AwardEnrolmentHelper::find($this->db, $awardItem->entity_id, $awardEnrolment->user_id, $awardEnrolment->instance_id);
                     $enrolment->pass = (AwardEnrolmentStatuses::COMPLETED == $enrolment->status) ? 1 : 0;
                     $enrolment->status = AwardEnrolmentStatuses::toString($enrolment->status);
                 } else {
@@ -176,7 +176,7 @@ class AwardTestData
                     $enrolment = EnrolmentHelper::loadByLoProfileAndPortal($go1, $awardItem->entity_id, $user->profile_id, $awardEnrolment->instance_id);
                 }
 
-                $awardItemEnrolmentId = $this->createAwardItemEnrolment($this->awardDb, [
+                $awardItemEnrolmentId = $this->createAwardItemEnrolment($this->db, [
                     'award_id'    => $this->award->id,
                     'user_id'     => $awardEnrolment->user_id,
                     'instance_id' => $awardEnrolment->instance_id,
@@ -187,7 +187,7 @@ class AwardTestData
                     'quantity'    => $quantity,
                     'remote_id'   => $enrolment->id,
                 ]);
-                $this->awardItemEnrolments[] = AwardItemEnrolmentHelper::load($this->awardDb, $awardItemEnrolmentId);
+                $this->awardItemEnrolments[] = AwardItemEnrolmentHelper::load($this->db, $awardItemEnrolmentId);
             }
         }
     }

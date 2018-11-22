@@ -32,13 +32,13 @@ class PlanEventEmbedderTest extends UtilCoreTestCase
         parent::setUp();
 
         $c = $this->getContainer();
-        $this->portalId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
-        $this->userId = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'profile_id' => $this->profileId]);
-        $this->accountId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com', 'profile_id' => $this->profileId]);
-        $this->link($this->db, EdgeTypes::HAS_ACCOUNT, $this->userId, $this->accountId);
-        $this->jwt = $this->jwtForUser($this->db, $this->userId, 'qa.mygo1.com');
-        $this->courseId = $this->createCourse($this->db, ['instance_id' => $this->portalId]);
-        $this->planId = $this->createPlan($this->db, [
+        $this->portalId = $this->createPortal($this->go1, ['title' => 'qa.mygo1.com']);
+        $this->userId = $this->createUser($this->go1, ['instance' => $c['accounts_name'], 'profile_id' => $this->profileId]);
+        $this->accountId = $this->createUser($this->go1, ['instance' => 'qa.mygo1.com', 'profile_id' => $this->profileId]);
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $this->userId, $this->accountId);
+        $this->jwt = $this->jwtForUser($this->go1, $this->userId, 'qa.mygo1.com');
+        $this->courseId = $this->createCourse($this->go1, ['instance_id' => $this->portalId]);
+        $this->planId = $this->createPlan($this->go1, [
             'user_id'     => $this->userId,
             'instance_id' => $this->portalId,
             'entity_id'   => $this->courseId,
@@ -47,8 +47,8 @@ class PlanEventEmbedderTest extends UtilCoreTestCase
 
     public function testPlanUpdateEventEmbedder()
     {
-        $embedder = new PlanUpdateEventEmbedder($this->db);
-        $plan = PlanHelper::load($this->db, $this->planId);
+        $embedder = new PlanUpdateEventEmbedder($this->go1);
+        $plan = PlanHelper::load($this->go1, $this->planId);
         $plan = Plan::create($plan);
         $embedded = $embedder->embedded($plan);
 
@@ -62,8 +62,8 @@ class PlanEventEmbedderTest extends UtilCoreTestCase
 
     public function testPlanCreateEventEmbedder()
     {
-        $embedder = new PlanCreateEventEmbedder($this->db);
-        $plan = PlanHelper::load($this->db, $this->planId);
+        $embedder = new PlanCreateEventEmbedder($this->go1);
+        $plan = PlanHelper::load($this->go1, $this->planId);
         $plan = Plan::create($plan);
         $embedded = $embedder->embedded($plan);
 
@@ -77,8 +77,8 @@ class PlanEventEmbedderTest extends UtilCoreTestCase
 
     public function testPlanDeleteEventEmbedder()
     {
-        $embedder = new PlanDeleteEventEmbedder($this->db);
-        $plan = PlanHelper::load($this->db, $this->planId);
+        $embedder = new PlanDeleteEventEmbedder($this->go1);
+        $plan = PlanHelper::load($this->go1, $this->planId);
         $plan = Plan::create($plan);
         $embedded = $embedder->embedded($plan);
 

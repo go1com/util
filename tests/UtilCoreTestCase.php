@@ -22,7 +22,7 @@ class UtilCoreTestCase extends TestCase
     use QueueMockTrait;
 
     /** @var  Connection */
-    protected $db;
+    protected $go1;
     protected $log;
 
     /** @var MqClient */
@@ -35,10 +35,10 @@ class UtilCoreTestCase extends TestCase
 
     public function setUp()
     {
-        $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
-        $this->installGo1Schema($this->db, false, 'accounts.test');
+        $this->go1 = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
+        $this->installGo1Schema($this->go1, false, 'accounts.test');
 
-        DB::install($this->db, [
+        DB::install($this->go1, [
             function (Schema $schema) {
                 $this->setupDatabaseSchema($schema);
             },

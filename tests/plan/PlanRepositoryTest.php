@@ -33,11 +33,11 @@ class PlanRepositoryTest extends UtilCoreTestCase
         parent::setUp();
 
         $this->rPlan = new PlanRepository(
-            $this->db,
+            $this->go1,
             $this->queue,
-            new PlanCreateEventEmbedder($this->db),
-            new PlanUpdateEventEmbedder($this->db),
-            new PlanDeleteEventEmbedder($this->db)
+            new PlanCreateEventEmbedder($this->go1),
+            new PlanUpdateEventEmbedder($this->go1),
+            new PlanDeleteEventEmbedder($this->go1)
         );
     }
 
@@ -46,7 +46,7 @@ class PlanRepositoryTest extends UtilCoreTestCase
         $plan = $this->rPlan->loadSuggestedPlan($this->entityType, $this->entityId, $this->userId);
         $this->assertNull($plan);
 
-        $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'type' => PlanTypes::SUGGESTED]);
+        $this->createPlan($this->go1, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'type' => PlanTypes::SUGGESTED]);
         $plan = $this->rPlan->loadSuggestedPlan($this->entityType, $this->entityId, $this->userId);
         $this->assertEquals($plan->entityType, $this->entityType);
         $this->assertTrue($plan instanceof Plan);

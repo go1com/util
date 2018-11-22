@@ -54,7 +54,7 @@ class DBTest extends UtilCoreTestCase
 
     public function testMerge()
     {
-        DB::merge($this->db, 'gc_user', [], $dataUser = [
+        DB::merge($this->go1, 'gc_user', [], $dataUser = [
             'id'         => $userId = 99,
             'first_name' => 'Nikk',
             'last_name'  => 'Nguyen',
@@ -69,12 +69,12 @@ class DBTest extends UtilCoreTestCase
             'status'     => 1,
             'data'       => json_encode(null),
         ]);
-        $originalUser = (array) UserHelper::load($this->db, $userId);
+        $originalUser = (array) UserHelper::load($this->go1, $userId);
 
         $this->assertArraySubset($dataUser, $originalUser);
 
         DB::merge(
-            $this->db, 'gc_user',
+            $this->go1, 'gc_user',
             [
                 'id' => $userId,
             ],
@@ -84,31 +84,31 @@ class DBTest extends UtilCoreTestCase
                 'instance'   => 'bar.com',
             ]
         );
-        $user = (array) UserHelper::load($this->db, $userId);
+        $user = (array) UserHelper::load($this->go1, $userId);
 
         $this->assertEquals($changedData, array_diff($user, $originalUser));
     }
 
     public function testLoad()
     {
-        $fooUserId = $this->createUser($this->db, [
+        $fooUserId = $this->createUser($this->go1, [
             'mail' => 'foo@foo.com',
             'data' => $fooData = ['foo' => 'bar'],
         ]);
-        $barUserId = $this->createUser($this->db, [
+        $barUserId = $this->createUser($this->go1, [
             'mail' => 'bar@foo.com',
         ]);
 
-        $fooUserObj = DB::load($this->db, 'gc_user', $fooUserId, DB::OBJ);
-        $barUserObj = DB::load($this->db, 'gc_user', $barUserId, DB::OBJ);
+        $fooUserObj = DB::load($this->go1, 'gc_user', $fooUserId, DB::OBJ);
+        $barUserObj = DB::load($this->go1, 'gc_user', $barUserId, DB::OBJ);
 
         $this->assertInternalType('object', $fooUserObj);
         $this->assertEquals((object) $fooData, $fooUserObj->data);
         $this->assertInternalType('object', $barUserObj);
         $this->assertEquals([], $barUserObj->data);
 
-        $fooUserArr = DB::load($this->db, 'gc_user', $fooUserId, DB::ARR);
-        $barUserArr = DB::load($this->db, 'gc_user', $barUserId, DB::ARR);
+        $fooUserArr = DB::load($this->go1, 'gc_user', $fooUserId, DB::ARR);
+        $barUserArr = DB::load($this->go1, 'gc_user', $barUserId, DB::ARR);
 
         $this->assertInternalType('array', $fooUserArr);
         $this->assertEquals($fooData, $fooUserArr['data']);
@@ -118,15 +118,15 @@ class DBTest extends UtilCoreTestCase
 
     public function testLoadMultiple()
     {
-        $fooUserId = $this->createUser($this->db, [
+        $fooUserId = $this->createUser($this->go1, [
             'mail' => 'foo@foo.com',
             'data' => $fooData = ['foo' => 'bar'],
         ]);
-        $barUserId = $this->createUser($this->db, [
+        $barUserId = $this->createUser($this->go1, [
             'mail' => 'bar@foo.com',
         ]);
 
-        $usersObj = DB::loadMultiple($this->db, 'gc_user', [$fooUserId, $barUserId], DB::OBJ);
+        $usersObj = DB::loadMultiple($this->go1, 'gc_user', [$fooUserId, $barUserId], DB::OBJ);
 
         $this->assertCount(2, $usersObj);
         $this->assertInternalType('object', $usersObj[0]);
@@ -134,7 +134,7 @@ class DBTest extends UtilCoreTestCase
         $this->assertInternalType('object', $usersObj[1]);
         $this->assertEquals([], $usersObj[1]->data);
 
-        $usersArr = DB::loadMultiple($this->db, 'gc_user', [$fooUserId, $barUserId], DB::ARR);
+        $usersArr = DB::loadMultiple($this->go1, 'gc_user', [$fooUserId, $barUserId], DB::ARR);
 
         $this->assertCount(2, $usersArr);
         $this->assertInternalType('array', $usersArr[0]);

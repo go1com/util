@@ -20,18 +20,19 @@ class PlanTest extends UtilCoreTestCase
     public function setUp()
     {
         parent::setUp();
+
         $this->rPlan = new PlanRepository(
-            $this->db,
+            $this->go1,
             $this->queue,
-            new PlanCreateEventEmbedder($this->db),
-            new PlanUpdateEventEmbedder($this->db),
-            new PlanDeleteEventEmbedder($this->db)
+            new PlanCreateEventEmbedder($this->go1),
+            new PlanUpdateEventEmbedder($this->go1),
+            new PlanDeleteEventEmbedder($this->go1)
         );
     }
 
     public function testCreate()
     {
-        $input = Plan::create($raw = (object)[
+        $input = Plan::create($raw = (object) [
             'user_id'      => 123,
             'assigner_id'  => 111,
             'instance_id'  => 124,
@@ -63,7 +64,7 @@ class PlanTest extends UtilCoreTestCase
     public function testUpdate()
     {
         // Create the plan
-        $input = Plan::create($raw = (object)[
+        $input = Plan::create($raw = (object) [
             'user_id'      => 123,
             'assigner_id'  => 111,
             'instance_id'  => 124,
@@ -93,7 +94,7 @@ class PlanTest extends UtilCoreTestCase
     public function testDelete()
     {
         // Create the plan
-        $plan = Plan::create($raw = (object)[
+        $plan = Plan::create($raw = (object) [
             'user_id'      => 123,
             'assigner_id'  => 111,
             'instance_id'  => 124,
@@ -116,7 +117,7 @@ class PlanTest extends UtilCoreTestCase
 
     public function testLoadMultiple()
     {
-        $input = Plan::create($raw = (object)[
+        $input = Plan::create($raw = (object) [
             'user_id'      => 123,
             'assigner_id'  => 111,
             'instance_id'  => 124,
@@ -142,7 +143,7 @@ class PlanTest extends UtilCoreTestCase
 
     public function testMerge()
     {
-        $input = Plan::create($raw = (object)[
+        $input = Plan::create($raw = (object) [
             'user_id'      => 123,
             'assigner_id'  => 111,
             'instance_id'  => 124,

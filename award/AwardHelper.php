@@ -205,9 +205,7 @@ class AwardHelper
 
     public static function loadEnrolment(Connection $db, int $awardEnrolmentId)
     {
-        return ($enrolments = static::loadEnrolments($db, [$awardEnrolmentId]))
-            ? $enrolments[0]
-            : false;
+        return ($enrolments = static::loadEnrolments($db, [$awardEnrolmentId])) ? $enrolments[0] : false;
     }
 
     public static function loadEnrolmentBy(Connection $db, int $awardId, int $userId, int $instanceId)

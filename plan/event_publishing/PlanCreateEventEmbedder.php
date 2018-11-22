@@ -21,7 +21,6 @@ class PlanCreateEventEmbedder
     public function embedded(Plan $plan): array
     {
         $embedded = [];
-
         $portal = PortalHelper::load($this->go1, $plan->instanceId);
         if ($portal) {
             $embedded['portal'] = $portal;

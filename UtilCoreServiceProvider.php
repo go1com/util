@@ -11,20 +11,9 @@ class UtilCoreServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $c)
     {
-        $c['html'] = function () {
-            return Text::defaultPurifier();
-        };
-
-        $c['access_checker'] = function () {
-            return new AccessChecker;
-        };
-
-        $c['portal_checker'] = function () {
-            return new PortalChecker;
-        };
-
-        $c['lo_checker'] = function () {
-            return new LoChecker;
-        };
+        $c['html'] = function () { return Text::defaultPurifier(); };
+        $c['access_checker'] = function () { return new AccessChecker; };
+        $c['portal_checker'] = function () { return new PortalChecker; };
+        $c['lo_checker'] = function () { return new LoChecker; };
     }
 }

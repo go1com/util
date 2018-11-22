@@ -81,9 +81,9 @@ class AwardHelperTest extends UtilCoreTestCase
     {
         $awardData = $this->awardData;
         $awardData['data'] = json_encode($awardData['data']);
-        $awardId = $this->createAward($this->db, $awardData);
+        $awardId = $this->createAward($this->go1, $awardData);
 
-        $award = call_user_func([AwardHelper::class, $methodName], $this->db, $awardId);
+        $award = call_user_func([AwardHelper::class, $methodName], $this->go1, $awardId);
         $this->assertInternalType('int' , $award->id);
         $this->assertInternalType('int' , $award->revision_id);
         $this->assertInternalType('int' , $award->instance_id);
@@ -96,13 +96,13 @@ class AwardHelperTest extends UtilCoreTestCase
         $this->assertEquals(['force', 'award'], $award->tags);
         $this->assertEquals([], $award->locale);
 
-        $emptyAward = call_user_func([AwardHelper::class, $methodName], $this->db, 99);
+        $emptyAward = call_user_func([AwardHelper::class, $methodName], $this->go1, 99);
         $this->assertEmpty($emptyAward);
     }
 
     public function testLoadManualItem()
     {
-        $awardManualItemId = $this->createAwardItemManual($this->db, [
+        $awardManualItemId = $this->createAwardItemManual($this->go1, [
             'award_id' => 1,
             'data'     => $data = [
                 'certificate' => [
@@ -112,7 +112,7 @@ class AwardHelperTest extends UtilCoreTestCase
                 ],
             ],
         ]);
-        $awardManualItem = AwardHelper::loadManualItem($this->db, $awardManualItemId);
+        $awardManualItem = AwardHelper::loadManualItem($this->go1, $awardManualItemId);
 
         $this->assertInternalType('object', $awardManualItem->data);
         $this->assertEquals(json_decode(json_encode($data)), $awardManualItem->data);
