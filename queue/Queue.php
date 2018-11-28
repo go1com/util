@@ -212,10 +212,10 @@ class Queue
     # We should not add a lot of routing keys for each task. Each should define only one DO routing key for each service.
     # For example:
     #   - Should not define:
-    #       - DO_ENROLMENT_CHECK_MODULE_ENROLMENTS = 'do.enrolment.xxxxx' # { BODY }
-    #       - DO_ENROLMENT_CHECK_MODULE_ENROLMENT  = 'do.enrolment.xxxxx' # { BODY }
+    #       - DO_ENROLMENT_CHECK_MODULE_ENROLMENTS = 'do.etc.xxxxx' # { BODY }
+    #       - DO_ENROLMENT_CHECK_MODULE_ENROLMENT  = 'do.etc.xxxxx' # { BODY }
     #   - Should:
-    #       - DO_ENROLMENT = 'do.enrolment' # { task: TASK_NAME, body: TASK_BODY }
+    #       - DO_ENROLMENT = 'do.etc' # { task: TASK_NAME, body: TASK_BODY }
     #
     # The #consumer auto routing the message to #SERVICE when the routing key is "do.SERVICE".
     # -------
@@ -225,13 +225,13 @@ class Queue
     const DO_MAIL_SEND                         = 'do.mail.send'; # { subject: STRING, body: STRING, html: STRING, context: OBJECT, attachments: STRING[], options: OBJECT }
     const DO_HISTORY_RECORD                    = 'do.history.record';
     const DO_ENROLMENT                         = 'process.enrolment'; # { action: STRING, body: OBJECT }
-    const DO_ENROLMENT_CRON                    = 'do.enrolment.cron'; # { task: STRING }
-    const DO_ENROLMENT_CHECK_MODULE_ENROLMENTS = 'do.enrolment.check-module-enrolments'; # { moduleId: INT }
-    const DO_ENROLMENT_CHECK_MODULE_ENROLMENT  = 'do.enrolment.check-module-enrolment'; # { moduleId: INT, enrolmentId: INT }
-    const DO_ENROLMENT_CREATE                  = 'do.enrolment.create'; # { … }
-    const DO_ENROLMENT_UPDATE                  = 'do.enrolment.update'; # { KEY_N: MIXED|NULL }
-    const DO_ENROLMENT_DELETE                  = 'do.enrolment.delete'; # { KEY_N: MIXED|NULL }
-    const DO_ENROLMENT_PLAN_CREATE             = 'do.enrolment.plan.create'; # Plan Object
+    const DO_ENROLMENT_CRON                    = 'do.etc.cron'; # { task: STRING }
+    const DO_ENROLMENT_CHECK_MODULE_ENROLMENTS = 'do.etc.check-module-enrolments'; # { moduleId: INT }
+    const DO_ENROLMENT_CHECK_MODULE_ENROLMENT  = 'do.etc.check-module-enrolment'; # { moduleId: INT, enrolmentId: INT }
+    const DO_ENROLMENT_CREATE                  = 'do.etc.create'; # { … }
+    const DO_ENROLMENT_UPDATE                  = 'do.etc.update'; # { KEY_N: MIXED|NULL }
+    const DO_ENROLMENT_DELETE                  = 'do.etc.delete'; # { KEY_N: MIXED|NULL }
+    const DO_ENROLMENT_PLAN_CREATE             = 'do.etc.plan.create'; # Plan Object
     const DO_EXIM_IMPORT_ENROLLMENT            = 'do.exim.import-enrolment'; # {user_id, lo_id, instance_id, notify, manager_id}
     const DO_EXIM_IMPORT_AWARD_ENROLLMENT      = 'do.exim.import-award-enrolment'; # {award_id, instance_id, user_ids}
     const DO_EXIM_IMPORT_USER                  = 'do.exim.import-user'; # {$instance, $mail, $first, $last, $status, $manager}
