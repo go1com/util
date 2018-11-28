@@ -42,10 +42,10 @@ class LoHelper
         'quantity'   => ['type' => 'bool', 'default' => false],
         'expiration' => ['type' => 'string', 'default' => '+ 1 year'],
     ];
-    
-    public static function loadFromEventPayloadIfNotEmbedded(Connection $go1, stdClass $payload)
+
+    public static function loadFromEventPayloadIfNotEmbedded(Connection $go1, stdClass $payload, string $loIdProperty = 'lo_id')
     {
-        return $payload->embedded['lo'] ?? self::load($db, $payload->lo_id);
+        return $payload->embedded['lo'] ?? self::load($db, $payload->{$loIdProperty});
     }
 
     public static function load(Connection $db, int $id, int $portalId = null, bool $expensiveTree = false)
