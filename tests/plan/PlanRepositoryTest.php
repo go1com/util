@@ -23,6 +23,11 @@ class PlanRepositoryTest extends UtilCoreTestCase
     protected $userId     = 222;
     protected $assignerId = 333;
     protected $portalId   = 444;
+    protected $planId;
+
+    /**
+     * @var PlanRepository
+     */
     protected $rPlan;
 
     /** @var MqClient */
@@ -39,6 +44,8 @@ class PlanRepositoryTest extends UtilCoreTestCase
             new PlanUpdateEventEmbedder($this->go1),
             new PlanDeleteEventEmbedder($this->go1)
         );
+
+        $this->planId = $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'type' => PlanTypes::ASSIGN]);
     }
 
     public function testLoadSuggestedPlan()
@@ -76,7 +83,24 @@ class PlanRepositoryTest extends UtilCoreTestCase
             'status'      => PlanStatuses::ASSIGNED,
         ]);
         $this->rPlan->create($plan, $notifyStatus, $dataContext);
+        $this->assertArrayHasKey('embedded', $this->queueMessages[Queue::PLAN_CREATE][0]);
         $msg = (object) $this->queueMessages[Queue::PLAN_CREATE][0];
         $this->assertEquals($msg->notify, $expectedNotify);
+    }
+
+    public function testUpdate()
+    {
+        $plan = $this->rPlan->load($this->planId);
+        $original = clone $plan;
+        $plan->status = 0;
+
+        $this->rPlan->update($original, $plan);
+        $this->assertArrayHasKey('embedded', $this->queueMessages[Queue::PLAN_UPDATE][0]);
+    }
+
+    public function testDelete()
+    {
+        $this->rPlan->delete($this->planId);
+        $this->assertArrayHasKey('embedded', $this->queueMessages[Queue::PLAN_DELETE][0]);
     }
 }
