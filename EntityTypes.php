@@ -2,7 +2,6 @@
 
 namespace go1\util;
 
-
 class EntityTypes
 {
     const AWARD     = 'award';

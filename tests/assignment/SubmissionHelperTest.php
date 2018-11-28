@@ -12,41 +12,41 @@ class SubmissionHelperTest extends UtilTestCase
 
     public function testLoad()
     {
-        $id = $this->createSubmission($this->db);
+        $id = $this->createSubmission($this->go1);
 
-        $this->assertTrue(is_object(SubmissionHelper::load($this->db, $id)));
-        $this->assertFalse(SubmissionHelper::load($this->db, 123));
+        $this->assertTrue(is_object(SubmissionHelper::load($this->go1, $id)));
+        $this->assertFalse(SubmissionHelper::load($this->go1, 123));
     }
 
     public function testLoadByEnrolmentId()
     {
-        $this->createSubmission($this->db, ['enrolment_id' => 123]);
-        $this->createSubmission($this->db, ['enrolment_id' => 234]);
+        $this->createSubmission($this->go1, ['enrolment_id' => 123]);
+        $this->createSubmission($this->go1, ['enrolment_id' => 234]);
 
-        $this->assertTrue(is_object(SubmissionHelper::loadByEnrolmentId($this->db, 123)));
-        $this->assertTrue(is_object(SubmissionHelper::loadByEnrolmentId($this->db, 234)));
-        $this->assertFalse(SubmissionHelper::loadByEnrolmentId($this->db, 345));
+        $this->assertTrue(is_object(SubmissionHelper::loadByEnrolmentId($this->go1, 123)));
+        $this->assertTrue(is_object(SubmissionHelper::loadByEnrolmentId($this->go1, 234)));
+        $this->assertFalse(SubmissionHelper::loadByEnrolmentId($this->go1, 345));
     }
 
     public function testGetSubmittedDate()
     {
-        $id = $this->createSubmission($this->db);
-        $this->createSubmissionRevision($this->db, ['submission_id' => $id, 'created' => 345]);
-        $this->createSubmissionRevision($this->db, ['submission_id' => $id, 'created' => 123]);
-        $this->createSubmissionRevision($this->db, ['submission_id' => $id, 'created' => 234]);
+        $id = $this->createSubmission($this->go1);
+        $this->createSubmissionRevision($this->go1, ['submission_id' => $id, 'created' => 345]);
+        $this->createSubmissionRevision($this->go1, ['submission_id' => $id, 'created' => 123]);
+        $this->createSubmissionRevision($this->go1, ['submission_id' => $id, 'created' => 234]);
 
-        $this->assertEquals(234, SubmissionHelper::getSubmittedDate($this->db, $id));
+        $this->assertEquals(234, SubmissionHelper::getSubmittedDate($this->go1, $id));
     }
 
     public function testGetMarkedDate()
     {
-        $id = $this->createSubmission($this->db);
-        $this->createSubmissionRevision($this->db, ['submission_id' => $id, 'actor_id' => 0, 'updated' => 345]);
-        $this->createSubmissionRevision($this->db, ['submission_id' => $id, 'actor_id' => 0, 'updated' => 234]);
-        $this->createSubmissionRevision($this->db, ['submission_id' => $id, 'actor_id' => 222, 'updated' => 121]);
-        $this->createSubmissionRevision($this->db, ['submission_id' => $id, 'actor_id' => 223, 'updated' => 56]);
-        $this->createSubmissionRevision($this->db, ['submission_id' => $id, 'actor_id' => 0, 'updated' => 87]);
+        $id = $this->createSubmission($this->go1);
+        $this->createSubmissionRevision($this->go1, ['submission_id' => $id, 'actor_id' => 0, 'updated' => 345]);
+        $this->createSubmissionRevision($this->go1, ['submission_id' => $id, 'actor_id' => 0, 'updated' => 234]);
+        $this->createSubmissionRevision($this->go1, ['submission_id' => $id, 'actor_id' => 222, 'updated' => 121]);
+        $this->createSubmissionRevision($this->go1, ['submission_id' => $id, 'actor_id' => 223, 'updated' => 56]);
+        $this->createSubmissionRevision($this->go1, ['submission_id' => $id, 'actor_id' => 0, 'updated' => 87]);
 
-        $this->assertEquals(56, SubmissionHelper::getMarkedDate($this->db, $id));
+        $this->assertEquals(56, SubmissionHelper::getMarkedDate($this->go1, $id));
     }
 }

@@ -13,16 +13,16 @@ class EckHelperTest extends UtilTestCase
 
     public function testLoadEntity()
     {
-        $instanceId = $this->createPortal($this->db, []);
+        $instanceId = $this->createPortal($this->go1, []);
 
-        $this->createField($this->db, ['field' => 'field_first_name', 'instance' => $instanceId, 'entity' => 'user']);
-        $this->createField($this->db, ['field' => 'field_last_name', 'instance' => $instanceId, 'entity' => 'user']);
-        $this->createEntityValues($this->db, $instanceId, 'user', 100, [
+        $this->createField($this->go1, ['field' => 'field_first_name', 'instance' => $instanceId, 'entity' => 'user']);
+        $this->createField($this->go1, ['field' => 'field_last_name', 'instance' => $instanceId, 'entity' => 'user']);
+        $this->createEntityValues($this->go1, $instanceId, 'user', 100, [
             'field_first_name' => [0 => 'Foo'],
             'field_last_name' => [0 => 'Bar'],
         ]);
 
-        $user = EckHelper::load($this->db, $instanceId, 'user', 100);
+        $user = EckHelper::load($this->go1, $instanceId, 'user', 100);
         $this->assertEquals('Foo', $user->get('field_first_name')[0]['value']);
         $this->assertEquals('Bar', $user->get('field_last_name')[0]['value']);
     }

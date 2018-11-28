@@ -25,8 +25,8 @@ class ImageTest extends UtilTestCase
      */
     public function testScale($expected, $width, $height)
     {
-        $instanceId = $this->createPortal($this->db, ['data' => ['files' => ['logo' => 'http://www.go1.com/logo.png']]]);
-        $portal = PortalHelper::load($this->db, $instanceId);
+        $instanceId = $this->createPortal($this->go1, ['data' => ['files' => ['logo' => 'http://www.go1.com/logo.png']]]);
+        $portal = PortalHelper::load($this->go1, $instanceId);
         $logo = PortalHelper::logo($portal);
 
         $url = Image::scale($logo, $width, $height);

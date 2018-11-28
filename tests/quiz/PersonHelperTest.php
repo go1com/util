@@ -12,19 +12,19 @@ class PersonHelperTest extends UtilTestCase
 
     public function testLoadByExternalId()
     {
-        $id = $this->createQuizPerson($this->db, ['external_identifier' => 123, 'external_source' => 'go1.user']);
+        $id = $this->createQuizPerson($this->go1, ['external_identifier' => 123, 'external_source' => 'go1.user']);
 
-        $this->assertTrue(is_object(PersonHelper::loadByExternalId($this->db, 123)));
-        $this->assertFalse(PersonHelper::loadByExternalId($this->db, 123, 'other-source'));
-        $this->assertFalse(PersonHelper::loadByExternalId($this->db, 125));
+        $this->assertTrue(is_object(PersonHelper::loadByExternalId($this->go1, 123)));
+        $this->assertFalse(PersonHelper::loadByExternalId($this->go1, 123, 'other-source'));
+        $this->assertFalse(PersonHelper::loadByExternalId($this->go1, 125));
     }
 
     public function testLoadBySecondaryId()
     {
-        $id = $this->createQuizPerson($this->db, ['secondary_identifier' => 123, 'external_source' => 'go1.user']);
+        $id = $this->createQuizPerson($this->go1, ['secondary_identifier' => 123, 'external_source' => 'go1.user']);
 
-        $this->assertTrue(is_object(PersonHelper::loadBySecondaryId($this->db, 123)));
-        $this->assertFalse(PersonHelper::loadBySecondaryId($this->db, 123, 'other-source'));
-        $this->assertFalse(PersonHelper::loadBySecondaryId($this->db, 125));
+        $this->assertTrue(is_object(PersonHelper::loadBySecondaryId($this->go1, 123)));
+        $this->assertFalse(PersonHelper::loadBySecondaryId($this->go1, 123, 'other-source'));
+        $this->assertFalse(PersonHelper::loadBySecondaryId($this->go1, 125));
     }
 }

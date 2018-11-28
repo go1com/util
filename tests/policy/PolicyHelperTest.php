@@ -16,7 +16,7 @@ class PolicyHelperTest extends UtilTestCase
 
     public function testGetLoPolicyByEntity()
     {
-        $this->createItem($this->db, [
+        $this->createItem($this->go1, [
             'type'             => Realm::ACCESS,
             'portal_id'        => $portalId = 12,
             'host_entity_type' => EntityTypes::LO,
@@ -25,7 +25,7 @@ class PolicyHelperTest extends UtilTestCase
             'entity_id'        => $accountId = 14,
         ]);
 
-        $this->createItem($this->db, [
+        $this->createItem($this->go1, [
             'type'             => Realm::VIEW,
             'portal_id'        => $portalId = 12,
             'host_entity_type' => EntityTypes::LO,
@@ -34,14 +34,14 @@ class PolicyHelperTest extends UtilTestCase
             'entity_id'        => $sharedPortalId = 15,
         ]);
 
-        $this->assertEquals(Realm::ACCESS, PolicyHelper::entityRealmOnLO($this->db, EntityTypes::USER, $accountId, $portalId, $loId));
-        $this->assertEquals(Realm::VIEW, PolicyHelper::entityRealmOnLO($this->db, EntityTypes::PORTAL, $sharedPortalId, $portalId, $loId));
-        $this->assertNull(PolicyHelper::entityRealmOnLO($this->db, EntityTypes::USER, 1, $portalId, $loId));
+        $this->assertEquals(Realm::ACCESS, PolicyHelper::entityRealmOnLO($this->go1, EntityTypes::USER, $accountId, $portalId, $loId));
+        $this->assertEquals(Realm::VIEW, PolicyHelper::entityRealmOnLO($this->go1, EntityTypes::PORTAL, $sharedPortalId, $portalId, $loId));
+        $this->assertNull(PolicyHelper::entityRealmOnLO($this->go1, EntityTypes::USER, 1, $portalId, $loId));
     }
 
     public function testLoadItem()
     {
-        $id = $this->createItem($this->db, $data =[
+        $id = $this->createItem($this->go1, $data =[
             'type'             => Realm::ACCESS,
             'portal_id'        => $portalId = 12,
             'host_entity_type' => EntityTypes::LO,
@@ -49,7 +49,7 @@ class PolicyHelperTest extends UtilTestCase
             'entity_type'      => EntityTypes::USER,
             'entity_id'        => $accountId = 14,
         ]);
-        $policyItem = PolicyHelper::loadItem($this->db, $id);
+        $policyItem = PolicyHelper::loadItem($this->go1, $id);
         $this->assertTrue($policyItem instanceof PolicyItem);
         $this->assertEquals($data['type'], $policyItem->type);
         $this->assertEquals($data['portal_id'], $policyItem->portalId);
@@ -58,6 +58,6 @@ class PolicyHelperTest extends UtilTestCase
         $this->assertEquals($data['entity_type'], $policyItem->entityType);
         $this->assertEquals($data['entity_id'], $policyItem->entityId);
 
-        $this->assertNull(PolicyHelper::loadItem($this->db, 'not-existing'));
+        $this->assertNull(PolicyHelper::loadItem($this->go1, 'not-existing'));
     }
 }

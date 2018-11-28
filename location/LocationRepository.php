@@ -9,12 +9,12 @@ use go1\util\queue\Queue;
 
 class LocationRepository
 {
-    private $db;
+    private $go1;
     private $queue;
 
     public function __construct(Connection $db, MqClient $queue)
     {
-        $this->db = $db;
+        $this->go1 = $db;
         $this->queue = $queue;
     }
 
@@ -25,19 +25,19 @@ class LocationRepository
 
     public function loadMultiple(array $ids)
     {
-        $locations = $this->db
+        $locations = $this->go1
             ->executeQuery('SELECT * FROM gc_location WHERE id IN (?)', [$ids], [DB::INTEGERS])
             ->fetchAll(DB::OBJ);
 
-        return array_map(function($_) {
-                return Location::create($_);
-            }, $locations);
+        return array_map(function ($_) {
+            return Location::create($_);
+        }, $locations);
     }
 
     public function create(Location &$location): int
     {
-        $this->db->insert('gc_location', $location->jsonSerialize());
-        $location->id = $this->db->lastInsertId('gc_location');
+        $this->go1->insert('gc_location', $location->jsonSerialize());
+        $location->id = $this->go1->lastInsertId('gc_location');
         $this->queue->publish($location->jsonSerialize(), Queue::LOCATION_CREATE);
 
         return $location->id;
@@ -49,7 +49,7 @@ class LocationRepository
             return false;
         }
 
-        $this->db->update('gc_location', $location->jsonSerialize(), ['id' => $location->id]);
+        $this->go1->update('gc_location', $location->jsonSerialize(), ['id' => $location->id]);
         $location->original = $original;
         $this->queue->publish($location->jsonSerialize(), Queue::LOCATION_UPDATE);
 
@@ -62,11 +62,16 @@ class LocationRepository
             return false;
         }
 
-        DB::transactional($this->db, function (Connection $db) use (&$location) {
+        DB::transactional($this->go1, function (Connection $db) use (&$location) {
             $db->delete('gc_location', ['id' => $location->id]);
             $this->queue->publish($location->jsonSerialize(), Queue::LOCATION_DELETE);
         });
 
         return true;
+    }
+
+    public function relatedLearingObjectIds(Location $location): array
+    {
+        # const HAS_LOCATION                = 40; # T: gc_location.id       | S: gc_event.id
     }
 }

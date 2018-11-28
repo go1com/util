@@ -25,11 +25,11 @@ class CollectionItemEventEmbedderTest extends UtilTestCase
 
     public function test()
     {
-        $embedder = new CollectionItemEventEmbedder($this->db);
-        $portalId = $this->createPortal($this->db, ['title' => 'ngoc.mygo1.com']);
-        $courseId = $this->createCourse($this->db, ['instance_id' => $portalId]);
+        $embedder = new CollectionItemEventEmbedder($this->go1);
+        $portalId = $this->createPortal($this->go1, ['title' => 'ngoc.mygo1.com']);
+        $courseId = $this->createCourse($this->go1, ['instance_id' => $portalId]);
         $collectionId = $this->createCollection(
-            $this->db,
+            $this->go1,
             $data = [
                 'type'         => CollectionTypes::DEFAULT,
                 'machine_name' => 'foo',
@@ -44,14 +44,14 @@ class CollectionItemEventEmbedderTest extends UtilTestCase
         );
 
         $id = $this->createCollectionItem(
-            $this->db,
+            $this->go1,
             $data = [
                 'collection_id' => $collectionId,
                 'lo_id'         => $courseId,
             ]
         );
 
-        $collectionItem = $this->db
+        $collectionItem = $this->go1
             ->executeQuery('SELECT * FROM collection_collection_item WHERE id = ?', [$id], [DB::STRING])
             ->fetch(DB::OBJ);
 

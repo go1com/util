@@ -13,7 +13,7 @@ class ContractModelTest extends UtilTestCase
 
     private function createStartDateContract(string $startDate, string $initialTerm)
     {
-        return $this->createContract($this->db, [
+        return $this->createContract($this->go1, [
             'instance_id'       => 1000,
             'user_id'           => 2000,
             'number_users'      => 100,
@@ -29,7 +29,7 @@ class ContractModelTest extends UtilTestCase
     public function testLessThan2Years()
     {
         $contractId = $this->createStartDateContract('-100 days', '2 years');
-        $contract = ContractHelper::load($this->db, $contractId);
+        $contract = ContractHelper::load($this->go1, $contractId);
         $renewalDate = (new DateTime($contract->getRenewalDate()))->format('Y-m-d');
 
         $expectedRenewalDate = (new DateTime('-100 days'));
@@ -40,7 +40,7 @@ class ContractModelTest extends UtilTestCase
     public function testLessThan2Months()
     {
         $contractId = $this->createStartDateContract('-20 days', '2 months');
-        $contract = ContractHelper::load($this->db, $contractId);
+        $contract = ContractHelper::load($this->go1, $contractId);
         $renewalDate = (new DateTime($contract->getRenewalDate()))->format('Y-m-d');
 
         $expectedRenewalDate = (new DateTime('-20 days'));
@@ -54,7 +54,7 @@ class ContractModelTest extends UtilTestCase
     public function testGreaterThan2YearsAndLessThan4Years()
     {
         $contractId = $this->createStartDateContract('-3 years', '2 years');
-        $contract = ContractHelper::load($this->db, $contractId);
+        $contract = ContractHelper::load($this->go1, $contractId);
         $renewalDate = (new DateTime($contract->getRenewalDate()))->format('Y-m-d');
 
         $expectedRenewalDate = (new DateTime('-3 years'));
@@ -65,7 +65,7 @@ class ContractModelTest extends UtilTestCase
     public function testGreaterThan1MonthAndLessThan2Months()
     {
         $contractId = $this->createStartDateContract('-40 days', '2 months');
-        $contract = ContractHelper::load($this->db, $contractId);
+        $contract = ContractHelper::load($this->go1, $contractId);
         $renewalDate = (new DateTime($contract->getRenewalDate()))->format('Y-m-d');
 
         $expectedRenewalDate = (new DateTime('-40 days'));

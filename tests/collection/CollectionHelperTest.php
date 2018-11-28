@@ -13,7 +13,7 @@ class CollectionHelperTest extends UtilTestCase
 
     public function testLoadByPortalAndMachineName()
     {
-        $this->createCollection($this->db, $data = [
+        $this->createCollection($this->go1, $data = [
             'type'         => CollectionTypes::DEFAULT,
             'machine_name' => 'foo',
             'title'        => 'bar',
@@ -24,7 +24,7 @@ class CollectionHelperTest extends UtilTestCase
             'created'      => time(),
             'updated'      => time(),
         ]);
-        $collection = CollectionHelper::loadByPortalAndMachineName($this->db, $data['portal_id'], $data['machine_name']);
+        $collection = CollectionHelper::loadByPortalAndMachineName($this->go1, $data['portal_id'], $data['machine_name']);
         $this->assertEquals($data['type'], $collection->type);
         $this->assertEquals($data['machine_name'], $collection->machineName);
         $this->assertEquals($data['portal_id'], $collection->portalId);
