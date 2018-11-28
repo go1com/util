@@ -43,9 +43,14 @@ class LoHelper
         'expiration' => ['type' => 'string', 'default' => '+ 1 year'],
     ];
 
-    public static function load(Connection $db, int $id, int $instanceId = null, bool $expensiveTree = false)
+    public static function loadFromEventPayloadIfNotEmbedded(Connection $go1, stdClass $payload)
     {
-        return ($learningObjects = static::loadMultiple($db, [$id], $instanceId, $expensiveTree)) ? $learningObjects[0] : false;
+        return $payload->embedded['lo'] ?? self::load($db, $payload->lo_id);
+    }
+
+    public static function load(Connection $db, int $id, int $portalId = null, bool $expensiveTree = false)
+    {
+        return ($learningObjects = static::loadMultiple($db, [$id], $portalId, $expensiveTree)) ? $learningObjects[0] : false;
     }
 
     public static function loadMultiple(Connection $db, array $ids, int $portalId = null, bool $expensiveTree = false): array
