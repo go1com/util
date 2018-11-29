@@ -191,6 +191,8 @@ class EdgeTest extends UtilCoreTestCase
         EdgeHelper::link($this->go1, $this->queue, EdgeTypes::CREDIT_TRANSFER, 1, 100000, 0, ['old_owner' => 1, 'new_owner' => 2, 'actor' => 'abc@go1.com']);
         EdgeHelper::link($this->go1, $this->queue, EdgeTypes::CREDIT_TRANSFER, 1, 100001, 0, ['old_owner' => 2, 'new_owner' => 3, 'actor' => 'abc1@go1.com']);
         EdgeHelper::link($this->go1, $this->queue, EdgeTypes::CREDIT_TRANSFER, 1, 100002, 0, ['old_owner' => 3, 'new_owner' => 1, 'actor' => 'abc@go1.com']);
+        
+        $this->assertTrue(true, 'no error found');
     }
 
     public function testLoHasToken()
