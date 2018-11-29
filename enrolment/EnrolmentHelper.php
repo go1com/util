@@ -36,9 +36,9 @@ use stdClass;
  */
 class EnrolmentHelper
 {
-    public static function isEmbeddedPortalActive(stdClass $lo): bool
+    public static function isEmbeddedPortalActive(stdClass $enrolment): bool
     {
-        $portal = $lo->embedded['portal'] ?? null;
+        $portal = $enrolment->embedded['portal'] ?? null;
 
         return $portal ? $portal->status : true;
     }
@@ -270,7 +270,8 @@ class EnrolmentHelper
         EnrolmentEventsEmbedder $enrolmentEventsEmbedder,
         $assignerId = null,
         $notify = true
-    ) {
+    )
+    {
         $date = DateTime::formatDate('now');
         if (!$enrolment->startDate && ($enrolment->status != EnrolmentStatuses::NOT_STARTED)) {
             $enrolment->startDate = $date;
