@@ -45,12 +45,12 @@ class LoHelper
 
     public static function loadFromEventPayloadIfNotEmbedded(Connection $go1, stdClass $payload, string $loIdProperty = 'lo_id')
     {
-        return $payload->embedded['lo'] ?? self::load($db, $payload->{$loIdProperty});
+        return $payload->embedded['lo'] ?? self::load($go1, $payload->{$loIdProperty});
     }
 
-    public static function load(Connection $db, int $id, int $portalId = null, bool $expensiveTree = false)
+    public static function load(Connection $go1, int $id, int $portalId = null, bool $expensiveTree = false)
     {
-        return ($learningObjects = static::loadMultiple($db, [$id], $portalId, $expensiveTree)) ? $learningObjects[0] : false;
+        return ($learningObjects = static::loadMultiple($go1, [$id], $portalId, $expensiveTree)) ? $learningObjects[0] : false;
     }
 
     public static function loadMultiple(Connection $db, array $ids, int $portalId = null, bool $expensiveTree = false): array
