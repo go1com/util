@@ -45,7 +45,7 @@ class PlanRepositoryTest extends UtilCoreTestCase
             new PlanDeleteEventEmbedder($this->go1)
         );
 
-        $this->planId = $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'type' => PlanTypes::ASSIGN]);
+        $this->planId = $this->createPlan($this->go1, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'type' => PlanTypes::ASSIGN]);
     }
 
     public function testLoadSuggestedPlan()
