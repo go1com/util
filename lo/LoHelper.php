@@ -43,7 +43,7 @@ class LoHelper
         'expiration' => ['type' => 'string', 'default' => '+ 1 year'],
     ];
 
-    public static function isPortalActive(stdClass $lo)
+    public static function isPortalActive(stdClass $lo): bool
     {
         $portal = $lo->embedded['portal'] ?? null;
 
