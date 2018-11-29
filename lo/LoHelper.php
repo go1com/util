@@ -43,6 +43,13 @@ class LoHelper
         'expiration' => ['type' => 'string', 'default' => '+ 1 year'],
     ];
 
+    public static function isPortalActive(stdClass $lo)
+    {
+        $portal = $lo->embedded['portal'] ?? null;
+
+        return $portal ? $portal->status : true;
+    }
+
     public static function loadFromEventPayloadIfNotEmbedded(Connection $go1, stdClass $payload, string $loIdProperty = 'lo_id')
     {
         return $payload->embedded['lo'] ?? self::load($go1, $payload->{$loIdProperty});
