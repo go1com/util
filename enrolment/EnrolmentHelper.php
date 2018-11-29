@@ -9,6 +9,7 @@ use go1\util\DateTime;
 use go1\util\DB;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
+use go1\util\enrolment\event_publishing\EnrolmentEventsEmbedder;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
 use go1\util\model\Enrolment;
@@ -254,14 +255,21 @@ class EnrolmentHelper
         return $progress;
     }
 
-    public static function create(Connection $db, MqClient $queue, Enrolment $enrolment, stdClass $lo, $assignerId = null, $notify = true)
-    {
+    public static function create(
+        Connection $db,
+        MqClient $queue,
+        Enrolment $enrolment,
+        stdClass $lo,
+        EnrolmentEventsEmbedder $enrolmentEventsEmbedder,
+        $assignerId = null,
+        $notify = true
+    ) {
         $date = DateTime::formatDate('now');
         if (!$enrolment->startDate && ($enrolment->status != EnrolmentStatuses::NOT_STARTED)) {
             $enrolment->startDate = $date;
         }
 
-        $enrolment = [
+        $data = [
             'id'                  => $enrolment->id,
             'profile_id'          => $enrolment->profileId,
             'parent_lo_id'        => $enrolment->parentLoId,
@@ -279,19 +287,21 @@ class EnrolmentHelper
             'data'                => json_encode($enrolment->data),
         ];
 
-        $db->insert('gc_enrolment', $enrolment);
+        $db->insert('gc_enrolment', $data);
 
         if ($lo->marketplace) {
             if ($portal = PortalHelper::load($db, $lo->instance_id)) {
                 if ((new PortalChecker)->isVirtual($portal)) {
-                    $queue->publish(['type' => 'enrolment', 'object' => $enrolment], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
+                    $queue->publish(['type' => 'enrolment', 'object' => $data], Queue::DO_USER_CREATE_VIRTUAL_ACCOUNT);
                 }
             }
         }
 
         $rMqClient = new ReflectionClass(MqClient::class);
         $actorIdKey = $rMqClient->hasConstant('CONTEXT_ACTOR_ID') ? $rMqClient->getConstant('CONTEXT_ACTOR_ID') : 'actor_id';
-        $queue->publish($enrolment, Queue::ENROLMENT_CREATE, ['notify_email' => $notify, $actorIdKey => $assignerId]);
+
+        $data['embedded'] = $enrolmentEventsEmbedder->embedded((object)$data);
+        $queue->publish($data, Queue::ENROLMENT_CREATE, ['notify_email' => $notify, $actorIdKey => $assignerId]);
     }
 
     public static function hasEnrolment(Connection $db, int $loId, int $profileId, int $parentLoId = null)

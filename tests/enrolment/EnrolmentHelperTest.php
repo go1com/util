@@ -2,10 +2,12 @@
 
 namespace go1\util\tests\enrolment;
 
+use go1\util\AccessChecker;
 use go1\util\DateTime;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
 use go1\util\enrolment\EnrolmentStatuses;
+use go1\util\enrolment\event_publishing\EnrolmentEventsEmbedder;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
@@ -36,9 +38,15 @@ class EnrolmentHelperTest extends UtilCoreTestCase
     protected $userId, $jwt;
     protected $lpId, $courseId, $moduleId, $liVideoId, $liResourceId, $liInteractiveId, $electiveQuestionId, $electiveTextId, $electiveQuizId;
 
+    /**
+     * @var EnrolmentEventsEmbedder
+     */
+    protected $enrolmentEventsEmbedder;
+
     public function setUp()
     {
         parent::setUp();
+        $this->enrolmentEventsEmbedder = new EnrolmentEventsEmbedder($this->go1, new AccessChecker);
 
         // Create instance
         $this->portalId = $this->createPortal($this->go1, ['title' => $this->portalName]);
@@ -265,7 +273,7 @@ class EnrolmentHelperTest extends UtilCoreTestCase
         $enrolment->changed = 6;
         $enrolment->data = ['foo' => 'bar'];
 
-        EnrolmentHelper::create($this->go1, $this->queue, $enrolment, $lo, null, true);
+        EnrolmentHelper::create($this->go1, $this->queue, $enrolment, $lo, $this->enrolmentEventsEmbedder, null, true);
 
         $e = EnrolmentHelper::loadSingle($this->go1, 1);
         $this->assertEquals($status, $enrolment->status);
@@ -284,6 +292,7 @@ class EnrolmentHelperTest extends UtilCoreTestCase
         $this->assertCount(1, $message);
         $this->assertTrue($message[0]['_context']['notify_email']);
         $this->assertNull($message[0]['_context']['actor_id']);
+        $this->assertArrayHasKey('lo', $message[0]['embedded']);
     }
 
     public function testCreateWithMarketplaceLO()
@@ -306,7 +315,7 @@ class EnrolmentHelperTest extends UtilCoreTestCase
         $enrolment->changed = 6;
         $enrolment->data = ['foo' => 'bar'];
 
-        EnrolmentHelper::create($this->go1, $this->queue, $enrolment, $lo, null, true);
+        EnrolmentHelper::create($this->go1, $this->queue, $enrolment, $lo, $this->enrolmentEventsEmbedder, null, true);
 
         $e = EnrolmentHelper::loadSingle($this->go1, 1);
         $this->assertEquals($status, $enrolment->status);
