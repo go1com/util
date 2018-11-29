@@ -36,6 +36,13 @@ use stdClass;
  */
 class EnrolmentHelper
 {
+    public static function isEmbeddedPortalActive(stdClass $lo): bool
+    {
+        $portal = $lo->embedded['portal'] ?? null;
+
+        return $portal ? $portal->status : true;
+    }
+
     public static function enrolmentId(Connection $db, int $loId, int $profileId)
     {
         return $db->fetchColumn('SElECT id FROM gc_enrolment WHERE lo_id = ? AND profile_id = ?', [$loId, $profileId]);
@@ -300,7 +307,7 @@ class EnrolmentHelper
         $rMqClient = new ReflectionClass(MqClient::class);
         $actorIdKey = $rMqClient->hasConstant('CONTEXT_ACTOR_ID') ? $rMqClient->getConstant('CONTEXT_ACTOR_ID') : 'actor_id';
 
-        $data['embedded'] = $enrolmentEventsEmbedder->embedded((object)$data);
+        $data['embedded'] = $enrolmentEventsEmbedder->embedded((object) $data);
         $queue->publish($data, Queue::ENROLMENT_CREATE, ['notify_email' => $notify, $actorIdKey => $assignerId]);
     }
 
@@ -387,12 +394,13 @@ class EnrolmentHelper
         return $row ? Enrolment::create($row) : null;
     }
 
-    public static function parentEnrolment(Connection $db, Enrolment $enrolment, $parentLoType = LoTypes::COURSE):? Enrolment
+    public static function parentEnrolment(Connection $db, Enrolment $enrolment, $parentLoType = LoTypes::COURSE): ?Enrolment
     {
         if ($db->fetchColumn('SELECT 1 FROM gc_lo WHERE type = ? AND id = ?', [$parentLoType, $enrolment->loId])) {
             return $enrolment;
         }
         $parentEnrolment = $enrolment->parentEnrolmentId ? EnrolmentHelper::loadSingle($db, $enrolment->parentEnrolmentId) : null;
+
         return $parentEnrolment ? static::parentEnrolment($db, $parentEnrolment, $parentLoType) : null;
     }
 }
