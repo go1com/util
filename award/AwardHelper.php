@@ -16,6 +16,13 @@ use stdClass;
 
 class AwardHelper
 {
+    public static function isEmbeddedPortalActive(stdClass $award): bool
+    {
+        $portal = $award->embedded['portal'] ?? null;
+
+        return $portal ? $portal->status : true;
+    }
+
     public static function getQuantityType($quantity)
     {
         if (is_null($quantity)) {
