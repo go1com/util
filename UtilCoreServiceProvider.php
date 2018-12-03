@@ -2,6 +2,7 @@
 
 namespace go1\util;
 
+use go1\util\consume\ServiceConsumeController;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
 use Pimple\Container;
@@ -15,5 +16,9 @@ class UtilCoreServiceProvider implements ServiceProviderInterface
         $c['access_checker'] = function () { return new AccessChecker; };
         $c['portal_checker'] = function () { return new PortalChecker; };
         $c['lo_checker'] = function () { return new LoChecker; };
+        
+        $c['service_consumer.controller'] = function (Container $c) {
+            return new ServiceConsumeController($c['consumers'], $c['logger']);
+        };
     }
 }
