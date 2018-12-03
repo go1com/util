@@ -50,7 +50,7 @@ class LoHelper
         return $portal ? $portal->status : true;
     }
 
-    public static function loadFromEventPayloadIfNotEmbedded(Connection $go1, stdClass $payload, string $loIdProperty = 'lo_id')
+    public static function loadOrGetFromEmbeddedData(Connection $go1, stdClass $payload, string $loIdProperty = 'lo_id')
     {
         return $payload->embedded['lo'] ?? self::load($go1, $payload->{$loIdProperty});
     }
