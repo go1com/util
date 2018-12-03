@@ -25,15 +25,11 @@ class AwardEnrolmentCreateEventEmbedder
 
     public function embedded(stdClass $awardEnrolment, Request $req = null): array
     {
-        $embedded = [];
-
-        $award = AwardHelper::load($this->award, $awardEnrolment->award_id);
-        if ($award) {
+        if ($award = AwardHelper::load($this->award, $awardEnrolment->award_id)) {
             $embedded['award'] = $award;
         }
 
-        $portal = PortalHelper::load($this->go1, $awardEnrolment->instance_id);
-        if ($portal) {
+        if ($portal = PortalHelper::load($this->go1, $awardEnrolment->instance_id)) {
             $embedded['portal'] = $portal;
 
             $user = UserHelper::load($this->go1, $awardEnrolment->user_id, null, 'mail');
@@ -49,6 +45,7 @@ class AwardEnrolmentCreateEventEmbedder
                 $embedded['jwt']['user'] = $user;
             }
         }
+
         return $embedded;
     }
 }

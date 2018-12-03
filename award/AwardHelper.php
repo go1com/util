@@ -68,6 +68,11 @@ class AwardHelper
         $award->created = intval($award->created);
     }
 
+    public static function loadOrGetFromAwardEnrolmentEmbeddedData(Connection $db, std $awardEnrolment)
+    {
+        return $awardEnrolment->embedded['award'] ?? self::load($db, $awardEnrolment->award_id);
+    }
+
     public static function load(Connection $db, int $awardId, array $statuses = [])
     {
         $awards = static::loadMultiple($db, [$awardId], $statuses);
