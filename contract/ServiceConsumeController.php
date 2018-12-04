@@ -1,9 +1,11 @@
 <?php
 
-namespace go1\util\consume;
+namespace go1\util\contract;
 
 use go1\util\AccessChecker;
-use go1\util\contract\ServiceConsumerInterface;
+use go1\util\consume\Error;
+use go1\util\consume\SystemError;
+use go1\util\consume\TestCase;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,11 +27,11 @@ class ServiceConsumeController
     {
         foreach ($this->consumers as $consumer) {
             foreach ($consumer->aware() as $routingKey => $description) {
-                $info[$consumer->name()][$routingKey] = $description;
+                $info[get_class($consumer)][$routingKey] = $description;
             }
         }
-
-        return $info ?? [];
+        
+        return new JsonResponse($info ?? []);
     }
 
     public function post(Request $req): JsonResponse
@@ -37,7 +39,7 @@ class ServiceConsumeController
         if (!(new AccessChecker)->isAccountsAdmin($req)) {
             return Error::simpleErrorJsonResponse('Internal resource', 403);
         }
-        
+
         $routingKey = $req->get('routingKey');
         $body = $req->get('body');
         $body = is_scalar($body) ? json_decode($body) : json_decode(json_encode($body));
@@ -45,14 +47,14 @@ class ServiceConsumeController
         $context = is_scalar($context) ? json_decode($context) : json_decode(json_encode($context, JSON_FORCE_OBJECT));
 
         return $body
-            ? $this->doConsume($routingKey, $body, $context)
+            ? $this->consume($routingKey, $body, $context)
             : new JsonResponse(null, 204);
     }
 
     private function consume(string $routingKey, stdClass $body, $context): JsonResponse
     {
         foreach ($this->consumers as $consumer) {
-            if (in_array($routingKey, $consumer->aware())) {
+            if ($consumer->aware()[$routingKey] ?? false) {
                 try {
                     $consumer->consume($routingKey, $body, $context);
                     $headers['X-CONSUMERS'][] = get_class($consumer);
