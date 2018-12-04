@@ -23,14 +23,14 @@ class ServiceConsumeController
         $this->logger = $logger;
     }
 
-    private function get(): JsonResponse
+    public function get(): JsonResponse
     {
         foreach ($this->consumers as $consumer) {
             foreach ($consumer->aware() as $routingKey => $description) {
                 $info[get_class($consumer)][$routingKey] = $description;
             }
         }
-        
+
         return new JsonResponse($info ?? []);
     }
 
