@@ -23,5 +23,5 @@ interface ServiceConsumerInterface
      * @param stdClass      $body
      * @param stdClass|null $context
      */
-    public function consume(string $routingKey, stdClass $body, stdClass $context = null): void;
+    public function consume(string $routingKey, stdClass $body, stdClass $context = null);
 }
