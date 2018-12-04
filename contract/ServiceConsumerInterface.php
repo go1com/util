@@ -2,6 +2,8 @@
 
 namespace go1\util\contract;
 
+use stdClass;
+
 interface ServiceConsumerInterface
 {
     /**
