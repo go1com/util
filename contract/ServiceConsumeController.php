@@ -21,7 +21,7 @@ class ServiceConsumeController
         $this->logger = $logger;
     }
 
-    private function getConsumersInfo(): JsonResponse
+    private function get(): JsonResponse
     {
         foreach ($this->consumers as $consumer) {
             foreach ($consumer->aware() as $routingKey => $description) {
@@ -37,11 +37,7 @@ class ServiceConsumeController
         if (!(new AccessChecker)->isAccountsAdmin($req)) {
             return Error::simpleErrorJsonResponse('Internal resource', 403);
         }
-
-        if ($req->query->get('info')) {
-            return $this->getConsumersInfo();
-        }
-
+        
         $routingKey = $req->get('routingKey');
         $body = $req->get('body');
         $body = is_scalar($body) ? json_decode($body) : json_decode(json_encode($body));
