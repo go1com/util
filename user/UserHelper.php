@@ -27,7 +27,7 @@ class UserHelper
 
     public static function isEmbeddedPortalActive(stdClass $user): bool
     {
-        $portal = $user->embedded['portal'] ?? null;
+        $portal = $user->embedded->portal ?? null;
 
         return $portal ? $portal->status : true;
     }

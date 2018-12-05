@@ -38,7 +38,7 @@ class EnrolmentHelper
 {
     public static function isEmbeddedPortalActive(stdClass $enrolment): bool
     {
-        $portal = $enrolment->embedded['portal'] ?? null;
+        $portal = $enrolment->embedded->portal ?? null;
 
         return $portal ? $portal->status : true;
     }

@@ -18,7 +18,7 @@ class AwardHelper
 {
     public static function isEmbeddedPortalActive(stdClass $award): bool
     {
-        $portal = $award->embedded['portal'] ?? null;
+        $portal = $award->embedded->portal ?? null;
 
         return $portal ? $portal->status : true;
     }
