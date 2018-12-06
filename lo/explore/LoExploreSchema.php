@@ -100,6 +100,7 @@ class LoExploreSchema
                     'administrative_area'      => ['type' => Schema::T_KEYWORD],
                     'administrative_area_name' => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
                     'locality'                 => ['type' => Schema::T_KEYWORD],
+                    'location_name'            => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
                     'dependent_locality'       => ['type' => Schema::T_KEYWORD],
                     'thoroughfare'             => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
                     'instructor_ids'           => ['type' => Schema::T_INT],
