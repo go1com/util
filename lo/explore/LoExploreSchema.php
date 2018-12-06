@@ -13,6 +13,7 @@ class LoExploreSchema
 
     const MAPPING = [
         Schema::O_LO         => self::LO_MAPPING,
+        Schema::O_GROUP      => self::GROUP_MAPPING,
         Schema::O_ENROLMENT  => self::ENROLMENT_MAPPING,
         Schema::O_GROUP_ITEM => self::GROUP_ITEM_MAPPING,
         Schema::O_ACCOUNT    => self::ACCOUNT_MAPPING,
@@ -198,6 +199,20 @@ class LoExploreSchema
             'id'       => ['type' => Schema::T_KEYWORD],
             'groups'   => ['type' => Schema::T_INT],
             'metadata' => [
+                'properties' => [
+                    'portal_id'  => ['type' => Schema::T_INT],
+                    'updated_at' => ['type' => Schema::T_INT],
+                ],
+            ],
+        ],
+    ];
+
+    const GROUP_MAPPING = [
+        '_routing'   => ['required' => true],
+        'properties' => [
+            'id'               => ['type' => Schema::T_KEYWORD],
+            'assigned_content' => ['type' => Schema::T_INT],
+            'metadata'         => [
                 'properties' => [
                     'portal_id'  => ['type' => Schema::T_INT],
                     'updated_at' => ['type' => Schema::T_INT],
