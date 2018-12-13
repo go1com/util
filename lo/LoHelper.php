@@ -53,7 +53,7 @@ class LoHelper
 
     public static function loadOrGetFromEmbeddedData(Connection $go1, stdClass $payload, string $loIdProperty = 'lo_id')
     {
-        return $payload->embedded['lo'] ?? self::load($go1, $payload->{$loIdProperty});
+        return $payload->embedded->lo ?? self::load($go1, $payload->{$loIdProperty});
     }
 
     public static function load(Connection $go1, int $id, int $portalId = null, bool $expensiveTree = false)
