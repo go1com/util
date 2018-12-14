@@ -70,7 +70,7 @@ class AwardHelper
 
     public static function loadOrGetFromAwardEnrolmentEmbeddedData(Connection $db, stdClass $awardEnrolment)
     {
-        return $awardEnrolment->embedded['award'] ?? self::load($db, $awardEnrolment->award_id);
+        return $awardEnrolment->embedded->award ?? self::load($db, $awardEnrolment->award_id);
     }
 
     public static function load(Connection $db, int $awardId, array $statuses = [])
