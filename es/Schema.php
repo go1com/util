@@ -454,7 +454,6 @@ class Schema
      * @TODO Make sure the revisions are indexed on content re-indexing.
      */
     const ENROLMENT_MAPPING = [
-        '_parent'           => ['type' => self::O_LO],
         '_routing'          => ['required' => true],
         'properties'        => [
             'id'                  => ['type' => self::T_KEYWORD],
