@@ -2,14 +2,15 @@
 
 namespace go1\util\contract;
 
+use Error as SystemError;
 use go1\util\AccessChecker;
-use go1\util\consume\Error;
-use go1\util\consume\SystemError;
-use go1\util\consume\TestCase;
+use go1\util\Error;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Exception;
 
 class ServiceConsumeController
 {
