@@ -19,6 +19,9 @@ class Schema
     const PORTALS_INDEX     = ES_INDEX . '_portal*';
     const PAYMENT_INDEX     = ES_INDEX . '_payment';
 
+    # GO1-core indices
+    const LEARNING_RECORD_INDEX = ES_INDEX.'_learning_record';
+
     # Indices for explore
     const EXPLORE_INDEX             = ES_INDEX . '_explore';
     const EXPLORE_GROUP_INDEX       = ES_INDEX . '_explore_group';
