@@ -37,10 +37,10 @@ class PortalModelTest extends UtilTestCase
             'created'    => time(),
         ];
 
-        $id = $this->createPortal($this->db, $data);
-        $this->createPortalDomain($this->db, $id, 'domain.go1.com');
-        $portal = PortalHelper::load($this->db, $id);
-        $model = Portal::create($portal, $this->db);
+        $id = $this->createPortal($this->go1, $data);
+        $this->createPortalDomain($this->go1, $id, 'domain.go1.com');
+        $portal = PortalHelper::load($this->go1, $id);
+        $model = Portal::create($portal, $this->go1);
 
         $this->assertEquals($data['title'], $model->title);
         $this->assertEquals($data['status'], $model->status);

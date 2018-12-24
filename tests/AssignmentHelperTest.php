@@ -24,16 +24,16 @@ class AssignmentHelperTest extends UtilTestCase
     {
         parent::setUp();
 
-        $this->fooAssignmentId = $this->createAssignment($this->db, ['data' => json_encode(['foo' => 'bar'])]);
-        $this->barAssignmentId = $this->createAssignment($this->db, ['data' => 'invalid data']);
-        $this->bazAssignmentId = $this->createAssignment($this->db, ['data' => '']);
+        $this->fooAssignmentId = $this->createAssignment($this->go1, ['data' => json_encode(['foo' => 'bar'])]);
+        $this->barAssignmentId = $this->createAssignment($this->go1, ['data' => 'invalid data']);
+        $this->bazAssignmentId = $this->createAssignment($this->go1, ['data' => '']);
     }
 
     public function testLoad()
     {
-        $fooAssignment = AssignmentHelper::load($this->db, $this->fooAssignmentId);
-        $barAssignment = AssignmentHelper::load($this->db, $this->barAssignmentId);
-        $bazAssignment = AssignmentHelper::load($this->db, $this->bazAssignmentId);
+        $fooAssignment = AssignmentHelper::load($this->go1, $this->fooAssignmentId);
+        $barAssignment = AssignmentHelper::load($this->go1, $this->barAssignmentId);
+        $bazAssignment = AssignmentHelper::load($this->go1, $this->bazAssignmentId);
 
         $this->assertTrue(is_object($fooAssignment));
         $this->assertEquals($this->fooAssignmentId, $fooAssignment->id);
@@ -48,22 +48,22 @@ class AssignmentHelperTest extends UtilTestCase
 
     public function testLocateLiAssignment()
     {
-        $fooAssignmentId = $this->createAssignment($this->db, ['data' => json_encode(['foo' => 'bar'])]);
-        $liAssignmentId = $this->createLO($this->db, ['type' => LiTypes::ASSIGNMENT, 'title' => 'Example Assignment Li', 'remote_id' => $fooAssignmentId]);
+        $fooAssignmentId = $this->createAssignment($this->go1, ['data' => json_encode(['foo' => 'bar'])]);
+        $liAssignmentId = $this->createLO($this->go1, ['type' => LiTypes::ASSIGNMENT, 'title' => 'Example Assignment Li', 'remote_id' => $fooAssignmentId]);
 
-        $li = AssignmentHelper::locateLiAssignment($this->db, $fooAssignmentId);
+        $li = AssignmentHelper::locateLiAssignment($this->go1, $fooAssignmentId);
         $this->assertTrue(is_object($li));
         $this->assertEquals($liAssignmentId, $li->id);
     }
 
     public function testGetEnrolment() {
-        $fooAssignmentId = $this->createAssignment($this->db, ['data' => json_encode(['foo' => 'bar'])]);
-        $liAssignmentId = $this->createLO($this->db, ['type' => LiTypes::ASSIGNMENT, 'title' => 'Example Assignment Li', 'remote_id' => $fooAssignmentId]);
-        $moduleId = $this->createModule($this->db);
-        $this->link($this->db, EdgeTypes::HAS_LI, $moduleId, $liAssignmentId);
-        $liEnrolmentId = $this->createEnrolment($this->db, ['lo_id' => $liAssignmentId, 'profile_id' => $profileId = 123, 'parent_lo_id' => $moduleId]);
+        $fooAssignmentId = $this->createAssignment($this->go1, ['data' => json_encode(['foo' => 'bar'])]);
+        $liAssignmentId = $this->createLO($this->go1, ['type' => LiTypes::ASSIGNMENT, 'title' => 'Example Assignment Li', 'remote_id' => $fooAssignmentId]);
+        $moduleId = $this->createModule($this->go1);
+        $this->link($this->go1, EdgeTypes::HAS_LI, $moduleId, $liAssignmentId);
+        $liEnrolmentId = $this->createEnrolment($this->go1, ['lo_id' => $liAssignmentId, 'profile_id' => $profileId = 123, 'parent_lo_id' => $moduleId]);
 
-        $enrolment = AssignmentHelper::getEnrolment($this->db, $profileId, $fooAssignmentId);
+        $enrolment = AssignmentHelper::getEnrolment($this->go1, $profileId, $fooAssignmentId);
         $this->assertTrue(is_object($enrolment));
         $this->assertEquals($liEnrolmentId, $enrolment->id);
         $this->assertEquals($moduleId, $enrolment->parent_lo_id);

@@ -21,7 +21,7 @@ class GroupAssignHelperTest extends UtilTestCase
     public function testMerge()
     {
         GroupAssignHelper::merge(
-            $this->db,
+            $this->go1,
             $this->queue,
             $this->groupId,
             $this->instanceId,
@@ -44,7 +44,7 @@ class GroupAssignHelperTest extends UtilTestCase
         ], (array) $this->queueMessages[Queue::GROUP_ASSIGN_CREATE][0]);
 
         GroupAssignHelper::merge(
-            $this->db,
+            $this->go1,
             $this->queue,
             $this->groupId,
             $this->instanceId,
@@ -72,7 +72,7 @@ class GroupAssignHelperTest extends UtilTestCase
     public function testLoadBy()
     {
         $this->testMerge();
-        $groupAssign = GroupAssignHelper::loadBy($this->db, $this->groupId, $this->instanceId, $this->entityType, $this->entityId);
+        $groupAssign = GroupAssignHelper::loadBy($this->go1, $this->groupId, $this->instanceId, $this->entityType, $this->entityId);
         $this->assertArraySubset([
             'id'          => 1,
             'group_id'    => $this->groupId,
@@ -89,7 +89,7 @@ class GroupAssignHelperTest extends UtilTestCase
     public function testArchive()
     {
         $this->testMerge();
-        GroupAssignHelper::archive($this->db, $this->queue, $this->groupId, $this->instanceId, $this->userId, $this->entityType, $this->entityId);
+        GroupAssignHelper::archive($this->go1, $this->queue, $this->groupId, $this->instanceId, $this->userId, $this->entityType, $this->entityId);
 
         $this->assertCount(1, $this->queueMessages[Queue::GROUP_ASSIGN_DELETE]);
         $this->assertArraySubset([

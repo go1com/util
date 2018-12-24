@@ -7,6 +7,7 @@ class Currency
     const DEFAULT   = 'AUD';
     const AVAILABLE = [
         'AUD' => 'Australian Dollar',
+        'BRL' => 'Brazilian Real',
         'CAD' => 'Canadian Dollar',
         'EUR' => 'Euro',
         'GBP' => 'British Pound',

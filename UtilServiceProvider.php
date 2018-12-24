@@ -48,11 +48,11 @@ class UtilServiceProvider implements ServiceProviderInterface
             return new QueueClient($c['client'], $c['queue_url']);
         };
 
-        $c['go1.client.es'] = function (Container $c) {
+        $c['go1.client.es.builder'] = function (Container $c) {
             $builder = EsClientBuilder::create();
 
             if ($o = $c['esOptions']) {
-                if ($o['credential']) {
+                if (!empty($o['credential'])) {
                     $provider = CredentialProvider::fromCredentials(new Credentials($o['key'], $o['secret']));
                     $builder->setHandler(new ElasticsearchPhpHandler($o['region'], $provider));
                 }
@@ -66,6 +66,13 @@ class UtilServiceProvider implements ServiceProviderInterface
             if (isset($c['go1.client.es.serializer'])) {
                 $builder->setSerializer($c['go1.client.es.serializer']);
             }
+
+            return $builder;
+        };
+
+        $c['go1.client.es'] = function (Container $c) {
+            /** @var ClientBuilder $builder */
+            $builder = $c['go1.client.es.builder'];
 
             return $builder->build();
         };
@@ -174,7 +181,7 @@ class UtilServiceProvider implements ServiceProviderInterface
         // Avoid legacy code to be broken.
         // @TODO: Remove this legacy supporting code
         $hack = -1 == version_compare(Service::VERSION, 'v18.8.5.0');
-        $hack = $hack  || getenv('MONOLITH');
+        $hack = $hack || getenv('MONOLITH');
         if ($hack) {
             $c
                 ->register(new UtilCoreServiceProvider)

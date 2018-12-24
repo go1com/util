@@ -12,9 +12,9 @@ class QuestionHelperTest extends UtilTestCase
 
     public function testLoad()
     {
-        $id = $this->createQuestion($this->db);
+        $id = $this->createQuestion($this->go1);
 
-        $this->assertTrue(is_object(QuestionHelper::load($this->db, $id)));
-        $this->assertFalse(QuestionHelper::load($this->db, 123));
+        $this->assertTrue(is_object(QuestionHelper::load($this->go1, $id)));
+        $this->assertFalse(QuestionHelper::load($this->go1, 123));
     }
 }

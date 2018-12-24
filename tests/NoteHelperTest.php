@@ -21,14 +21,14 @@ class NoteHelperTest extends UtilTestCase
     {
         parent::setUp();
 
-        $instanceId = $this->createPortal($this->db, []);
-        $loId = $this->createLO($this->db, ['instance_id' => $instanceId]);
-        $groupId = $this->createGroup($this->db, ['instance_id' => $instanceId]);
+        $instanceId = $this->createPortal($this->go1, []);
+        $loId = $this->createLO($this->go1, ['instance_id' => $instanceId]);
+        $groupId = $this->createGroup($this->go1, ['instance_id' => $instanceId]);
 
         return [
-            [$this->db, $instanceId, 'portal', $instanceId],
-            [$this->db, $instanceId, 'lo', $loId],
-            [$this->db, $instanceId, 'group', $groupId],
+            [$this->go1, $instanceId, 'portal', $instanceId],
+            [$this->go1, $instanceId, 'lo', $loId],
+            [$this->go1, $instanceId, 'group', $groupId],
         ];
     }
 
@@ -46,14 +46,14 @@ class NoteHelperTest extends UtilTestCase
 
     public function testLoadNoteComment()
     {
-        $userId = $this->createUser($this->db, ['data' => ['avatar' => ['uri' => 'https://avatar.com/a.jpg']]]);
-        $id = $this->createNoteComment($this->db, [
+        $userId = $this->createUser($this->go1, ['data' => ['avatar' => ['uri' => 'https://avatar.com/a.jpg']]]);
+        $id = $this->createNoteComment($this->go1, [
             'note_id' => 1000,
             'user_id' => $userId,
             'description' => 'note comment description'
         ]);
 
-        $comment = NoteHelper::loadComment($this->db, $id, $this->db);
+        $comment = NoteHelper::loadComment($this->go1, $id, $this->go1);
         $this->assertEquals(1000, $comment->note_id);
         $this->assertEquals('note comment description', $comment->description);
         $this->assertEquals($userId, $comment->user->id);

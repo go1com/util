@@ -25,12 +25,12 @@ class PolicyEventEmbedderTest extends UtilTestCase
 
     public function test()
     {
-        $embedder = new PolicyEventEmbedder($this->db, $this->db);
-        $portalId = $this->createPortal($this->db, ['title' => 'ngoc.mygo1.com']);
-        $courseId = $this->createCourse($this->db, ['instance_id' => $portalId]);
-        $accountId = $this->createUser($this->db, ['instance' => 'ngoc.mygo1.com']);
+        $embedder = new PolicyEventEmbedder($this->go1, $this->go1);
+        $portalId = $this->createPortal($this->go1, ['title' => 'ngoc.mygo1.com']);
+        $courseId = $this->createCourse($this->go1, ['instance_id' => $portalId]);
+        $accountId = $this->createUser($this->go1, ['instance' => 'ngoc.mygo1.com']);
         $id = $this->createItem(
-            $this->db,
+            $this->go1,
             [
                 'type'             => Realm::ACCESS,
                 'portal_id'        => $portalId,
@@ -40,7 +40,7 @@ class PolicyEventEmbedderTest extends UtilTestCase
                 'entity_id'        => $accountId,
             ]
         );
-        $policyItem = $this->db
+        $policyItem = $this->go1
             ->executeQuery('SELECT * FROM policy_policy_item WHERE id = ?', [$id], [DB::STRING])
             ->fetch(DB::OBJ);
 

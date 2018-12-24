@@ -54,13 +54,13 @@ trait OneMockTrait
     public $rootJwt;
 
     // The portal
-    public $instanceName          = 'qa.mygo1.com';
-    public $instanceVersion       = PortalHelper::STABLE_VERSION;
-    public $instanceId;
-    public $instancePublicKey;
-    public $instancePrivateKey;
-    public $instanceConfiguration = [];
-    public $instanceFeatures      = [
+    public $portalName          = 'qa.mygo1.com';
+    public $portalVersion       = PortalHelper::STABLE_VERSION;
+    public $portalId;
+    public $portalPublicKey;
+    public $portalPrivateKey;
+    public $portalConfiguration = [];
+    public $portalFeatures      = [
         'marketplace' => true,
         'user_invite' => true,
         'auth0'       => false,
@@ -138,21 +138,21 @@ trait OneMockTrait
 
     public function installPortal(Connection $db)
     {
-        if ($db->fetchColumn('SELECT 1 FROM gc_instance WHERE title = ?', [$this->instanceName])) {
+        if ($db->fetchColumn('SELECT 1 FROM gc_instance WHERE title = ?', [$this->portalName])) {
             return null;
         }
 
-        $this->instanceId = $this->createPortal($db, [
-            'title'   => $this->instanceName,
-            'version' => $this->instanceVersion,
+        $this->portalId = $this->createPortal($db, [
+            'title'   => $this->portalName,
+            'version' => $this->portalVersion,
             'data'    => [
-                'features'      => $this->instanceFeatures,
-                'configuration' => $this->instanceConfiguration,
+                'features'      => $this->portalFeatures,
+                'configuration' => $this->portalConfiguration,
             ],
         ]);
 
-        $this->instancePublicKey = $this->createPortalPublicKey($db, ['instance' => $this->instanceName]);
-        $this->instancePrivateKey = $this->createPortalPrivateKey($db, ['instance' => $this->instanceName]);
+        $this->portalPublicKey = $this->createPortalPublicKey($db, ['instance' => $this->portalName]);
+        $this->portalPrivateKey = $this->createPortalPrivateKey($db, ['instance' => $this->portalName]);
 
         $this->installPortalUsers($db);
         $this->installCourses($db);
@@ -167,14 +167,14 @@ trait OneMockTrait
             $db,
             EdgeTypes::HAS_ACCOUNT,
             $this->adminId = $this->createUser($db, ['instance' => $this->accountsName, 'mail' => $this->adminMail, 'uuid' => $this->adminUuid, 'profile_id' => $this->adminProfileId]),
-            $this->adminSubId = $this->createUser($db, ['instance' => $this->instanceName, 'mail' => $this->adminMail, 'uuid' => $this->adminSubUuid])
+            $this->adminSubId = $this->createUser($db, ['instance' => $this->portalName, 'mail' => $this->adminMail, 'uuid' => $this->adminSubUuid])
         );
         $this->link($db, EdgeTypes::HAS_ROLE, $this->adminSubId, $this->roleAdminId);
         $this->link($db, EdgeTypes::HAS_ROLE, $this->adminSubId, $this->roleAuthenticatedId);
         $this->adminJwt = JWT::encode(
             $this->getPayload([
                 'id'            => $this->adminId,
-                'instance_name' => $this->instanceName,
+                'instance_name' => $this->portalName,
                 'profile_id'    => $this->adminProfileId,
                 'mail'          => $this->adminMail,
                 'roles'         => [Roles::ADMIN, Roles::AUTHENTICATED],
@@ -186,15 +186,15 @@ trait OneMockTrait
         $this->link(
             $db,
             EdgeTypes::HAS_ACCOUNT,
-            $this->studentId = $this->createUser($db, ['instance' => $this->accountsName, 'mail' => $this->studentMail, 'uuid' => $this->studentUuid, 'profile_id' => $this->studentProfileId]),
-            $this->studentSubId = $this->createUser($db, ['instance' => $this->instanceName, 'mail' => $this->studentMail, 'uuid' => $this->studentSubUuid])
+            $this->studentUserId = $this->createUser($db, ['instance' => $this->accountsName, 'mail' => $this->studentMail, 'uuid' => $this->studentUuid, 'profile_id' => $this->studentProfileId]),
+            $this->studentSubId = $this->createUser($db, ['instance' => $this->portalName, 'mail' => $this->studentMail, 'uuid' => $this->studentSubUuid])
         );
         $this->link($db, EdgeTypes::HAS_ROLE, $this->studentSubId, $this->roleStudentId);
         $this->link($db, EdgeTypes::HAS_ROLE, $this->studentSubId, $this->roleAuthenticatedId);
         $this->studentJwt = JWT::encode(
             $this->getPayload([
-                'id'            => $this->studentId,
-                'instance_name' => $this->instanceName,
+                'id'            => $this->studentUserId,
+                'instance_name' => $this->portalName,
                 'profile_id'    => $this->studentProfileId,
                 'mail'          => $this->studentMail,
                 'roles'         => [Roles::STUDENT, Roles::AUTHENTICATED],
@@ -205,11 +205,11 @@ trait OneMockTrait
 
     public function installPortalRoles(Connection $db)
     {
-        $this->roleAdminId = $this->createRole($db, ['instance' => $this->instanceName, 'name' => Roles::ADMIN]);
-        $this->roleAuthenticatedId = $this->createRole($db, ['instance' => $this->instanceName, 'name' => Roles::AUTHENTICATED]);
-        $this->roleTutorId = $this->createRole($db, ['instance' => $this->instanceName, 'name' => Roles::TUTOR]);
-        $this->roleStudentId = $this->createRole($db, ['instance' => $this->instanceName, 'name' => Roles::STUDENT]);
-        $this->roleManagerId = $this->createRole($db, ['instance' => $this->instanceName, 'name' => Roles::MANAGER]);
+        $this->roleAdminId = $this->createRole($db, ['instance' => $this->portalName, 'name' => Roles::ADMIN]);
+        $this->roleAuthenticatedId = $this->createRole($db, ['instance' => $this->portalName, 'name' => Roles::AUTHENTICATED]);
+        $this->roleTutorId = $this->createRole($db, ['instance' => $this->portalName, 'name' => Roles::TUTOR]);
+        $this->roleStudentId = $this->createRole($db, ['instance' => $this->portalName, 'name' => Roles::STUDENT]);
+        $this->roleManagerId = $this->createRole($db, ['instance' => $this->portalName, 'name' => Roles::MANAGER]);
     }
 
     public function installCourses(Connection $db)
@@ -218,7 +218,7 @@ trait OneMockTrait
             $node['id'] = $this->createLO($db, [
                 'type'        => $node['type'],
                 'title'       => $node['title'],
-                'instance_id' => $this->instanceId,
+                'instance_id' => $this->portalId,
             ]);
 
             if ($parentType && $parentId) {
