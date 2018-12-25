@@ -37,6 +37,7 @@ trait EsAttendanceMockTrait
                 'coordinate'              => $event['coordinate'] ?? '',
                 'location_name'           => $event['location_name'] ?? '',
                 'module_title'            => $event['module_title'] ?? '',
+                'instructor_ids'          => $event['instructor_ids'] ?? [],
                 'instructors'             => $event['instructors'] ?? [],
                 'metadata'                => [
                     'instance_id' => $event['instance_id'] ?? 0,
