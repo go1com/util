@@ -71,7 +71,15 @@ class ConsumeController
         }
 
         if ($errors) {
-            $this->logger->error(sprintf('Failed to consume [%s] with %s %s: %s', $routingKey, json_encode($body), json_encode($context), json_encode($errors)));
+            $this->logger->error(
+                sprintf(
+                    'Failed to consume [%s] %s : with %s %s',
+                    $routingKey,
+                    json_encode($errors),
+                    json_encode($body),
+                    json_encode($context)
+                )
+            );
 
             return new JsonResponse(null, 500);
         }
