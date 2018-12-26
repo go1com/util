@@ -61,6 +61,9 @@ trait EsAttendanceMockTrait
             'pass'         => $options['pass'] ?? 0,
             'timestamp'    => $options['timestamp'] ?? 1,
             'event'        => $event,
+            'metadata'     => [
+                'instance_id' => intval($options['routing'] ?? $options['instance_id'] ?? 0),
+            ],
         ];
 
         return $client->create([
