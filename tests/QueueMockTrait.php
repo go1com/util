@@ -13,7 +13,7 @@ trait QueueMockTrait
     protected function mockMqClient(Container $c, callable $callback = null)
     {
         $c->extend('go1.client.mq', function () use ($callback) {
-            $mqClient = $this
+            $queue = $this
                 ->getMockBuilder(MqClient::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['publish', 'queue', 'publishEvent'])
@@ -28,12 +28,12 @@ trait QueueMockTrait
                 $this->queueMessages[$routingKey][] = $body;
             };
 
-            $mqClient
+            $queue
                 ->expects($this->any())
                 ->method('publish')
                 ->willReturnCallback($response);
 
-            $mqClient
+            $queue
                 ->expects($this->any())
                 ->method('queue')
                 ->willReturnCallback($response);
@@ -46,12 +46,12 @@ trait QueueMockTrait
                 $this->queueMessages[$event->getSubject()][] = $body;
             };
 
-            $mqClient
+            $queue
                 ->expects($this->any())
                 ->method('publishEvent')
                 ->willReturnCallback($responseEvent);
 
-            return $mqClient;
+            return $queue;
         });
     }
 }

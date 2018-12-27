@@ -23,6 +23,7 @@ class DB
         if (function_exists('__db_connection_options')) {
             return __db_connection_options($name);
         }
+
         $prefix = strtoupper("{$name}_DB");
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
         $slave = self::getEnvByPriority(["{$prefix}_HOST", 'RDS_DB_HOST', 'DEV_DB_HOST']);
