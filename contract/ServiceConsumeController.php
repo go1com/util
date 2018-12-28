@@ -72,8 +72,8 @@ class ServiceConsumeController
         }
 
         if (!empty($errors)) {
-            $err = 'failed to consume [%s] with %s %s: %s';
-            $err = sprintf($err, $routingKey, json_encode($body), json_encode($context), json_encode($errors));
+            $err = 'failed to consume [%s] [%s] %s %s';
+            $err = sprintf($err, $routingKey, json_encode($errors), json_encode($body), json_encode($context));
             $this->logger->error($err);
 
             return new JsonResponse(null, 500);
