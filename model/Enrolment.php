@@ -76,6 +76,7 @@ class Enrolment implements JsonSerializable
             'pass'                => $this->pass,
             'timestamp'           => $this->timestamp,
             'changed'             => $this->changed,
+            'data'                => $this->data,
         ];
 
         if ($this->original) {
