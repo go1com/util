@@ -4,6 +4,7 @@ namespace go1\util\contract;
 
 use Error as SystemError;
 use go1\util\AccessChecker;
+use go1\util\consume\exception\NotifyException;
 use go1\util\Error;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -59,6 +60,8 @@ class ServiceConsumeController
                 try {
                     $consumer->consume($routingKey, $body, $context);
                     $headers['X-CONSUMERS'][] = get_class($consumer);
+                } catch (NotifyException $e) {
+                    $this->logger->log($e->getNotifyExceptionType(), sprintf('Failed to consume [%s] with %s %s: %s', $routingKey, json_encode($body), json_encode($context), json_encode($e->getNotifyExceptionMessage())));
                 } catch (Exception $e) {
                     $errors[] = $e->getMessage();
 
