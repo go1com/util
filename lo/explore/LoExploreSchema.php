@@ -212,7 +212,7 @@ class LoExploreSchema
         '_routing'   => ['required' => true],
         'properties' => [
             'id'               => ['type' => Schema::T_KEYWORD],
-            'assigned_content' => ['type' => Schema::T_INT],
+            'assigned_content' => ['type' => Schema::T_KEYWORD],
             'metadata'         => [
                 'properties' => [
                     'portal_id'  => ['type' => Schema::T_INT],
