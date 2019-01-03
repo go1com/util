@@ -242,11 +242,11 @@ class AwardHelper
         return $db->fetchColumn('SELECT id FROM award_award WHERE revision_id = ?', [$awardRevisionId]);
     }
 
-    public static function assessorIds(Connection $db, int $loId): array
+    public static function assessorIds(Connection $go1, int $loId): array
     {
         return EdgeHelper
             ::select('target_id')
-            ->get($db, [$loId], [], [EdgeTypes::AWARD_ASSESSOR], PDO::FETCH_COLUMN);
+            ->get($go1, [$loId], [], [EdgeTypes::AWARD_ASSESSOR], PDO::FETCH_COLUMN);
     }
 
     public static function awardParentIds(Connection $db, array $awardIds)

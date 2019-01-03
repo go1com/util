@@ -266,7 +266,7 @@ class AccessChecker
     }
 
     public function isAwardAssessor(
-        Connection $go1Db,
+        Connection $go1,
         Connection $awardDb,
         int $awardId,
         int $assessorId,
@@ -280,13 +280,13 @@ class AccessChecker
 
         $award = AwardHelper::load($awardDb, $awardId);
         if ($req && $award) {
-            $instance = PortalHelper::load($go1Db, $award->instance_id);
+            $instance = PortalHelper::load($go1, $award->instance_id);
             if ($instance && $this->isPortalAdmin($req, $instance->title)) {
                 return true;
             }
         }
 
-        if (EdgeHelper::hasLink($go1Db, EdgeTypes::AWARD_ASSESSOR, $awardId, $assessorId)) {
+        if (EdgeHelper::hasLink($go1, EdgeTypes::AWARD_ASSESSOR, $awardId, $assessorId)) {
             return true;
         }
 
@@ -294,7 +294,7 @@ class AccessChecker
             $currentChildAwardIds = [$awardId];
             while ($awardParentIds = AwardHelper::awardParentIds($awardDb, $currentChildAwardIds)) {
                 foreach ($awardParentIds as $awardParentId) {
-                    if (EdgeHelper::hasLink($go1Db, EdgeTypes::AWARD_ASSESSOR, $awardParentId, $assessorId)) {
+                    if (EdgeHelper::hasLink($go1, EdgeTypes::AWARD_ASSESSOR, $awardParentId, $assessorId)) {
                         return true;
                     }
                 }
