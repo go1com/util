@@ -3,7 +3,6 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
-use go1\event\domain\entity\AttendanceStatus;
 use go1\util\DateTime;
 
 trait AttendanceMockTrait
@@ -16,7 +15,7 @@ trait AttendanceMockTrait
 
         $db->insert('event_enrolment', [
             'id'             => $options['id'] ?? null,
-            'status'         => $options['status'] ?? AttendanceStatus::ATTENDING,
+            'status'         => $options['status'] ?? 'attending',
             'user_id'        => $options['user_id'] ?? 1,
             'lo_id'          => $options['lo_id'] ?? 1,
             'event_id'       => $options['event_id'] ?? 1,
