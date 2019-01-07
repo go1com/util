@@ -270,6 +270,7 @@ class Queue
     const DO_MYTEAM                            = 'process.my-team'; # { action: STRING, body: OBJECT }
     const DO_ASSESSOR                          = 'do.assessor'; # { task: string, body: OBJECT }
     const DO_PAGEUP_UPLOAD_COURSE              = 'do.pageup.upload-couse'; # { $portal_id, $course_id }
+    const REINDEX_PREFIX                       = 'go1-reindex.';
 
     public static function postEvent(string $event): string
     {
