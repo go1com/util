@@ -13,7 +13,9 @@ trait EsEventMockTrait
         static $autoId;
 
         $event = [
+            'id'                      => $options['id'] ?? ++ $autoId,
             'lo_id'                   => $options['lo_id'] ?? ++$autoId,
+            'title'                   => $options['title'] ?? '',
             'start'                   => $options['start'] ?? DateTime::formatDate(time()),
             'end'                     => $options['end'] ?? DateTime::formatDate(time()),
             'timezone'                => $options['timezone'] ?? 'UTC',
