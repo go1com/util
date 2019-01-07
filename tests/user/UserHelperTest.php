@@ -127,4 +127,26 @@ class UserHelperTest extends UtilCoreTestCase
     {
         $this->assertEquals($valid, UserHelper::isStaff($roles));
     }
+
+    public function dataUserEmbedded()
+    {
+        return [
+            [['embedded' => ['portal' => ['status' => 0]]], false],
+            [['embedded' => ['portal' => ['status' => 1]]], true],
+            [['embedded' => ['portal' => [
+                0 => ['status' => 1]
+            ]]], true],
+            [['embedded' => ['portal' => [
+                ['status' => 0],
+                ['status' => 1],
+            ]]], false],
+        ];
+    }
+
+    /** @dataProvider dataUserEmbedded */
+    public function testIsEmbeddedPortalActive(array $user, bool $valid = true)
+    {
+        $user = json_decode(json_encode($user));
+        $this->assertEquals($valid, UserHelper::isEmbeddedPortalActive($user));
+    }
 }
