@@ -48,5 +48,22 @@ class CollectionSchema
             $item->addIndex(['lo_id']);
             $item->addIndex(['timestamp']);
         }
+
+        if (!$schema->hasTable('collection_group_selection')) {
+            $item = $schema->createTable('collection_group_selection');
+
+            $item->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $item->addColumn('group_id', 'integer');
+            $item->addColumn('collection_id', 'integer');
+            $item->addColumn('custom', 'integer', ['default' => 0]);
+            $item->addColumn('timestamp', 'integer');
+
+            $item->setPrimaryKey(['id']);
+            $item->addUniqueIndex(['collection_id', 'group_id']);
+            $item->addIndex(['group_id']);
+            $item->addIndex(['collection_id']);
+            $item->addIndex(['custom']);
+            $item->addIndex(['timestamp']);
+        }
     }
 }
