@@ -8,6 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use go1\clients\MqClient;
 use go1\util\DB;
 use go1\util\schema\AwardSchema;
+use go1\util\schema\CollectionSchema;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\UtilCoreServiceProvider;
@@ -31,6 +32,7 @@ class UtilCoreTestCase extends TestCase
 
     protected $schemaClasses = [
         AwardSchema::class,
+        CollectionSchema::class
     ];
 
     public function setUp()
