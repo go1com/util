@@ -7,7 +7,6 @@ use go1\clients\tests\UtilCoreClientsTestCase;
 use go1\util\plan\PlanRepository;
 use go1\util\schema\AssignmentSchema;
 use go1\util\schema\AwardSchema;
-use go1\util\schema\CollectionSchema;
 use go1\util\schema\CreditSchema;
 use go1\util\schema\EckSchema;
 use go1\util\schema\PolicySchema;
@@ -26,7 +25,6 @@ abstract class UtilTestCase extends UtilCoreClientsTestCase
         EckSchema::class,
         PlanRepository::class,
         QuizSchema::class,
-        CollectionSchema::class,
         PolicySchema::class,
     ];
 
