@@ -14,7 +14,7 @@ class CollectionGroupSelectionItem implements JsonSerializable
     public $custom;
     public $timestamp;
 
-    public static function create(stdClass $input): CollectionGroup
+    public static function create(stdClass $input): CollectionGroupSelectionItem
     {
         Text::purify(null, $input);
         $group = new CollectionGroupSelectionItem();
