@@ -185,6 +185,9 @@ class Queue
     const GROUP_COLLECTION_ITEM_CREATE  = 'group_collection_item.create';
     const GROUP_COLLECTION_ITEM_UPDATE  = 'group_collection_item.update';
     const GROUP_COLLECTION_ITEM_DELETE  = 'group_collection_item.delete';
+    const COLLECTION_GROUP_SELECTION_CREATE  = 'collection_group_selection.create';
+    const COLLECTION_GROUP_SELECTION_UPDATE  = 'collection_group_selection.update';
+    const COLLECTION_GROUP_SELECTION_DELETE  = 'collection_group_selection.delete';
     const POLICY_ITEM_CREATE            = 'policy.item.create';
     const POLICY_ITEM_UPDATE            = 'policy.item.update';
     const POLICY_ITEM_DELETE            = 'policy.item.delete';
