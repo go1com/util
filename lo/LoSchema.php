@@ -64,8 +64,7 @@ class LoSchema
             $price->addColumn('recurring', Type::BLOB, ['notnull' => false]);
             $price->setPrimaryKey(['id']);
             $price->addIndex(['price']);
-        }
-        else {
+        } else {
             $price = $schema->getTable('gc_lo_pricing');
             if (!$price->hasColumn('recurring')) {
                 $price->addColumn('recurring', Type::BLOB, ['notnull' => false]);
@@ -220,6 +219,20 @@ class LoSchema
             $table->setPrimaryKey(['id']);
             $table->addIndex(['lo_id']);
             $table->addIndex(['key']);
+        }
+
+        if (!$schema->hasTable('lo_stream')) {
+            $stream = $schema->createTable('lo_stream');
+            $stream->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $stream->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('created', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('lo_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('action', Type::STRING);
+            $stream->addColumn('payload', Type::BLOB);
+            $stream->setPrimaryKey(['id']);
+            $stream->addIndex(['lo_id']);
+            $stream->addIndex(['portal_id']);
+            $stream->addIndex(['created']);
         }
     }
 }
