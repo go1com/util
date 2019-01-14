@@ -86,6 +86,20 @@ class EnrolmentSchema
             $map->addIndex(['payment_method']);
         }
 
+        if (!$schema->hasTable('enrolment_stream')) {
+            $stream = $schema->createTable('enrolment_stream');
+            $stream->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $stream->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('created', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('enrolment_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('action', Type::STRING);
+            $stream->addColumn('payload', Type::BLOB);
+            $stream->setPrimaryKey(['id']);
+            $stream->addIndex(['enrolment_id']);
+            $stream->addIndex(['portal_id']);
+            $stream->addIndex(['created']);
+        }
+
         static::update01($schema);
     }
 
@@ -111,20 +125,6 @@ class EnrolmentSchema
             $manual->addIndex(['verified']);
             $manual->addIndex(['created']);
             $manual->addIndex(['updated']);
-        }
-
-        if (!$schema->hasTable('enrolment_stream')) {
-            $stream = $schema->createTable('enrolment_stream');
-            $stream->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
-            $stream->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
-            $stream->addColumn('created', Type::INTEGER, ['unsigned' => true]);
-            $stream->addColumn('enrolment_id', Type::INTEGER, ['unsigned' => true]);
-            $stream->addColumn('action', Type::STRING);
-            $stream->addColumn('payload', Type::BLOB);
-            $stream->setPrimaryKey(['id']);
-            $stream->addIndex(['enrolment_id']);
-            $stream->addIndex(['portal_id']);
-            $stream->addIndex(['created']);
         }
     }
 

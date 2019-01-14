@@ -21,7 +21,7 @@ trait EnrolmentMockTrait
             'lo_id'             => isset($options['lo_id']) ? $options['lo_id'] : 0,
             'instance_id'       => isset($options['instance_id']) ? $options['instance_id'] : 0,
             'taken_instance_id' => isset($options['taken_instance_id']) ? $options['taken_instance_id'] : 0,
-            'start_date'        => isset($options['start_date']) ? $options['start_date'] : (new DateTime)->format('Y-m-d h:i:s'),
+            'start_date'        => isset($options['start_date']) ? $options['start_date'] : (new DateTime)->format(DATE_ISO8601),
             'end_date'          => isset($options['end_date']) ? $options['end_date'] : null,
             'status'            => isset($options['status']) ? $options['status'] : EnrolmentStatuses::IN_PROGRESS,
             'result'            => isset($options['result']) ? $options['result'] : 0,
