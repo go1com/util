@@ -5,6 +5,7 @@ namespace go1\util\schema;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\View;
+use Doctrine\DBAL\Types\Type;
 use go1\flood\Flood;
 
 class UserSchema
@@ -76,6 +77,32 @@ class UserSchema
             if (class_exists(Flood::class)) {
                 Flood::migrate($schema, 'gc_flood');
             }
+        }
+
+        if (!$schema->hasTable('user_stream')) {
+            $stream = $schema->createTable('user_stream');
+            $stream->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $stream->addColumn('created', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('action', Type::STRING);
+            $stream->addColumn('payload', Type::BLOB);
+            $stream->setPrimaryKey(['id']);
+            $stream->addIndex(['user_id']);
+            $stream->addIndex(['created']);
+        }
+
+        if (!$schema->hasTable('account_stream')) {
+            $stream = $schema->createTable('account_stream');
+            $stream->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $stream->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('created', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('account_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('action', Type::STRING);
+            $stream->addColumn('payload', Type::BLOB);
+            $stream->setPrimaryKey(['id']);
+            $stream->addIndex(['portal_id']);
+            $stream->addIndex(['account_id']);
+            $stream->addIndex(['created']);
         }
     }
 
