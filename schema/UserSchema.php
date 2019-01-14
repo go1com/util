@@ -92,7 +92,7 @@ class UserSchema
         }
 
         if (!$schema->hasTable('account_stream')) {
-            $stream = $schema->createTable('enrolment_stream');
+            $stream = $schema->createTable('account_stream');
             $stream->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
             $stream->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
             $stream->addColumn('created', Type::INTEGER, ['unsigned' => true]);
