@@ -2,7 +2,7 @@
 
 namespace go1\util;
 
-use go1\util\consume\ServiceConsumeController;
+use go1\util\contract\ServiceConsumeController;
 use go1\util\lo\LoChecker;
 use go1\util\portal\PortalChecker;
 use Pimple\Container;
