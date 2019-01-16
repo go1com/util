@@ -23,9 +23,13 @@ class AccessChecker
     const ACCESS_ROOT          = 300;
     const ACCESS_OWNER         = 400;
 
-    public function isContentAdministrator(Request $req, $instance)
+    public function isContentAdministrator(Request $req, $instance, bool $inheritance = true)
     {
-        return !$this->isPortalAdmin($req, $instance) ? $this->isPortalAdmin($req, $instance, Roles::ADMIN_CONTENT) : true;
+        if ($inheritance && $this->isPortalAdmin($req, $instance, $inheritance)) {
+            return true;
+        }
+
+        return $this->isPortalAdmin($req, $instance, Roles::ADMIN_CONTENT, $inheritance);
     }
 
     /**
@@ -33,13 +37,13 @@ class AccessChecker
      * @param string  $instance
      * @return null|bool|stdClass
      */
-    public function isPortalAdmin(Request $req, $instance, $role = Roles::ADMIN)
+    public function isPortalAdmin(Request $req, $instance, $role = Roles::ADMIN, bool $inheritance = true)
     {
         if (!$user = $this->validUser($req)) {
             return null;
         }
 
-        if ($this->isAccountsAdmin($req)) {
+        if ($inheritance && $this->isAccountsAdmin($req)) {
             return 1;
         }
 

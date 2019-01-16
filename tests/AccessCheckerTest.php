@@ -2,10 +2,12 @@
 
 namespace go1\util\tests;
 
+use Firebase\JWT\JWT;
 use go1\util\AccessChecker;
 use go1\util\edge\EdgeTypes;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Text;
+use go1\util\user\Roles;
 use Symfony\Component\HttpFoundation\Request;
 
 class AccessCheckerTest extends UtilCoreTestCase
@@ -61,5 +63,48 @@ class AccessCheckerTest extends UtilCoreTestCase
         $req = new Request;
         $req->attributes->set('jwt.payload', $this->getPayload(['id' => $manager2Id, 'mail' => $manager2Mail]));
         $this->assertFalse((new AccessChecker)->isStudentManager($this->go1, $req, $studentMail, $portalName, EdgeTypes::HAS_MANAGER));
+    }
+
+    public function testPortalAdminWithInheritance()
+    {
+        $userId = $this->createUser($this->go1, ['mail' => $mail = 'duy.nguyen@go1.com', 'instance' => $accountsName = 'accounts.gocatalyze.com', 'data' => ['roles' => [Roles::ROOT]]]);
+        $accountId = $this->createUser($this->go1, ['mail' => $mail, 'instance' => $portalName = 'admin.go1.co', 'data' => ['roles' => [Roles::ADMIN]]]);
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $userId, $accountId);
+        $this->link($this->go1, EdgeTypes::HAS_ROLE, $userId, $this->createAccountsAdminRole($this->go1, ['instance' => $accountsName]));
+        $this->link($this->go1, EdgeTypes::HAS_ROLE, $accountId, $this->createPortalAdminRole($this->go1, ['instance' => $portalName]));
+
+        $req = new Request;
+        $accessChecker = new AccessChecker;
+        $req->attributes->set('jwt.payload', JWT::decode($this->jwtForUser($this->go1, $userId, $portalName), 'INTERNAL', ['HS256']));
+        $this->assertTrue((bool)$accessChecker->isPortalAdmin($req, $portalName));
+        $this->assertTrue((bool)$accessChecker->isPortalAdmin($req, $portalName), false);
+        $this->assertTrue((bool)$accessChecker->isContentAdministrator($req, $portalName));
+        $this->assertFalse((bool)$accessChecker->isContentAdministrator($req, $portalName, false));
+    }
+
+    public function testPortalContentAdminWithInheritance()
+    {
+        $userId = $this->createUser($this->go1, [
+            'mail'     => $mail = 'duy.nguyen@go1.com',
+            'instance' => $accountsName = 'accounts.gocatalyze.com',
+            'data'     => ['roles' => [Roles::ROOT]],
+        ]);
+        $accountId = $this->createUser($this->go1, [
+            'mail'     => $mail,
+            'instance' => $portalName = 'content-admin.go1.co',
+            'data'     => ['roles' => [Roles::ADMIN_CONTENT]],
+        ]);
+
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $userId, $accountId);
+        $this->link($this->go1, EdgeTypes::HAS_ROLE, $userId, $this->createAccountsAdminRole($this->go1, ['instance' => $accountsName]));
+        $this->link($this->go1, EdgeTypes::HAS_ROLE, $portalName, $this->createPortalContentAdminRole($this->go1, ['instance' => $portalName]));
+
+        $req = new Request;
+        $accessChecker = new AccessChecker;
+        $req->attributes->set('jwt.payload', JWT::decode($this->jwtForUser($this->go1, $userId, $portalName), 'INTERNAL', ['HS256']));
+        $this->assertTrue((bool)$accessChecker->isPortalAdmin($req, $portalName));
+        $this->assertFalse((bool)$accessChecker->isPortalAdmin($req, $portalName, Roles::ADMIN, false));
+        $this->assertTrue((bool)$accessChecker->isContentAdministrator($req, $portalName));
+        $this->assertTrue((bool)$accessChecker->isContentAdministrator($req, $portalName, Roles::ADMIN, false));
     }
 }
