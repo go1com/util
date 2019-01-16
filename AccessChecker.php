@@ -25,7 +25,7 @@ class AccessChecker
 
     public function isContentAdministrator(Request $req, $instance, bool $inheritance = true)
     {
-        if ($inheritance && $this->isPortalAdmin($req, $instance, $inheritance)) {
+        if ($inheritance && $this->isPortalAdmin($req, $instance, Roles::ADMIN, $inheritance)) {
             return true;
         }
 
