@@ -197,9 +197,11 @@ class LoExploreSchema
     const PORTAL_MAPPING = [
         '_routing'   => ['required' => true],
         'properties' => [
-            'id'       => ['type' => Schema::T_KEYWORD],
-            'groups'   => ['type' => Schema::T_INT],
-            'metadata' => [
+            'id'                 => ['type' => Schema::T_KEYWORD],
+            'groups'             => ['type' => Schema::T_INT],
+            'groups_v1'          => ['type' => Schema::T_INT], # List of group(version 1) that shared to portal via group policy.
+            'selected_groups_v1' => ['type' => Schema::T_INT], # List of group(version 1) that selected via portal content selection.
+            'metadata'           => [
                 'properties' => [
                     'portal_id'  => ['type' => Schema::T_INT],
                     'updated_at' => ['type' => Schema::T_INT],
