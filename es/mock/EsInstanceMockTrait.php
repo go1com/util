@@ -30,6 +30,7 @@ trait EsInstanceMockTrait
             'id'      => $portal['id'],
             'body'    => $portal,
             'parent'  => $portal['parent'] ?? 1,
+            'refresh' => true,
         ]);
     }
 }
