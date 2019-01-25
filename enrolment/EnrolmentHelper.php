@@ -84,10 +84,10 @@ class EnrolmentHelper
             ->createQueryBuilder()
             ->select($select)
             ->from('gc_enrolment')
-            ->where('lo_id = :lo_id')->setParameter(':lo_id', $loId)
-            ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', $profileId);
+            ->where('lo_id = :lo_id')->setParameter(':lo_id', (int)$loId, DB::INTEGER)
+            ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', (int)$profileId, DB::INTEGER);
 
-        $parentLoId && $q->andWhere('parent_lo_id = :parent_lo_id')->setParameter(':parent_lo_id', $parentLoId);
+        $parentLoId && $q->andWhere('parent_lo_id = :parent_lo_id')->setParameter(':parent_lo_id', (int)$parentLoId, DB::INTEGER);
         $enrolments = $q->execute()->fetchAll($fetchMode);
         if (count($enrolments) > 1) {
             throw new LengthException('More than one enrolment return.');
@@ -102,11 +102,11 @@ class EnrolmentHelper
             ->createQueryBuilder()
             ->select($select)
             ->from('gc_enrolment')
-            ->where('lo_id = :lo_id')->setParameter(':lo_id', $loId)
-            ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', $profileId)
-            ->andWhere('taken_instance_id = :taken_instance_id')->setParameter(':taken_instance_id', $portalId);
+            ->where('lo_id = :lo_id')->setParameter(':lo_id', (int)$loId)
+            ->andWhere('profile_id = :profile_id')->setParameter(':profile_id', (int)$profileId, DB::INTEGER)
+            ->andWhere('taken_instance_id = :taken_instance_id')->setParameter(':taken_instance_id', (int)$portalId, DB::INTEGER);
 
-        $parentLoId && $q->andWhere('parent_lo_id = :parent_lo_id')->setParameter(':parent_lo_id', $parentLoId);
+        $parentLoId && $q->andWhere('parent_lo_id = :parent_lo_id')->setParameter(':parent_lo_id', (int)$parentLoId, DB::INTEGER);
 
         return $q->execute()->fetch($fetchMode);
     }
