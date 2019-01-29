@@ -21,6 +21,7 @@ class Schema
 
     # GO1-core indices
     const LEARNING_RECORD_INDEX = ES_INDEX.'_learning_record';
+    const CUSTOMER_INDEX        = ES_INDEX.'_customer';
 
     # Indices for explore
     const EXPLORE_INDEX             = ES_INDEX . '_explore';
