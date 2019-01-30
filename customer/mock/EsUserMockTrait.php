@@ -5,7 +5,6 @@ namespace go1\util\customer\mock;
 use Elasticsearch\Client;
 use go1\util\customer\CustomerEsSchema;
 use go1\util\DateTime;
-use go1\util\es\Schema;
 
 trait EsUserMockTrait
 {
@@ -37,7 +36,7 @@ trait EsUserMockTrait
 
         $params = [
             'index'   => $options['index'] ?? CustomerEsSchema::INDEX,
-            'type'    => Schema::O_USER,
+            'type'    => CustomerEsSchema::O_USER,
             'id'      => $user['id'],
             'body'    => $user,
             'refresh' => true,
@@ -83,7 +82,7 @@ trait EsUserMockTrait
         $client->create([
             'index'   => $options['index'] ?? CustomerEsSchema::INDEX,
             'routing' => $options['routing'] ?? $options['instance_id'],
-            'type'    => Schema::O_ACCOUNT,
+            'type'    => CustomerEsSchema::O_ACCOUNT,
             'id'      => $account['id'],
             'body'    => $account,
             'refresh' => true,

@@ -32,7 +32,7 @@ trait EsPortalMockTrait
             'parent'  => $portal['parent'] ?? 1,
             'refresh' => true,
         ]);
-        
+
         return $portal['id'];
     }
 }
