@@ -248,6 +248,17 @@ class Schema
                     'updated_at'  => ['type' => self::T_INT],
                 ],
             ],
+            'enrolment' => [
+                'properties' => [
+                    'assigned'       => ['type' => Schema::T_KEYWORD],
+                    'not_started'    => ['type' => Schema::T_KEYWORD],
+                    'in_progress'    => ['type' => Schema::T_KEYWORD],
+                    'last_completed' => ['type' => Schema::T_KEYWORD],
+                    'completed'      => ['type' => Schema::T_KEYWORD],
+                    'expired'        => ['type' => Schema::T_KEYWORD],
+                    'all'            => ['type' => Schema::T_KEYWORD],
+                ],
+            ],
         ],
         'dynamic_templates' => [
             [
