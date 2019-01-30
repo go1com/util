@@ -51,8 +51,6 @@ class Schema
     const T_GEO_POINT           = 'geo_point';
 
     const O_EDGE                = 'edge';
-    const O_CONFIG              = 'configuration';
-    const O_ACTIVITY            = 'activity';
     const O_LO                  = 'lo';
     const O_LO_COLLECTION       = 'lo_collection';
     const O_PLAN                = 'plan';
@@ -60,12 +58,10 @@ class Schema
     const O_ENROLMENT_REVISION  = 'enrolment_revision';
     const O_GROUP               = 'group';
     const O_GROUP_ITEM          = 'group_item';
-    const O_MAIL                = 'mail';
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
     const O_CREDIT              = 'credit';
     const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
     const O_PURCHASE_REQUEST    = 'purchase_request';
-    const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
     const O_LO_GROUP            = 'lo_group';
     const O_LO_POLICY           = 'lo_policy';
@@ -106,12 +102,10 @@ class Schema
         self::O_ENROLMENT_REVISION  => self::ENROLMENT_MAPPING_REVISION,
         self::O_GROUP               => self::GROUP_MAPPING,
         self::O_GROUP_ITEM          => self::GROUP_ITEM_MAPPING,
-        self::O_MAIL                => self::MAIL_MAPPING,
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
         self::O_CREDIT              => self::CREDIT_MAPPING,
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
         self::O_PURCHASE_REQUEST    => self::PURCHASE_REQUEST_MAPPING,
-        self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
         self::O_COUPON              => self::COUPON_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
         self::O_EVENT_ATTENDANCE    => self::EVENT_ATTENDANCE_MAPPING,
@@ -124,7 +118,6 @@ class Schema
         self::O_MYTEAM_PROGRESS     => self::MY_TEAM_MAPPING,
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
         self::O_METRIC              => self::METRIC_MAPPING,
-        self::O_ACTIVITY            => self::ACTIVITY_MAPPING,
         self::O_LO_COLLECTION       => self::LO_COLLECTION_MAPPING,
     ];
 
@@ -519,25 +512,6 @@ class Schema
         ],
     ];
 
-    const MAIL_MAPPING = [
-        '_parent'    => ['type' => CustomerEsSchema::O_PORTAL],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'recipient'   => ['type' => self::T_KEYWORD],
-            'sender'      => ['type' => self::T_KEYWORD],
-            'cc'          => ['type' => self::T_KEYWORD],
-            'bcc'         => ['type' => self::T_KEYWORD],
-            'subject'     => ['type' => self::T_KEYWORD],
-            'body'        => ['type' => self::T_TEXT],
-            'html'        => ['type' => self::T_TEXT],
-            'context'     => ['type' => self::T_OBJECT],
-            'options'     => ['type' => self::T_OBJECT],
-            'attachments' => ['type' => self::T_OBJECT],
-            'timestamp'   => ['type' => self::T_DATE],
-        ],
-    ];
-
     const PAYMENT_TRANSACTION_MAPPING = [
         'properties' => [
             'id'                 => ['type' => self::T_KEYWORD],
@@ -637,36 +611,6 @@ class Schema
                     'user_id'    => ['type' => self::T_INT],
                     'manager_id' => ['type' => self::T_INT],
                     'lo_id'      => ['type' => self::T_INT],
-                ],
-            ],
-        ],
-    ];
-
-    const ECK_METADATA_MAPPING = [
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'instance'    => ['type' => self::T_KEYWORD],
-            'entity_type' => ['type' => self::T_KEYWORD],
-            'field'       => [
-                'type'       => self::T_NESTED,
-                'properties' => [
-                    'id'           => ['type' => self::T_KEYWORD],
-                    'name'         => ['type' => self::T_KEYWORD],
-                    'description'  => ['type' => self::T_TEXT],
-                    'label'        => ['type' => self::T_KEYWORD],
-                    'help'         => ['type' => self::T_KEYWORD],
-                    'type'         => ['type' => self::T_KEYWORD],
-                    'published'    => ['type' => self::T_INT],
-                    'weight'       => ['type' => self::T_INT],
-                    'max_rows'     => ['type' => self::T_INT],
-                    'parent_field' => ['type' => self::T_KEYWORD],
-                    'data'         => ['type' => self::T_OBJECT],
-                    'metadata'     => [
-                        'properties' => [
-                            'instance_id' => ['type' => self::T_INT],
-                            'updated_at'  => ['type' => self::T_INT],
-                        ],
-                    ],
                 ],
             ],
         ],
@@ -934,48 +878,6 @@ class Schema
             'award_item_id' => ['type' => self::T_INT],
             'quantity'      => ['type' => self::T_DOUBLE],
             'created'       => ['type' => self::T_DATE],
-        ],
-    ];
-
-    const ACTIVITY_MAPPING = [
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'instance_id' => ['type' => self::T_INT],
-            'actor_id'    => ['type' => self::T_INT],
-            'user_id'     => ['type' => self::T_INT],
-            'entity_type' => ['type' => self::T_KEYWORD],
-            'entity_id'   => ['type' => self::T_INT],
-            'action_id'   => ['type' => self::T_INT],
-            'tags'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'created'     => ['type' => self::T_DATE],
-            'updated'     => ['type' => self::T_DATE],
-            'context'     => [
-                'properties' => [
-                    'actor'  => ['type' => self::T_KEYWORD],
-                    'user'   => ['type' => self::T_KEYWORD],
-                    'entity' => [
-                        'properties' => [
-                            'title' => ['type' => self::T_KEYWORD],
-                            'type'  => ['type' => self::T_KEYWORD],
-                        ],
-                    ],
-                    'diff'   => [
-                        'properties' => [
-                            'diff_field_name' => ['type' => self::T_TEXT], # Can not use `field` because it already used
-                            'old'             => ['type' => self::T_TEXT],
-                            'new'             => ['type' => self::T_TEXT],
-                        ],
-                    ],
-                    'target' => [
-                        'properties' => [
-                            'id'    => ['type' => self::T_KEYWORD],
-                            'title' => ['type' => self::T_KEYWORD],
-                            'type'  => ['type' => self::T_KEYWORD],
-                        ],
-                    ],
-                ],
-            ],
         ],
     ];
 
