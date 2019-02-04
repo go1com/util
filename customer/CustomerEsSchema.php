@@ -94,7 +94,7 @@ class CustomerEsSchema
                     'updated_at'  => ['type' => Schema::T_INT],
                 ],
             ],
-            'enrolment' => [
+            'learning'     => [
                 'properties' => [
                     'assigned'       => ['type' => Schema::T_KEYWORD],
                     'not_started'    => ['type' => Schema::T_KEYWORD],
