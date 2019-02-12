@@ -20,7 +20,7 @@ class LoCustomTagCreateEventEmbedderTest extends UtilCoreTestCase
     protected $moduleId;
     protected $eventLiId;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

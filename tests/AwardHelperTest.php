@@ -15,7 +15,7 @@ class AwardHelperTest extends UtilCoreTestCase
 
     private $awardData;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -84,14 +84,14 @@ class AwardHelperTest extends UtilCoreTestCase
         $awardId = $this->createAward($this->go1, $awardData);
 
         $award = call_user_func([AwardHelper::class, $methodName], $this->go1, $awardId);
-        $this->assertInternalType('int' , $award->id);
-        $this->assertInternalType('int' , $award->revision_id);
-        $this->assertInternalType('int' , $award->instance_id);
-        $this->assertInternalType('int' , $award->user_id);
-        $this->assertInternalType('int' , $award->published);
-        $this->assertInternalType('int' , $award->expire);
-        $this->assertInternalType('int' , $award->created);
-        $this->assertInternalType('float' , $award->quantity);
+        $this->assertIsInt($award->id);
+        $this->assertIsInt($award->revision_id);
+        $this->assertIsInt($award->instance_id);
+        $this->assertIsInt($award->user_id);
+        $this->assertIsInt($award->published);
+        $this->assertIsInt($award->expire);
+        $this->assertIsInt($award->created);
+        $this->assertIsFloat($award->quantity);
         $this->assertEquals((object)$this->awardData['data'], $award->data);
         $this->assertEquals(['force', 'award'], $award->tags);
         $this->assertEquals([], $award->locale);
@@ -114,7 +114,7 @@ class AwardHelperTest extends UtilCoreTestCase
         ]);
         $awardManualItem = AwardHelper::loadManualItem($this->go1, $awardManualItemId);
 
-        $this->assertInternalType('object', $awardManualItem->data);
+        $this->assertIsObject($awardManualItem->data);
         $this->assertEquals(json_decode(json_encode($data)), $awardManualItem->data);
     }
 

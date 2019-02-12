@@ -27,7 +27,7 @@ class PlanEventEmbedderTest extends UtilCoreTestCase
     protected $courseId;
     protected $planId;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

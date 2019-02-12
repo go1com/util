@@ -58,6 +58,6 @@ class CollectionItemEventEmbedderTest extends UtilCoreTestCase
         $embedded = $embedder->embedded($collectionItem);
 
         $this->assertArrayHasKey('lo', $embedded);
-        $this->assertArraySubset($this->expectLo, (array)$embedded['lo']);
+        $this->assertEmpty(array_diff_assoc($this->expectLo, (array)$embedded['lo']));
     }
 }

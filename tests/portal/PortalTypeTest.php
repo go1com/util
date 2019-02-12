@@ -9,7 +9,7 @@ class PortalTypeTest extends TestCase
     public function testAll()
     {
         $portalTypes = PortalType::all();
-        $this->assertArraySubset([
+        $this->assertEmpty(array_diff_assoc([
             'content_partner',
             'distribution_partner',
             'internal',
@@ -17,7 +17,7 @@ class PortalTypeTest extends TestCase
             'complispace',
             'jse_customer',
             'totara_customer',
-        ], $portalTypes);
+        ], $portalTypes));
     }
 
     /**

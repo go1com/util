@@ -71,7 +71,7 @@ class DBTest extends UtilCoreTestCase
         ]);
         $originalUser = (array) UserHelper::load($this->go1, $userId);
 
-        $this->assertArraySubset($dataUser, $originalUser);
+        $this->assertEmpty(array_diff_assoc($dataUser, $originalUser));
 
         DB::merge(
             $this->go1, 'gc_user',
@@ -102,17 +102,17 @@ class DBTest extends UtilCoreTestCase
         $fooUserObj = DB::load($this->go1, 'gc_user', $fooUserId, DB::OBJ);
         $barUserObj = DB::load($this->go1, 'gc_user', $barUserId, DB::OBJ);
 
-        $this->assertInternalType('object', $fooUserObj);
+        $this->assertIsObject($fooUserObj);
         $this->assertEquals((object) $fooData, $fooUserObj->data);
-        $this->assertInternalType('object', $barUserObj);
+        $this->assertIsObject($barUserObj);
         $this->assertEquals([], $barUserObj->data);
 
         $fooUserArr = DB::load($this->go1, 'gc_user', $fooUserId, DB::ARR);
         $barUserArr = DB::load($this->go1, 'gc_user', $barUserId, DB::ARR);
 
-        $this->assertInternalType('array', $fooUserArr);
+        $this->assertIsArray($fooUserArr);
         $this->assertEquals($fooData, $fooUserArr['data']);
-        $this->assertInternalType('array', $barUserArr);
+        $this->assertIsArray($barUserArr);
         $this->assertEquals([], $barUserArr['data']);
     }
 
@@ -129,17 +129,17 @@ class DBTest extends UtilCoreTestCase
         $usersObj = DB::loadMultiple($this->go1, 'gc_user', [$fooUserId, $barUserId], DB::OBJ);
 
         $this->assertCount(2, $usersObj);
-        $this->assertInternalType('object', $usersObj[0]);
+        $this->assertIsObject($usersObj[0]);
         $this->assertEquals((object) $fooData, $usersObj[0]->data);
-        $this->assertInternalType('object', $usersObj[1]);
+        $this->assertIsObject($usersObj[1]);
         $this->assertEquals([], $usersObj[1]->data);
 
         $usersArr = DB::loadMultiple($this->go1, 'gc_user', [$fooUserId, $barUserId], DB::ARR);
 
         $this->assertCount(2, $usersArr);
-        $this->assertInternalType('array', $usersArr[0]);
+        $this->assertIsArray($usersArr[0]);
         $this->assertEquals($fooData, $usersArr[0]['data']);
-        $this->assertInternalType('array', $usersArr[1]);
+        $this->assertIsArray($usersArr[1]);
         $this->assertEquals([], $usersArr[1]['data']);
     }
 

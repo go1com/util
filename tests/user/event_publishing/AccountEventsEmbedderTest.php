@@ -24,7 +24,7 @@ class AccountEventsEmbedderTest extends UtilCoreTestCase
     protected $profileId = 999;
     protected $jwt;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

@@ -36,6 +36,6 @@ class AssessorEventEmbedderTest extends UtilCoreTestCase
         $embedded = $embedder->embedded($edge);
 
         $this->assertArrayHasKey('lo', $embedded);
-        $this->assertArraySubset($this->expectLo, (array)$embedded['lo']);
+        $this->assertEmpty(array_diff_assoc($this->expectLo, (array)$embedded['lo']));
     }
 }

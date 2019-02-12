@@ -19,7 +19,7 @@ class ManualRecordTest extends UtilCoreTestCase
     /** @var MqClient */
     protected $queue;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
