@@ -9,7 +9,7 @@ class ChannelTypeTest extends TestCase
     public function testAll()
     {
         $channelTypes = ChannelType::all();
-        $this->assertArraySubset([
+        $this->assertEmpty(array_diff_assoc([
             'internal',
             'referral_partner',
             'distribution_partner',
@@ -18,7 +18,7 @@ class ChannelTypeTest extends TestCase
             'direct',
             'platform_partner',
             'portal_launcher',
-        ], $channelTypes);
+        ], $channelTypes));
     }
 
     /**

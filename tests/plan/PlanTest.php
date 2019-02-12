@@ -17,7 +17,7 @@ class PlanTest extends UtilCoreTestCase
      */
     private $rPlan;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class PlanTest extends UtilCoreTestCase
         $this->assertEquals($raw->entity_type, $plan->entityType);
         $this->assertEquals($raw->entity_id, $plan->entityId);
         $this->assertEquals($raw->status, $plan->status);
-        $this->assertNotContains('<script', $plan->data->note);
+        $this->assertStringNotContainsString('<script', $plan->data->note);
 
         return $plan;
     }

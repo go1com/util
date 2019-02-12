@@ -43,7 +43,7 @@ class EnrolmentHelperTest extends UtilCoreTestCase
      */
     protected $enrolmentEventsEmbedder;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
         $this->enrolmentEventsEmbedder = new EnrolmentEventsEmbedder($this->go1, new AccessChecker);

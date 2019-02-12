@@ -22,7 +22,7 @@ class AwardCreateEventEmbedderTest extends UtilCoreTestCase
     protected $jwt;
     protected $awardId;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

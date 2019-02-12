@@ -23,7 +23,7 @@ class AwardEnrolmentCreateEventEmbedderTest extends UtilCoreTestCase
     protected $awardId;
     protected $awardEnrolmentId;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

@@ -116,6 +116,14 @@ class PortalCheckerTest extends UtilCoreTestCase
         $this->assertEquals($expecting, (new PortalChecker)->buildLink($portal, $uri, $prefix));
     }
 
+    public function testBuildLinkNoPublicDomainReplacement()
+    {
+        putenv('ENV=production');
+        $instanceId = $this->createPortal($this->go1, ['title' => 'public.mygo1.com']);
+        $portal = PortalHelper::load($this->go1, $instanceId);
+        $this->assertEquals('https://public.mygo1.com/p/#/', (new PortalChecker)->buildLink($portal, '', '', false));
+    }
+
     public function testAllowDiscussion()
     {
         $id = $this->createPortal($this->go1, [

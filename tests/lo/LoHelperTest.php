@@ -37,7 +37,7 @@ class LoHelperTest extends UtilCoreTestCase
     private $resource1Id;
     private $resource2Id;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

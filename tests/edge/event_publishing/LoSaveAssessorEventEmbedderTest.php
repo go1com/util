@@ -25,6 +25,6 @@ class LoSaveAssessorEventEmbedderTest extends UtilCoreTestCase
         $courseId = $this->createCourse($this->go1, ['instance_id' => $portalId]);
         $embedded = $embedder->embedded((object)['id' => $courseId]);
         $this->assertArrayHasKey('lo', $embedded);
-        $this->assertArraySubset($this->expectLo, (array)$embedded['lo']);
+        $this->assertEmpty(array_diff_assoc($this->expectLo, (array)$embedded['lo']));
     }
 }

@@ -26,7 +26,7 @@ class EnrolmentEventsEmbedderTest extends UtilCoreTestCase
     protected $courseId;
     protected $enrolmentId;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
