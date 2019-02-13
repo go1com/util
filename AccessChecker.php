@@ -107,7 +107,7 @@ class AccessChecker
         if (!empty($user)) {
             $accounts = isset($user->accounts) ? $user->accounts : [];
             foreach ($accounts as $account) {
-                $match = $portalIdOrName == is_numeric($portalIdOrName) ? ($account->portal_id ?? 0) : $account->instance;
+                $match = $portalIdOrName == (is_numeric($portalIdOrName) ? ($account->portal_id ?? 0) : $account->instance);
                 if ($match) {
                     return $account;
                 }
