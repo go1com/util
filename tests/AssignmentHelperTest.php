@@ -20,7 +20,7 @@ class AssignmentHelperTest extends UtilTestCase
     private $barAssignmentId; // invalid data
     private $bazAssignmentId; // empty data
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

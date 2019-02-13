@@ -47,7 +47,10 @@ class PolicyEventEmbedderTest extends UtilTestCase
         $embedded = $embedder->embedded($policyItem);
 
         $this->assertArrayHasKey('hostEntity', $embedded);
-        $this->assertArraySubset($this->expectLo, (array)$embedded['hostEntity']);
+        $hostEntity = (array)$embedded['hostEntity'];
+        $this->assertEquals($this->expectLo['id'], $hostEntity['id']);
+        $this->assertEquals($this->expectLo['type'], $hostEntity['type']);
+        $this->assertEquals($this->expectLo['instance_id'], $hostEntity['instance_id']);
         $this->assertEquals($accountId, $embedded['entity']->id);
     }
 }

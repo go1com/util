@@ -30,7 +30,7 @@ class VoteEventEmbedderTest extends UtilCoreTestCase
         "instance_id" => 1,
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -50,6 +50,9 @@ class VoteEventEmbedderTest extends UtilCoreTestCase
         $this->assertArrayHasKey('vote', $embedded);
         $this->assertArrayHasKey('lo', $embedded);
         $this->assertEquals($this->expectVote, $embedded['vote']);
-        $this->assertArraySubset($this->expectLo, $embedded['lo']);
+        $vote = (array)$embedded['lo'];
+        $this->assertEquals($this->expectLo['id'], $vote['id']);
+        $this->assertEquals($this->expectLo['type'], $vote['type']);
+        $this->assertEquals($this->expectLo['instance_id'], $vote['instance_id']);
     }
 }

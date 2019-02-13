@@ -39,6 +39,10 @@ class GroupItemEventEmbedderTest extends UtilTestCase
         $this->assertArrayHasKey('entity', $embedded);
         $this->assertArrayHasKey('group', $embedded);
         $this->assertArrayHasKey('portal', $embedded);
-        $this->assertArraySubset($this->expectLo, (array)$embedded['entity']);
+
+        $entity = (array)$embedded['entity'];
+        $this->assertEquals($this->expectLo['id'], $entity['id']);
+        $this->assertEquals($this->expectLo['type'], $entity['type']);
+        $this->assertEquals($this->expectLo['instance_id'], $entity['instance_id']);
     }
 }

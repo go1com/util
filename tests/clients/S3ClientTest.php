@@ -16,7 +16,7 @@ class S3ClientTest extends UtilTestCase
     private $file;
     private $content;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->c = $this->getContainer();
@@ -34,7 +34,7 @@ class S3ClientTest extends UtilTestCase
         ];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         file_exists($this->file) && unlink($this->file);
     }

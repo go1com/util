@@ -31,17 +31,16 @@ class GroupAssignHelperTest extends UtilTestCase
         );
 
         $this->assertCount(1, $this->queueMessages[Queue::GROUP_ASSIGN_CREATE]);
-        $this->assertArraySubset([
-            'id'          => 1,
-            'group_id'    => $this->groupId,
-            'instance_id' => $this->instanceId,
-            'entity_type' => $this->entityType,
-            'entity_id'   => $this->entityId,
-            'user_id'     => $this->userId,
-            'status'      => GroupAssignStatuses::PUBLISHED,
-            'due_date'    => null,
-            'data'        => null,
-        ], (array) $this->queueMessages[Queue::GROUP_ASSIGN_CREATE][0]);
+        $msg = (array)$this->queueMessages[Queue::GROUP_ASSIGN_CREATE][0];
+        $this->assertEquals(1, $msg['id']);
+        $this->assertEquals($this->groupId, $msg['group_id']);
+        $this->assertEquals($this->instanceId, $msg['instance_id']);
+        $this->assertEquals($this->entityType, $msg['entity_type']);
+        $this->assertEquals($this->entityId, $msg['entity_id']);
+        $this->assertEquals($this->userId, $msg['user_id']);
+        $this->assertEquals(GroupAssignStatuses::PUBLISHED, $msg['status']);
+        $this->assertNull($msg['due_date']);
+        $this->assertNull($msg['data']);
 
         GroupAssignHelper::merge(
             $this->go1,
@@ -56,34 +55,31 @@ class GroupAssignHelperTest extends UtilTestCase
         );
 
         $this->assertCount(1, $this->queueMessages[Queue::GROUP_ASSIGN_UPDATE]);
-        $this->assertArraySubset([
-            'id'          => 1,
-            'group_id'    => $this->groupId,
-            'instance_id' => $this->instanceId,
-            'entity_type' => $this->entityType,
-            'entity_id'   => $this->entityId,
-            'user_id'     => $this->userId,
-            'status'      => GroupAssignStatuses::PUBLISHED,
-            'due_date'    => $this->dueDate,
-            'data'        => json_encode($this->data),
-        ], (array) $this->queueMessages[Queue::GROUP_ASSIGN_UPDATE][0]);
+        $msg = (array)$this->queueMessages[Queue::GROUP_ASSIGN_UPDATE][0];
+        $this->assertEquals(1, $msg['id']);
+        $this->assertEquals($this->groupId, $msg['group_id']);
+        $this->assertEquals($this->instanceId, $msg['instance_id']);
+        $this->assertEquals($this->entityType, $msg['entity_type']);
+        $this->assertEquals($this->entityId, $msg['entity_id']);
+        $this->assertEquals($this->userId, $msg['user_id']);
+        $this->assertEquals(GroupAssignStatuses::PUBLISHED, $msg['status']);
+        $this->assertEquals($this->dueDate, $msg['due_date']);
+        $this->assertEquals(json_encode($this->data), $msg['data']);
     }
 
     public function testLoadBy()
     {
         $this->testMerge();
-        $groupAssign = GroupAssignHelper::loadBy($this->go1, $this->groupId, $this->instanceId, $this->entityType, $this->entityId);
-        $this->assertArraySubset([
-            'id'          => 1,
-            'group_id'    => $this->groupId,
-            'instance_id' => $this->instanceId,
-            'entity_type' => $this->entityType,
-            'entity_id'   => $this->entityId,
-            'user_id'     => $this->userId,
-            'status'      => GroupAssignStatuses::PUBLISHED,
-            'due_date'    => $this->dueDate,
-            'data'        => $this->data,
-        ], (array) $groupAssign);
+        $groupAssign = (array)GroupAssignHelper::loadBy($this->go1, $this->groupId, $this->instanceId, $this->entityType, $this->entityId);
+        $this->assertEquals(1, $groupAssign['id']);
+        $this->assertEquals($this->groupId, $groupAssign['group_id']);
+        $this->assertEquals($this->instanceId, $groupAssign['instance_id']);
+        $this->assertEquals($this->entityType, $groupAssign['entity_type']);
+        $this->assertEquals($this->entityId, $groupAssign['entity_id']);
+        $this->assertEquals($this->userId, $groupAssign['user_id']);
+        $this->assertEquals(GroupAssignStatuses::PUBLISHED, $groupAssign['status']);
+        $this->assertEquals($this->dueDate, $groupAssign['due_date']);
+        $this->assertEquals($this->data, $groupAssign['data']);
     }
 
     public function testArchive()
@@ -92,17 +88,16 @@ class GroupAssignHelperTest extends UtilTestCase
         GroupAssignHelper::archive($this->go1, $this->queue, $this->groupId, $this->instanceId, $this->userId, $this->entityType, $this->entityId);
 
         $this->assertCount(1, $this->queueMessages[Queue::GROUP_ASSIGN_DELETE]);
-        $this->assertArraySubset([
-            'id'          => 1,
-            'group_id'    => $this->groupId,
-            'instance_id' => $this->instanceId,
-            'entity_type' => $this->entityType,
-            'entity_id'   => $this->entityId,
-            'user_id'     => $this->userId,
-            'status'      => GroupAssignStatuses::PUBLISHED,
-            'due_date'    => $this->dueDate,
-            'data'        => $this->data,
-        ], (array) $this->queueMessages[Queue::GROUP_ASSIGN_DELETE][0]);
+        $msg = (array)$this->queueMessages[Queue::GROUP_ASSIGN_DELETE][0];
+        $this->assertEquals(1, $msg['id']);
+        $this->assertEquals($this->groupId, $msg['group_id']);
+        $this->assertEquals($this->instanceId, $msg['instance_id']);
+        $this->assertEquals($this->entityType, $msg['entity_type']);
+        $this->assertEquals($this->entityId, $msg['entity_id']);
+        $this->assertEquals($this->userId, $msg['user_id']);
+        $this->assertEquals(GroupAssignStatuses::PUBLISHED, $msg['status']);
+        $this->assertEquals($this->dueDate, $msg['due_date']);
+        $this->assertEquals($this->data, $msg['data']);
     }
 
 }

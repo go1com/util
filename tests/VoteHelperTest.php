@@ -11,7 +11,7 @@ class VoteHelperTest extends UtilTestCase
 {
     use VoteMockTrait;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->go1 = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
         $this->installGo1Schema($this->go1, $coreOnly = false);
