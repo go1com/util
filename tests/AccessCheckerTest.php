@@ -5,6 +5,7 @@ namespace go1\util\tests;
 use Firebase\JWT\JWT;
 use go1\util\AccessChecker;
 use go1\util\edge\EdgeTypes;
+use go1\util\schema\mock\PortalMockTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\Text;
 use go1\util\user\Roles;
@@ -12,10 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AccessCheckerTest extends UtilCoreTestCase
 {
+    use PortalMockTrait;
     use UserMockTrait;
 
     public function testValidAccount()
     {
+        $portalId = $this->createPortal($this->go1, ['title' => 'qa.mygo1.com']);
         $userId = $this->createUser($this->go1, ['instance' => 'accounts.gocatalyze.com']);
         $accountId = $this->createUser($this->go1, ['instance' => 'qa.mygo1.com']);
         $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $userId, $accountId);
@@ -24,7 +27,13 @@ class AccessCheckerTest extends UtilCoreTestCase
         $jwt = $this->jwtForUser($this->go1, $userId, 'qa.mygo1.com');
         $payload = Text::jwtContent($jwt);
         $req->attributes->set('jwt.payload', $payload);
+
+        // check by name
         $account = (new AccessChecker)->validAccount($req, 'qa.mygo1.com');
+        $this->assertEquals($account->id, $accountId);
+
+        // check by ID
+        $account = (new AccessChecker)->validAccount($req, $portalId);
         $this->assertEquals($account->id, $accountId);
     }
 

@@ -71,6 +71,7 @@ class User implements JsonSerializable
             $roleIds = $db
                 ->executeQuery($roleIds, [EdgeTypes::HAS_ROLE, $user->id])
                 ->fetchAll(PDO::FETCH_COLUMN);
+
             $user->roles = !$roleIds ? [] : $db
                 ->executeQuery('SELECT name FROM gc_role WHERE id IN (?)', [$roleIds], [DB::INTEGERS])
                 ->fetchAll(PDO::FETCH_COLUMN);
@@ -103,6 +104,7 @@ class User implements JsonSerializable
             'id'         => $this->id,
             'profile_id' => $this->profileId,
             'instance'   => $this->instance,
+            'portal_id'  => $this->portalId ?? 0,
             'name'       => $this->name,
             'mail'       => $this->mail,
             'first_name' => $this->firstName,

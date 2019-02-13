@@ -81,15 +81,29 @@ trait UserMockTrait
     # NOTE: This is not yet stable, JWT is large, not good for production usage.
     public function jwtForUser(Connection $db, int $userId, string $portalName = null): string
     {
-        $user = UserHelper::load($db, $userId);
-        $user = $user ? User::create($user, $db, true, $portalName) : null;
-        !$user && Error::throw(new InvalidArgumentException('User not found.'));
         $payload = [
             'iss'    => 'go1.user',
             'ver'    => '1.1',
             'exp'    => strtotime('+ 1 year'),
-            'object' => (object) ['type' => 'user', 'content' => $user],
+            'object' => (object) [
+                'type'    => 'user',
+                'content' => call_user_func(
+                    function () use ($db, $userId, $portalName) {
+                        $user = UserHelper::load($db, $userId);
+                        $user = $user ? User::create($user, $db, true, $portalName) : null;
+
+                        if ($user && !empty($user->accounts[0])) {
+                            $account = &$user->accounts[0];
+                            $account->portalId = (int) $db->fetchColumn('SELECT id FROM gc_instance WHERE title = ?', [$account->instance]);
+                        }
+
+                        return $user;
+                    }
+                ),
+            ],
         ];
+
+        !$payload['object']->content && Error::throw(new InvalidArgumentException('User not found.'));
 
         return JWT::encode($payload, 'INTERNAL');
     }

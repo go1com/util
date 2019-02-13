@@ -59,7 +59,7 @@ class AccessChecker
         return false;
     }
 
-    public function isPortalTutor(Request $req, $portalName, $role = Roles::TUTOR, bool $strict = true)
+    public function isPortalTutor(Request $req, $portalIdOrName, $role = Roles::TUTOR, bool $strict = true)
     {
         if ($strict && $this->isPortalAdmin($req, $portalName)) {
             return 1;
@@ -71,7 +71,8 @@ class AccessChecker
 
         $accounts = isset($user->accounts) ? $user->accounts : [];
         foreach ($accounts as &$account) {
-            if ($portalName === $account->instance) {
+            $actual = is_numeric($portalIdOrName) ? $account->portal_id : $account->instance;
+            if ($portalIdOrName == $actual) {
                 if (!empty($account->roles) && in_array($role, $account->roles)) {
                     return $account;
                 }
@@ -81,9 +82,9 @@ class AccessChecker
         return false;
     }
 
-    public function isPortalManager(Request $req, $portalName, bool $strict = true)
+    public function isPortalManager(Request $req, $portalIdOrName, bool $strict = true)
     {
-        return $this->isPortalTutor($req, $portalName, Roles::MANAGER, $strict);
+        return $this->isPortalTutor($req, $portalIdOrName, Roles::MANAGER, $strict);
     }
 
     public function isAccountsAdmin(Request $req)
@@ -95,7 +96,7 @@ class AccessChecker
         return in_array(Roles::ROOT, isset($user->roles) ? $user->roles : []) ? $user : false;
     }
 
-    public function validAccount(Request $req, $portalName)
+    public function validAccount(Request $req, $portalIdOrName)
     {
         $payload = $req->attributes->get('jwt.payload');
         if ($payload && !empty($payload->object->type) && ('user' === $payload->object->type)) {
@@ -106,7 +107,8 @@ class AccessChecker
         if (!empty($user)) {
             $accounts = isset($user->accounts) ? $user->accounts : [];
             foreach ($accounts as $account) {
-                if ($portalName == $account->instance) {
+                $match = $portalIdOrName == is_numeric($portalIdOrName) ? ($account->portal_id ?? 0) : $account->instance;
+                if ($match) {
                     return $account;
                 }
             }
