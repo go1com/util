@@ -793,7 +793,6 @@ class Schema
     ];
 
     const EVENT_ATTENDANCE_MAPPING = [
-        '_parent'    => ['type' => self::O_ENROLMENT],
         '_routing'   => ['required' => true],
         'properties' => self::EVENT_ATTENDANCE_PROPERTIES + [
                 'metadata'         => [
