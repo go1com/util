@@ -182,6 +182,7 @@ trait UserMockTrait
                     'instance_name' => isset($options['instance_name']) ? $options['instance_name'] : 'az.mygo1.com',
                     'mail'          => $mail,
                     'profile_id'    => intval($accountProfileId),
+                    'portal_id'     => (int) $db->fetchColumn('SELECT id FROM gc_instance WHERE title = ?', [isset($options['instance_name']) ? $options['instance_name'] : 'az.mygo1.com'])
                 ],
             ],
         ];
