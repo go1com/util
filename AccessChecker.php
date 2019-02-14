@@ -61,7 +61,7 @@ class AccessChecker
 
     public function isPortalTutor(Request $req, $portalIdOrName, $role = Roles::TUTOR, bool $strict = true)
     {
-        if ($strict && $this->isPortalAdmin($req, $portalName)) {
+        if ($strict && $this->isPortalAdmin($req, $portalIdOrName)) {
             return 1;
         }
 
