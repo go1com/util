@@ -2,6 +2,7 @@
 
 namespace go1\util\lo\explore;
 
+use go1\util\customer\CustomerEsSchema;
 use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\es\Schema;
 
@@ -12,12 +13,12 @@ class LoExploreSchema
     ];
 
     const MAPPING = [
-        Schema::O_LO         => self::LO_MAPPING,
-        Schema::O_GROUP      => self::GROUP_MAPPING,
-        Schema::O_ENROLMENT  => self::ENROLMENT_MAPPING,
-        Schema::O_GROUP_ITEM => self::GROUP_ITEM_MAPPING,
-        Schema::O_ACCOUNT    => self::ACCOUNT_MAPPING,
-        Schema::O_PORTAL     => self::PORTAL_MAPPING,
+        Schema::O_LO                => self::LO_MAPPING,
+        Schema::O_GROUP             => self::GROUP_MAPPING,
+        Schema::O_ENROLMENT         => self::ENROLMENT_MAPPING,
+        Schema::O_GROUP_ITEM        => self::GROUP_ITEM_MAPPING,
+        CustomerEsSchema::O_ACCOUNT => self::ACCOUNT_MAPPING,
+        CustomerEsSchema::O_PORTAL  => self::PORTAL_MAPPING,
     ];
 
     const LO_MAPPING = [

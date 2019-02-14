@@ -24,12 +24,11 @@ trait EsPortalMockTrait
         ];
 
         $client->create([
-            'index'   => CustomerEsSchema::INDEX,
+            'index'   => $options['index'] ?? CustomerEsSchema::INDEX,
             'routing' => $options['id'],
             'type'    => CustomerEsSchema::O_PORTAL,
             'id'      => $portal['id'],
             'body'    => $portal,
-            'parent'  => $portal['parent'] ?? 1,
             'refresh' => true,
         ]);
 
