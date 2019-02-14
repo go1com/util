@@ -272,7 +272,7 @@ class LoHelper
             'b', 'code', 'del', 'dd', 'dl', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
             'sup', 'sub', 'div', 'p', 'blockquote', 'strong', 'i', 'kbd', 's',
             'strike', 'hr', 'tr', 'td', 'th', 'thead', 'tbody', 'tfoot', 'em', 'pre', 'br',
-            'table', 'a', 'iframe', 'img', 'ul', 'li', 'ol', 'caption', 'span',
+            'table', 'a', 'iframe', 'img', 'ul', 'li', 'ol', 'caption', 'span', 'u',
         ]);
         $cnf->set('HTML.AllowedAttributes', [
             'a.href', 'a.rel', 'a.target',
