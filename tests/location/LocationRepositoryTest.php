@@ -13,7 +13,7 @@ class LocationRepositoryTest extends UtilTestCase
     protected $rLocation;
     protected $location;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -36,7 +36,7 @@ class GroupHelperTest extends UtilTestCase
     /** @var  GroupRepository */
     private $repository;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

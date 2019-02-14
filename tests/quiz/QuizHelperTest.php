@@ -14,7 +14,7 @@ class QuizHelperTest extends UtilTestCase
     use EnrolmentMockTrait;
     private $quiz;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $id = $this->createQuiz($this->go1, ['title' => 'demo quiz', 'li_id' => 10]);
