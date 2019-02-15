@@ -34,10 +34,10 @@ class AccessChecker
 
     /**
      * @param Request $req
-     * @param string  $instance
+     * @param string  $portalIdOrName
      * @return null|bool|stdClass
      */
-    public function isPortalAdmin(Request $req, $instance, $role = Roles::ADMIN, bool $inheritance = true)
+    public function isPortalAdmin(Request $req, $portalIdOrName, $role = Roles::ADMIN, bool $inheritance = true)
     {
         if (!$user = $this->validUser($req)) {
             return null;
@@ -49,7 +49,8 @@ class AccessChecker
 
         $accounts = isset($user->accounts) ? $user->accounts : [];
         foreach ($accounts as &$account) {
-            if ($instance === $account->instance) {
+            $actual = is_numeric($portalIdOrName) ? $account->portal_id : $account->instance;
+            if ($portalIdOrName === $actual) {
                 if (!empty($account->roles) && in_array($role, $account->roles)) {
                     return $account;
                 }
