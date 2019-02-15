@@ -16,7 +16,6 @@
     "go1/edge": "^0.3",
     "go1/util_core": "dev-master",
     "go1/util_core_clients": "dev-master",
-    "graphaware/neo4j-php-client": "^4.6",
     "jsq/amazon-es-php": "^0.2.0",
     "ktamas77/firebase-php": "^2.2",
     "monolog/monolog": "^1.19.0",
@@ -35,6 +34,7 @@
   },
   "suggest": {
     "predis/predis": "To use the PredisCollection to persist toggles in redis",
-    "qandidate/toggle": "^1.1"
+    "qandidate/toggle": "^1.1",
+    "graphaware/neo4j-php-client": "^4.6"
   }
 }
