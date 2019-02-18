@@ -18,7 +18,6 @@ class CustomerEsSchema
     ];
 
     const PORTAL_MAPPING = [
-        '_parent'    => ['type' => self::O_USER],
         '_routing'   => ['required' => true],
         'properties' => [
             'id'                => ['type' => Schema::T_KEYWORD],
