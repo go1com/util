@@ -166,7 +166,7 @@ trait UserMockTrait
         $mail = isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com';
         $roles = isset($options['roles']) ? $options['roles'] : ['authenticated'];
 
-        $accounts = [
+        $account = [
             'id'            => intval($accountId),
             'first_name'    => 'A',
             'last_name'     => 'T',
@@ -178,7 +178,7 @@ trait UserMockTrait
         ];
 
         if (isset($options['portal_id'])) {
-            $accounts['portal_id'] = $options['portal_id'];
+            $account['portal_id'] = $options['portal_id'];
         }
         
         $user = [
@@ -190,7 +190,7 @@ trait UserMockTrait
             'mail'          => $mail = isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com',
             'roles'         => $roles = isset($options['roles']) ? $options['roles'] : ['authenticated'],
             'accounts'      => [
-                (object) $accounts
+                (object) $account
             ],
         ];
 
