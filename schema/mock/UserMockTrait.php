@@ -163,7 +163,24 @@ trait UserMockTrait
         $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : DEFAULT_ACCOUNT_PROFILE_ID;
         $userId = isset($options['user_id']) ? $options['user_id'] : $accountId;
         $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : $accountProfileId;
+        $mail = isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com';
+        $roles = isset($options['roles']) ? $options['roles'] : ['authenticated'];
 
+        $account = [
+            'id'            => intval($accountId),
+            'first_name'    => 'A',
+            'last_name'     => 'T',
+            'status'        => 1,
+            'roles'         => $roles,
+            'instance_name' => isset($options['instance_name']) ? $options['instance_name'] : 'az.mygo1.com',
+            'mail'          => $mail,
+            'profile_id'    => intval($accountProfileId),
+        ];
+
+        if (isset($options['portal_id'])) {
+            $account['portal_id'] = $options['portal_id'];
+        }
+        
         $user = [
             'id'            => intval($userId),
             'first_name'    => 'A',
@@ -173,16 +190,7 @@ trait UserMockTrait
             'mail'          => $mail = isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com',
             'roles'         => $roles = isset($options['roles']) ? $options['roles'] : ['authenticated'],
             'accounts'      => [
-                (object) [
-                    'id'            => intval($accountId),
-                    'first_name'    => 'A',
-                    'last_name'     => 'T',
-                    'status'        => 1,
-                    'roles'         => $roles,
-                    'instance_name' => isset($options['instance_name']) ? $options['instance_name'] : 'az.mygo1.com',
-                    'mail'          => $mail,
-                    'profile_id'    => intval($accountProfileId)
-                ],
+                (object) $account
             ],
         ];
 
@@ -267,6 +275,7 @@ trait UserMockTrait
                 'id'         => intval($user['id']),
                 'instance'   => !empty($user['instance_name']) ? $user['instance_name'] : null,
                 'profile_id' => intval($user['profile_id']),
+                'portal_id'  => !empty($user['portal_id']) ? $user['portal_id'] : null,
                 'mail'       => $root ? $user['mail'] : null,
                 'name'       => $root ? $name : (($username === $name) ? null : $name),
                 'roles'      => $roles ?? [],
