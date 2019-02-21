@@ -2,9 +2,7 @@
 
 namespace go1\util;
 
-use Aws\Credentials\CredentialProvider;
 use Aws\Credentials\Credentials;
-use Aws\ElasticsearchService\ElasticsearchPhpHandler;
 use Aws\S3\S3Client;
 use Elasticsearch\ClientBuilder as EsClientBuilder;
 use go1\clients\AccountsClient;
@@ -50,16 +48,12 @@ class UtilServiceProvider implements ServiceProviderInterface
 
         $c['go1.client.es.builder'] = function (Container $c) {
             $builder = EsClientBuilder::create();
+            $o = $c['esOptions'];
 
-            if ($o = $c['esOptions']) {
-                if (!empty($o['credential'])) {
-                    $provider = CredentialProvider::fromCredentials(new Credentials($o['key'], $o['secret']));
-                    $builder->setHandler(new ElasticsearchPhpHandler($o['region'], $provider));
+            if ($c->offsetExists('profiler.do')) {
+                if ($c->offsetGet('profiler.do')) {
+                    $builder->setLogger($c['profiler.collectors.es']);
                 }
-            }
-
-            if ($c->offsetExists('profiler.do') && $c->offsetGet('profiler.do')) {
-                $builder->setLogger($c['profiler.collectors.es']);
             }
 
             $builder->setHosts([parse_url($o['endpoint'])]);
