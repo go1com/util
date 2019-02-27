@@ -28,7 +28,7 @@ trait EnrolmentMockTrait
             'pass'              => isset($options['pass']) ? $options['pass'] : 0,
             'timestamp'         => isset($options['timestamp']) ? $options['timestamp'] : time(),
             'changed'           => isset($options['changed']) ? $options['changed'] : time(),
-            'data'              => isset($options['data']) ? $options['data'] : '',
+            'data'              => isset($options['data']) ? (is_scalar($options['data']) ? $options['data'] : json_encode($options['data'])) : '',
         ]);
 
         $id = $options['id'] ?? $db->lastInsertId('gc_enrolment');
