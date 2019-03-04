@@ -40,7 +40,7 @@ class SocialSchema
             $item->addColumn('status', Type::INTEGER);
             $item->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $item->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
-            $item->addColumn('published', Type::SMALLINT, ['default' => 1]);
+            $item->addColumn('published', Type::SMALLINT, ['notnull' => true, 'default' => 1]);
             $item->setPrimaryKey(['id']);
             $item->addIndex(['group_id']);
             $item->addIndex(['entity_type']);
