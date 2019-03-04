@@ -40,6 +40,7 @@ class SocialSchema
             $item->addColumn('status', Type::INTEGER);
             $item->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $item->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
+            $item->addColumn('published', Type::SMALLINT, ['default' => 1]);
             $item->setPrimaryKey(['id']);
             $item->addIndex(['group_id']);
             $item->addIndex(['entity_type']);
@@ -47,6 +48,7 @@ class SocialSchema
             $item->addIndex(['status']);
             $item->addIndex(['created']);
             $item->addIndex(['updated']);
+            $item->addIndex(['published']);
             $item->addUniqueIndex(['group_id', 'entity_type', 'entity_id']);
             $item->addForeignKeyConstraint('social_group', ['group_id'], ['id']);
         }
