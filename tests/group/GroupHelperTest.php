@@ -341,6 +341,14 @@ class GroupHelperTest extends UtilTestCase
 
         $group = GroupHelper::load($this->go1, $groupId2);
         $this->assertEquals(20, $group->member_count);
+
+        $this->createGroupItem($this->go1, [
+            'group_id'  => $groupId2,
+            'entity_id' => 99999,
+            'published' => GroupItemStatus::UNPUBLISHED
+        ]);
+        $group = GroupHelper::load($this->go1, $groupId2);
+        $this->assertEquals(20, $group->member_count);
     }
 
     public function testLoadAssignsByGroup()
