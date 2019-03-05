@@ -10,20 +10,22 @@ use go1\util\eck\model\FieldStructure;
 
 class EckHelper
 {
-    public static function metadata(Connection $db, $instance, $entityType, $filter = true): EntityMetadata
+    public static function metadata(Connection $db, $portalName, $entityType, $filter = true, bool $attachPermission = true): EntityMetadata
     {
-        $metadata = new EntityMetadata($instance, $entityType, []);
+        $metadata = new EntityMetadata($portalName, $entityType, []);
 
         $sql = 'SELECT * FROM eck_structure WHERE instance = ? AND entity = ?';
         $sql .= $filter ? ' AND published = 1' : '';
-        $q = $db->executeQuery($sql, [$instance, $entityType]);
+        $q = $db->executeQuery($sql, [$portalName, $entityType]);
         while ($row = $q->fetch(DB::OBJ)) {
             $structure = FieldStructure::create($row);
 
-            // Attach permissions
-            $qq = $db->executeQuery('SELECT * FROM eck_permission_field WHERE field_id = ?', [$structure->id()]);
-            while ($realm = $qq->fetch(DB::OBJ)) {
-                $structure->setPermission($realm->role, $realm->permission, $realm->status ? true : false);
+            if ($attachPermission) {
+                $qq = 'SELECT * FROM eck_permission_field WHERE field_id = ?';
+                $qq = $db->executeQuery($qq, [$structure->id()]);
+                while ($realm = $qq->fetch(DB::OBJ)) {
+                    $structure->setPermission($realm->role, $realm->permission, $realm->status ? true : false);
+                }
             }
 
             $metadata->addField($structure);
@@ -31,7 +33,6 @@ class EckHelper
 
         return $metadata;
     }
-
 
     public static function load(Connection $db, $instance, string $entityType, int $entityId): Entity
     {
@@ -80,6 +81,7 @@ class EckHelper
     public static function field(Connection $db, int $fieldId)
     {
         $row = $db->executeQuery('SELECT * FROM eck_structure WHERE id = ?', [$fieldId])->fetch(DB::OBJ);
+
         return $row ? FieldStructure::create($row) : false;
     }
 }
