@@ -5,6 +5,7 @@ namespace go1\util\schema\mock;
 use Doctrine\DBAL\Connection;
 use go1\util\group\GroupAssignStatuses;
 use go1\util\group\GroupItemStatus;
+use go1\util\group\GroupItemTypes;
 use go1\util\group\GroupStatus;
 use go1\util\group\GroupTypes;
 
@@ -31,12 +32,13 @@ trait GroupMockTrait
     {
         $db->insert('social_group_item', [
             'id'          => $options['id'] ?? null,
-            'group_id'    => $title = isset($options['group_id']) ? $options['group_id'] : 1,
-            'entity_type' => isset($options['entity_type']) ? $options['entity_type'] : 'user',
-            'entity_id'   => isset($options['entity_id']) ? $options['entity_id'] : 1,
-            'status'      => isset($options['status']) ? $options['status'] : GroupItemStatus::ACTIVE,
-            'created'     => isset($options['created']) ? $options['created'] : time(),
-            'updated'     => isset($options['updated']) ? $options['updated'] : time(),
+            'group_id'    => $options['group_id'] ?? 1,
+            'entity_type' => $options['entity_type'] ?? GroupItemTypes::USER,
+            'entity_id'   => $options['entity_id'] ?? 1,
+            'status'      => $options['status'] ?? GroupItemStatus::ACTIVE,
+            'created'     => $options['created'] ?? time(),
+            'updated'     => $options['updated'] ??  time(),
+            'published'   => $options['published'] ?? GroupItemStatus::PUBLISHED
         ]);
 
         return $db->lastInsertId('social_group_item');
