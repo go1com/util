@@ -103,6 +103,7 @@ class EnrolmentSchema
         }
 
         static::update01($schema);
+        static::update02($schema);
     }
 
     public static function installManualRecord(Schema $schema)
@@ -144,6 +145,17 @@ class EnrolmentSchema
                     $enrolment->dropIndex($index->getName());
                     $enrolment->addUniqueIndex(['profile_id', 'parent_lo_id', 'lo_id', 'taken_instance_id']);
                 }
+            }
+        }
+    }
+
+    public static function update02(Schema $schema)
+    {
+        if ($schema->hasTable('enrolment_stream')) {
+            $stream = $schema->getTable('enrolment_stream');
+            if (!$stream->hasColumn('actor_id')) {
+                $stream->addColumn('actor_id', Type::INTEGER, ['unsigned' => true, 'default' => 0]);
+                $stream->addIndex(['actor_id']);
             }
         }
     }
