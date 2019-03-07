@@ -92,11 +92,13 @@ class EnrolmentSchema
             $stream->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
             $stream->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $stream->addColumn('enrolment_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('actor_id', Type::INTEGER, ['unsigned' => true, 'default' => 0]);
             $stream->addColumn('action', Type::STRING);
             $stream->addColumn('payload', Type::BLOB);
             $stream->setPrimaryKey(['id']);
             $stream->addIndex(['enrolment_id']);
             $stream->addIndex(['portal_id']);
+            $stream->addIndex(['actor_id']);
             $stream->addIndex(['created']);
         }
 
