@@ -10,6 +10,7 @@ use stdClass;
 class TaskConsumer implements ConsumerInterface
 {
     protected $db;
+    protected $dbWriter;
     protected $mqClient;
     protected $event;
     protected $taskName;
@@ -26,7 +27,8 @@ class TaskConsumer implements ConsumerInterface
         MqClient $mqClient,
         string $event,
         string $taskName,
-        string $taskItemName
+        string $taskItemName,
+        Connection $dbWriter = null
     )
     {
         $this->db = $db;
@@ -34,6 +36,7 @@ class TaskConsumer implements ConsumerInterface
         $this->event = $event;
         $this->taskName = $taskName;
         $this->taskItemName = $taskItemName;
+        $this->dbWriter = $dbWriter ?? $db;
     }
 
     public function aware(string $event): bool
@@ -90,7 +93,7 @@ class TaskConsumer implements ConsumerInterface
         $task = $this->getTask($taskId);
         if ($task && ($task->getDataType() == $type)) {
             $task->status = Task::STATUS_PROCESSING;
-            TaskHelper::updateTaskStatus($this->db, $task->id, $task->status, $task->name);
+            TaskHelper::updateTaskStatus($this->dbWriter, $task->id, $task->status, $task->name);
             $this->task = $task;
         }
     }
@@ -100,7 +103,7 @@ class TaskConsumer implements ConsumerInterface
         $taskItem = $this->getTaskItem($taskId);
         if ($taskItem && ($taskItem->getDataType() == $type)) {
             $taskItem->status = Task::STATUS_PROCESSING;
-            TaskHelper::updateTaskStatus($this->db, $taskItem->id, $taskItem->status, $taskItem->name);
+            TaskHelper::updateTaskStatus($this->dbWriter, $taskItem->id, $taskItem->status, $taskItem->name);
             $this->taskItem = $taskItem;
         }
     }
@@ -109,7 +112,11 @@ class TaskConsumer implements ConsumerInterface
     {
         $data = $this->taskItem->data;
         $data['error'] = $message;
-        TaskHelper::updateTaskData($this->db, $this->taskItem->id, $data, $this->taskItem->name);
+        $taskData = [
+            'status' => TaskItem::STATUS_FAILED,
+            'data'   => json_encode($data)
+        ];
+        TaskHelper::updateTask($this->dbWriter, $this->taskItem->id, $taskData, $this->taskItem->name);
     }
 
     /**
@@ -121,8 +128,18 @@ class TaskConsumer implements ConsumerInterface
         $sql = "SELECT 1 FROM {$this->taskItemName} WHERE task_id = ? AND status = ?";
         $pending = $this->db->fetchColumn($sql, [$task->id, TaskItem::STATUS_PENDING]);
         if (!$pending) {
-            TaskHelper::updateTaskStatus($this->db, $task->id, Task::STATUS_COMPLETED, $this->taskName);
+            TaskHelper::updateTaskStatus($this->dbWriter, $task->id, Task::STATUS_COMPLETED, $this->taskName);
         }
         $this->taskItem = null;
+    }
+
+    protected function addTaskItem(int $taskId, array $data)
+    {
+        TaskHelper::addTaskItem($this->dbWriter, $this->taskItemName, $taskId, Task::STATUS_PENDING, $data);
+    }
+
+    protected function completeTaskItem(int $taskItemId)
+    {
+        TaskHelper::updateTaskStatus($this->dbWriter, $taskItemId, Task::STATUS_COMPLETED, $this->taskItemName);
     }
 }

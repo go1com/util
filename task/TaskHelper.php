@@ -27,12 +27,17 @@ class TaskHelper
 
     public static function updateTaskStatus(Connection $db, int $id, string $status, string $name)
     {
-        $db->update($name, ['status' => $status], ['id' => $id]);
+        self::updateTask($db, $id, ['status' => $status], $name);
     }
 
     public static function updateTaskData(Connection $db, int $id, array $data, string $name)
     {
-        $db->update($name, ['data' => json_encode($data)], ['id' => $id]);
+        self::updateTask($db, $id, ['data' => json_encode($data)], $name);
+    }
+
+    public static function updateTask(Connection $db, int $id, array $data, string $name)
+    {
+        $db->update($name, $data, ['id' => $id]);
     }
 
     public static function loadTask(Connection $db, int $id, string $name)
