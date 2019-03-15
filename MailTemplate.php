@@ -1351,6 +1351,11 @@ class MailTemplate
         ]
     ];
 
+    const LEARNER_RECOMMENDATION_FORTNIGHTLY = [
+        'key'    => 'learner.recommendation.fortnightly',
+        'tokens' => [/* @TODO */],
+    ];
+
     public const CONTENT_IMPORT_COMPLETE = [
         'key'    => ContentImportCompleteCreate::ROUTING_KEY,
         'tokens' => [
