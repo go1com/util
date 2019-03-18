@@ -21,7 +21,7 @@ class SchedulerClient
         $this->schedulerUrl = $schedulerUrl;
     }
 
-    public function saveJob($jobNameOrId, $expression, Request $actionReq, $retry = false)
+    public function saveJob($jobNameOrId, $expression, Request $actionReq, $retry = false, $status = 1)
     {
         try {
             $headers = [];
@@ -30,6 +30,7 @@ class SchedulerClient
             }
             $this->client->put("$this->schedulerUrl/job/$jobNameOrId?jwt=" . UserHelper::ROOT_JWT, [
                 'json' => [
+                    'status'          => $status,
                     'cron_expression' => $expression,
                     'actions'         => [
                         [
