@@ -158,7 +158,7 @@ class AccessChecker
             return false;
         }
 
-        return $user->{$property} == $profileId;
+        return isset($user->{$property}) && ($user->{$property} == $profileId);
     }
 
     public function hasAccount(Request $req, string $portalName)
