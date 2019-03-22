@@ -134,7 +134,7 @@ class UserHelperTest extends UtilCoreTestCase
             [['embedded' => ['portal' => ['status' => 0]]], false],
             [['embedded' => ['portal' => ['status' => 1]]], true],
             [['embedded' => ['portal' => [
-                0 => ['status' => 1]
+                0 => ['status' => 1],
             ]]], true],
             [['embedded' => ['portal' => [
                 ['status' => 0],
@@ -148,5 +148,61 @@ class UserHelperTest extends UtilCoreTestCase
     {
         $user = json_decode(json_encode($user));
         $this->assertEquals($valid, UserHelper::isEmbeddedPortalActive($user));
+    }
+
+    public function testUserIdsToAccountIds()
+    {
+        $uId1 = $this->createUser($this->go1, ['instance' => 'accounts.local', 'mail' => 'u1@local']);
+        $aId1 = $this->createUser($this->go1, ['instance' => 'qa.mygo1.com', 'mail' => 'u1@local']);
+        $uId2 = $this->createUser($this->go1, ['instance' => 'accounts.local', 'mail' => 'u2@local']);
+        $aId2 = $this->createUser($this->go1, ['instance' => 'qa.mygo1.com', 'mail' => 'u2@local']);
+
+        $this->assertEquals(
+            [
+                $uId1 => null,
+                $uId2 => null,
+            ],
+            UserHelper::userIdsToAccountIds($this->go1, 'qa.mygo1.com', [$uId1, $uId2]),
+            'Before linking => nulls'
+        );
+
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $uId1, $aId1);
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $uId2, $aId2);
+        $this->assertEquals(
+            [
+                $uId1 => $aId1,
+                $uId2 => $aId2,
+            ],
+            UserHelper::userIdsToAccountIds($this->go1, 'qa.mygo1.com', [$uId1, $uId2]),
+            'After linking => expecting valid account Ids.'
+        );
+    }
+
+    public function testAccountIdsToUserIds()
+    {
+        $uId1 = $this->createUser($this->go1, ['instance' => 'accounts.local', 'mail' => 'u1@local']);
+        $aId1 = $this->createUser($this->go1, ['instance' => 'qa.mygo1.com', 'mail' => 'u1@local']);
+        $uId2 = $this->createUser($this->go1, ['instance' => 'accounts.local', 'mail' => 'u2@local']);
+        $aId2 = $this->createUser($this->go1, ['instance' => 'qa.mygo1.com', 'mail' => 'u2@local']);
+
+        $this->assertEquals(
+            [
+                $aId1 => null,
+                $aId2 => null,
+            ],
+            UserHelper::accountIdsToUserIds($this->go1, [$aId1, $aId2]),
+            'Before linking => nulls'
+        );
+
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $uId1, $aId1);
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $uId2, $aId2);
+        $this->assertEquals(
+            [
+                $aId1 => $uId1,
+                $aId2 => $uId2,
+            ],
+            UserHelper::accountIdsToUserIds($this->go1, [$aId1, $aId2]),
+            'After linking => expecting valid user Ids.'
+        );
     }
 }
