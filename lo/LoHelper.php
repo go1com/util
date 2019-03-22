@@ -284,7 +284,7 @@ class LoHelper
             'iframe.frameborder', 'iframe.mozallowfullscreen', 'iframe.webkitallowfullscreen',
         ]);
         $cnf->set('HTML.SafeIframe', true);
-        $cnf->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/|fast\.wistia\.net\/embed/)%');
+        $cnf->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/|fast\.wistia\.net\/embed/|video\.blueoceanacademy\.cn)%');
         $cnf->set('Attr.AllowedFrameTargets', ['_blank', '_self', '_parent', '_top']);
 
         $def = $cnf->getHTMLDefinition(true);
