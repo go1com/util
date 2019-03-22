@@ -243,7 +243,7 @@ class Queue
     const DO_FINDER                            = 'do.finder';
     const DO_PUBLIC_API_WEBHOOK_REQUEST        = 'do.public-api.webhook-request'; # { appId: INT, url: STRING, subject: OBJECT, original: null|OBJECT }
     const DO_MAIL_SEND                         = 'do.mail.send'; # { subject: STRING, body: STRING, html: STRING, context: OBJECT, attachments: STRING[], options: OBJECT }
-    const DO_MAIL_BULK_SEND                    = 'do.mail-bulk.send'; # { subject: STRING, body: STRING, html: STRING, context: OBJECT, attachments: STRING[], options: OBJECT }
+    const DO_MAIL_BULK_SEND                    = 'mail-bulk.send'; # { subject: STRING, body: STRING, html: STRING, context: OBJECT, attachments: STRING[], options: OBJECT }
     const DO_HISTORY_RECORD                    = 'do.history.record';
     const DO_ENROLMENT                         = 'process.enrolment'; # { action: STRING, body: OBJECT }
     const DO_ENROLMENT_CRON                    = 'etc.do.cron'; # { task: STRING }
