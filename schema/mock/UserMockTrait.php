@@ -37,7 +37,7 @@ trait UserMockTrait
         return $this->createRole($db, $options + ['name' => Roles::MANAGER]);
     }
 
-    protected function createRole(Connection $db, array $options)
+    public function createRole(Connection $db, array $options)
     {
         $db->insert('gc_role', [
             'instance'   => isset($options['instance']) ? $options['instance'] : 'az.mygo1.com',
@@ -180,7 +180,7 @@ trait UserMockTrait
         if (isset($options['portal_id'])) {
             $account['portal_id'] = $options['portal_id'];
         }
-        
+
         $user = [
             'id'            => intval($userId),
             'first_name'    => 'A',
