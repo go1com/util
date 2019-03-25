@@ -55,14 +55,14 @@ class UserHelper
             ->fetch(DB::OBJ);
     }
 
-    public static function queryMultiple(Connection $db, array $ids)
+    public static function queryMultiple(Connection $db, array $ids, string $columns = '*')
     {
-        return $db->executeQuery('SELECT * FROM gc_user WHERE id IN (?)', [$ids], [Connection::PARAM_INT_ARRAY]);
+        return $db->executeQuery("SELECT $columns FROM gc_user WHERE id IN (?)", [$ids], [Connection::PARAM_INT_ARRAY]);
     }
 
-    public static function loadMultiple(Connection $db, array $ids): array
+    public static function loadMultiple(Connection $db, array $ids, string $columns = '*'): array
     {
-        return self::queryMultiple($db, $ids)->fetchAll(DB::OBJ);
+        return self::queryMultiple($db, $ids, $columns)->fetchAll(DB::OBJ);
     }
 
     public static function loadByProfileId(Connection $db, int $profileId, string $portalName, $columns = '*')

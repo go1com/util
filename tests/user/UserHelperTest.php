@@ -205,4 +205,18 @@ class UserHelperTest extends UtilCoreTestCase
             'After linking => expecting valid user Ids.'
         );
     }
+
+    public function testloadMultiple()
+    {
+        $uId1 = $this->createUser($this->go1, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com']);
+        $uId2 = $this->createUser($this->go1, ['mail' => 'foo@bar.qux', 'instance' => 'qa.mygo1.com']);
+
+        $user = UserHelper::loadMultiple($this->go1, [$uId1, $uId2]);
+        $this->assertCount(2, $user);
+        $this->assertEquals($uId1, $user[0]->id);
+        $this->assertEquals($uId2, $user[1]->id);
+        $user = UserHelper::loadMultiple($this->go1, [$uId1, $uId2], 'id, mail');
+        $this->assertEquals((object) ['id' => $uId1, 'mail' => 'foo@bar.baz'], $user[0]);
+        $this->assertEquals((object) ['id' => $uId2, 'mail' => 'foo@bar.qux'], $user[1]);
+    }
 }
