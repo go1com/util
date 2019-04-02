@@ -39,6 +39,7 @@ class LoExploreSchema
             'description'     => ['type' => Schema::T_TEXT],
             'tags'            => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
             'custom_tags'     => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
+            'topics'          => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
             'pricing'         => [
                 'properties' => [
                     'currency' => ['type' => Schema::T_KEYWORD],
