@@ -2,7 +2,7 @@
 
 namespace go1\util;
 
-use Aws\Credentials\Credentials;
+use Aws\Credentials\CredentialProvider;
 use Aws\S3\S3Client;
 use Elasticsearch\ClientBuilder as EsClientBuilder;
 use go1\clients\AccountsClient;
@@ -77,7 +77,7 @@ class UtilServiceProvider implements ServiceProviderInterface
             $args = [
                 'region'      => $o['region'],
                 'version'     => $o['version'],
-                'credentials' => new Credentials($o['key'], $o['secret']),
+                'credentials' => CredentialProvider::defaultProvider(),
             ];
 
             if (getenv('MONOLITH')) {
