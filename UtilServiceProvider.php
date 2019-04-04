@@ -51,10 +51,6 @@ class UtilServiceProvider implements ServiceProviderInterface
             $builder = EsClientBuilder::create();
             $o = $c['esOptions'];
 
-            if (!empty($o['credential'])) {
-                $builder->setHandler(new ElasticsearchPhpHandler($o['region'], CredentialProvider::defaultProvider()));
-            }
-
             if ($c->offsetExists('profiler.do')) {
                 if ($c->offsetGet('profiler.do')) {
                     $builder->setLogger($c['profiler.collectors.es']);
