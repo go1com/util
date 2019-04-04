@@ -3,7 +3,6 @@
 namespace go1\util;
 
 use Aws\Credentials\CredentialProvider;
-use Aws\Credentials\Credentials;
 use Aws\ElasticsearchService\ElasticsearchPhpHandler;
 use Aws\S3\S3Client;
 use Elasticsearch\ClientBuilder as EsClientBuilder;
@@ -53,8 +52,7 @@ class UtilServiceProvider implements ServiceProviderInterface
 
             if ($o = $c['esOptions']) {
                 if (!empty($o['credential'])) {
-                    $provider = CredentialProvider::fromCredentials(new Credentials($o['key'], $o['secret']));
-                    $builder->setHandler(new ElasticsearchPhpHandler($o['region'], $provider));
+                    $builder->setHandler(new ElasticsearchPhpHandler($o['region'], CredentialProvider::defaultProvider()));
                 }
             }
 
@@ -76,7 +74,7 @@ class UtilServiceProvider implements ServiceProviderInterface
             $args = [
                 'region'      => $o['region'],
                 'version'     => $o['version'],
-                'credentials' => new Credentials($o['key'], $o['secret']),
+                'credentials' => CredentialProvider::defaultProvider(),
             ];
 
             if (getenv('MONOLITH')) {
