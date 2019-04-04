@@ -3,7 +3,6 @@
 namespace go1\util;
 
 use Aws\Credentials\CredentialProvider;
-use Aws\ElasticsearchService\ElasticsearchPhpHandler;
 use Aws\S3\S3Client;
 use Elasticsearch\ClientBuilder as EsClientBuilder;
 use go1\clients\AccountsClient;
