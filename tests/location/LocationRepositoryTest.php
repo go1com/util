@@ -13,11 +13,11 @@ class LocationRepositoryTest extends UtilTestCase
     protected $rLocation;
     protected $location;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->rLocation = new LocationRepository($this->db, $this->queue);
+        $this->rLocation = new LocationRepository($this->go1, $this->queue);
 
         $this->location = [
             'title'                   => 'GO1',

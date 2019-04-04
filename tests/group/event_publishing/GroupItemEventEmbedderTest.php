@@ -24,13 +24,13 @@ class GroupItemEventEmbedderTest extends UtilTestCase
 
     public function test()
     {
-        $embedder = new GroupItemEventEmbedder($this->db, $this->db, $this->db);
-        $portalId = $this->createPortal($this->db, ['title' => 'ngoc.mygo1.com']);
-        $courseId = $this->createCourse($this->db, ['instance_id' => $portalId]);
-        $id = $this->createGroup($this->db, ['instance_id' => $portalId]);
-        $this->createGroupItem($this->db, ['group_id' => $id, 'entity_type' => GroupItemTypes::LO, 'entity_id' => $courseId]);
+        $embedder = new GroupItemEventEmbedder($this->go1, $this->go1, $this->go1);
+        $portalId = $this->createPortal($this->go1, ['title' => 'ngoc.mygo1.com']);
+        $courseId = $this->createCourse($this->go1, ['instance_id' => $portalId]);
+        $id = $this->createGroup($this->go1, ['instance_id' => $portalId]);
+        $this->createGroupItem($this->go1, ['group_id' => $id, 'entity_type' => GroupItemTypes::LO, 'entity_id' => $courseId]);
 
-        $groupItem = $this->db
+        $groupItem = $this->go1
             ->executeQuery('SELECT * FROM social_group_item WHERE id = ?', [$id], [DB::INTEGER])
             ->fetch(DB::OBJ);
 
@@ -39,6 +39,10 @@ class GroupItemEventEmbedderTest extends UtilTestCase
         $this->assertArrayHasKey('entity', $embedded);
         $this->assertArrayHasKey('group', $embedded);
         $this->assertArrayHasKey('portal', $embedded);
-        $this->assertArraySubset($this->expectLo, (array)$embedded['entity']);
+
+        $entity = (array)$embedded['entity'];
+        $this->assertEquals($this->expectLo['id'], $entity['id']);
+        $this->assertEquals($this->expectLo['type'], $entity['type']);
+        $this->assertEquals($this->expectLo['instance_id'], $entity['instance_id']);
     }
 }

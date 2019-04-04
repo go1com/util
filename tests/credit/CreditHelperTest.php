@@ -16,16 +16,16 @@ class CreditHelperTest extends UtilTestCase
         $productType = 'lo';
         $productId = 234;
 
-        $this->createCredit($this->db, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_AVAILABLE]);
-        $this->createCredit($this->db, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_DISABLED]);
-        $this->createCredit($this->db, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_AVAILABLE]);
-        $this->createCredit($this->db, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_USED]);
-        $this->createCredit($this->db, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_DISABLED]);
-        $this->createCredit($this->db, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_USED]);
-        $this->createCredit($this->db, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_AVAILABLE]);
+        $this->createCredit($this->go1, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_AVAILABLE]);
+        $this->createCredit($this->go1, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_DISABLED]);
+        $this->createCredit($this->go1, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_AVAILABLE]);
+        $this->createCredit($this->go1, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_USED]);
+        $this->createCredit($this->go1, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_DISABLED]);
+        $this->createCredit($this->go1, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_USED]);
+        $this->createCredit($this->go1, ['owner_id' => $ownerId, 'product_type' => $productType, 'product_id' => $productId, 'status' => CreditStatuses::STATUS_AVAILABLE]);
 
-        $this->assertEquals(5, CreditHelper::total($this->db, $ownerId, $productId, $productType));
-        $this->assertEquals(2, CreditHelper::used($this->db, $ownerId, $productId, $productType));
-        $this->assertEquals(3, CreditHelper::remaining($this->db, $ownerId, $productId, $productType));
+        $this->assertEquals(5, CreditHelper::total($this->go1, $ownerId, $productId, $productType));
+        $this->assertEquals(2, CreditHelper::used($this->go1, $ownerId, $productId, $productType));
+        $this->assertEquals(3, CreditHelper::remaining($this->go1, $ownerId, $productId, $productType));
     }
 }

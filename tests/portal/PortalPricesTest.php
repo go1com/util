@@ -15,14 +15,14 @@ class PortalPricingTest extends UtilTestCase
     {
         $data = [
             'user_plan' => [
-                'license'   => 30,
-                'regional'  => 'UK',
-                'product'   => 'premium'
-            ]
+                'license'  => 30,
+                'regional' => 'UK',
+                'product'  => 'premium',
+            ],
         ];
-        $instanceId = $this->createPortal($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->go1, ['data' => $data]);
 
-        $portal = PortalHelper::load($this->db, $instanceId);
+        $portal = PortalHelper::load($this->go1, $instanceId);
         $userLimitationNumber = PortalPricing::getUserLimitationNumber($portal);
 
         $this->assertEquals(63, $userLimitationNumber);
@@ -30,12 +30,9 @@ class PortalPricingTest extends UtilTestCase
 
     public function testGetUserLimitationNumberLegacy()
     {
-        $data = [
-            'foo' => 'bar'
-        ];
-        $instanceId = $this->createPortal($this->db, ['data' => $data]);
-
-        $portal = PortalHelper::load($this->db, $instanceId);
+        $data = ['foo' => 'bar'];
+        $portalId = $this->createPortal($this->go1, ['data' => $data]);
+        $portal = PortalHelper::load($this->go1, $portalId);
         $userLimitationNumber = PortalPricing::getUserLimitationNumber($portal);
 
         $this->assertEquals(-1, $userLimitationNumber);
@@ -45,16 +42,16 @@ class PortalPricingTest extends UtilTestCase
     {
         $data = [
             'user_plan' => [
-                'license'   => 30,
-                'regional'  => 'UK',
-                'product'   => 'premium',
-                'price'     => 10000,
-                'currency'  => 'USD'
-            ]
+                'license'  => 30,
+                'regional' => 'UK',
+                'product'  => 'premium',
+                'price'    => 10000,
+                'currency' => 'USD',
+            ],
         ];
-        $instanceId = $this->createPortal($this->db, ['data' => $data]);
+        $instanceId = $this->createPortal($this->go1, ['data' => $data]);
 
-        $portal = PortalHelper::load($this->db, $instanceId);
+        $portal = PortalHelper::load($this->go1, $instanceId);
         list($price, $currency) = PortalPricing::getPrice($portal);
 
         $this->assertEquals(10000, $price);
@@ -66,39 +63,39 @@ class PortalPricingTest extends UtilTestCase
     public function testCountPortalUsers()
     {
         $instance = 'portal.mygo1.com';
-        $this->createPortal($this->db, ['title' => $instance]);
+        $this->createPortal($this->go1, ['title' => $instance]);
 
-        $this->createUser($this->db, ['mail' => 'user.0@instance.com', 'instance' => $instance]);
-        $this->createUser($this->db, ['mail' => 'user.1@instance.com', 'instance' => $instance]);
+        $this->createUser($this->go1, ['mail' => 'user.0@instance.com', 'instance' => $instance]);
+        $this->createUser($this->go1, ['mail' => 'user.1@instance.com', 'instance' => $instance]);
 
         $i = 0;
         while ($i < 10) {
-            $this->createUser($this->db, ['mail' => "user{$i}@instance.com", 'instance' => $instance]);
+            $this->createUser($this->go1, ['mail' => "user{$i}@instance.com", 'instance' => $instance]);
             $i++;
         }
 
-        $count = PortalPricing::countPortalUsers($this->db, $instance);
+        $count = PortalPricing::countPortalUsers($this->go1, $instance);
         $this->assertEquals(10, $count);
     }
 
     public function testCountPortalActiveUsers()
     {
         $instance = 'portal.mygo1.com';
-        $this->createPortal($this->db, ['title' => $instance]);
+        $this->createPortal($this->go1, ['title' => $instance]);
 
-        $this->createUser($this->db, ['mail' => 'user.0@instance.com', 'instance' => $instance]);
-        $this->createUser($this->db, ['mail' => 'user.1@instance.com', 'instance' => $instance]);
+        $this->createUser($this->go1, ['mail' => 'user.0@instance.com', 'instance' => $instance]);
+        $this->createUser($this->go1, ['mail' => 'user.1@instance.com', 'instance' => $instance]);
 
         $i = 0;
         while ($i < 10) {
-            $this->createUser($this->db, ['mail' => "user{$i}@instance.com", 'instance' => $instance]);
+            $this->createUser($this->go1, ['mail' => "user{$i}@instance.com", 'instance' => $instance]);
             $i++;
         }
 
-        $count = PortalPricing::countCurrentActiveUser($this->db, $instance, '-3 month');
+        $count = PortalPricing::countCurrentActiveUser($this->go1, $instance, '-3 month');
         $this->assertEquals(10, $count);
 
-        $count = PortalPricing::countCurrentActiveUser($this->db, $instance, 'now');
+        $count = PortalPricing::countCurrentActiveUser($this->go1, $instance, 'now');
         $this->assertEquals(0, $count);
     }
 }

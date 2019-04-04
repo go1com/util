@@ -47,7 +47,7 @@ class EckClientTest extends UtilTestCase
             ->expects($this->once())
             ->method('get')
             ->with($this->callback(function ($url) use ($qeliFields) {
-                $this->assertContains("{$this->eckUrl}/fields/{$this->instance}/user", $url);
+                $this->assertStringContainsString("{$this->eckUrl}/fields/{$this->instance}/user", $url);
 
                 return true;
             }))

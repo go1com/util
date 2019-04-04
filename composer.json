@@ -10,31 +10,30 @@
     }
   },
   "require": {
-    "php": "^7.2",
-    "doctrine/cache": "^v1.6.0",
-    "go1/app": "dev-master",
-    "go1/edge": "^0.3",
-    "go1/util_core": "dev-master",
-    "go1/util_core_clients": "dev-master",
-    "graphaware/neo4j-php-client": "^4.6",
-    "jsq/amazon-es-php": "^0.2.0",
-    "ktamas77/firebase-php": "^2.2",
-    "monolog/monolog": "^1.19.0",
-    "ongr/elasticsearch-dsl": "^5.0",
+    "php":                     "^7.2",
+    "doctrine/cache":          "^v1.6.0",
+    "go1/app":                 "dev-master",
+    "go1/edge":                "^0.3",
+    "go1/util_core":           "dev-master",
+    "go1/util_core_clients":   "dev-master",
+    "ktamas77/firebase-php":   "^2.2",
+    "monolog/monolog":         "^1.19.0",
+    "ongr/elasticsearch-dsl":  "^5.0",
     "php-amqplib/php-amqplib": "^2.6",
-    "ralouphie/mimey": "^1.0",
-    "symfony/var-dumper": "^4.0 | ^3.4"
+    "ralouphie/mimey":         "^1.0",
+    "symfony/var-dumper":      "^4.0 | ^3.4"
   },
   "require-dev": {
-    "behat/transliterator": "^1.2",
-    "ezyang/htmlpurifier": "^4.9",
-    "go1/neo4j-builder": "dev-master",
+    "behat/transliterator":      "^1.2",
+    "ezyang/htmlpurifier":       "^4.9",
+    "go1/neo4j-builder":         "dev-master",
     "go1/util_publishing_event": "dev-master",
-    "predis/predis": "~0.8",
-    "qandidate/toggle": "^1.1"
+    "predis/predis":             "~0.8",
+    "qandidate/toggle":          "^1.1"
   },
   "suggest": {
     "predis/predis": "To use the PredisCollection to persist toggles in redis",
-    "qandidate/toggle": "^1.1"
+    "qandidate/toggle": "^1.1",
+    "graphaware/neo4j-php-client": "^4.6"
   }
 }

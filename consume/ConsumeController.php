@@ -54,11 +54,10 @@ class ConsumeController
                 if ($consumer->aware($routingKey)) {
                     try {
                         $consumer->consume($routingKey, $body, $context);
-                    }
-                    catch (NotifyException $e) {
+                        $headers['X-CONSUMERS'][] = get_class($consumer);
+                    } catch (NotifyException $e) {
                         $this->logger->log($e->getNotifyExceptionType(), sprintf('Failed to consume [%s] with %s %s: %s', $routingKey, json_encode($body), json_encode($context), json_encode($e->getNotifyExceptionMessage())));
-                    }
-                    catch (Exception $e) {
+                    } catch (Exception $e) {
                         $errors[] = $e->getMessage();
 
                         if (defined('APP_ROOT') && class_exists(TestCase::class, false)) {
@@ -72,21 +71,34 @@ class ConsumeController
         }
 
         if ($errors) {
-            $this->logger->error(sprintf('Failed to consume [%s] with %s %s: %s', $routingKey, json_encode($body), json_encode($context), json_encode($errors)));
+            $this->logger->error(
+                sprintf(
+                    'Failed to consume [%s] %s : with %s %s',
+                    $routingKey,
+                    json_encode($errors),
+                    json_encode($body),
+                    json_encode($context)
+                )
+            );
 
             return new JsonResponse(null, 500);
         }
 
         return !$this->logWasteTime
-            ? new JsonResponse(null, 204)
-            : new TerminateAwareJsonResponse(null, 204, [
-                function () use ($routingKey, $body, $context) {
-                    $messageReleaseTime = $context->{MqClient::CONTEXT_TIMESTAMP} ?? null;
-                    if ($messageReleaseTime) {
-                        $wasteTime = time() - $messageReleaseTime;
-                        $this->logger->error(sprintf('consume.waste-time.%s: %d %s', $routingKey, $wasteTime, json_encode($body)));
-                    }
-                },
-            ]);
+            ? new JsonResponse(null, 204, $headers ?? [])
+            : new TerminateAwareJsonResponse(
+                null,
+                204,
+                [
+                    function () use ($routingKey, $body, $context) {
+                        $messageReleaseTime = $context->{MqClient::CONTEXT_TIMESTAMP} ?? null;
+                        if ($messageReleaseTime) {
+                            $wasteTime = time() - $messageReleaseTime;
+                            $this->logger->error(sprintf('consume.waste-time.%s: %d %s', $routingKey, $wasteTime, json_encode($body)));
+                        }
+                    },
+                ],
+                $headers ?? []
+            );
     }
 }

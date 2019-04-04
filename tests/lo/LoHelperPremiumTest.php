@@ -10,13 +10,13 @@ class LoHelperPremiumTest extends UtilTestCase
 {
     public function testIsPremium()
     {
-        $this->db->insert('gc_lo_group', ['lo_id' => 1000, 'instance_id' => 10000]);
-        $this->db->insert('gc_lo_group', ['lo_id' => 2000, 'instance_id' => 10000]);
+        $this->go1->insert('gc_lo_group', ['lo_id' => 1000, 'instance_id' => 10000]);
+        $this->go1->insert('gc_lo_group', ['lo_id' => 2000, 'instance_id' => 10000]);
 
-        $this->assertTrue(LoHelper::isBelongToGroup($this->db, 1000, 10000));
-        $this->assertTrue(LoHelper::isBelongToGroup($this->db, 2000, 10000));
-        $this->assertFalse(LoHelper::isBelongToGroup($this->db, 3000, 10000));
-        $this->assertFalse(LoHelper::isBelongToGroup($this->db, 1000, 10001));
+        $this->assertTrue(LoHelper::isBelongToGroup($this->go1, 1000, 10000));
+        $this->assertTrue(LoHelper::isBelongToGroup($this->go1, 2000, 10000));
+        $this->assertFalse(LoHelper::isBelongToGroup($this->go1, 3000, 10000));
+        $this->assertFalse(LoHelper::isBelongToGroup($this->go1, 1000, 10001));
     }
 
     public function testActiveMembershipIds()
@@ -32,28 +32,28 @@ class LoHelperPremiumTest extends UtilTestCase
         $course4 = $course1 + 3;
 
         # Group 1: portal 1 & course 1 & course 3
-        $this->db->insert('social_group_item', ['group_id' => $group1, 'created' => time(), 'updated' => time(), 'entity_type' => 'portal', 'entity_id' => $portal1, 'status' => GroupItemStatus::ACTIVE]);
-        $this->db->insert('social_group_item', ['group_id' => $group1, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course1, 'status' => GroupItemStatus::ACTIVE]);
-        $this->db->insert('social_group_item', ['group_id' => $group1, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course3, 'status' => GroupItemStatus::ACTIVE]);
-        $this->assertEquals([$portal1], LoHelper::activeMembershipIds($this->db, $course1));
-        $this->assertEquals([$portal1], LoHelper::activeMembershipIds($this->db, $course3));
+        $this->go1->insert('social_group_item', ['group_id' => $group1, 'created' => time(), 'updated' => time(), 'entity_type' => 'portal', 'entity_id' => $portal1, 'status' => GroupItemStatus::ACTIVE]);
+        $this->go1->insert('social_group_item', ['group_id' => $group1, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course1, 'status' => GroupItemStatus::ACTIVE]);
+        $this->go1->insert('social_group_item', ['group_id' => $group1, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course3, 'status' => GroupItemStatus::ACTIVE]);
+        $this->assertEquals([$portal1], LoHelper::activeMembershipIds($this->go1, $course1));
+        $this->assertEquals([$portal1], LoHelper::activeMembershipIds($this->go1, $course3));
 
         # Group 2: Portal 2 & course 2
-        $this->db->insert('social_group_item', ['group_id' => $group2, 'created' => time(), 'updated' => time(), 'entity_type' => 'portal', 'entity_id' => $portal2, 'status' => GroupItemStatus::ACTIVE]);
-        $this->db->insert('social_group_item', ['group_id' => $group2, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course2, 'status' => GroupItemStatus::ACTIVE]);
-        $this->assertEquals([$portal2], LoHelper::activeMembershipIds($this->db, $course2));
+        $this->go1->insert('social_group_item', ['group_id' => $group2, 'created' => time(), 'updated' => time(), 'entity_type' => 'portal', 'entity_id' => $portal2, 'status' => GroupItemStatus::ACTIVE]);
+        $this->go1->insert('social_group_item', ['group_id' => $group2, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course2, 'status' => GroupItemStatus::ACTIVE]);
+        $this->assertEquals([$portal2], LoHelper::activeMembershipIds($this->go1, $course2));
 
         # Group 3: contains everything.
-        $this->db->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'portal', 'entity_id' => $portal1, 'status' => GroupItemStatus::ACTIVE]);
-        $this->db->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'portal', 'entity_id' => $portal2, 'status' => GroupItemStatus::ACTIVE]);
-        $this->db->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course1, 'status' => GroupItemStatus::ACTIVE]);
-        $this->db->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course2, 'status' => GroupItemStatus::ACTIVE]);
-        $this->db->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course3, 'status' => GroupItemStatus::ACTIVE]);
-        $this->db->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course4, 'status' => GroupItemStatus::ACTIVE]);
+        $this->go1->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'portal', 'entity_id' => $portal1, 'status' => GroupItemStatus::ACTIVE]);
+        $this->go1->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'portal', 'entity_id' => $portal2, 'status' => GroupItemStatus::ACTIVE]);
+        $this->go1->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course1, 'status' => GroupItemStatus::ACTIVE]);
+        $this->go1->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course2, 'status' => GroupItemStatus::ACTIVE]);
+        $this->go1->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course3, 'status' => GroupItemStatus::ACTIVE]);
+        $this->go1->insert('social_group_item', ['group_id' => $group3, 'created' => time(), 'updated' => time(), 'entity_type' => 'lo', 'entity_id' => $course4, 'status' => GroupItemStatus::ACTIVE]);
 
-        $this->assertEquals([$portal1, $portal2], LoHelper::activeMembershipIds($this->db, $course1));
-        $this->assertEquals([$portal2, $portal1], LoHelper::activeMembershipIds($this->db, $course2));
-        $this->assertEquals([$portal1, $portal2], LoHelper::activeMembershipIds($this->db, $course3));
-        $this->assertEquals([$portal1, $portal2], LoHelper::activeMembershipIds($this->db, $course4));
+        $this->assertEquals([$portal1, $portal2], LoHelper::activeMembershipIds($this->go1, $course1));
+        $this->assertEquals([$portal2, $portal1], LoHelper::activeMembershipIds($this->go1, $course2));
+        $this->assertEquals([$portal1, $portal2], LoHelper::activeMembershipIds($this->go1, $course3));
+        $this->assertEquals([$portal1, $portal2], LoHelper::activeMembershipIds($this->go1, $course4));
     }
 }

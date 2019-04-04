@@ -9,7 +9,7 @@ use go1\util\Text;
 
 trait PolicyMockTrait
 {
-    protected function createItem(Connection $db, array $options): string
+    public function createItem(Connection $db, array $options): string
     {
         $db->insert('policy_policy_item', $record = [
             'id'               => $options['id'] ?? Text::uniqueId(),
