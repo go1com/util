@@ -94,7 +94,12 @@ class AccessChecker
             return null;
         }
 
-        return in_array(Roles::ROOT, isset($user->roles) ? $user->roles : []) ? $user : false;
+        return $this->hasAccountsAdminRole($user) ? $user : false;
+    }
+
+    public function hasAccountsAdminRole($user)
+    {
+        return in_array(Roles::ROOT, isset($user->roles) ? $user->roles : []);
     }
 
     public function validAccount(Request $req, $portalIdOrName)
