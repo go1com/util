@@ -25,6 +25,8 @@ class QueueContext
     const ACTION_USER_MAIL_SECONDARY_CONFIRM  = 'action.user_mail_secondary.confirm';
     const ACTION_USER_MAIL_SECONDARY_VERIFIED = 'action.user_mail_secondary.verified';
 
+    const ACTION_USER_EMAIL_CHANGED           = 'action.user.email_changed';
+
     const ACTION_USER_PASSWORD_CHANGED        = 'action.user.password_changed';
     const ACTION_USER_PASSWORD_FORGET         = 'action.user.password.forget';
 
