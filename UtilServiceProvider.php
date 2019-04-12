@@ -46,7 +46,7 @@ class UtilServiceProvider implements ServiceProviderInterface
             return new QueueClient($c['client'], $c['queue_url']);
         };
 
-        $c['go1.client.es.builder'] = function (Container $c) {
+        $c['go1.client.es.builder'] = $c->factory(function (Container $c) {
             $builder = EsClientBuilder::create();
             $o = $c['esOptions'];
 
@@ -62,7 +62,7 @@ class UtilServiceProvider implements ServiceProviderInterface
             }
 
             return $builder;
-        };
+        });
 
         $c['go1.client.es'] = function (Container $c) {
             /** @var ClientBuilder $builder */
