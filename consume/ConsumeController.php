@@ -58,6 +58,8 @@ class ConsumeController
                     } catch (NotifyException $e) {
                         $this->logger->log($e->getNotifyExceptionType(), sprintf('Failed to consume [%s] with %s %s: %s', $routingKey, json_encode($body), json_encode($context), json_encode($e->getNotifyExceptionMessage())));
                     } catch (Exception $e) {
+                        $this->logger->error(sprintf('Failed to consume [%s] with %s %s. Error: %s - %s', $routingKey, json_encode($body), json_encode($context), $e->getCode(), $e->getMessage()));
+
                         $errors[] = $e->getMessage();
 
                         if (defined('APP_ROOT') && class_exists(TestCase::class, false)) {
