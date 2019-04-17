@@ -15,7 +15,6 @@ class EnrolmentSchema
             $enrolment->addColumn('profile_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('parent_lo_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0, 'comment' => '@deprecated: Wrong design, we can not find parent enrolment from this value. This will be soon dropped.']);
             $enrolment->addColumn('parent_enrolment_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0]);
-            $enrolment->addColumn('parent_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0, 'comment' => 'Parent enrolment ID.']);
             $enrolment->addColumn('lo_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('instance_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('taken_instance_id', 'integer', ['unsigned' => true]);
