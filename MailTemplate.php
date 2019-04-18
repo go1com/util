@@ -83,6 +83,18 @@ class MailTemplate
         'tokens' => [
             '!user_first_name' => 'User first name',
             '!user_mail'       => 'User mail.',
+            '!previous_mail'   => 'Previous user mail',
+            '!portal_name'     => 'Portal name.',
+            '!portal_image'    => 'Portal logo.',
+            '!portal_url'      => 'Portal URL.',
+        ],
+    ];
+
+    const USER_EMAIL_UPDATED = [
+        'key'    => 'user.email.updated',
+        'tokens' => [
+            '!user_first_name' => 'User first name',
+            '!user_mail'       => 'User mail.',
             '!portal_name'     => 'Portal name.',
             '!portal_image'    => 'Portal logo.',
             '!portal_url'      => 'Portal URL.',
