@@ -107,7 +107,7 @@ class SocialSchema
     {
         $socialGroup = $schema->getTable('social_group');
         if (!$socialGroup->hasColumn('premium')) {
-            $socialGroup->addColumn('premium', 'boolean', ['default' => 0]);
+            $socialGroup->addColumn('premium', 'boolean', ['default' => 0, 'notnull' => false]);
         }
     }
 }
