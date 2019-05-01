@@ -88,6 +88,7 @@ class SocialSchema
         }
 
         static::update01($schema);
+        static::update02($schema);
     }
 
     private static function update01(Schema $schema)
@@ -99,6 +100,14 @@ class SocialSchema
         }
         if (!$socialAssign->hasColumn('data')) {
             $socialAssign->addColumn('data', Type::BLOB, ['notnull' => false]);
+        }
+    }
+
+    private static function update02(Schema $schema)
+    {
+        $socialGroup = $schema->getTable('social_group');
+        if (!$socialGroup->hasColumn('premium')) {
+            $socialGroup->addColumn('premium', 'boolean', ['default' => 0, 'notnull' => false]);
         }
     }
 }
