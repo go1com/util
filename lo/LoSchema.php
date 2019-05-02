@@ -33,6 +33,7 @@ class LoSchema
             $lo->addColumn('created', 'integer');
             $lo->addColumn('updated', 'integer', ['notnull' => false]);
             $lo->addColumn('sharing', 'smallint');
+            $lo->addColumn('premium', 'integer', ['unsigned' => true, 'notnull' => true, 'default' => 0]);
 
             $lo->setPrimaryKey(['id']);
             $lo->addIndex(['type']);
