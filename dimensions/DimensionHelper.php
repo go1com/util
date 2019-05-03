@@ -15,7 +15,7 @@ class DimensionHelper
     public static function loadMultiple(Connection $go1, array $ids)
     {
         $ids = array_map('intval', $ids);
-        $dimensions = !$ids ? [] : $db
+        $dimensions = !$ids ? [] : $go1
             ->executeQuery('SELECT * FROM dimensions where id IN (?)', [$ids], [DB::INTEGERS])
             ->fetchAll(DB::OBJ);
         return $dimensions;
@@ -23,6 +23,6 @@ class DimensionHelper
 
     public static function loadAllForType(Connection $go1, int $type)
     {
-        return $db->execQuery('SELECT * FROM dimensions where type = ?', [$type], [DB::INTEGER])->fetch(DB::OBJ);
+        return $go1->execQuery('SELECT * FROM dimensions where type = ?', [$type], [DB::INTEGER])->fetch(DB::OBJ);
     }
 }
