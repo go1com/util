@@ -25,7 +25,7 @@ class DimensionHelper
         return $dimensions;
     }
 
-    public static function loadAllForType(Connection, $go1, int $type)
+    public static function loadAllForType(Connection $go1, int $type)
     {
         Assert::lazy()
             ->that($type, 'type')->numeric()
