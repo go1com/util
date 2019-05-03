@@ -3,6 +3,7 @@
 namespace go1\util\dimensions;
 
 use Doctrine\DBAL\Connection;
+use Assert\Assert;
 use go1\util\DB;
 
 class DimensionHelper
