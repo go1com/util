@@ -35,6 +35,6 @@ trait DimensionsMockTrait
                     $table->addColumn('modified_date', 'datetime', []);
                 }
             }
-        );
+        ]);
     }
 }
