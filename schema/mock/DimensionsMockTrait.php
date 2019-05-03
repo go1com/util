@@ -18,6 +18,6 @@ trait DimesionsMockTrait
             'modified_date' => $options['modified_date'],
         ]);
 
-        $dimensionsId = $db->lastInsertId('dimensions');
+        return $db->lastInsertId('dimensions');
     }
 }
