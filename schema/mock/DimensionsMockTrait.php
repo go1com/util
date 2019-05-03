@@ -27,7 +27,7 @@ trait DimensionsMockTrait
     {
         DB::install($db, [
             function (Schema $schema) {
-                if (!$schama->hasTable('dimensions')) {
+                if (!$schema->hasTable('dimensions')) {
                     $table = $schema->createTable('dimensions');
                     $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
                     $table->addColumn('parent_id', 'integer', ['default' => null]);
