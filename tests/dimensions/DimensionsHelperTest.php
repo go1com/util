@@ -96,7 +96,6 @@ class DimesionsHelperTest extends UtilCoreTestCase
 
         $dimensions = DimensionHelper::loadAllForType($this->go1, '1');
 
-        var_dump($dimensions);
         $this->assertEquals(2, count($dimensions));
         $this->assertEquals('Design and Animation', $dimensions[0]->name);
         $this->assertEquals('Investment and Trading', $dimensions[1]->name);
