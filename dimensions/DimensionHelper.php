@@ -23,6 +23,6 @@ class DimensionHelper
 
     public static function loadAllForType(Connection $go1, int $type)
     {
-        return $go1->execQuery('SELECT * FROM dimensions where type = ?', [$type], [DB::INTEGER])->fetch(DB::OBJ);
+        return $go1->executeQuery('SELECT * FROM dimensions where type = ?', [$type], [DB::INTEGER])->fetch(DB::OBJ);
     }
 }
