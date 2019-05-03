@@ -3,6 +3,7 @@
 namespace go1\util\tests\dimensions;
 use go1\util\schema\mock\DimensionsMockTrait;
 use go1\util\dimensions\DimensionHelper;
+use go1\util\tests\UtilCoreTestCase;
 
 class DimesionsHelperTest extends UtilCoreTestCase
 {
