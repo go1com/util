@@ -20,4 +20,21 @@ trait DimensionsMockTrait
 
         return $db->lastInsertId('dimensions');
     }
+
+    public function createTable(Connection $db)
+    {
+        DB::install($db, [
+            function (Schema $schema) {
+                if (!$schama->hasTable('dimensions')) {
+                    $table = $schema->createTable('dimensions');
+                    $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+                    $table->addColumn('parent_id', 'integer' ['default' => null]);
+                    $table->addColumn('name', 'text', ['notnull' => true]);
+                    $table->addColumn('type', 'text', ['notnull' => true]);
+                    $table->addColumn('created_date', 'datetime', []);
+                    $table->addColumn('modified_date', 'datetime', []);
+                }
+            }
+        );
+    }
 }
