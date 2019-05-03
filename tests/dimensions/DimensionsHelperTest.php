@@ -28,11 +28,11 @@ class DimesionsHelperTest extends UtilCoreTestCase
 
         $dimension = DimensionHelper::load($this->go1, $dimensionId);
 
-        $this->assertEquals(0, $dimension['parent_id']);
-        $this->assertEquals('Design and Animation', $dimension['name']);
-        $this->assertEquals('1', $dimension['type']);
-        $this->assertEquals($createdDate, $dimension['createdDate']);
-        $this->assertEquals($modifiedDate, $dimension['modifiedDate']);
+        $this->assertEquals(0, $dimension->parent_id);
+        $this->assertEquals('Design and Animation', $dimension->name);
+        $this->assertEquals('1', $dimension->type);
+        $this->assertEquals($createdDate, $dimension->createdDate);
+        $this->assertEquals($modifiedDate, $dimension->modifiedDate);
     }
 
     public function testLoadMultiple()
@@ -62,8 +62,8 @@ class DimesionsHelperTest extends UtilCoreTestCase
         $dimensions = DimensionHelper::loadMultiple($this->go1, $dimensionIds);
 
         $this->assertEquals(2, count($dimensions));
-        $this->assertEquals('Design and Animation', $dimensions[0]['name']);
-        $this->assertEquals('Investment and Trading', $dimensions[1]['name']);
+        $this->assertEquals('Design and Animation', $dimensions[0]->name);
+        $this->assertEquals('Investment and Trading', $dimensions[1]->name);
     }
 
     public function testLoadAllForType()
@@ -91,7 +91,7 @@ class DimesionsHelperTest extends UtilCoreTestCase
         $dimensions = DimensionHelper::loadAllForType($this->go1, '1');
 
         $this->assertEquals(2, count($dimensions));
-        $this->assertEquals('Design and Animation', $dimensions[0]['name']);
-        $this->assertEquals('Investment and Trading', $dimensions[1]['name']);
+        $this->assertEquals('Design and Animation', $dimensions[0]->name);
+        $this->assertEquals('Investment and Trading', $dimensions[1]->name);
     }
 }
