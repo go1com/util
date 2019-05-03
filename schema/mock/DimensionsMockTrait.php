@@ -3,6 +3,7 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\Schema;
 use go1\util\dimensions\DimensionsHelper;
 use go1\util\DB;
 
