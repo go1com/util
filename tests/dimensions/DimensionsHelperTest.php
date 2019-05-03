@@ -31,8 +31,8 @@ class DimesionsHelperTest extends UtilCoreTestCase
         $this->assertEquals(0, $dimension->parent_id);
         $this->assertEquals('Design and Animation', $dimension->name);
         $this->assertEquals('1', $dimension->type);
-        $this->assertEquals($createdDate, $dimension->createdDate);
-        $this->assertEquals($modifiedDate, $dimension->modifiedDate);
+        $this->assertEquals($createdDate, $dimension->created_date);
+        $this->assertEquals($modifiedDate, $dimension->modified_date);
     }
 
     public function testLoadMultiple()
