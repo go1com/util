@@ -5,7 +5,7 @@ namespace go1\util\schema\mock;
 use Doctrine\DBAL\Connection;
 use go1\util\dimensions\DimensionsHelper;
 
-trait DimesionsMockTrait
+trait DimensionsMockTrait
 {
     public function createDimension(Connection $db, array $options = [])
     {
