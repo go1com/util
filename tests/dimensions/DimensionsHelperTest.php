@@ -12,8 +12,8 @@ class DimesionsHelperTest extends UtilCoreTestCase
 
     public function testLoad()
     {
-        $createdDate = (new DateTime('-2 day'))->format(DATE_ISO8601);
-        $modifiedDate = (new DateTime('-1 day'))->format(DATE_ISO8601);
+        $createdDate = DateTime::create('-2 day')->format(DATE_ISO8601);
+        $modifiedDate = DateTime::create('-1 day')->format(DATE_ISO8601);
 
         $dimensionId = $this->createDimension($this->go1,
             [
