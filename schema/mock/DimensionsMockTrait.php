@@ -28,7 +28,7 @@ trait DimensionsMockTrait
                 if (!$schama->hasTable('dimensions')) {
                     $table = $schema->createTable('dimensions');
                     $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
-                    $table->addColumn('parent_id', 'integer' ['default' => null]);
+                    $table->addColumn('parent_id', 'integer', ['default' => null]);
                     $table->addColumn('name', 'text', ['notnull' => true]);
                     $table->addColumn('type', 'text', ['notnull' => true]);
                     $table->addColumn('created_date', 'datetime', []);
