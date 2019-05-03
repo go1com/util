@@ -37,6 +37,9 @@ class DimesionsHelperTest extends UtilCoreTestCase
 
     public function testLoadMultiple()
     {
+        $createdDate = DateTime::create('-2 day')->format(DATE_ISO8601);
+        $modifiedDate = DateTime::create('-1 day')->format(DATE_ISO8601);
+
         $dimensionIds = array();
 
         $this->createTable($this->go1);
@@ -68,6 +71,9 @@ class DimesionsHelperTest extends UtilCoreTestCase
 
     public function testLoadAllForType()
     {
+        $createdDate = DateTime::create('-2 day')->format(DATE_ISO8601);
+        $modifiedDate = DateTime::create('-1 day')->format(DATE_ISO8601);
+
         $this->createTable($this->go1);
         $this->createDimension($this->go1,
             [
