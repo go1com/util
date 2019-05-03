@@ -527,4 +527,11 @@ class LoHelperTest extends UtilCoreTestCase
         $this->assertTrue(LoHelper::allowReuseEnrolment($course));
         $this->assertFalse(LoHelper::allowReuseEnrolment(LoHelper::load($this->go1, $this->course1Id)));
     }
+
+    public function testPremiumFlag() 
+    {
+        $courseId = $this->createCourse($this->go1, ['instance_id' => $this->createPortal($this->go1, []), 'premium' => 1]);
+        $course = LoHelper::load($this->go1, $courseId);
+        $this->assertEquals($course->premium, 1);
+    }
 }
