@@ -235,5 +235,19 @@ class LoSchema
             $stream->addIndex(['portal_id']);
             $stream->addIndex(['created']);
         }
+
+        if (!$schema->hasTable('gc_lo_attributes_lookup')) {
+            $attr = $schema->createTable('gc_lo_attributes_lookup');
+            $attr->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $attr->addColumn('key', 'integer', ['unsigned' => true]);
+            $attr->addColumn('name', 'string');
+            $attr->addColumn('identifier', 'string');
+            $attr->addColumn('attribute_type', 'string');
+            $attr->addColumn('lo_type', 'string');
+            $attr->addColumn('required', 'string');
+            $attr->addColumn('permission', 'string');
+            $attr->addColumn('default_value', 'string', ['notnull' => false]);
+            $attr->setPrimaryKey(['id']);
+        }
     }
 }
