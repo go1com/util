@@ -241,7 +241,6 @@ class LoSchema
             $attr->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $attr->addColumn('key', 'integer', ['unsigned' => true]);
             $attr->addColumn('name', 'string');
-            $attr->addColumn('identifier', 'string');
             $attr->addColumn('attribute_type', 'string');
             $attr->addColumn('lo_type', 'string');
             $attr->addColumn('required', 'string');
