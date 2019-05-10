@@ -185,4 +185,18 @@ trait LoMockTrait
             'status'      => $status,
         ]);
     }
+
+    public function createAttributeLookup(Connection $db, $key, $name, $attributeType, $loType, $required,
+                                          $permission, $defaultValue)
+    {
+        $db->insert('gc_lo_attributes_lookup', [
+            '`key`'             => $key,
+            'name'              => $name,
+            'attribute_type'    => $attributeType,
+            'lo_type'           => $loType,
+            'required'          => $required,
+            'permission'        => $permission,
+            'default_value'     => $defaultValue
+        ]);
+    }
 }
