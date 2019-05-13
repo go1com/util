@@ -8,6 +8,7 @@ class LoAttributes
     const WCAG             = 2;  // Web Content Accessibility Guidelines compatible
     const ASSESSABLE       = 3;
     const AVAILABILITY     = 4;  // marketplace
+    const REGION_RESTRICTION = 5;
 
     public static function machineName(int $attribute): ?string
     {
@@ -16,6 +17,7 @@ class LoAttributes
             self::WCAG             => 'wcag',
             self::ASSESSABLE       => 'assessable',
             self::AVAILABILITY     => 'availability',
+            self::REGION_RESTRICTION => 'region_restriction'
         ];
 
         return $map[$attribute] ?? null;
