@@ -248,5 +248,12 @@ class LoSchema
             $attr->addColumn('default_value', 'string', ['notnull' => false]);
             $attr->setPrimaryKey(['id']);
         }
+
+        // Alter origin_id column
+        if ($schema->hasTable('gc_lo') && $lo = $schema->getTable('gc_lo')) {
+            if ($lo->hasColumn('origin_id') && !$lo->hasIndex('origin_id')) {
+                $lo->addIndex(['origin_id']);
+            }
+        }
     }
 }
