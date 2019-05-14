@@ -412,6 +412,14 @@ class LoHelper
         return $ids;
     }
 
+    public static function moduleIdToCourseId(Connection $db, int $moduleId): int
+    {
+        $_ = 'SELECT source_id FROM gc_ro WHERE (type = ? OR type = ?) AND target_id = ?';
+        $_ = $db->fetchColumn($_, [EdgeTypes::HAS_MODULE, EdgeTypes::HAS_ELECTIVE_LO, $moduleId]);
+
+        return (int) $_;
+    }
+
     public static function moduleIds(Connection $db, int $loId): array
     {
         return EdgeHelper
