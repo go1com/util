@@ -250,8 +250,17 @@ class LoSchema
         }
 
         // Alter origin_id column
-        if ($schema->hasTable('gc_lo') && $lo = $schema->getTable('gc_lo')) {
-            if ($lo->hasColumn('origin_id') && !$lo->hasIndex('origin_id')) {
+        if ($schema->hasTable('gc_lo')) {
+            $lo = $schema->getTable('gc_lo');
+
+            $indexed = false;
+            foreach ($lo->getIndexes() as $index) {
+                if (['origin_id'] == $index->getColumns()) {
+                    $indexed = true;
+                }
+            }
+            
+            if (!$indexed) {
                 $lo->addIndex(['origin_id']);
             }
         }
