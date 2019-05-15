@@ -246,6 +246,12 @@ class LoSchema
             $attr->addColumn('required', 'string');
             $attr->addColumn('permission', 'string');
             $attr->addColumn('default_value', 'string', ['notnull' => false]);
+            $attr->addColumn('is_array', 'smallint', [
+                'unsigned' => true,
+                'notnull' => false,
+                'default' => 0,
+            ]);
+            
             $attr->setPrimaryKey(['id']);
         }
 
