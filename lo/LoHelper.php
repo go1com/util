@@ -198,14 +198,9 @@ class LoHelper
             if (in_array($attribute->key, LoAttributes::all())) {
                 $_ = LoAttributes::machineName($attribute->key);
 
-                print_r($type);
-                print_r($attribute);
-                if ($type) {
-                    if (isset($attribute) && isset($attribute->is_array) && $attribute->is_array === "1") {
-                        $attribute->value = json_decode($attribute->value);
-                    }
+                if (isset($attribute) && isset($attribute->is_array) && $attribute->is_array === "1") {
+                    $attribute->value = json_decode($attribute->value);
                 }
-
                 $arr->{$_} = $attribute->value;
             }
         }
