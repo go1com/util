@@ -159,7 +159,7 @@ class LoHelper
 
         if ($attachAttributes) {
             foreach ($learningObjects as &$lo) {
-                $lo->attr = self::getAttributes($db, $lo->id, $lo->type);
+                $lo->attributes = self::getAttributes($db, $lo->id, $lo->type);
             }
         }
 
