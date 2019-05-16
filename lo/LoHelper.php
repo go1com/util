@@ -171,38 +171,41 @@ class LoHelper
 
     private static function getAttributes(Connection $db, int $id, string $type)
     {
-        $qb = $db
-            ->createQueryBuilder()
-            ->select('gc_lo_attributes.key', 'gc_lo_attributes.value', 'lookup.is_array')
-            ->from('gc_lo_attributes')
-            ->join('gc_lo_attributes', 'gc_lo_attributes_lookup', 'lookup', 'gc_lo_attributes.key = lookup.key')
-            ->andWhere('lo_id = :lo_id')
-            ->setParameter(':lo_id', $id, DB::INTEGER);
-
-        if (!empty($type)) {
-            $qb = $qb
-                ->andWhere('(lo_type = :type OR lo_type is null)')
-                ->setParameter(':type', $type);
-        } else {
-            $qb = $qb
-                ->andWhere('lo_type is null');
-        }
-
-        $attributes = $qb
-            ->execute()
-            ->fetchAll(DB::OBJ);
-
         $arr = (object) [];
-
-        foreach ($attributes as $attribute) {
-            if (in_array($attribute->key, LoAttributes::all())) {
-                $_ = LoAttributes::machineName($attribute->key);
-
-                if (isset($attribute) && isset($attribute->is_array) && $attribute->is_array === "1") {
-                    $attribute->value = json_decode($attribute->value);
-                }
-                $arr->{$_} = $attribute->value;
+        try {
+            $qb = $db
+                ->createQueryBuilder()
+                ->select('gc_lo_attributes.key', 'gc_lo_attributes.value', 'lookup.is_array')
+                ->from('gc_lo_attributes')
+                ->leftJoin('gc_lo_attributes', 'gc_lo_attributes_lookup', 'lookup', 'gc_lo_attributes.key = lookup.key')
+                ->andWhere('lo_id = :lo_id')
+                ->setParameter(':lo_id', $id, DB::INTEGER);
+    
+            if (!empty($type)) {
+                $qb = $qb
+                    ->andWhere('(lo_type = :type OR lo_type is null)')
+                    ->setParameter(':type', $type);
+            } else {
+                $qb = $qb
+                    ->andWhere('lo_type is null');
             }
+    
+            $attributes = $qb
+                ->execute()
+                ->fetchAll(DB::OBJ);
+    
+            foreach ($attributes as $attribute) {
+                if (in_array($attribute->key, LoAttributes::all())) {
+                    $_ = LoAttributes::machineName($attribute->key);
+    
+                    if (isset($attribute) && isset($attribute->is_array) && $attribute->is_array === "1") {
+                        $attribute->value = json_decode($attribute->value);
+                    }
+                    $arr->{$_} = $attribute->value;
+                }
+            }
+        } catch (\Exception $e) {
+            // Do nothing, this is here in case it is used before the required tables are added
         }
 
         return $arr;

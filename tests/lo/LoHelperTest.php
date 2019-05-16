@@ -6,6 +6,7 @@ use DateTime;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
+use go1\util\lo\LoAttributes;
 use go1\util\lo\LoStatuses;
 use go1\util\lo\LoSuggestedCompletionTypes;
 use go1\util\schema\mock\EnrolmentMockTrait;
@@ -307,6 +308,21 @@ class LoHelperTest extends UtilCoreTestCase
         $this
             ->hasParent($this->module2Id, $parentIds)
             ->hasParent($this->course2Id, $parentIds);
+    }
+
+    public function testLoadAttributes()
+    {
+        $courseId = $this->createCourse($this->go1, ['course' => []]);
+        $this->go1->insert('gc_lo_attributes', [
+            'id'        => null,
+            'lo_id'     => $courseId,
+            'key'       => LoAttributes::MOBILE_OPTIMISED,
+            'value'     => 1,
+            'created'   => 0
+        ]);
+        $lo = LoHelper::load($this->go1, $courseId, null, false, true);
+        $this->assertNotEmpty($lo->attributes);
+        $this->assertEquals($lo->attributes->{LoAttributes::machineName(LoAttributes::MOBILE_OPTIMISED)}, 1);
     }
 
     public function testChildIds()
