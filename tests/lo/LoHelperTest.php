@@ -325,6 +325,31 @@ class LoHelperTest extends UtilCoreTestCase
         $this->assertEquals($lo->attributes->{LoAttributes::machineName(LoAttributes::MOBILE_OPTIMISED)}, 1);
     }
 
+    public function testLoadAttributesWithLookup()
+    {
+        $courseId = $this->createCourse($this->go1, ['course' => []]);
+        $this->go1->insert('gc_lo_attributes', [
+            'id'        => null,
+            'lo_id'     => $courseId,
+            'key'       => LoAttributes::REGION_RESTRICTION,
+            'value'     => '["AU"]',
+            'created'   => 0
+        ]);
+        $this->go1->insert('gc_lo_attributes_lookup', [
+            'id'                => null,
+            'name'              => LoAttributes::machineName(LoAttributes::REGION_RESTRICTION),
+            'key'               => LoAttributes::REGION_RESTRICTION,
+            'attribute_type'    => 'TEXT',
+            'lo_type'           => 'course',
+            'required'          => '["NO"]',
+            'permission'        => '["Author","AccountsOnAdmin","Admin","None"]',
+            'is_array'          => 1
+        ]);
+        $lo = LoHelper::load($this->go1, $courseId, null, false, true);
+        $this->assertNotEmpty($lo->attributes);
+        $this->assertEquals($lo->attributes->{LoAttributes::machineName(LoAttributes::REGION_RESTRICTION)}, ["AU"]);
+    }
+
     public function testChildIds()
     {
         # Course 1
@@ -544,7 +569,7 @@ class LoHelperTest extends UtilCoreTestCase
         $this->assertFalse(LoHelper::allowReuseEnrolment(LoHelper::load($this->go1, $this->course1Id)));
     }
 
-    public function testPremiumFlag() 
+    public function testPremiumFlag()
     {
         $courseId = $this->createCourse($this->go1, ['instance_id' => $this->createPortal($this->go1, []), 'premium' => 1]);
         $course = LoHelper::load($this->go1, $courseId);
