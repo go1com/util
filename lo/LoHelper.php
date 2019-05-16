@@ -56,12 +56,12 @@ class LoHelper
         return $payload->embedded->lo ?? self::load($go1, $payload->{$loIdProperty});
     }
 
-    public static function load(Connection $go1, int $id, int $portalId = null, bool $expensiveTree = false)
+    public static function load(Connection $go1, int $id, int $portalId = null, bool $expensiveTree = false, bool $attachAttributes = false)
     {
-        return ($learningObjects = static::loadMultiple($go1, [$id], $portalId, $expensiveTree)) ? $learningObjects[0] : false;
+        return ($learningObjects = static::loadMultiple($go1, [$id], $portalId, $expensiveTree, $attachAttributes)) ? $learningObjects[0] : false;
     }
 
-    public static function loadMultiple(Connection $db, array $ids, int $portalId = null, bool $expensiveTree = false): array
+    public static function loadMultiple(Connection $db, array $ids, int $portalId = null, bool $expensiveTree = false, bool $attachAttributes = false): array
     {
         $ids = array_map('intval', $ids);
         $learningObjects = !$ids ? [] : $db
@@ -157,11 +157,58 @@ class LoHelper
             }
         }
 
+        if ($attachAttributes) {
+            $attributes = self::getAttributes($db, $loIds);
+            foreach ($learningObjects as &$lo) {
+                $lo->attributes = (object) ($attributes[$lo->id] ?? []);
+            }
+        }
+
+
         # Load events.
         $learningObjects && static::attachEvents($db, $learningObjects, $loIds);
 
         return $learningObjects;
     }
+
+    private static function getAttributes(Connection $db, array $ids)
+    {
+        $arr = [];
+        try {
+            $qb = $db
+                ->createQueryBuilder()
+                ->select('gc_lo_attributes.lo_id, gc_lo_attributes.key', 'gc_lo_attributes.value', 'lookup.is_array', 'lo.type')
+                ->from('gc_lo_attributes')
+                ->join('gc_lo_attributes', 'gc_lo', 'lo', 'gc_lo_attributes.lo_id = lo.id')
+                ->leftJoin('gc_lo_attributes', 'gc_lo_attributes_lookup', 'lookup', 'gc_lo_attributes.key = lookup.key')
+                ->andWhere('lo_id in (:lo_id)')
+                ->setParameter(':lo_id', $ids, DB::INTEGERS)
+                ->andWhere('(lo_type = lo.type OR lo_type is null)');
+
+            $attributes = $qb
+                ->execute()
+                ->fetchAll(DB::OBJ);
+
+            foreach ($attributes as $attribute) {
+                if (in_array($attribute->key, LoAttributes::all())) {
+                    $_ = LoAttributes::machineName($attribute->key);
+
+                    if (isset($attribute) && isset($attribute->is_array) && $attribute->is_array === "1") {
+                        $attribute->value = json_decode($attribute->value);
+                    }
+                    if (empty($arr[$attribute->lo_id])) {
+                        $arr[$attribute->lo_id] = [];
+                    }
+                    $arr[$attribute->lo_id][$_] = $attribute->value;
+                }
+            }
+        } catch (\Exception $e) {
+            // Do nothing, this is here in case it is used before the required tables are added
+        }
+
+        return $arr;
+    }
+
 
     private static function attachEvents(Connection $db, array &$los, array &$loIds)
     {
