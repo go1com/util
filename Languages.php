@@ -105,6 +105,7 @@ class Languages
         'zh-hant'     => ['Chinese, Traditional', '繁體中文'],
     ];
 
+    // last updated: 2019-05-20
     const ISO_639_1_CODES = [
         'aa',
         'ab',
