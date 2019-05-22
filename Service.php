@@ -2,6 +2,8 @@
 
 namespace go1\util;
 
+use function getenv;
+
 class Service
 {
     const VERSION = 'v19.02.22.0';
@@ -25,6 +27,13 @@ class Service
 
     public static function accountsName(string $env): string
     {
+        if (!in_array($env, ['dev', 'staging'])) {
+            $k8s = 'http://user' === self::url('user', $env, getenv('SERVICE_URL_PATTERN'));
+            if ($k8s) {
+                return 'accounts.go1';
+            }
+        }
+
         switch ($env) {
             case 'production':
             case 'staging':
