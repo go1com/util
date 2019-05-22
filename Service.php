@@ -2,6 +2,7 @@
 
 namespace go1\util;
 
+use function defined;
 use function getenv;
 
 class Service
@@ -27,11 +28,8 @@ class Service
 
     public static function accountsName(string $env): string
     {
-        if (!in_array($env, ['dev', 'staging'])) {
-            $k8s = 'http://user' === self::url('user', $env, getenv('SERVICE_URL_PATTERN'));
-            if ($k8s) {
-                return 'accounts.go1';
-            }
+        if ($configured = getenv('ACCOUNTS_NAME')) {
+            return $configured;
         }
 
         switch ($env) {
