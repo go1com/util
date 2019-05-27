@@ -11,8 +11,8 @@ class LoAttributes
     const ASSESSABLE         = 3;
     const AVAILABILITY       = 4;  // marketplace
     const REGION_RESTRICTION = 5;
-    const REGION_RESTRICTIONS = 5;
     const TOPICS             = 6;
+    const REGION_RESTRICTIONS = 7;
 
     public static function machineName(int $attribute): ?string
     {
