@@ -11,6 +11,7 @@ class LoAttributes
     const ASSESSABLE         = 3;
     const AVAILABILITY       = 4;  // marketplace
     const REGION_RESTRICTION = 5;
+    const REGION_RESTRICTIONS = 5;
     const TOPICS             = 6;
 
     public static function machineName(int $attribute): ?string
@@ -21,6 +22,7 @@ class LoAttributes
             self::ASSESSABLE         => 'assessable',
             self::AVAILABILITY       => 'availability',
             self::REGION_RESTRICTION => 'region_restriction',
+            self::REGION_RESTRICTIONS => 'region_restrictions',
             self::TOPICS             => 'topics'
         ];
 
