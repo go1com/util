@@ -177,7 +177,7 @@ class LoHelper
         try {
             $qb = $db
                 ->createQueryBuilder()
-                ->select('gc_lo_attributes.lo_id, gc_lo_attributes.key', 'gc_lo_attributes.value', 'lookup.is_array', 'lo.type')
+                ->select('gc_lo_attributes.lo_id, gc_lo_attributes.key', 'gc_lo_attributes.value', 'lookup.attribute_type', 'lookup.is_array', 'lo.type')
                 ->from('gc_lo_attributes')
                 ->join('gc_lo_attributes', 'gc_lo', 'lo', 'gc_lo_attributes.lo_id = lo.id')
                 ->leftJoin('gc_lo_attributes', 'gc_lo_attributes_lookup', 'lookup', 'gc_lo_attributes.key = lookup.key')
@@ -198,6 +198,13 @@ class LoHelper
                     }
                     if (empty($arr[$attribute->lo_id])) {
                         $arr[$attribute->lo_id] = [];
+                    }
+                    if ($attribute->attribute_type === LoAttributeTypes::DIMENSION) {
+                        $newVal = $attribute->value;
+                        $attribute->value = [];
+                        foreach ($newVal as $val) {
+                            $attribute->value[strval($val)] = "";
+                        }
                     }
                     $arr[$attribute->lo_id][$_] = $attribute->value;
                 }

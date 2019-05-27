@@ -112,8 +112,10 @@ trait LoMockTrait
         if (isset($options['attributes'])) {
             $attrs = array_keys($options['attributes']);
             foreach ($attrs as $att) {
-                $lookup = $this->getAttributeLookup($db, $opt["type"], $att)[0];
-                $this->createAttribute($db, $courseId, $lookup['key'], $this->formatAttributeValue($options['attributes'][$att], $lookup));
+                $lookup = $this->getAttributeLookup($db, $opt["type"], $att);
+                if (isset($lookup['key'])) {
+                    $this->createAttribute($db, $courseId, $lookup['key'], $this->formatAttributeValue($options['attributes'][$att], $lookup));
+                }
             }
         }
 
@@ -226,7 +228,7 @@ trait LoMockTrait
     {
         $q = 'SELECT * FROM gc_lo_attributes_lookup WHERE lo_type = ? AND name = ?';
         $q = $db->fetchAll($q, [$loType, $name], [DB::STRING, DB::STRING]);
-        return $q;
+        return isset($q[0]) ? $q[0] : null;
     }
 
 
