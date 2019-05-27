@@ -575,4 +575,24 @@ class LoHelperTest extends UtilCoreTestCase
         $course = LoHelper::load($this->go1, $courseId);
         $this->assertEquals($course->premium, 1);
     }
+
+    public function testAttributes()
+    {
+        $this->createAttributeLookup($this->go1, LoAttributes::REGION_RESTRICTIONS, LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), 'DIMENSION', 'video',
+            '["ALWAYS", "FOR_PUBLISH"]', '["Author"]', null, 1);
+
+        $loId = $this->createLO($this->go1, [
+                'instance_id' => $this->createPortal($this->go1, []),
+                'type' => 'video',
+                'attributes' => [
+                    LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS) => [
+                        "3" => "Global",
+                        "4" => "AU"
+                    ]
+                ]
+            ]);
+
+        $lo = LoHelper::load($this->go1, $loId, null, false, true);
+        $this->assertObjectHasAttribute(LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), $lo->attributes);
+    }
 }

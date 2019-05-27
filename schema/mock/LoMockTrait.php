@@ -3,10 +3,12 @@
 namespace go1\util\schema\mock;
 
 use Doctrine\DBAL\Connection;
+use go1\util\DB;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
 use go1\util\lo\LoTypes;
+use go1\util\lo\LoAttributeTypes;
 use go1\util\Text;
 
 trait LoMockTrait
@@ -62,7 +64,7 @@ trait LoMockTrait
             $start = !isset($event['start']) ? 0 : (is_numeric($event['start']) ? $event['start'] : strtotime($event['start']));
         }
 
-        $db->insert('gc_lo', [
+        $opt = [
             'id'              => $options['id'] ?? null,
             'type'            => isset($options['type']) ? $options['type'] : LoTypes::COURSE,
             'instance_id'     => $instanceId = isset($options['instance_id']) ? $options['instance_id'] : 0,
@@ -86,7 +88,8 @@ trait LoMockTrait
             'updated'         => isset($options['updated']) ? $options['updated'] : time(),
             'sharing'         => isset($options['sharing']) ? $options['sharing'] : 0,
             'premium'         => isset($options['premium']) ? $options['premium'] : 0,
-        ]);
+        ];
+        $db->insert('gc_lo', $opt);
 
         $courseId = $db->lastInsertId('gc_lo');
         if (!empty($options['price'])) {
@@ -103,6 +106,16 @@ trait LoMockTrait
             $tags = Text::parseInlineTags($options['tags']);
             foreach ($tags as $tag) {
                 $this->postTag($db, $instanceId, $tag);
+            }
+        }
+
+        if (isset($options['attributes'])) {
+            $attrs = array_keys($options['attributes']);
+            foreach ($attrs as $att) {
+                $lookup = $this->getAttributeLookup($db, $opt["type"], $att);
+                if (isset($lookup['key'])) {
+                    $this->createAttribute($db, $courseId, $lookup['key'], $this->formatAttributeValue($options['attributes'][$att], $lookup));
+                }
             }
         }
 
@@ -187,7 +200,7 @@ trait LoMockTrait
     }
 
     public function createAttributeLookup(Connection $db, $key, $name, $attributeType, $loType, $required,
-                                          $permission, $defaultValue)
+                                          $permission, $defaultValue, $isArray = 0)
     {
         $db->insert('gc_lo_attributes_lookup', [
             '`key`'             => $key,
@@ -196,7 +209,45 @@ trait LoMockTrait
             'lo_type'           => $loType,
             'required'          => $required,
             'permission'        => $permission,
-            'default_value'     => $defaultValue
+            'default_value'     => $defaultValue,
+            'is_array'          => $isArray
         ]);
+    }
+
+    public function createAttribute(Connection $db, $loId, $key, $value)
+    {
+        $db->insert('gc_lo_attributes', [
+            'lo_id'             => $loId,
+            'key'               => $key,
+            'value'             => $value,
+            'created'           => time()
+        ]);
+    }
+
+    public function getAttributeLookup(Connection $db, $loType, $name)
+    {
+        $q = 'SELECT * FROM gc_lo_attributes_lookup WHERE lo_type = ? AND name = ?';
+        $q = $db->fetchAll($q, [$loType, $name], [DB::STRING, DB::STRING]);
+        return isset($q[0]) ? $q[0] : null;
+    }
+
+
+    public function formatAttributeValue($value, $lookup)
+    {
+        if (!isset($lookup) || count($lookup) <= 0) {
+            return $value;
+        }
+        if ($lookup['attribute_type'] === LoAttributeTypes::DIMENSION) {
+            $value = $this->is_assoc($value) ? array_keys($value) : $value;
+        }
+        if ($lookup['is_array']) {
+            $value = is_array($value) ? json_encode($value) : json_encode([$value]);
+        }
+
+        return $value;
+    }
+    public function is_assoc($var)
+    {
+        return is_array($var) && array_diff_key($var, array_keys(array_keys($var)));
     }
 }
