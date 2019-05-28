@@ -251,7 +251,10 @@ class LoSchema
                 'notnull' => false,
                 'default' => 0,
             ]);
-            
+            $attr->addColumn('dimension_id', 'integer', [
+                'unsigned' => true,
+                'notnull'  => false,
+            ]);
             $attr->setPrimaryKey(['id']);
         }
 

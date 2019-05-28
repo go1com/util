@@ -4,6 +4,7 @@ namespace go1\util\lo;
 
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
+use go1\util\dimensions\DimensionHelper;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
@@ -177,7 +178,7 @@ class LoHelper
         try {
             $qb = $db
                 ->createQueryBuilder()
-                ->select('gc_lo_attributes.lo_id, gc_lo_attributes.key', 'gc_lo_attributes.value', 'lookup.attribute_type', 'lookup.is_array', 'lo.type')
+                ->select('gc_lo_attributes.lo_id, gc_lo_attributes.key', 'gc_lo_attributes.value', 'lookup.attribute_type', 'lookup.is_array', 'lo.type', 'lookup.dimension_id')
                 ->from('gc_lo_attributes')
                 ->join('gc_lo_attributes', 'gc_lo', 'lo', 'gc_lo_attributes.lo_id = lo.id')
                 ->leftJoin('gc_lo_attributes', 'gc_lo_attributes_lookup', 'lookup', 'gc_lo_attributes.key = lookup.key')
@@ -203,7 +204,12 @@ class LoHelper
                         $newVal = $attribute->value;
                         $attribute->value = [];
                         foreach ($newVal as $val) {
-                            $attribute->value[strval($val)] = "";
+                            $dimensions = DimensionHelper::loadAllForType($db, $attribute->dimension_id);
+                            foreach ($dimensions as $dimension) {
+                                if ($dimension->id == $val) {
+                                    $value[strval($val)] = $dimension->name;
+                                }
+                            }
                         }
                     }
                     $arr[$attribute->lo_id][$_] = $attribute->value;
@@ -589,22 +595,15 @@ class LoHelper
             $newVal = $value;
             $value = [];
             foreach ($newVal as $val) {
-                $dimensions = self::getDimensionsByType($db, $lookup->dimensionId);
+                $dimensions = DimensionHelper::loadAllForType($db, $lookup->dimensionId);
                 foreach ($dimensions as $dimension) {
-                    if ($dimension['id'] == $val) {
-                        $value[strval($val)] = $dimension['name'];
+                    if ($dimension->id == $val) {
+                        $value[strval($val)] = $dimension->name;
                     }
                 }
             }
         }
 
         return $value;
-    }
-
-    public static function getDimensionsByType($db, $type)
-    {
-        $sql = 'SELECT *  FROM dimensions WHERE type = ?';
-        $rows = $db->executeQuery($sql, [$type], [DB::STRING])->fetchAll();
-        return $rows;
     }
 }

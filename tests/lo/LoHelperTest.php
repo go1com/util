@@ -579,8 +579,16 @@ class LoHelperTest extends UtilCoreTestCase
     public function testAttributes()
     {
         $this->createAttributeLookup($this->go1, LoAttributes::REGION_RESTRICTIONS, LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), 'DIMENSION', 'video',
-            '["ALWAYS", "FOR_PUBLISH"]', '["Author"]', null, 1);
+            '["ALWAYS", "FOR_PUBLISH"]', '["Author"]', null, 1, 2);
 
+        $this->go1->insert('dimensions', [
+            'id'             => 3,
+            'parent_id'      => 0,
+            'name'           => "NAME",
+            'type'           => "2",
+            'created_date'   => 0,
+            'modified_date'   => 0
+        ]);
         $loId = $this->createLO($this->go1, [
                 'instance_id' => $this->createPortal($this->go1, []),
                 'type' => 'video',
