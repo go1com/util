@@ -90,7 +90,13 @@ class LoExploreSchema
                 'assessable'            => ['type' => Schema::T_INT],
                 'mobile_optimised'      => ['type' => Schema::T_INT],
                 'wcag'                  => ['type' => Schema::T_INT],
-                'region_restriction'    => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
+                'region_restrictions'    => [
+                    'type'          => Schema::T_NESTED,
+                    'properties'    => [
+                        'value'     => ['type' => Schema::T_KEYWORD],
+                        'key'       => ['type' => Schema::T_KEYWORD],
+                    ],
+                ],
             ],
             'events'          => [
                 'type'       => Schema::T_NESTED,
