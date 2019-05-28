@@ -31,6 +31,8 @@ class DimensionRepository
             $table->addColumn('type', TYPE::STRING);
             $table->addColumn('created_date', TYPE::DATETIME);
             $table->addColumn('modified_date', TYPE::DATETIME);
+            $table->addIndex(['type']);
+            $table->addIndex(['name']);
         }
 
     }
