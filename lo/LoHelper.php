@@ -204,10 +204,12 @@ class LoHelper
                         $newVal = $attribute->value;
                         $attribute->value = [];
                         foreach ($newVal as $val) {
-                            $dimensions = DimensionHelper::loadAllForType($db, $attribute->dimension_id);
-                            foreach ($dimensions as $dimension) {
-                                if ($dimension->id == $val) {
-                                    $value[strval($val)] = $dimension->name;
+                            if ($attribute->dimension_id) {
+                                $dimensions = DimensionHelper::loadAllForType($db, $attribute->dimension_id);
+                                foreach ($dimensions as $dimension) {
+                                    if ($dimension->id == $val) {
+                                        $value[strval($val)] = $dimension->name;
+                                    }
                                 }
                             }
                         }
@@ -595,10 +597,12 @@ class LoHelper
             $newVal = $value;
             $value = [];
             foreach ($newVal as $val) {
-                $dimensions = DimensionHelper::loadAllForType($db, $lookup->dimensionId);
-                foreach ($dimensions as $dimension) {
-                    if ($dimension->id == $val) {
-                        $value[strval($val)] = $dimension->name;
+                if (isset($lookup->dimensionId)) {
+                    $dimensions = DimensionHelper::loadAllForType($db, $lookup->dimensionId);
+                    foreach ($dimensions as $dimension) {
+                        if ($dimension->id == $val) {
+                            $value[strval($val)] = $dimension->name;
+                        }
                     }
                 }
             }
