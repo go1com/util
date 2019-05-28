@@ -576,4 +576,35 @@ class LoHelper
     {
         return boolval($lo->data->{self::ALLOW_REUSE_ENROLMENT} ?? false);
     }
+
+    public static function formatAttributeValue($db, $value, $lookup)
+    {
+        if (!isset($lookup)) {
+            return $value;
+        }
+        if ($lookup->isArray) {
+            $value = json_decode($value);
+        }
+        if ($lookup->attributeType === LoAttributeTypes::DIMENSION) {
+            $newVal = $value;
+            $value = [];
+            foreach ($newVal as $val) {
+                $dimensions = self::getDimensionsByType($db, $lookup->dimensionId);
+                foreach ($dimensions as $dimension) {
+                    if ($dimension['id'] == $val) {
+                        $value[strval($val)] = $dimension['name'];
+                    }
+                }
+            }
+        }
+
+        return $value;
+    }
+
+    public static function getDimensionsByType($db, $type)
+    {
+        $sql = 'SELECT *  FROM dimensions WHERE type = ?';
+        $rows = $db->executeQuery($sql, [$type], [DB::STRING])->fetchAll();
+        return $rows;
+    }
 }
