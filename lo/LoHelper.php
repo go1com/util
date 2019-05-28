@@ -586,7 +586,10 @@ class LoHelper
                     $dimensions = DimensionHelper::loadAllForType($db, $lookup->dimensionId);
                     foreach ($dimensions as $dimension) {
                         if ($dimension->id == $val) {
-                            $value[strval($val)] = $dimension->name;
+                            $value[] = [
+                                "key" => strval($val),
+                                "value" => $dimension->name
+                            ];
                         }
                     }
                 }
