@@ -239,16 +239,16 @@ trait LoMockTrait
             return $value;
         }
         if ($lookup['attribute_type'] === LoAttributeTypes::DIMENSION) {
-            $value = $this->is_assoc($value) ? array_keys($value) : $value;
+            $oldValue = $value;
+            $value = [];
+            foreach($oldValue as $val) {
+                $value[] = is_array($val) ? $val['key'] : $val;
+            }
         }
         if ($lookup['is_array']) {
             $value = is_array($value) ? json_encode($value) : json_encode([$value]);
         }
 
         return $value;
-    }
-    public function is_assoc($var)
-    {
-        return is_array($var) && array_diff_key($var, array_keys(array_keys($var)));
     }
 }

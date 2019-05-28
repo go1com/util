@@ -595,8 +595,7 @@ class LoHelperTest extends UtilCoreTestCase
                 'type' => 'video',
                 'attributes' => [
                     LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS) => [
-                        "3" => "Global",
-                        "4" => "AU"
+                        [ "key" => "3", "value" => "" ],
                     ]
                 ]
             ]);
