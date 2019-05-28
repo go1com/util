@@ -193,28 +193,13 @@ class LoHelper
             foreach ($attributes as $attribute) {
                 if (in_array($attribute->key, LoAttributes::all())) {
                     $_ = LoAttributes::machineName($attribute->key);
+                    $atts = new StdClass();
+                    $atts->isArray = $attribute->is_array;
+                    $atts->dimensionId = $attribute->dimension_id;
+                    $atts->loId = $attribute->lo_id;
+                    $atts->attributeType = $attribute->attribute_type;
 
-                    if (isset($attribute) && isset($attribute->is_array) && $attribute->is_array === "1") {
-                        $attribute->value = json_decode($attribute->value);
-                    }
-                    if (empty($arr[$attribute->lo_id])) {
-                        $arr[$attribute->lo_id] = [];
-                    }
-                    if ($attribute->attribute_type === LoAttributeTypes::DIMENSION) {
-                        $newVal = $attribute->value;
-                        $attribute->value = [];
-                        foreach ($newVal as $val) {
-                            if ($attribute->dimension_id) {
-                                $dimensions = DimensionHelper::loadAllForType($db, $attribute->dimension_id);
-                                foreach ($dimensions as $dimension) {
-                                    if ($dimension->id == $val) {
-                                        $value[strval($val)] = $dimension->name;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    $arr[$attribute->lo_id][$_] = $attribute->value;
+                    $arr[$attribute->lo_id][$_] = self::formatAttributeValue($db, $attribute->value, $atts);
                 }
             }
         } catch (\Exception $e) {
