@@ -57,12 +57,12 @@ class LoHelper
         return $payload->embedded->lo ?? self::load($go1, $payload->{$loIdProperty});
     }
 
-    public static function load(Connection $go1, int $id, int $portalId = null, bool $expensiveTree = false, bool $attachAttributes = false, Connection $dimensionsDB = null)
+    public static function load(Connection $go1, int $id, int $portalId = null, bool $expensiveTree = false, bool $attachAttributes = false, Connection $dimensionDB = null)
     {
-        return ($learningObjects = static::loadMultiple($go1, [$id], $portalId, $expensiveTree, $attachAttributes, $dimensionsDB)) ? $learningObjects[0] : false;
+        return ($learningObjects = static::loadMultiple($go1, [$id], $portalId, $expensiveTree, $attachAttributes, $dimensionDB)) ? $learningObjects[0] : false;
     }
 
-    public static function loadMultiple(Connection $db, array $ids, int $portalId = null, bool $expensiveTree = false, bool $attachAttributes = false, Connection $dimensionsDB = null): array
+    public static function loadMultiple(Connection $db, array $ids, int $portalId = null, bool $expensiveTree = false, bool $attachAttributes = false, Connection $dimensionDB = null): array
     {
         $ids = array_map('intval', $ids);
         $learningObjects = !$ids ? [] : $db
@@ -159,7 +159,7 @@ class LoHelper
         }
 
         if ($attachAttributes) {
-            $attributes = self::getAttributes($db, $loIds, $dimensionsDB);
+            $attributes = self::getAttributes($db, $loIds, $dimensionDB);
             foreach ($learningObjects as &$lo) {
                 $lo->attributes = (object) ($attributes[$lo->id] ?? []);
             }
@@ -172,7 +172,7 @@ class LoHelper
         return $learningObjects;
     }
 
-    private static function getAttributes(Connection $db, array $ids, Connection $dimensionsDB = null)
+    private static function getAttributes(Connection $db, array $ids, Connection $dimensionDB = null)
     {
         $arr = [];
         try {
@@ -198,7 +198,7 @@ class LoHelper
                     $atts->dimensionId = $attribute->dimension_id;
                     $atts->loId = $attribute->lo_id;
                     $atts->attributeType = $attribute->attribute_type;
-                    $arr[$attribute->lo_id][$_] = self::formatAttributeValue($dimensionsDB, $attribute->value, $atts);
+                    $arr[$attribute->lo_id][$_] = self::formatAttributeValue($dimensionDB, $attribute->value, $atts);
                 }
             }
         } catch (\Exception $e) {
@@ -569,7 +569,7 @@ class LoHelper
         return boolval($lo->data->{self::ALLOW_REUSE_ENROLMENT} ?? false);
     }
 
-    public static function formatAttributeValue($dimensionsDB, $value, $lookup)
+    public static function formatAttributeValue($dimensionDB, $value, $lookup)
     {
         if (!isset($lookup)) {
             return $value;
@@ -582,7 +582,7 @@ class LoHelper
             $value = [];
             foreach ($newVal as $val) {
                 if (isset($lookup->dimensionId)) {
-                    $dimensions = DimensionHelper::loadAllForType($dimensionsDB, $lookup->dimensionId);
+                    $dimensions = DimensionHelper::loadAllForType($dimensionDB, $lookup->dimensionId);
                     foreach ($dimensions as $dimension) {
                         if ($dimension->id == $val) {
                             $value[] = [

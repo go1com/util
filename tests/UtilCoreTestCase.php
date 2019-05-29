@@ -26,7 +26,7 @@ class UtilCoreTestCase extends TestCase
     /** @var  Connection */
     protected $go1;
     protected $log;
-    protected $dimensionsDB;
+    protected $dimensionDB;
 
     /** @var MqClient */
     protected $queue;
@@ -40,7 +40,7 @@ class UtilCoreTestCase extends TestCase
     public function setUp() : void
     {
         $this->go1 = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
-        $this->dimensionsDB = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
+        $this->dimensionDB = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
         $this->installGo1Schema($this->go1, false, 'accounts.test');
 
         DB::install($this->go1, [
@@ -48,7 +48,7 @@ class UtilCoreTestCase extends TestCase
                 $this->setupDatabaseSchema($schema);
             },
         ]);
-        DB::install($this->dimensionsDB, [
+        DB::install($this->dimensionDB, [
             function (Schema $schema) {
                 DimensionRepository::install($schema);
             },
