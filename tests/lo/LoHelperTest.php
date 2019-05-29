@@ -331,14 +331,14 @@ class LoHelperTest extends UtilCoreTestCase
         $this->go1->insert('gc_lo_attributes', [
             'id'        => null,
             'lo_id'     => $courseId,
-            'key'       => LoAttributes::REGION_RESTRICTION,
+            'key'       => LoAttributes::REGION_RESTRICTIONS,
             'value'     => '["AU"]',
             'created'   => 0
         ]);
         $this->go1->insert('gc_lo_attributes_lookup', [
             'id'                => null,
-            'name'              => LoAttributes::machineName(LoAttributes::REGION_RESTRICTION),
-            'key'               => LoAttributes::REGION_RESTRICTION,
+            'name'              => LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS),
+            'key'               => LoAttributes::REGION_RESTRICTIONS,
             'attribute_type'    => 'TEXT',
             'lo_type'           => 'course',
             'required'          => '["NO"]',
@@ -347,7 +347,7 @@ class LoHelperTest extends UtilCoreTestCase
         ]);
         $lo = LoHelper::load($this->go1, $courseId, null, false, true);
         $this->assertNotEmpty($lo->attributes);
-        $this->assertEquals($lo->attributes->{LoAttributes::machineName(LoAttributes::REGION_RESTRICTION)}, ["AU"]);
+        $this->assertObjectHasAttribute(LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), $lo->attributes);
     }
 
     public function testChildIds()
