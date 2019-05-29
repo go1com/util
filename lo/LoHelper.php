@@ -570,7 +570,7 @@ class LoHelper
 
     public static function formatAttributeValue($value, $lookup)
     {
-        if (!empty($lookup)) {
+        if (empty($lookup)) {
             return $value;
         }
 
