@@ -7,7 +7,6 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
 use go1\clients\MqClient;
 use go1\util\DB;
-use go1\util\dimensions\DimensionRepository;
 use go1\util\schema\AwardSchema;
 use go1\util\schema\CollectionSchema;
 use go1\util\schema\InstallTrait;
@@ -26,7 +25,6 @@ class UtilCoreTestCase extends TestCase
     /** @var  Connection */
     protected $go1;
     protected $log;
-    protected $dimensionDB;
 
     /** @var MqClient */
     protected $queue;
@@ -40,17 +38,11 @@ class UtilCoreTestCase extends TestCase
     public function setUp() : void
     {
         $this->go1 = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
-        $this->dimensionDB = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
         $this->installGo1Schema($this->go1, false, 'accounts.test');
 
         DB::install($this->go1, [
             function (Schema $schema) {
                 $this->setupDatabaseSchema($schema);
-            },
-        ]);
-        DB::install($this->dimensionDB, [
-            function (Schema $schema) {
-                DimensionRepository::install($schema);
             },
         ]);
 
