@@ -331,32 +331,23 @@ class LoHelperTest extends UtilCoreTestCase
         $this->go1->insert('gc_lo_attributes', [
             'id'        => null,
             'lo_id'     => $courseId,
-            'key'       => LoAttributes::REGION_RESTRICTIONS,
+            'key'       => LoAttributes::REGION_RESTRICTION,
             'value'     => '["AU"]',
             'created'   => 0
         ]);
-        $this->go1->insert('dimensions', [
-            'id'             => 2,
-            'parent_id'      => 0,
-            'name'           => "NAME",
-            'type'           => 3,
-            'created_date'   => 0,
-            'modified_date'   => 0
-        ]);
         $this->go1->insert('gc_lo_attributes_lookup', [
             'id'                => null,
-            'name'              => LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS),
-            'key'               => LoAttributes::REGION_RESTRICTIONS,
+            'name'              => LoAttributes::machineName(LoAttributes::REGION_RESTRICTION),
+            'key'               => LoAttributes::REGION_RESTRICTION,
             'attribute_type'    => 'TEXT',
             'lo_type'           => 'course',
             'required'          => '["NO"]',
             'permission'        => '["Author","AccountsOnAdmin","Admin","None"]',
-            'is_array'          => 1,
-            'dimension_id'      => 3
+            'is_array'          => 1
         ]);
-        $lo = LoHelper::load($this->go1, $courseId, null, false, true, $this->dimensionsDB);
+        $lo = LoHelper::load($this->go1, $courseId, null, false, true);
         $this->assertNotEmpty($lo->attributes);
-        $this->assertObjectHasAttribute(LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), $lo->attributes);
+        $this->assertEquals($lo->attributes->{LoAttributes::machineName(LoAttributes::REGION_RESTRICTION)}, ["AU"]);
     }
 
     public function testChildIds()
