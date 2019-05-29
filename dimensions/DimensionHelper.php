@@ -31,7 +31,7 @@ class DimensionHelper
 
     public static function formatDimensionsAttribute(Connection $go1, $value, $lookup)
     {
-        if (!empty($lookup) || !empty($go1)) {
+        if (empty($lookup) || empty($go1)) {
             return $value;
         }
 
