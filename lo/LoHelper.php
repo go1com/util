@@ -4,7 +4,6 @@ namespace go1\util\lo;
 
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
-use go1\util\dimensions\DimensionHelper;
 use go1\util\edge\EdgeHelper;
 use go1\util\edge\EdgeTypes;
 use go1\util\enrolment\EnrolmentHelper;
@@ -198,7 +197,7 @@ class LoHelper
                     $atts->dimensionId = $attribute->dimension_id;
                     $atts->loId = $attribute->lo_id;
                     $atts->attributeType = $attribute->attribute_type;
-                    $arr[$attribute->lo_id][$_] = self::formatAttributeValue($db, $attribute->value, $atts);
+                    $arr[$attribute->lo_id][$_] = self::formatAttributeValue($attribute->value, $atts);
                 }
             }
         } catch (\Exception $e) {
@@ -569,30 +568,14 @@ class LoHelper
         return boolval($lo->data->{self::ALLOW_REUSE_ENROLMENT} ?? false);
     }
 
-    public static function formatAttributeValue($db, $value, $lookup)
+    public static function formatAttributeValue($value, $lookup)
     {
-        if (!isset($lookup)) {
+        if (!empty($lookup)) {
             return $value;
         }
+
         if ($lookup->isArray) {
             $value = json_decode($value);
-        }
-        if ($lookup->attributeType === LoAttributeTypes::DIMENSION) {
-            $newVal = $value;
-            $value = [];
-            foreach ($newVal as $val) {
-                if (isset($lookup->dimensionId)) {
-                    $dimensions = DimensionHelper::loadAllForType($db, $lookup->dimensionId);
-                    foreach ($dimensions as $dimension) {
-                        if ($dimension->id == $val) {
-                            $value[] = [
-                                "key" => strval($val),
-                                "value" => $dimension->name
-                            ];
-                        }
-                    }
-                }
-            }
         }
 
         return $value;

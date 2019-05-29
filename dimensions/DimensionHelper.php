@@ -4,6 +4,7 @@ namespace go1\util\dimensions;
 
 use Doctrine\DBAL\Connection;
 use go1\util\DB;
+use go1\util\lo\LoAttributeTypes;
 
 class DimensionHelper
 {
@@ -26,5 +27,36 @@ class DimensionHelper
             return $go1
                 ->executeQuery('SELECT * FROM dimensions where type = ?', [$type], [DB::INTEGER])
                 ->fetchAll(DB::OBJ);
+    }
+
+    public static function formatDimensionsAttribute(Connection $go1, $value, $lookup)
+    {
+        if (!empty($lookup) || !empty($go1)) {
+            return $value;
+        }
+
+        if ($lookup->isArray) {
+            $value = json_decode($value);
+        }
+
+        if ($lookup->attributeType === LoAttributeTypes::DIMENSION) {
+            $newVal = $value;
+            $value = [];
+            foreach ($newVal as $val) {
+                if (isset($lookup->dimensionId)) {
+                    $dimensions = self::loadAllForType($go1, $lookup->dimensionId);
+                    foreach ($dimensions as $dimension) {
+                        if ($dimension->id == $val) {
+                            $value[] = [
+                                "key" => strval($val),
+                                "value" => $dimension->name
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $value;
     }
 }
