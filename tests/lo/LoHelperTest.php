@@ -600,7 +600,7 @@ class LoHelperTest extends UtilCoreTestCase
                 ]
             ]);
 
-        $lo = LoHelper::load($this->go1, $loId, null, false, true, $this->dimensionDB);
+        $lo = LoHelper::load($this->go1, $loId, null, false, true, $this->dimensionsDB);
         $this->assertObjectHasAttribute(LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), $lo->attributes);
     }
 }
