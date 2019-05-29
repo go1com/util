@@ -571,10 +571,9 @@ class LoHelper
 
     public static function formatAttributeValue($dimensionsDB, $value, $lookup)
     {
-        if (!empty($lookup) ||  !empty($dimensionsDB)) {
+        if (!isset($lookup)) {
             return $value;
         }
-
         if ($lookup->isArray) {
             $value = json_decode($value);
         }
