@@ -183,7 +183,7 @@ class LoHelper
                 ->leftJoin('gc_lo_attributes', 'gc_lo_attributes_lookup', 'lookup', 'gc_lo_attributes.key = lookup.key')
                 ->andWhere('lo_id in (:lo_id)')
                 ->setParameter(':lo_id', $ids, DB::INTEGERS)
-                ->andWhere('(lo_type = lo.type OR lo_type is null)');
+                ->andWhere('((lo_type = lo.type COLLATE utf8_unicode_ci) OR lo_type is null)');
 
             $attributes = $qb
                 ->execute()
