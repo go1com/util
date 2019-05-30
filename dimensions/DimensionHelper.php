@@ -41,12 +41,12 @@ class DimensionHelper
         }
 
         if ($lookup->attributeType === LoAttributeTypes::DIMENSION) {
+            $dimensions = self::loadAllForType($db, $lookup->dimensionId);
 
             $newVal = $value;
             $value = [];
             foreach ($newVal as $val) {
                 if (isset($lookup->dimensionId)) {
-                    $dimensions = self::loadAllForType($db, $lookup->dimensionId);
                     foreach ($dimensions as $dimension) {
                         if ($dimension->id == $val) {
                             $value[] = [
