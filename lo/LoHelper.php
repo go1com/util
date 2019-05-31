@@ -177,13 +177,12 @@ class LoHelper
         try {
             $qb = $db
                 ->createQueryBuilder()
-                ->select('gc_lo_attributes.lo_id, gc_lo_attributes.key', 'gc_lo_attributes.value', 'lookup.attribute_type', 'lookup.is_array', 'lo.type', 'lookup.dimension_id')
+                ->select('DISTINCT gc_lo_attributes.lo_id, gc_lo_attributes.key', 'gc_lo_attributes.value', 'lookup.attribute_type', 'lookup.is_array', 'lo.type', 'lookup.dimension_id')
                 ->from('gc_lo_attributes')
                 ->join('gc_lo_attributes', 'gc_lo', 'lo', 'gc_lo_attributes.lo_id = lo.id')
                 ->leftJoin('gc_lo_attributes', 'gc_lo_attributes_lookup', 'lookup', 'gc_lo_attributes.key = lookup.key')
                 ->andWhere('lo_id in (:lo_id)')
-                ->setParameter(':lo_id', $ids, DB::INTEGERS)
-                ->andWhere('((lo_type = lo.type COLLATE utf8_unicode_ci) OR lo_type is null)');
+                ->setParameter(':lo_id', $ids, DB::INTEGERS);
 
             $attributes = $qb
                 ->execute()
