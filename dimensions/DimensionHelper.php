@@ -29,12 +29,18 @@ class DimensionHelper
                 ->fetchAll(DB::OBJ);
     }
 
+    public static function loadAllForLevel(Connection $db, $level)
+    {
+        return $db
+            ->executeQuery('SELECT *  FROM dimensions WHERE id in (select Level'.$level.' from dimensions_levels)')
+            ->fetchAll(DB::OBJ);
+    }
+
     public static function formatDimensionsAttribute(Connection $db, $value, $lookup)
     {
         if (empty($lookup) || empty($db)) {
             return $value;
         }
-
 
         if ($lookup->isArray) {
             $value = json_decode($value);
