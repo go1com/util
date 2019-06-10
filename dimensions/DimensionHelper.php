@@ -36,6 +36,13 @@ class DimensionHelper
             ->fetchAll(DB::OBJ);
     }
 
+    public static function loadAllForLevelAndType(Connection $db, $level, $type)
+    {
+        return $db
+            ->executeQuery('SELECT *  FROM dimensions WHERE type = ? AND id in (select Level'.$level.' from dimensions_levels)', [$type], [DB::INTEGER])
+            ->fetchAll(DB::OBJ);
+    }
+
     public static function formatDimensionsAttribute(Connection $db, $value, $lookup)
     {
         if (empty($lookup) || empty($db)) {
