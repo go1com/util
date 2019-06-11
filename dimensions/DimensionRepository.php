@@ -34,6 +34,5 @@ class DimensionRepository
             $table->addIndex(['type']);
             $table->addIndex(['name']);
         }
-
     }
 }

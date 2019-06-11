@@ -100,4 +100,40 @@ class DimesionsHelperTest extends UtilCoreTestCase
         $this->assertEquals('Design and Animation', $dimensions[0]->name);
         $this->assertEquals('Investment and Trading', $dimensions[1]->name);
     }
+
+    public function testLoadAllForLevelAndType()
+    {
+        $createdDate = DateTime::create('-2 day')->format(DATE_ISO8601);
+        $modifiedDate = DateTime::create('-1 day')->format(DATE_ISO8601);
+        $id = $this->createDimension($this->go1,
+            [
+                'parent_id' => 0,
+                'name' => 'Design and Animation',
+                'type' => '1',
+                'created_date' => $createdDate,
+                'modified_date' => $modifiedDate,
+            ]
+        );
+        $id2 = $this->createDimension($this->go1,
+            [
+                'parent_id' => $id,
+                'name' => 'Investment and Trading',
+                'type' => '1',
+                'created_date' => $createdDate,
+                'modified_date' => $modifiedDate,
+            ]
+        );
+        $this->createDimension($this->go1,
+            [
+                'parent_id' => $id2,
+                'name' => 'Third level',
+                'type' => '1',
+                'created_date' => $createdDate,
+                'modified_date' => $modifiedDate,
+            ]
+        );
+        DimensionsMockTrait::createViews($this->go1);
+        $dimensions = DimensionHelper::loadAllForLevelAndType($this->go1, 2, 1);
+        $this->assertEquals('Investment and Trading', $dimensions[0]->name);
+    }
 }
