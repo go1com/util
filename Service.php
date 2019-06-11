@@ -2,6 +2,9 @@
 
 namespace go1\util;
 
+use function defined;
+use function getenv;
+
 class Service
 {
     const VERSION = 'v19.02.22.0';
@@ -25,6 +28,10 @@ class Service
 
     public static function accountsName(string $env): string
     {
+        if ($configured = getenv('ACCOUNTS_NAME')) {
+            return $configured;
+        }
+
         switch ($env) {
             case 'production':
             case 'staging':

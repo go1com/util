@@ -86,6 +86,20 @@ class LoExploreSchema
                     'coordinate'               => ['type' => Schema::T_GEO_POINT],
                 ],
             ],
+            'attributes'    => [
+                'properties' => [
+                    'assessable'            => ['type' => Schema::T_INT],
+                    'mobile_optimised'      => ['type' => Schema::T_INT],
+                    'wcag'                  => ['type' => Schema::T_INT],
+                    'region_restrictions'    => [
+                        'type'          => Schema::T_NESTED,
+                        'properties'    => [
+                            'value'     => ['type' => Schema::T_KEYWORD],
+                            'key'       => ['type' => Schema::T_KEYWORD],
+                        ],
+                    ],
+                ],
+            ],
             'events'          => [
                 'type'       => Schema::T_NESTED,
                 'properties' => [

@@ -6,6 +6,7 @@ use DateTime;
 use go1\util\edge\EdgeTypes;
 use go1\util\lo\LiTypes;
 use go1\util\lo\LoHelper;
+use go1\util\lo\LoAttributes;
 use go1\util\lo\LoStatuses;
 use go1\util\lo\LoSuggestedCompletionTypes;
 use go1\util\schema\mock\EnrolmentMockTrait;
@@ -309,6 +310,46 @@ class LoHelperTest extends UtilCoreTestCase
             ->hasParent($this->course2Id, $parentIds);
     }
 
+    public function testLoadAttributes()
+    {
+        $courseId = $this->createCourse($this->go1, ['course' => []]);
+        $this->go1->insert('gc_lo_attributes', [
+            'id'        => null,
+            'lo_id'     => $courseId,
+            'key'       => LoAttributes::MOBILE_OPTIMISED,
+            'value'     => 1,
+            'created'   => 0
+        ]);
+        $lo = LoHelper::load($this->go1, $courseId, null, false, true);
+        $this->assertNotEmpty($lo->attributes);
+        $this->assertEquals($lo->attributes->{LoAttributes::machineName(LoAttributes::MOBILE_OPTIMISED)}, 1);
+    }
+
+    public function testLoadAttributesWithLookup()
+    {
+        $courseId = $this->createCourse($this->go1, ['course' => []]);
+        $this->go1->insert('gc_lo_attributes', [
+            'id'        => null,
+            'lo_id'     => $courseId,
+            'key'       => LoAttributes::REGION_RESTRICTIONS,
+            'value'     => '["AU"]',
+            'created'   => 0
+        ]);
+        $this->go1->insert('gc_lo_attributes_lookup', [
+            'id'                => null,
+            'name'              => LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS),
+            'key'               => LoAttributes::REGION_RESTRICTIONS,
+            'attribute_type'    => 'TEXT',
+            'lo_type'           => 'course',
+            'required'          => '["NO"]',
+            'permission'        => '["Author","AccountsOnAdmin","Admin","None"]',
+            'is_array'          => 1
+        ]);
+        $lo = LoHelper::load($this->go1, $courseId, null, false, true);
+        $this->assertNotEmpty($lo->attributes);
+        $this->assertObjectHasAttribute(LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), $lo->attributes);
+    }
+
     public function testChildIds()
     {
         # Course 1
@@ -526,5 +567,40 @@ class LoHelperTest extends UtilCoreTestCase
         $course = LoHelper::load($this->go1, $courseId);
         $this->assertTrue(LoHelper::allowReuseEnrolment($course));
         $this->assertFalse(LoHelper::allowReuseEnrolment(LoHelper::load($this->go1, $this->course1Id)));
+    }
+
+    public function testPremiumFlag()
+    {
+        $courseId = $this->createCourse($this->go1, ['instance_id' => $this->createPortal($this->go1, []), 'premium' => 1]);
+        $course = LoHelper::load($this->go1, $courseId);
+        $this->assertEquals($course->premium, 1);
+    }
+
+    public function testAttributes()
+    {
+        $dimensionType = 2;
+        $this->createAttributeLookup($this->go1, LoAttributes::REGION_RESTRICTIONS, LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), 'DIMENSION', 'video',
+            '["ALWAYS", "FOR_PUBLISH"]', '["Author"]', null, 1, $dimensionType);
+
+        $this->go1->insert('dimensions', [
+            'id'             => 3,
+            'parent_id'      => 0,
+            'name'           => "NAME",
+            'type'           => $dimensionType,
+            'created_date'   => 0,
+            'modified_date'   => 0
+        ]);
+        $loId = $this->createLO($this->go1, [
+                'instance_id' => $this->createPortal($this->go1, []),
+                'type' => 'video',
+                'attributes' => [
+                    LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS) => [
+                        [ "key" => "3", "value" => "" ],
+                    ]
+                ]
+            ]);
+
+        $lo = LoHelper::load($this->go1, $loId, null, false, true);
+        $this->assertObjectHasAttribute(LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), $lo->attributes);
     }
 }

@@ -6,7 +6,7 @@ use go1\util\es\Schema;
 
 class CustomerEsSchema
 {
-    const INDEX     = ES_INDEX.'_customer';
+    const INDEX     = ES_INDEX . '_customer';
     const O_PORTAL  = 'portal';
     const O_USER    = 'user';
     const O_ACCOUNT = 'account';

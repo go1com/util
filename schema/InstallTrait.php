@@ -7,6 +7,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use go1\kv\KV;
 use go1\util\DB;
+use go1\util\dimensions\DimensionRepository;
 use go1\util\plan\PlanRepository;
 
 trait InstallTrait
@@ -54,6 +55,7 @@ trait InstallTrait
                 LoSchema::install($schema);
                 EnrolmentSchema::install($schema);
                 PlanRepository::install($schema);
+                DimensionRepository::install($schema);
             },
             function (Schema $schema) use ($coreOnly) {
                 if (!$coreOnly) {

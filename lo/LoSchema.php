@@ -33,6 +33,7 @@ class LoSchema
             $lo->addColumn('created', 'integer');
             $lo->addColumn('updated', 'integer', ['notnull' => false]);
             $lo->addColumn('sharing', 'smallint');
+            $lo->addColumn('premium', 'integer', ['unsigned' => true, 'notnull' => true, 'default' => 0]);
 
             $lo->setPrimaryKey(['id']);
             $lo->addIndex(['type']);
@@ -233,6 +234,44 @@ class LoSchema
             $stream->addIndex(['lo_id']);
             $stream->addIndex(['portal_id']);
             $stream->addIndex(['created']);
+        }
+
+        if (!$schema->hasTable('gc_lo_attributes_lookup')) {
+            $attr = $schema->createTable('gc_lo_attributes_lookup');
+            $attr->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
+            $attr->addColumn('key', 'integer', ['unsigned' => true]);
+            $attr->addColumn('name', 'string');
+            $attr->addColumn('attribute_type', 'string');
+            $attr->addColumn('lo_type', 'string');
+            $attr->addColumn('required', 'string');
+            $attr->addColumn('permission', 'string');
+            $attr->addColumn('default_value', 'string', ['notnull' => false]);
+            $attr->addColumn('is_array', 'smallint', [
+                'unsigned' => true,
+                'notnull' => false,
+                'default' => 0,
+            ]);
+            $attr->addColumn('dimension_id', 'integer', [
+                'unsigned' => true,
+                'notnull'  => false,
+            ]);
+            $attr->setPrimaryKey(['id']);
+        }
+
+        // Alter origin_id column
+        if ($schema->hasTable('gc_lo')) {
+            $lo = $schema->getTable('gc_lo');
+
+            $indexed = false;
+            foreach ($lo->getIndexes() as $index) {
+                if (['origin_id'] == $index->getColumns()) {
+                    $indexed = true;
+                }
+            }
+            
+            if (!$indexed) {
+                $lo->addIndex(['origin_id']);
+            }
         }
     }
 }
