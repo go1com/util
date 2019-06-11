@@ -277,6 +277,20 @@ class Queue
     const DO_PAGEUP_UPLOAD_COURSE              = 'do.pageup.upload-couse'; # { $portal_id, $course_id }
     const REINDEX_PREFIX                       = 'go1-reindex.';
 
+    /**
+     * TEMPORARY EVENT (will be removed when premium/region restriction propagation is removed
+     *
+     * This event is to enable the marketplace consumer to break up the updating of the learning objects
+     * into manageable groups (of 5000 LOs)
+     *
+     * body = {
+     *      group: OBJECT, // the group object in which the Learning objects are.
+     *      offset: the starting offset in the list of learning objects
+     *      limit: the number of learning objects to process
+     * }
+     */
+    const MARKETPLACE_UPDATE_LO_REGIONS        = 'update.lo.regions';
+
     public static function postEvent(string $event): string
     {
         return "post_{$event}";
