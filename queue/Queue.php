@@ -286,6 +286,7 @@ class Queue
      * body = {
      *      group: OBJECT, // the group object in which the Learning objects are.
      *      offset: the starting offset in the list of learning objects
+     *      limit: the number of learning objects to process
      * }
      */
     const MARKETPLACE_UPDATE_LO_REGIONS        = 'update.lo.regions';
