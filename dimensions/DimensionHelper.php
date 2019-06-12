@@ -59,24 +59,17 @@ class DimensionHelper
             return $value;
         }
 
-        if ($lookup->isArray) {
-            $value = json_decode($value);
-        }
-
         if ($lookup->attributeType === LoAttributeTypes::DIMENSION) {
             $dimensions = self::loadAllForType($db, $lookup->dimensionId);
 
             $newVal = $value;
-            $value = [];
-            foreach ($newVal as $val) {
-                if (isset($lookup->dimensionId)) {
-                    foreach ($dimensions as $dimension) {
-                        if ($dimension->id == $val) {
-                            $value[] = [
-                                "key" => strval($val),
-                                "value" => $dimension->name
-                            ];
-                        }
+            if (isset($lookup->dimensionId)) {
+                foreach ($dimensions as $dimension) {
+                    if ($dimension->id == $newVal) {
+                        $value = [
+                            "key" => strval($newVal),
+                            "value" => $dimension->name
+                        ];
                     }
                 }
             }

@@ -196,7 +196,11 @@ class LoHelper
                     $atts->dimensionId = $attribute->dimension_id;
                     $atts->loId = $attribute->lo_id;
                     $atts->attributeType = $attribute->attribute_type;
-                    $arr[$attribute->lo_id][$_] = self::formatAttributeValue($attribute->value, $atts);
+                    if ($atts->isArray) {
+                        $arr[$attribute->lo_id][$_][] = self::formatAttributeValue($attribute->value, $atts);
+                    } else {
+                        $arr[$attribute->lo_id][$_] = self::formatAttributeValue($attribute->value, $atts);
+                    }
                 }
             }
         } catch (\Exception $e) {
@@ -575,6 +579,14 @@ class LoHelper
 
         if ($lookup->isArray) {
             $value = json_decode($value);
+        }
+
+        if ($lookup->attributeType === LoAttributeTypes::DIMENSION) {
+            $newVal = $value;
+            $value = [
+                "key" => strval($newVal),
+                "value" => ""
+            ];
         }
 
         return $value;
