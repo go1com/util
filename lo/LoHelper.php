@@ -581,14 +581,6 @@ class LoHelper
             $value = json_decode($value);
         }
 
-        if ($lookup->attributeType === LoAttributeTypes::DIMENSION) {
-            $newVal = $value;
-            $value = [
-                "key" => strval($newVal),
-                "value" => ""
-            ];
-        }
-
         return $value;
     }
 }
