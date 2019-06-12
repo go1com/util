@@ -196,7 +196,11 @@ class LoHelper
                     $atts->dimensionId = $attribute->dimension_id;
                     $atts->loId = $attribute->lo_id;
                     $atts->attributeType = $attribute->attribute_type;
-                    $arr[$attribute->lo_id][$_] = self::formatAttributeValue($attribute->value, $atts);
+                    if ($atts->isArray) {
+                        $arr[$attribute->lo_id][$_][] = self::formatAttributeValue($attribute->value, $atts);
+                    } else {
+                        $arr[$attribute->lo_id][$_] = self::formatAttributeValue($attribute->value, $atts);
+                    }
                 }
             }
         } catch (\Exception $e) {
