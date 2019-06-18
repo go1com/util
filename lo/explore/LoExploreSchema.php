@@ -94,7 +94,14 @@ class LoExploreSchema
                     'region_restrictions'    => [
                         'type'          => Schema::T_NESTED,
                         'properties'    => [
-                            'value'     => ['type' => Schema::T_KEYWORD],
+                            'value'     => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
+                            'key'       => ['type' => Schema::T_KEYWORD],
+                        ],
+                    ],
+                    'topics'    => [
+                        'type'          => Schema::T_NESTED,
+                        'properties'    => [
+                            'value'     => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
                             'key'       => ['type' => Schema::T_KEYWORD],
                         ],
                     ],
