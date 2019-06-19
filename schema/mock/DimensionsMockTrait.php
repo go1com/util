@@ -12,12 +12,12 @@ trait DimensionsMockTrait
     public function createDimension(Connection $db, array $options = [])
     {
         $db->insert('dimensions', [
-            'id' => $options['id'] ?? null,
-            'parent_id' => $options['parent_id'] ?? null,
-            'name' => $options['name'],
-            'type' => $options['type'],
-            'created_date' => $options['created_date'],
-            'modified_date' => $options['modified_date'],
+            'id'            => $options['id'] ?? null,
+            'parent_id'     => $options['parent_id'] ?? 0,
+            'name'          => $options['name'],
+            'type'          => $options['type'],
+            'created_date'  => $options['created_date'] ?? date("Y-m-d H:i:s"),
+            'modified_date' => $options['modified_date'] ?? date("Y-m-d H:i:s"),
         ]);
 
         return $db->lastInsertId('dimensions');
