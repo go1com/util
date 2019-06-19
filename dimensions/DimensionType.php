@@ -12,7 +12,7 @@ class DimensionType
 
     public static function all()
     {
-        $rSelf = new ReflectionClass(__CLASS__);
+        $rSelf = new \ReflectionClass(__CLASS__);
         $values = [];
         foreach ($rSelf->getConstants() as $const) {
             if (is_scalar($const)) {
