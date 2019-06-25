@@ -3,8 +3,10 @@
 namespace go1\util\portal;
 
 use Doctrine\DBAL\Connection;
+use go1\util\collection\PortalCollectionConfiguration;
 use go1\util\DB;
 use go1\util\user\Roles;
+use stdClass;
 
 class PortalChecker
 {
@@ -229,5 +231,22 @@ class PortalChecker
         $config = (array) $portal->configuration->{PortalHelper::FEATURE_NOTIFY_REMIND_MAJOR_EVENT} ?? [];
 
         return boolval($config[$role] ?? false);
+    }
+
+    public static function selectedContentSelections(stdClass $portal): bool
+    {
+        $collections = PortalHelper::collections($portal);
+        if (in_array(PortalCollectionConfiguration::SUBSCRIBE, $collections)) {
+            return true;
+        }
+
+        if (PortalChecker::allowMarketplace($portal)) {
+            if (in_array(PortalCollectionConfiguration::FREE, $collections)
+                || in_array(PortalCollectionConfiguration::PAID, $collections)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
