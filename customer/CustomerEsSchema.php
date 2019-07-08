@@ -23,7 +23,7 @@ class CustomerEsSchema
             'id'                => ['type' => Schema::T_KEYWORD],
             'title'             => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
             'status'            => ['type' => Schema::T_SHORT],
-            'name'              => ['type' => Schema::T_KEYWORD],
+            'name'              => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
             'version'           => ['type' => Schema::T_KEYWORD],
             'created'           => ['type' => Schema::T_DATE],
             'configuration'     => ['type' => Schema::T_OBJECT],
