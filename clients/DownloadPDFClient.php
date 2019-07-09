@@ -17,31 +17,26 @@ class DownloadPDFClient
         $this->wkhtmltopdfUrl = $wkhtmltopdfUrl;
     }
 
-    public function download(string $content, string $name, bool $removeMargins = false)
+    public function download(string $content, string $name, array $options = [])
     {
         $res = new StreamedResponse();
         $disposition = $res->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $name);
         $res->headers->set('Content-Disposition', $disposition);
         $res->headers->set('Content-Type', 'application/pdf');
-        $res->setCallback(function () use ($content, $removeMargins) {
-            echo $this->getPdf($content, $removeMargins);
+        $res->setCallback(function () use ($content, $options) {
+            echo $this->getPdf($content, $options);
             flush();
         });
 
         return $res->send();
     }
 
-    public function getPdf(string $html, bool $removeMargins = false)
+    public function getPdf(string $html, array $options = [])
     {
         $json = ['contents' => base64_encode($html)];
 
-        if ($removeMargins) {
-            $json['options'] = [
-                'margin-top' => '0',
-                'margin-left' => '0',
-                'margin-right' => '0',
-                'margin-bottom' => '0',
-            ];
+        if (!empty($options)) {
+            $json['options'] = $options;
         }
 
         $res = $this->client->post($this->wkhtmltopdfUrl,
