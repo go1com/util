@@ -17,26 +17,32 @@ class DownloadPDFClient
         $this->wkhtmltopdfUrl = $wkhtmltopdfUrl;
     }
 
-    public function download(string $content, string $name)
+    public function download(string $content, string $name, array $options = [])
     {
         $res = new StreamedResponse();
         $disposition = $res->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $name);
         $res->headers->set('Content-Disposition', $disposition);
         $res->headers->set('Content-Type', 'application/pdf');
-        $res->setCallback(function () use ($content) {
-            echo $this->getPdf($content);
+        $res->setCallback(function () use ($content, $options) {
+            echo $this->getPdf($content, $options);
             flush();
         });
 
         return $res->send();
     }
 
-    public function getPdf(string $html)
+    public function getPdf(string $html, array $options = [])
     {
+        $json = ['contents' => base64_encode($html)];
+
+        if (!empty($options)) {
+            $json['options'] = $options;
+        }
+
         $res = $this->client->post($this->wkhtmltopdfUrl,
             [
                 'headers'   => ['content-type' => 'application/json'],
-                'json'      => ['contents' => base64_encode($html)]
+                'json'      => $json
             ]
         );
 
