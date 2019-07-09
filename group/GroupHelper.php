@@ -2,6 +2,9 @@
 
 namespace go1\util\group;
 
+use function array_chunk;
+use function array_map;
+use function array_merge;
 use Doctrine\DBAL\Connection;
 use go1\util\AccessChecker;
 use go1\util\award\AwardHelper;
@@ -182,6 +185,32 @@ class GroupHelper
         (new UserHelper)->attachRootAccount($db, $users, $instance);
 
         return $users[0]['root']['id'] ?? 0;
+    }
+
+    public static function userGroupTitles(Connection $group, int $portalId, int $accountId): array
+    {
+        $titles = [];
+
+        $groupIds = $group
+            ->executeQuery(
+                'SELECT group_id FROM group_membership WHERE portal_id = ? AND user_id = ?',
+                [$portalId, $accountId]
+            )
+            ->fetchAll(PDO::FETCH_COLUMN);
+
+        $groupIds = array_map('intval', $groupIds);
+        $groupIdChunks = array_chunk($groupIds, 200);
+
+        foreach ($groupIdChunks as $groupIdChunk) {
+            $_ = $group
+                ->executeQuery('SELECT title FROM `group` WHERE id IN (?)', [$groupIdChunk], [DB::INTEGERS])
+                ->fetchAll(PDO::FETCH_COLUMN);
+            if ($_) {
+                $titles = array_merge($titles, $_);
+            }
+        }
+
+        return $titles;
     }
 
     public static function userGroups(Connection $go1, Connection $social, int $portalId, int $accountId, string $accountsName, $invisibility = null)
