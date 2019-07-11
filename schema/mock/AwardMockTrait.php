@@ -9,7 +9,7 @@ use go1\util\DateTime;
 
 trait AwardMockTrait
 {
-    protected function createAward(Connection $db, array $options = [])
+    public function createAward(Connection $db, array $options = [])
     {
         $data = $options['data'] ?? [];
         $data = !$data ? json_encode(null) : (is_scalar($data) ? $data : json_encode($data));
