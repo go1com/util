@@ -88,6 +88,7 @@ trait LoMockTrait
             'updated'         => isset($options['updated']) ? $options['updated'] : time(),
             'sharing'         => isset($options['sharing']) ? $options['sharing'] : 0,
             'premium'         => isset($options['premium']) ? $options['premium'] : 0,
+            'summary'         => isset($options['summary']) ? $options['summary'] : null,
         ];
         $db->insert('gc_lo', $opt);
 
