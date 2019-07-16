@@ -603,4 +603,11 @@ class LoHelperTest extends UtilCoreTestCase
         $lo = LoHelper::load($this->go1, $loId, null, false, true);
         $this->assertObjectHasAttribute(LoAttributes::machineName(LoAttributes::REGION_RESTRICTIONS), $lo->attributes);
     }
+
+    public function testSummary()
+    {
+        $courseId = $this->createCourse($this->go1, ['instance_id' => $this->createPortal($this->go1, []), 'summary' => "a summary"]);
+        $course = LoHelper::load($this->go1, $courseId);
+        $this->assertEquals($course->summary, "a summary");
+    }
 }
