@@ -13,6 +13,7 @@ class LoAttributes
     const REGION_RESTRICTION = 5;
     const TOPICS             = 6;
     const REGION_RESTRICTIONS = 7;
+    const LEARNING_OUTCOME   = 8;
 
     public static function machineName(int $attribute): ?string
     {
@@ -23,7 +24,8 @@ class LoAttributes
             self::AVAILABILITY       => 'availability',
             self::REGION_RESTRICTION => 'region_restriction',
             self::REGION_RESTRICTIONS => 'region_restrictions',
-            self::TOPICS             => 'topics'
+            self::TOPICS             => 'topics',
+            self::LEARNING_OUTCOME   => 'learning_outcome'
         ];
 
         return $map[$attribute] ?? null;
