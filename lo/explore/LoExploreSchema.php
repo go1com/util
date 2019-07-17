@@ -37,6 +37,7 @@ class LoExploreSchema
             'locale'          => ['type' => Schema::T_KEYWORD],
             'title'           => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
             'description'     => ['type' => Schema::T_TEXT],
+            'summary'         => ['type' => Schema::T_TEXT],
             'tags'            => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
             'custom_tags'     => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
             'topics'          => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
