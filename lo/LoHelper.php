@@ -578,7 +578,10 @@ class LoHelper
         }
 
         if ($lookup->isArray) {
-            $value = json_decode($value);
+            $tempValue = json_decode($value);
+            if (!is_null($tempValue)) {
+                $value = $tempValue;
+            }
         }
 
         return $value;
