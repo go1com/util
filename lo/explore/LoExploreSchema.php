@@ -89,6 +89,7 @@ class LoExploreSchema
             ],
             'attributes'    => [
                 'properties' => [
+                    'learning_outcomes'     => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
                     'assessable'            => ['type' => Schema::T_INT],
                     'mobile_optimised'      => ['type' => Schema::T_INT],
                     'wcag'                  => ['type' => Schema::T_INT],
