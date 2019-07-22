@@ -527,4 +527,13 @@ class LoHelperTest extends UtilCoreTestCase
         $this->assertTrue(LoHelper::allowReuseEnrolment($course));
         $this->assertFalse(LoHelper::allowReuseEnrolment(LoHelper::load($this->db, $this->course1Id)));
     }
+
+    public function testSanitizeTitle() {
+        $title = "<strong>Strong</strong> Test Title & &amp &lt; <br> <br/> 
+
+    After New line
+         ";
+        $sanitizedTitle = LoHelper::sanitizeTitle($title);
+        $this->assertEquals($sanitizedTitle, "Strong Test Title & &amp <     After New line");
+    }
 }
