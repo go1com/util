@@ -19,31 +19,31 @@ class EnrolmentRevisionHelperTest extends UtilCoreTestCase
     private $liEnrolmentIdA3    = 6;
     private $liEnrolmentIdB1    = 7;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $base = ['status' => EnrolmentStatuses::COMPLETED];
-        $this->createRevisionEnrolment($this->db, $base + ['enrolment_id' => $this->enrolmentId]);
-        $this->createRevisionEnrolment($this->db, $base + ['enrolment_id' => $this->moduleEnrolmentIdA, 'parent_enrolment_id' => $this->enrolmentId]);
-        $this->createRevisionEnrolment($this->db, $base + ['enrolment_id' => $this->liEnrolmentIdA1, 'parent_enrolment_id' => $this->moduleEnrolmentIdA]);
-        $this->createRevisionEnrolment($this->db, $base + ['enrolment_id' => $this->liEnrolmentIdA2, 'parent_enrolment_id' => $this->moduleEnrolmentIdA]);
-        $this->createRevisionEnrolment($this->db, $base + ['enrolment_id' => $this->liEnrolmentIdA3, 'parent_enrolment_id' => $this->moduleEnrolmentIdA]);
-        $this->createRevisionEnrolment($this->db, $base + ['enrolment_id' => $this->moduleEnrolmentIdB, 'parent_enrolment_id' => $this->enrolmentId]);
-        $this->createRevisionEnrolment($this->db, $base + ['enrolment_id' => $this->liEnrolmentIdB1, 'parent_enrolment_id' => $this->moduleEnrolmentIdB]);
+        $this->createRevisionEnrolment($this->go1, $base + ['enrolment_id' => $this->enrolmentId]);
+        $this->createRevisionEnrolment($this->go1, $base + ['enrolment_id' => $this->moduleEnrolmentIdA, 'parent_enrolment_id' => $this->enrolmentId]);
+        $this->createRevisionEnrolment($this->go1, $base + ['enrolment_id' => $this->liEnrolmentIdA1, 'parent_enrolment_id' => $this->moduleEnrolmentIdA]);
+        $this->createRevisionEnrolment($this->go1, $base + ['enrolment_id' => $this->liEnrolmentIdA2, 'parent_enrolment_id' => $this->moduleEnrolmentIdA]);
+        $this->createRevisionEnrolment($this->go1, $base + ['enrolment_id' => $this->liEnrolmentIdA3, 'parent_enrolment_id' => $this->moduleEnrolmentIdA]);
+        $this->createRevisionEnrolment($this->go1, $base + ['enrolment_id' => $this->moduleEnrolmentIdB, 'parent_enrolment_id' => $this->enrolmentId]);
+        $this->createRevisionEnrolment($this->go1, $base + ['enrolment_id' => $this->liEnrolmentIdB1, 'parent_enrolment_id' => $this->moduleEnrolmentIdB]);
     }
 
     public function testChildIds()
     {
         # Enrolment
-        $childIds = EnrolmentRevisionHelper::childIds($this->db, $this->enrolmentId);
+        $childIds = EnrolmentRevisionHelper::childIds($this->go1, $this->enrolmentId);
         $this->assertEquals(2, count($childIds));
         $this
             ->hasChild($this->moduleEnrolmentIdA, $childIds)
             ->hasChild($this->moduleEnrolmentIdB, $childIds);
 
         # Enrolment all child
-        $childIds = EnrolmentRevisionHelper::childIds($this->db, $this->enrolmentId, true);
+        $childIds = EnrolmentRevisionHelper::childIds($this->go1, $this->enrolmentId, true);
         $this->assertEquals(6, count($childIds));
         $this
             ->hasChild($this->moduleEnrolmentIdA, $childIds)
@@ -54,7 +54,7 @@ class EnrolmentRevisionHelperTest extends UtilCoreTestCase
             ->hasChild($this->liEnrolmentIdB1, $childIds);
 
         # Enrolment module A
-        $childIds = EnrolmentRevisionHelper::childIds($this->db, $this->moduleEnrolmentIdA);
+        $childIds = EnrolmentRevisionHelper::childIds($this->go1, $this->moduleEnrolmentIdA);
         $this->assertEquals(3, count($childIds));
         $this
             ->hasChild($this->liEnrolmentIdA1, $childIds)
@@ -62,16 +62,16 @@ class EnrolmentRevisionHelperTest extends UtilCoreTestCase
             ->hasChild($this->liEnrolmentIdA3, $childIds);
 
         # Enrolment module B
-        $childIds = EnrolmentRevisionHelper::childIds($this->db, $this->moduleEnrolmentIdB);
+        $childIds = EnrolmentRevisionHelper::childIds($this->go1, $this->moduleEnrolmentIdB);
         $this->assertEquals(1, count($childIds));
         $this->hasChild($this->liEnrolmentIdB1, $childIds);
 
         # Enrolment resource A1
-        $childIds = EnrolmentRevisionHelper::childIds($this->db, $this->liEnrolmentIdA1);
+        $childIds = EnrolmentRevisionHelper::childIds($this->go1, $this->liEnrolmentIdA1);
         $this->assertEquals(0, count($childIds));
 
         # Enrolment resource B1
-        $childIds = EnrolmentRevisionHelper::childIds($this->db, $this->liEnrolmentIdB1);
+        $childIds = EnrolmentRevisionHelper::childIds($this->go1, $this->liEnrolmentIdB1);
         $this->assertEquals(0, count($childIds));
     }
 

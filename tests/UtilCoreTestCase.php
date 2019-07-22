@@ -7,6 +7,8 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
 use go1\clients\MqClient;
 use go1\util\DB;
+use go1\util\schema\AwardSchema;
+use go1\util\schema\CollectionSchema;
 use go1\util\schema\InstallTrait;
 use go1\util\schema\mock\UserMockTrait;
 use go1\util\UtilCoreServiceProvider;
@@ -21,19 +23,24 @@ class UtilCoreTestCase extends TestCase
     use QueueMockTrait;
 
     /** @var  Connection */
-    protected $db;
+    protected $go1;
     protected $log;
 
     /** @var MqClient */
     protected $queue;
     protected $queueMessages = [];
 
-    public function setUp()
-    {
-        $this->db = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
-        $this->installGo1Schema($this->db, false, 'accounts.test');
+    protected $schemaClasses = [
+        AwardSchema::class,
+        CollectionSchema::class
+    ];
 
-        DB::install($this->db, [
+    public function setUp() : void
+    {
+        $this->go1 = DriverManager::getConnection(['url' => 'sqlite://sqlite::memory:']);
+        $this->installGo1Schema($this->go1, false, 'accounts.test');
+
+        DB::install($this->go1, [
             function (Schema $schema) {
                 $this->setupDatabaseSchema($schema);
             },
@@ -68,7 +75,9 @@ class UtilCoreTestCase extends TestCase
 
     protected function setupDatabaseSchema(Schema $schema)
     {
-        # Extra database setup, test cases can safely override this.
+        foreach ($this->schemaClasses as $schemaClass) {
+            call_user_func([$schemaClass, 'install'], $schema);
+        }
     }
 
     protected function getContainer(bool $rebuild = false): Container

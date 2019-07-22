@@ -28,15 +28,15 @@ class UserModelTest extends UtilCoreTestCase
             'status'     => 1,
         ];
 
-        $userId = $this->createUser($this->db, $data + ['instance' => 'accounts.com']);
-        $account1Id = $this->createUser($this->db, $data + ['instance' => $instance1 = '1.mygo1.com']);
-        $account2Id = $this->createUser($this->db, $data + ['instance' => $instance2 = '2.mygo1.com']);
-        $this->link($this->db, EdgeTypes::HAS_ACCOUNT, $userId, $account1Id);
-        $this->link($this->db, EdgeTypes::HAS_ACCOUNT, $userId, $account2Id);
+        $userId = $this->createUser($this->go1, $data + ['instance' => 'accounts.com']);
+        $account1Id = $this->createUser($this->go1, $data + ['instance' => $instance1 = '1.mygo1.com']);
+        $account2Id = $this->createUser($this->go1, $data + ['instance' => $instance2 = '2.mygo1.com']);
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $userId, $account1Id);
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $userId, $account2Id);
 
         // Don't load accounts
-        $root = UserHelper::load($this->db, $userId);
-        $user = User::create($root, $this->db, $isRoot = false);
+        $root = UserHelper::load($this->go1, $userId);
+        $user = User::create($root, $this->go1, $isRoot = false);
 
         $this->assertEquals($userId, $user->id);
         $this->assertEquals($data['mail'], $user->mail);
@@ -50,15 +50,15 @@ class UserModelTest extends UtilCoreTestCase
         $this->assertEquals(0, count($user->accounts));
 
         // Load sub accounts.
-        $user = User::create($root, $this->db, $isRoot = true, $instance1);
+        $user = User::create($root, $this->go1, $isRoot = true, $instance1);
         $this->assertEquals(1, count($user->accounts));
         $this->assertEquals($account1Id, $user->accounts[0]->id);
     }
 
     public function testDiff()
     {
-        $id = $this->createUser($this->db, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com', 'first_name' => 'Foo']);
-        $original = UserHelper::load($this->db, $id);
+        $id = $this->createUser($this->go1, ['mail' => 'foo@bar.baz', 'instance' => 'qa.mygo1.com', 'first_name' => 'Foo']);
+        $original = UserHelper::load($this->go1, $id);
         $originalModel = User::create($original);
 
         $user = clone $original;

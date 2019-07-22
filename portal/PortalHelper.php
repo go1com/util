@@ -56,7 +56,7 @@ class PortalHelper
             $portal->data = isset($portal->data) ? (object) json_decode($portal->data) : new stdClass();
 
             if ($includePortalData) {
-                $portal->data->portal_data = self::loadPortalDataById($go1, (int)$portal->id);
+                $portal->data->portal_data = self::loadPortalDataById($go1, (int) $portal->id);
             }
 
             return $portal;

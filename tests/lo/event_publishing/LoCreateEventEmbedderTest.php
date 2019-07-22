@@ -24,28 +24,28 @@ class LoCreateEventEmbedderTest extends UtilCoreTestCase
     protected $moduleId;
     protected $eventLiId;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $c = $this->getContainer();
-        $this->portalId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
-        $this->userId = $this->createUser($this->db, ['instance' => $c['accounts_name']]);
-        $this->accountId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com']);
-        $this->link($this->db, EdgeTypes::HAS_ACCOUNT, $this->userId, $this->accountId);
-        $this->jwt = $this->jwtForUser($this->db, $this->userId, 'qa.mygo1.com');
-        $this->courseId = $this->createCourse($this->db, ['instance_id' => $this->portalId]);
-        $this->moduleId = $this->createModule($this->db, ['instance_id' => $this->portalId]);
-        $this->eventLiId = $this->createLO($this->db, ['instance_id' => $this->portalId, 'type' => 'event']);
-        $this->link($this->db, EdgeTypes::HAS_MODULE, $this->courseId, $this->moduleId);
-        $this->link($this->db, EdgeTypes::HAS_LI, $this->moduleId, $this->eventLiId);
+        $this->portalId = $this->createPortal($this->go1, ['title' => 'qa.mygo1.com']);
+        $this->userId = $this->createUser($this->go1, ['instance' => $c['accounts_name']]);
+        $this->accountId = $this->createUser($this->go1, ['instance' => 'qa.mygo1.com']);
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $this->userId, $this->accountId);
+        $this->jwt = $this->jwtForUser($this->go1, $this->userId, 'qa.mygo1.com');
+        $this->courseId = $this->createCourse($this->go1, ['instance_id' => $this->portalId]);
+        $this->moduleId = $this->createModule($this->go1, ['instance_id' => $this->portalId]);
+        $this->eventLiId = $this->createLO($this->go1, ['instance_id' => $this->portalId, 'type' => 'event']);
+        $this->link($this->go1, EdgeTypes::HAS_MODULE, $this->courseId, $this->moduleId);
+        $this->link($this->go1, EdgeTypes::HAS_LI, $this->moduleId, $this->eventLiId);
     }
 
     public function test()
     {
         $c = $this->getContainer();
-        $event = LoHelper::load($this->db, $this->eventLiId);
-        $embedder = new LoCreateEventEmbedder($this->db, $c['access_checker']);
+        $event = LoHelper::load($this->go1, $this->eventLiId);
+        $embedder = new LoCreateEventEmbedder($this->go1, $c['access_checker']);
         $req = Request::create('/', 'POST');
         $req->attributes->set('jwt.payload', Text::jwtContent($this->jwt));
         $embedded = $embedder->embedded($event, $req);

@@ -3,6 +3,7 @@
 namespace go1\util\schema;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 class PortalSchema
 {
@@ -65,6 +66,18 @@ class PortalSchema
             $data->addIndex(['expiry_date']);
             $data->addIndex(['cancel_expiry_date']);
             $data->addIndex(['partner_portal_id']);
+        }
+
+        if (!$schema->hasTable('portal_stream')) {
+            $stream = $schema->createTable('portal_stream');
+            $stream->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $stream->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('created', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('action', Type::STRING);
+            $stream->addColumn('payload', Type::BLOB);
+            $stream->setPrimaryKey(['id']);
+            $stream->addIndex(['portal_id']);
+            $stream->addIndex(['created']);
         }
 
         $installPortalConf && self::installPortalConf($schema);

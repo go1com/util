@@ -3,8 +3,10 @@
 namespace go1\util\portal;
 
 use Doctrine\DBAL\Connection;
+use go1\util\collection\PortalCollectionConfiguration;
 use go1\util\DB;
 use go1\util\user\Roles;
+use stdClass;
 
 class PortalChecker
 {
@@ -126,13 +128,20 @@ class PortalChecker
         return $portal->configuration->modulesEnabled->allowRegister ?? true;
     }
 
-    public function buildLink($portal, $uri, $prefix = '')
+    /**
+     * @param object $portal
+     * @param string $uri
+     * @param string $prefix
+     * @param bool   $replacePublicDomain If set to false, does not replace public.mygo1.com with www.go1.com
+     * @return string
+     */
+    public function buildLink($portal, $uri, $prefix = '', $replacePublicDomain = true)
     {
         $uri = ltrim($uri, '/');
         $env = getenv('ENV') ?: 'production';
         switch ($env) {
             case 'production':
-                if (PortalHelper::WEBSITE_PUBLIC_INSTANCE == $portal->title) {
+                if ($replacePublicDomain && PortalHelper::WEBSITE_PUBLIC_INSTANCE == $portal->title) {
                     $domain = PortalHelper::WEBSITE_DOMAIN;
                     if (stripos($domain, 'www.') === false) {
                         $domain = 'www.' . $domain;
@@ -222,5 +231,22 @@ class PortalChecker
         $config = (array) $portal->configuration->{PortalHelper::FEATURE_NOTIFY_REMIND_MAJOR_EVENT} ?? [];
 
         return boolval($config[$role] ?? false);
+    }
+
+    public static function selectedContentSelections(stdClass $portal): bool
+    {
+        $collections = PortalHelper::collections($portal);
+        if (in_array(PortalCollectionConfiguration::SUBSCRIBE, $collections)) {
+            return true;
+        }
+
+        if (PortalChecker::allowMarketplace($portal)) {
+            if (in_array(PortalCollectionConfiguration::FREE, $collections)
+                || in_array(PortalCollectionConfiguration::PAID, $collections)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -20,11 +20,11 @@ class LoSaveAssessorEventEmbedderTest extends UtilCoreTestCase
 
     public function test()
     {
-        $embedder = new LoSaveAssessorEventEmbedder($this->db);
-        $portalId = $this->createPortal($this->db, ['title' => 'ngoc.mygo1.com']);
-        $courseId = $this->createCourse($this->db, ['instance_id' => $portalId]);
+        $embedder = new LoSaveAssessorEventEmbedder($this->go1);
+        $portalId = $this->createPortal($this->go1, ['title' => 'ngoc.mygo1.com']);
+        $courseId = $this->createCourse($this->go1, ['instance_id' => $portalId]);
         $embedded = $embedder->embedded((object)['id' => $courseId]);
         $this->assertArrayHasKey('lo', $embedded);
-        $this->assertArraySubset($this->expectLo, (array)$embedded['lo']);
+        $this->assertEmpty(array_diff_assoc($this->expectLo, (array)$embedded['lo']));
     }
 }

@@ -13,7 +13,7 @@ class RoleHelperTest extends UtilCoreTestCase
 
     public function testAdd()
     {
-        RoleHelper::add($this->db, $this->queue, $this->portalName, 'admin');
+        RoleHelper::add($this->go1, $this->queue, $this->portalName, 'admin');
 
         $message = $this->queueMessages[Queue::ROLE_CREATE][0];
         $this->assertEquals($this->portalName, $message['instance']);
@@ -22,16 +22,16 @@ class RoleHelperTest extends UtilCoreTestCase
 
     public function TestRoleId()
     {
-        $expectedRoleId = RoleHelper::add($this->db, $this->queue, $this->portalName, 'admin');
-        $roleId = RoleHelper::roleId($this->db, $this->queue, $this->portalName, 'admin');
+        $expectedRoleId = RoleHelper::add($this->go1, $this->queue, $this->portalName, 'admin');
+        $roleId = RoleHelper::roleId($this->go1, $this->queue, $this->portalName, 'admin');
 
         $this->assertEquals($expectedRoleId, $roleId);
     }
 
     public function testGrant()
     {
-        $roleId = RoleHelper::add($this->db, $this->queue, $this->portalName, 'admin');
-        RoleHelper::grant($this->db, $this->queue, $this->portalName, 1000, 'admin');
+        $roleId = RoleHelper::add($this->go1, $this->queue, $this->portalName, 'admin');
+        RoleHelper::grant($this->go1, $this->queue, $this->portalName, 1000, 'admin');
 
         $message = $this->queueMessages[Queue::RO_CREATE][0];
         $this->assertEquals(EdgeTypes::HAS_ROLE, $message['type']);
@@ -41,14 +41,14 @@ class RoleHelperTest extends UtilCoreTestCase
 
     public function testRoleIds()
     {
-        $adminRoleId = RoleHelper::add($this->db, $this->queue, $this->portalName, 'admin');
-        $studentRoleId = RoleHelper::add($this->db, $this->queue, $this->portalName, 'student');
+        $adminRoleId = RoleHelper::add($this->go1, $this->queue, $this->portalName, 'admin');
+        $studentRoleId = RoleHelper::add($this->go1, $this->queue, $this->portalName, 'student');
 
-        $ids = RoleHelper::roleIds($this->db, $this->portalName, ['admin', 'student']);
+        $ids = RoleHelper::roleIds($this->go1, $this->portalName, ['admin', 'student']);
         $this->assertTrue(in_array($adminRoleId, $ids));
         $this->assertTrue(in_array($studentRoleId, $ids));
 
-        $emptyIds = RoleHelper::roleIds($this->db, $this->portalName, ['wrong role']);
+        $emptyIds = RoleHelper::roleIds($this->go1, $this->portalName, ['wrong role']);
         $this->assertEmpty($emptyIds);
     }
 }

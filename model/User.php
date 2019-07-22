@@ -46,6 +46,8 @@ class User implements JsonSerializable
      */
     public static function create(stdClass $row, Connection $db = null, $root = true, string $portalName = null)
     {
+        $data = $row->data ?? null;
+
         $user = new User;
         $user->id = $row->id;
         $user->profileId = $row->profile_id ?? null;
@@ -59,7 +61,7 @@ class User implements JsonSerializable
         $user->access = $row->access ?? null;
         $user->login = $row->login ?? null;
         $user->timestamp = $row->timestamp ?? null;
-        $user->data = is_scalar($row->data) ? json_decode($row->data) : $row->data;
+        $user->data = is_scalar($data) ? json_decode($data) : $data;
         $user->roles = $row->roles ?? $user->data->roles ?? null;
         $user->avatar = $row->avatar ?? $user->data->avatar->uri ?? null;
 
@@ -69,6 +71,7 @@ class User implements JsonSerializable
             $roleIds = $db
                 ->executeQuery($roleIds, [EdgeTypes::HAS_ROLE, $user->id])
                 ->fetchAll(PDO::FETCH_COLUMN);
+
             $user->roles = !$roleIds ? [] : $db
                 ->executeQuery('SELECT name FROM gc_role WHERE id IN (?)', [$roleIds], [DB::INTEGERS])
                 ->fetchAll(PDO::FETCH_COLUMN);
@@ -101,6 +104,7 @@ class User implements JsonSerializable
             'id'         => $this->id,
             'profile_id' => $this->profileId,
             'instance'   => $this->instance,
+            'portal_id'  => $this->portalId ?? 0,
             'name'       => $this->name,
             'mail'       => $this->mail,
             'first_name' => $this->firstName,

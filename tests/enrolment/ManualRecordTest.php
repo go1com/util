@@ -19,11 +19,11 @@ class ManualRecordTest extends UtilCoreTestCase
     /** @var MqClient */
     protected $queue;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
-        DB::install($this->db, [
+        DB::install($this->go1, [
             function (Schema $schema) {
                 EnrolmentSchema::installManualRecord($schema);
             },
@@ -43,7 +43,7 @@ class ManualRecordTest extends UtilCoreTestCase
                 $this->queueMessages[$subject][] = $payload;
             });
 
-        $this->repository = new ManualRecordRepository($this->db, $this->queue);
+        $this->repository = new ManualRecordRepository($this->go1, $this->queue);
     }
 
     public function testCreateAndLoad()
@@ -103,7 +103,7 @@ class ManualRecordTest extends UtilCoreTestCase
     {
         $record = $this->testCreateAndLoad();
         $this->repository->delete($record->id);
-        $count = $this->db->fetchColumn('SELECT COUNT(*) FROM enrolment_manual WHERE id = ?', [$record->id]);
+        $count = $this->go1->fetchColumn('SELECT COUNT(*) FROM enrolment_manual WHERE id = ?', [$record->id]);
         $msg = $this->queueMessages[Queue::MANUAL_RECORD_DELETE][0];
 
         $this->assertTrue($msg instanceof ManualRecord);

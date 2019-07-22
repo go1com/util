@@ -2,9 +2,12 @@
 
 namespace go1\util;
 
+use function defined;
+use function getenv;
+
 class Service
 {
-    const VERSION = 'v18.8.5.0';
+    const VERSION = 'v19.02.22.0';
 
     public static function cacheOptions($root)
     {
@@ -25,6 +28,10 @@ class Service
 
     public static function accountsName(string $env): string
     {
+        if ($configured = getenv('ACCOUNTS_NAME')) {
+            return $configured;
+        }
+
         switch ($env) {
             case 'production':
             case 'staging':

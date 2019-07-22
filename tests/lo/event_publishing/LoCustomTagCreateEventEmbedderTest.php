@@ -20,19 +20,19 @@ class LoCustomTagCreateEventEmbedderTest extends UtilCoreTestCase
     protected $moduleId;
     protected $eventLiId;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->getContainer();
-        $this->portalId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
-        $this->courseId = $this->createCourse($this->db, ['instance_id' => $this->portalId]);
+        $this->portalId = $this->createPortal($this->go1, ['title' => 'qa.mygo1.com']);
+        $this->courseId = $this->createCourse($this->go1, ['instance_id' => $this->portalId]);
     }
 
     public function test()
     {
         $c = $this->getContainer();
-        $embedder = new LoCustomTagCreateEventEmbedder($this->db, $c['access_checker']);
+        $embedder = new LoCustomTagCreateEventEmbedder($this->go1, $c['access_checker']);
         $embedded = $embedder->embedded((object)[
             'instance_id' => $this->portalId,
             'lo_id'       => $this->courseId,

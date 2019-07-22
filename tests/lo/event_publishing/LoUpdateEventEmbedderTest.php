@@ -15,8 +15,8 @@ class LoUpdateEventEmbedderTest extends LoCreateEventEmbedderTest
     public function test()
     {
         $c = $this->getContainer();
-        $event = LoHelper::load($this->db, $this->eventLiId);
-        $embedder = new LoUpdateEventEmbedder($this->db, $c['access_checker']);
+        $event = LoHelper::load($this->go1, $this->eventLiId);
+        $embedder = new LoUpdateEventEmbedder($this->go1, $c['access_checker']);
         $req = Request::create('/', 'POST');
         $req->attributes->set('jwt.payload', Text::jwtContent($this->jwt));
         $embedded = $embedder->embedded($event, $req);

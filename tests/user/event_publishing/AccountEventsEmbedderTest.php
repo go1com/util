@@ -24,24 +24,24 @@ class AccountEventsEmbedderTest extends UtilCoreTestCase
     protected $profileId = 999;
     protected $jwt;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $c = $this->getContainer();
-        $this->portalId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
-        $this->userId = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'profile_id' => $this->profileId]);
-        $this->accountId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com', 'profile_id' => $this->profileId]);
-        $this->link($this->db, EdgeTypes::HAS_ACCOUNT, $this->userId, $this->accountId);
-        $this->jwt = $this->jwtForUser($this->db, $this->userId, 'qa.mygo1.com');
+        $this->portalId = $this->createPortal($this->go1, ['title' => 'qa.mygo1.com']);
+        $this->userId = $this->createUser($this->go1, ['instance' => $c['accounts_name'], 'profile_id' => $this->profileId]);
+        $this->accountId = $this->createUser($this->go1, ['instance' => 'qa.mygo1.com', 'profile_id' => $this->profileId]);
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $this->userId, $this->accountId);
+        $this->jwt = $this->jwtForUser($this->go1, $this->userId, 'qa.mygo1.com');
     }
 
     public function test()
     {
         $c = $this->getContainer();
-        $embedder = new AccountEventsEmbedder($this->db, new $c['access_checker']);
+        $embedder = new AccountEventsEmbedder($this->go1, new $c['access_checker']);
 
-        $account = UserHelper::load($this->db, $this->accountId);
+        $account = UserHelper::load($this->go1, $this->accountId);
         $req = Request::create('/', 'POST');
         $req->attributes->set('jwt.payload', Text::jwtContent($this->jwt));
         $embedded = $embedder->embed($account, $req);

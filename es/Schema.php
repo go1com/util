@@ -2,6 +2,7 @@
 
 namespace go1\util\es;
 
+use go1\util\customer\CustomerEsSchema;
 use go1\util\enrolment\EnrolmentStatuses;
 use go1\util\event\AttendanceStatuses;
 
@@ -18,6 +19,10 @@ class Schema
     const ACTIVITY_INDEX    = ES_INDEX . '_activity';
     const PORTALS_INDEX     = ES_INDEX . '_portal*';
     const PAYMENT_INDEX     = ES_INDEX . '_payment';
+    const EVENT_INDEX       = ES_INDEX . '_event';
+
+    # GO1-core indices
+    const LEARNING_RECORD_INDEX = ES_INDEX.'_learning_record';
 
     # Indices for explore
     const EXPLORE_INDEX             = ES_INDEX . '_explore';
@@ -47,26 +52,17 @@ class Schema
     const T_GEO_POINT           = 'geo_point';
 
     const O_EDGE                = 'edge';
-    const O_PORTAL              = 'portal';
-    const O_CONFIG              = 'configuration';
-    const O_USER                = 'user';
-    const O_ACCOUNT             = 'account';
-    const O_ACTIVITY            = 'activity';
     const O_LO                  = 'lo';
     const O_LO_COLLECTION       = 'lo_collection';
     const O_PLAN                = 'plan';
     const O_ENROLMENT           = 'enrolment';
     const O_ENROLMENT_REVISION  = 'enrolment_revision';
-    const O_SUBMISSION          = 'asm_submission';
-    const O_SUBMISSION_REVISION = 'asm_submission_revision';
     const O_GROUP               = 'group';
     const O_GROUP_ITEM          = 'group_item';
-    const O_MAIL                = 'mail';
     const O_PAYMENT_TRANSACTION = 'payment_transaction';
     const O_CREDIT              = 'credit';
     const O_QUIZ_USER_ANSWER    = 'quiz_user_answer';
     const O_PURCHASE_REQUEST    = 'purchase_request';
-    const O_ECK_METADATA        = 'eck_metadata';
     const O_COUPON              = 'coupon';
     const O_LO_GROUP            = 'lo_group';
     const O_LO_POLICY           = 'lo_policy';
@@ -84,10 +80,6 @@ class Schema
     const O_CONTRACT            = 'contract';
     const O_METRIC              = 'metric';
 
-    // enrolment only belongs to LO. account_enrolment is enrolment, but belong to account.
-    // This is used to get users that is not enrolled to a course.
-    const O_ACCOUNT_ENROLMENT = 'account_enrolment';
-
     const A_SIMPLE     = 'simple';
     const A_WHITESPACE = 'whitespace';
 
@@ -102,10 +94,6 @@ class Schema
 
     const MAPPING = [
         self::O_EDGE                => self::EDGE_MAPPING,
-        self::O_PORTAL              => self::PORTAL_MAPPING,
-        self::O_CONFIG              => self::CONFIGURATION_MAPPING,
-        self::O_USER                => self::USER_MAPPING,
-        self::O_ACCOUNT             => self::ACCOUNT_MAPPING,
         self::O_LO                  => self::LO_MAPPING,
         self::O_LO_GROUP            => self::LO_GROUP_MAPPING,
         self::O_LO_TAG              => self::LO_TAG_MAPPING,
@@ -113,16 +101,12 @@ class Schema
         self::O_PLAN                => self::PLAN_MAPPING,
         self::O_ENROLMENT           => self::ENROLMENT_MAPPING,
         self::O_ENROLMENT_REVISION  => self::ENROLMENT_MAPPING_REVISION,
-        self::O_SUBMISSION          => self::SUBMISSION_MAPPING,
-        self::O_SUBMISSION_REVISION => self::SUBMISSION_REVISION_MAPPING,
         self::O_GROUP               => self::GROUP_MAPPING,
         self::O_GROUP_ITEM          => self::GROUP_ITEM_MAPPING,
-        self::O_MAIL                => self::MAIL_MAPPING,
         self::O_PAYMENT_TRANSACTION => self::PAYMENT_TRANSACTION_MAPPING,
         self::O_CREDIT              => self::CREDIT_MAPPING,
         self::O_QUIZ_USER_ANSWER    => self::QUIZ_USER_ANSWER_MAPPING,
         self::O_PURCHASE_REQUEST    => self::PURCHASE_REQUEST_MAPPING,
-        self::O_ECK_METADATA        => self::ECK_METADATA_MAPPING,
         self::O_COUPON              => self::COUPON_MAPPING,
         self::O_EVENT               => self::EVENT_MAPPING,
         self::O_EVENT_ATTENDANCE    => self::EVENT_ATTENDANCE_MAPPING,
@@ -130,13 +114,11 @@ class Schema
         self::O_AWARD_ITEM          => self::AWARD_ITEM_MAPPING,
         self::O_AWARD_ITEM_MANUAL   => self::AWARD_ITEM_MANUAL_MAPPING,
         self::O_AWARD_ACHIEVEMENT   => self::AWARD_ACHIEVEMENT_MAPPING,
-        self::O_ACCOUNT_ENROLMENT   => self::ACCOUNT_ENROLMENT_MAPPING,
         self::O_SUGGESTION_CATEGORY => self::SUGGESTION_CATEGORY_MAPPING,
         self::O_SUGGESTION_TAG      => self::SUGGESTION_TAG_MAPPING,
         self::O_MYTEAM_PROGRESS     => self::MY_TEAM_MAPPING,
         self::O_CONTRACT            => self::CONTRACT_MAPPING,
         self::O_METRIC              => self::METRIC_MAPPING,
-        self::O_ACTIVITY            => self::ACTIVITY_MAPPING,
         self::O_LO_COLLECTION       => self::LO_COLLECTION_MAPPING,
     ];
 
@@ -156,136 +138,6 @@ class Schema
             'target_id' => ['type' => self::T_INT],
             'weight'    => ['type' => self::T_INT],
             'data'      => ['type' => self::T_OBJECT],
-        ],
-    ];
-
-    const PORTAL_MAPPING = [
-        '_parent'    => ['type' => self::O_USER],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'                => ['type' => self::T_KEYWORD],
-            'title'             => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'status'            => ['type' => self::T_SHORT],
-            'name'              => ['type' => self::T_KEYWORD],
-            'version'           => ['type' => self::T_KEYWORD],
-            'created'           => ['type' => self::T_DATE],
-            'configuration'     => ['type' => self::T_OBJECT],
-            'legacy'            => ['type' => self::T_INT],
-            'logo'              => ['type' => self::T_TEXT],
-            'score'             => ['type' => self::T_INT], # activity score
-            'user_count'        => ['type' => self::T_INT],
-            'active_user_count' => ['type' => self::T_INT], # last 30 days
-            'plan'              => [
-                'properties' => [
-                    'name'     => ['type' => self::T_KEYWORD], # platform|premium
-                    'status'   => ['type' => self::T_INT], # 0: Free, 1: Trial, 2: Paid, 3: Overdue invoice
-                    'license'  => ['type' => self::T_INT],
-                    'regional' => ['type' => self::T_KEYWORD],
-                ],
-            ],
-            'csm'               => [
-                'properties' => [
-                    'user_id' => ['type' => self::T_INT],
-                ],
-            ],
-        ],
-    ];
-
-    const CONFIGURATION_MAPPING = [
-        '_parent'    => ['type' => self::O_PORTAL],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'instance'  => ['type' => self::T_KEYWORD],
-            'namespace' => ['type' => self::T_KEYWORD],
-            'name'      => ['type' => self::T_KEYWORD],
-            'public'    => ['type' => self::T_INT],
-            'value'     => ['type' => self::T_OBJECT],
-        ],
-    ];
-
-    const USER_MAPPING = [
-        'properties' => [
-            'id'           => ['type' => self::T_KEYWORD],
-            'profile_id'   => ['type' => self::T_INT],
-            'mail'         => ['type' => self::T_KEYWORD],
-            'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'first_name'   => ['type' => self::T_KEYWORD],
-            'last_name'    => ['type' => self::T_KEYWORD],
-            'created'      => ['type' => self::T_DATE],
-            'login'        => ['type' => self::T_DATE],
-            'access'       => ['type' => self::T_DATE],
-            'status'       => ['type' => self::T_SHORT],
-            'allow_public' => ['type' => self::T_INT],
-            'avatar'       => ['type' => self::T_TEXT],
-            'roles'        => ['type' => self::T_KEYWORD],
-            'timestamp'    => ['type' => self::T_DATE],
-        ],
-    ];
-
-    const ACCOUNT_MAPPING = [
-        '_routing'          => ['required' => true],
-        'properties'        => [
-            'id'           => ['type' => self::T_KEYWORD],
-            'instance'     => ['type' => self::T_KEYWORD],
-            'mail'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'first_name'   => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'last_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'created'      => ['type' => self::T_DATE],
-            'login'        => ['type' => self::T_DATE],
-            'access'       => ['type' => self::T_DATE],
-            'status'       => ['type' => self::T_SHORT],
-            'allow_public' => ['type' => self::T_INT],
-            'avatar'       => ['type' => self::T_TEXT],
-            'roles'        => ['type' => self::T_KEYWORD],
-            'groups'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'timestamp'    => ['type' => self::T_DATE],
-            'managers'     => ['type' => self::T_INT], # Use user.id of manager
-            'metadata'     => [
-                'properties' => [
-                    'user_id'     => ['type' => self::T_INT],
-                    'instance_id' => ['type' => self::T_INT],
-                    'updated_at'  => ['type' => self::T_INT],
-                ],
-            ],
-        ],
-        'dynamic_templates' => [
-            [
-                'custom_field_string' => [
-                    'path_match' => 'fields_*.*.value_string',
-                    'mapping'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
-                ],
-            ],
-            [
-                'custom_field_text' => [
-                    'path_match' => 'fields_*.*.value_text',
-                    'mapping'    => ['type' => self::T_TEXT],
-                ],
-            ],
-            [
-                'custom_field_integer' => [
-                    'path_match' => 'fields_*.*.value_integer',
-                    'mapping'    => ['type' => self::T_INT],
-                ],
-            ],
-            [
-                'custom_field_float' => [
-                    'path_match' => 'fields_*.*.value_float',
-                    'mapping'    => ['type' => self::T_DOUBLE],
-                ],
-            ],
-            [
-                'custom_field_date' => [
-                    'path_match' => 'fields_*.*.value_date',
-                    'mapping'    => ['type' => self::T_DATE],
-                ],
-            ],
-            [
-                'custom_field_datetime' => [
-                    'path_match' => 'fields_*.*.value_datetime',
-                    'mapping'    => ['type' => self::T_DATE],
-                ],
-            ],
         ],
     ];
 
@@ -342,7 +194,7 @@ class Schema
             'items_count'     => ['type' => self::T_INT], # Only count first child level
             'authors'         => [
                 'type'       => self::T_NESTED,
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => CustomerEsSchema::USER_MAPPING['properties'],
             ],
             'group_ids'       => ['type' => self::T_INT],
             'data'            => [
@@ -458,7 +310,6 @@ class Schema
      * @TODO Make sure the revisions are indexed on content re-indexing.
      */
     const ENROLMENT_MAPPING = [
-        '_parent'           => ['type' => self::O_LO],
         '_routing'          => ['required' => true],
         'properties'        => [
             'id'                  => ['type' => self::T_KEYWORD],
@@ -513,7 +364,7 @@ class Schema
                 ],
             ],
             'account'             => [
-                'properties' => self::ACCOUNT_MAPPING['properties'],
+                'properties' => CustomerEsSchema::ACCOUNT_MAPPING['properties'],
             ],
             'progress'            => [
                 'properties' => [
@@ -543,6 +394,7 @@ class Schema
                     'user_id'             => ['type' => self::T_INT],
                     'instance_id'         => ['type' => self::T_INT],
                     'updated_at'          => ['type' => self::T_INT],
+                    'event_details'       => ['type' => self::T_KEYWORD] + self::ANALYZED, # Ex: Induction training | 08 August 2018 - 09 August 2018 | Brisbane
                 ],
             ],
         ],
@@ -622,55 +474,6 @@ class Schema
         ],
     ];
 
-    const ACCOUNT_ENROLMENT_MAPPING = [
-        '_parent'    => ['type' => self::O_ACCOUNT],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'       => ['type' => self::T_KEYWORD], # Enrolment ID
-            'lo_id'    => ['type' => self::T_INT],
-            'type'     => ['type' => self::T_KEYWORD],
-            'status'   => ['type' => self::T_SHORT],
-            'metadata' => [
-                'properties' => [
-                    'instance_id' => ['type' => self::T_INT],
-                    'course_id'   => ['type' => self::T_INT],
-                    'updated_at'  => ['type' => self::T_INT],
-                ],
-            ],
-        ],
-    ];
-
-    const SUBMISSION_MAPPING = [
-        '_parent'    => ['type' => self::O_ENROLMENT],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'revision_id' => ['type' => self::T_INT],
-            'profile_id'  => ['type' => self::T_INT],
-            'status'      => ['type' => self::T_SHORT],
-            'created'     => ['type' => self::T_DATE],
-            'updated'     => ['type' => self::T_DATE],
-            'published'   => ['type' => self::T_INT],
-            'assessors'   => ['type' => self::T_INT],
-        ],
-    ];
-
-    const SUBMISSION_REVISION_MAPPING = [
-        '_parent'    => ['type' => self::O_SUBMISSION],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'      => ['type' => self::T_KEYWORD],
-            'status'  => ['type' => self::T_SHORT],
-            'created' => ['type' => self::T_DATE],
-            'updated' => ['type' => self::T_DATE],
-            'data'    => [
-                'properties' => [
-                    'files' => ['type' => self::T_OBJECT],
-                ],
-            ],
-        ],
-    ];
-
     const GROUP_MAPPING = [
         '_routing'   => ['required' => true],
         'properties' => [
@@ -710,25 +513,6 @@ class Schema
         ],
     ];
 
-    const MAIL_MAPPING = [
-        '_parent'    => ['type' => self::O_PORTAL],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'recipient'   => ['type' => self::T_KEYWORD],
-            'sender'      => ['type' => self::T_KEYWORD],
-            'cc'          => ['type' => self::T_KEYWORD],
-            'bcc'         => ['type' => self::T_KEYWORD],
-            'subject'     => ['type' => self::T_KEYWORD],
-            'body'        => ['type' => self::T_TEXT],
-            'html'        => ['type' => self::T_TEXT],
-            'context'     => ['type' => self::T_OBJECT],
-            'options'     => ['type' => self::T_OBJECT],
-            'attachments' => ['type' => self::T_OBJECT],
-            'timestamp'   => ['type' => self::T_DATE],
-        ],
-    ];
-
     const PAYMENT_TRANSACTION_MAPPING = [
         'properties' => [
             'id'                 => ['type' => self::T_KEYWORD],
@@ -744,12 +528,13 @@ class Schema
             'premium_purchase'   => ['type' => self::T_INT],
             'user_id'            => ['type' => self::T_INT],
             'user'               => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => CustomerEsSchema::USER_MAPPING['properties'],
             ],
             'items'              => [
                 'type'       => self::T_NESTED,
                 'properties' => self::PAYMENT_TRANSACTION_ITEM_MAPPING['properties'],
             ],
+            'taken_portal_id'    => ['type' => self::T_INT],
             'credit_usage_count' => ['type' => self::T_INT],
         ],
     ];
@@ -785,7 +570,7 @@ class Schema
             'question'      => ['type' => self::T_KEYWORD] + self::ANALYZED,
             'counter'       => ['type' => self::T_INT],
             'user'          => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => CustomerEsSchema::USER_MAPPING['properties'],
             ],
             'li'            => [
                 'properties' => self::LO_MAPPING['properties'],
@@ -809,10 +594,10 @@ class Schema
             'id'            => ['type' => self::T_KEYWORD],
             'portal_id'     => ['type' => self::T_INT],
             'user'          => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => CustomerEsSchema::USER_MAPPING['properties'],
             ],
             'manager'       => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => CustomerEsSchema::USER_MAPPING['properties'],
             ],
             'lo'            => [
                 'properties' => self::LO_MAPPING['properties'],
@@ -827,36 +612,6 @@ class Schema
                     'user_id'    => ['type' => self::T_INT],
                     'manager_id' => ['type' => self::T_INT],
                     'lo_id'      => ['type' => self::T_INT],
-                ],
-            ],
-        ],
-    ];
-
-    const ECK_METADATA_MAPPING = [
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'instance'    => ['type' => self::T_KEYWORD],
-            'entity_type' => ['type' => self::T_KEYWORD],
-            'field'       => [
-                'type'       => self::T_NESTED,
-                'properties' => [
-                    'id'           => ['type' => self::T_KEYWORD],
-                    'name'         => ['type' => self::T_KEYWORD],
-                    'description'  => ['type' => self::T_TEXT],
-                    'label'        => ['type' => self::T_KEYWORD],
-                    'help'         => ['type' => self::T_KEYWORD],
-                    'type'         => ['type' => self::T_KEYWORD],
-                    'published'    => ['type' => self::T_INT],
-                    'weight'       => ['type' => self::T_INT],
-                    'max_rows'     => ['type' => self::T_INT],
-                    'parent_field' => ['type' => self::T_KEYWORD],
-                    'data'         => ['type' => self::T_OBJECT],
-                    'metadata'     => [
-                        'properties' => [
-                            'instance_id' => ['type' => self::T_INT],
-                            'updated_at'  => ['type' => self::T_INT],
-                        ],
-                    ],
                 ],
             ],
         ],
@@ -904,7 +659,7 @@ class Schema
         '_parent'    => ['type' => self::O_PAYMENT_TRANSACTION],
         'properties' => [
             'user'      => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => CustomerEsSchema::USER_MAPPING['properties'],
             ],
             'lo'        => [
                 'properties' => self::LO_MAPPING['properties'],
@@ -925,16 +680,16 @@ class Schema
     ];
 
     const INSTRUCTOR_PROPERTIES = [
-        'id'           => ['type' => self::T_KEYWORD],
-        'profile_id'     => ['type' => self::T_INT],
-        'instance'     => ['type' => self::T_KEYWORD],
-        'mail'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-        'name'         => ['type' => self::T_KEYWORD] + self::ANALYZED,
-        'first_name'   => ['type' => self::T_KEYWORD] + self::ANALYZED,
-        'last_name'    => ['type' => self::T_KEYWORD] + self::ANALYZED,
-        'status'       => ['type' => self::T_SHORT],
-        'avatar'       => ['type' => self::T_TEXT],
-        'roles'        => ['type' => self::T_KEYWORD]
+        'id'         => ['type' => self::T_KEYWORD],
+        'profile_id' => ['type' => self::T_INT],
+        'instance'   => ['type' => self::T_KEYWORD],
+        'mail'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'name'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'first_name' => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'last_name'  => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'status'     => ['type' => self::T_SHORT],
+        'avatar'     => ['type' => self::T_TEXT],
+        'roles'      => ['type' => self::T_KEYWORD],
     ];
 
     const EVENT_PROPERTIES = [
@@ -985,38 +740,68 @@ class Schema
             ],
     ];
 
-    const EVENT_ATTENDANCE_MAPPING = [
-        '_parent'    => ['type' => self::O_ENROLMENT],
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'           => ['type' => self::T_KEYWORD],
-            'user_id'      => ['type' => self::T_INT],
-            'lo_id'        => ['type' => self::T_INT],
-            'enrolment_id' => ['type' => self::T_INT],
-            'event_id'     => ['type' => self::T_INT],
-            'portal_id'    => ['type' => self::T_INT],
-            'profile_id'   => ['type' => self::T_INT],
-            'start_at'     => ['type' => self::T_DATE],
-            'end_at'       => ['type' => self::T_DATE],
-            'status'       => ['type' => self::T_SHORT],
-            'result'       => ['type' => self::T_INT],
-            'pass'         => ['type' => self::T_INT],
-            'timestamp'    => ['type' => self::T_DATE],
-            'progress'     => [
-                'properties' => [
-                    AttendanceStatuses::ATTENDED     => ['type' => self::T_INT],
-                    AttendanceStatuses::NOT_ATTENDED => ['type' => self::T_INT],
-                    AttendanceStatuses::ATTENDING    => ['type' => self::T_INT],
-                    AttendanceStatuses::PENDING      => ['type' => self::T_INT],
-                ],
-            ],
-            'metadata'     => [
-                'properties' => [
-                    'updated_at'  => ['type' => self::T_INT],
-                    'instance_id' => ['type' => self::T_INT],
-                ],
+    const ACCOUNT_LITE_PROPERTIES = [
+        'id'         => ['type' => self::T_KEYWORD],
+        'profile_id' => ['type' => self::T_INT],
+        'instance'   => ['type' => self::T_KEYWORD],
+        'mail'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'name'       => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'first_name' => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'last_name'  => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'status'     => ['type' => self::T_SHORT],
+        'avatar'     => ['type' => self::T_TEXT],
+        'roles'      => ['type' => self::T_KEYWORD],
+        'groups'     => ['type' => self::T_KEYWORD] + self::ANALYZED,
+        'managers'   => ['type' => self::T_INT], # Use user.id of manager
+        'metadata'   => [
+            'properties' => [
+                'user_id'     => ['type' => self::T_INT],
+                'instance_id' => ['type' => self::T_INT],
+                'updated_at'  => ['type' => self::T_INT],
             ],
         ],
+    ];
+
+    const EVENT_ATTENDANCE_PROPERTIES = [
+        'id'           => ['type' => self::T_KEYWORD],
+        'user_id'      => ['type' => self::T_INT],
+        'lo_id'        => ['type' => self::T_INT],
+        'enrolment_id' => ['type' => self::T_INT],
+        'event_id'     => ['type' => self::T_INT],
+        'portal_id'    => ['type' => self::T_INT],
+        'profile_id'   => ['type' => self::T_INT],
+        'start_at'     => ['type' => self::T_DATE],
+        'end_at'       => ['type' => self::T_DATE],
+        'status'       => ['type' => self::T_SHORT],
+        'result'       => ['type' => self::T_INT],
+        'pass'         => ['type' => self::T_INT],
+        'timestamp'    => ['type' => self::T_DATE],
+        'progress'     => [
+            'properties' => [
+                AttendanceStatuses::ATTENDED     => ['type' => self::T_INT],
+                AttendanceStatuses::NOT_ATTENDED => ['type' => self::T_INT],
+                AttendanceStatuses::ATTENDING    => ['type' => self::T_INT],
+                AttendanceStatuses::PENDING      => ['type' => self::T_INT],
+            ],
+        ],
+        'account'             => [
+            'properties' => self::ACCOUNT_LITE_PROPERTIES,
+        ],
+        'event'            => [
+            'properties' => self::EVENT_PROPERTIES
+        ],
+    ];
+
+    const EVENT_ATTENDANCE_MAPPING = [
+        '_routing'   => ['required' => true],
+        'properties' => self::EVENT_ATTENDANCE_PROPERTIES + [
+                'metadata'         => [
+                    'properties' => [
+                        'instance_id' => ['type' => self::T_INT],
+                        'updated_at'  => ['type' => self::T_INT],
+                    ],
+                ],
+            ],
     ];
 
     const AWARD_MAPPING = [
@@ -1093,48 +878,6 @@ class Schema
             'award_item_id' => ['type' => self::T_INT],
             'quantity'      => ['type' => self::T_DOUBLE],
             'created'       => ['type' => self::T_DATE],
-        ],
-    ];
-
-    const ACTIVITY_MAPPING = [
-        '_routing'   => ['required' => true],
-        'properties' => [
-            'id'          => ['type' => self::T_KEYWORD],
-            'instance_id' => ['type' => self::T_INT],
-            'actor_id'    => ['type' => self::T_INT],
-            'user_id'     => ['type' => self::T_INT],
-            'entity_type' => ['type' => self::T_KEYWORD],
-            'entity_id'   => ['type' => self::T_INT],
-            'action_id'   => ['type' => self::T_INT],
-            'tags'        => ['type' => self::T_KEYWORD] + self::ANALYZED,
-            'created'     => ['type' => self::T_DATE],
-            'updated'     => ['type' => self::T_DATE],
-            'context'     => [
-                'properties' => [
-                    'actor'  => ['type' => self::T_KEYWORD],
-                    'user'   => ['type' => self::T_KEYWORD],
-                    'entity' => [
-                        'properties' => [
-                            'title' => ['type' => self::T_KEYWORD],
-                            'type'  => ['type' => self::T_KEYWORD],
-                        ],
-                    ],
-                    'diff'   => [
-                        'properties' => [
-                            'diff_field_name' => ['type' => self::T_TEXT], # Can not use `field` because it already used
-                            'old'             => ['type' => self::T_TEXT],
-                            'new'             => ['type' => self::T_TEXT],
-                        ],
-                    ],
-                    'target' => [
-                        'properties' => [
-                            'id'    => ['type' => self::T_KEYWORD],
-                            'title' => ['type' => self::T_KEYWORD],
-                            'type'  => ['type' => self::T_KEYWORD],
-                        ],
-                    ],
-                ],
-            ],
         ],
     ];
 
@@ -1224,7 +967,7 @@ class Schema
             'user_id'         => ['type' => self::T_INT],
             'staff_id'        => ['type' => self::T_INT],
             'staff'           => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => CustomerEsSchema::USER_MAPPING['properties'],
             ],
             'number_users'    => ['type' => self::T_INT],
             'price'           => ['type' => self::T_DOUBLE],
@@ -1251,7 +994,7 @@ class Schema
             'id'           => ['type' => self::T_KEYWORD],
             'title'        => ['type' => self::T_KEYWORD],
             'user'         => [
-                'properties' => self::USER_MAPPING['properties'],
+                'properties' => CustomerEsSchema::USER_MAPPING['properties'],
             ],
             'type'         => ['type' => self::T_KEYWORD],
             'metric_value' => ['type' => self::T_DOUBLE],

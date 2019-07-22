@@ -27,12 +27,17 @@ trait UserMockTrait
         return $this->createRole($db, $options + ['name' => Roles::ADMIN]);
     }
 
+    public function createPortalContentAdminRole($db, array $options = [])
+    {
+        return $this->createRole($db, $options + ['name' => Roles::ADMIN_CONTENT]);
+    }
+
     public function createPortalManagerRole($db, array $options = [])
     {
         return $this->createRole($db, $options + ['name' => Roles::MANAGER]);
     }
 
-    protected function createRole(Connection $db, array $options)
+    public function createRole(Connection $db, array $options)
     {
         $db->insert('gc_role', [
             'instance'   => isset($options['instance']) ? $options['instance'] : 'az.mygo1.com',
@@ -76,15 +81,29 @@ trait UserMockTrait
     # NOTE: This is not yet stable, JWT is large, not good for production usage.
     public function jwtForUser(Connection $db, int $userId, string $portalName = null): string
     {
-        $user = UserHelper::load($db, $userId);
-        $user = $user ? User::create($user, $db, true, $portalName) : null;
-        !$user && Error::throw(new InvalidArgumentException('User not found.'));
         $payload = [
             'iss'    => 'go1.user',
             'ver'    => '1.1',
             'exp'    => strtotime('+ 1 year'),
-            'object' => (object) ['type' => 'user', 'content' => $user],
+            'object' => (object) [
+                'type'    => 'user',
+                'content' => call_user_func(
+                    function () use ($db, $userId, $portalName) {
+                        $user = UserHelper::load($db, $userId);
+                        $user = $user ? User::create($user, $db, true, $portalName) : null;
+
+                        if ($user && !empty($user->accounts[0])) {
+                            $account = &$user->accounts[0];
+                            $account->portalId = (int) $db->fetchColumn('SELECT id FROM gc_instance WHERE title = ?', [$account->instance]);
+                        }
+
+                        return $user;
+                    }
+                ),
+            ],
         ];
+
+        !$payload['object']->content && Error::throw(new InvalidArgumentException('User not found.'));
 
         return JWT::encode($payload, 'INTERNAL');
     }
@@ -144,6 +163,23 @@ trait UserMockTrait
         $accountProfileId = isset($options['profile_id']) ? $options['profile_id'] : DEFAULT_ACCOUNT_PROFILE_ID;
         $userId = isset($options['user_id']) ? $options['user_id'] : $accountId;
         $userProfileId = isset($options['user_profile_id']) ? $options['user_profile_id'] : $accountProfileId;
+        $mail = isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com';
+        $roles = isset($options['roles']) ? $options['roles'] : ['authenticated'];
+
+        $account = [
+            'id'            => intval($accountId),
+            'first_name'    => 'A',
+            'last_name'     => 'T',
+            'status'        => 1,
+            'roles'         => $roles,
+            'instance_name' => isset($options['instance_name']) ? $options['instance_name'] : 'az.mygo1.com',
+            'mail'          => $mail,
+            'profile_id'    => intval($accountProfileId),
+        ];
+
+        if (isset($options['portal_id'])) {
+            $account['portal_id'] = $options['portal_id'];
+        }
 
         $user = [
             'id'            => intval($userId),
@@ -154,16 +190,7 @@ trait UserMockTrait
             'mail'          => $mail = isset($options['mail']) ? $options['mail'] : 'thehongtt@gmail.com',
             'roles'         => $roles = isset($options['roles']) ? $options['roles'] : ['authenticated'],
             'accounts'      => [
-                (object) [
-                    'id'            => intval($accountId),
-                    'first_name'    => 'A',
-                    'last_name'     => 'T',
-                    'status'        => 1,
-                    'roles'         => $roles,
-                    'instance_name' => isset($options['instance_name']) ? $options['instance_name'] : 'az.mygo1.com',
-                    'mail'          => $mail,
-                    'profile_id'    => intval($accountProfileId),
-                ],
+                (object) $account
             ],
         ];
 
@@ -248,6 +275,7 @@ trait UserMockTrait
                 'id'         => intval($user['id']),
                 'instance'   => !empty($user['instance_name']) ? $user['instance_name'] : null,
                 'profile_id' => intval($user['profile_id']),
+                'portal_id'  => !empty($user['portal_id']) ? $user['portal_id'] : null,
                 'mail'       => $root ? $user['mail'] : null,
                 'name'       => $root ? $name : (($username === $name) ? null : $name),
                 'roles'      => $roles ?? [],

@@ -17,31 +17,31 @@ class PlanHelperTest extends UtilCoreTestCase
 
     public function testLoadByEntityAndUser()
     {
-        $plan = PlanHelper::loadByEntityAndUser($this->db, $this->entityType, $this->entityId, $this->userId);
+        $plan = PlanHelper::loadByEntityAndUser($this->go1, $this->entityType, $this->entityId, $this->userId);
         $this->assertFalse($plan);
 
-        $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::EXPIRED]);
-        $plan = PlanHelper::loadByEntityAndUser($this->db, $this->entityType, $this->entityId, $this->userId);
+        $this->createPlan($this->go1, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::EXPIRED]);
+        $plan = PlanHelper::loadByEntityAndUser($this->go1, $this->entityType, $this->entityId, $this->userId);
         $this->assertFalse($plan);
 
-        $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId]);
-        $plan = PlanHelper::loadByEntityAndUser($this->db, $this->entityType, $this->entityId, $this->userId);
+        $this->createPlan($this->go1, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId]);
+        $plan = PlanHelper::loadByEntityAndUser($this->go1, $this->entityType, $this->entityId, $this->userId);
         $this->assertNotFalse($plan);
     }
 
     public function testPlanIds()
     {
-        $plan = PlanHelper::userPlanIds($this->db, $this->entityType, $this->userId);
+        $plan = PlanHelper::userPlanIds($this->go1, $this->entityType, $this->userId);
         $this->assertEquals([], $plan);
 
-        $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::EXPIRED]);
-        $plan = PlanHelper::userPlanIds($this->db, $this->entityType, $this->userId);
+        $this->createPlan($this->go1, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::EXPIRED]);
+        $plan = PlanHelper::userPlanIds($this->go1, $this->entityType, $this->userId);
         $this->assertEquals([], $plan);
 
-        $plan1Id = $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::PENDING]);
-        $plan2Id = $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId + 1, 'user_id' => $this->userId, 'status' => PlanStatuses::PENDING]);
-        $plan3Id = $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId + 2, 'user_id' => $this->userId, 'status' => PlanStatuses::ASSIGNED]);
-        $plans = PlanHelper::userPlanIds($this->db, $this->entityType, $this->userId, PlanStatuses::PENDING);
+        $plan1Id = $this->createPlan($this->go1, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::PENDING]);
+        $plan2Id = $this->createPlan($this->go1, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId + 1, 'user_id' => $this->userId, 'status' => PlanStatuses::PENDING]);
+        $plan3Id = $this->createPlan($this->go1, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId + 2, 'user_id' => $this->userId, 'status' => PlanStatuses::ASSIGNED]);
+        $plans = PlanHelper::userPlanIds($this->go1, $this->entityType, $this->userId, PlanStatuses::PENDING);
         $this->assertEquals(2, count($plans));
         $this->assertEquals($plan1Id, $plans[0]);
         $this->assertEquals($plan2Id, $plans[1]);
@@ -49,8 +49,8 @@ class PlanHelperTest extends UtilCoreTestCase
 
     public function testLoad()
     {
-        $id = $this->createPlan($this->db, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::EXPIRED]);
-        $plan = PlanHelper::load($this->db, $id);
+        $id = $this->createPlan($this->go1, ['entity_type' => $this->entityType, 'entity_id' => $this->entityId, 'user_id' => $this->userId, 'status' => PlanStatuses::EXPIRED]);
+        $plan = PlanHelper::load($this->go1, $id);
 
         $this->assertEquals($id, $plan->id);
         $this->assertObjectHasAttribute('entity_type', $plan);

@@ -26,18 +26,18 @@ class EnrolmentEventsEmbedderTest extends UtilCoreTestCase
     protected $courseId;
     protected $enrolmentId;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $c = $this->getContainer();
-        $this->portalId = $this->createPortal($this->db, ['title' => 'qa.mygo1.com']);
-        $this->userId = $this->createUser($this->db, ['instance' => $c['accounts_name'], 'profile_id' => $this->profileId]);
-        $this->accountId = $this->createUser($this->db, ['instance' => 'qa.mygo1.com', 'profile_id' => $this->profileId]);
-        $this->link($this->db, EdgeTypes::HAS_ACCOUNT, $this->userId, $this->accountId);
-        $this->jwt = $this->jwtForUser($this->db, $this->userId, 'qa.mygo1.com');
-        $this->courseId = $this->createCourse($this->db, ['instance_id' => $this->portalId]);
-        $this->enrolmentId = $this->createEnrolment($this->db, [
+        $this->portalId = $this->createPortal($this->go1, ['title' => 'qa.mygo1.com']);
+        $this->userId = $this->createUser($this->go1, ['instance' => $c['accounts_name'], 'profile_id' => $this->profileId]);
+        $this->accountId = $this->createUser($this->go1, ['instance' => 'qa.mygo1.com', 'profile_id' => $this->profileId]);
+        $this->link($this->go1, EdgeTypes::HAS_ACCOUNT, $this->userId, $this->accountId);
+        $this->jwt = $this->jwtForUser($this->go1, $this->userId, 'qa.mygo1.com');
+        $this->courseId = $this->createCourse($this->go1, ['instance_id' => $this->portalId]);
+        $this->enrolmentId = $this->createEnrolment($this->go1, [
             'lo_id'             => $this->courseId,
             'taken_instance_id' => $this->portalId,
             'profile_id'        => $this->profileId,
@@ -47,8 +47,8 @@ class EnrolmentEventsEmbedderTest extends UtilCoreTestCase
     public function test()
     {
         $c = $this->getContainer();
-        $embedder = new EnrolmentEventsEmbedder($this->db, $c['access_checker']);
-        $enrolment = EnrolmentHelper::load($this->db, $this->enrolmentId);
+        $embedder = new EnrolmentEventsEmbedder($this->go1, $c['access_checker']);
+        $enrolment = EnrolmentHelper::load($this->go1, $this->enrolmentId);
         $req = Request::create('/', 'POST');
         $req->attributes->set('jwt.payload', Text::jwtContent($this->jwt));
         $embedded = $embedder->embedded($enrolment, $req);

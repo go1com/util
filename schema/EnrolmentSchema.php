@@ -15,7 +15,6 @@ class EnrolmentSchema
             $enrolment->addColumn('profile_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('parent_lo_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0, 'comment' => '@deprecated: Wrong design, we can not find parent enrolment from this value. This will be soon dropped.']);
             $enrolment->addColumn('parent_enrolment_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0]);
-            $enrolment->addColumn('parent_id', 'integer', ['unsigned' => true, 'notnull' => false, 'default' => 0, 'comment' => 'Parent enrolment ID.']);
             $enrolment->addColumn('lo_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('instance_id', 'integer', ['unsigned' => true]);
             $enrolment->addColumn('taken_instance_id', 'integer', ['unsigned' => true]);
@@ -86,7 +85,24 @@ class EnrolmentSchema
             $map->addIndex(['payment_method']);
         }
 
+        if (!$schema->hasTable('enrolment_stream')) {
+            $stream = $schema->createTable('enrolment_stream');
+            $stream->addColumn('id', Type::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+            $stream->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('created', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('enrolment_id', Type::INTEGER, ['unsigned' => true]);
+            $stream->addColumn('actor_id', Type::INTEGER, ['unsigned' => true, 'default' => 0]);
+            $stream->addColumn('action', Type::STRING);
+            $stream->addColumn('payload', Type::BLOB);
+            $stream->setPrimaryKey(['id']);
+            $stream->addIndex(['enrolment_id']);
+            $stream->addIndex(['portal_id']);
+            $stream->addIndex(['actor_id']);
+            $stream->addIndex(['created']);
+        }
+
         static::update01($schema);
+        static::update02($schema);
     }
 
     public static function installManualRecord(Schema $schema)
@@ -128,6 +144,17 @@ class EnrolmentSchema
                     $enrolment->dropIndex($index->getName());
                     $enrolment->addUniqueIndex(['profile_id', 'parent_lo_id', 'lo_id', 'taken_instance_id']);
                 }
+            }
+        }
+    }
+
+    public static function update02(Schema $schema)
+    {
+        if ($schema->hasTable('enrolment_stream')) {
+            $stream = $schema->getTable('enrolment_stream');
+            if (!$stream->hasColumn('actor_id')) {
+                $stream->addColumn('actor_id', Type::INTEGER, ['unsigned' => true, 'default' => 0]);
+                $stream->addIndex(['actor_id']);
             }
         }
     }

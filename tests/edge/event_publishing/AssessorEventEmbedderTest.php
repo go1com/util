@@ -24,18 +24,18 @@ class AssessorEventEmbedderTest extends UtilCoreTestCase
 
     public function test()
     {
-        $embedder = new AssessorEventEmbedder($this->db);
-        $portalId = $this->createPortal($this->db, ['title' => 'ngoc.mygo1.com']);
-        $courseId = $this->createCourse($this->db, ['instance_id' => $portalId]);
-        $id = EdgeHelper::link($this->db, $this->queue, EdgeTypes::COURSE_ASSESSOR, $courseId, $userId = 2, $weight = 0);
+        $embedder = new AssessorEventEmbedder($this->go1);
+        $portalId = $this->createPortal($this->go1, ['title' => 'ngoc.mygo1.com']);
+        $courseId = $this->createCourse($this->go1, ['instance_id' => $portalId]);
+        $id = EdgeHelper::link($this->go1, $this->queue, EdgeTypes::COURSE_ASSESSOR, $courseId, $userId = 2, $weight = 0);
 
-        $edge = $this->db
+        $edge = $this->go1
             ->executeQuery('SELECT * FROM gc_ro WHERE id = ?', [$id], [DB::STRING])
             ->fetch(DB::OBJ);
 
         $embedded = $embedder->embedded($edge);
 
         $this->assertArrayHasKey('lo', $embedded);
-        $this->assertArraySubset($this->expectLo, (array)$embedded['lo']);
+        $this->assertEmpty(array_diff_assoc($this->expectLo, (array)$embedded['lo']));
     }
 }
