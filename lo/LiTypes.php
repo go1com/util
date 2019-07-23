@@ -12,6 +12,8 @@ class LiTypes
     const DOCUMENT    = 'document';
     const H5P         = 'h5p';
     const IFRAME      = 'iframe';
+    // Link will replace iframe in the future
+    const LINK        = 'link';
     const INTERACTIVE = 'interactive';
     const QUESTION    = 'question';
     const QUIZ        = 'quiz';
