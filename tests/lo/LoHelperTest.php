@@ -609,17 +609,18 @@ class LoHelperTest extends UtilCoreTestCase
         $this->createAttributeLookup($this->go1, LoAttributes::LEARNING_OUTCOMES, LoAttributes::machineName(LoAttributes::LEARNING_OUTCOMES), 'TEXT', 'video',
             '["NO"]', '[]', null, 1, null);
 
+        $body = [LoAttributes::machineName(LoAttributes::LEARNING_OUTCOMES) => [
+            "This is alearning, outcome",
+            "Woahzers Rick, that 1 value is really something.",
+            "Listen up Mo-*Burp*rty, you are gonna learn today!",
+            "123123",
+            "123123"
+        ]];
 
         $loId = $this->createLO($this->go1, [
             'instance_id' => $this->createPortal($this->go1, []),
             'type' => 'video',
-            'attributes' => [
-                LoAttributes::machineName(LoAttributes::LEARNING_OUTCOMES) => [
-                    "This is alearning, outcome",
-                    "Woahzers Rick, that 1 value is really something.",
-                    "Listen up Mo-*Burp*rty, you are gonna learn today!"
-                ]
-            ]
+            'attributes' => $body
         ]);
 
         $lo = LoHelper::load($this->go1, $loId, null, false, true);
