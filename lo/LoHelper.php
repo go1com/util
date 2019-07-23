@@ -586,10 +586,12 @@ class LoHelper
 
         if ($lookup->isArray) {
             $tempValue = json_decode($value);
-            if ($lookup->attributeType == LoAttributeTypes::TEXT) {
-                $value = "$tempValue";
-            } else {
-                $value = $tempValue;
+            if (!is_null($tempValue)) {
+                if ($lookup->attributeType == LoAttributeTypes::TEXT) {
+                    $value = "$tempValue";
+                } else {
+                    $value = $tempValue;
+                }
             }
         }
 
