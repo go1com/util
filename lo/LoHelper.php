@@ -355,6 +355,13 @@ class LoHelper
         return $cnf;
     }
 
+    public static function sanitizeTitle(string $title = "") {
+        // HTML Decode Characters, replace br and new lines with spaces
+        $title = preg_replace("/(<br\W*?\/?>)|(\s+)/im", " ", html_entity_decode($title, ENT_QUOTES));
+        // Strip tags and trim
+        return trim(strip_tags($title));
+    }
+
     public static function assessorIds(Connection $db, int $loId): array
     {
         return EdgeHelper

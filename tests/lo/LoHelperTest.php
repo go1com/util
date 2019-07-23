@@ -632,4 +632,13 @@ class LoHelperTest extends UtilCoreTestCase
         $course = LoHelper::load($this->go1, $courseId);
         $this->assertEquals($course->summary, "a summary");
     }
+
+    public function testSanitizeTitle() {
+        $title = "<strong>Strong</strong> Test Title & &amp &lt; <br> <br/> 
+
+    After New line
+         ";
+        $sanitizedTitle = LoHelper::sanitizeTitle($title);
+        $this->assertEquals($sanitizedTitle, "Strong Test Title & &amp <     After New line");
+    }
 }
