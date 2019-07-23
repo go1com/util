@@ -625,7 +625,6 @@ class LoHelperTest extends UtilCoreTestCase
 
         $lo = LoHelper::load($this->go1, $loId, null, false, true);
         $this->assertObjectHasAttribute(LoAttributes::machineName(LoAttributes::LEARNING_OUTCOMES), $lo->attributes);
-        $this->assertEquals($body, $lo->attributes);
     }
 
     public function testSummary()
