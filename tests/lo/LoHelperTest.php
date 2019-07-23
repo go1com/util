@@ -617,7 +617,9 @@ class LoHelperTest extends UtilCoreTestCase
                 LoAttributes::machineName(LoAttributes::LEARNING_OUTCOMES) => [
                     "This is alearning, outcome",
                     "Woahzers Rick, that 1 value is really something.",
-                    "Listen up Mo-*Burp*rty, you are gonna learn today!"
+                    "Listen up Mo-*Burp*rty, you are gonna learn today!",
+                    "123123",
+                    "123123"
                 ]
             ]
         ]);
