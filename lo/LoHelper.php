@@ -586,8 +586,10 @@ class LoHelper
 
         if ($lookup->isArray) {
             $tempValue = json_decode($value);
-            if (!is_null($tempValue)) {
+            if (!is_null($tempValue) && !is_numeric($tempValue)) {
                 $value = $tempValue;
+            } else if ($lookup->attributeType == LoAttributeTypes::TEXT) {
+                $value = "$value";
             }
         }
 
