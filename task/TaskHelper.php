@@ -97,7 +97,7 @@ class TaskHelper
 
     public static function loadTaskItemByStatus(Connection $db, int $taskId, int $status, string $name)
     {
-        $sql = "SELECT * FROM {$name} WHERE task_id = ? AND status = ? ORDER BY id ASC";
+        $sql = "SELECT * FROM {$name} WHERE task_id = ? AND status = ? ORDER BY id ASC LIMIT 1";
         $row = $db->executeQuery($sql, [$taskId, $status])
             ->fetch(DB::OBJ);
 
