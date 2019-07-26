@@ -39,17 +39,9 @@ class TermSchema
                         'type' => Schema::T_COMPLETION_CATEGORY,
                         'path' => 'topic',
                     ],
-                    [
-                        'name' => 'portal_id',
-                        'type' => Schema::T_COMPLETION_CATEGORY,
-                        'path' => 'portal_id',
-                    ]
                 ],
             ],
             'topic' => [
-                'type' => Schema::T_TEXT,
-            ],
-            'portal_id' => [
                 'type' => Schema::T_TEXT,
             ],
         ],
