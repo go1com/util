@@ -11,12 +11,17 @@ class LiTypes
     const ASSIGNMENT  = 'assignment';
     const DOCUMENT    = 'document';
     const H5P         = 'h5p';
+    /**
+     * @deprecated use the LINK type instead
+     */
     const IFRAME      = 'iframe';
-    // Link will replace iframe in the future
     const LINK        = 'link';
     const INTERACTIVE = 'interactive';
     const QUESTION    = 'question';
     const QUIZ        = 'quiz';
+    /**
+     * @deprecated use the TEXT type instead
+     */
     const RESOURCE    = 'resource';
     const TEXT        = 'text';
     const VIDEO       = 'video';
