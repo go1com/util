@@ -156,6 +156,7 @@ class LoExploreSchema
                     'updated_at' => ['type' => Schema::T_INT],
                 ],
             ],
+            'product_ids' => ['type' => Schema::T_INT], # @see go1-core/content-subscription-index
         ],
     ];
 
