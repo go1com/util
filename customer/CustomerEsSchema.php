@@ -47,23 +47,23 @@ class CustomerEsSchema
             ],
         ],
     ];
-
     const USER_MAPPING = [
         'properties' => [
-            'id'           => ['type' => Schema::T_KEYWORD],
-            'profile_id'   => ['type' => Schema::T_INT],
-            'mail'         => ['type' => Schema::T_KEYWORD],
-            'name'         => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
-            'first_name'   => ['type' => Schema::T_KEYWORD],
-            'last_name'    => ['type' => Schema::T_KEYWORD],
-            'created'      => ['type' => Schema::T_DATE],
-            'login'        => ['type' => Schema::T_DATE],
-            'access'       => ['type' => Schema::T_DATE],
-            'status'       => ['type' => Schema::T_SHORT],
-            'allow_public' => ['type' => Schema::T_INT],
-            'avatar'       => ['type' => Schema::T_TEXT],
-            'roles'        => ['type' => Schema::T_KEYWORD],
-            'timestamp'    => ['type' => Schema::T_DATE],
+            'id'                     => ['type' => Schema::T_KEYWORD],
+            'profile_id'             => ['type' => Schema::T_INT],
+            'mail'                   => ['type' => Schema::T_KEYWORD],
+            'name'                   => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
+            'first_name'             => ['type' => Schema::T_KEYWORD],
+            'last_name'              => ['type' => Schema::T_KEYWORD],
+            'created'                => ['type' => Schema::T_DATE],
+            'login'                  => ['type' => Schema::T_DATE],
+            'access'                 => ['type' => Schema::T_DATE],
+            'status'                 => ['type' => Schema::T_SHORT],
+            'allow_public'           => ['type' => Schema::T_INT],
+            'avatar'                 => ['type' => Schema::T_TEXT],
+            'roles'                  => ['type' => Schema::T_KEYWORD],
+            'timestamp'              => ['type' => Schema::T_DATE],
+            'subscribed_product_ids' => ['type' => Schema::T_INT], # @see go1-core/content-subscription-index
         ],
     ];
 
