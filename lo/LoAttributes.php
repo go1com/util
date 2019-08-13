@@ -10,6 +10,9 @@ class LoAttributes
     const WCAG               = 2;  // Web Content Accessibility Guidelines compatible
     const ASSESSABLE         = 3;
     const AVAILABILITY       = 4;  // marketplace
+    /**
+     * @deprecated use the REGION_RESTRICTIONS type instead
+     */
     const REGION_RESTRICTION = 5;
     const TOPICS             = 6;
     const REGION_RESTRICTIONS = 7;
