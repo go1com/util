@@ -95,7 +95,6 @@ trait EsEnrolmentMockTrait
             'routing' => $options['routing'] ?? $options['instance_id'],
             'type'    => Schema::O_ENROLMENT_REVISION,
             'id'      => $enrolmentRevision['id'],
-            'parent'  => $options['parent'] ?? $enrolmentRevision['lo_id'],
             'body'    => $enrolmentRevision,
             'refresh' => true,
         ]);
