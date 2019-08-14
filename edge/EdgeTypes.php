@@ -107,7 +107,7 @@ class EdgeTypes
     const HAS_AWARD_LOCATION          = 43; # T: gc_location.id       | S: award_award.id
     const HAS_SUGGESTED_COMPLETION    = 44; # T: 0                    | S: gc_ro.id              | data: { KEY: VALUE }
     const AWARD_ASSESSOR              = 45; # T: Account              | S: award.id
-    const GROUP_HAS_ITEM              = 46; # T: ?                    | S: Learning object
+    const GROUP_HAS_ITEM              = 46; # T: Learning object      | S: Learning object (group lo only)
 
     # LO & enrolment scheduling
     # ---------------------
