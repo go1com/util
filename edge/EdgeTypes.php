@@ -32,6 +32,7 @@ class EdgeTypes
         self::HAS_MODULE,
         self::HAS_ELECTIVE_LO,
         self::HAS_ELECTIVE_LI,
+        self::GROUP_HAS_ITEM,
     ];
 
     const LO_HAS_CHILDREN = [
