@@ -156,9 +156,4 @@ class PortalHelperTest extends UtilCoreTestCase
         $result = PortalHelper::validateCustomDomainDNS(PortalHelper::CUSTOM_DOMAIN_DEFAULT_HOST);
         $this->assertEquals($result, true);
     }
-
-    public function testSSLCheck() {
-        $result = PortalHelper::isSSLEnabledDomain(PortalHelper::CUSTOM_DOMAIN_DEFAULT_HOST);
-        $this->assertEquals($result, true);
-    }
 }
