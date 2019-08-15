@@ -151,4 +151,9 @@ class PortalHelperTest extends UtilCoreTestCase
         $this->assertEquals($portalId, $portalData->id);
         $this->assertEquals($customerID, $portalData->data->portal_data->customer_id);
     }
+
+    public function testDNSCheck() {
+        $result = PortalHelper::validateCustomDomainDNS(PortalHelper::CUSTOM_DOMAIN_DEFAULT_HOST);
+        $this->assertEquals($result, true);
+    }
 }
