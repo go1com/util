@@ -1371,6 +1371,7 @@ class MailTemplate
             '!site_name'       => 'Human name of the portal.', //deprecated
             '!portal_url'      => 'Portal URL',
             '!primary_domain'  => 'Primary domain of portal.',
+            '!onetime_url'     => 'Onetime login link.',
         ]
     ];
 
