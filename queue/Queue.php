@@ -77,7 +77,6 @@ class Queue
     const ENROLMENT_UPDATE              = 'enrolment.update';
     const ENROLMENT_DELETE              = 'enrolment.delete';
     const ENROLMENT_REVISION_CREATE     = 'enrolment-revision.create';
-    const ENROLMENT_REVISION_UPDATE     = 'enrolment-revision.update';
     const ENROLMENT_SAVE_ASSESSORS      = 'enrolment.save.assessors';   # Body: {body: [create: INT[], update: INT[], delete: INT[]], id: INT}
     const MANUAL_RECORD_CREATE          = 'manual-record.create';
     const MANUAL_RECORD_UPDATE          = 'manual-record.update';
@@ -208,6 +207,8 @@ class Queue
     const CONTENT_IMPORT_PROCESS_IMPORT = 'content_import.process.import';
     const CONTENT_IMPORT_PROCESS_IMPORT_JOB = 'content_import_job.process.import';
     const MARKETPLACE_SCHEDULED_PUBLISH = 'marketplace.scheduled_publish';
+    const MERGE_ACCOUNT_REVISION        = 'merge-account.revision';
+
 
     /**
      * @deprecated
