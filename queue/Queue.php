@@ -191,6 +191,7 @@ class Queue
     const POLICY_ITEM_CREATE            = 'policy.item.create';
     const POLICY_ITEM_UPDATE            = 'policy.item.update';
     const POLICY_ITEM_DELETE            = 'policy.item.delete';
+    const POLICY_ITEM_SYNC              = 'policy.item.sync';
     const PAGEUP_COURSE_UPLOAD          = 'pageup.course.upload';
     const EXIM_TASK_UPDATE              = 'exim.task.update';
     const PURCHASE_REQUEST_CREATE       = 'purchase.request.create';
