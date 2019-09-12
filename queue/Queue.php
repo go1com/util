@@ -208,6 +208,7 @@ class Queue
     const CONTENT_IMPORT_PROCESS_IMPORT = 'content_import.process.import';
     const CONTENT_IMPORT_PROCESS_IMPORT_JOB = 'content_import_job.process.import';
     const MARKETPLACE_SCHEDULED_PUBLISH = 'marketplace.scheduled_publish';
+    const MARKETPLACE_SYNC_CHILD        = 'marketplace.sync_child';
     const MERGE_ACCOUNT_ENROLMENT_REVISION  = 'merge-account.enrolment-revision'; // Change profile_id of enrolment revisions, body: {profile_id, portal_id}
 
 
