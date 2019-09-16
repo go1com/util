@@ -11,6 +11,7 @@ class LiTypes
     const ASSIGNMENT  = 'assignment';
     const DOCUMENT    = 'document';
     const H5P         = 'h5p';
+    const MANUAL      = 'manual';
     /**
      * @deprecated use the LINK type instead
      */
