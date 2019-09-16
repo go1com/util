@@ -17,18 +17,20 @@ class LoAttributes
     const TOPICS             = 6;
     const REGION_RESTRICTIONS = 7;
     const LEARNING_OUTCOMES   = 8;
+    const PROVIDER            = 9;
 
     public static function machineName(int $attribute): ?string
     {
         $map = [
-            self::MOBILE_OPTIMISED   => 'mobile_optimised',
-            self::WCAG               => 'wcag',
-            self::ASSESSABLE         => 'assessable',
-            self::AVAILABILITY       => 'availability',
-            self::REGION_RESTRICTION => 'region_restriction',
+            self::MOBILE_OPTIMISED    => 'mobile_optimised',
+            self::WCAG                => 'wcag',
+            self::ASSESSABLE          => 'assessable',
+            self::AVAILABILITY        => 'availability',
+            self::REGION_RESTRICTION  => 'region_restriction',
             self::REGION_RESTRICTIONS => 'region_restrictions',
-            self::TOPICS             => 'topics',
-            self::LEARNING_OUTCOMES   => 'learning_outcomes'
+            self::TOPICS              => 'topics',
+            self::LEARNING_OUTCOMES   => 'learning_outcomes',
+            self::PROVIDER            => 'provider',
         ];
 
         return $map[$attribute] ?? null;
