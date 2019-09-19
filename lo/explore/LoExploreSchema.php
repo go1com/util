@@ -72,6 +72,7 @@ class LoExploreSchema
             'data'            => [
                 'properties' => [
                     'single_li' => ['type' => Schema::T_SHORT],
+                    'source_id' => ['type' => Schema::T_KEYWORD] + Schema::ANALYZED,
                 ],
             ],
             'locations'       => [
