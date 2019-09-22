@@ -51,6 +51,7 @@ class Queue
     const USER_LOGIN_SUCCESS            = 'user.login-success';
     const USER_LOGIN_FAIL               = 'user.login-fail';
     const USER_MASQUERADE               = 'user.masquerade';
+    const USER_STORE_SEEK_METADATA      = 'user.seek-metadata'; # Object { account_id: INT, role: STRING, skill: STRING }
     const USER_EMAIL_CREATE             = 'user-email.create';
     const USER_EMAIL_UPDATE             = 'user-email.update';
     const USER_EMAIL_DELETE             = 'user-email.delete';
