@@ -192,7 +192,7 @@ class EnrolmentHelper
 
             return [
                 $parentLo = $parentLoId ? $loadLo($parentLoId) : false,
-                $parentEnrolment = $parentLo ? EnrolmentHelper::loadByLoAndProfileId($db, $parentLo->id, $enrolment->profile_id) : false,
+                $parentEnrolment = $parentLo ? EnrolmentHelper::loadByLoProfileAndPortal($db, $parentLo->id, $enrolment->profile_id, $enrolment->taken_instance_id) : false,
             ];
         };
         $lo = $loadLo($enrolment->lo_id);
