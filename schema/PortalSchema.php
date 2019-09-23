@@ -51,6 +51,7 @@ class PortalSchema
             $data->addColumn('expiry_date', 'integer', ['unsigned' => true, 'notnull' => false]);
             $data->addColumn('cancel_expiry_date', 'integer', ['unsigned' => true, 'notnull' => false]);
             $data->addColumn('partner_portal_id', 'integer', ['unsigned' => true, 'notnull' => false]);
+            $data->addColumn('referrer', 'string', ['notnull' => false]);
 
             $data->setPrimaryKey(['id']);
             $data->addIndex(['state']);
@@ -66,6 +67,7 @@ class PortalSchema
             $data->addIndex(['expiry_date']);
             $data->addIndex(['cancel_expiry_date']);
             $data->addIndex(['partner_portal_id']);
+            $data->addIndex(['referrer']);
         }
 
         if (!$schema->hasTable('portal_stream')) {
