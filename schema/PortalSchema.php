@@ -84,6 +84,7 @@ class PortalSchema
 
         $installPortalConf && self::installPortalConf($schema);
         self::update01($schema);
+        self::update02($schema);
     }
 
     public static function installPortalConf(Schema $schema)
@@ -110,6 +111,17 @@ class PortalSchema
             if (!$portalData->hasColumn('industry')) {
                 $portalData->addColumn('industry', 'string', ['notnull' => false]);
                 $portalData->addIndex(['industry']);
+            }
+        }
+    }
+
+    public static function update02(Schema $schema)
+    {
+        if ($schema->hasTable('portal_data')) {
+            $portalData = $schema->getTable('portal_data');
+            if (!$portalData->hasColumn('referrer')) {
+                $portalData->addColumn('referrer', 'string', ['notnull' => false]);
+                $portalData->addIndex(['referrer']);
             }
         }
     }
