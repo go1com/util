@@ -104,6 +104,20 @@ class PortalSchema
         }
     }
 
+    public static function installPortalIntegration(Schema $schema)
+    {
+        if ($schema->hasTable('portal_integration')) {
+            return;
+        }
+
+        $table = $schema->createTable('portal_integration');
+        $table->addColumn('portal_id', 'integer')->setUnsigned(true);
+        $table->addColumn('integration', 'string', ['length' => 45]);
+        $table->setPrimaryKey(['portal_id', 'integration']);
+        $table->addColumn('enabled', 'boolean');
+        $table->addIndex(['integration', 'enabled'], 'idx_integration_enabled');
+    }
+
     public static function update01(Schema $schema)
     {
         if ($schema->hasTable('portal_data')) {
