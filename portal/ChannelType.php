@@ -19,4 +19,5 @@ class ChannelType extends ConstantContainer
     const DIRECT               = 'direct';
     const PLATFORM_PARTNER     = 'platform_partner';
     const PORTAL_LAUNCHER      = 'portal_launcher';
+    const CONTENT_PARTNER      = 'content_partner';
 }
