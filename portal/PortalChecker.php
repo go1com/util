@@ -169,6 +169,10 @@ class PortalChecker
             $domain = getenv('ENV_HOSTNAME') . '/p';
         }
 
+        if (getenv('ENV_HOSTNAME_QA')) {
+            $domain = getenv('ENV_HOSTNAME_QA') . '/p';
+        }
+
         return (PortalHelper::WEBSITE_DOMAIN == $domain) ? "https://{$domain}/{$uri}" : "https://{$domain}/{$prefix}#/{$uri}";
     }
 
