@@ -7,6 +7,7 @@ use InvalidArgumentException;
 class EnrolmentAllowTypes
 {
     const DEFAULT      = 'allow';
+    const ENROLL       = 'enroll'; // legacy data
     const ENQUIRY      = 'enquiry';
     const DISABLE      = 'disable';
     const SUBSCRIPTION = 'subscription';
@@ -22,6 +23,7 @@ class EnrolmentAllowTypes
     {
         switch ($type) {
             case self::DEFAULT:
+            case self::ENROLL:
                 return self::I_DEFAULT;
 
             case self::ENQUIRY:
