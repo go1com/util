@@ -725,7 +725,6 @@ class Schema
 
     const EVENT_MAPPING = [
         '_routing'   => ['required' => true],
-        '_parent'    => ['type' => self::O_LO],
         'properties' => self::EVENT_PROPERTIES + [
                 'parent'   => [
                     'properties' => self::LO_MAPPING['properties'],
