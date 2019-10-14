@@ -17,6 +17,7 @@ class ScormSchema
             $credential->addColumn('client_secret', Type::STRING);
             $credential->setPrimaryKey(['id']);
             $credential->addUniqueIndex(['instance']);
+            $credential->addIndex(['client_id']);
         }
 
         if (!$schema->hasTable('scorm_package')) {
