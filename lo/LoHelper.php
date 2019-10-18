@@ -592,6 +592,14 @@ class LoHelper
                 $value = "$value";
             }
         }
+        else {
+            if ($lookup->attributeType == LoAttributeTypes::BOOLEAN) {
+                if ($value === null) {
+                    return $value;
+                }
+                $value = is_string($value) ? ($value === '1' || $value === 'true') : boolval($value);
+            }
+        }
 
         return $value;
     }
