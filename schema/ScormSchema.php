@@ -53,6 +53,8 @@ class ScormSchema
             $scormUser->setPrimaryKey(['id']);
             $scormUser->addUniqueIndex(['user_id']);
             $scormUser->addIndex(['student_id']);
+            $scormUser->addIndex(['portal_id']);
+            $scormUser->addIndex(['timestamp']);
         }
     }
 }
