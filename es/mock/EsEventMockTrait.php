@@ -50,7 +50,6 @@ trait EsEventMockTrait
             'type'    => Schema::O_EVENT,
             'id'      => $options['id'] ?? ($autoId + 1),
             'body'    => $event,
-            'parent'  => $options['parent']['id'] ?? $options['lo_id'],
             'refresh' => true,
         ]);
     }
