@@ -491,4 +491,42 @@ class GroupHelper
     {
         return $group->user_id == $userId;
     }
+
+    /**
+     * To check whether a portal can access on a learning object or not via recipient & content group
+     */
+    public static function hasPremium(Connection $social, int $loId, int $instanceId): bool
+    {
+        $sql  = 'SELECT group_id';
+        $sql .= ' FROM social_group_item as item';
+        $sql .= ' INNER JOIN social_group ON social_group.id = item.group_id';
+        $sql .= ' WHERE social_group.type = ? AND item.entity_type = ? AND item.entity_id = ?';
+        $recipientGroupIds = $social
+            ->executeQuery($sql, [GroupTypes::CONTENT_PACKAGE, GroupItemTypes::PORTAL, $instanceId], [DB::STRING, DB::STRING, DB::INTEGER])
+            ->fetchAll(DB::COL);
+
+        if (empty($recipientGroupIds)) {
+            return false;
+        }
+
+        $sql  = 'SELECT item.entity_id';
+        $sql .= ' FROM social_group_item as item';
+        $sql .= ' WHERE item.entity_type = ? AND item.group_id IN (?)';
+        $contentGroupIds = $social
+            ->executeQuery($sql, [GroupItemTypes::GROUP, $recipientGroupIds], [DB::STRING, DB::INTEGERS])
+            ->fetchAll(DB::COL);
+
+        if (empty($contentGroupIds)) {
+            return false;
+        }
+
+        $sql  = 'SELECT 1';
+        $sql .= ' FROM social_group_item as item';
+        $sql .= ' WHERE item.entity_type = ? AND item.entity_id = ? AND item.group_id IN (?)';
+        $exist = $social
+            ->executeQuery($sql, [GroupItemTypes::LO, $loId, $contentGroupIds], [DB::STRING, DB::INTEGER, DB::INTEGERS])
+            ->fetchColumn();
+
+        return $exist ? true : false;
+    }
 }

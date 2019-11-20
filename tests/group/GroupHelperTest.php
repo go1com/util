@@ -569,4 +569,19 @@ class GroupHelperTest extends UtilTestCase
         $group = GroupHelper::load($this->go1, $groupId, false);
         $this->assertFalse(isset($group->member_count));
     }
+
+    public function testHasPremium()
+    {
+        $courseXId = 100;
+        $recipientPortalId = 200;
+        $this->assertFalse(GroupHelper::hasPremium($this->go1, $courseXId, $recipientPortalId));
+
+        $recipientGroupId = $this->repository->create(GroupTypes::CONTENT_PACKAGE, 555, 'R-Group');
+        $contentGroupId = $this->repository->create(GroupTypes::CONTENT, 555, 'C-Group');
+        $this->repository->createItem($recipientGroupId, GroupItemTypes::GROUP, $contentGroupId, GroupItemStatus::ACTIVE);
+        $this->repository->createItem($contentGroupId, GroupItemTypes::LO, $courseXId, GroupItemStatus::ACTIVE);
+        $this->repository->createItem($recipientGroupId, GroupItemTypes::PORTAL, $recipientPortalId, GroupItemStatus::ACTIVE);
+
+        $this->assertTrue(GroupHelper::hasPremium($this->go1, $courseXId, $recipientPortalId));
+    }
 }
