@@ -24,8 +24,6 @@ class MailSchema
             $log->addColumn('cc', 'string');
             $log->addColumn('bcc', 'string');
             $log->addColumn('subject', 'string');
-            $log->addColumn('body', 'text');
-            $log->addColumn('html', 'text');
             $log->addColumn('context', 'text');
             $log->addColumn('options', 'text');
             $log->addColumn('attachments', 'string');
@@ -55,6 +53,14 @@ class MailSchema
             if (!$log->hasColumn('smtp_id')) {
                 $log->addColumn('smtp_id', 'string', ['not_null' => false]);
                 $log->addIndex(['smtp_id']);
+            }
+            // Schema v1.2, remove body,html column (By allow NULL for now)
+            foreach (['body', 'html'] as $key) {
+                if ($log->hasColumn($key) && $col = $log->getColumn($key)) {
+                    if ($col->getNotnull()) {
+                        $col->setNotnull(false);
+                    }
+                }
             }
         }
     }
