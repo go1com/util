@@ -40,6 +40,8 @@ class SocialSchema
             $item->addColumn('status', Type::INTEGER);
             $item->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $item->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
+            $item->addColumn('decommissioned_at', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+            $item->addColumn('removed_at', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
             $item->addColumn('published', Type::SMALLINT, ['notnull' => true, 'default' => 1]);
             $item->setPrimaryKey(['id']);
             $item->addIndex(['group_id']);
@@ -51,6 +53,15 @@ class SocialSchema
             $item->addIndex(['published']);
             $item->addUniqueIndex(['group_id', 'entity_type', 'entity_id']);
             $item->addForeignKeyConstraint('social_group', ['group_id'], ['id']);
+        } else {
+            $table = $schema->getTable('social_group_item');
+            if (!$table->hasColumn('decommissioned_at')) {
+                $table->addColumn('decommissioned_at', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+            }
+
+            if (!$table->hasColumn('removed_at')) {
+                $table->addColumn('removed_at', Type::INTEGER, ['unsigned' => true, 'notnull' => false]);
+            }
         }
 
         if (!$schema->hasTable('gc_social_tag')) {
