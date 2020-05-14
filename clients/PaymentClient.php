@@ -122,4 +122,53 @@ class PaymentClient
             return false;
         }
     }
+
+    /**
+     * Get Stripe customers by the supplied user_id
+     * @param int $userId the user's id
+     * @return mixed an array of customers from table 'payment_customer' if successful, false if unsuccessful.
+     */
+    public function getStripeCustomersByUserId(int $userId)
+    {
+        if (empty($userId)) {
+            return [];
+        }
+        try {
+            $connection = $this->client->get( "{$this->paymentUrl}/stripe/customer?user_id={$userId}&jwt=" . UserHelper::ROOT_JWT)
+                ->getBody()
+                ->getContents();
+            return json_decode($connection);
+        } catch (RequestException $e) {
+            $this->logger->error("[#payment] Failed to fetch Stripe customers by user_id: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Create a payment customer from the supplied customer_id and user_id
+     * @param string $customerId the Stripe customer_id
+     * @param string $userId the GO1 user's id
+     * @param array $payload the payment options such as stripe token, source, description, etc
+     * @return mixed the ID of the new payment customer if successful, error if unsuccessful.
+     */
+    public function createPaymentCustomer(string $customerId, string $userId, array $payload)
+    {
+        if (empty($customerId) || empty($userId) || empty($payload)) {
+            return "[#payment] Failed to create payment customer - invalid params";
+        }
+        $payload['customer_id'] = $customerId;
+        $payload['user_id'] = $userId;
+        try {
+            $res = $this->client->post("{$this->paymentUrl}/stripe/customer?jwt=" . UserHelper::ROOT_JWT, [
+                'headers' => ['Content-Type' => 'application/json'],
+                'json'    => $payload
+            ]);
+
+            return $res->getBody()->getContents();
+        } catch (RequestException $e) {
+            $error = "[#payment] Failed to create payment customer by user_id: " . $e->getMessage();
+            $this->logger->error($error);
+            return $error;
+        }
+    }
 }
