@@ -182,7 +182,6 @@ class PaymentClientTest extends UtilTestCase
         $paymentClient = $c['go1.client.payment'];
 
         $res = $paymentClient->createPaymentCustomer($payload);
-        $result = json_decode($res);
-        $this->assertEquals($result->id, $mockCustomerIdResult['id']);
+        $this->assertEquals($res->id, $mockCustomerIdResult['id']);
     }
 }

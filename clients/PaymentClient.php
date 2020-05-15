@@ -126,7 +126,7 @@ class PaymentClient
     /**
      * Get Stripe customers by the supplied user_id
      * @param int $userId the user's id
-     * @return mixed an array of customers from table 'payment_customer' if successful, false if unsuccessful.
+     * @return array | object an array of customers from table 'payment_customer' if successful. Error message if unsuccessful.
      */
     public function getStripeCustomersByUserId(int $userId)
     {
@@ -135,37 +135,38 @@ class PaymentClient
         }
         try {
             $connection = $this->client->get("{$this->paymentUrl}/stripe/customer?user_id={$userId}", [
-                    'headers' => ['Authorization' => "Bearer " . UserHelper::ROOT_JWT]]
-            )->getBody()->getContents();
+                'headers' => ['Authorization' => "Bearer " . UserHelper::ROOT_JWT]
+            ])->getBody()->getContents();
 
             return json_decode($connection);
         } catch (RequestException $e) {
-            $this->logger->error("[#payment] Failed to fetch Stripe customers by user_id: " . $e->getMessage());
-            return false;
+            $error = '[#payment] Failed to fetch Stripe customers by user_id: ' . $e->getMessage();
+            $this->logger->error($error);
+            return ['error' => $error];
         }
     }
 
     /**
      * Create a payment customer on GO1
      * @param array $payload the payment customer information such as stripe token, source, description, the Stripe customer_id and the GO1 user_id, etc
-     * @return mixed the ID of the new payment customer if successful, error if unsuccessful.
+     * @return array | object the json containing the new payment customer id if successful, eg: "{'id':100}". Error message if unsuccessful.
      */
     public function createPaymentCustomer(array $payload)
     {
         if (empty($payload)) {
-            return "[#payment] Failed to create payment customer - invalid params";
+            return ['error' => '[#payment] Failed to create payment customer - invalid params'];
         }
         try {
             $res = $this->client->post("{$this->paymentUrl}/stripe/customer", [
                 'headers' => ['Content-Type' => 'application/json', 'Authorization' => "Bearer " . UserHelper::ROOT_JWT],
                 'json' => $payload
-            ]);
+            ])->getBody()->getContents();
 
-            return $res->getBody()->getContents();
+            return json_decode($res);
         } catch (RequestException $e) {
-            $error = "[#payment] Failed to create payment customer by user_id: " . $e->getMessage();
+            $error = '[#payment] Failed to create payment customer by user_id: ' . $e->getMessage();
             $this->logger->error($error);
-            return $error;
+            return ['error' => $e->getMessage()];
         }
     }
 }
