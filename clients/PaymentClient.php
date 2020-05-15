@@ -134,9 +134,10 @@ class PaymentClient
             return [];
         }
         try {
-            $connection = $this->client->get( "{$this->paymentUrl}/stripe/customer?user_id={$userId}&jwt=" . UserHelper::ROOT_JWT)
-                ->getBody()
-                ->getContents();
+            $connection = $this->client->get("{$this->paymentUrl}/stripe/customer?user_id={$userId}", [
+                    'headers' => ['Authorization' => "Bearer " . UserHelper::ROOT_JWT]]
+            )->getBody()->getContents();
+
             return json_decode($connection);
         } catch (RequestException $e) {
             $this->logger->error("[#payment] Failed to fetch Stripe customers by user_id: " . $e->getMessage());
@@ -145,23 +146,19 @@ class PaymentClient
     }
 
     /**
-     * Create a payment customer from the supplied customer_id and user_id
-     * @param string $customerId the Stripe customer_id
-     * @param string $userId the GO1 user's id
-     * @param array $payload the payment options such as stripe token, source, description, etc
+     * Create a payment customer on GO1
+     * @param array $payload the payment customer information such as stripe token, source, description, the Stripe customer_id and the GO1 user_id, etc
      * @return mixed the ID of the new payment customer if successful, error if unsuccessful.
      */
-    public function createPaymentCustomer(string $customerId, string $userId, array $payload)
+    public function createPaymentCustomer(array $payload)
     {
-        if (empty($customerId) || empty($userId) || empty($payload)) {
+        if (empty($payload)) {
             return "[#payment] Failed to create payment customer - invalid params";
         }
-        $payload['customer_id'] = $customerId;
-        $payload['user_id'] = $userId;
         try {
-            $res = $this->client->post("{$this->paymentUrl}/stripe/customer?jwt=" . UserHelper::ROOT_JWT, [
-                'headers' => ['Content-Type' => 'application/json'],
-                'json'    => $payload
+            $res = $this->client->post("{$this->paymentUrl}/stripe/customer", [
+                'headers' => ['Content-Type' => 'application/json', 'Authorization' => "Bearer " . UserHelper::ROOT_JWT],
+                'json' => $payload
             ]);
 
             return $res->getBody()->getContents();
