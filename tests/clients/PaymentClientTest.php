@@ -91,4 +91,97 @@ class PaymentClientTest extends UtilTestCase
         ];
         $paymentClient->create($product, 10, 'cod', [], 'USER_JWT');
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testGetStripeCustomersByUserId()
+    {
+        $userId = 111415;
+        $mockPaymentCustomers = [
+            [
+                "id"          => 9,
+                "user_id"     => $userId,
+                "customer_id" => "cus_9rxaedJs1",
+                "token"       => "tok_manual",
+                "status"      => "1",
+                "description" => "here be description",
+                "metadata"    => [
+                    "source"    => "payment_details"
+                ],
+                "created"     => "1483532066",
+                "updated"     => "1483532066"
+            ]
+        ];
+
+        $client = $this->getMockBuilder(Client::class)->setMethods(['get'])->getMock();
+        $client
+            ->expects($this->once())
+            ->method('get')
+            ->with($this->callback(function ($url) use ($userId) {
+                $this->assertStringContainsString("{$this->paymentUrl}/stripe/customer?user_id=$userId", $url);
+                return true;
+            }))
+            ->willReturn(new Response(200, [], json_encode($mockPaymentCustomers)));
+
+        $c = $this->getContainer();
+        $c['client'] = $client;
+        $c['payment_url'] = $this->paymentUrl;
+        /** @var PaymentClient $paymentClient */
+        $paymentClient = $c['go1.client.payment'];
+
+        $res = $paymentClient->getStripeCustomersByUserId($userId);
+
+        $this->assertTrue(count($res) > 0);
+        $actual = $res[0];
+        $expected = $mockPaymentCustomers[0];
+
+        $this->assertEquals($actual->id, $expected['id']);
+        $this->assertEquals($actual->user_id, $expected['user_id']);
+        $this->assertEquals($actual->customer_id, $expected['customer_id']);
+        $this->assertEquals($actual->token, $expected['token']);
+        $this->assertEquals($actual->status, $expected['status']);
+        $this->assertEquals($actual->description, $expected['description']);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCreatePaymentCustomer()
+    {
+        $payload = [
+            'token'       => 'tok_visa',
+            'source'      => 'Content-subscription',
+            'description' => 'Individual-purchase-level',
+            'customer_id' => 'cus_abcnco121j',
+            'user_id'     => 115708
+        ];
+        $mockCustomerIdResult = [
+            'id' => 188999
+        ];
+
+        $client = $this->getMockBuilder(Client::class)->setMethods(['post'])->getMock();
+        $client
+            ->expects($this->once())
+            ->method('post')
+            ->with($this->callback(function ($url) {
+                $this->assertStringContainsString("{$this->paymentUrl}/stripe/customer", $url);
+                return true;
+            }), $this->callback(function ($options) use ($payload) {
+                $this->assertEquals("application/json", $options['headers']['Content-Type']);
+                $actual = $options['json'];
+                $this->assertEquals($actual, $payload);
+                return true;
+            }))
+            ->willReturn(new Response(200, [], json_encode($mockCustomerIdResult)));
+
+        $c = $this->getContainer();
+        $c['client'] = $client;
+        $c['payment_url'] = $this->paymentUrl;
+        /** @var PaymentClient $paymentClient */
+        $paymentClient = $c['go1.client.payment'];
+
+        $res = $paymentClient->createPaymentCustomer($payload);
+        $this->assertEquals($res->id, $mockCustomerIdResult['id']);
+    }
 }
