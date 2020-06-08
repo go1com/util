@@ -57,6 +57,7 @@ class GroupHelperTest extends UtilTestCase
             $instanceId = 555,
             $title = 'Testing group',
             $visibility = GroupStatus::PUBLIC,
+            $premium = 0,
             $userId = 333,
             $data = ['foo' => 'bar']
         );
@@ -66,6 +67,7 @@ class GroupHelperTest extends UtilTestCase
         $this->assertEquals($instanceId, $group->instance_id);
         $this->assertEquals($title, $group->title);
         $this->assertEquals($visibility, $group->visibility);
+        $this->assertEquals($premium, $group->premium);
         $this->assertEquals($userId, $group->user_id);
         $this->assertEquals((object) $data, $group->data);
     }
@@ -576,8 +578,8 @@ class GroupHelperTest extends UtilTestCase
         $recipientPortalId = 200;
         $this->assertFalse(GroupHelper::hasPremium($this->go1, $courseXId, $recipientPortalId));
 
-        $recipientGroupId = $this->repository->create(GroupTypes::CONTENT_PACKAGE, 555, 'R-Group');
-        $contentGroupId = $this->repository->create(GroupTypes::CONTENT, 555, 'C-Group');
+        $recipientGroupId = $this->repository->create(GroupTypes::CONTENT_PACKAGE, 555, 'R-Group', GroupStatus::PUBLIC, 1);
+        $contentGroupId = $this->repository->create(GroupTypes::CONTENT, 555, 'C-Group', GroupStatus::PUBLIC, 1);
         $this->repository->createItem($recipientGroupId, GroupItemTypes::GROUP, $contentGroupId, GroupItemStatus::ACTIVE);
         $this->repository->createItem($contentGroupId, GroupItemTypes::LO, $courseXId, GroupItemStatus::ACTIVE);
         $this->repository->createItem($recipientGroupId, GroupItemTypes::PORTAL, $recipientPortalId, GroupItemStatus::ACTIVE);

@@ -18,6 +18,7 @@ trait GroupMockTrait
             'user_id'     => $title = isset($options['user_id']) ? $options['user_id'] : 1,
             'title'       => isset($options['title']) ? $options['title'] : 'Group Foo',
             'visibility'  => isset($options['visibility']) ? $options['visibility'] : GroupStatus::PUBLIC,
+            'premium'     => isset($options['premium']) ? $options['premium'] : 0,
             'type'        => isset($options['type']) ? $options['type'] : GroupTypes::DEFAULT,
             'instance_id' => isset($options['instance_id']) ? $options['instance_id'] : 1,
             'created'     => isset($options['created']) ? $options['created'] : time(),
