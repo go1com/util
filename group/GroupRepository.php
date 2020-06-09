@@ -26,7 +26,8 @@ class GroupRepository
         string $type,
         string $instanceId,
         string $title = '',
-        bool $visibility = GroupStatus::PRIVATE,
+        int $visibility = GroupStatus::PRIVATE,
+        int $premium = 0,
         int $userId = 1,
         array $data = null)
     {
@@ -36,6 +37,7 @@ class GroupRepository
             'instance_id' => $instanceId,
             'type'        => $type,
             'visibility'  => $visibility,
+            'premium'     => $premium,
             'created'     => $time = time(),
             'updated'     => $time,
             'data'        => is_scalar($data) ? $data : json_encode($data),

@@ -18,6 +18,7 @@ class SocialSchema
             $group->addColumn('instance_id', Type::INTEGER, ['unsigned' => true]);
             $group->addColumn('type', Type::STRING, ['default' => GroupTypes::DEFAULT]);
             $group->addColumn('visibility', Type::INTEGER);
+            $group->addColumn('premium', Type::INTEGER, ['default' => 0, 'notnull' => false]);
             $group->addColumn('created', Type::INTEGER, ['unsigned' => true]);
             $group->addColumn('updated', Type::INTEGER, ['unsigned' => true]);
             $group->addColumn('data', Type::BLOB);
@@ -27,6 +28,7 @@ class SocialSchema
             $group->addIndex(['instance_id']);
             $group->addIndex(['type']);
             $group->addIndex(['visibility']);
+            $group->addIndex(['premium']);
             $group->addIndex(['created']);
             $group->addIndex(['updated']);
         }
@@ -118,7 +120,8 @@ class SocialSchema
     {
         $socialGroup = $schema->getTable('social_group');
         if (!$socialGroup->hasColumn('premium')) {
-            $socialGroup->addColumn('premium', 'boolean', ['default' => 0, 'notnull' => false]);
+            $socialGroup->addColumn('premium', Type::INTEGER, ['default' => 0, 'notnull' => false]);
+            $socialGroup->addIndex(['premium']);
         }
     }
 }
