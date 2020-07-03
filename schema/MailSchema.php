@@ -63,5 +63,12 @@ class MailSchema
                 }
             }
         }
+
+        // Schema v1.3, add category column (By allow NULL for now)
+        if ($schema->hasTable('mail_log') && $log = $schema->getTable('mail_log')) {
+            if (!$log->hasColumn('category')) {
+                $log->addColumn('category', 'string', ['not_null' => false]);
+            }
+        }
     }
 }

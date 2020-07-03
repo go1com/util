@@ -62,5 +62,6 @@ class SchemaTest extends TestCase
         $log = $schema->getTable('mail_log');
         $this->assertEquals(true, $log->hasColumn('id'));
         $this->assertEquals(true, $log->hasColumn('smtp_id'));
+        $this->assertEquals(true, $log->hasColumn('category'));
     }
 }
