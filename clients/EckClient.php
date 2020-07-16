@@ -51,14 +51,14 @@ class EckClient
     }
 
     /**
-     * Get the entity's custom fields.
+     * Get the entity's custom fields data.
      *
      * @param string $instance the portal name
      * @param string $entityType the entity type (e.g.: 'account')
      * @param string $entityId the entity's account id (i.e.: the user's account id)
      * @return array a list of custom fields for the entity.
      */
-    public function getEntityFields(string $instance, string $entityType, int $entityId)
+    public function getEntityData(string $instance, string $entityType, int $entityId)
     {
         $eckUrl = "{$this->url}/entity/{$instance}/{$entityType}/{$entityId}?jwt={$this->jwt}";
         $data = $this->client->get($eckUrl)->getBody()->getContents();

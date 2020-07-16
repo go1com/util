@@ -95,7 +95,7 @@ class EckClientTest extends UtilTestCase
         $this->assertEquals('Phone', $fieldPhone['label']);
         $this->assertEquals('string', $fieldPhone['type']);
 
-        $fieldValues = $eckClient->getEntityFields($this->instance, 'account', $this->userId);
+        $fieldValues = $eckClient->getEntityData($this->instance, 'account', $this->userId);
         $this->assertEquals('qeli.mygo1.com', $fieldValues['instance']);
         $this->assertEquals('account', $fieldValues['entity_type']);
         $this->assertEquals(1234567, $fieldValues['id']);
