@@ -2,6 +2,7 @@
 
 namespace go1\util\schema\tests;
 
+use go1\api\infrastructure\UserApi;
 use go1\clients\EckClient;
 use go1\util\tests\UtilTestCase;
 use GuzzleHttp\Client;
@@ -11,10 +12,11 @@ class EckClientTest extends UtilTestCase
 {
     private $instance = 'qa.mygo1.com';
     private $eckUrl = 'http://eck.dev.go1.service';
+    private $userId = 1234567;
 
     private function mockClient()
     {
-        $qeliFields = [
+        $qeliFieldsResp = new Response(200, [], json_encode([
             'instance'    => 'qeli.mygo1.com',
             'entity_type' => 'user',
             'fields'      => [
@@ -40,19 +42,38 @@ class EckClientTest extends UtilTestCase
                     'published' => 1,
                 ],
             ],
-        ];
+        ]));
+
+        $fieldValuesResp = new Response(200, [], json_encode([
+            'instance'       => 'qeli.mygo1.com',
+            'entity_type'    => 'account',
+            'id'             => $this->userId,
+            'custom_field_1' => [
+                'value' => 'value 1 test'
+            ],
+            'custom_field_2' => [
+                'value' => 'value 2 test'
+            ]
+        ]));
 
         $client = $this->getMockBuilder(Client::class)->setMethods(['get'])->getMock();
         $client
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('get')
-            ->with($this->callback(function ($url) use ($qeliFields) {
-                $this->assertStringContainsString("{$this->eckUrl}/fields/{$this->instance}/user", $url);
-
+            ->with($this->callback(function ($url) {
+                $fieldsUrl = "{$this->eckUrl}/fields/{$this->instance}/user";
+                $accountUrl = "{$this->eckUrl}/entity/{$this->instance}/account/{$this->userId}";
+                if (strpos($url, $fieldsUrl) === 0) {
+                    $this->assertStringContainsString($fieldsUrl, $url);
+                } elseif (strpos($url, $accountUrl) === 0) {
+                    $this->assertStringContainsString($accountUrl, $url);
+                } else {
+                    $this->assertTrue(false, 'Must call an eck service url!');
+                    return false;
+                }
                 return true;
             }))
-            ->willReturn(new Response(200, [], json_encode($qeliFields)));
-
+            ->willReturnOnConsecutiveCalls($qeliFieldsResp, $fieldValuesResp);
         return $client;
     }
 
@@ -73,5 +94,12 @@ class EckClientTest extends UtilTestCase
         $fieldPhone = $fields['field_phone'];
         $this->assertEquals('Phone', $fieldPhone['label']);
         $this->assertEquals('string', $fieldPhone['type']);
+
+        $fieldValues = $eckClient->getEntityData($this->instance, 'account', $this->userId);
+        $this->assertEquals('qeli.mygo1.com', $fieldValues['instance']);
+        $this->assertEquals('account', $fieldValues['entity_type']);
+        $this->assertEquals(1234567, $fieldValues['id']);
+        $this->assertEquals(['value' => 'value 1 test'], $fieldValues['custom_field_1']);
+        $this->assertEquals(['value' => 'value 2 test'], $fieldValues['custom_field_2']);
     }
 }
