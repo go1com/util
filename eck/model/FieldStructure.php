@@ -196,6 +196,9 @@ class FieldStructure implements JsonSerializable
         return $enum;
     }
 
+    /**
+     * @return boolean | null
+     */
     public function multiselect()
     {
         $multiSelect = null;
