@@ -3,7 +3,6 @@
 namespace go1\util\eck\model;
 
 use go1\util\DateTime;
-use go1\util\eck\model\Permission;
 use JsonSerializable;
 use RuntimeException;
 use stdClass;
@@ -185,16 +184,33 @@ class FieldStructure implements JsonSerializable
         return $this->parentField;
     }
 
+    /**
+     * Gets the data.enum value
+     * @return array | string
+     */
     public function enum()
     {
         $enum = [];
-        if ($this->data && is_scalar($this->data)) {
-            $data = json_decode($this->data, true);
-
+        if ($this->data) {
+            $data = is_scalar($this->data) ? json_decode($this->data, true) : json_decode(json_encode($this->data), true);
             $enum = isset($data['enum']) ? implode("\n", $data['enum']) : '';
         }
 
         return $enum;
+    }
+
+    /**
+     * Gets the data.multiselect value
+     * @return boolean | null
+     */
+    public function multiselect()
+    {
+        $multiSelect = null;
+        if ($this->data) {
+            $data = is_scalar($this->data) ? json_decode($this->data, true) : json_decode(json_encode($this->data), true);
+            $multiSelect = $data['multiselect'] ?? null;
+        }
+        return $multiSelect;
     }
 
     /**
@@ -324,6 +340,7 @@ class FieldStructure implements JsonSerializable
             'max_rows'     => $this->maxRows,
             'parent_field' => $this->parentField,
             'enum'         => $this->enum(),
+            'multiselect'  => $this->multiselect(),
             'permission'   => !empty($permissions) ? $permissions : [],
             'original'     => $this->original,
         ];
