@@ -184,12 +184,15 @@ class FieldStructure implements JsonSerializable
         return $this->parentField;
     }
 
+    /**
+     * Gets the data.enum value
+     * @return array | string
+     */
     public function enum()
     {
         $enum = [];
-        if ($this->data && is_scalar($this->data)) {
-            $data = json_decode($this->data, true);
-
+        if ($this->data) {
+            $data = is_scalar($this->data) ? json_decode($this->data, true) : json_decode(json_encode($this->data), true);
             $enum = isset($data['enum']) ? implode("\n", $data['enum']) : '';
         }
 
@@ -197,13 +200,14 @@ class FieldStructure implements JsonSerializable
     }
 
     /**
+     * Gets the data.multiselect value
      * @return boolean | null
      */
     public function multiselect()
     {
         $multiSelect = null;
-        if ($this->data && is_scalar($this->data)) {
-            $data = json_decode($this->data, true);
+        if ($this->data) {
+            $data = is_scalar($this->data) ? json_decode($this->data, true) : json_decode(json_encode($this->data), true);
             $multiSelect = $data['multiselect'] ?? null;
         }
         return $multiSelect;
