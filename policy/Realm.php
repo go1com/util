@@ -5,4 +5,5 @@ class Realm
 {
     const VIEW   = 1;
     const ACCESS = 2;
+    const EDIT   = 3;
 }

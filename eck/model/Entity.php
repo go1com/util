@@ -6,6 +6,13 @@ use JsonSerializable;
 
 class Entity implements JsonSerializable
 {
+    // Eck entity types
+    const ACCOUNT = 'account';
+    const ENROLMENT = 'enrolment';
+    const LO = 'lo';
+    const PORTAL = 'portal';
+    const USER = 'user';
+
     private $instance;
     private $entityType;
     private $id;
