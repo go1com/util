@@ -18,7 +18,7 @@ class RealtimeClient
         $this->realtimeUrl = $realtimeUrl;
     }
 
-    public function notify(int $profileId, array $data)
+    public function notify(int $profileId = 0, array $data)
     {
         $this->queue->publish(
             [
