@@ -59,6 +59,9 @@ class SchedulerClient
         try {
             $this->client->delete("$this->schedulerUrl/job/$jobNameOrId?jwt=".UserHelper::ROOT_JWT);
         } catch (RequestException $e) {
+            if (404 === $e->getResponse()->getStatusCode()) {
+                return;
+            }
             if ($retry) {
                 return $this->deleteJob($jobNameOrId);
             }
