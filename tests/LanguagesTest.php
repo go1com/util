@@ -10,7 +10,9 @@ class LanguagesTest extends TestCase
 {
     public function testLanguageCode()
     {
-        $this->assertEquals('nn', Languages::getLanguageCode('no'));
         $this->assertEquals('en', Languages::getLanguageCode('go1'));
+        $this->assertEquals('nn', Languages::getLanguageCode('no'));
+        $this->assertEquals('es', Languages::getLanguageCode('mx'));
+        $this->assertEquals('pt-Br', Languages::getLanguageCode('br'));
     }
 }
