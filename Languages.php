@@ -297,7 +297,9 @@ class Languages
         'au'    => 'en-AU',
         'en-au' => 'en-AU',
         'en-us' => 'en',
+        'mx'    => 'es',
         'pt-pt' => 'pt-PT',
+        'br'    => 'pt-BR',
         'vi'    => 'vi',
         'no'    => 'nn',
     ];
@@ -306,8 +308,10 @@ class Languages
         'AU' => 'en-au',
         'US' => 'en-us',
         'PT' => 'pt-pt',
+        'BR' => 'pt-br',
         'DE' => 'de',
         'ES' => 'es',
+        'MX' => 'es',
         'VN' => 'vi',
         'NO' => 'no',
     ];
