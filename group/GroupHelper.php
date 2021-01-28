@@ -187,15 +187,27 @@ class GroupHelper
         return $users[0]['root']['id'] ?? 0;
     }
 
-    public static function userGroupTitles(Connection $group, int $portalId, int $accountId): array
+    public static function userGroupTitles(Connection $group, int $portalId, int $accountId, array $modes = []): array
     {
         $titles = [];
 
-        $groupIds = $group
-            ->executeQuery(
-                'SELECT group_id FROM group_membership WHERE portal_id = ? AND user_id = ?',
-                [$portalId, $accountId]
-            )
+        $q = $group
+            ->createQueryBuilder()
+            ->select('group_id')
+            ->from('group_membership')
+            ->where('portal_id = :portalId')
+            ->andWhere('user_id = :userId')
+            ->setParameter(':portalId', $portalId, DB::INTEGER)
+            ->setParameter(':userId', $accountId, DB::INTEGER);
+
+        if ($modes) {
+            $q
+                ->andWhere('mode IN (:modes)')
+                ->setParameter(':modes', $modes, DB::INTEGERS);
+        }
+
+        $groupIds = $q
+            ->execute()
             ->fetchAll(PDO::FETCH_COLUMN);
 
         $groupIds = array_map('intval', $groupIds);
