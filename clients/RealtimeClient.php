@@ -2,40 +2,43 @@
 
 namespace go1\clients;
 
-use go1\util\queue\Queue;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use HTMLPurifier;
 
 class RealtimeClient
 {
-    private $queue;
-    private $html;
-    private $realtimeUrl;
+    private HTMLPurifier $html;
+    private Client $client;
+    private string $realtimeUrl;
 
-    public function __construct(MqClient $queue, HTMLPurifier $html, string $realtimeUrl)
+    public function __construct(Client $client, HTMLPurifier $html, string $realtimeUrl)
     {
-        $this->queue = $queue;
+        $this->client = $client;
         $this->html = $html;
         $this->realtimeUrl = $realtimeUrl;
     }
 
-    public function notify(int $profileId, array $data)
+    public function notify(int $profileId, array $data, bool $retry = true)
     {
-        $this->queue->publish(
-            [
-                'method'  => 'POST',
-                'url'     => "{$this->realtimeUrl}/notification",
-                'query'   => '',
+        try {
+            $this->client->post("{$this->realtimeUrl}/notification",[
                 'headers' => ['Content-Type' => 'application/json'],
-                'body'    => json_encode([
+                'json' => [
                     'pid'         => $profileId,
                     'message'     => $this->html->purify($data['message']),
                     'image'       => $data['image'] ?? null,
                     'tag'         => $data['tag'] ?? null,
                     'from'        => $data['from'] ?? null,
                     'instance_id' => $data['instance_id'] ?? null,
-                ]),
-            ],
-            Queue::DO_CONSUMER_HTTP_REQUEST
-        );
+                ],
+            ]);
+        } catch (RequestException $e) {
+            if ($retry) {
+                $this->notify($profileId, $data, false);
+            } else {
+                throw $e;
+            }
+        }
     }
 }
