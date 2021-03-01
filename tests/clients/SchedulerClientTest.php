@@ -6,6 +6,7 @@ use go1\clients\SchedulerClient;
 use go1\util\tests\UtilTestCase;
 use go1\util\user\UserHelper;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 class SchedulerClientTest extends UtilTestCase
@@ -34,6 +35,8 @@ class SchedulerClientTest extends UtilTestCase
                     $this->assertEquals('POST', $options['json']['actions'][0]['data']['method']);
                     $this->assertEquals(['foo' => 'bar'], $options['json']['actions'][0]['data']['body']);
                     $this->assertEquals(['token' => 'foo'], $options['json']['actions'][0]['data']['headers']);
+
+                    return new Response();
                 }
             );
 
@@ -63,6 +66,8 @@ class SchedulerClientTest extends UtilTestCase
             ->willReturnCallback(
                 function (string $uri)  {
                     $this->assertEquals($uri, "$this->schedulerUrl/job/$this->jobName?jwt=" . UserHelper::ROOT_JWT);
+
+                    return new Response();
                 }
             );
 

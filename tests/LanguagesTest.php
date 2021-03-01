@@ -13,6 +13,6 @@ class LanguagesTest extends TestCase
         $this->assertEquals('en', Languages::getLanguageCode('go1'));
         $this->assertEquals('nn', Languages::getLanguageCode('no'));
         $this->assertEquals('es', Languages::getLanguageCode('mx'));
-        $this->assertEquals('pt-Br', Languages::getLanguageCode('br'));
+        $this->assertEquals('pt-BR', Languages::getLanguageCode('br'));
     }
 }
