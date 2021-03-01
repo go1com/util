@@ -123,7 +123,7 @@ class UtilServiceProvider implements ServiceProviderInterface
         };
 
         $c['go1.client.realtime'] = function (Container $c) {
-            return new RealtimeClient($c['go1.client.mq'], $c['html'], $c['realtime_url']);
+            return new RealtimeClient($c['client'], $c['html'], $c['realtime_url']);
         };
 
         $c['go1.client.firebase'] = function (Container $c) {
