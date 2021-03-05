@@ -31,6 +31,7 @@ class RealtimeClient
                     'tag'         => $data['tag'] ?? null,
                     'from'        => $data['from'] ?? null,
                     'instance_id' => $data['instance_id'] ?? null,
+                    'envent_type' => $data['event_type'] ?? null,
                 ],
             ]);
         } catch (RequestException $e) {
