@@ -37,6 +37,8 @@ class RealtimeClientTest extends UtilTestCase
                                 'tag'         => 'tag',
                                 'from'        => 'from',
                                 'instance_id' => 1,
+                                'transient'   => true,
+                                'event_type'  => 'unit-test',
                             ],
                         ]
                         , $options);
@@ -67,6 +69,8 @@ class RealtimeClientTest extends UtilTestCase
             'tag'         => 'tag',
             'from'        => 'from',
             'instance_id' => 1,
+            'transient'   => true,
+            'event_type'  => 'unit-test',
         ];
         $client->notify(1, $data);
     }
