@@ -18,7 +18,7 @@
     "go1/util_core_clients":   "dev-master",
     "ktamas77/firebase-php":   "^2.2",
     "monolog/monolog":         "^1.19.0",
-    "ongr/elasticsearch-dsl":  "^5.0",
+    "ongr/elasticsearch-dsl":  "^6.0",
     "php-amqplib/php-amqplib": "^2.6",
     "ralouphie/mimey":         "^1.0",
     "symfony/var-dumper":      "^4.0 | ^3.4",
