@@ -36,6 +36,7 @@ class AssignmentSchema
             $submission->addColumn('revision_id', 'integer', ['unsigned' => true, 'notnull' => false]);
             $submission->addColumn('assignment_id', 'integer', ['unsigned' => true]);
             $submission->addColumn('profile_id', 'integer', ['unsigned' => true]);
+            $submission->addColumn('user_id', 'integer', ['unsigned' => true]);
             $submission->addColumn('status', 'smallint');
             $submission->addColumn('created', 'integer', ['unsigned' => true]);
             $submission->addColumn('updated', 'integer', ['unsigned' => true]);
@@ -46,6 +47,7 @@ class AssignmentSchema
             $submission->addIndex(['assignment_id']);
             $submission->addIndex(['profile_id']);
             $submission->addIndex(['created']);
+            $submission->addIndex(['user_id']);
             $submission->addIndex(['updated']);
             $submission->addIndex(['published']);
             $submission->addIndex(['status']);
