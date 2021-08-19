@@ -9,8 +9,8 @@ use HTMLPurifier;
 class RealtimeClient
 {
     private HTMLPurifier $html;
-    private Client $client;
-    private string $realtimeUrl;
+    private Client       $client;
+    private string       $realtimeUrl;
 
     public function __construct(Client $client, HTMLPurifier $html, string $realtimeUrl)
     {
@@ -19,12 +19,12 @@ class RealtimeClient
         $this->realtimeUrl = $realtimeUrl;
     }
 
-    public function notify(int $profileId, array $data, bool $retry = true)
+    public function notify(int $profileId, array $data)
     {
         try {
-            $this->client->post("{$this->realtimeUrl}/notification",[
+            $this->client->post("{$this->realtimeUrl}/notification", [
                 'headers' => ['Content-Type' => 'application/json'],
-                'json' => [
+                'json'    => [
                     'pid'         => $profileId,
                     'message'     => $this->html->purify($data['message']),
                     'image'       => $data['image'] ?? null,
@@ -36,11 +36,6 @@ class RealtimeClient
                 ],
             ]);
         } catch (RequestException $e) {
-            if ($retry) {
-                $this->notify($profileId, $data, false);
-            } else {
-                throw $e;
-            }
         }
     }
 }
