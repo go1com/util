@@ -47,6 +47,7 @@ class ScormSchema
             $scormUser->addColumn('user_id', Type::INTEGER, ['unsigned' => true]);
             $scormUser->addColumn('student_id', Type::STRING);
             $scormUser->addColumn('student_name', Type::STRING);
+            $scormUser->addColumn('comments_from_lms', Type::STRING, ['notnull' => false, 'default' => null]);
             $scormUser->addColumn('portal_id', Type::INTEGER, ['unsigned' => true]);
             $scormUser->addColumn('portal_name', Type::STRING);
             $scormUser->addColumn('timestamp', Type::INTEGER, ['unsigned' => true]);
