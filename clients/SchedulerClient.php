@@ -41,23 +41,26 @@ class SchedulerClient
                                 'headers' => $headers ?: null,
                                 'body'    => $actionReq->request->all() ?: null,
                             ]),
-                        ]
+                        ],
                     ],
-                ]
+                ],
             ]);
         } catch (RequestException $e) {
             if ($retry) {
                 return $this->saveJob($jobNameOrId, $expression, $actionReq);
             }
 
-            $this->logger->error("Failed to put scheduler job $jobNameOrId. Reason: " . $e->getMessage());
+            $this->logger->error("Failed to put scheduler job", [
+                'jobNameOrId' => $jobNameOrId,
+                'exception'   => $e->getMessage(),
+            ]);
         }
     }
 
     public function deleteJob($jobNameOrId, $retry = false)
     {
         try {
-            $this->client->delete("$this->schedulerUrl/job/$jobNameOrId?jwt=".UserHelper::ROOT_JWT);
+            $this->client->delete("$this->schedulerUrl/job/$jobNameOrId?jwt=" . UserHelper::ROOT_JWT);
         } catch (RequestException $e) {
             if (404 === $e->getResponse()->getStatusCode()) {
                 return;
@@ -65,7 +68,35 @@ class SchedulerClient
             if ($retry) {
                 return $this->deleteJob($jobNameOrId);
             }
-            $this->logger->error("Failed to delete scheduler job $jobNameOrId. Reason: ".$e->getMessage());
+            $this->logger->error("Failed to delete scheduler job", [
+                'jobNameOrId' => $jobNameOrId,
+                'exception'   => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function getJob(string $jobName): array
+    {
+        try {
+            $res = $this->client->get("$this->schedulerUrl/job?name=$jobName", [
+                'headers' => [
+                    'Content-Type'  => 'application/json',
+                    'Authorization' => 'Bearer ' . UserHelper::ROOT_JWT,
+                ],
+            ]);
+
+            if (200 === $res->getStatusCode()) {
+                return json_decode($res->getBody()->getContents());
+            }
+
+            return [];
+        } catch (RequestException $e) {
+            $this->logger->error("Can not get scheduler job", [
+                'jobName'   => $jobName,
+                'exception' => $e->getMessage(),
+            ]);
+
+            return [];
         }
     }
 }
