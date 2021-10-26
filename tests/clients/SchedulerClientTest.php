@@ -27,7 +27,7 @@ class SchedulerClientTest extends UtilTestCase
             ->expects($this->any())
             ->method('put')
             ->willReturnCallback(
-                function (string $uri, array $options)  {
+                function (string $uri, array $options) {
                     $this->assertEquals($uri, "$this->schedulerUrl/job/$this->jobName?jwt=" . UserHelper::ROOT_JWT);
                     $this->assertEquals('* * * * *', $options['json']['cron_expression']);
                     $this->assertEquals('http', $options['json']['actions'][0]['type']);
@@ -44,7 +44,7 @@ class SchedulerClientTest extends UtilTestCase
         $req->headers->replace([]);
         $req->headers->set('token', 'foo');
         $req->request->replace([
-            'foo' => 'bar'
+            'foo' => 'bar',
         ]);
 
         $c = $this->getContainer();
@@ -64,7 +64,7 @@ class SchedulerClientTest extends UtilTestCase
             ->expects($this->any())
             ->method('delete')
             ->willReturnCallback(
-                function (string $uri)  {
+                function (string $uri) {
                     $this->assertEquals($uri, "$this->schedulerUrl/job/$this->jobName?jwt=" . UserHelper::ROOT_JWT);
 
                     return new Response();
@@ -74,5 +74,31 @@ class SchedulerClientTest extends UtilTestCase
         $c = $this->getContainer();
         $scheduler = new SchedulerClient($client, $c['logger'], 'http://dev.scheduler.go1.co');
         $scheduler->deleteJob('foo');
+    }
+
+    public function testGetJob()
+    {
+        $client = $this
+            ->getMockBuilder(Client::class)
+            ->setMethods(['get'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $client
+            ->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(
+                function (string $uri, array $options) {
+                    $this->assertEquals($uri, "$this->schedulerUrl/job?name={$this->jobName}");
+                    $this->assertEquals('application/json', $options['headers']['Content-Type']);
+                    $this->assertEquals('Bearer ' . UserHelper::ROOT_JWT, $options['headers']['Authorization']);
+
+                    return new Response(200, [], json_encode([(object) ['name' => $this->jobName]]));
+                }
+            );
+
+        $c = $this->getContainer();
+        $scheduler = new SchedulerClient($client, $c['logger'], 'http://dev.scheduler.go1.co');
+        $scheduler->getJob('foo');
     }
 }
