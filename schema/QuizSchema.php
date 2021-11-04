@@ -147,6 +147,7 @@ class QuizSchema
         $tbl->addColumn('total', 'integer', ['unsigned' => true, 'notnull' => true, 'comment' => 'The total sequences in sequence (result).']);
         $tbl->addColumn('created', 'bigint', ['notnull' => true, 'default' => 0, 'comment' => 'The unix timestamp when sequence was created.']);
         $tbl->addColumn('data', 'text', ['notnull' => false, 'default' => null, 'comment' => 'Non query data.']);
+        $tbl->addColumn('enrolment_id', 'integer', ['notnull' => false, 'default' => null, 'comment' => 'Learning item enrolment id']);
         $tbl->setPrimaryKey(['sequence_id']);
         $tbl->addIndex(['uuid'], 'idx_sequence_uuid');
         $tbl->addIndex(['result_uuid'], 'idx_sequence_result_uuid');
