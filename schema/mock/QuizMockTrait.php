@@ -207,7 +207,7 @@ trait QuizMockTrait
             'answer_uuid'    => $options['answer_uuid'] ?? '',
             'result_uuid'    => $options['result_uuid'] ?? '',
             'relation_uuid'  => $options['relation_uuid'] ?? '',
-            #'enrolment_id'   => $options['enrolment_id'] ?? 0,
+            'enrolment_id'   => $options['enrolment_id'] ?? 0,
             'data'           => $data,
         ]);
 
