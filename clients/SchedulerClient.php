@@ -21,6 +21,49 @@ class SchedulerClient
         $this->schedulerUrl = $schedulerUrl;
     }
 
+    public function addJob($expression, Request $actionReq, $retry = false, $status = 1): ?int
+    {
+        try {
+            $headers = [];
+            foreach ($actionReq->headers->keys() as $key) {
+                $headers[$key] = $actionReq->headers->get($key);
+            }
+            $res = $this->client->post(
+                "$this->schedulerUrl/job",
+                [
+                    'headers' => [
+                        'Accept'        => 'application/json',
+                        'Authorization' => sprintf('Bearer %s', UserHelper::ROOT_JWT),
+                    ],
+                    'json'    => [
+                        'status'          => $status,
+                        'cron_expression' => $expression,
+                        'actions'         => [
+                            [
+                                'type' => 'http',
+                                'data' => array_filter([
+                                    'url'     => $actionReq->getUri(),
+                                    'method'  => $actionReq->getMethod(),
+                                    'headers' => $headers ?: null,
+                                    'body'    => $actionReq->request->all() ?: null,
+                                ]),
+                            ],
+                        ],
+                    ],
+                ]);
+
+            return json_decode($res->getBody()->getContents())->id ?: null;
+        } catch (RequestException $e) {
+            if ($retry) {
+                return $this->addJob($expression, $actionReq);
+            }
+
+            $this->logger->error("Failed to add scheduler job", [
+                'exception' => $e->getMessage(),
+            ]);
+        }
+    }
+
     public function saveJob($jobNameOrId, $expression, Request $actionReq, $retry = false, $status = 1)
     {
         try {
