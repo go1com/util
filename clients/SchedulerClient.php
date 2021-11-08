@@ -21,7 +21,7 @@ class SchedulerClient
         $this->schedulerUrl = $schedulerUrl;
     }
 
-    public function addJob($expression, Request $actionReq, $retry = false, $status = 1): ?int
+    public function addJob(string $jobName, string $expression, Request $actionReq, bool $retry = false, int $status = 1): ?int
     {
         try {
             $headers = [];
@@ -36,6 +36,7 @@ class SchedulerClient
                         'Authorization' => sprintf('Bearer %s', UserHelper::ROOT_JWT),
                     ],
                     'json'    => [
+                        'name'            => $jobName,
                         'status'          => $status,
                         'cron_expression' => $expression,
                         'actions'         => [
@@ -55,12 +56,14 @@ class SchedulerClient
             return json_decode($res->getBody()->getContents())->id ?: null;
         } catch (RequestException $e) {
             if ($retry) {
-                return $this->addJob($expression, $actionReq);
+                return $this->addJob($jobName, $expression, $actionReq);
             }
 
             $this->logger->error("Failed to add scheduler job", [
                 'exception' => $e->getMessage(),
             ]);
+
+            return null;
         }
     }
 
