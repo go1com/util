@@ -31,6 +31,7 @@ class SchedulerClientTest extends UtilTestCase
                     $this->assertEquals($uri, "$this->schedulerUrl/job");
                     $this->assertEquals('application/json', $options['headers']['Accept']);
                     $this->assertEquals('Bearer ' . UserHelper::ROOT_JWT, $options['headers']['Authorization']);
+                    $this->assertEquals('foo', $options['json']['name']);
                     $this->assertEquals('* * * * *', $options['json']['cron_expression']);
                     $this->assertEquals('http', $options['json']['actions'][0]['type']);
                     $this->assertEquals($this->fooConsumeUrl, $options['json']['actions'][0]['data']['url']);
@@ -51,7 +52,7 @@ class SchedulerClientTest extends UtilTestCase
 
         $c = $this->getContainer();
         $scheduler = new SchedulerClient($client, $c['logger'], 'http://dev.scheduler.go1.co');
-        $scheduler->addJob('* * * * *', $req);
+        $scheduler->addJob('foo', '* * * * *', $req);
     }
 
     public function testCreateJob()
