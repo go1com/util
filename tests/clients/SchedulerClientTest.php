@@ -15,6 +15,45 @@ class SchedulerClientTest extends UtilTestCase
     private $fooConsumeUrl = 'http://foo.go1.service/scheduler-consume';
     private $jobName       = 'foo';
 
+    public function testAddJob()
+    {
+        $client = $this
+            ->getMockBuilder(Client::class)
+            ->setMethods(['post'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $client
+            ->expects($this->any())
+            ->method('post')
+            ->willReturnCallback(
+                function (string $uri, array $options) {
+                    $this->assertEquals($uri, "$this->schedulerUrl/job");
+                    $this->assertEquals('application/json', $options['headers']['Accept']);
+                    $this->assertEquals('Bearer ' . UserHelper::ROOT_JWT, $options['headers']['Authorization']);
+                    $this->assertEquals('* * * * *', $options['json']['cron_expression']);
+                    $this->assertEquals('http', $options['json']['actions'][0]['type']);
+                    $this->assertEquals($this->fooConsumeUrl, $options['json']['actions'][0]['data']['url']);
+                    $this->assertEquals('POST', $options['json']['actions'][0]['data']['method']);
+                    $this->assertEquals(['foo' => 'bar'], $options['json']['actions'][0]['data']['body']);
+                    $this->assertEquals(['token' => 'foo'], $options['json']['actions'][0]['data']['headers']);
+
+                    return new Response();
+                }
+            );
+
+        $req = Request::create('http://foo.go1.service/scheduler-consume', 'POST');
+        $req->headers->replace([]);
+        $req->headers->set('token', 'foo');
+        $req->request->replace([
+            'foo' => 'bar',
+        ]);
+
+        $c = $this->getContainer();
+        $scheduler = new SchedulerClient($client, $c['logger'], 'http://dev.scheduler.go1.co');
+        $scheduler->addJob('* * * * *', $req);
+    }
+
     public function testCreateJob()
     {
         $client = $this
