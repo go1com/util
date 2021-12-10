@@ -302,6 +302,7 @@ class Languages
         'br'    => 'pt-BR',
         'vi'    => 'vi',
         'no'    => 'nn',
+        'nn'    => 'nn',
     ];
 
     const COUNTRY_TO_LOCALE = [
