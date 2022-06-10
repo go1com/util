@@ -3,7 +3,7 @@
 namespace go1\util\activity;
 
 use Doctrine\DBAL\Connection;
-use Elasticsearch\Client;
+use ElasticsearchCompat\SearchClient;
 use go1\util\es\dsl\TermsAggregation;
 use go1\util\es\Schema;
 use go1\util\portal\PortalHelper;
@@ -19,7 +19,7 @@ class ActivityRepository
     private $client;
     private $go1;
 
-    public function __construct(Connection $db, Client $client)
+    public function __construct(Connection $db, SearchClient $client)
     {
         $this->client = $client;
         $this->go1 = $db;
