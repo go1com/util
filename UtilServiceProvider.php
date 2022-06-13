@@ -4,6 +4,8 @@ namespace go1\util;
 
 use Aws\Credentials\CredentialProvider;
 use Aws\S3\S3Client;
+use go1\ElasticsearchCompat\SearchClient;
+use go1\ElasticsearchCompat\Version;
 use Elasticsearch\ClientBuilder as EsClientBuilder;
 use go1\clients\AccountsClient;
 use go1\clients\CurrencyClient;
@@ -64,11 +66,36 @@ class UtilServiceProvider implements ServiceProviderInterface
             return $builder;
         });
 
+        $c['go1.client.es.v8.builder'] = $c->factory(function (Container $c) {
+            $builder = EsClientBuilder::create();
+            $o = $c['esOptions.v8'];
+
+            if ($c->offsetExists('profiler.do')) {
+                if ($c->offsetGet('profiler.do')) {
+                    $builder->setLogger($c['profiler.collectors.es']);
+                }
+            }
+
+            $builder->setHosts([parse_url($o['endpoint'])]);
+            if (isset($c['go1.client.es.serializer'])) {
+                $builder->setSerializer($c['go1.client.es.serializer']);
+            }
+
+            return $builder;
+        });
+
         $c['go1.client.es'] = function (Container $c) {
             /** @var ClientBuilder $builder */
             $builder = $c['go1.client.es.builder'];
 
             return $builder->build();
+        };
+
+        $c['go1.client.es.compat'] = function (Container $c) {
+            return new SearchClient(getenv('STATSIG_SERVER_KEY'), getenv("ENV"), [
+                Version::ES56 => $c['go1.client.es.builder']->build(),
+                Version::ES82_AU => $c['go1.client.es.v8.builder']->build()
+            ]);
         };
 
         $c['go1.client.s3'] = function (Container $c) {

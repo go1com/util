@@ -12,6 +12,7 @@
   "require": {
     "php":                     "^7.2",
     "doctrine/cache":          "^v1.6.0",
+    "go1/elasticsearch-compat":"dev-master",
     "go1/app":                 "dev-master",
     "go1/edge":                "^0.3",
     "go1/util_core":           "dev-master",
@@ -23,6 +24,7 @@
     "ralouphie/mimey":         "^1.0",
     "symfony/var-dumper":      "^4.0 | ^3.4",
     "go1.core/util":           "dev-master",
+    "go1.libraries/notify.util": "dev-master",
     "guzzlehttp/guzzle":       "^7.0.1"
   },
   "require-dev": {
@@ -38,6 +40,8 @@
     "graphaware/neo4j-php-client": "^4.6"
   },
   "repositories":      [
-    { "type": "vcs", "url": "https://code.go1.com.au/mirror/go1-core/util.git" }
+    { "type": "vcs", "url": "https://code.go1.com.au/mirror/go1-core/util.git" },
+    { "type": "vcs", "url": "git@code.go1.com.au:util/es.git" },
+    { "type": "vcs", "url": "git@code.go1.com.au:domain-notifications/notify-util.git" }
   ]
 }
